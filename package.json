@@ -7,6 +7,10 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "nuxt": "3.0.0-rc.3"
+    "@nuxtjs/style-resources": "^1.2.1",
+    "fibers": "^5.0.1",
+    "nuxt": "3.0.0-rc.3",
+    "sass": "^1.51.0",
+    "sass-loader": "^10.2.1"
   }
 }

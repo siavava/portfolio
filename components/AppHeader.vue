@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <h1 class="title">Amittai's Page</h1>
+    <Logo/>
     <ul class="nav">
       <li class="nav-item">
         <nuxt-link to="/" class="nav-link">Home</nuxt-link>
