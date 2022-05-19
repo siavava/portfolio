@@ -1,51 +1,36 @@
 <template>
-  <div class="container">
+  <div id="main">
     <AppHeader/>
-    <slot />
+    <!-- <Front/> -->
+    <!-- <About/> -->
+    <!-- <Jobs/> -->
+    <!-- <Featured/> -->
+    <!-- <Projects/> -->
+    <!-- <Contact/> -->
+    <AppFooter/>
   </div>
 </template>
 
-<script lang="ts">
-import AppHeader from "../components/AppHeader.vue"
-
-export default {
-  components: {
-    AppHeader
-  },
-  layout: 'default'
-}
-</script>
-
-
 <style lang="sass">
+  @use "../styles/colors"
+  #main
+    display: flex
+    flex-direction: column
+    min-height: 100vh
+    $back-color: colors.color("blue")
+    @debug $back-color
+    background-color: colors.color("green")
 
-  *
-    box-sizing: border-box
-    margin: 0
-    padding: 0
-
-  body
-    font-family: aktiv-grotesk, courier-new, courier, monospace
-    font-style: normal
-    font-weight: 400
-    font-size: 1rem
-    line-height: 1.5
-    background: #f4f4f4
-
-
-  a
-    color: crimson
-    text-decoration: none
-
-  ul
-    list-style: none
-
-
-  .container
-    max-width: 800px
-    margin: 2rem auto
-    overflow: hidden
-    padding: 1rem 2rem
-    background: #fff
-
+  
+  .skip-to-content
+    position: absolute
+    top: 0
+    right: 0
+    background-color: colors.color("red")
 </style>
+
+<script lang="ts">
+  export default {
+    name: "DefaultLayout",
+  }
+</script>

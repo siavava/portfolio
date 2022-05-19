@@ -1,22 +1,22 @@
 <template>
-  <div>
-    <!-- <h2> Welcome to my page. </h2> -->
+  <div id="main">
+    <AppHeader />
+    <!-- <Front/> -->
+    <About />
+    <!-- <Jobs/> -->
+    <!-- <Featured/> -->
+    <!-- <Projects/> -->
+    <!-- <Contact/> -->
+    <AppFooter />
   </div>
 </template>
 
-<script lang="ts">
+<style lang="sass">
+  @use '../styles/index'
+</style>
 
+<script lang="ts">
 export default {
-  head() {
-    return {
-      title: "Amittai's Portfolio",
-      meta: [
-        {
-          name: "Amittai's Portfolio",
-          content: "Randomness",
-        },
-      ],
-    }
-  }
+  name: "DefaultLayout",
 }
 </script>
