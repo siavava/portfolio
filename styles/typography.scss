@@ -12,24 +12,41 @@
 }
 
 $fonts-map: (
-  "font-sans": "Calibre",
-  
-  "font-mono": "SF Mono",
+  "sans-serif": "Graphik",
+  // "sans-serif": "Inter Variable",
+  // "monospace": "SF Mono",
+
+  "rubik-fade": "Rubik Fade",
+
+  "megrim": "Megrim",
+
+  "fredericka": "Fredericka the Great",
+
+  "macondo": "Macondo",
+
+  "rubik-puddles": "Rubik Puddles",
+
+  "twitch": "Twitch",
+
+  "matter": "Matter",
+
+  "big-heading": "Antique Olive",
+
+  "antique-olive": "Antique Olive",
+
+  "headings": "Antique Olive",
+
+  "anek-latin": "Anek Latin",
 );
 
-// $fonts-map: (
-//   "font-sans": "Calibre, Inter, San Francisco, SF Pro Text,\
-//                 -apple-system, system-ui, sans-serif",
-//   "font-mono": "SF Mono, Fira Code, Fira Mono, Roboto Mono, monospace",
-// );
-
 $font-sizes: (
-  "xxs": 12px,
-  "xs": 13px,
-  "s": 14px,
-  "m": 16px,
-  "l": 18px,
-  "xl": 20px,
-  "xxl": 22px,
-  "heading": 32px
+  "xxs": 11px,
+  "xs": 12px,
+  "s": 13px,
+  "m": 14px,
+  "l": 17px,
+  "xl": 19px,
+  "xxl": 21px,
+  "heading": clamp(21px, 5vw, 35px),
+  "big-heading": 80px
 );
