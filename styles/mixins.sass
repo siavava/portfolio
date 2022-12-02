@@ -3,27 +3,48 @@
 @use "typography"
 @use "geometry"
 
-$border-radius: geometry.radius("small")
 
-@mixin button
-  color: colors.color("green")
-  background-color: transparent
-  border: 1px solid colors.color("green")
-  border-radius: geometry.var("border-radius")
-  font-size: typography.font-size("xs")
-  font-family: typography.font("font-mono")
-  line-height: 1
-  text-decoration: none
-  cursor: pointer
-  padding: 1.25rem 1.75rem
-  transition: geometry.var("default-transition")
-  padding: 1.25rem 1.75rem
+@mixin split
+  display: flex
+  flex-direction: row
+  gap: 2em
+  font-size: typography.font-size(m)
 
-  &:hover, &:focus, &:active
-    background-color: colors.color("green-tint")
-    outline: none
-  &:after
-    display: none !important
+  @media screen and ( max-width: 540px )
+    flex-direction: column
+    gap: 1em
+
+    & > :first-child
+      width: 100%
+
+    & > :last-child
+      width: 100%
+
+  &:not(:last-child)
+    margin-bottom: 2em
+
+  // first descendant
+  & > :first-child
+    width: 20%
+    gap: 0.5em
+    display: flex
+
+    @media screen and ( max-width: 540px )
+      margin-top: 2em
+
+  & > :last-child
+    width: 80%
+
+    @media screen and ( max-width: 540px )
+      width: 100%
+    
+  .range
+    font-size: typography.font-size(xs)
+    color: colors.color(dark-foreground)
+    gap: 1rem
+
+    .date
+      width: 40%
 
 @mixin flex-center
   display: flex
@@ -34,114 +55,3 @@ $border-radius: geometry.radius("small")
   display: flex
   justify-content: space-between
   align-items: center
-
-
-@mixin link
-  display: inline-block
-  text-decoration: none
-  text-decoration-skip-ink: auto
-  color: inherit
-  position: relative
-  transition: geometry.var("default-transition")
-  &:hover, &:active, &:focus
-    color: colors.color("green")
-    outline: 0
-
-
-@mixin inline-link
-  display: inline-block
-  text-decoration: none
-  text-decoration-skip-ink: auto
-  position: relative
-  transition: geometry.var("default-transition")
-  color: colors.color("green")
-  &:hover,
-  &:focus,
-  &:active
-    color: colors.color("green")
-    outline: 0
-    &:after
-      width: 100%
-
-    & > *
-      color: colors.color("green") !important
-      transition: geometry.var("default-transition")
-
-  &:after
-    content: ''
-    display: block
-    width: 0
-    height: 1px
-    position: relative
-    bottom: 0.37em
-    background-color: colors.color("green")
-    transition: geometry.var("default-transition")
-    opacity: 0.5
-
-@mixin small-button
-  color: colors.color("green")
-  background-color: transparent
-  border: 1px solid colors.color("green")
-  border-radius: geometry.var("border-radius")
-  padding: 0.75rem 1rem
-  font-size: typography.font-size("xs")
-  font-family: typography.font("font-mono")
-  line-height: 1
-  text-decoration: none
-  cursor: pointer
-  transition: geometry.var("default-transition")
-  &:hover, &:focus, &:active
-    background-color: colors.color("green-tint")
-    outline: none
-
-  &:after
-    display: none !important
-
-@mixin big-button
-  color: colors.color("green")
-  background-color: transparent
-  border: 1px solid colors.color("green")
-  border-radius: geometry.var("border-small")
-  padding: 1.25rem 1.75rem
-  font-size: typography.font-size("s")
-  font-family: typography.font("font-mono")
-  line-height: 1
-  text-decoration: none
-  cursor: pointer
-  transition: geometry.var("default-transition")
-
-  &:hover,
-  &:focus,
-  &:active
-    background-color: colors.color("green-tint")
-    outline: none
-  &:after
-    display: none !important
-
-@mixin box-shadow
-  box-shadow: 0 10px 30px -15px colors.color("navy-shadow")
-  transition: geometry.transition(all, 0.2s, ease-in-out)
-
-  &:hover,
-  &:focus
-    box-shadow: 0 20px 30px -15px colors.color("navy-shadow")
-
-@mixin styled-list
-  padding: 0
-  margin: 0
-  list-style: none
-  font-size: typography.font-size("l")
-  li
-    position: relative
-    padding-left: 30px
-    margin-bottom: 10px
-    &:before 
-      content: '▹'
-      position: absolute
-      left: 0
-      color: colors.color("green")
-
-@mixin reset-list
-  list-style: none
-  padding: 0
-  margin: 0
