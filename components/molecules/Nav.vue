@@ -42,7 +42,7 @@ const fadeDownClass = isHome ? 'fadedown' : '';
   }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 
 @use "~/styles/colors"
 @use "~/styles/typography"

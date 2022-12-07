@@ -48,7 +48,7 @@
           </ul>
           <div class="project-links">
             <a
-              v-if="project?.repo !== null"
+              v-if="project.repo"
               :href="project.repo"
               aria-label="GitHub Link"
             >
@@ -63,7 +63,7 @@
           </div>
         </div>   
         <div class="project-image">
-          <a :href="project.url ? project.url : project.repo ? project.repo : '#'">
+          <a :href="project.url ? project.url : project.repo">
             <img
               :src="`/${project.cover}`"
               :alt="project.title"
