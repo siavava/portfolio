@@ -20,18 +20,31 @@
       <div class="menu-columns-wrapper">
         <div class="menu-column">
           <NuxtLink
-            :to="path"
+            :to="currentPage"
             class="menu-column-header"
           >
             <strong> Current Page </strong>
           </NuxtLink>
-          <NuxtLink
-            v-for="item in dummyData"
-            :to="path"
-            class="menu-column-item"
-          >
-            {{ item }}
-          </NuxtLink>
+          <ul v-if="isHome">
+            <li v-for="link in navLinks.homeLinks">
+              <NuxtLink
+                :to="link.url"
+                class="menu-column-item"
+              >
+                {{ link.name }}
+              </NuxtLink>
+            </li>
+          </ul>
+          <ul v-else>
+            <li v-for="anchor in anchors">
+              <NuxtLink
+                :to="anchor.url"
+                class="menu-column-item"
+              >
+                {{ anchor.name }}
+              </NuxtLink>
+            </li>
+          </ul>
         </div>
         <div class="menu-column">
           <NuxtLink
@@ -113,6 +126,7 @@ export default {
       scrollHeight: 0,
       height: 0,
       menuOpen: false,
+      anchors: [],
     };
   },
   computed: {
@@ -137,6 +151,19 @@ export default {
     // set height initially.
     // this.height = this.$refs.header?.offsetHeight || 0;
     this.height = this.$el.offsetHeight;
+
+    try {
+      const rawAnchors = document.getElementsByTagName("h2");
+  
+      for (let i=0; i<rawAnchors.length; i++) {
+        const name = rawAnchors.item(i).innerText;
+        const url = rawAnchors.item(i).id;
+        this.anchors.push({ name, url });
+        console.log(`this.anchors = ${this.anchors}`);
+      }
+    } catch(err) {
+      console.error(err.message);
+    }
 
     // update height on resize!
     // window.addEventListener("resize", () => {
@@ -242,7 +269,11 @@ export default {
 //
 //
 
-const { path } = useRoute();
+import { navLinks } from "~/src/config";
+
+const { path: currentPage } = useRoute();
+const { path } = useRoute(); // test
+const isHome = path == "/";
 
 const dummyData = [ "One", "Two", "Three", "Four" ];
 
