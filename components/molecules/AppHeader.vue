@@ -149,7 +149,6 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
     
     // set height initially.
-    // this.height = this.$refs.header?.offsetHeight || 0;
     this.height = this.$el.offsetHeight;
 
     try {
@@ -166,8 +165,9 @@ export default {
     }
 
     // update height on resize!
+    //! No longer necessary since we no longer shift from 100px to 70px
     // window.addEventListener("resize", () => {
-    //   this.height = this.$refs.header?.offsetHeight || 0;
+    //   this.height = this.$el.offsetHeight || 0;
     // });
   },
   beforeDestroy() {
@@ -176,24 +176,13 @@ export default {
   watch: {
     menuOpen: {
       handler: function(newVal, oldVal) {
-        // if (this.menuOpen) {
-        //   document.body.style.overflow = "hidden";
-        // } else {
-        //   document.body.style.overflow = "auto";
-        // }
         this.height = this.$el.offsetHeight || 0;
-        // console.log(`height: ${this.height}`);
       },
       deep: true,
     },
   },
   methods: {
     toggleMenu() {
-      // if (this.menuOpen) {
-      //   document.body.style.overflow = "hidden";
-      // } else {
-      //   document.body.style.overflow = "auto";
-      // }
       this.height = this.$refs.header.offsetHeight || 0;
     },
     close() {
@@ -289,7 +278,6 @@ const closeMenu = () => {
 }
 
 const openMenu = () => {
-  // console.log(`Menu Opened!`);
   menuOpen.value = true;
   document.getElementById("searchbar")?.focus();
   // searchBar.value.focus();
@@ -297,18 +285,8 @@ const openMenu = () => {
 }
 
 const toggleMenu = () => {
-//   console.log(`
-//   menuOpen: ${menuOpen.value !== null}
-//   buttonRef: ${buttonRef.value !== null}
-//   header: ${headerRef.value !== null}
-//   searchBar: ${searchBar.value !== null}
-// `);
-
-  // console.log(`Menu Toggled!`);
   buttonRef.value.toggle();
   headerRef.value.menuOpen = !headerRef.value.menuOpen;
-  // headerRef.value.toggleMenu();
-  // console.log(`menuOpen: ${headerRef.value.menuOpen}`);
   menuOpen.value
     ? closeMenu()
     : openMenu();

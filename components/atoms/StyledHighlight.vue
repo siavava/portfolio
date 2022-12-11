@@ -32,12 +32,6 @@ const tabWidth = 120;
           ? `transform: translateY(${this.index * tabHeight}px);`
           : `transform: translateX(${this.index * tabWidth}px);`;
       },
-      vertical() {
-        if (typeof window !== "undefined") {
-          return window.innerWidth > 600;
-        }
-        return false;
-      },
     },
     mounted() {
       this.vertical = window.innerWidth > 600;

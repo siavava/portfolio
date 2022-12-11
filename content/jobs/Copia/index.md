@@ -1,9 +1,9 @@
 ---
 date: '2021-08-25'
 title: 'Backend Engineer Intern'
-company: 'Copia Global'
+company: 'Copia'
 location: 'Nairobi, KE'
-range: 'June - August 2021'
+range: 'Summer 2021'
 url: 'https://copiaglobal.com/'
 category: 'jobs-info'
 ---

@@ -3,7 +3,7 @@ date: '2022-09-02'
 title: 'Software Engineering Intern'
 company: 'Meta'
 location: 'Menlo Park, CA'
-range: 'June - September 2022'
+range: 'Summer 2022'
 url: 'https://engineering.fb.com/'
 category: 'jobs-info'
 ---

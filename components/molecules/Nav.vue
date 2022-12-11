@@ -17,22 +17,6 @@
 
 <script lang="ts" setup>
 import { loaderDelay as timeout } from '~/src/utils';
-// import { useState } from '~/src/stateful';
-
-// const [isMounted, setMounted] = useState(false); 
-
-// onMounted(() => {
-//   // console.log("Mounted!");
-//   setTimeout(() => {
-//     setMounted(true);
-//   }, loaderDelay);
-// });
-
-// const { path } = useRoute();
-// const isHome = path === "/";
-
-// const timeout = isHome ? loaderDelay : 0;
-// const fadeDownClass = isHome ? 'fadedown' : '';
 </script>
 
 <script lang="ts">

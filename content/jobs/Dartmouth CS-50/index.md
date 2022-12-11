@@ -1,6 +1,6 @@
 ---
 date: '2022-06-13'
-title: 'Teaching Assistant'
+title: 'Teaching Assistant, CS-50'
 company: 'Dartmouth'
 location: 'Hanover, NH'
 range: 'Fall 2021 - Spring 2022'
