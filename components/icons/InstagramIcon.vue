@@ -5,7 +5,7 @@
   strokeLinecap="round"
   strokeLinejoin="round"
   class="feather feather-instagram"
-  fill="#000000"
+  fill="none"
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 30 30"
   width="30px"

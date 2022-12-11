@@ -27,6 +27,15 @@ export default {
     }    
   },
   ssr: true,
+
+  link: [
+    {
+      hid: "icon",
+      rel: "icon",
+      type: "image/x-icon",
+      href: "/favicon.png"
+    }
+  ],
   
   css: [
     "~/styles/raw-fonts.scss",

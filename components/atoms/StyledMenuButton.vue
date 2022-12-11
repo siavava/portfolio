@@ -1,9 +1,32 @@
 <template>
-  <!-- <button class="menu-button"> -->
-    <!-- {{ menuOpen ? "&#x3e" : "&#x3c" }} -->
-    <!-- <div class="menu-button-container"> -->
-      <Icon type="menu" class="menu-button" />
-    <!-- </div> -->
+  <button
+    class="menu-button"
+    :class="clicked ? 'clicked' : ''"
+    @click="click"
+    aria-controls="primary-navigation"
+    aria-expanded="false"
+  >
+    <svg
+      class="hamburger"
+      viewBox="0 0 1000 1000"
+    >
+      <rect
+        class="line top"
+        width="700"
+        height="40"
+        x="100" y="350" rx="0"
+      />
+
+      <rect
+        class="line bottom"
+        width="500"
+        height="40"
+        x="300" y="550" rx="0"
+      />
+
+    </svg>
+
+  </button>
 </template>
 
 <script lang="ts">
@@ -13,115 +36,58 @@
     data() {
       return {
         menuOpen: false,
+        clicked: false,
       }
     },
     methods: {
       toggle() {
         this.menuOpen = !this.menuOpen;
       },
+      click() {
+        this.clicked = !this.clicked;
+      },
     },
   }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @use "~/styles/mixins"
 @use "~/styles/geometry"
 @use "~/styles/colors"
 @use "../styles/typography"
 
-.menu-button-container
-  position: absolute
-  right: 0
-  width: 64px
-  height: 64px
-  display: flex
-  // justify-content: center
-  align-items: center
-  z-index: 19
+.menu-button
+  // margin-top: 10px //
+  background: transparent
+  z-index: 25
+  // border: 2px solid colors.color("green")
+
+  .line
+    transition: 0.2s
+    transform-origin: center
+    color: colors.color("green")
 
 .menu-button
-  position: relative
-  margin: 10px 0
-  margin-left: auto
-  margin-right: 0
-  max-height: 70%
-  max-width: 70%
-  border: 0
-  background: transparent
-  color: inherit
-  text-transform: none
-  transition-duration: 0.15s
-  z-index: 20
-  
 
-  // &:hover
-  //   color: red
+  &:hover
+    .top
+      width: 50%
+      x: 300
 
-  .ham-box
-    display: inline-block
-    position: relative
-    width: geometry.var("hamburger-width")
-    height: 24px
+    .bottom
+      width: 70%
+      x: 100
 
-  .ham-box-inner 
-    position: absolute
-    top: 50%
-    right: 0
-    width: geometry.var("hamburger-width")
-    height: 2px
-    border-radius: geometry.var("border-radius")
-    background-color: colors.color("green")
-    transition-duration: 0.22s
-    transition-property: transform
+  &.clicked
+    .top, .bottom
+      width: 70%
+      x: 150
+      y: 500
 
-    &:before, &:after 
-      content: ''
-      display: block
-      position: absolute
-      left: auto
-      right: 0
-      width: geometry.var("hamburger-width")
-      height: 2px
-      border-radius: 4px
-      background-color: colors.color("green")
-      transition-timing-function: ease
-      transition-duration: 0.15s
-      transition-property: transform
+    .top
+      rotate: 45deg
 
-
-  .ham-box-inner .menu-open
-    transition-delay: 0.12s
-    transform: rotate(225deg)
-    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1)
-
-    &:before
-      width: 100%
-      top: 0
-      opacity: 0
-      transition: geometry.var("ham-before-active")
-
-    &:after
-      width: 100%
-      bottom: 0
-      transform:  rotate(-90deg)
-      transition: geometry.var("ham-after-active")
-
-  .ham-box-inner .menu-closed
-
-    transition-delay: 0s
-    transform: rotate(0deg)
-    transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19)
-
-    &:before
-      width: 120%
-      top: -10px
-      opacity: 1
-      transition: geometry.var("ham-before")
-
-    &:after
-      width: 80%
-      bottom: -10px
-      transform:  rotate(0)
-      transition: geometry.var("ham after")
+    .bottom
+      rotate: -45deg
     
 </style>

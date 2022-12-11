@@ -1,17 +1,17 @@
 <template>
   <div id="root">
-    <AppHeader/>
-    <body>
+    <AppHeader />
+    <body> <!-- header in body == not sticky -->
       <main>
-        <a class="skip-to-content" href="#content"/>
+        <a class="skip-to-content" href="#content" />
         <!-- <body> -->
           <div class="container">
-            <slot id="content"/>
+            <slot id="content" />
           </div>
           <!-- <slot id="content"/> -->
       </main>
+      <AppFooter />
     </body>
-    <AppFooter/>
   </div>
 </template>
 
@@ -22,25 +22,3 @@
   max-width: 1000px
   margin: 0 auto
 </style>
-
-<!-- <script lang="ts">
-  export default {
-    name: "DefaultLayout",
-    props: {
-      title: {
-        type: String,
-        default: "Default Layout"
-      },
-      children: {
-        type: Object,
-        default: null
-      }
-    }
-  }
-</script> -->
-
-<!-- <script setup lang="ts">
-
-
-
-</script> -->

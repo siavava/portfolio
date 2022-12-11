@@ -16,6 +16,9 @@ head:
       content: 'Altair'
     - name: 'copyright'
       content: '© 2022 Altair'
+navigation:
+  title: 'Home'
+  icon: '🥶'
 ---
 
 <hero></hero>

@@ -95,7 +95,7 @@
       <div class="menu-extras">
         <div class="menu-extras-links">
           <NuxtLink
-            to="/"
+            to="/#about"
             class="menu-column-header"
           >
             About
@@ -117,6 +117,7 @@
 
 
 <script lang="ts">
+
 export default {
   name: "AppHeader",
   data() {
@@ -153,10 +154,11 @@ export default {
 
     try {
       const rawAnchors = document.getElementsByTagName("h2");
+      const { path } = useRoute();
   
       for (let i=0; i<rawAnchors.length; i++) {
         const name = rawAnchors.item(i).innerText;
-        const url = rawAnchors.item(i).id;
+        const url = `${path}#${rawAnchors.item(i).id.toString()}`;
         this.anchors.push({ name, url });
         console.log(`this.anchors = ${this.anchors}`);
       }
@@ -375,9 +377,10 @@ const toggleMenu = () => {
 .menu-button
   position: absolute
   right: 0
-  top: 1px
+  // top: 1px
   width: 50px
   height: 50px
+  margin-top: 15px
 
 
 .site-menu

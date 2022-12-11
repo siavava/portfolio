@@ -11,7 +11,6 @@
       </Transition>
     </TransitionGroup>
     <NavLinks />
-    <Menu class="menu"/>
   </nav>
 </template>
 
@@ -49,16 +48,13 @@ nav
 
 
 
-.menu-button, .nav-inner
+
+.nav-inner
   width: auto
   height: auto
   color: colors.color("green")
-
-
-.logo
-  svg
-    width: 50px
-    height: 50px
+  margin-left: 10px
+  margin-right: -5rem
 
 /* Fade down */
 .fadedown-enter 
@@ -70,19 +66,5 @@ nav
   opacity: 1
   transform: translateY(0px)
   transition: opacity 300ms geometry.var("default-easing"), transform 300ms geometry.var("default-easing")
-
-
-
-// .menu
-//   position: absolute
-//   top: 0px
-//   right: 0px    
-//   height: 100%
-
-//   // center vertically
-//   transform: translateY(-25%)
-//   -webkit-transform: translateY(-25%)
-//   margin-right: 10px
-//   margin-left: 100px
 
 </style>
