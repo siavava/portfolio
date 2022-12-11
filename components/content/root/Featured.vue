@@ -67,6 +67,7 @@
             <img
               :src="`/${project.cover}`"
               :alt="project.title"
+              loading="lazy"
             />
           </a>
         </div>

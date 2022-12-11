@@ -4,6 +4,8 @@
 @use "mixins"
 @use "geometry"
 
+@use "transitions"
+
 html
   box-sizing: border-box
   width: 100%
@@ -175,7 +177,7 @@ h1, h2, h3, h4, h5, h6
   
   &::before 
     position: relative
-    bottom: 4px
+    bottom: -4px  // switch from 4px to -4 bc of new font.
     counter-increment: sections 1
     content: '0' counter(sections) '.'
     margin-right: 10px

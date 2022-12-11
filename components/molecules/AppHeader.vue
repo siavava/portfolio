@@ -5,7 +5,7 @@
     :style="style"
   >
     <div class="nav-container">
-      <Nav class="nav-in-container"/>
+      <Nav class="nav-in-container" />
       <StyledMenuButton
         @click="toggleMenu"
         :aria-expanded="menuOpen ? 'true' : 'false'"
@@ -168,6 +168,9 @@ export default {
       //   document.body.style.overflow = "auto";
       // }
       this.height = this.$refs.header.offsetHeight || 0;
+    },
+    close() {
+      this.menuOpen = false;
     },
 
     /**

@@ -2,8 +2,7 @@
   <nav>
     <TransitionGroup :component="null">
       <Transition
-        :if="isMounted"
-        :class="fadeDownClass"
+        class="fadedown"
         :timeout="timeout"
       >
         <div class="nav-inner">
@@ -17,23 +16,23 @@
 </template>
 
 <script lang="ts" setup>
-import { loaderDelay } from '~/src/utils';
-import { useState } from '~/src/stateful';
+import { loaderDelay as timeout } from '~/src/utils';
+// import { useState } from '~/src/stateful';
 
-const [isMounted, setMounted] = useState(false); 
+// const [isMounted, setMounted] = useState(false); 
 
-onMounted(() => {
-  // console.log("Mounted!");
-  setTimeout(() => {
-    setMounted(true);
-  }, loaderDelay);
-});
+// onMounted(() => {
+//   // console.log("Mounted!");
+//   setTimeout(() => {
+//     setMounted(true);
+//   }, loaderDelay);
+// });
 
-const { path } = useRoute();
-const isHome = () => path === "/";
+// const { path } = useRoute();
+// const isHome = path === "/";
 
-const timeout = isHome ? loaderDelay : 0;
-const fadeDownClass = isHome ? 'fadedown' : '';
+// const timeout = isHome ? loaderDelay : 0;
+// const fadeDownClass = isHome ? 'fadedown' : '';
 </script>
 
 <script lang="ts">
@@ -48,6 +47,7 @@ const fadeDownClass = isHome ? 'fadedown' : '';
 @use "~/styles/typography"
 @use "~/styles/geometry"
 @use "~/styles/mixins"
+@use "~/styles/transitions"
 
 
 nav
@@ -75,6 +75,18 @@ nav
   svg
     width: 50px
     height: 50px
+
+/* Fade down */
+.fadedown-enter 
+  opacity: 0.01
+  transform: translateY(-20px)
+  transition: opacity 300ms geometry.var("default-easing"), transform 300ms geometry.var("default-easing")
+
+.fadedown-enter-active 
+  opacity: 1
+  transform: translateY(0px)
+  transition: opacity 300ms geometry.var("default-easing"), transform 300ms geometry.var("default-easing")
+
 
 
 // .menu

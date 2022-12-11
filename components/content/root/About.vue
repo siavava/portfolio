@@ -18,6 +18,7 @@
         quality="100"
         formats="AUTO, WEBP, AVIF"
         alt="head shot"
+        loading="lazy"
       />
     </StyledImage>
   </StyledAboutSection>

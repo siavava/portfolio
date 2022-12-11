@@ -109,6 +109,11 @@ export default {
     // overwriting: false,
   },
   buildModules: [
+
+    // Google Fonts
     "@nuxtjs/google-fonts",
+
+    // Nuxt Image
+    "@nuxt/image",
   ]
 }

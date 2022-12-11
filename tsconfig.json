@@ -15,8 +15,9 @@
     // "allowSyntheticDefaultImports": true,
     "types": [
       "@types/node", // standard node types
+      "vite/client", // if using vite
       "@nuxt/types",
-      // "vite/client", // if using vite
+      "@nuxt/image"
       // ...
     ]
   }
