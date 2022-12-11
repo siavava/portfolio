@@ -63,7 +63,7 @@
   // border: 2px solid colors.color("green")
 
   .line
-    transition: 0.2s
+    transition: 0.1s
     transform-origin: center
     color: colors.color("green")
 
@@ -79,10 +79,13 @@
       x: 100
 
   &.clicked
+
+    rotate: 270deg
+    transition: 200ms ease-in-out  200ms
     .top, .bottom
       width: 70%
       x: 150
-      y: 500
+      y: 480
 
     .top
       rotate: 45deg
