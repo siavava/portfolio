@@ -29,8 +29,19 @@ const tabWidth = 120;
     computed: {
       style() {
         return this.vertical
-          ? `transform: translateY(${this.index * tabHeight}px);`
-          : `transform: translateX(${this.index * tabWidth}px);`;
+          ? `
+              -webkit-transform: translateY(${this.index * tabHeight}px);
+              -moz-transform: translateY(${this.index * tabHeight}px);
+              -ms-transform: translateY(${this.index * tabHeight}px);
+              -o-transform: translateY(${this.index * tabHeight}px);
+              transform: translateY(${this.index * tabHeight}px);`
+          : `
+              -webkit-transform: translateX(${this.index * tabWidth}px);
+              -moz-transform: translateX(${this.index * tabWidth}px);
+              -ms-transform: translateX(${this.index * tabWidth}px);
+              -o-transform: translateX(${this.index * tabWidth}px);
+              transform: translateX(${this.index * tabWidth}px);`
+          ;
       },
     },
     mounted() {
@@ -73,6 +84,22 @@ const tabWidth = 120;
   height: geometry.var("tab-height")
   border-radius: geometry.var("border-radius")
   background: colors.color("green")
+
+  -webkit-transform: translateY(geometry.var("tab-height"))
+  -webkit-transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1)
+  -webkit-transition-delay: 0.1s
+
+  -moz-transform: translateY(geometry.var("tab-height"))
+  -moz-transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1)
+  -moz-transition-delay: 0.1s
+
+  -ms-transform: translateY(geometry.var("tab-height"))
+  -ms-transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1)
+  -ms-transition-delay: 0.1s
+
+  -o-transform: translateY(geometry.var("tab-height"))
+  -o-transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1)
+  -o-transition-delay: 0.1s
 
   transform: translateY(geometry.var("tab-height"))
   transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1)
