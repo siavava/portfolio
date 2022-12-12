@@ -50,6 +50,10 @@ const tabWidth = 120;
         this.vertical = window.innerWidth > 600;
         this.$forceUpdate();
       });
+      screen.orientation.addEventListener("change", () => {
+        this.vertical = window.innerWidth > 600;
+        this.$forceUpdate();
+      });
     },
 
     unmounted() {
