@@ -14,6 +14,7 @@
         class="line top"
         width="700"
         height="40"
+        color="currentColor"
         x="100" y="350" rx="0"
       />
 
@@ -21,6 +22,7 @@
         class="line bottom"
         width="500"
         height="40"
+        color="currentColor"
         x="300" y="550" rx="0"
       />
 
@@ -59,9 +61,9 @@
 .menu-button
   background: transparent
   z-index: 25
+  color: colors.color("green")
 
   .line
-    color: colors.color("green")
 
     -webkit-transition: 0.1s
     -moz-transition: 0.1s
