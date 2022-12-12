@@ -98,9 +98,17 @@
       y: 480
 
     .top
-      rotate: 45deg
+      -webkit-transform: rotate(45deg)
+      -moz-transform: rotate(45deg)
+      -ms-transform: rotate(45deg)
+      -o-transform: rotate(45deg)
+      transform: rotate(45deg)
 
     .bottom
-      rotate: -45deg
+      -webkit-transform: rotate(-45deg)
+      -moz-transform: rotate(-45deg)
+      -ms-transform: rotate(-45deg)
+      -o-transform: rotate(-45deg)
+      transform: rotate(-45deg)
     
 </style>
