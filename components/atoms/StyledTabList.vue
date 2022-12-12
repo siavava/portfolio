@@ -22,30 +22,32 @@ export default {
   @media (max-width: 600px)
     display: flex
     overflow-x: auto
-    width: calc(100% + 100px)
-    padding-left: 50px
-    margin-left: -50px
+    // width: calc(100% + 100px)
+    width: auto
+    // padding-left: 50px
+    // margin-left: -50px
     margin-bottom: 30px
 
   @media (max-width: 480px)
-    width: calc(100% + 50px)
-    padding-left: 25px
-    margin-left: -25px
+    // width: calc(100% + 50px)
+    width: auto
+    // padding-left: 25px
+    // margin-left: -25px
 
-  li
-    &:first-of-type
-      @media (max-width: 600px)
-        margin-left: 50px
+  // li
+  //   &:first-of-type
+  //     @media (max-width: 600px)
+  //       margin-left: 50px
 
-      @media (max-width: 480px)
-        margin-left: 25px
+  //     @media (max-width: 480px)
+  //       margin-left: 25px
 
 
-    &:last-of-type
-      @media (max-width: 600px)
-        padding-right: 50px
+  //   &:last-of-type
+  //     @media (max-width: 600px)
+  //       padding-right: 50px
 
-      @media (max-width: 480px)
-        padding-right: 25px
+  //     @media (max-width: 480px)
+  //       padding-right: 25px
 
 </style>

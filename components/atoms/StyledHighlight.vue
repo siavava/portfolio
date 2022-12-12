@@ -81,10 +81,10 @@ const tabWidth = 120;
   @media (max-width: 600px) 
     top: auto
     bottom: 0
-    width: 120px //geometry.var("tab-width")
+    width: geometry.var("tab-width")
     max-width: geometry.var("tab-width")
     height: 2px
-    margin-left: 50px
+    // margin-left: 50px
     // transform: translateX(geometry.var("tab-width"))
 
   // @media (max-width: 480px) 
