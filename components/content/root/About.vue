@@ -45,7 +45,7 @@ const { data } = await useAsyncData(
 
 <style lang="sass">
 
-.numbered-heading
-  font-weight: 600
+// .numbered-heading
+//   font-weight: 600
 
 </style>
