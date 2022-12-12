@@ -80,8 +80,10 @@
 
   &.clicked
 
-    rotate: 270deg
-    transition: 200ms ease-in-out  200ms
+    /// need to fix iOS error here.
+    // rotate: 270deg
+    // transition: 200ms ease-in-out  200ms
+
     .top, .bottom
       width: 70%
       x: 150
