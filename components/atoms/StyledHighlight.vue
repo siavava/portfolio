@@ -48,24 +48,32 @@ const tabWidth = 120;
       this.vertical = window.innerWidth > 600;
       window.addEventListener("resize", () => {
         this.vertical = window.innerWidth > 600;
-        this.$forceUpdate();
+        // this.$forceUpdate();
       });
       screen.orientation.addEventListener("change", () => {
         this.vertical = window.innerWidth > 600;
-        this.$forceUpdate();
+        // this.$forceUpdate();
       });
     },
 
     unmounted() {
       window.removeEventListener("resize", () => {
         this.vertical = window.innerWidth > 600;
-        this.$forceUpdate();
+        // this.$forceUpdate();
+      });
+      screen.orientation.removeEventListener("change", () => {
+        this.vertical = window.innerWidth > 600;
+        // this.$forceUpdate();
       });
     },
 
     watch: {
       index(newIndex: number) {
         
+        // re-render the component
+        this.$forceUpdate();
+      },
+      vertical(newVertical: boolean) {
         // re-render the component
         this.$forceUpdate();
       },
