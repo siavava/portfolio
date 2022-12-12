@@ -57,19 +57,22 @@
 @use "../styles/typography"
 
 .menu-button
-  // margin-top: 10px //
   background: transparent
   z-index: 25
-  // border: 2px solid colors.color("green")
 
   .line
     color: colors.color("green")
 
-    transition: 0.1s
     -webkit-transition: 0.1s
     -moz-transition: 0.1s
     -ms-transition: 0.1s
     -o-transition: 0.1s
+    transition: 0.1s
+    
+    -webkit-transform-origin: center
+    -moz-transform-origin: center
+    -ms-transform-origin: center
+    -o-transform-origin: center
     transform-origin: center
 
 .menu-button

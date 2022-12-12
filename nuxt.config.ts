@@ -2,6 +2,9 @@
 
 
 export default {
+  app: {
+    pageTransition: { name: "page", mode: "out-in" },
+  },
   typescript: {
     shim: false,
     strict: false,
@@ -124,5 +127,5 @@ export default {
 
     // Nuxt Image
     "@nuxt/image",
-  ]
+  ],
 }
