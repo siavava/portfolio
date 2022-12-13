@@ -14,17 +14,17 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @use "../styles/typography"
-  @use "../styles/colors"
-  @use "../styles/geometry"
+@use "../styles/typography"
+@use "../styles/colors"
+@use "../styles/geometry"
 
-  .about-section
-    max-width: 900px
-    .inner
-      display: grid
-      grid-template-columns: 3fr 2fr
-      grid-gap: 50px
-      @media (max-width: 768px) 
-        display: block
+.about-section
+  max-width: 900px
+  .inner
+    display: grid
+    grid-template-columns: 3fr 2fr
+    grid-gap: 50px
+    @media (max-width: 768px) 
+      display: block
 </style>
 
