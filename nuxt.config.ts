@@ -26,8 +26,15 @@ export default {
       ignores: [
         'content/jobs',
       ],
-      
-    }    
+    },
+    markdown: {
+      remarkPlugins: [
+        "remark-math"
+      ],
+      rehypePlugins: [
+        "rehype-katex"
+      ]
+    } 
   },
   ssr: true,
 

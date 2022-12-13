@@ -1,15 +1,8 @@
 <template>
   <StyledAboutSection id="about" class="about-section">
     <StyledText>
-      <ContentDoc :value="data" />
-      <ul class="styled-list">
-        <li v-for="skill in data.skills">
-          {{ skill }}
-        </li>
-      </ul>
-    
+      <ContentDoc path="profile/brief" />    
     </StyledText>
-
     <StyledImage>
       <img
         src="~assets/images/profile-image.jpg"
@@ -24,28 +17,8 @@
   </StyledAboutSection>
 </template>
 
-<script lang="ts" setup>
-
-const { data } = await useAsyncData(
-  `profile-brief-${useRoute().path}`,
-  async () => {
-    const _projectsData = queryContent("profile/brief")
-      .where({ category: 'profile-brief' })
-      .findOne();
-    return await _projectsData;
-});
-
-</script>
-
 <script lang="ts">
   export default {
     name: "About"
   }
 </script>
-<!-- 
-<style lang="sass">
-
-// .numbered-heading
-//   font-weight: 600
-
-</style> -->

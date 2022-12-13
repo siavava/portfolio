@@ -49,7 +49,7 @@ export default {
     border-radius: geometry.var("border-radius")
     background-color: colors.color("light-background")
     transition: geometry.var("default-transition")
-    overflow: auto
+    overflow: none
   
   .project-top 
     @include mixins.flex-between

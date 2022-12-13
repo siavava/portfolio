@@ -1,14 +1,5 @@
 ---
 category: 'profile-brief'
-skills:
-  - 'Python/Julia'
-  - 'C/C++'
-  - 'Java'
-  - 'Haskell'
-  - 'MySQL/MongoDB'
-  - 'Vue/TypeScript/Sass'
-  - 'LaTeX'
-  - 'Rust'
 ---
 
 
@@ -32,3 +23,12 @@ and Computer Vision, but I am generally looking for opportunities
 to dabble in data engineering, machine learning, and/or functional programming.
 
 Here are a few technologies I've been working with recently:
+
+  - Python/Julia
+  - C/C++
+  - Java
+  - Haskell
+  - MySQL/MongoDB
+  - Vue/TypeScript/Sass
+  - LaTeX
+  - Rust

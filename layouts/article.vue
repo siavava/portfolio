@@ -6,7 +6,9 @@
         <a class="skip-to-content" href="#content"/>
         <!-- <body> -->
           <div class="container">
-            <slot id="content"/>
+            <StyledText>
+              <slot id="content"/>
+            </StyledText>
           </div>
           <!-- <slot id="content"/> -->
       </main>
