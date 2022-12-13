@@ -19,6 +19,7 @@ head:
 navigation:
   title: 'Home'
   icon: '🥶'
+layout: default
 ---
 
 <hero></hero>

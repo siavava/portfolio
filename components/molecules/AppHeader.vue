@@ -140,7 +140,7 @@ export default {
     style() {
       return this.scrolledToTop
         ? `box-shadow: none`
-        : `transform: tranforegroundY(-${this.scrollHeight}px)`;
+        : `transform: translateY(-${this.scrollHeight}px)`;
     },
     scrolledToTop() {
       return this.lastScrollPosition <= 0;
