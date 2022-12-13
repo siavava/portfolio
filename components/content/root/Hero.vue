@@ -25,8 +25,8 @@ export default {
   align-items: flex-start
   min-height: 100vh
   padding: 0
-  // max-width: 800px
-  margin: 0 auto
+  max-width: 900px
+  // margin: 0 auto
   // position: static
 
   @media (max-width: 480px) and (min-height: 700px)
@@ -64,4 +64,7 @@ export default {
 
       &:hover, &:focus, &:active
         color: colors.color("green")
+
+  .reduced
+    font-size: clamp(30px,6vw, 80px)
 </style>

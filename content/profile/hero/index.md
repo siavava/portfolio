@@ -12,7 +12,7 @@ mouse-events: none
 ## Altair.
 ::
 
-::h3{class="big-heading"}
+::h3{class="big-heading reduced"}
 ### I make things do stuff.
 ::
 
