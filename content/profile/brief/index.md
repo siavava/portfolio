@@ -3,7 +3,7 @@ category: 'profile-brief'
 ---
 
 
-Hello, my given name is [Amittai](?), but my preferred name ad 2022
+My given name is [Amittai](?), but my preferred name ad 2022
 is [Altair](https://www.thebump.com/b/altair-baby-name).
 I am a current student at Dartmouth College, and some would say
 a wannabe software engineer. I am passionate about data and computation,
