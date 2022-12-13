@@ -4,7 +4,7 @@
   </p>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @use "~/styles/typography"
 @use "~/styles/colors"
 @use "~/styles/geometry"
@@ -16,8 +16,8 @@
   color: colors.color("light-slate")
 
   ul
-    display: grid
-    grid-template-columns: repeat(2, minmax(140px, 200px))
+    // display: grid
+    // grid-template-columns: repeat(2, minmax(140px, 200px))
     grid-gap: 0 10px
     padding: 0
     margin: 20px 0 0 0
@@ -38,6 +38,9 @@
         color: colors.color("green")
         font-size: typography.font-size("s")
         line-height: 12px
+      
+      a
+        @include mixins.inline-link
 
   a
     @include mixins.inline-link
