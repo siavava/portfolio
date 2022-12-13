@@ -38,8 +38,8 @@ nav
   position: relative
   width: 100%
   max-width: 1600px
-  color: colors.color("lightest-slate")
-  font-family: typography.font("font-mono")
+  color: colors.color("lightest-foreground")
+  font-family: typography.font("monospace")
   counter-reset: item 0
   z-index: 12
   float: right
@@ -52,7 +52,7 @@ nav
 .nav-inner
   width: auto
   height: auto
-  color: colors.color("green")
+  color: colors.color("highlight")
   margin-left: 10px
   margin-right: -5rem
 

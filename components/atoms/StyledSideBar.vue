@@ -20,8 +20,8 @@
   width: min(75vw, 400px)
   height: 100vh
   outline: 0
-  background-color: colors.color("light-navy")
-  box-shadow: -10px 0px 30px -15px colors.color("navy-shadow") // 
+  background-color: colors.color("light-background")
+  box-shadow: -10px 0px 30px -15px colors.color("shadow") // 
   z-index: 9
   // transform: translateX($props => (props.menuOpen ? 0 : 100)vw)
   // visibility: $props => (props.menuOpen ? 'visible' : 'hidden')
@@ -36,8 +36,8 @@
     @include mixins.flex-between
     width: 100%
     flex-direction: column
-    color: colors.color("lightest-slate")
-    font-family: typography.font("font-mono")
+    color: colors.color("lightest-foreground")
+    font-family: typography.font("monospace")
     text-align: center
   
   ol 
@@ -65,7 +65,7 @@
       &:before 
         content: '0' counter(item) '.'
         margin-bottom: 5px
-        color: colors.color("green")
+        color: colors.color("primary-highlight")
         font-size: typography.font-size("s")
 
         position: absolute

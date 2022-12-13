@@ -34,17 +34,18 @@ export default {
 
   h1
     margin: 0 0 30px 4px
-    color: colors.color("green")
-    font-family: typography.font("font-mono")
+    color: colors.color("primary-highlight")
+    font-family: typography.font("monospace")
+
     font-size: clamp(typography.font-size("s"), 5vw, typography.font-size("m"))
-    font-weight: 400
+    font-weight: 600
 
     @media (max-width: 480px)
       margin: 0 0 20px 2px
     
   h3
     margin-top: 10px
-    color: colors.color("slate")
+    color: colors.color("foreground")
     line-height: 0.9
 
   .big-heading
@@ -57,13 +58,12 @@ export default {
   .email-link
     @include mixins.big-button
 
-    p
-      font-family: typography.font("font-mono")
-      font-size: typography.font-size("s")
-      font-weight: 600
+    // p
+      // font-family: typography.font("monospace")
+      // font-size: typography.font-size("s")
 
-      &:hover, &:focus, &:active
-        color: colors.color("green")
+      // &:hover, &:focus, &:active
+      //   color: colors.color("primary-highlight")
 
   .reduced
     font-size: clamp(30px,6vw, 80px)

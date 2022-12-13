@@ -13,5 +13,5 @@
 <style lang="sass" scoped>
 @use "~/styles/colors"
 .yellow
-  color: colors.color("highlight")
+  color: colors.color("secondary-highlight")
 </style>

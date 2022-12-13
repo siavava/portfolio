@@ -333,3 +333,115 @@
     local('DM Mono Bold Italic'),
     url('~/assets/fonts/DMMono/DMMono-MediumItalic.ttf') format('truetype');
 }
+
+
+// brown light := 400
+@font-face {
+  font-family: 'Brown';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Brown Light'),
+    url('~/assets/fonts/Brown/BrownLight Regular.ttf') format('truetype');
+}
+
+// brown light italic
+@font-face {
+  font-family: 'Brown';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Brown Light Italic'),
+    url('~/assets/fonts/Brown/BrownLight Italic.ttf') format('truetype');
+}
+
+// brown medium := 500
+@font-face {
+  font-family: 'Brown';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src:
+    local('Brown Medium'),
+    url('~/assets/fonts/Brown/BrownMedium Regular.ttf') format('truetype');
+}
+
+// brown medium italic
+@font-face {
+  font-family: 'Brown';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src:
+    local('Brown Medium Italic'),
+    url('~/assets/fonts/Brown/BrownMedium Italic.ttf') format('truetype');
+}
+
+// brown bold := 600
+@font-face {
+  font-family: 'Brown';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    local('Brown Bold'),
+    url('~/assets/fonts/Brown/Brown Bold.ttf') format('truetype');
+}
+
+// brown bold italic
+@font-face {
+  font-family: 'Brown';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    local('Brown Bold Italic'),
+    url('~/assets/fonts/Brown/Brown BoldItalic.ttf') format('truetype');
+}
+
+
+// brown bold-italic
+@font-face {
+  font-family: 'Brown';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    local('Brown Bold Italic'),
+    url('~/assets/fonts/Brown/Brown BoldItalic.ttf') format('truetype');
+}
+
+// brown extra-bold
+// @font-face {
+//   font-family: 'Brown';
+//   font-style: normal;
+//   font-weight: 700;
+//   font-display: swap;
+//   src:
+//     local('Brown ExtraBold'),
+//     url('~/assets/fonts/Brown/BrownExtraBold Regular.ttf') format('truetype');
+// }
+
+// // brown extra-bold condensed
+// @font-face {
+//   font-family: 'Brown';
+//   font-style: normal;
+//   font-weight: 700;
+//   font-display: swap;
+//   src:
+//     local('Brown ExtraBold Condensed'),
+//     url('~/assets/fonts/Brown/BrownExtraBoldCondensed Regular.ttf') format('truetype');
+// }
+
+// brown heavy
+@font-face {
+  font-family: 'Brown';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    local('Brown Heavy'),
+    url('~/assets/fonts/Brown/BrownHeavy Regular.ttf') format('truetype');
+}

@@ -70,10 +70,11 @@
   width: 100%
   height: geometry.var("tab-height")
   padding: 0 20px 2px
-  border-left: 2px solid colors.color("lightest-navy")
+  border-left: 2px solid colors.color("lightest-background")
   background-color: transparent
-  font-family: typography.font("font-mono")
+  font-family: typography.font("monospace")
   font-size: typography.font-size("xs")
+  font-weight: 600
   text-align: left
   white-space: nowrap
 
@@ -86,16 +87,16 @@
     width: geometry.var("tab-width")
     padding: 0 15px
     border-left: 0
-    border-bottom: 2px solid colors.color("lightest-navy")
+    border-bottom: 2px solid colors.color("lightest-background")
     text-align: center
   
   &:hover, &:focus-visible, &:focus
-    background-color: colors.color("light-navy")
+    background-color: colors.color("light-background")
 
   &:active
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
 
   &.selected
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
 
 </style>

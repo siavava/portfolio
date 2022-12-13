@@ -84,9 +84,10 @@ const gitHubInfo = ref({
 
 .styled-credit-section
   color: inherit
-  font-family: typography.font("font-mono")
+  font-family: typography.font("monospace")
   font-size: typography.font-size("xxs")
   line-height: 1
+  font-weight: 600
 
   a
     padding: 10px
@@ -111,14 +112,14 @@ const gitHubInfo = ref({
   max-width: 270px
   margin: 0 auto 10px
   margin: 0 auto 10px
-  color: colors.color("light-slate")
+  color: colors.color("light-foreground")
 
   @media (max-width 768px)
     display: block
     width: 100%
     max-width: 270px
     margin: 0 auto 10px
-    color: colors.color("light-slate")
+    color: colors.color("light-foreground")
 
   ul
     @include mixins.flex-between

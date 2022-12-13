@@ -47,7 +47,7 @@ export default {
     height: 100%
     padding: 2rem 1.75rem
     border-radius: geometry.var("border-radius")
-    background-color: colors.color("light-navy")
+    background-color: colors.color("light-background")
     transition: geometry.var("default-transition")
     overflow: auto
   
@@ -56,7 +56,7 @@ export default {
     margin-bottom: 35px
 
     .folder 
-      color: colors.color("green")
+      color: colors.color("primary-highlight")
       svg 
         width: 40px
         height: 40px
@@ -114,20 +114,6 @@ export default {
     
   
   .project-tech-list 
-    display: flex
-    align-items: flex-end
-    flex-grow: 1
-    flex-wrap: wrap
-    padding: 0
-    margin: 20px 0 0 0
-    list-style: none
-    
-    li 
-      font-family: typography.font("font-mono")
-      font-size: typography.font-size("xxs")
-      line-height: 1.75
-
-      &:not(:last-of-type) 
-        margin-right: 15px
+    @include mixins.small-list-inline
 
 </style>

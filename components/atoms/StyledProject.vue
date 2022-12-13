@@ -103,13 +103,13 @@
   
   .project-overline
     margin: 10px 0
-    color: colors.color("green")
-    font-family: typography.font("font-mono")
+    color: colors.color("primary-highlight")
+    font-family: typography.font("monospace")
     font-size: typography.font-size("xs")
     font-weight: 400
   
   .project-title
-    color: colors.color("lightest-slate")
+    color: colors.color("lightest-foreground")
     font-size: clamp(24px, 5vw, 28px)
     z-index: 2
     position: relative
@@ -139,8 +139,8 @@
     position: relative
     padding: 25px
     border-radius: geometry.var("border-radius")
-    background-color: colors.color("light-navy")
-    color: colors.color("light-slate")
+    background-color: colors.color("light-background")
+    color: colors.color("light-foreground")
     font-size: typography.font-size("l")
     z-index: 2
     @media (max-width: 768px)
@@ -160,27 +160,28 @@
     
   
   .project-tech-list 
-    display: flex
-    flex-wrap: wrap
-    position: relative
-    margin: 25px 0 10px
-    padding: 0
-    list-style: none
-    z-index: 2
-    pointer-events: none
+    @include mixins.small-list-inline
+    // display: flex
+    // flex-wrap: wrap
+    // position: relative
+    // margin: 25px 0 10px
+    // padding: 0
+    // list-style: none
+    // z-index: 2
+    // pointer-events: none
 
-    li
-      margin: 0 20px 5px 0
-      color: colors.color("light-slate")
-      font-family: typography.font("font-mono")
-      font-size: typography.font-size("xs")
-      white-space: nowrap
+    // li
+    //   margin: 0 20px 5px 0
+    //   color: colors.color("light-foreground")
+    //   font-family: typography.font("monospace")
+    //   font-size: typography.font-size("xs")
+    //   white-space: nowrap
     
-    @media (max-width: 768px) 
-      margin: 10px 0
-      li 
-        margin: 0 10px 5px 0
-        color: colors.color("lightest-slate")
+    // @media (max-width: 768px) 
+    //   margin: 10px 0
+    //   li 
+    //     margin: 0 10px 5px 0
+    //     color: colors.color("lightest-foreground")
       
     
   
@@ -190,7 +191,7 @@
     position: relative
     margin-top: 10px
     margin-left: -10px
-    color: colors.color("lightest-slate")
+    color: colors.color("lightest-foreground")
     z-index: 2
 
     a 
@@ -228,7 +229,7 @@
     a 
       width: 100%
       height: 100%
-      background-color: colors.color("green")
+      background-color: colors.color("primary-highlight")
       border-radius: geometry.var("border-radius")
       vertical-align: middle
       &:hover,
@@ -252,7 +253,7 @@
         bottom: 0
         z-index: 1
         transition: geometry.var("default-transition")
-        background-color: colors.color("navy")
+        background-color: colors.color("background")
         mix-blend-mode: screen
       
     

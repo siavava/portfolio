@@ -41,7 +41,7 @@ const { data: contact } = await useAsyncData(
   .overline 
     display: block
     margin-bottom: 20px
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
     font-family: typography.font("font-mono")
     font-size: typography.font-size("m")
     font-weight: 400

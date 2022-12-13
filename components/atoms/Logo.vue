@@ -26,7 +26,7 @@
   margin-right: 5px
 
   svg
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
     width: 50px
     height: 50px
 

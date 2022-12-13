@@ -6,12 +6,12 @@
 $border-radius: geometry.radius("small")
 
 @mixin button
-  color: colors.color("green")
+  color: colors.color("primary-highlight")
   background-color: transparent
-  // border: 1px solid colors.color("green")
+  // border: 1px solid colors.color("primary-highlight")
   border-radius: geometry.var("border-radius")
   font-size: typography.font-size("xs")
-  font-family: typography.font("font-mono")
+  font-family: typography.font("monospace")
   line-height: 1
   text-decoration: none
   cursor: pointer
@@ -20,14 +20,14 @@ $border-radius: geometry.radius("small")
   padding: 1.25rem 1.75rem
 
   margin-top: 50px
-  color: colors.color("lightest-slate")
-  background-color: colors.color("green-tint")
+  color: colors.color("lightest-foreground")
+  background-color: colors.color("primary-highlight-tint")
   border: none  // remove terrible border
   outline: none
 
   &:hover, &:focus, &:active
-    // background-color: colors.color("green-tint")
-    color: colors.color("green")
+    // background-color: colors.color("primary-highlight-tint")
+    color: colors.color("primary-highlight")
     outline: none
   &:after
     display: none !important
@@ -51,7 +51,7 @@ $border-radius: geometry.radius("small")
   position: relative
   transition: geometry.var("default-transition")
   &:hover, &:active, &:focus
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
     outline: 0
 
 
@@ -61,17 +61,17 @@ $border-radius: geometry.radius("small")
   text-decoration-skip-ink: auto
   position: relative
   transition: geometry.var("default-transition")
-  color: colors.color("green")
+  color: colors.color("primary-highlight")
   &:hover,
   &:focus,
   &:active
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
     outline: 0
     &:after
       width: 100%
 
     & > *
-      color: colors.color("green") !important
+      color: colors.color("primary-highlight") !important
       transition: geometry.var("default-transition")
 
   &:after
@@ -81,64 +81,64 @@ $border-radius: geometry.radius("small")
     height: 1px
     position: relative
     bottom: 0.37em
-    background-color: colors.color("green")
+    background-color: colors.color("primary-highlight")
     transition: geometry.var("default-transition")
     opacity: 0.5
 
 @mixin small-button
-  color: colors.color("green")
+  color: colors.color("primary-highlight")
   background-color: transparent
-  border: 1px solid colors.color("green")
+  border: 1px solid colors.color("primary-highlight")
   border-radius: geometry.var("border-radius")
   padding: 0.75rem 1rem
   font-size: typography.font-size("xs")
-  font-family: typography.font("font-mono")
+  font-family: typography.font("monospace")
+  font-weight: 600
   line-height: 1
   text-decoration: none
   cursor: pointer
   transition: geometry.var("default-transition")
   &:hover, &:focus, &:active
-    background-color: colors.color("green-tint")
+    background-color: colors.color("primary-highlight-tint")
     outline: none
 
   &:after
     display: none !important
 
 @mixin big-button
-  color: colors.color("green")
-  background-color: transparent
-  border: 1px solid colors.color("green")
+  color: colors.color("lightest-foreground")
+  // border: 1px solid colors.color("primary-highlight")
   border-radius: geometry.var("border-small")
   padding: 1.25rem 1.75rem
   font-size: typography.font-size("s")
-  font-family: typography.font("font-mono")
+  font-family: typography.font("monospace")
+  font-weight: 600
   line-height: 1
   text-decoration: none
   cursor: pointer
   transition: geometry.var("default-transition")
 
   margin-top: 50px
-  color: colors.color("lightest-slate")
   border: none  // remove terrible border
-  background-color: colors.color("green-tint")
+  background-color: colors.color("primary-highlight-tint")
   outline: none
 
   &:hover,
   &:focus,
   &:active
-    background-color: colors.color("green-tint")
+    background-color: colors.color("primary-highlight-tint")
     outline: none
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
   &:after
     display: none !important
 
 @mixin box-shadow
-  box-shadow: 0 10px 30px -15px colors.color("navy-shadow")
+  box-shadow: 0 10px 30px -15px colors.color("shadow")
   transition: geometry.transition(all, 0.2s, ease-in-out)
 
   &:hover,
   &:focus
-    box-shadow: 0 20px 30px -15px colors.color("navy-shadow")
+    box-shadow: 0 20px 30px -15px colors.color("shadow")
 
 @mixin styled-list
   padding: 0
@@ -153,7 +153,56 @@ $border-radius: geometry.radius("small")
       content: '▹'
       position: absolute
       left: 0
-      color: colors.color("green")
+      color: colors.color("primary-highlight")
+
+@mixin small-list
+  display: grid
+  grid-template-columns: repeat(2, minmax(140px, 200px))
+  grid-gap: 0 10px
+  padding: 0
+  margin: 20px 0 0 0
+  overflow: hidden
+  list-style: none
+
+  li
+    position: relative
+    margin-bottom: 10px
+    padding-left: 20px
+    font-family: typography.font("monospace")
+    font-weight: 600
+    font-size: typography.font-size("xs")
+
+    &:before
+      content: '▹'
+      position: absolute
+      left: 0
+      color: colors.color("primary-highlight")
+      font-size: typography.font-size("s")
+      line-height: 12px
+
+@mixin small-list-inline
+  display: flex
+  flex-wrap: wrap
+  position: relative
+  margin: 25px 0 10px
+  padding: 0
+  list-style: none
+  z-index: 2
+  pointer-events: none
+
+  li
+    margin: 0 20px 5px 0
+    color: colors.color("light-foreground")
+    font-family: typography.font("monospace")
+    font-size: typography.font-size("xs")
+    font-weight: 600
+    white-space: nowrap
+  
+  @media (max-width: 768px) 
+    margin: 10px 0
+    li 
+      margin: 0 10px 5px 0
+      color: colors.color("lightest-foreground")
 
 @mixin reset-list
   list-style: none

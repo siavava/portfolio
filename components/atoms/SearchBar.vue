@@ -57,18 +57,18 @@ export default {
     font-size: 20px
     padding: 20px
     line-height: 130%
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
     font-size: typography.font-size("xl")
     font-family: typography.font("font-sans")
 
     &::placeholder
       font-size: typography.font-size("xl")
       font-family: typography.font("font-sans")
-      color: colors.color("green")
+      color: colors.color("primary-highlight")
       opacity: 0.4
 
     &::selection
-      color: colors.color("green")
+      color: colors.color("primary-highlight")
       opacity: 0.8
 
   .search-icon
@@ -81,8 +81,8 @@ export default {
     left: auto
     right: 10px
     top: 15px
-    fill: colors.color("green")
-    stroke: colors.color("green")
+    fill: colors.color("primary-highlight")
+    stroke: colors.color("primary-highlight")
     opacity: 0.8
     cursor: pointer
 

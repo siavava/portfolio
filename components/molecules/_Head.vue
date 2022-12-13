@@ -26,6 +26,6 @@ if ( path === '/' ) {
 
 <script lang="ts">
 export default {
-  name: "Head",
+  name: "_Head",
 }
 </script>

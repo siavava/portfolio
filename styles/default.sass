@@ -15,13 +15,13 @@ html
   box-sizing: inherit
 
 ::selection
-  background-color: colors.color("lightest-navy")
-  color: colors.color("lightest-slate")
+  background-color: colors.color("lightest-background")
+  color: colors.color("lightest-foreground")
 
 
 /* Provide basic, default focus styles.*/
 :focus
-  outline: 2px dashed colors.color("green")
+  outline: 2px dashed colors.color("primary-highlight")
   outline-offset: 3px
 
 /*
@@ -36,23 +36,23 @@ html
   platform, provide enhanced focus styles for keyboard
   focus. */
 :focus-visible 
-  outline: 2px dashed colors.color("green")
+  outline: 2px dashed colors.color("primary-highlight")
   outline-offset: 3px
 
 /* Scrollbar Styles */
 html 
   scrollbar-width: thin
-  scrollbar-color: colors.color("dark-slate") colors.color("navy")
+  scrollbar-color: colors.color("dark-foreground") colors.color("background")
 
 ::-webkit-scrollbar 
   width: 12px
 
 ::-webkit-scrollbar-track 
-  background: colors.color(navy)
+  background: colors.color("background")
 
 ::-webkit-scrollbar-thumb 
-  background-color: colors.color("dark-slate")
-  border: 3px solid colors.color("navy")
+  background-color: colors.color("dark-foreground")
+  border: 3px solid colors.color("background")
   border-radius: 10px
 
 body
@@ -66,9 +66,9 @@ body
   overflow-x: hidden
   -moz-osx-font-smoothing: grayscale
   -webkit-font-smoothing: antialiased
-  background-color: colors.color("navy")
-  color: colors.color("slate")
-  font-family: typography.font("font-sans")
+  background-color: colors.color("background")
+  color: colors.color("foreground")
+  font-family: typography.font("sans-serif")
   font-size: typography.font-size("xl")
   line-height: 1.3
   @media (max-width: 480px) 
@@ -153,7 +153,7 @@ section
 h1, h2, h3, h4, h5, h6 
   margin: 0 0 10px 0
   font-weight: 600
-  color: colors.color("lightest-slate")
+  color: colors.color("lightest-foreground")
   line-height: 1.1
 
 .big-heading 
@@ -181,8 +181,8 @@ h1, h2, h3, h4, h5, h6
     counter-increment: sections 1
     content: '0' counter(sections) '.'
     margin-right: 10px
-    color: colors.color("green")
-    font-family: typography.font("font-mono")
+    color: colors.color("primary-highlight")
+    font-family: typography.font("monospace")
     font-size: clamp(typography.font-size("m"), 3vw, typography.font-size("xl"))
     font-weight: 400
 
@@ -199,7 +199,7 @@ h1, h2, h3, h4, h5, h6
     width: 300px
     height: 1px
     margin-left: 20px
-    background-color: colors.color("lightest-navy")
+    background-color: colors.color("lightest-background")
     @media (max-width: 1080px) 
       width: 200px
     
@@ -240,7 +240,7 @@ a
   transition: geometry.var("default-transition")
 
   &:hover, &:focus 
-    color: colors.color("green")
+    color: colors.color("primary-highlight")
   
   &.inline-link 
     @include mixins.inline-link
@@ -275,7 +275,7 @@ p
     @include mixins.inline-link
   
   & > code 
-    background-color: colors.color("light-navy")
+    background-color: colors.color("light-background")
     color: colors.color("white")
     font-size: typography.font-size("s")
     border-radius: geometry.var("border-radius")
@@ -299,7 +299,7 @@ p
 //         content: '▹'
 //         position: absolute
 //         left: 0
-//         color: colors.color("green")
+//         color: colors.color("primary-highlight")
       
 .styled-content
   display: flex
@@ -307,7 +307,7 @@ p
   min-height: 100vh
 
 blockquote 
-  border-left-color: colors.color("green")
+  border-left-color: colors.color("primary-highlight")
   border-left-style: solid
   border-left-width: 1px
   margin-left: 0px
@@ -320,7 +320,7 @@ blockquote
   
 
 hr 
-  background-color: colors.color("lightest-navy")
+  background-color: colors.color("lightest-background")
   height: 1px
   border-width: 0px
   border-style: initial
@@ -329,7 +329,7 @@ hr
   margin: 1rem
 
 code 
-  font-family: typography.font("font-mono")
+  font-family: typography.font("monospace")
   font-size: typography.font-size("m")
 
 .skip-to-content 
@@ -344,8 +344,8 @@ code
 
 
   &:focus, &:active 
-    background-color: colors.color("green")
-    color: colors.color("navy")
+    background-color: colors.color("primary-highlight")
+    color: colors.color("background")
     top: 0
     left: 0
     width: auto
@@ -355,19 +355,19 @@ code
   
 
 .logo
-  color: colors.color("green")
+  color: colors.color("primary-highlight")
 
 .overline 
-  color: colors.color("green")
-  font-family: typography.font("font-mono")
+  color: colors.color("primary-highlight")
+  font-family: typography.font("monospace")
   font-size: typography.font-size("m")
   font-weight: 400
 
 .subtitle 
-  color: colors.color("green")
+  color: colors.color("primary-highlight")
   margin: 0 0 20px 0
   font-size: typography.font-size("m")
-  font-family: typography.font("font-mono")
+  font-family: typography.font("monospace")
   font-weight: 400
   line-height: 1.5
 
@@ -386,7 +386,7 @@ code
   display: flex
   align-items: center
   margin-bottom: 50px
-  color: colors.color("green")
+  color: colors.color("primary-highlight")
 
 
   .arrow 
@@ -396,7 +396,7 @@ code
   
   a 
     @include mixins.inline-link
-    font-family: typography.font("font-mono")
+    font-family: typography.font("monospace")
     font-size: typography.font-size("s")
     font-weight: 600
     line-height: 1.5
@@ -435,23 +435,23 @@ code
 /* Fade up */
 .fadeup-enter-from
   opacity: 0.01
-  transform: translateY(20px)
+  transform: tranforegroundY(20px)
   transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
 
 .fadeup-enter-to
   opacity: 1
-  transform: translateY(0px)
+  transform: tranforegroundY(0px)
   transition: opacity 300ms geometry.var("easing"), transform 300ms var("easing")
 
 /* Fade down */
 .fadedown-enter-from
   opacity: 0.01
-  transform: translateY(-20px)
+  transform: tranforegroundY(-20px)
   transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
 
 .fadedown-enter-to
   opacity: 1
-  transform: translateY(0px)
+  transform: tranforegroundY(0px)
   transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
 
 /* Fade */

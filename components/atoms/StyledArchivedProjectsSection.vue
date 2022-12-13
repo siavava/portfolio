@@ -18,7 +18,7 @@
     font-size: clamp(24px, 5vw, typography.font-size("heading"))
 
   .archive-link
-    font-family: typography.font("font-mono")
+    font-family: typography.font("monospace")
     font-size: typography.font-size("s")
 
     &:after

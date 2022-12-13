@@ -61,7 +61,7 @@
 .menu-button
   background: transparent
   z-index: 25
-  color: colors.color("green")
+  color: colors.color("primary-highlight")
 
   .line
 

@@ -33,7 +33,7 @@
     position: relative
     width: 100%
     border-radius: geometry.var("border-radius")
-    // background-color: colors.color("green")
+    // background-color: colors.color("primary-highlight")
     
     &:hover, &:focus 
       outline: 0
@@ -67,11 +67,11 @@
     &:before 
       top: 0
       left: 0
-      background-color: colors.color("navy")
+      background-color: colors.color("background")
       mix-blend-mode: screen
     
     &:after 
-      border: 2px solid colors.color("green")
+      border: 2px solid colors.color("primary-highlight")
       top: 20px
       left: 20px
       z-index: 1

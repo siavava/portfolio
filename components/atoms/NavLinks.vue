@@ -54,6 +54,7 @@
 .home-links
   display: flex
   margin: 0 auto
+  font-weight: 600
 
   @media (max-width: 768px)
     display: none
@@ -76,7 +77,7 @@
         &:before
           content: '0' counter(item) '.'
           margin-right: 5px
-          color: colors.color("green")
+          color: colors.color("primary-highlight")
           font-size: typography.font-size("xxs")
           text-align: right
 

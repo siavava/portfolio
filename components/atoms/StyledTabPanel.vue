@@ -68,12 +68,12 @@ export default {
     line-height: 1.3
 
     .company 
-      color: colors.color("green")
+      color: colors.color("primary-highlight")
     
   
   .range 
     margin-bottom: 25px
-    color: colors.color("light-slate")
-    font-family: typography.font("font-mono")
+    color: colors.color("light-foreground")
+    font-family: typography.font("monospace")
     font-size: typography.font-size("xs")
 </style>

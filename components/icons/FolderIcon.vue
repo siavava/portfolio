@@ -38,5 +38,5 @@
     fill: none
 
     &:hover
-      fill: colors.color("green")
+      fill: colors.color("primary-highlight")
 </style>

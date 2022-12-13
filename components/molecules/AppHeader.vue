@@ -140,7 +140,7 @@ export default {
     style() {
       return this.scrolledToTop
         ? `box-shadow: none`
-        : `transform: translateY(-${this.scrollHeight}px)`;
+        : `transform: tranforegroundY(-${this.scrollHeight}px)`;
     },
     scrolledToTop() {
       return this.lastScrollPosition <= 0;
@@ -326,7 +326,7 @@ const toggleMenu = () => {
   // filter: grayscale(30%) !important
 
   // blur when there's content underneath
-  // background-color: colors.color("navy")
+  // background-color: colors.color("background")
   backdrop-filter: blur(16px)
 
   pointer-events: auto !important
@@ -345,8 +345,8 @@ const toggleMenu = () => {
     padding: 0 25px
 
   @media (prefers-reduced-motion: no-preference)
-    box-shadow: 0 10px 30px -10px colors.color("navy-shadow")
-    box-shadow: 0 10px 30px -10px colors.color("navy-shadow")
+    box-shadow: 0 10px 30px -10px colors.color("shadow")
+    box-shadow: 0 10px 30px -10px colors.color("shadow")
 
 
   // when menu is open,
@@ -396,8 +396,8 @@ const toggleMenu = () => {
   margin-top: 20px
   margin-bottom: 20px
   overflow: hidden
-  border-top: 1px solid colors.color("lightest-navy")
-  color: colors.color("lightest-slate")
+  border-top: 1px solid colors.color("lightest-background")
+  color: colors.color("lightest-foreground")
   font-weight: 500
   line-height: 2
 
@@ -409,7 +409,7 @@ const toggleMenu = () => {
   height: 100%
   width: 100%
   margin: 40px 0 40px 0
-  border-top: 1px solid colors.color("lightest-navy")
+  border-top: 1px solid colors.color("lightest-background")
   color: inherit
 
 .menu-column
@@ -433,12 +433,12 @@ const toggleMenu = () => {
 .menu-column-header
   font-family: typography.font("font-sans")
   font-size: typography.font-size("xl")
-  color: colors.color("lightest-slate")
+  color: colors.color("lightest-foreground")
 
 .menu-column-item
   font-family: typography.font("font-sans")
   font-size: typography.font-size("m")
-  color: colors.color("light-slate")
+  color: colors.color("light-foreground")
 
 .menu-extras
   display: flex
@@ -446,7 +446,7 @@ const toggleMenu = () => {
   justify-content: space-between
   height: 100%
   width: 100%
-  border-top: 1px solid colors.color("lightest-navy")
+  border-top: 1px solid colors.color("lightest-background")
 
 .menu-extras-links
   display: flex
@@ -455,7 +455,7 @@ const toggleMenu = () => {
   margin-left: 10px
   align-items: left
   margin: 40px
-  color: colors.color("green")
+  color: colors.color("primary-highlight")
 
 .menu-extras-footer
   width: 50%

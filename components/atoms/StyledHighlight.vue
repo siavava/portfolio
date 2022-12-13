@@ -95,7 +95,7 @@ const tabWidth = 120;
   width: 2px
   height: geometry.var("tab-height")
   border-radius: geometry.var("border-radius")
-  background: colors.color("green")
+  background: colors.color("primary-highlight")
 
   -webkit-transform: translateY(geometry.var("tab-height"))
   -webkit-transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1)
