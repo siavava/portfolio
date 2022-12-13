@@ -26,7 +26,7 @@ to build the next important solutions.
 I have been an alumni / student at:
 - [Dartmouth College][dartmouth] (current)
 - [Y Combinator][yc]
-- [Carnegie Mellon][cmu]
+- [Carnegie Mellon University][cmu]
 - [Starehe Boys' Center & School][starehe]
 ::
 
