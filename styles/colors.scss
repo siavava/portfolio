@@ -4,14 +4,13 @@ $red: #DC4D4D;
 // $red: #A80506;
 // $red: #E30707;
 $black: #040404;
-$green: #64ffda,;
+$green: #64ffda;
 
-$colors: (
-  "secondary-highlight": yellow,
-  
-  "primary-highlight": $red,
-  // "primary-highlight-tint": rgba(100, 255, 218, 0.1),
+$navy: (
+
+  "primary-highlight": #DC4D4D,
   "primary-highlight-tint": rgba(202, 85, 85, 0.11) ,
+  "secondary-highlight": yellow,
   
   "background": #0a192f,
   "dark-background": #020c1b,
@@ -24,33 +23,43 @@ $colors: (
   "foreground": #8892b0,
   "light-foreground": #a8b2d1,
   "lightest-foreground": #ccd6f6,
-
-
-
-  // "dark-navy": #020c1b,
-  // "light-navy": #112240,
-  // "lightest-navy": #233554,
-  // "navy-shadow": rgba(2, 12, 27, 0.7),
-  // "dark-slate": #495670,
-  // "slate": #8892b0,
-  // "light-slate": #a8b2d1,
-  // "lightest-slate": #ccd6f6,
-  // "white": #e6f1ff,
-  // "green": #64ffda,
-  // "green": $red,
-  // "green-tint": rgba(100, 255, 218, 0.1),
 );
 
-@function color($color-name) {
-  $result: map.get($colors, $color-name);
-  @return $result;
-}
-@function darken($color, $amount: 50%) {
-  $black: color("black");
-  @return mix($color, $black, $amount);
+$neon: (
+  "secondary-highlight": yellow,
+  
+  "primary-highlight": $green,
+  "primary-highlight-tint": rgba(100, 255, 218, 0.1),
+  
+  "background": #0a192f,
+  "dark-background": #020c1b,
+  "light-background": #112240,
+  "lightest-background": #233554,
+  "shadow": rgba(2, 12, 27, 0.7),
+
+  "dark-foreground": #495670,
+  "foreground": #8892b0,
+  "light-foreground": #a8b2d1,
+  "lightest-foreground": #ccd6f6,
+
+);
+
+$theme: null;
+
+.neon {
+  $theme: $neon !global;
+  // @debug map.get($theme, "primary-highlight");
 }
 
-@function invert($color, $amount: 100%) {
-  $inverse: change-color($color, $hue: hue($color) + 180);
-  @return mix($inverse, $color, $amount);
+.navy {
+  $theme: $navy !global;
+  // @debug map.get($theme, "primary-highlight");
+}
+
+
+
+
+@function color($color-name) {
+  $result: map.get($theme, $color-name);
+  @return $result;
 }

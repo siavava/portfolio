@@ -1,7 +1,7 @@
 <template>
   <div id="root">
     <AppHeader />
-    <body> <!-- header in body == not sticky -->
+    <body class="navy"> <!-- header in body == not sticky -->
       <main>
         <a class="skip-to-content" href="#content" />
         <!-- <body> -->

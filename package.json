@@ -27,11 +27,13 @@
     "sass": "latest",
     "sass-loader": "latest",
     "scrollreveal": "^4.0.9",
+    "shiki": "^0.11.1",
     "sr": "^1.0.4",
     "vue-freezeframe": "^5.0.2",
     "vue-styled-components": "^1.0.4"
   },
   "dependencies": {
+    "@nuxt/content": "nuxt/content#feat/rehype-plugins",
     "@nuxt/vite-builder": "^3.0.0",
     "axios": ">=1.2.1",
     "node-sass": ">=7.0.1",
@@ -42,7 +44,6 @@
     "vue-resize-observer": "^2.0.16",
     "vue-router": "^4.1.6",
     "vue-scroll-reveal": "^1.0.11",
-    "vuex": "^4.1.0",
-    "@nuxt/content": "nuxt/content#feat\/rehype-plugins"
+    "vuex": "^4.1.0"
   }
 }

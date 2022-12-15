@@ -26,9 +26,9 @@ You can play with Nuxt online directly on CodeSandbox or StackBlitz:
 ## Prerequisites
 
 - [node](https://nodejs.org) - _We recommend you have the latest LTS version installed_.
-- 
+
 - A text editor, we recommend [VS Code](https://code.visualstudio.com/) with the [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur) extension or [WebStorm](https://www.jetbrains.com/webstorm/).
-- 
+
 - A terminal, we recommend using VS Code's [integrated terminal](https://code.visualstudio.com/docs/editor/integrated-terminal) or [WebStorm terminal](https://www.jetbrains.com/help/webstorm/terminal-emulator.html).
 
 ## Using create-nuxt-app
@@ -37,7 +37,58 @@ To get started quickly, you can use [create-nuxt-app](https://github.com/nuxt/cr
 
 Make sure you have installed yarn, npx (included by default with npm v5.2+) or npm (v6.1+).
 
-::code-group
+```python [src/neural.py] {15, 17-21}
+class NeuralNetwork:
+  """A neural network with an arbitrary number of layers and neurons."""
+
+  def __init__(self, layers, activation='sigmoid', learning_rate=0.1):
+    """Initializes the neural network.
+
+    Args:
+      layers: A list of integers for number of neurons in each layer.
+      activation: A string representing the activation function to use.
+      learning_rate: A float representing the learning rate.
+    """
+    self.layers = layers
+    self.activation = activation
+    self.learning_rate = learning_rate
+    self.weights = []
+    self.biases = []
+    self._initialize_weights()
+
+  def _initialize_weights(self):
+    """Initializes the weights and biases of the neural network."""
+    for i in range(len(self.layers) - 1):
+      self.weights.append(np.random.randn(self.layers[i], self.layers[i + 1]))
+      self.biases.append(np.random.randn(self.layers[i + 1]))
+
+  def _sigmoid(self, x):
+    """Computes the sigmoid function.
+
+    Args:
+      x: A float or numpy array.
+
+    Returns:
+      A float or numpy array.
+    """
+    return 1 / (1 + np.exp(-x))
+
+  def _sigmoid_derivative(self, x):
+    """Computes the derivative of the sigmoid function.
+
+    Args:
+      x: A float or numpy array.
+
+    Returns:
+      A float or numpy array.
+    """
+    return self._sigmoid(x) * (1 - self._sigmoid(x))
+
+```
+
+Hello
+
+<!-- ::code-group
 ```bash [Yarn]
 yarn create nuxt-app <project-name>
 ```
@@ -47,22 +98,23 @@ npx create-nuxt-app <project-name>
 ```bash [NPM]
 npm init nuxt-app <project-name>
 ```
-::
+:: -->
 
 It will ask you some questions (name, Nuxt options, UI framework, TypeScript, linter, testing framework, etc). To find out more about all the options see the [create-nuxt-app documentation](https://github.com/nuxt/create-nuxt-app/blob/master/README.md).
 
 Once all questions are answered, it will install all the dependencies. The next step is to navigate to the project folder and launch it:
 
-::code-group
+<!-- ::code-group -->
 ```bash [Yarn]
 cd <project-name>
+echo $(pwd)
 yarn dev
 ```
 ```bash [NPM]
 cd <project-name>
 npm run dev
 ```
-::
+<!-- :: -->
 
 The application is now running on [http://localhost:3000](http://localhost:3000). Well done!
 

@@ -34,7 +34,10 @@ export default {
       rehypePlugins: [
         "rehype-katex"
       ]
-    } 
+    },
+    highlight: {
+      theme: "github-dark",
+    }
   },
   ssr: true,
 
