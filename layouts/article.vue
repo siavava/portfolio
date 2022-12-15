@@ -4,13 +4,9 @@
       <AppHeader/>
       <main>
         <a class="skip-to-content" href="#content"/>
-        <!-- <body> -->
           <div class="container">
-            <StyledText>
-              <slot id="content"/>
-            </StyledText>
+            <slot id="content"/>
           </div>
-          <!-- <slot id="content"/> -->
       </main>
       <AppFooter/>
     </body>
@@ -21,9 +17,16 @@
 @use "../styles/default"
 @use "../styles/typography"
 
+#root
+  display: flex
+  margin: 0 auto
+  flex-direction: column
+  min-height: 100vh
+
 .container
   max-width: 720px
   margin: 0 auto
+  font-size: typography.font-size("m")
 
 h1
   font-size: 36px

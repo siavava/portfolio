@@ -11,3 +11,15 @@ const heading = 1
 const { anchorLinks } = useRuntimeConfig().public.content
 const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes(heading)
 </script>
+
+<style lang="sass" scoped>
+
+@use "../styles/colors"
+@use "../styles/typography"
+h1
+  margin-top: 1.5rem
+  margin-bottom: 1.5rem
+  font-weight: 800
+  font-size: typography.font-size("heading")
+  color: colors.color("primary-highlight")
+</style>

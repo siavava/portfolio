@@ -32,7 +32,7 @@ const { data: contact } = await useAsyncData(
 
 .contact-section
   max-width: 600px
-  margin: 0 auto //100px remove bottom margin
+  margin: 0 auto
   text-align: center
 
   @media (max-width: 768px) 
@@ -42,24 +42,23 @@ const { data: contact } = await useAsyncData(
     display: block
     margin-bottom: 20px
     color: colors.color("primary-highlight")
-    font-family: typography.font("font-mono")
+    font-family: typography.font("monospace")
     font-size: typography.font-size("m")
-    font-weight: 400
+    font-weight: 600
     text-decoration: none
-    // background-color: yellow
     
     &:before 
       bottom: 0
       font-size: typography.font-size("s")
+      font-weight: 600
     
     &:after 
       display: none
-    
-  
-  // .title
-  * > h2
+
+  div > h2
     font-size: clamp(40px, 5vw, 60px)
     font-weight: 600
+    color: colors.color("lightest-foreground")
   
   .email-link
     @include mixins.big-button

@@ -18,10 +18,6 @@ defineProps({
 </template>
 
 <style lang="sass" scoped>
-
-@use "~/styles/typography"
-@use "~/styles/colors"
-@use "~/styles/geometry"
 @use "~/styles/mixins"
 
 a

@@ -5,18 +5,11 @@ email: 'amittaijoel@outlook.com'
 
 ## Get In Touch
 
-I am excited to connect with people, 
-especially those I don't know;
-the most meaningful exchanges of ideas and culture
-often are between people from disparate environments,
-erstwhile unknown to each other.
+I am particularly excited to make new connections.
+Ping me an [email][email], or find me on [Instagram][instagram], [Twitter][twitter],
+[GitHub][github], [Behance][behance], [LinkedIn][linkedin], and beyond.
 
-Shoot me an [email][email], or
-find me on [Instagram][instagram] / [Twitter][twitter] /
- [GitHub][github] / [Behance][behance] / [Linkedin][linkedin]
- and beyond.
-
-I  hope you're kind to the world,
+I hope you're kind to the world,
 and I hope the world is kind to you.
 
 [email]: mailto:amittaijoel@outlook.com

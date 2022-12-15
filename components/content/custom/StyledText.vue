@@ -16,37 +16,13 @@
 @use "~/styles/geometry"
 @use "~/styles/mixins"
 
-.styled-text
-  font-family: typography.font("font-sans")
-  font-size: typography.font-size("m")
+// .styled-text
+  // font-family: typography.font("sans-serif")
 
-  ul
-    @include mixins.small-list
-    // display: grid
-    // grid-template-columns: repeat(2, minmax(140px, 200px))
-    // grid-gap: 0 10px
-    // padding: 0
-    // margin: 20px 0 0 0
-    // overflow: hidden
-    // list-style: none
+  // // ul
+  // //   @include mixins.styled-list
 
-    // li
-    //   position: relative
-    //   margin-bottom: 10px
-    //   padding-left: 20px
-    //   font-family: typography.font("monospace")
-    //   font-weight: 600
-    //   font-size: typography.font-size("xs")
-
-    //   &:before
-    //     content: '▹'
-    //     position: absolute
-    //     left: 0
-    //     color: colors.color("primary-highlight")
-    //     font-size: typography.font-size("s")
-    //     line-height: 12px
-
-  a
-    @include mixins.inline-link
+  // // a
+  // //   @include mixins.inline-link
     
 </style>

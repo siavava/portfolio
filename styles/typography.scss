@@ -16,28 +16,12 @@ $fonts-map: (
   // "font-sans": "DM Sans",
   // "font-sans": "Brown",
   "sans-serif": "Brown",
+  // "sans-serif": "DM Sans",
   
   // "font-mono": "SF Mono",
   // "font-mono": "DM Mono"
   "monospace": "DM Mono"
 );
-
-// $fonts-map: (
-//   "font-sans": "Calibre, Inter, San Francisco, SF Pro Text,\
-//                 -apple-system, system-ui, sans-serif",
-//   "font-mono": "SF Mono, Fira Code, Fira Mono, Roboto Mono, monospace",
-// );
-
-// $font-sizes: (
-//   "xxs": 12px,
-//   "xs": 13px,
-//   "s": 14px,
-//   "m": 16px,
-//   "l": 18px,
-//   "xl": 20px,
-//   "xxl": 22px,
-//   "heading": 32px
-// );
 
 $font-sizes: (
   "xxs": 11px,
@@ -47,6 +31,6 @@ $font-sizes: (
   "l": 17px,
   "xl": 19px,
   "xxl": 21px,
-  "heading": 31px,
+  "heading": clamp(21px, 5vw, 35px),
   "big-heading": 80px
 );

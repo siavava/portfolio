@@ -57,6 +57,7 @@ export default {
   left: 0
   right: 0
   overflow: auto
+  
   ul
     @include mixins.styled-list
     

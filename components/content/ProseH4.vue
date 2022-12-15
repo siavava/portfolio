@@ -11,3 +11,13 @@ const heading = 4
 const { anchorLinks } = useRuntimeConfig().public.content
 const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes(heading)
 </script>
+
+<style lang="sass" scoped>
+
+@use "../styles/colors"
+h4
+  margin-top: 0.5em
+  margin-bottom: 0.5em
+  font-weight: 500
+  color: colors.color("lightest-foreground")
+</style>

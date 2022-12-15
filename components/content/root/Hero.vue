@@ -1,10 +1,24 @@
 <template>
   <section class="hero">
-    <ContentDoc
-      path="profile/hero"
-      tag="div"
-      class="hero-container"
-    />
+    <div class="hero-content-container">
+      <h1 class="hero-h1">
+        Hi, my name is
+      </h1>
+
+      <h2 class="big-heading">
+        Altair.
+      </h2>
+
+      <h3 class="hero-h3 big-heading reduced">
+        I make things do stuff.
+      </h3>
+
+      <ContentDoc
+        path="profile/hero"
+        tag="div"
+        class="hero-container"
+      />
+    </div>
   </section>
 </template>
 
@@ -22,15 +36,17 @@ export default {
 .hero
   @include mixins.flex-center
   flex-direction: column
-  align-items: flex-start
+  align-items: center
   min-height: 100vh
   padding: 0
   max-width: 900px
-  // margin: 0 auto
-  // position: static
 
   @media (max-width: 480px) and (min-height: 700px)
     padding-bottom: 10vh
+
+  .hero-content-container
+    width: auto
+
 
   h1
     margin: 0 0 30px 4px
@@ -38,7 +54,8 @@ export default {
     font-family: typography.font("monospace")
 
     font-size: clamp(typography.font-size("s"), 5vw, typography.font-size("m"))
-    font-weight: 600
+    font-weight: 600t
+    width: 100%
 
     @media (max-width: 480px)
       margin: 0 0 20px 2px
@@ -51,20 +68,14 @@ export default {
   .big-heading
     font-weight: 600
   
-  p p
-    margin: 20px 0 0
+  p
+    margin: 20px 0
     max-width: 540px
   
   .email-link
     @include mixins.big-button
 
-    // p
-      // font-family: typography.font("monospace")
-      // font-size: typography.font-size("s")
-
-      // &:hover, &:focus, &:active
-      //   color: colors.color("primary-highlight")
-
   .reduced
     font-size: clamp(30px,6vw, 80px)
+
 </style>

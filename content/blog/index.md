@@ -10,6 +10,116 @@ ManualInstallVideoTitle: Nuxt Manual Installation
 layout: article
 ---
 
+# This is H1 that Spans Multiple Lines
+
+My given name is [Amittai][amittai], but my preferred name ad 2022
+is [Altair][altair].
+I am a current student at Dartmouth College, and some would say
+a wannabe software engineer. I am passionate about data and computation,
+especially in the context of society and how those two can drive changes.
+My interests include deep learning and everything in the AI space,
+data engineering, systems, and, somehow, lately, a little bit of
+web development. I am also a big fan of the [Haskell][haskell]
+programming language and functional programming patterns in general.
+
+When not coding or studying Math, I am probably sleeping,
+playing online chess, shooting photos that I will never
+put out into the world, or, on occasion, playing
+[Assassin's Creed][assassins-creed] 
+([Origins][assassins-creed-origins], anyone?).
+
+## This is H2 that Spans Multiple Lines
+
+My given name is [Amittai][amittai], but my preferred name ad 2022
+is [Altair][altair].
+I am a current student at Dartmouth College, and some would say
+a wannabe software engineer. I am passionate about data and computation,
+especially in the context of society and how those two can drive changes.
+My interests include deep learning and everything in the AI space,
+data engineering, systems, and, somehow, lately, a little bit of
+web development. I am also a big fan of the [Haskell][haskell]
+programming language and functional programming patterns in general.
+
+When not coding or studying Math, I am probably sleeping,
+playing online chess, shooting photos that I will never
+put out into the world, or, on occasion, playing
+[Assassin's Creed][assassins-creed] 
+([Origins][assassins-creed-origins], anyone?).
+
+### This is H3 that Spans Multiple Lines
+
+My given name is [Amittai][amittai], but my preferred name ad 2022
+is [Altair][altair].
+I am a current student at Dartmouth College, and some would say
+a wannabe software engineer. I am passionate about data and computation,
+especially in the context of society and how those two can drive changes.
+My interests include deep learning and everything in the AI space,
+data engineering, systems, and, somehow, lately, a little bit of
+web development. I am also a big fan of the [Haskell][haskell]
+programming language and functional programming patterns in general.
+
+When not coding or studying Math, I am probably sleeping,
+playing online chess, shooting photos that I will never
+put out into the world, or, on occasion, playing
+[Assassin's Creed][assassins-creed] 
+([Origins][assassins-creed-origins], anyone?).
+
+#### This is H4 that Spans Multiple Lines
+
+My given name is [Amittai][amittai], but my preferred name ad 2022
+is [Altair][altair].
+I am a current student at Dartmouth College, and some would say
+a wannabe software engineer. I am passionate about data and computation,
+especially in the context of society and how those two can drive changes.
+My interests include deep learning and everything in the AI space,
+data engineering, systems, and, somehow, lately, a little bit of
+web development. I am also a big fan of the [Haskell][haskell]
+programming language and functional programming patterns in general.
+
+When not coding or studying Math, I am probably sleeping,
+playing online chess, shooting photos that I will never
+put out into the world, or, on occasion, playing
+[Assassin's Creed][assassins-creed] 
+([Origins][assassins-creed-origins], anyone?).
+
+##### This is H5 that Spans Multiple Lines
+
+My given name is [Amittai][amittai], but my preferred name ad 2022
+is [Altair][altair].
+I am a current student at Dartmouth College, and some would say
+a wannabe software engineer. I am passionate about data and computation,
+especially in the context of society and how those two can drive changes.
+My interests include deep learning and everything in the AI space,
+data engineering, systems, and, somehow, lately, a little bit of
+web development. I am also a big fan of the [Haskell][haskell]
+programming language and functional programming patterns in general.
+
+When not coding or studying Math, I am probably sleeping,
+playing online chess, shooting photos that I will never
+put out into the world, or, on occasion, playing
+[Assassin's Creed][assassins-creed] 
+([Origins][assassins-creed-origins], anyone?).
+
+
+
+###### This is H6 that Spans Multiple Lines
+
+My given name is [Amittai][amittai], but my preferred name ad 2022
+is [Altair][altair].
+I am a current student at Dartmouth College, and some would say
+a wannabe software engineer. I am passionate about data and computation,
+especially in the context of society and how those two can drive changes.
+My interests include deep learning and everything in the AI space,
+data engineering, systems, and, somehow, lately, a little bit of
+web development. I am also a big fan of the [Haskell][haskell]
+programming language and functional programming patterns in general.
+
+When not coding or studying Math, I am probably sleeping,
+playing online chess, shooting photos that I will never
+put out into the world, or, on occasion, playing
+[Assassin's Creed][assassins-creed] 
+([Origins][assassins-creed-origins], anyone?).
+
 # Installation
 
 Here, you will find information on setting up and running a Nuxt project in 4 steps.
@@ -37,9 +147,11 @@ To get started quickly, you can use [create-nuxt-app](https://github.com/nuxt/cr
 
 Make sure you have installed yarn, npx (included by default with npm v5.2+) or npm (v6.1+).
 
-```python [src/neural.py] {15, 17-21}
+```python [src/neural.py] {15, 17-21, 24}
 class NeuralNetwork:
-  """A neural network with an arbitrary number of layers and neurons."""
+  """
+    A neural network with an arbitrary number of layers and neurons.
+  """
 
   def __init__(self, layers, activation='sigmoid', learning_rate=0.1):
     """Initializes the neural network.
@@ -104,17 +216,19 @@ It will ask you some questions (name, Nuxt options, UI framework, TypeScript, li
 
 Once all questions are answered, it will install all the dependencies. The next step is to navigate to the project folder and launch it:
 
-<!-- ::code-group -->
-```bash [Yarn]
-cd <project-name>
-echo $(pwd)
-yarn dev
+```haskell [Main.hs] {3, 5-6, 9-10}
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main where
+
+main :: IO ()
+main = do
+  putStrLn  "Hello, dummy!"
+  putStr    "Type anything: "
+  input     <- getLine
+  print     input
+  return    ()
 ```
-```bash [NPM]
-cd <project-name>
-npm run dev
-```
-<!-- :: -->
 
 The application is now running on [http://localhost:3000](http://localhost:3000). Well done!
 
@@ -231,7 +345,7 @@ We use the dev command when running our application in development mode.
 
 ::
 
-The application is now running on **[http://localhost:3000](http://localhost:3000/)**.
+The application is now running on [http://localhost:3000](http://localhost:3000/).
 
 Open it in your browser by clicking the link in your terminal and you should see the text "Hello World" we copied in the previous step.
 
@@ -253,10 +367,18 @@ Create a page named `fun.vue` in the `pages` directory.
 
 Add a `<template></template>` and include a heading with a funny sentence inside.
 
-Then, go to your browser and see your new page on **[localhost:3000/fun](http://localhost:3000/fun)**.
+Then, go to your browser and see your new page on [localhost:3000/fun](http://localhost:3000/fun).
 
 ::alert{type="info"}
 
 Creating a directory named `more-fun` and putting an `index.vue` file inside it will give the same result as creating a `more-fun.vue` file.
 
 ::
+
+
+
+[amittai]:                  https://en.wikipedia.org/wiki/Amittai
+[altair]:                   https://www.thebump.com/b/altair-baby-name
+[haskell]:                  https://www.haskell.org/
+[assassins-creed]:          https://www.ubisoft.com/en-us/game/assassins-creed
+[assassins-creed-origins]:  https://www.ubisoft.com/en-us/game/assassins-creed/origins

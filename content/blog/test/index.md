@@ -1,3 +1,7 @@
+---
+layout: article
+---
+
 # Reward Design
 
 ## Concept Check

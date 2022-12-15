@@ -37,6 +37,14 @@ export default {
     },
     highlight: {
       theme: "github-dark",
+      preload: [
+        'bash',
+        'c',
+        'cpp',
+        'java',
+        'python',
+        'haskell'
+      ]
     }
   },
   ssr: true,

@@ -25,6 +25,10 @@ to dabble in data engineering, machine learning, and/or functional programming.
 
 Here are a few technologies I've been working with recently:
 
+::small-list
+---
+class: "columned"
+---
   - Python/Julia
   - C/C++
   - Java
@@ -33,6 +37,7 @@ Here are a few technologies I've been working with recently:
   - Vue/TypeScript/Sass
   - LaTeX
   - Rust
+::
 
 [amittai]:                  https://en.wikipedia.org/wiki/Amittai
 [altair]:                   https://www.thebump.com/b/altair-baby-name

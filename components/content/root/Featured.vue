@@ -91,24 +91,11 @@
 </script>
 
 <script lang="ts" setup>
-// import { joinPaths } from '~~/src/utils';
-
-// const makePath = (file: string) => {
-//   return await loadImage(`/assets/projects/featured/${file}`);
-//   // const _path = joinPaths('assets/projects/featured', path);
-//   // console.log(`Path: ${_path}`);
-//   // return _path;
-// }
-
-// const imageUrl = (file: string) => {
-//   const _url = new URL(file, import.meta.url);
-//   return _url.href;
-// }
 
 const hasCompany = (project: any) => typeof project.company !== 'undefined';
 
 
-// read 'job-info' data from Markdown 
+// read 'job-info' data
 const { data } = await useAsyncData(
   `projects-${useRoute().path}`,
   async () => {
@@ -121,10 +108,5 @@ const { data } = await useAsyncData(
 
 
 const projects = data.value || [];
-// projects.forEach((project: any) => {
-//   if (project.cover) {
-//     project.cover = makePath(project.cover);
-//   } 
-// });
 
 </script>
