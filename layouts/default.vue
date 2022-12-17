@@ -22,3 +22,8 @@
   max-width: 1000px
   margin: 0 auto
 </style>
+
+<script setup lang="ts">
+import observe from "~/src/observer";
+observe();
+</script>

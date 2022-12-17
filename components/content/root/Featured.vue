@@ -7,6 +7,7 @@
       <StyledProject
         v-for="project, i in projects"
         :key="i"
+        class="hide fade-in"
       >
         <div class="project-content">
           <div>
@@ -78,6 +79,7 @@
 </template>
 
 <style lang="sass" scoped>
+@use "../styles/transitions"
 
 .project-title
   font-weight: 600

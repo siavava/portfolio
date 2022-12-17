@@ -1,6 +1,28 @@
 // Description: Transitions for page transitions
 
 @use "geometry"
+    
+.fade-in
+  opacity: 100%
+  transform: translateY(0px)
+  blur: 5px
+
+  -webkit-transition: all 300ms geometry.var("default-easing") 300ms
+  -moz-transition: all 300ms geometry.var("default-easing") 300ms
+  -o-transition: all 300ms geometry.var("default-easing") 300ms
+  -ms-transition: all 300ms geometry.var("default-easing") 300ms
+  transition: all 300ms geometry.var("default-easing") 300ms
+
+  &.hidden
+    opacity: 10%
+    transform: translateY(20px)
+    blur: 5px
+
+    -webkit-transition: all 300ms geometry.var("default-easing") 1000ms
+    -moz-transition: all 300ms geometry.var("default-easing") 1000ms
+    -o-transition: all 300ms geometry.var("default-easing") 1000ms
+    -ms-transition: all 300ms geometry.var("default-easing") 1000ms
+    transition: all 300ms geometry.var("default-easing") 1000ms
 
 /* Fade up */
 .fadeup-enter 
