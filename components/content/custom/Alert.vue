@@ -41,6 +41,10 @@ export default {
   padding: 2em
   border-radius: 0.5rem
 
+  & > ul > li::before
+    color: inherit !important
+
+
   .alert-icon
     width: 1.5em
     height: 1.5em
@@ -51,13 +55,13 @@ export default {
     margin-bottom: 1em
     display: flex
     flex-direction: row
-    // color: colors.color("primary-highlight")
 
     .title
       font-weight: 600
       font-family: typography.font("monospace")
       text-transform: capitalize
       width: fit-content
+
 
   &.info
     background-color: colors.color("info-background") !important
@@ -66,12 +70,14 @@ export default {
     & > .paragraph
       color: colors.color("info-foreground") !important
 
+
   &.success
     background-color: colors.color("success-background")
     color: colors.color("success-foreground")
 
     & > .paragraph
       color: colors.color("success-foreground") !important
+
 
   &.error
     background-color: colors.color("error-background") !important
@@ -87,6 +93,7 @@ export default {
 
     & > .paragraph
       color: colors.color("warning-foreground") !important
+
 
   &.critical
     background-color: colors.color("critical-background") !important

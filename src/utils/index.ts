@@ -6,6 +6,12 @@ export const hex2rgba = (hex, alpha = 1) => {
   return `rgba(${r},${g},${b},${alpha})`;
 };
 
+export function toTitleCase(str: string) {
+  return str.replace(/(^|\s)\S/g, function(t) { 
+    return t.toUpperCase() 
+  });
+}
+
 export const navDelay = 1000;
 export const loaderDelay = 2000;
 
