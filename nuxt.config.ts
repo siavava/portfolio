@@ -45,6 +45,7 @@ export default {
         'python',
         'haskell',
         'f#',
+        'vue',
       ]
     }
   },

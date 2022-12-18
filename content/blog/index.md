@@ -249,22 +249,87 @@ The application is now running on [http://localhost:3000](http://localhost:3000)
 
 ::alert{type="info"}
 Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+
+Here is a list:
+
+  - Something
+  - Something else.
+
+**And a nested code-block**:
+
+```typescript [Main.ts] {2}
+const do = (action) => {
+  return action();
+}
+```
 ::
 
 ::alert{type="success"}
 Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+
+Here is a list:
+
+  - Something
+  - Something else.
+
+**And a nested code-block**:
+
+```typescript [Main.ts] {2}
+const do = (action) => {
+  return action();
+}
+```
 ::
 
 ::alert{type="error"}
 Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+
+Here is a list:
+
+  - Something
+  - Something else.
+
+**And a nested code-block**:
+
+```typescript [Main.ts] {2}
+const do = (action) => {
+  return action();
+}
+```
 ::
 
 ::alert{type="warning"}
 Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+
+Here is a list:
+
+  - Something
+  - Something else.
+
+**And a nested code-block**:
+
+```typescript [Main.ts] {2}
+const do = (action) => {
+  return action();
+}
+```
 ::
 
 ::alert{type="critical"}
 Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+
+Here is a list:
+
+  - Something
+  - Something else.
+
+**And a nested code-block**:
+
+```typescript [Main.ts] {2}
+const do = (action) => {
+  return action();
+}
+```
 ::
 
 ## Manual Installation
