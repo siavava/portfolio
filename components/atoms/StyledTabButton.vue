@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="selected ? 'styled-button selected' : 'styled-button'"
+    :class="selected ? 'styled-tab-button selected' : 'styled-tab-button'"
     :id="`styled-button-${identifier}`"
     :style="style"
   >
@@ -63,7 +63,7 @@
 @use "~/styles/geometry"
 @use "~/styles/mixins"
 
-.styled-button
+.styled-tab-button
   @include mixins.link
   display: flex
   align-items: center

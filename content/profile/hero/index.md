@@ -3,7 +3,7 @@ category: 'hero'
 layout: default
 ---
 
-::p
+<!-- ::p -->
 I am a [Kenyan][kenya] software engineer,
 current student at [Dartmouth College][dartmouth].
 I am passionate about sustainable development
@@ -19,14 +19,10 @@ I have been an alumni / student at:
 - [Starehe Boys' Center & School][starehe]
 ::
 
-<button
-  class="email-link"
+:styled-button[Up/Down for a chat?]{
   href="mailto:amittaijoel@outlook.com"
   target="_blank"
-  rel="noreferrer">
-  Up/Down for a chat?
-</button>
-::
+  rel="noreferrer"}
 
 
 [dartmouth]:  https://home.dartmouth.edu/

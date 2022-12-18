@@ -65,8 +65,8 @@ export default {
     color: colors.color("foreground")
     line-height: 0.9
 
-  .big-heading
-    font-weight: 600
+  // .big-heading
+  //   font-weight: 600
   
   p
     margin: 20px 0
