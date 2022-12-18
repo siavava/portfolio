@@ -43,7 +43,8 @@ export default {
         'cpp',
         'java',
         'python',
-        'haskell'
+        'haskell',
+        'f#',
       ]
     }
   },

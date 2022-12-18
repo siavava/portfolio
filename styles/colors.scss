@@ -23,6 +23,17 @@ $navy: (
   "foreground": #8892b0,
   "light-foreground": #a8b2d1,
   "lightest-foreground": #ccd6f6,
+
+  "info-background": rgba(5, 95, 249, 0.1),
+  "info-foreground": #7aade0,
+  "success-background": rgba(6, 251, 128, 0.1),
+  "success-foreground": #CFF09E,
+  "error-background": rgba(96, 32, 32, 0.1),
+  "error-foreground": #fcb9b9,
+  "warning-background": rgba(137, 33, 30, 0.15),
+  "warning-foreground": #fd7c7c,
+  "critical-background": rgba(238, 12, 12, 0.15),
+  "critical-foreground": #f42e4f,
 );
 
 $neon: (

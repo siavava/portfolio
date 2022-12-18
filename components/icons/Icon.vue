@@ -14,6 +14,11 @@
   <StarIcon         v-else-if="type.toLowerCase() === 'star'" />
   <TwitterIcon      v-else-if="type.toLowerCase() === 'twitter'" />
   <SearchIcon       v-else-if="type.toLowerCase() === 'search'" />
+  <InfoIcon         v-else-if="type.toLowerCase() === 'info'" />
+  <SuccessIcon      v-else-if="type.toLowerCase() === 'success'" />
+  <ErrorIcon        v-else-if="type.toLowerCase() === 'error'" />
+  <WarningIcon      v-else-if="type.toLowerCase() === 'warning'" />
+  <CriticalIcon     v-else-if="type.toLowerCase() === 'critical'" />
   <ExternalLinkIcon v-else />
 </template>
 

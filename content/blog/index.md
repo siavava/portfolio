@@ -230,9 +230,40 @@ main = do
   return    ()
 ```
 
+```f# [Main.fs] {3, 5-6, 9-10}
+module PigLatin =
+  let toPigLatin (word: string) =
+    let isVowel (c: char) =
+      match c with
+      | 'a' | 'e' | 'i' |'o' |'u'
+      | 'A' | 'E' | 'I' | 'O' | 'U' -> true
+      |_ -> false
+    
+    if isVowel word[0] then
+      word + "yay"
+    else
+      word[1..] + string word[0] + "ay"
+```
+
 The application is now running on [http://localhost:3000](http://localhost:3000). Well done!
 
 ::alert{type="info"}
+Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+::
+
+::alert{type="success"}
+Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+::
+
+::alert{type="error"}
+Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+::
+
+::alert{type="warning"}
+Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
+::
+
+::alert{type="critical"}
 Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
 ::
 
@@ -320,7 +351,7 @@ It is important that this page is called `index.vue` as this will be the default
 
 Open the `index.vue` file in your editor and add the following content:
 
-```html{}[pages/index.vue]
+```vue{}[pages/index.vue]
 <template>
   <h1>Hello world!</h1>
 </template>
