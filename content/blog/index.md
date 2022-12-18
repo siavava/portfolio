@@ -264,7 +264,11 @@ const do = (action) => {
 ```
 ::
 
-::alert{type="success"}
+::alert
+---
+type:   success
+title:  all this stuff just works?
+---
 Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
 
 Here is a list:
@@ -281,7 +285,11 @@ const do = (action) => {
 ```
 ::
 
-::alert{type="error"}
+::alert
+---
+type: "error"
+title: This will bite you!
+---
 Another way to get started with Nuxt is to use [CodeSandbox](https://template.nuxtjs.org) which is a great way for quickly playing around with Nuxt and/or sharing your code with other people.
 
 Here is a list:

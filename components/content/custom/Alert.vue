@@ -6,7 +6,7 @@
     <div class="title-container">
       <Icon :type="type" class="alert-icon" />
       <span class="title">
-        {{ type }}
+        {{ title || type }}
       </span>
     </div>
     <slot id="alert-content" />
@@ -23,6 +23,10 @@ export default {
       validator: (value: string) => [
         'info', 'success', 'error', 'warning', 'critical'
       ].includes(value)
+    },
+    title: {
+      type: String,
+      default: ''
     }
   }
 }
