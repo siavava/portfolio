@@ -22,7 +22,7 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             />
-      </svg>
+          </svg>
           <svg
             v-else
             viewBox="0 0 24 24"
@@ -52,7 +52,11 @@
         </button>
       </div>
     </div>
-    <slot class="code"/>
+    <div class="code-internal-1">
+      <div class="code-internal-2">
+        <slot class="code"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -95,76 +99,82 @@ export default defineComponent({
   margin: 1rem 0
   padding: 1rem
   padding-top: 0
-  overflow: scroll
   border-radius: 0.3rem
   font-size: typography.font-size("m")
+  min-width: 100%
+  
   counter-reset: line
 
-  -ms-overflow-style: none
-  scrollbar-width: none
+  .code-internal-1
+    overflow-x: scroll
+    min-width: 100%
 
-  &::-webkit-scrollbar
-    display: none
+    &::-webkit-scrollbar
+      display: none
 
-  & > pre > code
-    font-size: clamp(typography.font-size("xxs"), typography.font-size("s"), typography.font-size("m"))
-    line-height: 1.7em
-    display: flex
-    flex-direction: column
+    .code-internal-2
+      min-width: 100%
 
-    & > span
-
-      &.highlight
-        background-color: colors.color("lightest-background")
-        &::before
-          color: colors.color("primary-highlight")
-          border-right: 1px solid
-
-      &::before
+      pre
         display: inline-block
-        width: 2.5em
-        text-align: right
-        content: counter(line)
-        counter-increment: line
-        margin-right: 1em
-        padding-right: 0.5em
-        color: colors.color("lightest-background")
-        font-weight: 600
-        border-right: 1px solid colors.color("lightest-background")
+        overflow-x: scroll
+        -ms-overflow-style: none
+        overflow-style: none
+        scrollbar-width: none
+        min-width: 100%
 
-      &:hover
-        background-color: colors.color("lightest-background")
-
-        &::before
-          display: inline-block
-          width: 2.5em
-          text-align: right
-          content: counter(line)
-          counter-increment: line
-          margin-right: 1em
-          padding-right: 0.5em
-          color: colors.color("lightest-foreground")
-          border-right: 1px solid
-
-      &::selection
-        &::before
-          display: inline-block
-          width: 2.5em
-          text-align: right
-          content: counter(line)
-          counter-increment: line
-          margin-right: 1em
-          padding-right: 0.5em
-          color: colors.color("lightest-foreground")
+        &::-webkit-scrollbar
+          display: none
 
 
+        code
+          font-size: typography.font-size("s")
+          line-height: 1.7em
+          display: flex
+          flex-direction: column
+
+          & > span
+
+            &.highlight
+              background-color: colors.color("lightest-background")
+              width: 100%
+              &::before
+                content: '+'
+                color: colors.color("critical-foreground")
+                color: colors.color("primary-highlight")
+                border-right: 1px solid
+
+            &::before
+              display: inline-block
+              width: 2.5em
+              text-align: right
+              content: counter(line)
+              counter-increment: line
+              margin-right: 1em
+              padding-right: 0.5em
+              color: colors.color("lightest-background")
+              font-weight: 600
+              border-right: 1px solid colors.color("lightest-background")
+
+            &:hover
+              background-color: colors.color("lightest-background")
+
+              &::before
+                display: inline-block
+                width: 2.5em
+                text-align: right
+                content: counter(line)
+                counter-increment: line
+                margin-right: 1em
+                padding-right: 0.5em
+                color: colors.color("lightest-foreground")
+                border-right: 1px solid
 
 .language
   right: 1em
   margin: 1em
   font-weight: 600
   text-transform: capitalize
-  color: colors.color("foreground")
 
 .top-container
   display: flex
@@ -173,25 +183,13 @@ export default defineComponent({
   border-bottom: 1px solid colors.color("lightest-background")
 
 .copy-button
-
   font: typography.font("monospace")
   color: colors.color("primary-highlight")
   padding: 1em
-
-.copy-container
-  display: flex
-
-.copied-text
-  margin: 1em
-
-.copy-icon
-  width: 36px
-  stroke: colors.color("lightest-foreground")
 
 .filename
   position: absolute
   margin: 1em
   left: 1em
-
 
 </style>

@@ -1,15 +1,15 @@
 <template>
   <div id="root">
+    <AppHeader/>
     <body>
-      <AppHeader/>
       <main>
         <a class="skip-to-content" href="#content"/>
           <div class="container">
             <slot id="content"/>
           </div>
       </main>
-      <AppFooter/>
     </body>
+    <AppFooter/>
   </div>
 </template>
 
@@ -58,25 +58,3 @@ hr
 
 
 </style>
-
-<!-- <script lang="ts">
-  export default {
-    name: "DefaultLayout",
-    props: {
-      title: {
-        type: String,
-        default: "Default Layout"
-      },
-      children: {
-        type: Object,
-        default: null
-      }
-    }
-  }
-</script> -->
-
-<!-- <script setup lang="ts">
-
-
-
-</script> -->

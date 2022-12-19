@@ -1,4 +1,5 @@
 ---
+title: Altair > Blog
 layout: article
 ---
 
