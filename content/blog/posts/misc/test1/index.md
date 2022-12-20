@@ -1,13 +1,11 @@
 ---
 title: Altair > Blog
-description: Here, you will find information on setting up and running a Nuxt project in 4 steps.
-category: get-started
-csb_link: https://codesandbox.io/embed/github/nuxt-academy/guides-examples/tree/master/01_get_started/01_installation?fontsize=14&hidenavigation=1&theme=dark
-CreateNuxtAppVideo: wHkPjOmJTt0
-CreateNuxtAppVideoTitle: Using create-nuxt-app
-ManualInstallVideo: mKV_9AIG70E
-ManualInstallVideoTitle: Nuxt Manual Installation
+heading: Blog Test 01
+description: Setting Up and Running Nuxt in 4 Steps.
+category: misc
+draft: false
 layout: article
+date: 2022-12-21
 ---
 
 # This is H1 that Spans Multiple Lines

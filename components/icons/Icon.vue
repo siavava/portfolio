@@ -19,6 +19,10 @@
   <ErrorIcon        v-else-if="type.toLowerCase() === 'error'" />
   <WarningIcon      v-else-if="type.toLowerCase() === 'warning'" />
   <CriticalIcon     v-else-if="type.toLowerCase() === 'critical'" />
+  <BlogSystemsIcon  v-else-if="type.toLowerCase() === 'blog-systems'" />
+  <BlogResearchIcon v-else-if="type.toLowerCase() === 'blog-research'" />
+  <BlogMiscIcon     v-else-if="type.toLowerCase() === 'blog-misc'" />
+  <BlogReadingsIcon v-else-if="type.toLowerCase() === 'blog-readings'" />
   <ExternalLinkIcon v-else />
 </template>
 
