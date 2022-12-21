@@ -95,7 +95,7 @@ console.log(blogs.value);
 
       .blog-icon
         height: 100%
-        width: fit-content
+        width: auto
         margin-right: 1em
         color: colors.color("secondary-highlight")
 
