@@ -25,23 +25,13 @@
           >
             <strong> Current Page </strong>
           </NuxtLink>
-          <ul v-if="isHome">
-            <li v-for="link in navLinks.homeLinks">
-              <NuxtLink
-                :to="link.url"
-                class="menu-column-item"
-              >
-                {{ link.name }}
-              </NuxtLink>
-            </li>
-          </ul>
-          <ul v-else>
+          <ul>
             <li v-for="anchor in anchors">
               <NuxtLink
-                :to="anchor.url"
+                :to="anchor._path"
                 class="menu-column-item"
               >
-                {{ anchor.name }}
+                {{ anchor.heading }}
               </NuxtLink>
             </li>
           </ul>
@@ -117,11 +107,11 @@
           </NuxtLink>
         </div>
         <div class="menu-extras-footer">
-          <AppFooter class="menu-footer"/>
+          <AppFooter class="menu-footer in-header"/>
         </div>
       </div>
     </div>
-  </header>
+  </header> 
 </template>
 
 
@@ -161,18 +151,17 @@ export default {
     // set height initially.
     this.height = this.$el.offsetHeight;
 
-    try {
-      const rawAnchors = document.getElementsByTagName("h2");
-      const { path } = useRoute();
-  
-      for (let i=0; i<Math.min(5, rawAnchors.length); i++) {
-        const name = rawAnchors.item(i).innerText;
-        const url = `${path}#${rawAnchors.item(i).id.toString()}`;
-        this.anchors.push({ name, url });
-      }
-    } catch(err) {
-      console.error(err.message);
-    }
+    this.route = useRoute().path;
+
+    this.setup();
+
+    // const rawAnchors = document.getElementsByTagName("h2");
+
+    // for (let i=0; i<Math.min(5, rawAnchors.length); i++) {
+    //   const name = rawAnchors.item(i).innerText;
+    //   const url = `${this.route}#${rawAnchors.item(i).id.toString()}`;
+    //   this.anchors.push({ name, url });
+    // }
 
     // update height on resize!
     //! No longer necessary since we no longer shift from 100px to 70px
@@ -190,6 +179,13 @@ export default {
       },
       deep: true,
     },
+    $route() {
+      this.setup();
+      this.$forceUpdate();
+    },
+    anchors() {
+      this.$forceUpdate();
+    }
   },
   methods: {
     toggleMenu() {
@@ -197,6 +193,23 @@ export default {
     },
     close() {
       this.menuOpen = false;
+    },
+
+    setup() {
+      const { path } = useRoute();
+      if (path === "/") {
+        this.anchors = navLinks.homeLinks;
+      } else {
+        
+        this.anchors = [];
+        const rawAnchors = document.getElementsByTagName("h2");
+        for (let i=0; i<Math.min(5, rawAnchors.length); i++) {
+          const heading = rawAnchors.item(i).innerText;
+          const _path = `${path}#${rawAnchors.item(i).id.toString()}`;
+          this.anchors.push({ heading, _path });
+        }
+      }
+      console.log(`Running setup in ${useRoute().path}`)
     },
 
     /**
@@ -310,7 +323,7 @@ const { data: featuredBlogsMeta } = await useAsyncData(
       .where({ draft: false })
       .where({ category: { $contains: "featured" } } )
       .only(["_path", "heading", "date", "description"])
-      .limit(5)
+      .limit(7)
       .sort({ date: -1 })
       .find();
     return await _blogs;
@@ -517,11 +530,14 @@ const { data: researchMeta } = await useAsyncData(
   @media (max-width: 768px)
     width: 100%
 
-.menu-footer
-  float: right
-  margin-top: 20px
-  top: 0px
-  width: 100%
+  .menu-footer
+    float: right
+    margin-top: 20px
+    top: 0px
+    width: 100%
+
+    &.in-header
+      border-top: none
 
 
 

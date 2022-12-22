@@ -2,7 +2,9 @@
 title: Altair > Blog
 heading: Random Innuendos with LDA and TF-IDF
 description: Using TF-IDF on text? Could never be me!
-category: applied
+category:
+  - applied
+  - featured
 draft: false
 featured: true
 layout: article

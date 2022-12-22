@@ -3,7 +3,14 @@
     <div v-for="blog in blogs" :key="blog.id" class="blog-card">
       <div class="blog-meta">
         <Icon
-          :type="`blog-${typeof blog.category === 'string' ? blog.category : blog.category[0] }`" class="blog-icon" />
+          v-if="(typeof blog.category === 'string')"
+          :type="`blog-${blog.category}`"
+          class="blog-icon"
+        />
+        <Icon v-else
+          :type="`blog-${blog.category[0]}`"
+          class="blog-icon" 
+        />
         <span
           v-if="typeof blog.category == 'string'"
           class="blog-category">
@@ -59,6 +66,8 @@ const { data: blogs } = await useAsyncData(
       .find();
     return await _blogs;
 });
+
+console.log(`${blogs}`)
 </script>
 
 <style lang="sass" scoped>

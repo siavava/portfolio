@@ -2,7 +2,9 @@
 title: Altair > Blog
 heading: Blog Test 01
 description: Setting Up and Running Nuxt in 4 Steps.
-category: misc
+category:
+  - misc
+  - featured
 draft: false
 layout: article
 date: 2022-12-21

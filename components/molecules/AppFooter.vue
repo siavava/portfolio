@@ -7,10 +7,10 @@
           :key="i"
         >
           <NuxtLink
-            :href="link.url"
+            :href="link._path"
             aria-label="link to my {{ link.name }} page"
           >
-            <Icon :type="link.name" />
+            <Icon :type="link.heading" />
       </NuxtLink>
         </li>
       </ul>
@@ -81,6 +81,7 @@ const gitHubInfo = ref({
   min-height: 70px
   padding: 15px
   text-align: center
+  border-top: 1px solid colors.color("light-background")
 
 .styled-credit-section
   color: inherit

@@ -4,56 +4,56 @@ const email = 'amittaijoel@outlook.com';
 
 const social = [
     {
-      name: 'GitHub',
-      url: 'https://github.com/siavava',
+      heading: 'GitHub',
+      _path: 'https://github.com/siavava',
     },
     {
-      name: 'Instagram',
-      url: 'https://www.instagram.com/siavava',
+      heading: 'Instagram',
+      _path: 'https://www.instagram.com/siavava',
     },
     {
-      name: 'Twitter',
-      url: 'https://twitter.com/siavava',
+      heading: 'Twitter',
+      _path: 'https://twitter.com/siavava',
     },
     {
-      name: 'Linkedin',
-      url: 'https://www.linkedin.com/in/siavava',
+      heading: 'Linkedin',
+      _path: 'https://www.linkedin.com/in/siavava',
     },
   ];
 
 const homeLinks = [
     {
-      name: 'About',
-      url: '/#about',
+      heading: 'About',
+      _path: '/#about',
     },
     {
-      name: 'Experience',
-      url: '/#jobs',
+      heading: 'Experience',
+      _path: '/#jobs',
     },
     {
-      name: 'Work',
-      url: '/#projects',
+      heading: 'Work',
+      _path: '/#projects',
     },
     {
-      name: 'Contact',
-      url: '/#contact',
+      heading: 'Contact',
+      _path: '/#contact',
     },
   ];
 
 const otherLinks = [
     {
-      name: 'Blog',
-      url: '/blog',
+      heading: 'Blog',
+      _path: '/blog',
       show: true,
     },
     {
-      name: 'Resume',
-      url: '/resume',
+      heading: 'Resume',
+      _path: '/resume',
       show: true,
     },
     {
-      name: 'Art Portfolio',
-      url: '/portfolio',
+      heading: 'Art Portfolio',
+      _path: '/portfolio',
       show: true,
     },
   ].filter((link) => link.show);
