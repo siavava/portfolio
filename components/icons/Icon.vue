@@ -23,6 +23,7 @@
   <BlogResearchIcon v-else-if="type.toLowerCase() === 'blog-research'" />
   <BlogMiscIcon     v-else-if="type.toLowerCase() === 'blog-misc'" />
   <BlogReadingsIcon v-else-if="type.toLowerCase() === 'blog-readings'" />
+  <BlogAppliedicon  v-else-if="type.toLowerCase() === 'blog-applied'" />
   <ExternalLinkIcon v-else />
 </template>
 

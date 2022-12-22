@@ -1,15 +1,15 @@
 ---
 title: Altair > Blog
-heading: Intense Gray Codes in Mixed Radices
+heading: Technology in the Developing World
 description: Carpe-nocturm research project.
 category:
   - research
-  - featured
   - publications
+  - featured
 draft: false
 featured: true
 layout: article
-date: 2022-12-15
+date: 2020-12-15
 ---
 
 # Reward Design

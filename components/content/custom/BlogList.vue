@@ -2,10 +2,26 @@
   <div class="blog-list-container">
     <div v-for="blog in blogs" :key="blog.id" class="blog-card">
       <div class="blog-meta">
-        <Icon :type="`blog-${blog.category}`" class="blog-icon" />
-        <span class="blog-category">
+        <Icon
+          :type="`blog-${typeof blog.category === 'string' ? blog.category : blog.category[0] }`" class="blog-icon" />
+        <span
+          v-if="typeof blog.category == 'string'"
+          class="blog-category">
           {{ blog.category }}
         </span>
+        <div v-else>
+          <template
+            v-for="(category, index) in blog.category"
+            :key="index"
+            >
+            <span
+              class="blog-category multiple"
+              v-if="category !== 'featured'"
+            >
+              {{ category }}
+            </span>
+          </template>
+        </div>
       </div>
       <NuxtLink class="blog-link" :to="blog._path">
         <h2 class="blog-heading">
@@ -43,8 +59,6 @@ const { data: blogs } = await useAsyncData(
       .find();
     return await _blogs;
 });
-
-console.log(blogs.value);
 </script>
 
 <style lang="sass" scoped>
@@ -107,6 +121,20 @@ console.log(blogs.value);
         align-self: center
         font-weight: 600
         text-transform: capitalize
+
+        &.multiple
+          margin-right: 0.5em
+          text-transform: capitalize
+
+          &::after
+            content: ","
+            margin-left: 0
+
+          &:last-child
+            margin-right: 0
+
+            &::after
+              content: ""
 
 
     .blog-link

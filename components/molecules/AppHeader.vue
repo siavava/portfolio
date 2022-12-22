@@ -48,48 +48,57 @@
         </div>
         <div class="menu-column">
           <NuxtLink
-            :to="path"
+            to="/blog"
             class="menu-column-header"
           >
             <strong> Blog </strong>
           </NuxtLink>
-          <NuxtLink
-            v-for="item in dummyData"
-            :to="path"
-            class="menu-column-item"
-          >
-            {{ item }}
-          </NuxtLink>
+          <ul>
+            <li v-for="item in featuredBlogsMeta">
+              <NuxtLink
+                :to="item._path"
+                class="menu-column-item"
+              >
+                {{ item.heading }}
+              </NuxtLink>
+            </li>
+          </ul>
         </div>
         <div class="menu-column">
           <NuxtLink
-            :to="path"
+            to="/blog"
             class="menu-column-header"
           >
             <strong> Publications </strong>
           </NuxtLink>
-          <NuxtLink
-            v-for="item in dummyData"
-            :to="path"
-            class="menu-column-item"
-          >
-            {{ item }}
-          </NuxtLink>
+          <ul>
+            <li v-for="item in publicationsMeta">
+              <NuxtLink
+                :to="item._path"
+                class="menu-column-item"
+              >
+                {{ item.heading }}
+              </NuxtLink>
+            </li>
+          </ul>
         </div>
         <div class="menu-column">
           <NuxtLink
-            :to="path"
+            to="/blog"
             class="menu-column-header"
           >
             <strong> Research </strong>
           </NuxtLink>
-          <NuxtLink
-            v-for="item in dummyData"
-            :to="path"
-            class="menu-column-item"
-          >
-            {{ item }}
-          </NuxtLink>
+          <ul>
+            <li v-for="item in researchMeta">
+              <NuxtLink
+                :to="item._path"
+                class="menu-column-item"
+              >
+                {{ item.heading }}
+              </NuxtLink>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="menu-extras">
@@ -156,11 +165,10 @@ export default {
       const rawAnchors = document.getElementsByTagName("h2");
       const { path } = useRoute();
   
-      for (let i=0; i<rawAnchors.length; i++) {
+      for (let i=0; i<Math.min(5, rawAnchors.length); i++) {
         const name = rawAnchors.item(i).innerText;
         const url = `${path}#${rawAnchors.item(i).id.toString()}`;
         this.anchors.push({ name, url });
-        console.log(`this.anchors = ${this.anchors}`);
       }
     } catch(err) {
       console.error(err.message);
@@ -293,6 +301,52 @@ const toggleMenu = () => {
     ? closeMenu()
     : openMenu();
 }
+
+/// DATA
+const { data: featuredBlogsMeta } = await useAsyncData(
+  `featured-blogs-meta`,
+  async () => {
+    const _blogs = queryContent("blog/posts")
+      .where({ draft: false })
+      .where({ category: { $contains: "featured" } } )
+      .only(["_path", "heading", "date", "description"])
+      .limit(5)
+      .sort({ date: -1 })
+      .find();
+    return await _blogs;
+});
+
+/// PUBLICATIONS
+const { data: publicationsMeta } = await useAsyncData(
+  `publication-blogs-meta`,
+  async () => {
+    const _blogs = queryContent("blog/posts")
+      .where({ draft: false })
+
+      // select blogs that have publications as one of the categories
+      .where({ category: { $contains: "publications" } } )
+      .only(["_path", "heading", "date", "description", "tags",])
+      .limit(5)
+      .sort({ date: -1 })
+      .find();
+    return await _blogs;
+});
+
+/// RESEARCH
+const { data: researchMeta } = await useAsyncData(
+  `research-blogs-meta`,
+  async () => {
+    const _blogs = queryContent("blog/posts")
+      .where({ draft: false })
+
+      // select blogs that have publications as one of the categories
+      .where({ category: { $contains: "research" } } )
+      .only(["_path", "heading", "date", "description", "tags",])
+      .limit(5)
+      .sort({ date: -1 })
+      .find();
+    return await _blogs;
+});
 </script>
 
 
