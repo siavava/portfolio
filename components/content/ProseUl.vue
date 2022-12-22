@@ -10,7 +10,7 @@
   @include mixins.styled-list
   display: block
   font-size: inherit
-  margin-left: 1em
+  margin-left: 0.5em
   width: fit-content
 
 </style>

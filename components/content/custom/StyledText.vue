@@ -16,13 +16,13 @@
 @use "~/styles/geometry"
 @use "~/styles/mixins"
 
-// .styled-text
-  // font-family: typography.font("sans-serif")
+.styled-text
+  font-family: typography.font("sans-serif")
 
-  // // ul
-  // //   @include mixins.styled-list
+  ul
+    @include mixins.styled-list
 
-  // // a
-  // //   @include mixins.inline-link
+  a
+    @include mixins.inline-link
     
 </style>

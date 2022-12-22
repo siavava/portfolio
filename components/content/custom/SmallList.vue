@@ -17,10 +17,15 @@
 .small-list
   @include mixins.small-list
   display: block
-  width: fit-content
+  max-width: 100%
 
   &.columned
-    column-count: 2
-    grid-template-columns: repeat(2, minmax(140px, 200px))
+    -webkit-columns: 2
+    -moz-columns: 2
+    -ms-grid-columns: 2
+    columns: 2
 
+
+    grid-template-columns: repeat(2, minmax(140px, 200px))
+    grid-gap: 1em
 </style>

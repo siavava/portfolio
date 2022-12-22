@@ -1,8 +1,6 @@
 <template>
   <StyledAboutSection id="about" class="about-section">
-    <StyledText>
-      <ContentDoc path="profile/brief" />    
-    </StyledText>
+    <ContentDoc path="profile/brief" />
     <StyledImage>
       <img
         src="~assets/images/profile-image.jpg"
