@@ -5,7 +5,7 @@
         Hi, my name is
       </h1>
 
-      <h2 class="big-heading rubik">
+      <h2 class="big-heading" :class="font">
         Altair.
       </h2>
 
@@ -25,6 +25,13 @@
 <script lang="ts">
 export default {
   name: "Hero",
+  data() {
+    return {
+      font: "fredericka",
+      // font: "megrim",
+      // font: "macondo",
+    }
+  }
 }
 </script>
 
@@ -79,5 +86,24 @@ export default {
     font-family: typography.font("rubik-fade")
     font-weight: 400
     font-size: clamp(40px, 6vw, 80px)
+    // opacity: 0.5
+
+  .megrim
+    font-family: typography.font("megrim")
+    font-weight: 500
+    font-size: clamp(40px, 6vw, 80px)
+    // opacity: 0.5
+
+  .fredericka
+    font-family: typography.font("fredericka")
+    font-weight: 500
+    font-size: clamp(40px, 6vw, 80px)
+    // opacity: 0.5
+
+  .macondo
+    font-family: typography.font("macondo")
+    font-weight: 500
+    font-size: clamp(40px, 6vw, 80px)
+    // opacity: 0.5
 
 </style>

@@ -595,3 +595,36 @@
     local('Rubik Fade Regular'),
     url('~/assets/fonts/RubikFade/RubikFadeRegular.ttf') format('truetype');
 }
+
+// megrim regular := 400
+@font-face {
+  font-family: 'Megrim';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Megrim Regular'),
+    url('~/assets/fonts/Megrim/Megrim-Regular.ttf') format('truetype');
+}
+
+// fredericka regular := 400
+@font-face {
+  font-family: 'Fredericka the Great';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Fredericka the Great Regular'),
+    url('~/assets/fonts/Fredericka/Fredericka.ttf') format('truetype');
+}
+
+// macondo regulat := 400
+@font-face {
+  font-family: 'Macondo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Macondo Regular'),
+    url('~/assets/fonts/Macondo/Macondo-Regular.ttf') format('truetype');
+}
