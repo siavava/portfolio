@@ -583,3 +583,15 @@
     local('Brandon Grotesk Black Italic'),
     url('~/assets/fonts/BrandonGrotesk/Brandon_blk_it.otf') format('truetype');
 }
+
+
+// Rubik Fade Regular := 400
+@font-face {
+  font-family: 'Rubik Fade';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Rubik Fade Regular'),
+    url('~/assets/fonts/RubikFade/RubikFadeRegular.ttf') format('truetype');
+}

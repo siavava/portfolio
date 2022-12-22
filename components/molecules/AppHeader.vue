@@ -179,12 +179,13 @@ export default {
       },
       deep: true,
     },
-    $route() {
+    $route(oldVal, newVal) {
+      console.log(`Route changed from ${oldVal} to ${newVal}`)
       this.setup();
       this.$forceUpdate();
     },
     anchors() {
-      this.$forceUpdate();
+      // this.$forceUpdate();
     }
   },
   methods: {
@@ -209,7 +210,8 @@ export default {
           this.anchors.push({ heading, _path });
         }
       }
-      console.log(`Running setup in ${useRoute().path}`)
+      
+      this.$forceUpdate();
     },
 
     /**

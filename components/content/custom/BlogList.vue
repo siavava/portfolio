@@ -18,7 +18,7 @@
         </span>
         <div v-else>
           <template
-            v-for="(category, index) in blog.category"
+            v-for="category in blog.category"
             :key="index"
             >
             <span
@@ -113,7 +113,7 @@ console.log(`${blogs}`)
     .blog-meta
       display: flex
       flex-direction: row
-      height: 1em
+      height: 1.2em
       margin-bottom: 0.5em
 
       .blog-icon
@@ -125,15 +125,15 @@ console.log(`${blogs}`)
       .blog-category
         font-family: typography.font("monospace")
         font-size: typography.font-size("xs")
-        color: colors.color("secondary-highlight")
-        height: fit-content
-        align-self: center
         font-weight: 600
+        color: colors.color("secondary-highlight")
+        height: 100%
+        align-self: center
         text-transform: capitalize
 
         &.multiple
           margin-right: 0.5em
-          text-transform: capitalize
+          align-self: center
 
           &::after
             content: ","
@@ -155,5 +155,9 @@ console.log(`${blogs}`)
       font-family: typography.font("monospace")
       font-size: typography.font-size("xs")
       color: colors.color("secondary-highlight")
+
+    .blog-description
+      font-size: typography.font-size("m")
+      color: colors.color("foreground")
 
 </style>

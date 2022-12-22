@@ -5,7 +5,7 @@
         Hi, my name is
       </h1>
 
-      <h2 class="big-heading">
+      <h2 class="big-heading rubik">
         Altair.
       </h2>
 
@@ -64,9 +64,6 @@ export default {
     margin-top: 10px
     color: colors.color("foreground")
     line-height: 0.9
-
-  // .big-heading
-  //   font-weight: 600
   
   p
     margin: 20px 0
@@ -77,5 +74,10 @@ export default {
 
   .reduced
     font-size: clamp(30px,6vw, 80px)
+
+  .rubik
+    font-family: typography.font("rubik-fade")
+    font-weight: 400
+    font-size: clamp(40px, 6vw, 80px)
 
 </style>
