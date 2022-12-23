@@ -43,14 +43,16 @@ export default {
 @use "~/styles/mixins"
 @use "~/styles/colors"
 @use "~/styles/typography"
+@use "~/styles/geometry"
 
 .hero
   @include mixins.flex-center
   flex-direction: column
   align-items: center
   min-height: 100vh
-  padding: 0
+  // padding: 0
   max-width: 900px
+  margin-top: calc(0px - geometry.var("nav-height"))
 
   @media (max-width: 480px) and (min-height: 700px)
     padding-bottom: 10vh

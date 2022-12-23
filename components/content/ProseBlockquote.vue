@@ -14,6 +14,7 @@ blockquote
 
   margin-top: 2rem
   padding: 3rem
+  padding-bottom: 0
   margin-bottom: 2rem
   border-left: none
   // background-color: yellow
@@ -46,7 +47,7 @@ blockquote
     opacity: 0.2
     position: absolute
     right: 0
-    bottom: 0.8em
+    bottom: 3rem
     color: colors.color("primary-highlight")
 
   hr

@@ -375,19 +375,13 @@ const { data: researchMeta } = await useAsyncData(
   @include mixins.flex-between
 
   z-index: 11
-  padding: 0 50px
-  
-  position: fixed
+  // padding: 0 // 50px
+  position: sticky
   top: 0
   left: 0
   width: 100vw
-  // height: auto
-  max-width: 100% //1300px
-  margin: auto
-
-  MAX-height: 90vh
-  overflow: scroll
-
+  width: 100%
+  max-height: 90vh
   display: table
 
   // trick: make header stick out a bit
@@ -446,7 +440,6 @@ const { data: researchMeta } = await useAsyncData(
 .menu-button
   position: absolute
   right: 0
-  // top: 1px
   width: 50px
   height: 50px
   margin-top: 15px
@@ -455,11 +448,8 @@ const { data: researchMeta } = await useAsyncData(
 .site-menu
   display: block
   position: relative
-  // overflow: hidden
   max-width: 1300px
   width: 100%
-  // flex-direction: column
-  // min-height: auto
   max-height: 80vh
   margin: 20PX auto
   overflow-y: scroll

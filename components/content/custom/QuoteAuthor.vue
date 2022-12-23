@@ -35,9 +35,10 @@ export default {
     li
       margin: 0
       padding: 0
-      padding-right: 0.3em
+      margin-right: 0.3rem
       font-weight: 400
       font-style: italic
+      font-size: typography.font-size("m")
 
       &::before
         content: ''
