@@ -381,12 +381,12 @@ const { data: researchMeta } = await useAsyncData(
   top: 0
   left: 0
   width: 100vw
-  height: auto
+  // height: auto
   max-width: 100% //1300px
   margin: auto
 
-  max-height: 100vh
-  overflow-y: scroll
+  MAX-height: 90vh
+  overflow: scroll
 
   display: table
 
@@ -422,7 +422,7 @@ const { data: researchMeta } = await useAsyncData(
   // make header not exceed the height of the screen
   // and make overflowing content scrollable
   &.menu-open
-    max-height: 100vh
+    max-height: 90vh
     overflow-y: scroll
 
 .nav-container
@@ -455,20 +455,21 @@ const { data: researchMeta } = await useAsyncData(
 .site-menu
   display: block
   position: relative
-  overflow: hidden
+  // overflow: hidden
   max-width: 1300px
   width: 100%
-  flex-direction: column
-  min-height: auto
-  max-height: auto
-  margin: auto
-  margin-top: 20px
-  margin-bottom: 20px
-  overflow: hidden
+  // flex-direction: column
+  // min-height: auto
+  max-height: 80vh
+  margin: 20PX auto
+  overflow-y: scroll
   border-top: 1px solid colors.color("lightest-background")
   color: colors.color("lightest-foreground")
   font-weight: 500
   line-height: 2
+
+  &::-webkit-scrollbar
+    display: none
 
 .menu-columns-wrapper
   display: flex
