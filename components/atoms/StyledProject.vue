@@ -179,6 +179,7 @@
     margin-left: -10px
     color: colors.color("lightest-foreground")
     z-index: 2
+    width: fit-content
 
     a 
       @include mixins.flex-center
