@@ -21,6 +21,8 @@ export default {
   padding: 1rem
 
   color: colors.color("primary-highlight")
+  font-weight: 600
+  font-size: typography.font-size("xl")
   opacity: 0.7
 
   display: flex
@@ -34,6 +36,8 @@ export default {
       margin: 0
       padding: 0
       padding-right: 0.3em
+      font-weight: 400
+      font-style: italic
 
       &::before
         content: ''
