@@ -1,5 +1,8 @@
 <template>
   <section class="hero">
+    <div class="hero-background rubik-puddles">
+      ALT
+    </div>
     <div class="hero-content-container">
       <h1 class="hero-h1">
         Hi, my name is
@@ -30,6 +33,7 @@ export default {
       font: "fredericka",
       // font: "megrim",
       // font: "macondo",
+      // font: "rubik-puddles"
     }
   }
 }
@@ -105,5 +109,21 @@ export default {
     font-weight: 500
     font-size: clamp(40px, 6vw, 80px)
     // opacity: 0.5
+
+  .rubik-puddles
+    font-family: typography.font("rubik-puddles")
+    
+    font-weight: 500
+
+  .hero-background
+    position: fixed
+    opacity: 0.1
+    max-width: 100%
+    width: 100%
+    // background: yellow
+    font-size: 50vw //clamp(40px, 100vw, 160px)
+    color: colors.color("critical-foreground")
+    z-index: 0
+    mouse-events: none
 
 </style>

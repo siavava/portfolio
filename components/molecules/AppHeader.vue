@@ -377,7 +377,7 @@ const { data: researchMeta } = await useAsyncData(
   z-index: 11
   padding: 0 50px
   
-  position: sticky
+  position: fixed
   top: 0
   left: 0
   width: 100vw

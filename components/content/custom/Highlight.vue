@@ -1,5 +1,5 @@
 <template>
-  <span class="yellow">
+  <span class="highlight">
     <slot />
   </span>
 </template>
@@ -12,6 +12,6 @@
 
 <style lang="sass" scoped>
 @use "~/styles/colors"
-.yellow
+.highlight
   color: colors.color("secondary-highlight")
 </style>

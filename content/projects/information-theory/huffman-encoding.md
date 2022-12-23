@@ -13,7 +13,7 @@ featured: false
 ---
 
 A program that encodes text using a lossless compression algorithm.
-A <highlight> frequency tree </highlight> is built from the text. Thereafter,
-<highlight> binary codes are assigned </highlight> to each character
-having the <highlight> most frequent characters
-get shortest codes </highlight>.
+A <highlight>frequency tree</highlight> is built from the text. Thereafter,
+<highlight>binary codes are assigned</highlight> to each character
+having the <highlight>most frequent characters
+get shortest codes</highlight>.

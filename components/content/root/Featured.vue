@@ -14,7 +14,7 @@
             <p class="project-overline">Featured Project</p>
             <h3 class="project-title">
               <a
-                v-if="project?.url !== null"
+                v-if="project?.url"
                 :href="project.url"
               >
                 {{ project.title }}
@@ -64,7 +64,7 @@
           </div>
         </div>   
         <div class="project-image">
-          <a :href="project.url ? project.url : project.repo">
+          <a>
             <img
               :src="`/${project.cover}`"
               :alt="project.title"

@@ -13,6 +13,7 @@ blockquote
   position: relative
 
   margin-top: 2rem
+  padding: 2rem
   margin-bottom: 2rem
   border-left: none
   // background-color: yellow
@@ -30,11 +31,12 @@ blockquote
     font-size: clamp(30px, 10rem, 120px)
     line-height: 1
     opacity: 0.2
-    // color: colors.color("shadow")
     z-index: 0
     position: absolute
     left: 0
     top: -2rem
+
+    color: colors.color("primary-highlight")
 
   &:after
     content: "”"
@@ -44,5 +46,10 @@ blockquote
     opacity: 0.2
     position: absolute
     right: 0
-    bottom: -5rem
+    color: colors.color("primary-highlight")
+
+  hr
+    max-width: 20%
+    margin: 0.5rem auto
+    margin-top: 2rem
 </style>

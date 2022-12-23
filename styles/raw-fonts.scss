@@ -628,3 +628,14 @@
     local('Macondo Regular'),
     url('~/assets/fonts/Macondo/Macondo-Regular.ttf') format('truetype');
 }
+
+// rubik-puddles regular := 400
+@font-face {
+  font-family: 'Rubik Puddles';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Rubik Puddles Regular'),
+    url('~/assets/fonts/RubikPuddles/RubikPuddles-Regular.ttf') format('truetype');
+}

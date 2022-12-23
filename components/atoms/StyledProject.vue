@@ -79,6 +79,7 @@
       grid-column: 1 / 8
       @media (max-width: 768px)
         grid-column: 1 / -1
+        height: 100%
       
     
   
@@ -113,23 +114,30 @@
     font-size: clamp(24px, 5vw, 28px)
     z-index: 2
     position: relative
+    pointer-events: none
 
     @media (min-width: 768px)
       margin: 0 0 20px
+
+    span
+      pointer-events: none
+
+    a
+      pointer-events: all
     
-    @media (max-width: 768px)
-      color: colors.color("white")
+    // @media (max-width: 768px)
+    //   color: colors.color("white")
       
-      a, span
-        position: static
-        &:before
-          content: ''
-          display: block
-          position: absolute
-          width: 100%
-          height: 100%
-          top: 0
-          left: 0
+      // a, span
+      //   // position: static
+      //   &:before
+      //     content: ''
+      //     display: block
+      //     position: absolute
+      //     width: 100%
+      //     height: 100%
+      //     top: 0
+      //     left: 0
         
       
     
@@ -147,6 +155,7 @@
       padding: 20px 0
       background-color: transparent
       box-shadow: none
+      pointer-events: none
       &:hover
         box-shadow: none
       
@@ -161,29 +170,6 @@
   
   .project-tech-list 
     @include mixins.small-list-inline
-    // display: flex
-    // flex-wrap: wrap
-    // position: relative
-    // margin: 25px 0 10px
-    // padding: 0
-    // list-style: none
-    // z-index: 2
-    // pointer-events: none
-
-    // li
-    //   margin: 0 20px 5px 0
-    //   color: colors.color("light-foreground")
-    //   font-family: typography.font("monospace")
-    //   font-size: typography.font-size("xs")
-    //   white-space: nowrap
-    
-    // @media (max-width: 768px) 
-    //   margin: 10px 0
-    //   li 
-    //     margin: 0 10px 5px 0
-    //     color: colors.color("lightest-foreground")
-      
-    
   
   .project-links 
     display: flex

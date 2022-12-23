@@ -32,7 +32,14 @@ put out into the world, or, on occasion, playing
 > and one hand stretched into the world
 > and letting ourselves be a conduit for energy.
 >
-> Albert Einstein
+> ---
+> <quote-author>
+>   Albert Einstein
+>
+>   - Scientist
+>   - Physicist
+>   - Nobel Laureate
+> </quote-author>
 > 
 
 ## This is H2 that Spans Multiple Lines
