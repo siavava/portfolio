@@ -14,8 +14,6 @@ export default {
 </script>
 
 <style lang="sass">
-
-
 @use "~/styles/colors"
 @use "~/styles/typography"
 @use "~/styles/geometry"

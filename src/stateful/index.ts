@@ -65,7 +65,8 @@ export function useEffect(effect: EffectCallback, deps?: Dependency | Dependency
     return;
   }
 
-  // else, run effects on mount and when deps change
-  onMounted(effect);
+  // do not run effect on mount!
+  // weird side-effects e.g. scrolling.
+  // onMounted(effect);
   watch(deps, effect);
 }

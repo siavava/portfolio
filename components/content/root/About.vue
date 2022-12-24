@@ -20,9 +20,3 @@
     name: "About"
   }
 </script>
-
-<script setup lang="ts">
-import observe from "~/src/observer";
-
-onMounted(observe);
-</script>

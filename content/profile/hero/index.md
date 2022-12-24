@@ -19,7 +19,7 @@ I have been an alumni / student at:
 - [Starehe Boys' Center & School][starehe]
 ::
 
-:styled-button[Up/Down for a chat?]{
+:animated-styled-button[Up/Down for a chat?]{
   href="mailto:amittaijoel@outlook.com"
   target="_blank"
   rel="noreferrer"}

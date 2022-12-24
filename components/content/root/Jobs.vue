@@ -1,7 +1,7 @@
 <template>
   <StyledJobsSection id="jobs">
     <h2 class="numbered-heading">Work Experience</h2>
-    <div class="inner">
+    <div class="inner hide fade-in">
       <StyledTabList
         role="tablist"
         aria-label="Job tabs"
@@ -132,7 +132,7 @@ const selectTab = (id: number) => {
 };
 
 // Only re-run the effect if tabFocus changes
-useEffect(() => focusTab(), tabFocus.ref);
+watch(tabFocus.ref, focusTab);
 
 // Focus on tabs when using up & down arrow keys
 const onKeyDown = (event) => {
