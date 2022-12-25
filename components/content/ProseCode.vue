@@ -138,6 +138,7 @@ export default defineComponent({
             &.highlight
               background-color: colors.color("lightest-background")
               width: 100%
+              padding-right: 1em
               &::before
                 content: '+'
                 color: colors.color("critical-foreground")
