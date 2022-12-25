@@ -20,6 +20,7 @@
 
 .container
   max-width: 1000px
+  margin: 0 auto
 </style>
 
 <script setup lang="ts">
