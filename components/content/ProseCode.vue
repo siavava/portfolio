@@ -65,7 +65,7 @@ const { copy, copied } = useClipboard();
 </script>
 
 <script lang="ts">
-export default defineComponent({
+export default {
   props: {
     code: {
       type: String,
@@ -84,9 +84,7 @@ export default defineComponent({
       default: () => []
     }
   }
-})
-
-
+}
 </script>
 
 <style lang="sass">

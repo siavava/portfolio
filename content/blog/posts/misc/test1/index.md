@@ -28,6 +28,18 @@ put out into the world, or, on occasion, playing
 [Assassin's Creed][assassins-creed] 
 ([Origins][assassins-creed-origins], anyone?).
 
+::code-group
+```bash [Yarn]
+yarn create nuxt-app <project-name>
+```
+```bash [NPX]
+npx create-nuxt-app <project-name>
+```
+```bash [NPM]
+npm init nuxt-app <project-name>
+```
+::
+
 > Art is standing with one hand extended into the universe
 > and one hand extended into the world
 > and letting ourselves be a conduit for passing energy.
