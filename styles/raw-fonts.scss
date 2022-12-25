@@ -639,3 +639,41 @@
     local('Rubik Puddles Regular'),
     url('~/assets/fonts/RubikPuddles/RubikPuddles-Regular.ttf') format('truetype');
 }
+
+// red-hat-mono variable-weight
+@font-face {
+  font-family: 'Red Hat Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src:
+    local('Red Hat Mono Thin'),
+    local('Red Hat Mono ExtraLight'),
+    local('Red Hat Mono Light'),
+    local('Red Hat Mono Regular'),
+    local('Red Hat Mono Medium'),
+    local('Red Hat Mono SemiBold'),
+    local('Red Hat Mono Bold'),
+    local('Red Hat Mono ExtraBold'),
+    local('Red Hat Mono Black'),
+    url('~/assets/fonts/RedHatMono/RedHatMono.ttf') format('truetype');
+}
+
+// red-hat-mono italic
+@font-face {
+  font-family: 'Red Hat Mono';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src:
+    local('Red Hat Mono Thin Italic'),
+    local('Red Hat Mono ExtraLight Italic'),
+    local('Red Hat Mono Light Italic'),
+    local('Red Hat Mono Italic'),
+    local('Red Hat Mono Medium Italic'),
+    local('Red Hat Mono SemiBold Italic'),
+    local('Red Hat Mono Bold Italic'),
+    local('Red Hat Mono ExtraBold Italic'),
+    local('Red Hat Mono Black Italic'),
+    url('~/assets/fonts/RedHatMono/RedHatMono-Italic.ttf') format('truetype');
+}

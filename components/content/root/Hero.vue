@@ -125,7 +125,9 @@ export default {
     // background: yellow
     font-size: 50vw //clamp(40px, 100vw, 160px)
     color: colors.color("critical-foreground")
-    z-index: 0
+    // z-index: -1
     mouse-events: none
+
+    backdrop-filter: blur(10px)
 
 </style>

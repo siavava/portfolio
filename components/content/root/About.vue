@@ -1,6 +1,6 @@
 <template>
   <StyledAboutSection id="about" class="about-section">
-    <ContentDoc path="profile/brief" />
+    <ContentDoc path="profile/brief" class="doc" />
     <StyledImage>
       <img
         src="~assets/images/profile-image.jpg"
@@ -20,3 +20,11 @@
     name: "About"
   }
 </script>
+
+<style lang="sass">
+// .about-section
+//   z-index: 2 !important
+
+//   *
+//     z-index: auto
+</style>
