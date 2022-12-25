@@ -21,10 +21,6 @@
 .container
   max-width: 1000px
   margin: 0 auto
-
-  // testing typewriter effect
-  display: flex
-  justify-content: center
 </style>
 
 <script setup lang="ts">
