@@ -28,9 +28,9 @@ put out into the world, or, on occasion, playing
 [Assassin's Creed][assassins-creed] 
 ([Origins][assassins-creed-origins], anyone?).
 
-> Art is standing with one hand stretched into the universe
-> and one hand stretched into the world
-> and letting ourselves be a conduit for energy.
+> Art is standing with one hand extended into the universe
+> and one hand extended into the world
+> and letting ourselves be a conduit for passing energy.
 >
 > ---
 > <quote-author>
