@@ -126,7 +126,7 @@ export default {
 
 
         code
-          font-size: typography.font-size("s")
+          font-size: typography.font-size("xs")
           line-height: 1.7em
           display: flex
           flex-direction: column
