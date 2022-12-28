@@ -1,5 +1,5 @@
 <template>
-  <meta name="viewport" content="initial-scale=1.0;" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <div class="error-page">
     <h1 v-if="error.statusCode === 404">Oops!</h1>
     <h1 v-else>An error occurred</h1>
@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   export default {
     props: ['error'],
     layout: 'error' // you can set a custom layout for the error page
