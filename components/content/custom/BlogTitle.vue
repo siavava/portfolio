@@ -117,6 +117,7 @@
           height: 70%
           margin-right: 1rem
           vertical-align: middle
+          max-width: 1.5rem
 
         .category-labels
           display: inline-flex
