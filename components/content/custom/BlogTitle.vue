@@ -110,14 +110,11 @@
       .category
         color: colors.color("primary-highlight")
         display: inline-flex
-        margin: auto
         height: clamp(1.4rem, 2vh, 2rem)
-        vertical-align: middle
 
         .category-icon
           width: fit-content
           height: 70%
-          margin: auto
           margin-right: 1rem
           vertical-align: middle
 
