@@ -1,6 +1,7 @@
 ---
 category: 'hero'
 layout: default
+navigation: false
 ---
 
 <!-- ::p -->

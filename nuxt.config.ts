@@ -148,4 +148,22 @@ export default {
     // Nuxt Image
     "@nuxt/image",
   ],
+
+  // router: {
+  //   middleware: 'trailingSlashRedirect',
+  //   trailingSlash: false,
+  // },
+
+  redirect: [
+    {
+        from: '^[\\w\\.\\/]*(?<!\\/)(\\?.*\\=.*)*$',
+        to: (from, req) => {
+            const matches = req.url.match(/^.*(\?.*)$/)
+            if (matches.length > 1) {
+                return matches[0].replace(matches[1], '') + '/' + matches[1]
+            }
+            return matches[0]
+        }
+     }
+  ],
 }

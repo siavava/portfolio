@@ -25,6 +25,7 @@ blockquote
     line-height: 1.5
     margin: 0
     padding: 0
+    color: lighten(colors.color("lightest-background"), 30%)
 
   &:before
     content: "“"

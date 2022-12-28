@@ -1,6 +1,5 @@
 ---
-title: Altair > Blog
-heading: Max-flow / Min-cut; Smart Algorithms You Should Know!
+title: Max-flow / Min-cut;  Essential algorithms
 description: Everything about Reward Design in RL.
 category:
   - theory
@@ -8,4 +7,5 @@ category:
 draft: false
 layout: article
 date: 2022-09-11
+navigation: true
 ---

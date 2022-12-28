@@ -6,6 +6,7 @@ location: 'Hanover, NH'
 range: 'Winter 2023'
 url: 'https://web.cs.dartmouth.edu/'
 category: 'jobs-info'
+navigation: false
 ---
 
 - Supported students through Dartmouth's freshman-level course on

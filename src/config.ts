@@ -4,55 +4,55 @@ const email = 'amittaijoel@outlook.com';
 
 const social = [
     {
-      heading: 'GitHub',
+      title: 'GitHub',
       _path: 'https://github.com/siavava',
     },
     {
-      heading: 'Instagram',
+      title: 'Instagram',
       _path: 'https://www.instagram.com/siavava',
     },
     {
-      heading: 'Twitter',
+      title: 'Twitter',
       _path: 'https://twitter.com/siavava',
     },
     {
-      heading: 'Linkedin',
+      title: 'Linkedin',
       _path: 'https://www.linkedin.com/in/siavava',
     },
   ];
 
 const homeLinks = [
     {
-      heading: 'About',
+      title: 'About',
       _path: '/#about',
     },
     {
-      heading: 'Experience',
+      title: 'Experience',
       _path: '/#jobs',
     },
     {
-      heading: 'Work',
+      title: 'Work',
       _path: '/#projects',
     },
     {
-      heading: 'Contact',
+      title: 'Contact',
       _path: '/#contact',
     },
   ];
 
 const otherLinks = [
     {
-      heading: 'Blog',
+      title: 'Blog',
       _path: '/blog',
       show: true,
     },
     {
-      heading: 'Resume',
+      title: 'Resume',
       _path: '/resume',
       show: true,
     },
     {
-      heading: 'Art Portfolio',
+      title: 'Art Portfolio',
       _path: '/portfolio',
       show: true,
     },

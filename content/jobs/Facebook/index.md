@@ -6,6 +6,7 @@ location: 'Menlo Park, CA'
 range: 'Summer 2022'
 url: 'https://engineering.fb.com/'
 category: 'jobs-info'
+navigation: false
 ---
 
 - Prototyped new infrastructure for Meta's machine learning platform.

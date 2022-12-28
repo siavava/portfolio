@@ -12,6 +12,7 @@ tech:
   - Database Systems
 category: 'featured-project'
 featured: true
+navigation: false
 ---
 
 A fully functional relational <highlight> database app </highlight> app built with a

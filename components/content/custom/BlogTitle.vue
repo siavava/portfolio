@@ -61,35 +61,37 @@
 
   margin-bottom: 5em
 
-  display: flex
-  flex-direction: row
-  align-items: flex-end
-  position: relative
+  @include mixins.fancy-background
+
+  // display: flex
+  // flex-direction: row
+  // align-items: flex-end
+  // position: relative
 
 
-  &::after
-    content: ""
-    position: absolute
-    width: 200%
-    height: 100%
-    top: 0
-    left: 60%
-    opacity: 0.5
-    z-index: 0
-    background-image: radial-gradient(circle at 2px 2px, colors.color(primary-highlight), 2px, transparent 0)
-    background-size: 20px 20px
-    background-repeat: repeat
+  // &::after
+  //   content: ""
+  //   position: absolute
+  //   width: 200%
+  //   height: 100%
+  //   top: 0
+  //   left: 60%
+  //   opacity: 0.5
+  //   z-index: 0
+  //   background-image: radial-gradient(circle at 2px 2px, colors.color(primary-highlight), 2px, transparent 0)
+  //   background-size: 20px 20px
+  //   background-repeat: repeat
 
-  &::before
-    content: ""
-    position: absolute
-    width: 200vw
-    height: 100%
-    top: 0
-    left: 0
-    opacity: 0.1
-    background-color: colors.color("primary-highlight")
-    transform: translateX(-20%)
+  // &::before
+  //   content: ""
+  //   position: absolute
+  //   width: 200vw
+  //   height: 100%
+  //   top: 0
+  //   left: 0
+  //   opacity: 0.1
+  //   background-color: colors.color("primary-highlight")
+  //   transform: translateX(-20%)
 
 
 
@@ -190,14 +192,14 @@
 <script lang="ts" setup>
 const { path } = useRoute();
 const { primaryCategory, categories, image, caption, date, title, description } = await queryContent(path)
-.only(['category', 'date', 'image', 'caption', 'heading', 'description'])
+.only(['category', 'date', 'image', 'caption', 'title', 'description'])
 .findOne()
 .then((data) => {
   return {
     categories: data.category.filter((category) => category !== "featured"),
     primaryCategory: data.category[0] || data.category,
     date: data.date,
-    title: data.heading,
+    title: data.title,
     description: data.description,
     image: data.image || null,
     caption: data.caption || null,

@@ -18,23 +18,24 @@
       class="site-menu">
       <SearchBar ref="searchBar" class="search-bar"/>
       <div class="menu-columns-wrapper">
-        <div class="menu-column">
+        <div class="menu-column toc-current-page">
           <NuxtLink
             :to="currentPage"
             class="menu-column-header"
           >
             <strong> Current Page </strong>
           </NuxtLink>
-          <ul>
-            <li v-for="anchor in anchors">
+          <ul v-if="currentPage === '/'">
+            <li v-for="anchor in navLinks.homeLinks">
               <NuxtLink
                 :to="anchor._path"
                 class="menu-column-item"
               >
-                {{ anchor.heading }}
+                {{ anchor.title }}
               </NuxtLink>
             </li>
           </ul>
+          <TableOfContents class="toc-current-page" />
         </div>
         <div class="menu-column">
           <NuxtLink
@@ -49,7 +50,7 @@
                 :to="item._path"
                 class="menu-column-item"
               >
-                {{ item.heading }}
+                {{ item.title }}
               </NuxtLink>
             </li>
           </ul>
@@ -67,7 +68,7 @@
                 :to="item._path"
                 class="menu-column-item"
               >
-                {{ item.heading }}
+                {{ item.title }}
               </NuxtLink>
             </li>
           </ul>
@@ -85,7 +86,7 @@
                 :to="item._path"
                 class="menu-column-item"
               >
-                {{ item.heading }}
+                {{ item.title }}
               </NuxtLink>
             </li>
           </ul>
@@ -111,7 +112,22 @@
         </div>
       </div>
     </div>
-  </header> 
+    <div class="header-toc-plus-button">
+      <button
+        @click="tocExpanded = !tocExpanded"
+        class="toc-button"
+      />
+      <div
+        @click="tocExpanded = !tocExpanded"
+        :class="{
+          'header-toc': true,
+          'header-toc-hidden': (!tocExpanded) || menuOpen,
+          }"
+        >
+        <slot />
+      </div>
+    </div>
+  </header>
 </template>
 
 
@@ -127,6 +143,7 @@ export default {
       height: 0,
       menuOpen: false,
       anchors: [],
+      tocExpanded: false,
     };
   },
   computed: {
@@ -201,14 +218,33 @@ export default {
       if (path === "/") {
         this.anchors = navLinks.homeLinks;
       } else {
+
+        // const { toc } = useContent();
+        // console.log(`toc: ${typeof toc.links}`);
+        // for (var _link in toc.links) {
+        //   console.log(_link);
+        //   this.anchors.push({
+        //     title: _link.text,
+        //     _path: `#${_link.id}`,
+        //   });
+        // }
+
+        // toc.links.forEach((link) => {
+        //   this.anchors.push({
+        //     title: link.title,
+        //     _path: `${path}#${link.id}`,
+        //   });
+        // });
+
+        // this.anchors = 
         
-        this.anchors = [];
-        const rawAnchors = document.getElementsByTagName("h2");
-        for (let i=0; i<Math.min(5, rawAnchors.length); i++) {
-          const heading = rawAnchors.item(i).innerText;
-          const _path = `${path}#${rawAnchors.item(i).id.toString()}`;
-          this.anchors.push({ heading, _path });
-        }
+        // this.anchors = [];
+        // const rawAnchors = document.getElementsByTagName("h2");
+        // for (let i=0; i<Math.min(5, rawAnchors.length); i++) {
+        //   const title = rawAnchors.item(i).innerText;
+        //   const _path = `${path}#${rawAnchors.item(i).id.toString()}`;
+        //   this.anchors.push({ title, _path });
+        // }
       }
       
       this.$forceUpdate();
@@ -286,10 +322,6 @@ export default {
 import { navLinks } from "~/src/config";
 
 const { path: currentPage } = useRoute();
-const { path } = useRoute(); // test
-const isHome = path == "/";
-
-const dummyData = [ "One", "Two", "Three", "Four" ];
 
 const menuOpen = ref(false);
 const buttonRef = ref(null);
@@ -324,7 +356,7 @@ const { data: featuredBlogsMeta } = await useAsyncData(
     const _blogs = queryContent("blog/posts")
       .where({ draft: false })
       .where({ category: { $contains: "featured" } } )
-      .only(["_path", "heading", "date", "description"])
+      .only(["_path", "title", "date", "description"])
       .limit(7)
       .sort({ date: -1 })
       .find();
@@ -340,7 +372,7 @@ const { data: publicationsMeta } = await useAsyncData(
 
       // select blogs that have publications as one of the categories
       .where({ category: { $contains: "publications" } } )
-      .only(["_path", "heading", "date", "description", "tags",])
+      .only(["_path", "title", "date", "description", "tags",])
       .limit(5)
       .sort({ date: -1 })
       .find();
@@ -356,12 +388,14 @@ const { data: researchMeta } = await useAsyncData(
 
       // select blogs that have publications as one of the categories
       .where({ category: { $contains: "research" } } )
-      .only(["_path", "heading", "date", "description", "tags",])
+      .only(["_path", "title", "date", "description", "tags",])
       .limit(5)
       .sort({ date: -1 })
       .find();
     return await _blogs;
 });
+
+console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 </script>
 
 
@@ -399,6 +433,8 @@ const { data: researchMeta } = await useAsyncData(
 
   // center nav on the header when header is wider than nav.
   // margin: 0 auto
+
+  padding: 0 50px
 
 
   @media (max-width: 1080px)
@@ -451,7 +487,7 @@ const { data: researchMeta } = await useAsyncData(
   max-width: 1300px
   width: 100%
   max-height: 80vh
-  margin: 20PX auto
+  margin: 20px auto
   overflow-y: scroll
   border-top: 1px solid colors.color("lightest-background")
   color: colors.color("lightest-foreground")
@@ -491,12 +527,12 @@ const { data: researchMeta } = await useAsyncData(
 
 
 .menu-column-header
-  font-family: typography.font("font-sans")
+  font-family: typography.font("sans-serif")
   font-size: typography.font-size("xl")
   color: colors.color("lightest-foreground")
 
 .menu-column-item
-  font-family: typography.font("font-sans")
+  font-family: typography.font("sans-serif")
   font-size: typography.font-size("m")
   color: colors.color("light-foreground")
 
@@ -532,10 +568,85 @@ const { data: researchMeta } = await useAsyncData(
     &.in-header
       border-top: none
 
-
-
 .search-bar, .search-icon
   margin-top: 20px
   margin-bottom: 20px
+
+.header-toc-plus-button
+  position: relative
+  max-width: 1300px
+  padding: 0 5%
+  margin: 0 auto
+
+  .header-toc
+    margin-bottom: 2vh
+
+    * > .toc > h2
+      text-decoration: none !important
+
+      &::after
+        content: "▲"
+        margin-left: 10px
+        font-size: typography.font-size("s")
+    *
+      border: none
+    // background: yellow
+
+    // & > *
+    //   display: none
+
+    &.header-toc-hidden
+      * > .toc > h2
+        display: block
+        color: colors.color("fancy-background")
+        text-decoration: none !important
+
+        &::after
+          content: "▼"
+          margin-left: 10px
+          font-size: 14px
+          color: colors.color("fancy-background")
+
+      * > .toc > :not(h2)
+        display: none
+
+
+
+  .toc-button
+    margin: 0 0
+    width: 140px
+    height: 30px
+    background: green
+    position: absolute
+    opacity: 0
+
+
+
+// hide toc on desktop
+@media (min-width: 1200px)
+  
+  .header-toc-plus-button
+    display: none
+
+
+.toc-current-page
+  
+  * > .toc
+    border: none
+
+  * > .toc > h2
+    display: none
+
+  .toc-link-1
+    color: colors.color("light-foreground") !important
+    font-family: typography.font("sans-serif") !important
+    font-size: typography.font-size("m") !important
+    color: colors.color("light-foreground") !important
+
+    &::before
+      content: none !important
+
+  * > .toc .toc-link-2
+    display: none
 
 </style>

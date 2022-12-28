@@ -1,6 +1,7 @@
 ---
 category: 'contact'
 email: 'amittaijoel@outlook.com'
+navigation: false
 ---
 
 ## Get In Touch

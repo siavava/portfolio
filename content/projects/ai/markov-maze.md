@@ -12,6 +12,7 @@ tech:
   - AI
 category: 'featured-project'
 featured: true
+navigation: false
 ---
 
 A common problem in robotics is localizing a robot in a novel environment

@@ -12,6 +12,7 @@ tech:
   - Web Crawling
 category: 'featured-project'
 featured: true
+navigation: false
 ---
 
 A hyper-efficient <highlight> search engine </highlight>

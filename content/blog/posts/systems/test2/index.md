@@ -1,6 +1,5 @@
 ---
-title: Altair > Blog
-heading: Reward Design in Reinforcement Learning
+title: Reward Design in Reinforcement Learning
 description: Everything about Reward Design in RL.
 category:
   - systems
@@ -8,6 +7,7 @@ category:
 draft: false
 layout: article
 date: 2022-09-11
+navigation: true
 ---
 
 # Reward Design

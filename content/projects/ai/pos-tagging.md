@@ -9,6 +9,7 @@ tech:
   - Markov Decision Processes
 category: 'featured-project'
 featured: false
+navigation: false
 ---
 
 A bot that uses <highlight> hidden markov models </highlight> to tag parts of speech in a sentence.

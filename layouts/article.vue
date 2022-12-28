@@ -1,23 +1,47 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <div id="root">
-    <AppHeader/>
+    <AppHeader>
+      <TableOfContents />
+    </AppHeader>
     <body>
       <main>
-        <BlogTitle />
-        <a class="skip-to-content" href="#content"/>
+        <div class="content">
+          <a class="skip-to-content" href="#content"/>
+          <BlogTitle />
           <div class="container">
-            <slot id="content"/>
+            <div class="left-panel">
+              <BlogNavigation class="article-blog-navigation" />
+            </div>
+            <div class="content">
+              <slot id="content"/>
+            </div>
+            <div class="right-panel">
+              <TableOfContents />
+            </div>
           </div>
+        </div>
       </main>
     </body>
-    <AppFooter/>
+    <BlogNavigation class="article-blog-navigation-footer fancy-background" />
+    <AppFooter />
   </div>
 </template>
 
-<style lang="sass">
+<script setup lang="ts">
+import observe, { observeToc } from '~~/src/observer';
+observeToc();
+</script>
+
+<style lang="sass" scoped>
 @use "../styles/default"
 @use "../styles/typography"
+@use "../styles/colors"
+@use "../styles/mixins"
+
+.article-blog-navigation
+  position: sticky
+  left: 0
 
 #root
   display: flex
@@ -26,9 +50,51 @@
   min-height: 100vh
 
 .container
-  max-width: 720px
-  margin: 0 auto
+  position: relative
+  margin: 2vw
   font-size: typography.font-size("m")
+  display: flex
+  flex-direction: row
+
+  .right-panel
+    min-width: 240px
+    max-width: 240px
+    margin: 0 2vw
+    padding: 2vh 0
+    height: fit-content
+    position: sticky
+    top: 0
+    overflow: hidden
+
+  .left-panel
+    min-width: 240px
+    max-width: 240px
+    width: 240px
+    margin: 0 2vw
+    padding: 2vh 0
+    height: fit-content
+    position: sticky
+    top: 0
+    overflow: hidden
+
+  .content
+    width: 60%
+    max-width: 768px
+    margin: 0 auto
+
+  // hide side-panel on mobile
+  @media (max-width: 1200px)
+    
+    .content
+      width: 100%
+
+    .right-panel
+      display: none
+
+    .left-panel
+      display: none
+    // gap: 0
+
 
 h1
   font-size: 36px
@@ -57,6 +123,16 @@ hr
   font-size: 18px
   font-weight: 500
   line-height: 29px
+
+.article-blog-navigation-footer
+  width: max-content
+  max-width: 768px
+  min-width: 480px
+
+  padding: 4vh 4vw
+  margin: 0 auto
+  border-top: none
+  border-bottom: none
 
 
 </style>

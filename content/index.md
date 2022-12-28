@@ -1,5 +1,5 @@
 ---
-title: "altair.fyi"
+title: "altair"
 description: 'This blog talks about science, math, art, and computing.'
 image:
   src: '/assets/connection.svg'

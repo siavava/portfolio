@@ -1,5 +1,5 @@
 ---
-title: Test of Blog Elements
+title: Test of Navigation
 description: Setting Up and Running Nuxt in 4 Steps.
 category:
   - misc
@@ -418,14 +418,14 @@ The `package.json` is like the ID card of your project. It contains all the proj
 
 Once the `package.json` has been created, add `nuxt` to your project via `npm` or `yarn` like so below:
 
-<!-- ::code-group -->
+::code-group
 ```bash [Yarn]
 yarn add nuxt
 ```
 ```bash [NPM]
 npm install nuxt
 ```
-<!-- :: -->
+::
 
 This command will add `nuxt` as a dependency to your project and add it to your `package.json`. The `node_modules` directory will also be created which is where all your installed packages and dependencies are stored.
 
@@ -465,14 +465,14 @@ Open the `index.vue` file in your editor and add the following content:
 
 Run your project by typing one of the following commands below in your terminal:
 
-<!-- ::code-group -->
+::code-group
 ```bash [Yarn]
 yarn dev
 ```
 ```bash [NPM]
 npm run dev
 ```
-<!-- :: -->
+::
 
 ::alert{type="info"}
 

@@ -6,6 +6,7 @@ location: 'Nairobi, KE'
 range: 'Summer 2021'
 url: 'https://copiaglobal.com/'
 category: 'jobs-info'
+navigation: false
 ---
 
 - Supported the organization's effort to redefine what e-commerce

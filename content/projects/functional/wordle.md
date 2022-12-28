@@ -11,6 +11,7 @@ tech:
   - Functional Programming
 category: 'featured-project'
 featured: true
+navigation: false
 ---
 
 Wordle and Grep replicas implemented in Haskell,

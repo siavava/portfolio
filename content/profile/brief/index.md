@@ -1,5 +1,6 @@
 ---
 category: 'profile-brief'
+navigation: false
 ---
 
 

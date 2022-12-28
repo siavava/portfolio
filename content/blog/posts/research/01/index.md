@@ -1,6 +1,5 @@
 ---
-title: Altair > Blog
-heading: Intense Gray Codes in Mixed Radices
+title: Intense Gray Codes in Mixed Radices
 description: Carpe-nocturm research project.
 category:
   - research
@@ -10,6 +9,7 @@ draft: false
 featured: true
 layout: article
 date: 2022-12-15
+navigation: true
 ---
 
 # Reward Design

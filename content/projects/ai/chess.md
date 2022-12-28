@@ -11,6 +11,7 @@ tech:
   - AI
 category: 'featured-project'
 featured: true
+navigation: false
 ---
 
 A chess bot that uses various strategies including

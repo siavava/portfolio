@@ -6,6 +6,7 @@ location: 'Hanover, NH'
 range: 'Fall 2021 - Spring 2022'
 url: 'https://web.cs.dartmouth.edu/'
 category: 'jobs-info'
+navigation: false
 ---
 
 - Supported students learning what most found their most challenging

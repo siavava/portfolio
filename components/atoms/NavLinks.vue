@@ -1,7 +1,7 @@
 <template>
   <div class="home-links">
     <template v-if="(isHome && menuIsCollapsed)">
-      <ol v-for="{ heading, _path }, i in homeLinks">
+      <ol v-for="{ title, _path }, i in homeLinks">
         <TransitionGroup :component="null">
           <Transition :key="i" :class="fadeDownClass" :timeout="timeout">
             <li
@@ -12,7 +12,7 @@
                 :to="_path"
                 class="nav-link"
               >
-                {{ heading }}
+                {{ title }}
               </NuxtLink>
             </li>
           </Transition>

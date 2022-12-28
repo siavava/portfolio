@@ -10,6 +10,7 @@ tech:
   - Information Theory
   - Object-Oriented Programming
 featured: false
+navigation: false
 ---
 
 A program that encodes text using a lossless compression algorithm.

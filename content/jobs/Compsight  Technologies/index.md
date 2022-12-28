@@ -6,6 +6,7 @@ location: 'Nairobi, KE'
 range: 'January - November 2018'
 url: 'https://compsight.co.ke/'
 category: 'jobs-info'
+navigation: false
 ---
 
 - Compsight specializes in building technological solutions

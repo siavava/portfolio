@@ -12,6 +12,7 @@ tech:
   - Deep Learning
 category: 'featured-project'
 featured: true
+navigation: false
 ---
 
 As part of a <highlight> publication

@@ -32,7 +32,7 @@
       </div>
       <NuxtLink class="blog-link" :to="blog._path">
         <h2 class="blog-heading">
-          {{ blog.heading }}
+          {{ blog.title }}
         </h2>
       </NuxtLink>
       <p class="blog-description">{{ blog.description }}</p>
