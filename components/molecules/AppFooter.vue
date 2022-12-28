@@ -10,7 +10,7 @@
             :href="link._path"
             aria-label="link to my {{ link.name }} page"
           >
-            <Icon :type="link.heading" />
+            <Icon :type="link.title" />
       </NuxtLink>
         </li>
       </ul>
