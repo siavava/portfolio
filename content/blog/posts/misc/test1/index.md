@@ -13,7 +13,7 @@ image: title-image.jpg
 caption: This is the image caption.
 ---
 
-![Title Image](./title-image.jpg)
+![Title Image](/blog/posts/misc/test1/title-image.jpg)
 
 # This is H1 that Spans Multiple Lines
 
