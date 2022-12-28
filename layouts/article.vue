@@ -1,4 +1,5 @@
 <template>
+  <meta name="viewport" content="initial-scale=1.0;" />
   <div id="root">
     <AppHeader/>
     <body>

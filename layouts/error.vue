@@ -1,4 +1,5 @@
 <template>
+  <meta name="viewport" content="initial-scale=1.0;" />
   <div class="error-page">
     <h1 v-if="error.statusCode === 404">Oops!</h1>
     <h1 v-else>An error occurred</h1>
