@@ -1,14 +1,19 @@
 ---
 title: Altair > Blog
-heading: Blog Test 01
+heading: This is a Comprehensive Test of Blog Elements
 description: Setting Up and Running Nuxt in 4 Steps.
 category:
   - misc
   - featured
+  - development
 draft: false
 layout: article
 date: 2022-12-21
+image: title-image.jpg
+caption: This is the image caption.
 ---
+
+![Title Image](title-image.jpg)
 
 # This is H1 that Spans Multiple Lines
 

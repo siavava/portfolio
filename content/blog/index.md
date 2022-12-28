@@ -1,5 +1,6 @@
 ---
 title: Altair > Blog
+layout: default
 ---
 
 # Blog

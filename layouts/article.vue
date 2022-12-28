@@ -3,6 +3,7 @@
     <AppHeader/>
     <body>
       <main>
+        <BlogTitle />
         <a class="skip-to-content" href="#content"/>
           <div class="container">
             <slot id="content"/>
