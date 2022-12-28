@@ -115,6 +115,7 @@
         vertical-align: middle
 
         .category-icon
+          width: fit-content
           height: 70%
           margin: auto
           margin-right: 1rem
