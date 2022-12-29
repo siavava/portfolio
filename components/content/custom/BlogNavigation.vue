@@ -114,8 +114,8 @@ console.log(navigation);
   line-height: 2
   counter-reset: toc-0
 
-  border-top: 1px solid colors.color("primary-highlight")
-  border-bottom: 1px solid colors.color("primary-highlight")
+  // border-top: 1px solid colors.color("primary-highlight")
+  // border-bottom: 1px solid colors.color("primary-highlight")
 
   h2
     font-size: typography.font-size("xl")

@@ -17,7 +17,7 @@
               <slot id="content"/>
             </div>
             <div class="right-panel">
-              <TableOfContents />
+              <TableOfContents class="table-of-contents" />
             </div>
           </div>
         </div>
@@ -42,6 +42,9 @@ observeToc();
 .article-blog-navigation
   position: sticky
   left: 0
+
+  // border-top: 1px solid colors.color("primary-highlight")
+  // border-bottom: 1px solid colors.color("primary-highlight")
 
 #root
   display: flex
@@ -136,5 +139,8 @@ hr
   border-top: none
   border-bottom: none
 
+// .table-of-contents
+//   border-top: 1px solid colors.color("primary-highlight")
+//   border-bottom: 1px solid colors.color("primary-highlight")
 
 </style>
