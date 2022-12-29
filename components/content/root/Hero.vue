@@ -1,8 +1,8 @@
 <template>
   <section class="hero">
-    <div class="hero-background rubik-puddles">
+    <!-- <div class="hero-background rubik-puddles">
       ALT
-    </div>
+    </div> -->
     <div class="hero-content-container">
       <h1 class="hero-h1">
         Hi, my name is

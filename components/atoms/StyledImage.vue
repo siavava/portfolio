@@ -39,8 +39,8 @@
       outline: 0
 
       &:after 
-        top: 15px
-        left: 15px
+        top: 10px
+        left: 10px
       
       .img 
         filter: grayscale(30%) contrast(1)

@@ -404,6 +404,7 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 @use "~/styles/typography"
 @use "~/styles/colors"
 @use "~/styles/geometry"
+@use "~/styles/default"
 
 .header
   @include mixins.flex-between
@@ -641,7 +642,10 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     color: colors.color("light-foreground") !important
     font-family: typography.font("sans-serif") !important
     font-size: typography.font-size("m") !important
-    color: colors.color("light-foreground") !important
+    // color: colors.color("lightest-foreground") !important
+
+    font-weight: 500 !important
+    line-height: 2.3em !important
 
     &::before
       content: none !important

@@ -17,7 +17,7 @@
 </template>
 
 <style lang="sass">
-@use "../styles/default"
+@use "~/styles/default"
 
 .container
   max-width: 1000px
