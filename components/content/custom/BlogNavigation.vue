@@ -152,6 +152,7 @@ console.log(navigation);
 
       .icon
         color: colors.color("fancy-background")
+        aspect-ratio: 1 / 1
 
     .category-child
       // background: red
