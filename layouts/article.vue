@@ -48,6 +48,8 @@ observeToc();
   margin: 0 auto
   flex-direction: column
   min-height: 100vh
+  max-width: 100vw
+  overflow: hidden
 
 .container
   position: relative
