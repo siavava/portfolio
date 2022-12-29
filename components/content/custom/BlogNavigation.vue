@@ -154,7 +154,7 @@ console.log(navigation);
         position: relative
         color: colors.color("fancy-background")
         height: 100%
-        aspect-ratio: 1 / 1
+        width: 20px
 
     .category-child
       // background: red
