@@ -151,7 +151,9 @@ console.log(navigation);
       color: colors.color("primary-highlight")
 
       .icon
+        position: relative
         color: colors.color("fancy-background")
+        height: 100%
         aspect-ratio: 1 / 1
 
     .category-child
