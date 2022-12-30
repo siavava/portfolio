@@ -8,7 +8,7 @@ category:
 draft: false
 layout: article
 date: 2022-12-21
-image: title-image.jpg
+# image: title-image.jpg
 caption: This is the image caption.
 navigation: true
 ---

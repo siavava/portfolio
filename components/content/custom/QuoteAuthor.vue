@@ -38,7 +38,7 @@ export default {
       margin-right: 0.3rem
       font-weight: 400
       font-style: italic
-      font-size: typography.font-size("m")
+      font-size: clamp(8px, 1.8vw, typography.font-size("m"))
 
       &::before
         content: ''

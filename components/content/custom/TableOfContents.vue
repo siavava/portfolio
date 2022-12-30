@@ -79,11 +79,13 @@ const { toc } = useContent();
 
   .toc-link-1
     // margin-left: 1em
-    font-size: typography.font-size("m")
+    font-size: typography.font-size("s")
+    // font-size: 1
     font-weight: 600
     counter-reset: toc-2
     // color: colors.color("lightest-foreground")
-    color: lighten(colors.color("lightest-background"), 30%)
+    color: colors.color("fancy-background")
+    opacity: 0.7
     
     &::before
       counter-increment: toc-1
@@ -92,10 +94,9 @@ const { toc } = useContent();
       color: colors.color("primary-highlight")
 .toc-link-2
   margin-left: 1em
-  font-size: typography.font-size("s")
+  font-size: typography.font-size("xs")
   font-weight: 400
   line-height: 2
-  color: lighten(colors.color("lightest-background"), 30%)
 
   &::before
     counter-increment: toc-2

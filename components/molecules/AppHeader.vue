@@ -490,7 +490,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   max-height: 80vh
   margin: 20px auto
   overflow-y: scroll
-  border-top: 1px solid colors.color("lightest-background")
   color: colors.color("lightest-foreground")
   font-weight: 500
   line-height: 2
@@ -505,8 +504,7 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   justify-content: space-between
   height: 100%
   width: 100%
-  margin: 40px 0 40px 0
-  border-top: 1px solid colors.color("lightest-background")
+  margin: 0 0 40px 0
   color: inherit
 
 .menu-column
@@ -569,9 +567,10 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     &.in-header
       border-top: none
 
-.search-bar, .search-icon
-  margin-top: 20px
-  margin-bottom: 20px
+.search-bar
+  border-top: 1px solid colors.color("lightest-background")
+  border-bottom: 1px solid colors.color("lightest-background")
+  padding: 0 2vw
 
 .header-toc-plus-button
   position: relative
@@ -591,10 +590,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
         font-size: typography.font-size("s")
     *
       border: none
-    // background: yellow
-
-    // & > *
-    //   display: none
 
     &.header-toc-hidden
       * > .toc > h2
@@ -615,11 +610,11 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 
   .toc-button
     margin: 0 0
-    width: 140px
+    width: 15ch // 140px
     height: 30px
-    background: green
+    // background: green
     position: absolute
-    opacity: 0
+    // opacity: 0
 
 
 
@@ -639,12 +634,12 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     display: none
 
   .toc-link-1
-    color: colors.color("light-foreground") !important
+    color: colors.color("lightest-foreground") !important
     font-family: typography.font("sans-serif") !important
     font-size: typography.font-size("m") !important
     // color: colors.color("lightest-foreground") !important
 
-    font-weight: 500 !important
+    font-weight: 600 !important
     line-height: 2.3em !important
 
     &::before

@@ -83,15 +83,17 @@ observeToc();
     overflow: hidden
 
   .content
+    // width: max(60vw, 75ch)
     width: 60%
-    max-width: 768px
-    margin: 0 auto
+    max-width: 75ch
 
   // hide side-panel on mobile
   @media (max-width: 1200px)
     
     .content
       width: 100%
+      max-width: 65ch
+      margin: 0 auto !important
 
     .right-panel
       display: none

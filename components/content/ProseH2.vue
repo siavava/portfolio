@@ -20,4 +20,5 @@ h2
   margin-bottom: 1rem
   font-weight: 500
   color: colors.color("primary-highlight")
+  font-size: 1.5rem
 </style>

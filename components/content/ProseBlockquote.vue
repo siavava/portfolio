@@ -7,25 +7,25 @@
 <style lang="sass">
 @use "~/styles/typography"
 @use "~/styles/colors"
+@use "~/styles/mixins"
 blockquote
-  width: 100%
+  width: 80%
   text-align: center
   position: relative
+  margin: 2rem auto
 
-  margin-top: 2rem
   padding: 3rem
   padding-bottom: 0
-  margin-bottom: 2rem
   border-left: none
-  // background-color: yellow
 
   .paragraph
-    font-size: typography.font-size("xl")
+    font-size: clamp(0.8rem, 1.5vw, 1.1rem) //1.2em
     font-weight: 500
     line-height: 1.5
     margin: 0
     padding: 0
-    color: lighten(colors.color("lightest-background"), 30%)
+    color: colors.color("fancy-background")
+
 
   &:before
     content: "“"

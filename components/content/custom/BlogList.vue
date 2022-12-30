@@ -77,6 +77,8 @@ console.log(`${blogs}`)
 @use "~/styles/geometry"
 
 .blog-list-container
+  // @include mixins.box-shadow
+  @include mixins.fancy-background
   display: flex
   flex-direction: column
   align-items: left
@@ -84,13 +86,9 @@ console.log(`${blogs}`)
   margin: 1em 0
   padding: 1em
   border-radius: 0.5rem
-  background-color: colors.color("light-background")
-  
-  @include mixins.box-shadow
-  // position: relative
   padding: 25px
   border-radius: geometry.var("border-radius")
-  background-color: colors.color("light-background")
+  // background-color: colors.color("light-background")
   color: colors.color("light-foreground")
   font-size: typography.font-size("l")
   z-index: 2
@@ -103,12 +101,12 @@ console.log(`${blogs}`)
 
   .blog-card
     margin: 1em 0
-    padding-bottom: 1em
-    border-bottom: 1px solid colors.color("lightest-background")
 
-    &:last-child
-      padding-bottom: 0
-      border-bottom: none
+    &:not(:last-child)
+      padding-bottom: 1em
+      border-bottom: 1px solid colors.color("lightest-background")
+      // padding-bottom: 0
+      // border-bottom: none
 
     .blog-meta
       display: flex
@@ -120,44 +118,37 @@ console.log(`${blogs}`)
         height: 100%
         width: auto
         margin-right: 1em
-        color: colors.color("secondary-highlight")
+        color: colors.color("fancy-background")
 
       .blog-category
         font-family: typography.font("monospace")
         font-size: typography.font-size("xs")
         font-weight: 600
-        color: colors.color("secondary-highlight")
+        color: colors.color("fancy-background")
         height: 100%
-        align-self: center
         text-transform: capitalize
 
         &.multiple
           margin-right: 0.5em
-          align-self: center
 
-          &::after
+          &:not(:last-child)::after
             content: ","
-            margin-left: 0
-
-          &:last-child
-            margin-right: 0
-
-            &::after
-              content: ""
 
 
     .blog-link
       .blog-heading
         color: colors.color("primary-highlight") !important
-        font-size: typography.font-size("xl")
+        font-size: clamp(typography.font-size("m"), 3vw, typography.font-size("xl"))
 
     .blog-date
       font-family: typography.font("monospace")
       font-size: typography.font-size("xs")
-      color: colors.color("secondary-highlight")
+      font-weight: 700
+      color: colors.color("fancy-background")
 
     .blog-description
       font-size: typography.font-size("m")
-      color: colors.color("foreground")
+      color: colors.color("lightest-foreground")
+      max-width: 60ch
 
 </style>
