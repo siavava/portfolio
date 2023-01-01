@@ -161,7 +161,7 @@ console.log(navigation);
       font-size: typography.font-size("xs")
       font-weight: 700
       line-height: 2
-      color: lighten(colors.color("lightest-background"), 30%)
+      color: colors.color("fancy-background")
       margin-left: 0.6rem
       padding-left: 0.5rem
       border-left: 1px solid // lighten(colors.color("lightest-background"), 10%)

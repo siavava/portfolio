@@ -16,7 +16,7 @@ $navy: (
   "dark-background": #020c1b,
   "light-background": #112240,
   "lightest-background": #233554,
-  "fancy-background": lighten(#233554, 30%),
+  "fancy-background": lighten(#0a192f, 40%),
   "shadow": rgba(2, 12, 27, 0.7),
 
 
@@ -56,17 +56,19 @@ $neon: (
 
 );
 
-$theme: null;
+// $theme: null;
 
-.neon {
-  $theme: $neon !global;
-  // @debug map.get($theme, "primary-highlight");
-}
+// .neon {
+//   $theme: $neon !global;
+//   // @debug map.get($theme, "primary-highlight");
+// }
 
-.navy {
-  $theme: $navy !global;
-  // @debug map.get($theme, "primary-highlight");
-}
+// .navy {
+//   $theme: $navy !global;
+//   // @debug map.get($theme, "primary-highlight");
+// }
+
+$theme: $navy;
 
 
 

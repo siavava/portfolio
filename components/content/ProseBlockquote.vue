@@ -22,8 +22,6 @@ blockquote
     font-size: clamp(1rem, 1.7vw, 1.5rem) //1.2em
     font-weight: 500
     line-height: 1.5
-    margin: 0
-    padding: 0
     color: colors.color("fancy-background")
 
 
