@@ -53,6 +53,5 @@ blockquote
 
   hr
     max-width: 20%
-    margin: 0.5rem auto
-    margin-top: 2rem
+    margin: 2rem auto 0.5rem auto
 </style>
