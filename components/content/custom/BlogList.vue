@@ -143,12 +143,12 @@ console.log(`${blogs}`)
     .blog-date
       font-family: typography.font("monospace")
       font-size: typography.font-size("xs")
-      font-weight: 700
-      color: colors.color("fancy-background")
+      font-weight: 500
+      color: colors.color("primary-highlight")
 
     .blog-description
       font-size: typography.font-size("m")
       color: colors.color("lightest-foreground")
-      max-width: 60ch
+      max-width: 50ch
 
 </style>

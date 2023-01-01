@@ -85,7 +85,6 @@ const { toc } = useContent();
     counter-reset: toc-2
     // color: colors.color("lightest-foreground")
     color: colors.color("fancy-background")
-    opacity: 0.7
     
     &::before
       counter-increment: toc-1

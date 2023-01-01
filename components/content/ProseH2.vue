@@ -18,7 +18,7 @@ const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes
 h2
   margin-top: 1rem
   margin-bottom: 1rem
-  font-weight: 500
-  color: colors.color("primary-highlight")
+  font-weight: 600
   font-size: 1.5rem
+  color: colors.color("primary-highlight")
 </style>
