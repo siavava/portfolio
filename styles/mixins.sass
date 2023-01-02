@@ -152,10 +152,15 @@ $border-radius: geometry.radius("small")
 
     &:before 
       content: '▹'
+
       position: absolute
       left: 0
+
       color: colors.color("primary-highlight")
+      
+      font-family: typography.font("monospace")
       font-size: typography.font-size("xs")
+      font-weight: 400
 
 @mixin small-list
   @include styled-list 
