@@ -150,7 +150,7 @@ style: "justify-content: right; width: 70%; "
 ::small-list
   - Artificial Intelligence :highlight[(1 course)]
   - Computer Vision :highlight[(2 course)]
-  - Deep Learning (1 course)]
+  - Deep Learning :highlight[(1 course)]
   - Machine Learning :highlight[(1 course)]
   - Natural Language Processing :highlight[(1 course)]
   - Physical Computing :highlight[(1 course)]
