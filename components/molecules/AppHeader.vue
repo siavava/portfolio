@@ -421,7 +421,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   @include mixins.flex-between
 
   z-index: 11
-  // padding: 0 // 50px
   position: sticky
   top: 0
   left: 0
@@ -429,6 +428,7 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   min-height: 70px
   max-height: 90vh
   display: table
+  padding: 0 clamp(10px, 2vw, 20px)
 
   // trick: make header stick out a bit
   // by filtering it with grayscale.
@@ -442,17 +442,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   user-select: auto !important
   transition: geometry.var("default-transition")
 
-
-
-  padding: 0 50px
-
-
-  // @media (max-width: 1080px)
-  //   padding: 0 40px
-  
-  // @media (max-width: 768px)
-  //   padding: 0 25px
-
   @media (prefers-reduced-motion: no-preference)
     box-shadow: 0 10px 30px -10px colors.color("shadow")
     box-shadow: 0 10px 30px -10px colors.color("shadow")
@@ -465,41 +454,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     max-height: 90vh
     overflow-y: scroll
 
-  // nav
-  //   @include mixins.flex-between
-  //   position: relative
-  //   max-width: 1600px
-  //   // color: colors.color("lightest-foreground")
-  //   font-family: typography.font("monospace")
-  //   counter-reset: item
-  //   margin: 0 auto
-  //   padding: 0 50px
-  //   height: 100%
-  //   width: min(100%, 1600px)
-
-  //   .header-logo
-  //     position: relative
-  //     align-self: left
-  //     height: 80% //clamp(30px, 5vw, 40px)
-  //     margin-top: 2px
-  //     aspect-ratio: 1/1
-  //     margin-left: 0
-  //     // background: green
-  //     // padding: 10px
-
-  //   .header-nav-links
-  //     position: relative
-  //     align-self: center
-  //     width: fit-content
-  //     margin: auto 0
-
-  //   .menu-button
-  //     position: relative
-  //     align-self: right
-  //     height: clamp(30px, 5vw, 40px)
-  //     aspect-ratio: 1 / 1 
-  //     margin: auto 0
-
 .header-nav
   @include mixins.flex-between
   position: relative
@@ -509,35 +463,27 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   margin: 0 auto
   height: geometry.var("header-height")
   max-height: geometry.var("header-height")
-  width: min(100%, 1600px)
-  // background: yellow
+  width: min(100%, 1300px)
 
   .header-logo
     position: relative
     align-self: left
-    height: clamp(50px, 5vw, 70px)
+    height: 40px
     aspect-ratio: 1 / 1
     margin-left: 0
-    height: 80%
-    padding: 10px 0
-    // background: green
-    // padding: 10px
+    padding: 5px
 
   .header-nav-links
     position: relative
-    align-self: center
-    width: fit-content
-    margin: auto
-    height: 80%
-    padding: 10px 0
+    height: 70px
+    padding: 10px
 
   .menu-button
     position: relative
-    // align-self: right
-    height: clamp(50px, 5vw, 70px)
+    height: 50px
     aspect-ratio: 1 / 1 
     margin: auto 0
-    // background: yellow
+    padding: 5px
 
 
 .site-menu

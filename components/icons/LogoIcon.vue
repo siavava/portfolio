@@ -128,15 +128,9 @@
 @use "~/styles/geometry"
 
 svg
-  // fill: none
   transition: geometry.var("default-transition")
   user-select: none
-  width: 50px
-  height: 50px
-  padding: 5px
-
-  &:hover, &:focus
-    fill: colors.color("green-tint")
+  aspect-ratio: 1/1
         
 </style>
 
