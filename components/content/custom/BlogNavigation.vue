@@ -82,27 +82,7 @@ export default {
 
 <script lang="ts" setup>
 const { path } = useRoute();
-const { toc, prev, next } = useContent();
-
-const navigation = fetchContentNavigation();
-
-const blogContent = queryContent("blog/posts")
-  .where( { navigation: true } )
-  .sort( { date: -1 } );
-
-// navigation.forEach((item) => {
-//   console.log(item);
-//   // if (item.children) {
-//   //   item.children.forEach((child) => {
-//   //     if (child.id === activeTocItem) {
-//   //       child.active = true;
-//   //     }
-//   //   });
-// });
-
-console.log(navigation);
-
-
+const { toc } = useContent();
 
 </script>
 
@@ -131,7 +111,6 @@ console.log(navigation);
     font-weight: 700
     position: relative
     margin: 0.5rem 0
-    // background: yellow
 
     &.active
       color: colors.color("primary-highlight")
@@ -157,18 +136,15 @@ console.log(navigation);
         width: 20px
 
     .category-child
-      // background: red
       font-size: typography.font-size("xs")
-      font-weight: 700
-      line-height: 2
+      font-weight: 400
       color: colors.color("fancy-background")
       margin-left: 0.6rem
-      padding-left: 0.5rem
-      border-left: 1px solid // lighten(colors.color("lightest-background"), 10%)
+      padding-left: 1rem
+      border-left: 2px solid
 
       &.active
         color: colors.color("primary-highlight")
-        border-left: 1px solid
 
 
 .navigation-old

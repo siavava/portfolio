@@ -13,18 +13,22 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @use "../styles/typography"
 @use "../styles/colors"
 @use "../styles/geometry"
 
 .about-section
   max-width: 900px
+  // width: 100%
   .inner
     display: grid
-    grid-template-columns: 3fr 2fr
+    // grid-template-columns: 3fr 2fr
     grid-gap: 50px
     @media (max-width: 768px) 
       display: block
+
+  ul
+    width: fit-content
 </style>
 

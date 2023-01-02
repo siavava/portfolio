@@ -37,7 +37,7 @@ observeToc();
 @use "../styles/default"
 @use "../styles/typography"
 @use "../styles/colors"
-@use "../styles/mixins"
+// @use "../styles/mixins"
 
 .article-blog-navigation
   position: sticky

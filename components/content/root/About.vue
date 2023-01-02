@@ -1,7 +1,7 @@
 <template>
   <StyledAboutSection id="about" class="about-section">
     <ContentDoc path="profile/brief" class="doc" />
-    <StyledImage>
+    <!-- <StyledImage>
       <img
         src="~assets/images/profile-image.jpg"
         class="img"
@@ -11,7 +11,7 @@
         alt="head shot"
         loading="lazy"
       />
-    </StyledImage>
+    </StyledImage> -->
   </StyledAboutSection>
 </template>
 

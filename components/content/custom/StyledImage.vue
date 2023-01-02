@@ -1,7 +1,16 @@
 <template>
   <div id="styled-image">
     <div class="wrapper">
-      <slot />
+      <img
+        src="~assets/images/profile-image.jpg"
+        class="img"
+        width="500"
+        quality="100"
+        formats="AUTO, WEBP, AVIF"
+        alt="head shot"
+        loading="lazy"
+      />
+      <!-- <slot /> -->
     </div>
   </div>
 </template>
@@ -21,11 +30,13 @@
 
 #styled-image
   position: relative
-  max-width: 300px
+  width: clamp(200px, 50%, 280px)
+  padding: 10px 30px 30px 10px
+  float: right
 
-  @media (max-width: 768px)
-    margin: 50px auto 0
-    width: 70%
+  // @media (max-width: 768px)
+  //   margin: 50px auto 0 auto
+  //   width: 70%
   
   .wrapper 
     @include mixins.box-shadow
