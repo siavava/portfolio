@@ -208,34 +208,6 @@ $border-radius: geometry.radius("small")
   margin: 0
 
 @mixin fancy-background
-  position: relative
-  z-index: 1
-  overflow: hidden
-
-  // background color to extend to entire screen width
-  &::before
-    // content: ""
-    // width: 100%
-    // height: 100%
-    // position: absolute
-    // top: 0
-    // left: 0
-    // opacity: 0.1
-    // background-color: colors.color("primary-highlight")
-    // transform: translateX(-20%)
-
-  // background dots to latter half of screen width.
-  &::after
-    content: ""
-    position: absolute
-    width: 100%
-    height: 100%
-    top: 0
-    // left: 70%
-    opacity: 0.2
-    z-index: 0
-    background-image: radial-gradient(circle at 2px 2px, colors.color(primary-highlight), 2px, transparent 0)
-    background-size: 20px 20px
-    background-repeat: repeat
-
-    
+  background-image: radial-gradient(circle at 2px 2px, rgba(colors.color(primary-highlight), 30%), 2px, transparent 0)
+  background-size: 20px 20px
+  background-repeat: repeat
