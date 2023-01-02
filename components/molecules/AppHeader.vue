@@ -454,11 +454,11 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   max-height: 90vh
   overflow-y: scroll
 
-  -webkit-transition: all 0.3s ease-in-out
-  -ms-transition: all 0.3s ease-in-out
-  -moz-transition: all 0.3s ease-in-out
-  -o-transition: all 0.3s ease-in-out
-  transition: all 0.3s ease-in-out
+  -webkit-transition: all 0.1s ease-in-out
+  -ms-transition: all 0.1s ease-in-out
+  -moz-transition: all 0.1s ease-in-out
+  -o-transition: all 0.1s ease-in-out
+  transition: all 0.1s ease-in-out
 
 
 .header-nav
@@ -509,11 +509,11 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   &.menu-open
     max-height: 80vh
 
-  -webkit-transition: all 0.3s ease-in-out
-  -ms-transition: all 0.3s ease-in-out
-  -moz-transition: all 0.3s ease-in-out
-  -o-transition: all 0.3s ease-in-out
-  transition: all 0.3s ease-in-out
+  -webkit-transition: all 0.1s ease-in-out
+  -ms-transition: all 0.1s ease-in-out
+  -moz-transition: all 0.1s ease-in-out
+  -o-transition: all 0.1s ease-in-out
+  transition: all 0.1s ease-in-out
 
   &::-webkit-scrollbar
     display: none
@@ -611,11 +611,11 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     -ms-user-select: none
     user-select: none
 
-    -webkit-transition: all 0.3s ease-in-out
-    -ms-transition: all 0.3s ease-in-out
-    -moz-transition: all 0.3s ease-in-out
-    -o-transition: all 0.3s ease-in-out
-    transition: all 0.3s ease-in-out
+    -webkit-transition: all 0.1s ease-in-out
+    -ms-transition: all 0.1s ease-in-out
+    -moz-transition: all 0.1s ease-in-out
+    -o-transition: all 0.1s ease-in-out
+    transition: all 0.1s ease-in-out
 
     * > .toc > h2
       text-decoration: none !important
