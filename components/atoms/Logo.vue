@@ -19,15 +19,9 @@
 @use "~/styles/geometry"
 @use "~/styles/mixins"
 
-.logo
-  @include mixins.flex-center
-  width: 40px
-  height: 40px
-  margin-right: 5px
-
-  svg
-    color: colors.color("primary-highlight")
-    width: 50px
-    height: 50px
+// .logo
+//   @include mixins.flex-center
+//   height: clamp(20px, 5vw, 50px)
+//   margin-right: 50vw
 
 </style>

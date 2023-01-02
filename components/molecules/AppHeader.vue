@@ -4,15 +4,16 @@
     :class="menuOpen ? 'header menu-open' : 'header'"
     :style="style"
   >
-    <div class="nav-container">
-      <Nav class="nav-in-container" />
+    <nav class="header-nav">
+      <Logo class="header-logo"/>
+      <NavLinks class="header-nav-links" />
       <StyledMenuButton
         @click="toggleMenu"
         :aria-expanded="menuOpen ? 'true' : 'false'"
         :aria-label="menuOpen ? 'Close Menu' : 'Open Menu'"
         ref="buttonRef"
         class="menu-button"/>
-    </div>
+    </nav>
     <div
       v-show="menuOpen"
       class="site-menu">
@@ -329,6 +330,7 @@ export default {
 //
 
 import { navLinks } from "~/src/config";
+import { loaderDelay as timeout } from '~/src/utils';
 
 const { path: currentPage } = useRoute();
 
@@ -358,7 +360,7 @@ const toggleMenu = () => {
     : openMenu();
 }
 
-/// DATA
+/// DATA 
 const { data: featuredBlogsMeta } = await useAsyncData(
   `featured-blogs-meta`,
   async () => {
@@ -409,11 +411,11 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 
 
 <style lang="sass">
-@use "~/styles/mixins"
-@use "~/styles/typography"
 @use "~/styles/colors"
+@use "~/styles/typography"
 @use "~/styles/geometry"
-@use "~/styles/default"
+@use "~/styles/mixins"
+@use "~/styles/transitions"
 
 .header
   @include mixins.flex-between
@@ -424,7 +426,7 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   top: 0
   left: 0
   width: 100vw
-  width: 100%
+  min-height: 70px
   max-height: 90vh
   display: table
 
@@ -441,17 +443,15 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   transition: geometry.var("default-transition")
 
 
-  // center nav on the header when header is wider than nav.
-  // margin: 0 auto
 
   padding: 0 50px
 
 
-  @media (max-width: 1080px)
-    padding: 0 40px
+  // @media (max-width: 1080px)
+  //   padding: 0 40px
   
-  @media (max-width: 768px)
-    padding: 0 25px
+  // @media (max-width: 768px)
+  //   padding: 0 25px
 
   @media (prefers-reduced-motion: no-preference)
     box-shadow: 0 10px 30px -10px colors.color("shadow")
@@ -465,30 +465,79 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     max-height: 90vh
     overflow-y: scroll
 
-.nav-container
-  display: flex
-  justify-content: space-between
-  column-gap: 20px
+  // nav
+  //   @include mixins.flex-between
+  //   position: relative
+  //   max-width: 1600px
+  //   // color: colors.color("lightest-foreground")
+  //   font-family: typography.font("monospace")
+  //   counter-reset: item
+  //   margin: 0 auto
+  //   padding: 0 50px
+  //   height: 100%
+  //   width: min(100%, 1600px)
 
+  //   .header-logo
+  //     position: relative
+  //     align-self: left
+  //     height: 80% //clamp(30px, 5vw, 40px)
+  //     margin-top: 2px
+  //     aspect-ratio: 1/1
+  //     margin-left: 0
+  //     // background: green
+  //     // padding: 10px
+
+  //   .header-nav-links
+  //     position: relative
+  //     align-self: center
+  //     width: fit-content
+  //     margin: auto 0
+
+  //   .menu-button
+  //     position: relative
+  //     align-self: right
+  //     height: clamp(30px, 5vw, 40px)
+  //     aspect-ratio: 1 / 1 
+  //     margin: auto 0
+
+.header-nav
+  @include mixins.flex-between
   position: relative
-  max-width: 1300px
-  width: auto
+  color: colors.color("lightest-foreground")
+  font-family: typography.font("monospace")
+  counter-reset: item
   margin: 0 auto
+  height: geometry.var("header-height")
+  max-height: geometry.var("header-height")
+  width: min(100%, 1600px)
+  // background: yellow
 
-.nav-in-container
-  margin: 10px
-  max-width: 100%
-  height: auto
-  padding-top: 20px
-  padding-bottom: 20px
-  margin: auto
+  .header-logo
+    position: relative
+    align-self: left
+    height: clamp(50px, 5vw, 70px)
+    aspect-ratio: 1 / 1
+    margin-left: 0
+    height: 80%
+    padding: 10px 0
+    // background: green
+    // padding: 10px
 
-.menu-button
-  position: absolute
-  right: 0
-  width: 50px
-  height: 50px
-  margin-top: 15px
+  .header-nav-links
+    position: relative
+    align-self: center
+    width: fit-content
+    margin: auto
+    height: 80%
+    padding: 10px 0
+
+  .menu-button
+    position: relative
+    // align-self: right
+    height: clamp(50px, 5vw, 70px)
+    aspect-ratio: 1 / 1 
+    margin: auto 0
+    // background: yellow
 
 
 .site-menu
