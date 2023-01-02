@@ -5,6 +5,7 @@
 <style lang="sass" scoped>
 
 //! This overrides mixins.small-list.li
-li
-  width: fit-content
+// li
+//   background: yellow
+  // width: fit-content
 </style>

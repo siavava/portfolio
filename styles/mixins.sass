@@ -147,35 +147,31 @@ $border-radius: geometry.radius("small")
   font-size: typography.font-size("l")
   li
     position: relative
-    padding-left: 30px
+    padding-left: 20px
     margin-bottom: 10px
+
     &:before 
       content: '▹'
       position: absolute
       left: 0
       color: colors.color("primary-highlight")
+      font-size: 1em
 
 @mixin small-list
+  @include styled-list 
+  
   display: grid
   grid-gap: 0 10px
   padding: 0
-  margin: 20px 0
-  overflow: hidden
-  list-style: none
+  margin: 1em 0
 
   li
-    position: relative
     font-family: typography.font("monospace")
     font-weight: 600
     font-size: typography.font-size("xs")
 
-    &:before
-      content: '▹'
-      position: absolute
-      left: 0
-      color: colors.color("primary-highlight")
-      font-size: typography.font-size("s")
-      line-height: 12px
+    &::before
+      font-weight: 400
 
 @mixin small-list-inline
   display: flex
