@@ -624,7 +624,8 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     display: flex
     flex-direction: row
     white-space: nowrap
-    gap: 0.5rem
+    gap: 0.5em
+    align-items: flex-start
     font-size: typography.font-size("m")
     color: colors.color('fancy-background')
 

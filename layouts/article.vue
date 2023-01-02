@@ -147,11 +147,9 @@ hr
   line-height: 29px
 
 .article-blog-navigation-footer
-  width: max-content
-  max-width: 768px
-  min-width: 480px
+  width: 100%
 
-  padding: 4vh 4vw
+  padding: 1em 12vw
   margin: 0 auto
   border-top: none
   border-bottom: none
