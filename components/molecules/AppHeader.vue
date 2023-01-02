@@ -1,7 +1,7 @@
 <template>
   <header
     ref="headerRef"
-    :class="menuOpen ? 'header menu-open' : 'header'"
+    class="header"
     :style="style"
   >
     <nav class="header-nav">
@@ -15,8 +15,10 @@
         class="menu-button"/>
     </nav>
     <div
-      v-show="menuOpen"
-      class="site-menu">
+      :class="{
+        'site-menu': true,
+        'menu-open': menuOpen,
+      }">
       <SearchBar ref="searchBar" class="search-bar"/>
       <div class="menu-columns-wrapper">
         <div class="menu-column toc-current-page">
@@ -306,7 +308,7 @@ export default {
       const offset = this.scrollSpeed  * (currentScrollPosition - this.lastScrollPosition);
       this.lastScrollPosition = currentScrollPosition;
 
-      if (offset > 0 && !this.hidden) {
+      if (offset > 0 && !this.hidden && !this.menuOpen) {
         // scrolling down
         this.scrollHeight = Math.min(this.scrollHeight + offset, this.height);
         if (this.scrollHeight >= this.height) {
@@ -450,9 +452,16 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   // when menu is open,
   // make header not exceed the height of the screen
   // and make overflowing content scrollable
-  &.menu-open
-    max-height: 90vh
-    overflow-y: scroll
+  // &.menu-open
+  max-height: 90vh
+  overflow-y: scroll
+
+  -webkit-transition: all 0.3s ease-in-out
+  -ms-transition: all 0.3s ease-in-out
+  -moz-transition: all 0.3s ease-in-out
+  -o-transition: all 0.3s ease-in-out
+  transition: all 0.3s ease-in-out
+
 
 .header-nav
   @include mixins.flex-between
@@ -491,12 +500,22 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   position: relative
   max-width: 1300px
   width: 100%
-  max-height: 80vh
+  // max-height: 80vh
   margin: 0 auto
   overflow-y: scroll
   color: colors.color("lightest-foreground")
   font-weight: 500
   line-height: 2
+  max-height: 0
+
+  &.menu-open
+    max-height: 80vh
+
+  -webkit-transition: all 0.3s ease-in-out
+  -ms-transition: all 0.3s ease-in-out
+  -moz-transition: all 0.3s ease-in-out
+  -o-transition: all 0.3s ease-in-out
+  transition: all 0.3s ease-in-out
 
   &::-webkit-scrollbar
     display: none
