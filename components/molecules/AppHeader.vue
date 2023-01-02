@@ -118,6 +118,21 @@
     <div
       v-if="nonTocRoutes.indexOf(route) == -1"
       class="header-toc-plus-button">
+      <button
+        :class="{
+          'header-toc-button': true,
+          'expanded': tocExpanded,
+        }"
+        @click="tocExpanded = !tocExpanded"
+      >
+        <span> Table of Contents</span>
+        <Icon
+          :class="{
+            'expand-icon': true, 
+            'expanded': tocExpanded
+          }"
+          type="expand" />
+      </button>
       <div
         @click="tocExpanded = !tocExpanded"
         :class="{
@@ -498,7 +513,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   position: relative
   max-width: 1300px
   width: 100%
-  // max-height: 80vh
   margin: 0 auto
   overflow-y: scroll
   color: colors.color("lightest-foreground")
@@ -598,13 +612,33 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 
 .header-toc-plus-button
   position: relative
-  max-width: 1300px
+  // max-width: 1200px
+  max-width: 800px
   padding: 0 5%
   margin: 0 auto
+  min-height: 40px 
+
+  .header-toc-button
+    width: fit-content
+    height: 20px
+    display: flex
+    flex-direction: row
+    white-space: nowrap
+    gap: 0.5rem
+    font-size: typography.font-size("m")
+    color: colors.color('fancy-background')
+
+    margin-top: 0
+    padding-top: 0
+    line-height: 1.5
+
+    &.expanded
+      color: colors.color('primary-highlight')
+    
 
   .header-toc
-    margin-bottom: 2vh
-    max-height: 100%
+
+    background: green
 
     -webkit-user-select: none
     -moz-user-select: none
@@ -618,13 +652,7 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     transition: all 0.1s ease-in-out
 
     * > .toc > h2
-      text-decoration: none !important
-      cursor: pointer
-
-      &::after
-        content: "▲"
-        margin-left: 10px
-        font-size: typography.font-size("s")
+      display: none !important
     *
       border: none
 
@@ -636,23 +664,8 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
         color: colors.color("fancy-background")
         text-decoration: none !important
 
-        &::after
-          content: "▼"
-          margin-left: 1em
-          font-size: 14px
-
       * > .toc > :not(h2)
         display: none
-
-
-
-  .toc-button
-    margin: 0 0
-    width: 15ch // 140px
-    height: 30px
-    // background: green
-    position: absolute
-    // opacity: 0
 
 
 
@@ -675,7 +688,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     color: colors.color("lightest-foreground") !important
     font-family: typography.font("sans-serif") !important
     font-size: typography.font-size("m") !important
-    // color: colors.color("lightest-foreground") !important
 
     font-weight: 600 !important
     line-height: 2.3em !important
