@@ -2,7 +2,11 @@
 
 Built with [Nuxt 3](https://nuxtjs.org/),
 [Sass](https://sass-lang.com), and [TypeScript](https://www.typescriptlang.org),
-with a slight hint of [MongoDB](https://www.mongodb.com).
+with a subtle hint of [MongoDB](https://www.mongodb.com).
+
+### Deploy Status:
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e0f5d7d0-9d2a-45ae-8962-6e3af2ec4cf3/deploy-status)](https://app.netlify.com/sites/amittai/deploys)
 
 &copy; ${2022}^{+}$, Altair
 
