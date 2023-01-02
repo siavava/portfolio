@@ -125,7 +125,7 @@
         }"
         @click="tocExpanded = !tocExpanded"
       >
-        <span> Table of Contents</span>
+        <span style="margin-right: 0.5em;"> Table of Contents</span>
         <Icon
           :class="{
             'expand-icon': true, 
@@ -134,7 +134,6 @@
           type="expand" />
       </button>
       <div
-        @click="tocExpanded = !tocExpanded"
         :class="{
           'header-toc': true,
           'header-toc-hidden': (!tocExpanded) || menuOpen,
@@ -624,7 +623,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     display: flex
     flex-direction: row
     white-space: nowrap
-    gap: 0.5em
     align-items: flex-start
     font-size: typography.font-size("m")
     color: colors.color('fancy-background')
@@ -638,9 +636,6 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
     
 
   .header-toc
-
-    background: green
-
     -webkit-user-select: none
     -moz-user-select: none
     -ms-user-select: none
