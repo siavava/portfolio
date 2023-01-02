@@ -35,7 +35,7 @@
               </NuxtLink>
             </li>
           </ul>
-          <TableOfContents class="toc-current-page" />
+          <TableOfContents v-else class="toc-current-page" />
         </div>
         <div class="menu-column">
           <NuxtLink
@@ -112,7 +112,9 @@
         </div>
       </div>
     </div>
-    <div class="header-toc-plus-button">
+    <div
+      v-if="nonTocRoutes.indexOf(route) == -1"
+      class="header-toc-plus-button">
       <button
         @click="tocExpanded = !tocExpanded"
         class="toc-button"
@@ -144,6 +146,10 @@ export default {
       menuOpen: false,
       anchors: [],
       tocExpanded: false,
+      nonTocRoutes: [
+        "/",
+        "/blog", "/blog/",
+      ],
     };
   },
   computed: {
@@ -160,6 +166,9 @@ export default {
     },
     scrolledToTop() {
       return this.lastScrollPosition <= 0;
+    },
+    route() {
+      return useRoute().path;
     },
   },
   mounted() {
