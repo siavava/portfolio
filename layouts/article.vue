@@ -4,25 +4,27 @@
     <AppHeader>
       <TableOfContents />
     </AppHeader>
-    <body>
-      <main>
-        <div class="content">
-          <a class="skip-to-content" href="#content"/>
-          <BlogTitle />
-          <div class="container">
-            <div class="left-panel">
-              <BlogNavigation class="article-blog-navigation" />
-            </div>
-            <div class="content">
-              <slot id="content"/>
-            </div>
-            <div class="right-panel">
-              <TableOfContents class="table-of-contents" />
+    <BlogTitle />
+    <main>
+      <div class="body-and-panels">
+        <div class="left-panel">
+          <BlogNavigation class="article-blog-navigation" />
+        </div>
+        <body>
+          <div class="content">
+            <a class="skip-to-content" href="#content"/>
+            <div class="container">
+              <div class="content">
+                <slot id="content"/>
+              </div>
             </div>
           </div>
+        </body>
+        <div class="right-panel">
+          <TableOfContents class="table-of-contents" />
         </div>
+      </div>
       </main>
-    </body>
     <BlogNavigation class="article-blog-navigation-footer fancy-background" />
     <AppFooter />
   </div>
@@ -37,6 +39,7 @@ observeToc();
 @use "../styles/default"
 @use "../styles/typography"
 @use "../styles/colors"
+@use "../styles/geometry"
 // @use "../styles/mixins"
 
 .article-blog-navigation
@@ -52,8 +55,40 @@ observeToc();
   flex-direction: column
   min-height: 100vh
   max-width: 100vw
-  overflow: hidden
+  // overflow: hidden
 
+.body-and-panels
+  display: flex
+  flex-direction: row
+  margin: 0 auto
+  width: 100%
+
+  .right-panel
+    min-width: 240px
+    max-width: 240px
+    margin-right: 20px
+    padding: geometry.var("nav-height") 0
+    height: fit-content
+    position: sticky
+    top: 0
+    overflow: hidden
+
+    @media(max-width: 1200px)
+      display: none
+
+  .left-panel
+    min-width: 240px
+    max-width: 240px
+    width: 240px
+    margin-left: 20px
+    padding: geometry.var("nav-height") 0
+    height: fit-content
+    position: sticky
+    top: 0
+    overflow: hidden
+
+    @media(max-width: 1200px)
+      display: none
 .container
   position: relative
   margin: 2vw
@@ -61,30 +96,10 @@ observeToc();
   display: flex
   flex-direction: row
 
-  .right-panel
-    min-width: 240px
-    max-width: 240px
-    margin: 0 2vw
-    padding: 2vh 0
-    height: fit-content
-    position: sticky
-    top: 0
-    overflow: hidden
-
-  .left-panel
-    min-width: 240px
-    max-width: 240px
-    width: 240px
-    margin: 0 2vw
-    padding: 2vh 0
-    height: fit-content
-    position: sticky
-    top: 0
-    overflow: hidden
 
   .content
     // width: max(60vw, 75ch)
-    width: 60%
+    width: 100%
     max-width: 75ch
 
   // hide side-panel on mobile
@@ -140,9 +155,10 @@ hr
   margin: 0 auto
   border-top: none
   border-bottom: none
+  
+  display: none
 
-// .table-of-contents
-//   border-top: 1px solid colors.color("primary-highlight")
-//   border-bottom: 1px solid colors.color("primary-highlight")
+  @media(max-width: 1200px)
+    display: block
 
 </style>

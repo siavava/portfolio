@@ -157,7 +157,7 @@ $border-radius: geometry.radius("small")
       left: 0
 
       color: colors.color("primary-highlight")
-      
+
       font-family: typography.font("monospace")
       font-size: typography.font-size("xs")
       font-weight: 400
@@ -213,25 +213,25 @@ $border-radius: geometry.radius("small")
 
   // background color to extend to entire screen width
   &::before
-    content: ""
-    position: absolute
-    width: 200vw
-    height: 100%
-    top: 0
-    left: 0
-    opacity: 0.1
-    background-color: colors.color("primary-highlight")
-    transform: translateX(-20%)
+    // content: ""
+    // width: 100%
+    // height: 100%
+    // position: absolute
+    // top: 0
+    // left: 0
+    // opacity: 0.1
+    // background-color: colors.color("primary-highlight")
+    // transform: translateX(-20%)
 
   // background dots to latter half of screen width.
   &::after
     content: ""
     position: absolute
-    width: 200%
+    width: 100%
     height: 100%
     top: 0
-    left: 70%
-    opacity: 0.3
+    // left: 70%
+    opacity: 0.2
     z-index: 0
     background-image: radial-gradient(circle at 2px 2px, colors.color(primary-highlight), 2px, transparent 0)
     background-size: 20px 20px

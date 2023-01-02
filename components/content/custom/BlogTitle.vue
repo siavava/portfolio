@@ -26,23 +26,23 @@
             })
           }}
         </span>
-        <figure
-          v-if="image"
-          class="title-image-wrapper"
-        >
-          <img
-            class="title-image"
-            :src="`${path}/title-image.jpg`"
-            alt="Title Image"
-          />
-          <figcaption
-            v-if="caption"
-            class="title-image-caption">
-            {{ caption }}
-          </figcaption>
-        </figure>
       </div>
     </div>
+    <figure
+      v-if="image"
+      class="title-image-wrapper"
+    >
+      <img
+        class="title-image"
+        :src="`${path}/title-image.jpg`"
+        alt="Title Image"
+      />
+      <figcaption
+        v-if="caption"
+        class="title-image-caption">
+        {{ caption }}
+      </figcaption>
+    </figure>
   </div>
 </template>
 
@@ -57,47 +57,16 @@
 .title-container
   width: 100%
   height: fit-content
-  padding-bottom: 3em
+  align-content: center
+  padding: 0.5rem 0 2rem 0
 
-  margin-bottom: 5em
+  overflow: hidden
 
   @include mixins.fancy-background
 
-  // display: flex
-  // flex-direction: row
-  // align-items: flex-end
-  // position: relative
-
-
-  // &::after
-  //   content: ""
-  //   position: absolute
-  //   width: 200%
-  //   height: 100%
-  //   top: 0
-  //   left: 60%
-  //   opacity: 0.5
-  //   z-index: 0
-  //   background-image: radial-gradient(circle at 2px 2px, colors.color(primary-highlight), 2px, transparent 0)
-  //   background-size: 20px 20px
-  //   background-repeat: repeat
-
-  // &::before
-  //   content: ""
-  //   position: absolute
-  //   width: 200vw
-  //   height: 100%
-  //   top: 0
-  //   left: 0
-  //   opacity: 0.1
-  //   background-color: colors.color("primary-highlight")
-  //   transform: translateX(-20%)
-
-
-
   .text-container
-    width: 100%
-    max-width: 100%
+    width: min(80%, 1200px)
+    margin: auto
     background-size: 1.125rem 1.125rem
     height: 100%
     display: flex
@@ -107,7 +76,6 @@
 
     .title
       width: 100%
-      padding: 2vw
 
       .category
         color: colors.color("primary-highlight")
@@ -139,7 +107,6 @@
             &:not(:last-child)::after
               content: ","
               margin-right: 0.5rem
-              color: colors.color("primary-highlight")
               font-weight: 500
 
       .title-heading
@@ -147,6 +114,7 @@
         font-weight: 700
         line-height: 130%
         margin: 0.5em 0
+        color: colors.color("primary-highlight")
 
       .title-description
         font-size: clamp(typography.font-size("m"), 1.7vw, 1.53rem)
@@ -161,28 +129,29 @@
         font-size: typography.font-size("s")
         font-weight: 700
 
-      .title-image-wrapper
-        width: 100%
-        display: flex
-        flex-direction: column
-        align-items: center
-        gap: 0.5em
+  .title-image-wrapper
+    width: min(80%, 1200px)
+    margin: auto
+    max-width: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 0.5em
 
 
-      .title-image
-        aspect-ratio: 16 / 4
-        object-fit: cover
-        margin-top: 2em
-        padding: 0 1em
-        
-      .title-image-caption
-        width: fit-content
-        align-self: flex-end
-        margin-right: clamp(3em, 4vw, 5em)
-        font-size: clamp(typography.font-size("s"), 2vw,  typography.font-size("l"))
-        font-weight: 600
-        font-style: italic
-        color: colors.color("primary-highlight")
+  .title-image
+    aspect-ratio: 16 / 4
+    object-fit: cover
+    margin-top: 2em
+    
+  .title-image-caption
+    width: fit-content
+    align-self: flex-end
+    margin-right: clamp(3em, 4vw, 5em)
+    font-size: clamp(typography.font-size("s"), 2vw,  typography.font-size("l"))
+    font-weight: 600
+    font-style: italic
+    color: colors.color("primary-highlight")
 
 
 
