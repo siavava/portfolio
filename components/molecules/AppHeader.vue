@@ -350,9 +350,6 @@ const openMenu = () => {
       document.getElementById("searchbar")?.focus();
     }, timeout);
   }
-  // document.getElementById("searchbar")?.focus();
-  // searchBar.value.focus();
-  // onClickOutside(header, closeMenu);
 }
 
 const toggleMenu = () => {
