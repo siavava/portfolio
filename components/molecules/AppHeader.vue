@@ -468,10 +468,10 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   .header-logo
     position: relative
     align-self: left
-    height: 40px
+    height: 70px
     aspect-ratio: 1 / 1
     margin-left: 0
-    padding: 5px
+    padding: 20px 30px 20px 10px
 
   .header-nav-links
     position: relative
@@ -480,10 +480,10 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 
   .menu-button
     position: relative
-    height: 50px
+    height: 70px
     aspect-ratio: 1 / 1 
     margin: auto 0
-    padding: 5px
+    padding: 15px 0px 15px 5px
 
 
 .site-menu
@@ -492,7 +492,7 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   max-width: 1300px
   width: 100%
   max-height: 80vh
-  margin: 20px auto
+  margin: 0 auto
   overflow-y: scroll
   color: colors.color("lightest-foreground")
   font-weight: 500
@@ -575,6 +575,9 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   border-top: 1px solid colors.color("lightest-background")
   border-bottom: 1px solid colors.color("lightest-background")
   padding: 0 2vw
+  align-content: center
+  vertical-align: middle
+  height: geometry.var("nav-height")
 
 .header-toc-plus-button
   position: relative

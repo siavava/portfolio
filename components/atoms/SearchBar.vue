@@ -45,18 +45,17 @@ export default {
 @use "~/styles/typography"
 
 .site-search-form
-  padding-top: 5px
-  padding-bottom: 5px
-  justify: space-between
+  // padding-top: 5px
+  // padding-bottom: 5px
+  // justify: space-between
 
   .site-search-input
     width: 100%
-    height: 100%
+    height: 40px
     background: inherit
-    border: none
     font-size: 20px
-    padding: 20px
-    line-height: 130%
+    margin: 15px 0
+    padding-right: 50px
     color: colors.color("primary-highlight")
     font-size: typography.font-size("xl")
     font-family: typography.font("font-sans")
@@ -65,18 +64,16 @@ export default {
       font-size: typography.font-size("xl")
       font-family: typography.font("font-sans")
       color: colors.color("primary-highlight")
-      opacity: 0.4
+      opacity: 0.6
 
     &::selection
       color: colors.color("primary-highlight")
       opacity: 0.8
 
   .search-icon
-    max-width: 42px
-    max-height: 42px
-    // margin-top: 10px
-    // margin-right: 10px
-    // float: right
+    max-width: 40px
+    max-height: 40px
+    aspect-ratio: 1/1
     position: absolute
     left: auto
     right: 10px
