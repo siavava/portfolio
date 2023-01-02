@@ -118,10 +118,6 @@
     <div
       v-if="nonTocRoutes.indexOf(route) == -1"
       class="header-toc-plus-button">
-      <button
-        @click="tocExpanded = !tocExpanded"
-        class="toc-button"
-      />
       <div
         @click="tocExpanded = !tocExpanded"
         :class="{
@@ -343,13 +339,18 @@ const searchBar = ref(null);
 
 
 const closeMenu = () => {
-  // console.log(`Menu Closed!`);
   menuOpen.value = false;
 }
 
 const openMenu = () => {
   menuOpen.value = true;
-  document.getElementById("searchbar")?.focus();
+  // auto-focus on search bar on desktop
+  if (window.innerWidth > 768) {
+    setTimeout(() => {
+      document.getElementById("searchbar")?.focus();
+    }, timeout);
+  }
+  // document.getElementById("searchbar")?.focus();
   // searchBar.value.focus();
   // onClickOutside(header, closeMenu);
 }
@@ -606,9 +607,22 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 
   .header-toc
     margin-bottom: 2vh
+    max-height: 100%
+
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+
+    -webkit-transition: all 0.3s ease-in-out
+    -ms-transition: all 0.3s ease-in-out
+    -moz-transition: all 0.3s ease-in-out
+    -o-transition: all 0.3s ease-in-out
+    transition: all 0.3s ease-in-out
 
     * > .toc > h2
       text-decoration: none !important
+      cursor: pointer
 
       &::after
         content: "▲"
@@ -618,6 +632,8 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
       border: none
 
     &.header-toc-hidden
+      max-height: 2em
+
       * > .toc > h2
         display: block
         color: colors.color("fancy-background")
@@ -625,9 +641,8 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 
         &::after
           content: "▼"
-          margin-left: 10px
+          margin-left: 1em
           font-size: 14px
-          color: colors.color("fancy-background")
 
       * > .toc > :not(h2)
         display: none
