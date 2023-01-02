@@ -424,7 +424,7 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   position: sticky
   top: 0
   left: 0
-  width: 100vw
+  width: 100%
   min-height: 70px
   max-height: 90vh
   display: table
