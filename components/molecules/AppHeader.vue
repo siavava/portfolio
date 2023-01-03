@@ -116,7 +116,7 @@
       </div>
     </div>
     <div
-      v-if="nonTocRoutes.indexOf(route) == -1"
+      v-show="nonTocRoutes.indexOf(route) == -1"
       class="header-toc-plus-button">
       <button
         :class="{
@@ -458,11 +458,6 @@ const { data: researchMeta } = await useAsyncData(
     box-shadow: 0 10px 30px -10px colors.color("shadow")
     box-shadow: 0 10px 30px -10px colors.color("shadow")
 
-
-  // when menu is open,
-  // make header not exceed the height of the screen
-  // and make overflowing content scrollable
-  // &.menu-open
   max-height: 90vh
   overflow-y: scroll
 
@@ -645,7 +640,7 @@ const { data: researchMeta } = await useAsyncData(
     -o-transition: all 0.1s ease-in-out
     transition: all 0.1s ease-in-out
 
-    * > .toc > h2
+    * > .toc > .title
       display: none !important
     *
       border: none
@@ -653,12 +648,7 @@ const { data: researchMeta } = await useAsyncData(
     &.header-toc-hidden
       max-height: 2em
 
-      * > .toc > h2
-        display: block
-        color: colors.color("fancy-background")
-        text-decoration: none !important
-
-      * > .toc > :not(h2)
+      * > .toc > *
         display: none
 
 

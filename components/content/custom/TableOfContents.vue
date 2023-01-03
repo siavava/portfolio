@@ -159,6 +159,14 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleScroll);
   },
+  watch: {
+    // when route changes, register event listeners in case they haven't been registered yet
+    $route() {
+      this.handleScroll();
+      window.addEventListener("scroll", this.handleScroll);
+      window.addEventListener("resize", this.handleScroll);
+    },
+  }
 }
 </script>
 
