@@ -126,6 +126,7 @@ export default {
 
 
         code
+          font-family: typography.font("monospace")
           font-size: typography.font-size("xs")
           line-height: 1.7em
           display: flex

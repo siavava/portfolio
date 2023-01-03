@@ -608,15 +608,15 @@
 }
 
 // fredericka regular := 400
-@font-face {
-  font-family: 'Fredericka the Great';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src:
-    local('Fredericka the Great Regular'),
-    url('~/assets/fonts/Fredericka/Fredericka.ttf') format('truetype');
-}
+// @font-face {
+//   font-family: 'Fredericka the Great';
+//   font-style: normal;
+//   font-weight: 400;
+//   font-display: swap;
+//   src:
+//     local('Fredericka the Great Regular'),
+//     url('~/assets/fonts/Fredericka/Fredericka.ttf') format('truetype');
+// }
 
 // macondo regulat := 400
 @font-face {
@@ -677,3 +677,5 @@
     local('Red Hat Mono Black Italic'),
     url('~/assets/fonts/RedHatMono/RedHatMono-Italic.ttf') format('truetype');
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');

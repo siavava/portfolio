@@ -149,6 +149,7 @@ $border-radius: geometry.radius("small")
     position: relative
     padding-left: 20px
     margin-bottom: 10px
+    font-weight: 400
 
     &:before 
       content: '▹'
@@ -160,7 +161,7 @@ $border-radius: geometry.radius("small")
 
       font-family: typography.font("monospace")
       font-size: typography.font-size("xs")
-      font-weight: 400
+
 
 @mixin small-list
   @include styled-list 
@@ -172,7 +173,7 @@ $border-radius: geometry.radius("small")
 
   li
     font-family: typography.font("monospace")
-    font-weight: 600
+    font-weight: 400
     font-size: typography.font-size("xs")
 
     &::before
@@ -193,7 +194,7 @@ $border-radius: geometry.radius("small")
     color: colors.color("light-foreground")
     font-family: typography.font("monospace")
     font-size: typography.font-size("xs")
-    font-weight: 600
+    // font-weight: 600
     white-space: nowrap
   
   @media (max-width: 768px) 

@@ -107,7 +107,7 @@
     color: colors.color("primary-highlight")
     font-family: typography.font("monospace")
     font-size: typography.font-size("xs")
-    font-weight: 600
+    font-weight: 400
   
   .project-title
     color: colors.color("lightest-foreground")

@@ -28,12 +28,16 @@
 <script lang="ts">
 export default {
   name: "Hero",
-  data() {
-    return {
-      font: "fredericka",
-      // font: "megrim",
-      // font: "macondo",
-      // font: "rubik-puddles"
+  computed: {
+    font() {
+      const fonts = [
+        "fredericka",
+        // "megrim",
+        // "macondo",
+        // "rubik-puddles",
+        // "DM Mono",
+      ]
+      return fonts[Math.floor(Math.random() * fonts.length)];
     }
   }
 }
@@ -50,7 +54,6 @@ export default {
   flex-direction: column
   align-items: center
   min-height: 100vh
-  // padding: 0
   max-width: 900px
   margin-top: calc(0px - geometry.var("nav-height"))
 
