@@ -54,7 +54,6 @@
 .home-links
   display: flex
   margin: 0 auto
-  font-weight: 600
 
   @media (max-width: 768px)
     display: none

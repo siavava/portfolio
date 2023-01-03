@@ -70,7 +70,7 @@ export default {
     font-family: typography.font("monospace")
 
     font-size: clamp(typography.font-size("s"), 5vw, typography.font-size("m"))
-    font-weight: 600t
+    font-weight: 400
     width: 100%
 
     @media (max-width: 480px)

@@ -16,8 +16,8 @@
       </ul>
     </div>
     <div class="styled-credit-section">
-      <div>
-        &copy {{ new Date().getFullYear() }}, Altair
+      <div class="year">
+        {{ new Date().getFullYear() }}, Altair
       </div>
 
       <div
@@ -38,28 +38,12 @@
 
 <script setup lang="ts">
 import { social } from '~/src/config';
-// import { useEffect } from '~~/src/stateful';
 
 const gitHubInfo = ref({
   stars: 20,
   forks: 23,
   watchers: 564,
 });
-
-// useEffect(() => {
-//   fetch('https://api.github.com/users/siavava/repos/tau')
-//   .then(res => res.json())
-//   .then(data => {
-//     gitHubInfo.value = {
-//       stars: data.stargazers_count,
-//       forks: data.forks_count,
-//       watchers: data.watchers_count,
-//     };
-//   })
-//   .catch(err => console.error(err));
-// }, []);
-
-
 </script>
 
 <script lang="ts">
@@ -73,6 +57,12 @@ const gitHubInfo = ref({
 @use "../styles/mixins"
 @use "../styles/typography"
 @use "../styles/colors"
+
+.year::before
+  content: "©"
+  font-family: typography.font("sans-serif")
+  font-size: typography.font-size("s")
+  margin-right: 0.5em
 
 .styled-footer
   @include mixins.flex-center
@@ -88,7 +78,7 @@ const gitHubInfo = ref({
   font-family: typography.font("monospace")
   font-size: typography.font-size("xxs")
   line-height: 1
-  font-weight: 600
+  // font-weight: 600
 
   a
     padding: 10px

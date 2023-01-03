@@ -47,10 +47,6 @@
 
     watch: {
       selected(newSelected: boolean) {
-        // console.log(`selected changed to ${newSelected}`);
-        // console.log(`style is ${this.style}`);
-        
-        // re-render the component
         this.$forceUpdate();
       },
     },
@@ -74,7 +70,6 @@
   background-color: transparent
   font-family: typography.font("monospace")
   font-size: typography.font-size("xs")
-  font-weight: 600
   text-align: left
   white-space: nowrap
 
@@ -98,5 +93,6 @@
 
   &.selected
     color: colors.color("primary-highlight")
+    font-weight: 600
 
 </style>
