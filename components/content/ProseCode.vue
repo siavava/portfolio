@@ -173,7 +173,7 @@ export default {
 .language
   right: 1em
   margin: 1em
-  font-weight: 600
+  font-weight: 500
   text-transform: capitalize
 
 .top-container
@@ -191,5 +191,7 @@ export default {
   position: absolute
   margin: 1em
   left: 1em
+  font-family: typography.font("monospace")
+  font-size: typography.font-size("xs")
 
 </style>

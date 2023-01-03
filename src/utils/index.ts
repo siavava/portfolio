@@ -37,3 +37,48 @@ export {
   NumRefManager,
   joinPaths,
 };
+
+
+/**
+ * Check if an element is in the viewport
+ * @param el - The element to check
+ * @returns {boolean} - Whether the element is in the viewport
+ */
+export function elementIsInWindow(el: Element): boolean {
+
+  // return false in SSR mode
+  if (typeof window === 'undefined') return false;
+
+  // otherwise, check status of element.
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <=
+      (window.innerWidth || document.documentElement.clientWidth)
+  );
+};
+
+const eps = 1;
+
+export function elementIsAtTop(el: Element) {
+  const rect = el.getBoundingClientRect();
+  return (-eps) <= rect.top && rect.top <= eps;
+}
+
+export function elementIsAtBottom(el: Element) {
+  const rect = el.getBoundingClientRect();
+  return (-eps + window.innerHeight) <= rect.bottom && rect.bottom <= (eps + window.innerHeight);
+}
+
+export function elementIsBelowScreen(el: Element) {
+  const rect = el.getBoundingClientRect();
+  return rect.top > window.innerHeight;
+}
+
+export function elementIsAboveScreen(el: Element) {
+  const rect = el.getBoundingClientRect();
+  return rect.bottom < 0;
+}

@@ -3,7 +3,7 @@
     v-if="toc && toc.links"
     class="navigation"
   >
-    <h2> Navigation </h2>
+    <span class="title"> Navigation </span>
     <!-- <ContentNavigation
       :query="blogContent"
     /> -->
@@ -97,7 +97,7 @@ const { toc } = useContent();
   // border-top: 1px solid colors.color("primary-highlight")
   // border-bottom: 1px solid colors.color("primary-highlight")
 
-  h2
+  .title
     font-size: typography.font-size("xl")
     color: colors.color("primary-highlight")
     font-weight: 700
@@ -145,6 +145,7 @@ const { toc } = useContent();
 
       &.active
         color: colors.color("primary-highlight")
+        font-weight: 600
 
 
 .navigation-old

@@ -13,6 +13,6 @@
 .paragraph
   font-family: typography.font("sans-serif")
   font-size: typography.font-size("m")
-  line-height: 1.5
+  line-height: 1.7
   color: colors.color("foreground")
 </style>

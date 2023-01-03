@@ -32,3 +32,7 @@ My interests include deep learning and everything in the AI space,
 data engineering, systems, and, somehow, lately, a little bit of
 web development. I am also a big fan of the [Haskell][haskell]
 programming language and functional programming patterns in general.
+
+[amittai]: https://en.wikipedia.org/wiki/Amittai
+[altair]: https://en.wikipedia.org/wiki/Altair
+[haskell]: https://www.haskell.org/

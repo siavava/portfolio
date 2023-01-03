@@ -5,11 +5,14 @@
     <ul
       class="toc"
     >
-      <h2> Table of Contents </h2>
+      <span class="title"> Table of Contents </span>
       <li
         v-for="link in toc.links"
         :key="link.text"
-        class="toc-link-1"
+        :class="{
+          'toc-link-1': true,
+          'active':  activeTocElementIds.includes(link.id),
+        }"
       >
         <a
           :href="`#${link.id}`"
@@ -21,7 +24,10 @@
           <li
             v-for="child in link.children"
             :key="child.text"
-            class="toc-link-2"
+            :class="{
+              'toc-link-2': true,
+              'active': activeTocElementIds.includes(child.id),
+            }"
           >
             <a
               :href="`#${child.id}`"
@@ -37,6 +43,14 @@
 </template>
 
 <script lang="ts">
+import { 
+  elementIsInWindow,
+  elementIsAtBottom,
+  elementIsAtTop,
+  elementIsBelowScreen,
+  elementIsAboveScreen
+} from "~/src/utils";
+
 export default {
   name: "TableOfContents",
   props: {
@@ -45,9 +59,104 @@ export default {
       default: ""
     },
   },
+  data() {
+    return {
+      refreshKey: 0,
+      scrollY: 0,
+      scrollDirection: "down",
+      activeTocItems: new Set<Element>(),
+    }
+  },
   computed: {
+    activeTocElementIds(): string[] {
+      const tocItemIds: string[] = [];
+      this.activeTocItems.forEach((tocItem: Element) => {
+        tocItemIds.push(tocItem.id);
+      });
+      return tocItemIds;
+    },
+    tocItemsOrdered() {
+      return Array.from(document.querySelectorAll("h2, h3"));
+    },
 
-  }
+    tocItemsInViewport(): Element[] {
+
+      this.refreshKey;
+
+      // ignore in ssr more
+      if (typeof window === "undefined") {
+        return [];
+      }
+      
+      const tocItemsInViewport: Element[] = [];
+
+      this.tocItemsOrdered.forEach((tocItem: Element) => {
+        if (elementIsInWindow(tocItem)) {
+          tocItemsInViewport.push(tocItem);
+        }
+      });
+      return tocItemsInViewport;
+    },
+  },
+
+  methods: {
+    updateActiveTocItems() {
+      const tocItemsInViewport = this.tocItemsInViewport;
+      this.tocItemsOrdered.forEach((tocItem: Element) => {
+      const elemIndex = this.tocItemsOrdered.indexOf(tocItem);
+        if (tocItemsInViewport.includes(tocItem)) {
+          this.activeTocItems.add(tocItem);
+
+          // if element not at top of screen, add predecessor
+          if (!elementIsAtTop(tocItem)) {
+            const predecessor = this.tocItemsOrdered[elemIndex - 1] || null;
+            if (predecessor) {
+              this.activeTocItems.add(predecessor);
+            }
+          }
+
+        } else if (elementIsBelowScreen(tocItem)) {
+          this.activeTocItems.delete(tocItem);
+        } else if (elementIsAboveScreen(tocItem)) {
+          const successor = this.tocItemsOrdered[elemIndex + 1] || null;
+          if (successor && elementIsAboveScreen(successor)) {
+            this.activeTocItems.delete(tocItem);
+          }
+        }
+      });
+    },
+    handleScroll() {
+
+      this.refreshKey = this.refreshKey == 999 ? 0 : this.refreshKey + 1;
+
+      const currentScrollPosition = window.scrollY || document.documentElement.scrollTop;
+      this.scrollDirection = (currentScrollPosition > this.scrollY)
+        ? "down"
+        : "up";
+      this.scrollY = currentScrollPosition;
+
+      this.updateActiveTocItems();
+    },
+  },
+
+
+  mounted: function () {
+    // ignore in ssr more
+    if (typeof window === "undefined") {
+      return;
+    }
+    this.handleScroll();
+    window.addEventListener("scroll", this.handleScroll);
+  },
+
+
+  unmounted: function () {
+    // ignore in ssr more
+    if (typeof window === "undefined") {
+      return;
+    }
+    window.removeEventListener("scroll", this.handleScroll);
+  },
 }
 </script>
 
@@ -62,14 +171,12 @@ const { toc } = useContent();
 <style lang="sass" scoped>
 @use "../styles/typography"
 @use "../styles/colors"
+@use "~/styles/geometry"
 .toc
   line-height: 2
   counter-reset: toc-1
 
-  // border-top: 1px solid colors.color("primary-highlight")
-  // border-bottom: 1px solid colors.color("primary-highlight")
-
-  h2
+  .title
     font-size: typography.font-size("xl")
     color: colors.color("primary-highlight")
     font-weight: 600
@@ -81,21 +188,38 @@ const { toc } = useContent();
     // margin-left: 1em
     font-size: typography.font-size("s")
     // font-size: 1
-    font-weight: 600
+    font-weight: 500
     counter-reset: toc-2
     // color: colors.color("lightest-foreground")
     color: colors.color("fancy-background")
+
+    -webkit-transition: all 0.4s geometry.var("default-easing")
+    -moz-transition: all 0.4s geometry.var("default-easing")
+    -ms-transition: all 0.4s geometry.var("default-easing")
+    -o-transition: all 0.4s geometry.var("default-easing")
+    transition: all 0.4s geometry.var("default-easing")
     
     &::before
       counter-increment: toc-1
       content: counter(toc-1) "."
       margin-right: 0.5em
       color: colors.color("primary-highlight")
+
+    &.active
+      color: colors.color("primary-highlight")
+      font-weight: 600
 .toc-link-2
   margin-left: 1em
   font-size: typography.font-size("xs")
   font-weight: 400
   line-height: 2
+  color: colors.color("fancy-background")
+
+  -webkit-transition: all 0.4s geometry.var("default-easing")
+  -moz-transition: all 0.4s geometry.var("default-easing")
+  -ms-transition: all 0.4s geometry.var("default-easing")
+  -o-transition: all 0.4s geometry.var("default-easing")
+  transition: all 0.4s geometry.var("default-easing")
 
   &::before
     counter-increment: toc-2
@@ -103,7 +227,8 @@ const { toc } = useContent();
     margin-right: 0.5em
     color: colors.color("primary-highlight")
 
-.active
-  color: colors.color("primary-highlight")
+  &.active
+    color: colors.color("primary-highlight")
+    font-weight: 500
 </style>
 

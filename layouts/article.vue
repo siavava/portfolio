@@ -31,8 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import observe, { observeToc } from '~~/src/observer';
-observeToc();
+// import observe, { observeToc } from '~~/src/observer';
 </script>
 
 <style lang="sass" scoped>
