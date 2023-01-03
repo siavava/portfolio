@@ -8,7 +8,6 @@ $border-radius: geometry.radius("small")
 @mixin button
   color: colors.color("primary-highlight")
   background-color: transparent
-  // border: 1px solid colors.color("primary-highlight")
   border-radius: geometry.var("border-radius")
   font-size: typography.font-size("xs")
   font-family: typography.font("monospace")
@@ -26,7 +25,6 @@ $border-radius: geometry.radius("small")
   outline: none
 
   &:hover, &:focus, &:active
-    // background-color: colors.color("primary-highlight-tint")
     color: colors.color("primary-highlight")
     outline: none
   &:after
@@ -93,7 +91,7 @@ $border-radius: geometry.radius("small")
   padding: 0.75rem 1rem
   font-size: typography.font-size("xs")
   font-family: typography.font("monospace")
-  font-weight: 600
+  // font-weight: 600
   line-height: 1
   text-decoration: none
   cursor: pointer
@@ -112,7 +110,6 @@ $border-radius: geometry.radius("small")
   padding: 1.25rem 1.75rem
   font-size: typography.font-size("s")
   font-family: typography.font("monospace")
-  font-weight: 600
   line-height: 1
   text-decoration: none
   cursor: pointer
