@@ -53,7 +53,7 @@
   margin: 0 auto
   flex-direction: column
   min-height: 100vh
-  max-width: 100vw
+  // max-width: 100vw
   // overflow: hidden
 
 .body-and-panels
@@ -90,24 +90,28 @@
       display: none
 .container
   position: relative
-  margin: 2vw
+  margin: 0 auto
+  padding: 0 1vw
   font-size: typography.font-size("m")
   display: flex
   flex-direction: row
+  
+  @media(max-width: 1200px)
+    padding: 0
 
 
   .content
     // width: max(60vw, 75ch)
     width: 100%
-    max-width: 75ch
+    max-width: 85ch
+    margin: 0 auto
 
   // hide side-panel on mobile
   @media (max-width: 1200px)
     
     .content
       width: 100%
-      max-width: 65ch
-      margin: 0 auto !important
+      max-width: 85ch
 
     .right-panel
       display: none
