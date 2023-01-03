@@ -147,6 +147,7 @@ export default {
     }
     this.handleScroll();
     window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("resize", this.handleScroll);
   },
 
 
@@ -156,6 +157,7 @@ export default {
       return;
     }
     window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("resize", this.handleScroll);
   },
 }
 </script>
