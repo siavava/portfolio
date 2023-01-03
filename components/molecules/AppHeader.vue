@@ -219,9 +219,9 @@ export default {
       deep: true,
     },
     $route(oldVal, newVal) {
-      console.log(`Route changed from ${oldVal} to ${newVal}`)
-      this.setup();
-      this.$forceUpdate();
+      // console.log(`Route changed from ${oldVal} to ${newVal}`)
+      // this.setup();
+      // this.$forceUpdate();
     },
     anchors() {
       // this.$forceUpdate();
@@ -419,8 +419,6 @@ const { data: researchMeta } = await useAsyncData(
       .find();
     return await _blogs;
 });
-
-console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
 </script>
 
 
@@ -677,7 +675,7 @@ console.log("featuredBlogsMeta", featuredBlogsMeta?.value);
   * > .toc
     border: none
 
-  * > .toc > h2
+  * > .toc > .title
     display: none
 
   .toc-link-1

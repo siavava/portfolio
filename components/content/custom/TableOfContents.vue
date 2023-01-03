@@ -195,11 +195,11 @@ const { toc } = useContent();
     // color: colors.color("lightest-foreground")
     color: colors.color("fancy-background")
 
-    -webkit-transition: all 0.2s geometry.var("default-easing")
-    -moz-transition: all 0.2s geometry.var("default-easing")
-    -ms-transition: all 0.2s geometry.var("default-easing")
-    -o-transition: all 0.2s geometry.var("default-easing")
-    transition: all 0.2s geometry.var("default-easing")
+    -webkit-transition: all 0.2s ease-in-out
+    -moz-transition: all 0.2s ease-in-out
+    -ms-transition: all 0.2s ease-in-out
+    -o-transition: all 0.2s ease-in-out
+    transition: all 0.2s ease-in-out
     
     &::before
       counter-increment: toc-1
@@ -217,11 +217,11 @@ const { toc } = useContent();
   line-height: 2
   color: colors.color("fancy-background")
 
-  -webkit-transition: all 0.2s geometry.var("default-easing")
-  -moz-transition: all 0.2s geometry.var("default-easing")
-  -ms-transition: all 0.2s geometry.var("default-easing")
-  -o-transition: all 0.2s geometry.var("default-easing")
-  transition: all 0.2s geometry.var("default-easing")
+  -webkit-transition: all 0.2s ease-in-out
+  -moz-transition: all 0.2s ease-in-out
+  -ms-transition: all 0.2s ease-in-out
+  -o-transition: all 0.2s ease-in-out
+  transition: all 0.2s ease-in-out
 
   &::before
     counter-increment: toc-2
