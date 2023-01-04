@@ -118,28 +118,31 @@
     <div
       v-show="nonTocRoutes.indexOf(route) == -1"
       class="header-toc-plus-button">
-      <button
-        :class="{
-          'header-toc-button': true,
-          'expanded': tocExpanded,
-        }"
-        @click="tocExpanded = !tocExpanded"
-      >
-        <span style="margin-right: 0.5em;"> Table of Contents</span>
-        <Icon
+      <div class="toc-wrapper">
+
+        <button
           :class="{
-            'expand-icon': true, 
-            'expanded': tocExpanded
+            'header-toc-button': true,
+            'expanded': tocExpanded,
           }"
-          type="expand" />
-      </button>
-      <div
-        :class="{
-          'header-toc': true,
-          'header-toc-hidden': (!tocExpanded) || menuOpen,
-          }"
+          @click="tocExpanded = !tocExpanded"
         >
-        <slot />
+          <span style="margin-right: 0.5em;"> Table of Contents</span>
+          <Icon
+            :class="{
+              'expand-icon': true, 
+              'expanded': tocExpanded
+            }"
+            type="expand" />
+        </button>
+        <div
+          :class="{
+            'header-toc': true,
+            'header-toc-hidden': (!tocExpanded) || menuOpen,
+            }"
+          >
+          <slot />
+        </div>
       </div>
     </div>
   </header>
@@ -595,8 +598,8 @@ const { data: researchMeta } = await useAsyncData(
       border-top: none
 
 .search-bar
-  border-top: 1px solid colors.color("lightest-background")
-  border-bottom: 1px solid colors.color("lightest-background")
+  border-top: 3px dotted colors.color("lightest-background")
+  border-bottom: 3px dotted colors.color("lightest-background")
   padding: 0 2vw
   align-content: center
   vertical-align: middle
@@ -604,11 +607,18 @@ const { data: researchMeta } = await useAsyncData(
 
 .header-toc-plus-button
   position: relative
-  // max-width: 1200px
-  max-width: 800px
-  padding: 0 5%
+  padding: 10px 0
   margin: 0 auto
   min-height: 40px 
+  background-filter: blur(15px)
+  border-top: 3px dotted colors.color("lightest-background")
+  border-bottom: 3px dotted colors.color("lightest-background")
+
+  .toc-wrapper
+    width: 100%
+    max-width: 70ch
+    margin: 0 auto
+    padding: 0 1em
 
   .header-toc-button
     width: fit-content
@@ -619,6 +629,7 @@ const { data: researchMeta } = await useAsyncData(
     align-items: flex-start
     font-size: typography.font-size("m")
     color: colors.color('fancy-background')
+    font-weight: 500
 
     margin-top: 0
     padding-top: 0
@@ -629,6 +640,7 @@ const { data: researchMeta } = await useAsyncData(
     
 
   .header-toc
+    padding-top: 10px
     -webkit-user-select: none
     -moz-user-select: none
     -ms-user-select: none
@@ -640,16 +652,16 @@ const { data: researchMeta } = await useAsyncData(
     -o-transition: all 0.1s ease-in-out
     transition: all 0.1s ease-in-out
 
+    overflow: hidden //: none
+    max-height: 100%
+
     * > .toc > .title
       display: none !important
-    *
-      border: none
 
     &.header-toc-hidden
-      max-height: 2em
-
-      * > .toc > *
-        display: none
+      max-height: 0
+      padding-top: 0
+      // display: none
 
 
 
