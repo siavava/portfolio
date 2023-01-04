@@ -641,6 +641,9 @@ const { data: researchMeta } = await useAsyncData(
     -o-user-select: none
     user-select: none
 
+    -webkit-tap-highlight-color: rgba(0,0,0,0)
+    -webkit-tap-highlight-color: transparent
+
     &.expanded
       color: colors.color('primary-highlight')
     
