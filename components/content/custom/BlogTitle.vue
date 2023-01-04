@@ -65,9 +65,9 @@
   @include mixins.fancy-background
 
   .text-container
-    width: min(80%, 1200px)
+    width: min(100%, 1200px)
     margin: auto
-    background-size: 1.125rem 1.125rem
+    padding: 0 5vw
     height: 100%
     display: flex
     flex-direction: column
@@ -130,7 +130,7 @@
         font-weight: 700
 
   .title-image-wrapper
-    width: min(80%, 1200px)
+    width: min(90%, 1200px)
     margin: auto
     max-width: 100%
     display: flex
