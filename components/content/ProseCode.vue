@@ -136,7 +136,7 @@ export default {
           & > span
 
             &.highlight
-              background-color: colors.color("lightest-background")
+              background-color: rgba(colors.color("lightest-background"), 0.3)
               width: 100%
               padding-right: 1em
               &::before
@@ -154,27 +154,29 @@ export default {
               margin-right: 1em
               padding-right: 0.5em
               color: colors.color("lightest-background")
-              font-weight: 600
+              // font-weight: 600
               border-right: 1px solid colors.color("lightest-background")
 
             &:hover
-              background-color: colors.color("lightest-background")
+              background-color: rgba(colors.color("lightest-background"), 0.3)
 
               &::before
                 display: inline-block
-                width: 2.5em
-                text-align: right
+                // width: 2.5em
+                // text-align: right
                 content: counter(line)
                 counter-increment: line
-                margin-right: 1em
+                // margin-right: 1em
                 padding-right: 0.5em
                 color: colors.color("lightest-foreground")
                 border-right: 1px solid
 
 .language
-  right: 1em
-  margin: 1em
-  font-weight: 500
+  padding: 0 1em
+  margin: auto 0
+  padding-top: 7px
+  line-height: 1
+  font-weight: 400
   text-transform: capitalize
 
 .top-container
@@ -192,6 +194,7 @@ export default {
   position: absolute
   margin: 1em
   left: 1em
+  top: 5px
   font-family: typography.font("monospace")
   font-size: typography.font-size("xs")
 
