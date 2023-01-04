@@ -37,7 +37,6 @@ export default {
 
   aspect-ratio: 1/1
   max-height: 1em
-  background: yellow
 
   .expand
     display: block !important
