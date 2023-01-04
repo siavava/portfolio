@@ -621,7 +621,7 @@ const { data: researchMeta } = await useAsyncData(
     padding: 0 1em
 
   .header-toc-button
-    // width: fit-content
+    width: 100%
     height: 20px
     display: flex
     flex-direction: row
