@@ -56,9 +56,10 @@ export default {
   min-height: 100vh
   max-width: 900px
   margin-top: calc(0px - geometry.var("nav-height"))
+  padding: 0 20px
 
-  @media (max-width: 480px) and (min-height: 700px)
-    padding-bottom: 10vh
+  @media(max-height: 720px)
+    margin-top: 0
 
   .hero-content-container
     width: auto
