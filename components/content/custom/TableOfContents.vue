@@ -11,7 +11,9 @@
         :key="link.text"
         :class="{
           'toc-link-1': true,
-          'active':  activeTocElementIds.includes(link.id),
+          'active': activeTocElementIds.includes(link.id) ||
+            (link.children &&
+              link.children.some(child => activeTocElementIds.includes(child.id)))
         }"
       >
         <a
