@@ -34,8 +34,9 @@ export default {
 
 <style lang="sass">
 .expand-icon
-  height: 100%
-  // background: yellow !important
+
+  aspect-ratio: 1/1
+  background: yellow
 
   .expand
     display: block !important

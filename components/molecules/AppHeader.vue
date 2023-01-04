@@ -621,7 +621,7 @@ const { data: researchMeta } = await useAsyncData(
     padding: 0 1em
 
   .header-toc-button
-    width: fit-content
+    // width: fit-content
     height: 20px
     display: flex
     flex-direction: row
@@ -644,6 +644,7 @@ const { data: researchMeta } = await useAsyncData(
     -webkit-user-select: none
     -moz-user-select: none
     -ms-user-select: none
+    -o-user-select: none
     user-select: none
 
     -webkit-transition: all 0.1s ease-in-out
@@ -672,9 +673,6 @@ const { data: researchMeta } = await useAsyncData(
 
 
 .toc-current-page
-  
-  * > .toc
-    border: none
 
   * > .toc > .title
     display: none
