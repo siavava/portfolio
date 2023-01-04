@@ -151,6 +151,8 @@
 
 <script lang="ts">
 
+import { navHeight, nonTocRoutes } from "~/src/config";
+
 export default {
   name: "AppHeader",
   data() {
@@ -162,10 +164,6 @@ export default {
       menuOpen: false,
       anchors: [],
       tocExpanded: false,
-      nonTocRoutes: [
-        "/",
-        "/blog", "/blog/",
-      ],
     };
   },
   computed: {
@@ -191,7 +189,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
     
     // set height initially.
-    this.height = this.$el.offsetHeight;
+    this.height = navHeight; //this.$el.offsetHeight;
 
     this.route = useRoute().path;
 
@@ -451,7 +449,8 @@ const { data: researchMeta } = await useAsyncData(
 
   // blur when there's content underneath
   // background-color: colors.color("background")
-  backdrop-filter: blur(16px)
+  background-color: rgba(colors.color("background"), 0.8)
+  backdrop-filter: blur(2px)
 
   pointer-events: auto !important
   user-select: auto !important
@@ -610,9 +609,10 @@ const { data: researchMeta } = await useAsyncData(
   padding: 10px 0
   margin: 0 auto
   min-height: 40px 
-  background-filter: blur(15px)
   border-top: 3px dotted colors.color("lightest-background")
   border-bottom: 3px dotted colors.color("lightest-background")
+  // background: none
+  // backdrop-filter: blur(2px) !important
 
   .toc-wrapper
     width: 100%
@@ -661,7 +661,6 @@ const { data: researchMeta } = await useAsyncData(
     &.header-toc-hidden
       max-height: 0
       padding-top: 0
-      // display: none
 
 
 
@@ -685,8 +684,8 @@ const { data: researchMeta } = await useAsyncData(
     font-family: typography.font("sans-serif") !important
     font-size: typography.font-size("m") !important
 
-    font-weight: 600 !important
-    line-height: 2.3em !important
+    font-weight: 400 !important
+    line-height: 2.5em !important
 
     &::before
       content: none !important
