@@ -11,14 +11,14 @@
           <BlogNavigation class="article-blog-navigation" />
         </div>
         <body>
-          <!-- <div class="content"> -->
+          <div class="content">
             <a class="skip-to-content" href="#content"/>
             <div class="container">
               <div class="content">
                 <slot id="content"/>
               </div>
             </div>
-          <!-- </div> -->
+          </div>
         </body>
         <div class="right-panel">
           <TableOfContents class="table-of-contents" />
@@ -74,9 +74,6 @@
 
     @media(max-width: 1200px)
       display: none !important
-
-      .table-of-contents
-        display: none !important
 
   .left-panel
     min-width: 240px
