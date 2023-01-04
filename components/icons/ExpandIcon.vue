@@ -36,6 +36,7 @@ export default {
 .expand-icon
 
   aspect-ratio: 1/1
+  max-height: 1em
   background: yellow
 
   .expand
