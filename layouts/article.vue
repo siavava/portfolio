@@ -73,7 +73,10 @@
     overflow: hidden
 
     @media(max-width: 1200px)
-      display: none
+      display: none !important
+
+      .table-of-contents
+        display: none !important
 
   .left-panel
     min-width: 240px
@@ -112,13 +115,6 @@
     .content
       width: 100%
       max-width: 85ch
-
-    .right-panel
-      display: none
-
-    .left-panel
-      display: none
-    // gap: 0
 
 
 h1

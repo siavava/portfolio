@@ -635,6 +635,12 @@ const { data: researchMeta } = await useAsyncData(
     padding-top: 0
     line-height: 1.5
 
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    -o-user-select: none
+    user-select: none
+
     &.expanded
       color: colors.color('primary-highlight')
     
