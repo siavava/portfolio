@@ -39,7 +39,17 @@
               </template>
             </h3>
             <div class="project-description">
+
               <ContentDoc :value="project" />
+
+              <span v-if="project.date" class="project-date">
+                {{ new Date(project.date)
+                  .toLocaleDateString('en-us', {
+                    month: 'long',
+                    year: 'numeric',
+                  })
+                }}
+              </span>
             </div>
           </div>
           <ul class="project-tech-list">
@@ -103,7 +113,7 @@ const { data } = await useAsyncData(
   async () => {
     const _projectsData = queryContent("projects")
       .where({ featured: true })
-      .sort({ month: -1, year: -1, order: 1 })
+      .sort({date: -1, order: 1 })
       .find();
     return await _projectsData;
 });

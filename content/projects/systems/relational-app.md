@@ -2,6 +2,7 @@
 order: 1
 month: 10
 year: 2022
+date: 2022-10-20
 title: 'Relational Database App'
 cover: 'featured-relational-db.gif'
 repo: 'https://github.com/siavava/relational'

@@ -2,6 +2,7 @@
 order: 4
 month: 1
 year: 2021
+date: 2021-03-15
 title: 'Neural Networks'
 cover: 'featured-neural-networks.gif'
 url: 'https://issuu.com/dartmouthjournalofscience/docs/21w_dujs_print_v1/16'

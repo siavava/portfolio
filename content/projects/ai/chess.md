@@ -2,6 +2,7 @@
 order: 1
 month: 10
 year: 2021
+date: 2021-10-01
 title: 'Intelligent Chess bot'
 cover: 'featured-chess-ai.jpeg'
 repo: 'https://github.com/siavava/ai/tree/main/03-ChessAI'

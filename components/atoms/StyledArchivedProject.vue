@@ -113,5 +113,6 @@ export default {
   
   .project-tech-list 
     @include mixins.small-list-inline
+    text-transform: capitalize
 
 </style>

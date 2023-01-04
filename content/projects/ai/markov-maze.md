@@ -1,7 +1,6 @@
 ---
 order: 1
-month: 10
-year: 2021
+date: 2021-10-02
 title: 'Robot Colocation'
 cover: 'featured-robot-colocation.gif'
 repo: 'https://github.com/siavava/ai/tree/main/06-HiddenMarkovModels'

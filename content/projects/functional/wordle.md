@@ -2,6 +2,7 @@
 order: 6
 month: 3
 year: 2022
+date: 2022-03-01
 title: 'Wordle, Grep'
 cover: 'featured-wordle.gif'
 repo: 'https://github.com/siavava/tau'

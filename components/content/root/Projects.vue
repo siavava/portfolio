@@ -4,9 +4,9 @@
       Other Noteworthy Projects
     </h2>
 
-    <Link class="inline-link archive-link" to="/archive" ref={revealArchiveLink}>
+    <NuxtLink class="inline-link archive-link" to="/archive" ref="revealArchiveLink">
       view the archive
-    </Link>
+    </NuxtLink>
         <TransitionGroup
           component="null"
           ref="projectsGrid"
@@ -20,7 +20,7 @@
              class="fadeup"
             :timeout="i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300"
             :exit="false"
-            mode="fade"
+            mode="in-out"
             tag="StyledArchivedProject"
             :style="{
               transitionDelay: `${i >= GRID_LIMIT ? (i - GRID_LIMIT) * 100 : 0}ms`,
@@ -71,6 +71,15 @@
                   <ContentDoc :value="project" />
                 </header>
 
+                <span v-if="project.date" class="project-date">
+                  {{ new Date(project.date)
+                    .toLocaleDateString('en-us', {
+                      month: 'long',
+                      year: 'numeric',
+                    })
+                  }}
+                </span>
+
                 <footer>
                   <ul class="project-tech-list">
                     <li
@@ -100,6 +109,7 @@
 <script lang="ts" setup>
 
 import { MarkdownParsedContent } from '@nuxt/content/dist/runtime/types';
+import { delimiter } from 'path';
 
 const projectsGrid = ref<HTMLElement | null>(null); 
 const GRID_LIMIT = 6;
@@ -110,7 +120,7 @@ const { data: projectData } = await useAsyncData(
   async () => {
     const _projectsData = queryContent<MarkdownParsedContent>("projects")
       .where({ featured: false })
-      .sort({ month: -1, year: -1, order: 1 })
+      .sort({ date: -1 })
       .find();
     return await _projectsData;
 });
@@ -124,27 +134,21 @@ const totalCount = ref(projects.length);
 const currentlyShowing = ref(Math.min(GRID_LIMIT, totalCount.value));
 
 const toggleShowMore = () => {
-  // currentlyShowing.value = showMore.value ? 6 : projects.length;
-  // this.more = !this.more;
   showMore.value = !showMore.value;
 };
 
-const isMax = () => currentlyShowing.value == (projects.length - 1);
+const isMax = () => currentlyShowing.value > (projects.length - 1);
 const isMin = () => currentlyShowing.value <= GRID_LIMIT;
 
 function showAnotherProject() {
   if (!isMax()) {
     currentlyShowing.value += 1;
-    // this.current = currentlyShowing.value;
-    this.$forceUpdate();
   }
 }
 
 function hideAnotherProject() {
   if (!isMin()) {
     currentlyShowing.value -= 1;
-    // this.current = currentlyShowing.value;
-    this.$forceUpdate();
   }
 }
 
@@ -171,6 +175,8 @@ onUnmounted(() => {
 
 <style lang="sass">
 @use "~/styles/typography"
+@use "~/styles/colors"
+
 .list-enter-active, .list-leave-active
   transition: all 2s ease
 
@@ -184,8 +190,11 @@ onUnmounted(() => {
 * > h3
   font-weight: 600
 
-// * > p
-//   font-weight: 400
-//   font-size: typography.font-size("m")
+.project-date
+  font-size: 0.8rem
+  font-weight: 400
+  color: colors.color("primary-highlight")
 
+  margin-top: 2em
+  font-family: typography.font("monospace")
 </style>

@@ -151,6 +151,8 @@
     color: colors.color("light-foreground")
     font-size: typography.font-size("l")
     z-index: 2
+    display: flex
+    flex-direction: column
     @media (max-width: 768px)
       padding: 20px 0
       background-color: transparent
@@ -254,4 +256,15 @@
           height: 100%
           filter: grayscale(100%) contrast(1) brightness(50%)
 
+.project-date
+  font-size: 0.8rem
+  font-weight: 400
+  color: colors.color("primary-highlight")
+
+  margin-top: 2em
+  font-family: typography.font("monospace")
+
+  position: relative
+  align-self: flex-end
+  right: 0
 </style>

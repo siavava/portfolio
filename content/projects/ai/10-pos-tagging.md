@@ -1,7 +1,6 @@
 ---
 order: 3
-month: 10
-year: 2021
+date: 2021-03-02
 title: 'Parts-Of-Speech Tagging'
 repo: 'https://github.com/siavava/java/tree/main/Problem%20Sets/PS-5'
 tech:

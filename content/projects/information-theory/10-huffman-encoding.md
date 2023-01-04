@@ -1,7 +1,6 @@
 ---
-order: 10
-month: 3
-year: 2022
+# order: 10
+date: 2021-03-01
 title: 'Huffman Encoding'
 cover: 'featured-wordle.gif'
 repo: 'https://github.com/siavava/tau'
