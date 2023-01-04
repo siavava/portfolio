@@ -194,7 +194,7 @@ onUnmounted(() => {
   font-size: 0.8rem
   font-weight: 400
   color: colors.color("primary-highlight")
+  font-family: typography.font("monospace")
 
   margin-top: 2em
-  font-family: typography.font("monospace")
 </style>
