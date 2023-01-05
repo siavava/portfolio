@@ -26,11 +26,11 @@
         >
           <span>
             <Icon type="star" />
-            <span> {{ gitHubInfo.stars }}</span>
+            <span v-if="repoInfo.stars"> {{ repoInfo.stars }}</span>
           </span>
           <span>
             <Icon type="fork" />
-            <span> {{ gitHubInfo.forks }}</span>
+            <span v-if="repoInfo.forks"> {{ repoInfo.forks }}</span>
           </span>
         </div>
       </div>
@@ -41,11 +41,27 @@
 <script setup lang="ts">
 import { social } from '~/src/config';
 
-const gitHubInfo = ref({
-  stars: 20,
-  forks: 23,
-  watchers: 564,
+interface GitHubInfo {
+  stars?: Number;
+  forks?: Number;
+  watchers?: Number;
+}
+
+
+const repoInfo = ref<GitHubInfo>({} as GitHubInfo);
+
+await fetch('https://api.github.com/repos/siavava/altair')
+.then((response) => {
+  response.json()
+  .then((data) => {
+    repoInfo.value = {
+      stars: data?.stargazers_count || 0,
+      forks: data?.forks || 0,
+      watchers: data?.watchers_count || 0,
+    }
+  });
 });
+
 </script>
 
 <script lang="ts">
