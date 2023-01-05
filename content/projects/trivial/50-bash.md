@@ -13,7 +13,7 @@ navigation: false
 
 Hacking our way out of various scenarios with bash scripting.
 
-Includes processing streams of data (<highlight>sed</highlight>),
-matching string patters in files <highlight>grep</highlight>),
-extracting bits of data from files (<highlight>head/tail</highlight>),
+Includes processing streams of data using :highlight[sed],
+matching string patters in files using :highlight[grep],
+extracting bits of data from files using :highlight[head] / :highlight[tail],
 and more.

@@ -11,6 +11,6 @@ featured: false
 navigation: false
 ---
 
-An interactive GUI game of pong that uses the <highlight> PyQt5 </highlight>
+An interactive GUI game of pong that uses the :highlight[PyQt5]
 library to display graphics and handles user inputs, detects collisions (for the game),
 and tracks scores as well as the high score in the current streak of games.

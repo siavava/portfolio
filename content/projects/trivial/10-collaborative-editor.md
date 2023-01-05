@@ -16,6 +16,6 @@ navigation: false
 A collaborative editor on shared canvas.
 Multiple users can connect, and each sees changes in real-time as they are made.
 We use mutexes and locks to enable concurrent access whilst
-avoiding <highlight>data races</highlight> and deadlock pitfalls
-such as <highlight>mutual exclusion</highlight>, <highlight>hold-and-wait</highlight>, 
-<highlight>circular wait</highlight>, and <highlight>no preemption</highlight>.
+avoiding :highlight[data races] and deadlock pitfalls
+such as :highlight[mutual exclusion], :highlight[hold-and-wait], 
+:highlight[circular wait], and :highlight[no preemption].

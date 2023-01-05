@@ -15,6 +15,6 @@ navigation: false
 
 The infamous Kevin Bacon game;
 given any two actors, find the shortest social connection path between them.
-We use <highlight> breadth-first search </highlight>
-and <highlight> depth-first search </highlight> as the two strategies
+We use :highlight[breadth-first search]
+and :highlight[depth-first search] as the two strategies
 to find the shortest path (favoring BFS).

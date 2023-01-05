@@ -16,17 +16,17 @@ featured: true
 navigation: false
 ---
 
-A fully functional relational <highlight> database app </highlight> app built with a
+A :highlight[relational database] with a
 [Python](https://www.python.org/) frontend
 and a [MySQL](https://www.mysql.com/) backend.
 It is modeled for a collective of publishing houses
 and offers data stores and a command-line interface
 for querying and analyzing the data.
-It offers support for <highlight> different user modes </highlight>
+It offers support for :highlight[different user modes]
 (_author_, _editor_, _reviewer_),
-and each user can opt into <highlight> password authentication </highlight>.
-Several <highlight> automated events are handled internally </highlight> &mdash;
-for instance, assigning and re-assigning editors and reviewers,
+and each user can opt into :highlight[password authentication].
+Several :highlight[automated events] are handled internally &mdash;
+assigning and re-assigning editors and reviewers,
 auto-rejecting submissions that are not within the relevant scope,
 and accepting OR rejecting publications once all reviews are in.
 

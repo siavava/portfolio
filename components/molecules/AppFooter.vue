@@ -15,24 +15,26 @@
         </li>
       </ul>
     </div>
-    <div class="styled-credit-section">
-      <div class="year">
-        {{ new Date().getFullYear() }}, Altair
+    <NuxtLink to="https://github.com/siavava/altair">
+      <div class="styled-credit-section">
+        <div class="year">
+          {{ new Date().getFullYear() }}, Altair
+        </div>
+        <div
+          class="github-stats"
+          aria-label="GitHub stats"
+        >
+          <span>
+            <Icon type="star" />
+            <span> {{ gitHubInfo.stars }}</span>
+          </span>
+          <span>
+            <Icon type="fork" />
+            <span> {{ gitHubInfo.forks }}</span>
+          </span>
+        </div>
       </div>
-
-      <div
-        class="github-stats"
-      >
-        <span>
-          <Icon type="star" />
-          <span> {{ gitHubInfo.stars }}</span>
-        </span>
-        <span>
-          <Icon type="fork" />
-          <span> {{ gitHubInfo.forks }}</span>
-        </span>
-      </div>
-    </div>
+    </NuxtLink>
   </footer>
 </template>
 
@@ -78,10 +80,6 @@ const gitHubInfo = ref({
   font-family: typography.font("monospace")
   font-size: typography.font-size("xxs")
   line-height: 1
-  // font-weight: 600
-
-  a
-    padding: 10px
 
   .github-stats
     margin-top: 10px
