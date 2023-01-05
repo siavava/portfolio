@@ -22,9 +22,9 @@ navigation:
 layout: default
 ---
 
-<hero></hero>
-<about></about>
-<jobs></jobs>
-<featured></featured>
-<projects></projects>
-<contact></contact>
+:hero
+:about
+:jobs
+:featured
+:projects
+:contact

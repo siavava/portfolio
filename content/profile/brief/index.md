@@ -74,8 +74,9 @@ class: ""
 style: "justify-content: right; width: MAX(70%, fit-content); "
 ---
   - Vue ([Nuxt][nuxt])
-  - TypeScript / JavaScript
-  - CSS/SCSS/Sass
+  - React
+  - TypeScript
+  - CSS / Sass
 ::
 
 </div>
