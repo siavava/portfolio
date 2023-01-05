@@ -30,3 +30,8 @@ for instance, assigning and re-assigning editors and reviewers,
 auto-rejecting submissions that are not within the relevant scope,
 and accepting OR rejecting publications once all reviews are in.
 
+<br/>
+
+:highlight[Collaborative project with [Ke Lou][lou]].
+
+[lou]: https://www.linkedin.com/in/ke-lou-898301133

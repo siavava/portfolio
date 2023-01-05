@@ -19,3 +19,11 @@ Players join over :highlight[web sockets].
 The maze is revealed to each player as they and view it.
 The game ends when all the nuggets are collected,
 and we print a leader-board of the players' scores.
+
+<br/>
+
+:highlight[**Collaborative project with [Alphonso Bradham][alphonso]**
+and [Zimehr Abbasi][zimehr]].
+
+[alphonso]: https://www.linkedin.com/in/alphonso-bradham
+[zimehr]: https://in.linkedin.com/in/zimehr-abbasi-aa8865154

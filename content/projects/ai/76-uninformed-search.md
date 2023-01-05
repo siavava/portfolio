@@ -15,6 +15,6 @@ navigation: false
 Using uninformed search algorithms
 such as :highlight[breadth-first search] and :highlight[depth-first search]
 to search the solution space for elementary problems such as
-the :chicken: and :dog: problem (we wish to get $x$ chicken and $y$ foxes across
+the :chicken: and :dog: problem (we wish to get x chicken and y foxes across
 a crossway with limited carriage capacity
 without leaving any chicken unattended with the foxes.
