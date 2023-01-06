@@ -38,12 +38,11 @@ export default {
 
 .alert-container
   margin: 1em 0
-  padding: 2em
+  padding: 2em 1em 0.5em 1em
   border-radius: 0.5rem
 
   & > ul > li::before
     color: inherit !important
-
 
   .alert-icon
     width: 1.5em

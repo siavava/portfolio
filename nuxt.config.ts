@@ -153,6 +153,10 @@ export default {
     // Nuxt Image
     "@nuxt/image",
   ],
+  layouts: {
+    default: "~/layouts/clean.vue",
+    // error: "~/layouts/error.vue",
+  },
 
   // router: {
   //   middleware: 'trailingSlashRedirect',

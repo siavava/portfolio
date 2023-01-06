@@ -21,7 +21,10 @@
       }">
       <SearchBar ref="searchBar" class="search-bar"/>
       <div class="menu-columns-wrapper">
-        <div class="menu-column toc-current-page">
+        <div
+          class="menu-column toc-current-page"
+          v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"   
+        >
           <NuxtLink
             :to="currentPage"
             class="menu-column-header"
@@ -116,6 +119,7 @@
       </div>
     </div>
     <div
+      v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
       v-show="nonTocRoutes.indexOf(route) == -1"
       class="header-toc-plus-button">
       <div class="toc-wrapper">
@@ -147,7 +151,6 @@
     </div>
   </header>
 </template>
-
 
 <script lang="ts">
 
@@ -184,6 +187,10 @@ export default {
     route() {
       return useRoute().path;
     },
+    // tocValid() {
+    //   // console.log(`toc.links: ${toc.links}`)
+    //   return toc.links;
+    // }
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -346,6 +353,7 @@ import { navLinks } from "~/src/config";
 import { loaderDelay as timeout } from '~/src/utils';
 
 const { path: currentPage } = useRoute();
+const { toc } = useContent();
 
 const menuOpen = ref(false);
 const buttonRef = ref(null);

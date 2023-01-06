@@ -10,8 +10,8 @@
             <slot id="content" />
           </div>
           <!-- <slot id="content"/> -->
-      </main>
-      <AppFooter />
+        </main>
+        <AppFooter class="default-footer" />
     </body>
   </div>
 </template>

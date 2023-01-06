@@ -21,7 +21,10 @@
           </div>
         </body>
         <div class="right-panel">
-          <TableOfContents class="table-of-contents" />
+          <TableOfContents
+            class="table-of-contents"
+            v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
+            />
         </div>
       </div>
       </main>
@@ -31,7 +34,9 @@
 </template>
 
 <script setup lang="ts">
-// import observe, { observeToc } from '~~/src/observer';
+
+const { path: currentPage } = useRoute();
+const { toc } = useContent();
 </script>
 
 <style lang="sass" scoped>
@@ -65,7 +70,8 @@
   .right-panel
     min-width: 240px
     max-width: 240px
-    margin-right: 20px
+    margin-right: 10px
+    margin-left: 10px
     padding: geometry.var("nav-height") 0
     height: fit-content
     position: sticky
@@ -79,7 +85,8 @@
     min-width: 240px
     max-width: 240px
     width: 240px
-    margin-left: 20px
+    margin-left: 10px
+    margin-right: 10px
     padding: geometry.var("nav-height") 0
     height: fit-content
     position: sticky

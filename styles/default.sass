@@ -62,7 +62,7 @@ body
   
   margin: 0
   width: 100%
-  min-height: 100%
+  // min-height: 100%
   overflow-x: hidden
   -moz-osx-font-smoothing: grayscale
   -webkit-font-smoothing: antialiased
@@ -88,7 +88,14 @@ body
       pointer-events: none
       user-select: none
     
-  
+#root
+  display: flex
+  flex-direction: column
+
+  min-height: 100vh
+
+  .default-footer
+    align-self: flex-end
 
 :root
   min-height: 100vh
@@ -100,7 +107,7 @@ main
   margin: 0 auto
   width: 100%
   max-width: 1300px
-  min-height: 100vh
+  height: max-content
   padding: 0 clamp(0.5em, 3vw, 3em)
   
   &.fill-height 
