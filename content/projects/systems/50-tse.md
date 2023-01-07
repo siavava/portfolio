@@ -1,6 +1,6 @@
 ---
 order: 5
-date: 05-22-2021
+date: 2021-05-22
 title: 'Tiny Search Engine'
 cover: 'featured-search-engine.gif'
 repo: 'https://github.com/siavava/tse'
