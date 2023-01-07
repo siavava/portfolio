@@ -22,7 +22,7 @@ This paper explores the role of technology in the developing world,
 looking at the possibilities and challenges, and addressing
 how the technology disparity between developing and developed nations arose in the first place.
 
-[Link :rocket:](https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/16)
+[**Link :rocket:**](https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/16)
 
 ---
 
