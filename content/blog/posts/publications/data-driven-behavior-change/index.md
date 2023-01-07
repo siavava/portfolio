@@ -9,7 +9,7 @@ draft: false
 featured: true
 image: neural-network.jpg
 layout: article
-date: 2020-12-15
+date: 2021-03-14
 navigation: true
 ---
 
@@ -237,7 +237,7 @@ end
 What should we care about in the machine learning and AI space?
 Certainly, great caution needs to be exercised in developing
 and adopting machine learning systems because of the immense power
-they have (which can effectively propagate negative, often unintended and harmful results). 
+they have (which can effectively propagate negative, often unintended and harmful results).
 
 [khan-academy]: https://www.wikipedia.org/wiki/Khan_Academy
 [tesla]:        https://www.wikipedia.org/wiki/Tesla,_Inc.

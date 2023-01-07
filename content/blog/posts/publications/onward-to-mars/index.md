@@ -113,9 +113,11 @@ what should we expect, and how will it affect our lives?
 [virgin-galactic]: https://en.wikipedia.org/wiki/Virgin_Galactic
 
 [^1]: This is literally out of this world!
-[^2]: Perhaps it is not feasible.
-      [Elon Musk][musk] funds :highlight[SpaceX], [Jeff Bezos][bezos] funds :highlight[Blue Origin],
+[^2]: Perhaps it is not feasible.  
+      [Elon Musk][musk] funds :highlight[SpaceX],
+      [Jeff Bezos][bezos] funds :highlight[Blue Origin],
       and [Richard Branson][branson] funds :highlight[Virgin Galactic].
+      
       These are billionaires who have the flexibility to fund projects
       that may not have immediate returns as long as they believe in the
       promise of eventual advantage in the long run.
