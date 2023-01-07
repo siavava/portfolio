@@ -98,7 +98,7 @@ How do we tackle such pitfalls?
 
 ## Demo: Building a Neural Network
 
-```julia
+```julia[neural.jl]
 """
   Neural network abstraction
 """
