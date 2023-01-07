@@ -18,7 +18,7 @@ draft: true
 featured: true
 layout: article
 date: 2022-12-11
-navigation: true
+navigation: false
 ---
 
 # Reward Design

@@ -10,7 +10,7 @@ layout: article
 date: 2022-12-21
 image: title-image.jpg
 caption: This is the image caption.
-navigation: true
+navigation: false
 ---
 
 <!-- ![Title Image](/blog/posts/misc/test1/title-image.jpg) -->

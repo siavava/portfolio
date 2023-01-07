@@ -7,5 +7,5 @@ category:
 draft: true
 layout: article
 date: 2022-09-11
-navigation: true
+navigation: false
 ---
