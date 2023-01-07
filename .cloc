@@ -1,19 +1,20 @@
-     100 files     112 text files.
-classified 109 filesDuplicate file check 109 files (101 known unique)Unique:      100 files                                               109 unique files.                              
-Counting:  100      75 files ignored.
+     100 files     200 files     202 text files.
+classified 199 filesDuplicate file check 199 files (181 known unique)Unique:      100 files                                               194 unique files.                              
+Counting:  100     138 files ignored.
 
-github.com/AlDanial/cloc v 1.94  T=0.04 s (2847.4 files/s, 168961.3 lines/s)
+github.com/AlDanial/cloc v 1.94  T=0.07 s (2823.0 files/s, 189607.1 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Vuejs Component                 64            628            285           3199
-Sass                             4            159             29            497
-Markdown                        19             87              0            445
-TypeScript                      13             85             83            376
-SCSS                             4             56             24            252
+Vuejs Component                 99            954            500           5355
+Markdown                        56            579              0           2228
+SCSS                             4            128            101            633
+Text                             9            149              0            590
+Sass                             5            185             50            553
+TypeScript                      15            112            123            525
 SVG                              2              2              0            140
-YAML                             2             16             33             49
-JSON                             1              0              0             23
+YAML                             3             16             33             50
+JSON                             1              0              0             24
 -------------------------------------------------------------------------------
-SUM:                           109           1033            454           4981
+SUM:                           194           2125            807          10098
 -------------------------------------------------------------------------------
