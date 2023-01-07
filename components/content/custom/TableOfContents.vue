@@ -223,7 +223,6 @@ const { toc } = useContent();
 
     &.active
       color: colors.color("primary-highlight")
-      font-weight: 600
 .toc-link-2
   margin-left: 1em
   font-size: typography.font-size("xs")
@@ -245,6 +244,5 @@ const { toc } = useContent();
 
   &.active
     color: colors.color("primary-highlight")
-    font-weight: 500
 </style>
 
