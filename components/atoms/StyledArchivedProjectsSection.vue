@@ -28,7 +28,7 @@
   .projects-grid
     @include mixins.reset-list
     display: grid
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
 
     // grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
 
@@ -37,7 +37,7 @@
     margin-top: 50px
 
     @media (max-width: 1080px)
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))
 
       // grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
 
@@ -50,5 +50,28 @@
 <script lang="ts">
 export default {
   name: "StyledArchivedProjectsSection",
+
+  // watch width and force update when it changes
+  data() {
+    return {
+      width: 0,
+    }
+  },
+
+  mounted() {
+    window.addEventListener("resize", this.handleResize)
+  },
+
+  methods: {
+    handleResize() {
+      this.width = window.innerWidth
+    },
+  },
+
+  watch: {
+    width() {
+      this.$forceUpdate()
+    },
+  },
 }
 </script>
