@@ -50,6 +50,7 @@
 @use "../styles/typography"
 @use "../styles/colors"
 @use "../styles/mixins"
+@use "../styles/geometry"
 
 *
   z-index: 1
@@ -136,18 +137,27 @@
 
   .title-image-wrapper
     width: min(90%, 1200px)
+    // height: fit-content
     margin: auto
+    margin-top: 2em
     max-width: 100%
     display: flex
     flex-direction: column
     align-items: center
-    gap: 0.5em
+    // gap: 0.5em
+    background: colors.color("primary-highlight")
+    border-radius: geometry.var("border-radius")
 
 
   .title-image
     // aspect-ratio: 16 / 8
-    object-fit: cover
-    margin-top: 2em
+    // object-fit: cover
+    
+    border-radius: geometry.var("border-radius")
+    filter: grayscale(70%)
+    backdrop-filter: invert(1.0) opacity(0.9) sepia(0.5)
+    mix-blend-mode: multiply
+    
     
   .title-image-caption
     width: fit-content

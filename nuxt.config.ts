@@ -42,6 +42,7 @@ export default {
         'c',
         'cpp',
         'java',
+        'julia',
         'python',
         'haskell',
         'f#',
