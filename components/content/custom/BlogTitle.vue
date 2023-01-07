@@ -104,17 +104,15 @@
 
           .category-label
             font-size: clamp(typography.font-size("s"), 1.5vw, typography.font-size("m"))
-            font-weight: 700
+            font-weight: 500
             font-family: typography.font("monospace")
             text-transform: capitalize
-            letter-spacing: 0.1em
             line-height: 1
             align-self: center
 
             &:not(:last-child)::after
               content: ","
               margin-right: 0.5rem
-              font-weight: 500
 
       .title-heading
         font-size: clamp(1.3rem, 3.5vw, 3rem)
@@ -126,7 +124,7 @@
       .title-description
         font-size: clamp(typography.font-size("m"), 1.7vw, 1.53rem)
         font-weight: 500
-        line-height: 150%
+        line-height: 1.5
         margin-bottom: 0.5rem
         color: colors.color("light-foreground")
 
@@ -134,7 +132,7 @@
         color: colors.color("primary-highlight")
         font-family: typography.font("monospace")
         font-size: typography.font-size("s")
-        font-weight: 700
+        font-weight: 500
 
   .title-image-wrapper
     width: min(90%, 1200px)
