@@ -5,7 +5,7 @@ category:
   - misc
   - featured
   - development
-draft: false
+draft: true
 layout: article
 date: 2022-12-21
 image: title-image.jpg

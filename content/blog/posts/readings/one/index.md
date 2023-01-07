@@ -14,7 +14,7 @@ category:
   - readings
   - research
   - featured
-draft: false
+draft: true
 featured: true
 layout: article
 date: 2022-12-11

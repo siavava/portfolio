@@ -13,12 +13,12 @@
           <div>
             <p class="project-overline">Featured Project</p>
             <h3 class="project-title">
-              <a
+              <NuxtLink
                 v-if="project?.url"
-                :href="project.url"
+                :to="project.url"
               >
                 {{ project.title }}
-              </a>
+            </NuxtLink>
               <span v-else>
                 {{ project.title }}
               </span>
@@ -28,14 +28,14 @@
                   class="project-company">
                   &nbsp;@&nbsp;
                 </span>
-                <a
+                <NuxtLink
                   v-if="
                     project.company !== null
                     && project.company.url !== null &&
                     project?.company?.name !== null"
-                  :href="project.company.url">
+                  :to="project.company.url">
                   {{ project.company.name }}
-                </a>
+              </nuxtLink>
               </template>
             </h3>
             <div class="project-description">
@@ -58,19 +58,19 @@
             </li>
           </ul>
           <div class="project-links">
-            <a
+            <NuxtLink
               v-if="project.repo"
-              :href="project.repo"
+              :to="project.repo"
               aria-label="GitHub Link"
             >
               <Icon type="GitHub" />
-            </a>
-            <a
+          </NuxtLink>
+            <NuxtLink
               v-if="project.url"
-              :href="project.url"
+              :to="project.url"
             >
               <Icon type="ExternalLink" />
-            </a>
+        </NuxtLink>
           </div>
         </div>   
         <div class="project-image">
