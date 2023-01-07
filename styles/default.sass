@@ -146,20 +146,6 @@ section
       color: colors.color("secondary-highlight")
 
 
-ol
-  counter-reset: ol-count
-
-  & > li
-    counter-increment: ol-count
-    position: relative
-    padding-left: 1.5em
-    margin-bottom: 0.7em
-    
-    &::before
-      position: absolute
-      left: 0
-      content: counter(ol-count) '.'
-
 h1, h2, h3, h4, h5, h6 
   margin: 0 0 10px 0
   font-weight: 600
