@@ -145,8 +145,8 @@
     flex-direction: column
     align-items: center
     // gap: 0.5em
-    border-radius: geometry.var("border-radius")
-    background-color: colors.color("primary-highlight")
+    // border-radius: geometry.var("border-radius")
+    // background-color: colors.color("primary-highlight")
 
 
   .title-image
@@ -154,11 +154,11 @@
     // object-fit: cover
     
     border-radius: geometry.var("border-radius")
-    filter: grayscale(70%)
-    -webkit-backdrop-filter: invert(1.0) opacity(0.9) sepia(0.5)
-    backdrop-filter: invert(1.0) opacity(0.9) sepia(0.5)
-    background-color: colors.color("primary-highlight")
-    mix-blend-mode: multiply
+    // filter: grayscale(70%)
+    // -webkit-backdrop-filter: invert(1.0) opacity(0.9) sepia(0.5)
+    // backdrop-filter: invert(1.0) opacity(0.9) sepia(0.5)
+    // background-color: colors.color("primary-highlight")
+    // mix-blend-mode: multiply
     
     
   .title-image-caption

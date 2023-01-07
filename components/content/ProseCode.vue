@@ -96,7 +96,7 @@ export default {
   background: rgba(colors.color("light-background"), 0.3)
   position: relative
   margin: 1rem 0
-  padding: 1rem
+  padding: 0.5rem
   padding-top: 0
   border-radius: 0.3rem
   font-size: typography.font-size("m")
