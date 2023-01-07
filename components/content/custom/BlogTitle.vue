@@ -81,6 +81,7 @@
         color: colors.color("primary-highlight")
         display: inline-flex
         height: clamp(1.4rem, 2vh, 2rem)
+        position: relative
 
         .category-icon
           width: fit-content
@@ -93,13 +94,19 @@
           display: inline-flex
           flex-direction: row
           cursor: pointer
-          vertical-align: middle
+          // background: yellow
+          // height: max-content
+          position: absolute
+          top: 50%
+          transform: translateY(-60%)
+          left: 2.5rem
+
 
           .category-label
-            font-size: clamp(typography.font-size("s"), 1.5vw, typography.font-size("l"))
+            font-size: clamp(typography.font-size("s"), 1.5vw, typography.font-size("m"))
             font-weight: 700
             font-family: typography.font("monospace")
-            text-transform: uppercase
+            text-transform: capitalize
             letter-spacing: 0.1em
             line-height: 1
             align-self: center
