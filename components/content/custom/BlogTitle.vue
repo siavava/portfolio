@@ -145,8 +145,8 @@
     flex-direction: column
     align-items: center
     // gap: 0.5em
-    background: colors.color("primary-highlight")
     border-radius: geometry.var("border-radius")
+    background-color: colors.color("primary-highlight")
 
 
   .title-image
@@ -156,6 +156,7 @@
     border-radius: geometry.var("border-radius")
     filter: grayscale(70%)
     backdrop-filter: invert(1.0) opacity(0.9) sepia(0.5)
+    background-color: colors.color("primary-highlight")
     mix-blend-mode: multiply
     
     
