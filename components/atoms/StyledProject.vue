@@ -80,23 +80,12 @@
       @media (max-width: 768px)
         grid-column: 1 / -1
         height: 100%
-
-        :is(a, img)
-          width: 100%
-          height: 100%
-          max-width: 100%
-          max-height: 100%
-
-        img
-          object-fit: cover
-          object-position: center
-      
-    
   
   .project-content
     position: relative
     grid-column: 1 / 7
     grid-row: 1 / -1
+    z-index: 2
     @media (max-width: 1080px)
       grid-column: 1 / 9
     
@@ -204,22 +193,11 @@
     grid-row: 1 / -1
     position: relative
     z-index: 1
-    
+
     @media (max-width: 768px) 
       grid-column: 1 / -1
       height: 100%
-      max-height: 100%
       opacity: 0.5
-
-      :is(a, img)
-        width: 100%
-        height: 100%
-        max-width: 100%
-        max-height: 100%
-
-      img
-        object-fit: cover
-        object-position: center
       
     
     a 
@@ -228,12 +206,12 @@
       background-color: colors.color("primary-highlight")
       border-radius: geometry.var("border-radius")
       vertical-align: middle
-      &:hover,
-      &:focus 
+
+      &:is(:hover,:focus) 
         background: transparent
         outline: 0
-        &:before,
-        .img 
+
+        &:is(:before, .img) 
           background: transparent
           filter: none
         
@@ -258,10 +236,14 @@
         mix-blend-mode: multiply
         filter: grayscale(40%) contrast(1) brightness(70%)
         
-        @media (max-width: 768px) 
-          object-fit: cover
-          width: auto
+        @media (max-width: 768px)
           height: 100%
+          min-width: 100%
+          max-height: 100%
+
+          // crop image to fit container
+          object-fit: cover
+          object-position: center
           filter: grayscale(100%) contrast(1) brightness(50%)
 
 .project-date

@@ -26,10 +26,8 @@ export default {
   transition: geometry.var("default-transition")
 
   @media (prefers-reduced-motion: no-preference) 
-    &:hover,
-    &:focus-within 
-      .project-inner 
-        transform: translateY(-7px)
+    &:is(:hover, :focus-within, .project-inner) 
+      transform: translateY(-7px)
       
 
   a 
