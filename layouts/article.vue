@@ -58,6 +58,7 @@ const { toc } = useContent();
   margin: 0 auto
   flex-direction: column
   min-height: 100vh
+  gap: 2vh
   // max-width: 100vw
   // overflow: hidden
 
@@ -152,11 +153,8 @@ hr
 .article-blog-navigation-footer
   width: 100%
 
-  padding: 1em 12vw
+  padding: 0 12vw
   margin: 0 auto
-  margin-top: 2em
-  border-top: none
-  border-bottom: none
   
   display: none
 

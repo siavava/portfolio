@@ -140,7 +140,7 @@
 
 
   .title-image
-    // aspect-ratio: 16 / 4
+    // aspect-ratio: 16 / 8
     object-fit: cover
     margin-top: 2em
     
