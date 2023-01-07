@@ -110,7 +110,7 @@
             to="/"
             class="menu-column-header"
           >
-            Misc
+            Home
           </NuxtLink>
         </div>
         <div class="menu-extras-footer">
