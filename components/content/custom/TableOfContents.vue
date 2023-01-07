@@ -77,7 +77,9 @@ export default {
       });
       return tocItemIds;
     },
+
     tocItemsOrdered() {
+      this.refreshKey;
       return Array.from(document.querySelectorAll("h2, h3"));
     },
 
@@ -164,6 +166,8 @@ export default {
   watch: {
     // when route changes, register event listeners in case they haven't been registered yet
     $route() {
+      this.refreshKey += 1;
+      this.activeTocItems = new Set<Element>();
       this.handleScroll();
       window.addEventListener("scroll", this.handleScroll);
       window.addEventListener("resize", this.handleScroll);

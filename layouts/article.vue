@@ -154,6 +154,7 @@ hr
 
   padding: 1em 12vw
   margin: 0 auto
+  margin-top: 2em
   border-top: none
   border-bottom: none
   

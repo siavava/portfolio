@@ -20,5 +20,5 @@ h2
   margin-bottom: 1rem
   font-weight: 600
   font-size: 1.5rem
-  color: colors.color("primary-highlight")
+  color: colors.color("lightest-foreground")
 </style>

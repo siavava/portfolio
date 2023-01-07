@@ -34,7 +34,7 @@
     >
       <img
         class="title-image"
-        :src="`${path}/title-image.jpg`"
+        :src="`${path}/${image}`"
         alt="Title Image"
       />
       <figcaption
@@ -140,7 +140,7 @@
 
 
   .title-image
-    aspect-ratio: 16 / 4
+    // aspect-ratio: 16 / 4
     object-fit: cover
     margin-top: 2em
     

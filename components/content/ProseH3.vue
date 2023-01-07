@@ -18,7 +18,7 @@ const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes
 h3
   margin-top: 0.5em
   margin-bottom: 0.5em
-  font-weight: 600
-  font-size: 1.5rem
+  font-weight: 500
+  font-size: 1.3rem
   color: colors.color("lightest-foreground")
 </style>

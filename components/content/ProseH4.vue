@@ -19,6 +19,6 @@ h4
   margin-top: 0.5em
   margin-bottom: 0.5em
   font-weight: 500
-  font-size: 1.5rem
+  font-size: 1.2rem
   color: colors.color("lightest-foreground")
 </style>
