@@ -86,6 +86,12 @@
     grid-column: 1 / 7
     grid-row: 1 / -1
     z-index: 2
+    pointer-events: none
+
+    a
+      z-index: 3
+      pointer-events: all
+      
     @media (max-width: 1080px)
       grid-column: 1 / 9
     
@@ -93,7 +99,8 @@
       display: flex
       flex-direction: column
       justify-content: center
-      height: 100%
+      height: fit-content
+      overflow: hidden
       grid-column: 1 / -1
       padding: 40px 40px 30px
     
