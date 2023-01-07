@@ -81,6 +81,7 @@ export default {
     margin-top: 10px
     color: colors.color("foreground")
     line-height: 0.9
+    padding-top: 0.3em
   
   p
     margin: 20px 0

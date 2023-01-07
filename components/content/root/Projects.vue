@@ -4,9 +4,9 @@
       Other Noteworthy Projects
     </h2>
 
-    <NuxtLink class="inline-link archive-link" to="/archive" ref="revealArchiveLink">
+    <!-- <NuxtLink class="inline-link archive-link" to="/archive" ref="revealArchiveLink">
       view the archive
-    </NuxtLink>
+    </NuxtLink> -->
         <TransitionGroup
           component="null"
           ref="projectsGrid"
