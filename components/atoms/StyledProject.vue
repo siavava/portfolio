@@ -88,7 +88,7 @@
           max-height: 100%
 
         img
-          object-fit: contain
+          object-fit: cover
           object-position: center
       
     
