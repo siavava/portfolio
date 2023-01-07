@@ -135,22 +135,6 @@
     a
       pointer-events: all
     
-    // @media (max-width: 768px)
-    //   color: colors.color("white")
-      
-      // a, span
-      //   // position: static
-      //   &:before
-      //     content: ''
-      //     display: block
-      //     position: absolute
-      //     width: 100%
-      //     height: 100%
-      //     top: 0
-      //     left: 0
-        
-      
-    
   
   .project-description
     @include mixins.box-shadow
@@ -220,11 +204,23 @@
     grid-row: 1 / -1
     position: relative
     z-index: 1
+    
     @media (max-width: 768px) 
       grid-column: 1 / -1
       height: 100%
       max-height: 100%
       opacity: 0.5
+
+      :is(a, img)
+        width: 100%
+        height: 100%
+        max-width: 100%
+        max-height: 100%
+
+      img
+        object-fit: cover
+        object-position: center
+      
     
     a 
       width: 100%
@@ -261,6 +257,7 @@
         border-radius: geometry.var("border-radius")
         mix-blend-mode: multiply
         filter: grayscale(40%) contrast(1) brightness(70%)
+        
         @media (max-width: 768px) 
           object-fit: cover
           width: auto
