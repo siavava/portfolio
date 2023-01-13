@@ -1,6 +1,6 @@
 ---
 # order: 10
-date: 2022-02-14
+date: 2022-03-14
 title: 'Position-Based Dynamics'
 # cover: 
 repo: 'https://github.com/siavava/PhysX/tree/cleaned-up-proj/proj/a1_mass_spring'
