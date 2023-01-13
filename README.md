@@ -1,6 +1,6 @@
 # Personal Website
 
-Built with [Nuxt 3](https://nuxtjs.org/),
+Built with [Nuxt 3](https://nuxt.com/v3),
 [Sass](https://sass-lang.com), and [TypeScript](https://www.typescriptlang.org),
 with a subtle hint of [MongoDB](https://www.mongodb.com).
 
@@ -53,4 +53,5 @@ Locally preview production build:
 npm run preview
 ```
 
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment) for more information.
+Checkout the [Nuxt3 docs](https://nuxt.com/docs)
+and [Nuxt2 docs](https://nuxtjs.org/docs/) for more information.
