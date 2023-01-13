@@ -65,5 +65,5 @@ and [Nuxt2 docs](https://nuxtjs.org/docs/) for more information.[^2]
 
 [^2]: Nuxt 2 docs offer better examples and and interactive guides,
       but obviously are not up to date with everything new Nuxt 3
-      (and, generally, much of nuxt 2 is still present in Nuxt 3
+      (but, generally, much of Nuxt 2 is still present in Nuxt 3
       so there's useful stuff to be got there).
