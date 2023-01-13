@@ -1,4 +1,4 @@
-# Altair's Portfolio/Blog Website
+# Personal Website
 
 Built with [Nuxt 3](https://nuxtjs.org/),
 [Sass](https://sass-lang.com), and [TypeScript](https://www.typescriptlang.org),
