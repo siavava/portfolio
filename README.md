@@ -8,7 +8,7 @@ with a subtle hint of [MongoDB](https://www.mongodb.com).
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/e0f5d7d0-9d2a-45ae-8962-6e3af2ec4cf3/deploy-status)](https://app.netlify.com/sites/amittai/deploys)
 
-&copy; ${2022}^{+}$, Altair
+&copy; ${2022}^{+}$, Altair[^1]
 
 ---
 
@@ -54,9 +54,16 @@ npm run preview
 ```
 
 Checkout the [Nuxt3 docs](https://nuxt.com/docs)
-and [Nuxt2 docs](https://nuxtjs.org/docs/) for more information.[^1]
+and [Nuxt2 docs](https://nuxtjs.org/docs/) for more information.[^2]
 
-[^1]: Nuxt 2 docs offer better examples and and interactive guides,
+[^1]: Can you fully reuse this website? That is certainly not my
+      intention, but if you are learning Nuxt, Vue,
+      or Web Development in general,
+      feel free to use this as a starting point.
+      Likewise, some of the designs are inspired by
+      things I saw on the internet, but I redesigned myself.
+
+[^2]: Nuxt 2 docs offer better examples and and interactive guides,
       but obviously are not up to date with everything new Nuxt 3
       (and, generally, much of nuxt 2 is still present in Nuxt 3
       so there's useful stuff to be got there).
