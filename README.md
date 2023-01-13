@@ -14,7 +14,7 @@ with a subtle hint of [MongoDB](https://www.mongodb.com).
 
 ## Nuxt 3 Documentation
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+Look at the [Nuxt 3 info page](https://v3.nuxtjs.org) to learn more:
 
 ### Setup
 
@@ -54,4 +54,8 @@ npm run preview
 ```
 
 Checkout the [Nuxt3 docs](https://nuxt.com/docs)
-and [Nuxt2 docs](https://nuxtjs.org/docs/) for more information.
+and [Nuxt2 docs](https://nuxtjs.org/docs/) for more information.[^1]
+
+[^1]: Nuxt 2 docs offer better examples and and interactive guides,
+      but obviously are not up to date with everything new Nuxt 3
+      (and, generally, Nuxt 2 $\subset$ Nuxt 3, so you can get useful stuff there).
