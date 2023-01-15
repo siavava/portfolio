@@ -4,23 +4,15 @@ layout: default
 navigation: false
 ---
 
-<!-- ::p -->
-I am a [Kenyan][kenya] software engineer,
-current student at [Dartmouth College][dartmouth].
-I am passionate about sustainable development
-and am looking to leverage emerging technologies
-to build the next important solutions.
+And every problem that we have is a problem at scale &mdash;
+we may just not have realized it yet.
+I am passionate about solving the problems in my communities
+by building solutions that enable others to their best work, play, or life.
+My most recent experiences include building high-performance
+machine learning infrastructure at [Meta][meta],
+but that is only the beginning...
 
-I have been an alumni / student at:
-
-::small-list
-- [Dartmouth College][dartmouth] (current)
-- [Y Combinator][yc]
-- [Carnegie Mellon University][cmu]
-- [Starehe Boys' Center & School][starehe]
-::
-
-:animated-styled-button[Up/Down for a chat?]{
+:animated-styled-button[Up for a chat?]{
   href="mailto:amittaijoel@outlook.com"
   target="_blank"
   rel="noreferrer"}
@@ -31,3 +23,4 @@ I have been an alumni / student at:
 [starehe]:    https://www.stareheboyscentre.ac.ke/sbc/
 [yc]:         https://www.startupschool.org/
 [cmu]:        https://www.cs.cmu.edu/
+[meta]:       https://engineering.fb.com/

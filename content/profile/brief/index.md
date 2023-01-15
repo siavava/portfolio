@@ -5,25 +5,31 @@ navigation: false
 
 :styled-image
 
-My given name is [Amittai][amittai], but my preferred name ad 2022
-is [Altair][altair].
-I am a current student at Dartmouth College, and some would say
-a wannabe software engineer. I am passionate about data and computation,
-especially in the context of society and how those two can drive changes.
-My interests include deep learning and everything in the AI space,
-data engineering, systems, and, somehow, lately, a little bit of
-web development. I am also a big fan of the [Haskell][haskell]
-programming language and functional programming patterns in general.
+My given name is [Amittai][amittai], but my preferred name ad 2022 is [Altair][altair].
+I am a [Kenyan][kenya] student at [Dartmouth College][dartmouth]
+where I am a dual major in Computer Science and Mathematics.
 
-When not coding or studying Math, I am probably sleeping,
-playing online chess, shooting photos that I will never
-put out into the world, or, on occasion, playing
-[Assassin's Creed][assassins-creed] 
-([Origins][assassins-creed-origins], anyone?).
+My primary interests in computer science are data engineering and deep learning,
+but I am also interested in functional programming ([Haskell][haskell]?),
+web development (Vue > React), graph algorithms (and graph neural networks),
+and theory of computation.
+I am currently learning theory of computation and computer vision.
 
-I am most recently learning Database Systems (check out my projects section)
-and Computer Vision, but I am generally looking for opportunities
-to dabble in data engineering, machine learning, and/or functional programming.
+My primary interests in mathematics are in abstract algebra, analysis, and logic,
+but I also find the power of differential equations fascinating.
+
+Beyond academics, find me playing chess, reading or writing,
+shooting with my camera, or playing 
+[Assassin's Creed][assassins-creed].
+
+I have been an alumni / student at:
+
+::small-list
+- [Dartmouth College][dartmouth] (current)
+- [Y Combinator][yc]
+- [Carnegie Mellon University][cmu]
+- [Starehe Boys' Center & School][starehe]
+::
 
 Here are a few technologies I've been working with recently:
 
@@ -42,8 +48,9 @@ class: ""
 style: "justify-content: right; width: 70%; "
 ---
   - x86 Assembly
-  - C/C++
+  - C, C++
   - Rust
+  - Haskell
 ::
 
 </div>
@@ -58,7 +65,7 @@ style: "justify-content: right; width: 70%; "
 ---
   - Python
   - Julia
-  - MySQL, PostgreSQL
+  - SQL
   - MongoDB
 ::
 
@@ -76,7 +83,7 @@ style: "justify-content: right; width: MAX(70%, fit-content); "
   - Vue ([Nuxt][nuxt])
   - React
   - TypeScript
-  - CSS / Sass
+  - CSS, Sass
 ::
 
 </div>
@@ -92,7 +99,7 @@ style: "justify-content: right; width: 70%; "
 ---
   - LaTeX
   - scm (git, hg)
-  - scripting (bash, pwsh, py)
+  - Bash, PowerShell
   - Docker
 ::
 </div>
@@ -140,6 +147,7 @@ style: "justify-content: right; width: 70%; "
 
 ::small-list
   - Computer Architecture :highlight[(1 course)]
+  - Systems Engineering :highlight[(1 course)]
   - Database Systems :highlight[(1 course)]
 ::
 </div>
@@ -152,7 +160,7 @@ style: "justify-content: right; width: 70%; "
   - Artificial Intelligence :highlight[(1 course)]
   - Computer Vision :highlight[(2 courses)]
   - Deep Learning :highlight[(1 course)]
-  - Machine Learning :highlight[(1 course)]
+  - Machine Learning :highlight[(2 course)]
   - Natural Language Processing :highlight[(1 course)]
   - Physical Computing :highlight[(1 course)]
 ::
@@ -160,33 +168,18 @@ style: "justify-content: right; width: 70%; "
 
 <div>
 
-&nbsp; &nbsp; **Neuroscience**
+&nbsp; &nbsp; **Other**
 ::small-list
   - Comparative Literature :highlight[(1 course)]
-  - Computational Neuroscience :highlight[(1 course)]
-  - Face Perception :highlight[(1 course)]
-::
-</div>
-
-
-
-<div>
-
-::small-list
----
-class: ""
-  ---
-&nbsp; &nbsp; :highlight[**Other**]
-
+  - Neuroscience :highlight[(2 course)]
   - Writing :highlight[(2 courses)]
   - Photography :highlight[(1 course)]
-  - Psychology :highlight[(2 courses)]
 ::
-
 </div>
 ::
 
-</highlight>
+Read on to find out more about myself and my past work and projects,
+or [reach out][contact] &mdash; I'm always open for a chat!
 
 [amittai]:                  https://en.wikipedia.org/wiki/Amittai
 [altair]:                   https://www.thebump.com/b/altair-baby-name
@@ -194,4 +187,9 @@ class: ""
 [assassins-creed]:          https://www.ubisoft.com/en-us/game/assassins-creed
 [assassins-creed-origins]:  https://www.ubisoft.com/en-us/game/assassins-creed/origins
 [nuxt]:                     https://nuxtjs.org/
-
+[dartmouth]:                https://home.dartmouth.edu/
+[kenya]:                    https://www.bbc.com/news/world-africa-13681341
+[starehe]:                  https://www.stareheboyscentre.ac.ke/sbc/
+[yc]:                       https://www.startupschool.org/
+[cmu]:                      https://www.cs.cmu.edu/
+[contact]:                  mailto:amittaijoel@outlook.com

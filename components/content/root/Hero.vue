@@ -13,7 +13,6 @@
       </h2>
 
       <h3 class="hero-h3 big-heading reduced">
-        <!-- I make things do stuff. -->
         I solve problems at scale.
       </h3>
 
