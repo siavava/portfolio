@@ -6,8 +6,9 @@ navigation: false
 
 And every problem that we have is a problem at scale &mdash;
 we may just not have realized it yet.
-I am excited about the immense potential for tech-driven developmental momentum
-especially in historically sidelined communities.
+
+I am excited about the immense potential for tech-driven development
+especially in historically marginalized communities.
 Most recently, I built and tested high-performing
 machine learning infrastructure at [Meta][meta],
 helping the company scale up its machine learning efforts.
