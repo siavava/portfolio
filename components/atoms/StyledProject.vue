@@ -66,11 +66,11 @@
       
     
     .project-links
-      justify-content: flex-end !important
+      justify-content: flex-end
       margin-left: 0
       margin-right: -10px
       @media (max-width: 768px)
-        justify-content: flex-start !important
+        justify-content: flex-start
         margin-left: -10px
         margin-right: 0
       
