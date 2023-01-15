@@ -74,11 +74,11 @@
           margin-right: 0
         
       
-      .project-image
-        grid-column: 1 / 8
-        @media (max-width: 768px)
-          grid-column: 1 / -1
-          height: 100%
+    .project-image
+      grid-column: 1 / 8
+      @media (max-width: 768px)
+        grid-column: 1 / -1
+        height: 100%
   
   .project-content
     position: relative
@@ -144,7 +144,7 @@
     flex-direction: column
 
     pointer-events: all
-    
+
     @media (max-width: 768px)
       padding: 20px 0
       background-color: transparent
