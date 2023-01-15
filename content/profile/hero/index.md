@@ -6,13 +6,15 @@ navigation: false
 
 And every problem that we have is a problem at scale &mdash;
 we may just not have realized it yet.
-I am passionate about solving the problems in my communities
-by building solutions that enable others to their best work, play, or life.
-My most recent experiences include building high-performance
+I am excited about the immense potential for tech-driven developmental momentum
+especially in historically sidelined communities.
+Most recently, I built and tested high-performing
 machine learning infrastructure at [Meta][meta],
-but that is only the beginning...
+helping the company scale up its machine learning efforts.
 
-:animated-styled-button[Up for a chat?]{
+I am currently looking for my next challenge...
+
+:animated-styled-button[Down for a chat?]{
   href="mailto:amittaijoel@outlook.com"
   target="_blank"
   rel="noreferrer"}
