@@ -17,5 +17,5 @@ navigation: false
 - Designed and implemented multiple extensions, including
   multi-threading and asynchronous computation to bolster
   the supported data rates.
-- At completion, the util could generates loads of up-to 375k
-  data-points per second.
+<!-- - At completion, the util could generates loads of up-to 375k
+  data-points per second. -->
