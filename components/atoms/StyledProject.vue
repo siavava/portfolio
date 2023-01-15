@@ -53,33 +53,32 @@
         padding: 25px 25px 20px
       
     
-    .project-tech-list
-      justify-content: flex-end
-      @media (max-width: 768px)
-        justify-content: flex-start
-      
-      li
-        margin: 0 0 5px 20px
+      .project-tech-list
+        justify-content: flex-end
         @media (max-width: 768px)
-          margin: 0 10px 5px 0
+          justify-content: flex-start
+        
+        li
+          margin: 0 0 5px 20px
+          @media (max-width: 768px)
+            margin: 0 10px 5px 0
+
+      .project-links
+        width: 100%
+        justify-content: flex-end
+        margin-left: 0
+        margin-right: -10px
+        @media (max-width: 768px)
+          justify-content: flex-start
+          margin-left: -10px
+          margin-right: 0
         
       
-    
-    .project-links
-      justify-content: flex-end
-      margin-left: 0
-      margin-right: -10px
-      @media (max-width: 768px)
-        justify-content: flex-start
-        margin-left: -10px
-        margin-right: 0
-      
-    
-    .project-image
-      grid-column: 1 / 8
-      @media (max-width: 768px)
-        grid-column: 1 / -1
-        height: 100%
+      .project-image
+        grid-column: 1 / 8
+        @media (max-width: 768px)
+          grid-column: 1 / -1
+          height: 100%
   
   .project-content
     position: relative

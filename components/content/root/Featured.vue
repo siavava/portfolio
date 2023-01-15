@@ -58,19 +58,19 @@
             </li>
           </ul>
           <div class="project-links">
-            <a
+            <NuxtLink
               v-if="project.repo"
-              :href="project.repo"
+              :to="project.repo"
               aria-label="GitHub Link"
             >
               <Icon type="GitHub" />
-            </a>
-            <a
+            </NuxtLink>
+            <NuxtLink
               v-if="project.url"
-              :href="project.url"
+              :to="project.url"
             >
               <Icon type="ExternalLink" />
-            </a>
+            </NuxtLink>
           </div>
         </div>   
         <div class="project-image">
