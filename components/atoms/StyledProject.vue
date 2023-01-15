@@ -64,7 +64,7 @@
             margin: 0 10px 5px 0
 
       .project-links
-        width: 100%
+        min-width: 100%
         justify-content: flex-end
         margin-left: 0
         margin-right: -10px
@@ -142,6 +142,9 @@
     z-index: 2
     display: flex
     flex-direction: column
+
+    pointer-events: all
+    
     @media (max-width: 768px)
       padding: 20px 0
       background-color: transparent
