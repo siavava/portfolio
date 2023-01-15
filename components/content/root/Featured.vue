@@ -60,14 +60,14 @@
           <div class="project-links">
             <a
               v-if="project.repo"
-              :to="project.repo"
+              :href="project.repo"
               aria-label="GitHub Link"
             >
               <Icon type="GitHub" />
-          </a>
-            <a>
+            </a>
+            <a
               v-if="project.url"
-              :to="project.url"
+              :href="project.url"
             >
               <Icon type="ExternalLink" />
             </a>
