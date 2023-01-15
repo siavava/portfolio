@@ -13,7 +13,7 @@
       </h2>
 
       <h3 class="hero-h3 big-heading reduced">
-        I solve problems at scale.
+        I build systems at scale.
       </h3>
 
       <ContentDoc
