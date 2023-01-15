@@ -44,7 +44,7 @@ const { data: contact } = await useAsyncData(
     color: colors.color("primary-highlight")
     font-family: typography.font("monospace")
     font-size: typography.font-size("m")
-    font-weight: 600
+    font-weight: 400
     text-decoration: none
     
     &:before 
