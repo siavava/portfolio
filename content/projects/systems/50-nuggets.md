@@ -1,6 +1,6 @@
 ---
 order: 7
-date: 2022-06-02
+date: 2021-06-02
 title: 'Nuggets Game'
 cover: 'featured-nuggets.gif'
 repo: 'https://github.com/siavava/tse'
