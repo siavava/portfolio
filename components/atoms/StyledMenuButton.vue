@@ -14,7 +14,7 @@
         class="line top"
         width="80%"
         height="6px"
-        color="currentColor"
+        fill="currentColor"
         x="10" y="40" rx="0"
       />
 
@@ -22,7 +22,7 @@
         class="line bottom"
         width="56%"
         height="6px"
-        color="currentColor"
+        fill="currentColor"
         x="34" y="60" rx="0"
       />
 
