@@ -164,6 +164,19 @@
   
   .project-tech-list 
     @include mixins.small-list-inline
+
+    // add a comma after each list item except the last
+    li
+      margin-left: 0
+      margin: 0 0px 5px 0 !important
+      font-weight: 600
+      color: colors.color("secondary-highlight")
+      
+      &:not(:last-of-type)::after 
+        content: "/"
+        margin-left: 1.5em
+        margin-right: 1.5em
+        color: colors.color("foreground")
   
   .project-links 
     display: flex

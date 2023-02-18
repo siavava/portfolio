@@ -111,6 +111,19 @@ export default {
   
   .project-tech-list 
     @include mixins.small-list-inline
-    text-transform: capitalize
+    
+    
+    li
+      margin-left: 0
+      margin: 0 0px 5px 0
+      font-weight: 600
+      
+      color: colors.color("secondary-highlight")
+
+      &:not(:last-of-type)::after 
+        content: "/"
+        margin-left: 1.5em
+        margin-right: 1.5em
+        color: colors.color("foreground")
 
 </style>
