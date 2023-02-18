@@ -122,8 +122,8 @@ export default {
 
       &:not(:last-of-type)::after 
         content: "/"
-        margin-left: 1.5em
-        margin-right: 1.5em
+        margin-left: 1em
+        margin-right: 1em
         color: colors.color("foreground")
 
 </style>
