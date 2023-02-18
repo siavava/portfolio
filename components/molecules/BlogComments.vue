@@ -428,6 +428,7 @@ section.comments
         border: 1px solid colors.color("lightest-background")
         border-radius: 0.5rem
         opacity: 0.5
+        font-size: 16px
 
         &:active, &:focus
           opacity: 1
