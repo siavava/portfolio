@@ -483,8 +483,10 @@ section.comments
             transform: translateY(30%)
           
         .comment-date
-          font-size: 0.8rem
+          font-size: 0.8em
+          margin-left: 1em
           color: colors.color("primary-highlight")
           text-align: left
+          font-family: typography.font("monospace")
 
 </style>

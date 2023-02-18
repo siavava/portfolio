@@ -58,6 +58,13 @@ export default {
   margin-top: calc(0px - geometry.var("nav-height"))
   padding: 0 20px
 
+  @media(min-width: 1080px)
+    & > :is(h1), & > * > :is(h1, h2, h3)
+      opacity: 0.6
+
+      &:hover, &:focus
+        opacity: 1
+
   @media(max-height: 720px)
     margin-top: 0
 
@@ -65,13 +72,15 @@ export default {
     width: auto
 
 
-  h1
+  .hero-h1
     margin: 0 0 30px 4px
     color: colors.color("primary-highlight")
     font-family: typography.font("monospace")
+    text-transform: uppercase
 
-    font-size: clamp(typography.font-size("s"), 5vw, typography.font-size("m"))
-    font-weight: 400
+    font-size: clamp(typography.font-size("xs"), 1vw, typography.font-size("m"))
+    // opacity: 0.5
+    font-weight: 600
     width: 100%
 
     @media (max-width: 480px)
@@ -86,6 +95,7 @@ export default {
   p
     margin: 20px 0
     max-width: 540px
+    opacity: 1 !important
   
   .email-link
     @include mixins.big-button

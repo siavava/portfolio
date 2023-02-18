@@ -55,6 +55,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-// svg
-	// stroke-width: 10rem
+svg
+	fill: currentcolor
 </style>
