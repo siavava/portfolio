@@ -540,6 +540,8 @@ section.comments
 
       a
         @include mixins.inline-link
+        &:hover
+          cursor: pointer
       
     .form
 
