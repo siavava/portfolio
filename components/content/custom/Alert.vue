@@ -41,8 +41,18 @@ export default {
   padding: 1em 1em 0.5em 1em
   border-radius: 0.5rem
 
-  & > ul > li::before
-    color: inherit !important
+  & > ul
+    font-size: inherit !important
+    margin: 0.5em 0 0.5em 0.5em
+    
+    li
+      margin: 0
+      line-height: 1.75
+      font-size: inherit !important
+      font-size: inherit !important
+
+    &::before
+      color: inherit !important
 
   .alert-icon
     width: 1.5em

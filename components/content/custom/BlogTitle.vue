@@ -3,7 +3,7 @@
     <div class="text-container">
       <div class="title">
         <div class="category">
-          <Icon :type="`blog-${primaryCategory}`" class="category-icon" />
+          <!-- <Icon :type="`blog-${primaryCategory}`" class="category-icon" /> -->
           <ul class="category-labels">
             <li
               class="category-label"
@@ -81,8 +81,10 @@
       .category
         color: colors.color("primary-highlight")
         display: inline-flex
-        height: clamp(1.4rem, 2vh, 2rem)
+        height: clamp(1.5rem, 1.5vh, 2rem)
         position: relative
+        opacity: 0.7
+        margin: 0.5rem 0 0 0
 
         .category-icon
           width: fit-content
@@ -95,58 +97,55 @@
           display: inline-flex
           flex-direction: row
           cursor: pointer
-          // background: yellow
-          // height: max-content
-          position: absolute
-          top: 50%
-          transform: translateY(-60%)
-          left: 2.5rem
+          // position: absolute
+          // top: 50%
+          // transform: translateY(-60%)
+          // left: 2.5rem
 
 
           .category-label
-            font-size: clamp(typography.font-size("s"), 1.5vw, typography.font-size("m"))
-            font-weight: 500
+            font-size: clamp(typography.font-size("xs"), 1vw, typography.font-size("m"))
+            font-weight: 600
             font-family: typography.font("monospace")
             text-transform: capitalize
-            line-height: 1
-            align-self: center
+            text-transform: uppercase
+            
 
             &:not(:last-child)::after
-              content: ","
-              margin-right: 0.5rem
+              content: "/"
+              color: colors.color("lightest-foreground")
+              margin: 0 0.5rem 0 0.5rem
 
       .title-heading
-        font-size: clamp(1.3rem, 3.5vw, 3rem)
+        font-size: clamp(1.3rem, 2vw, 2rem)
         font-weight: 700
         line-height: 130%
         margin: 0.5em 0
         color: colors.color("primary-highlight")
 
       .title-description
-        font-size: clamp(typography.font-size("m"), 1.7vw, 1.53rem)
+        font-size: clamp(1rem, 1.5vw, 1.5rem)
         font-weight: 500
         line-height: 1.5
         margin-bottom: 0.5rem
-        color: colors.color("light-foreground")
+        color: colors.color("lightest-foreground")
 
       .date
         color: colors.color("primary-highlight")
         font-family: typography.font("monospace")
-        font-size: typography.font-size("s")
-        font-weight: 500
+        font-size: typography.font-size("xxs")
+        font-weight: 600
+        text-transform: uppercase
+
 
   .title-image-wrapper
     width: min(90%, 1200px)
-    // height: fit-content
     margin: auto
     margin-top: 2em
     max-width: 100%
     display: flex
     flex-direction: column
     align-items: center
-    // gap: 0.5em
-    // border-radius: geometry.var("border-radius")
-    // background-color: colors.color("primary-highlight")
 
 
   .title-image
@@ -158,6 +157,7 @@
   .title-image-caption
     width: fit-content
     align-self: flex-end
+    margin-top: 2rem
     margin-right: clamp(3em, 4vw, 5em)
     font-size: clamp(typography.font-size("s"), 2vw,  typography.font-size("l"))
     font-weight: 600

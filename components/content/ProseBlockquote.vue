@@ -8,6 +8,7 @@
 @use "~/styles/typography"
 @use "~/styles/colors"
 @use "~/styles/mixins"
+
 blockquote
   width: 100%
   text-align: center
@@ -23,7 +24,7 @@ blockquote
     font-size: clamp(1rem, 1.7vw, 1.5rem) //1.2em
     font-weight: 500
     line-height: 1.5
-    color: colors.color("fancy-background")
+    color: colors.color("lightest-foreground")
 
 
     &:before
@@ -50,8 +51,9 @@ blockquote
       bottom: 3rem
       color: colors.color("primary-highlight")
 
-  hr
+  & > hr
     max-width: 20%
     size:  10px
-    margin: 2rem auto 0.5rem auto
+    margin: 1em  auto 0 auto !important
+
 </style>
