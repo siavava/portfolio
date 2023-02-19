@@ -256,9 +256,8 @@ main :: IO ()
 main = do
   putStrLn  "Hello, dummy!"
   putStr    "Type anything: "
-  input     <- getLine
-  print     input
-  return    ()
+  getLine >>= print
+  return ()
 ```
 
 ```f# [Main.fs] {3, 5-6, 9-10}
