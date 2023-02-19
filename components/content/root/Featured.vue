@@ -79,6 +79,7 @@
               :src="`/${project.cover}`"
               :alt="project.title"
               loading="lazy"
+              class="img-project"
             />
           </a>
         </div>

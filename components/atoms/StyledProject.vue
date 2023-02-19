@@ -233,7 +233,7 @@
         background: transparent
         outline: 0
 
-        &:is(:before, .img) 
+        &:is(:before, img) 
           background: transparent
           filter: none
         
@@ -253,7 +253,7 @@
         mix-blend-mode: screen
       
     
-      img 
+      .img-project
         border-radius: geometry.var("border-radius")
         mix-blend-mode: multiply
         filter: grayscale(40%) contrast(1) brightness(70%)

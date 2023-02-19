@@ -8,7 +8,6 @@
         class="no-comments"
       >
         <Alert type="info">
-
           There are no comments yet. Be the first to comment!
         </Alert>
       </div>
@@ -50,23 +49,56 @@
       <h2 class="section-subtitle">Thoughts?</h2>
       
       <p class="signed-in-info">
+
         
-        <Alert :type="isLoggedIn ? 'info' : 'error'">
+        <Alert  class="user-alert" :type="isLoggedIn ? 'info' : 'error'">
           <span v-if="isLoggedIn">
             You are signed in as <strong class="username"> {{ currentUser.displayName }}</strong>.
             <br/>
             <span v-if="subscribed">
               You are subscribed to this article, you'll be notified when new comments are posted.
               <br/>
-              If no longer interested
-              <a @click="unsubscribe">unsubscribe</a>.
+              If no longer interested,
+              <a @click="() => { unsubscribe() }">unsubscribe</a>
+              or <a @click="refreshSubscriptions">manage subscriptions</a>.
             </span>
             <span v-else>
               You are not subscribed to this article.
               <br/>
               If interested in getting updates,
-                <a @click="subscribe">subscribe</a>.
+              <a @click="subscribe">subscribe</a>
+              or <a @click="refreshSubscriptions">manage subscriptions</a>.
             </span>
+            <div class="all-subs-panel" >
+            <div v-if="showAllSubscriptions">
+              <div v-for="sub in allSubscriptions" class="sub">
+                <Alert class="user-alert" type="warning" :title="sub.category">
+                  <NuxtLink :to="sub.path" class="sub-title">
+                    {{ sub.title }}
+                  </NuxtLink>
+                  <div class="sub-description">
+                    {{ sub.description }}
+                  </div>
+                  <div v-if="sub.date" class="sub-date">
+                    {{ getCommentDateAsString(new Date(sub.date)) }}
+                  </div>
+                  <div class="sub-image">
+                    <img alt="blog image" :src="`${sub.path}/${sub.image}`" />
+                  </div>
+                  <div class="sub-actions">
+                    <Button
+                      @click="() => { unsubscribe(sub.path) }"
+                      type="danger"
+                      size="small"
+                      class="unsubscribe-button"
+                    >
+                      Unsubscribe
+                    </Button>
+                  </div>
+                </Alert>
+                </div>
+              </div>
+            </div>
           </span>
           <span v-else>
             You are not signed in. <br/>
@@ -157,7 +189,7 @@ getDoc
 
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
-// import { getCommentDateAsString } from '~/src/utils';
+import { MarkdownParsedContent } from '@nuxt/content/dist/runtime/types';
 
 // comment interface
 interface Comment {
@@ -179,7 +211,9 @@ export default {
       showAuthPopup: false,
       avatar: '',
       userDependency: 0,
-      subscribed: false
+      subscribed: false,
+      showAllSubscriptions: false,
+      allSubscriptions: [],
     };
   },
   watch: {
@@ -201,10 +235,14 @@ export default {
     },
 
     subscribe() {
-      console.log("subscribing")
       const db = getFirestore();
-      const { path } = useRoute();
       const { currentUser } = getAuth();
+      var { path } = useRoute();
+
+      // add trailing slash if not present
+      if (path[path.length - 1] != '/') {
+        path += '/';
+      }
       
       const q = query(collection(db, "subscriptions"), where("page", "==", path));
 
@@ -224,34 +262,28 @@ export default {
                 page: path,
                 subscribers: subscribers
               });
+              this.getAllSubscriptions();
               this.subscribed = true;
             });
           }
-          // console.log(`snapshot size: ${querySnapshot.size}`)
-          // querySnapshot.forEach((doc) => {
-          //   const subscribers = doc.data().subscribers;
-          //   subscribers.push(currentUser.email);
-          //   setDoc(doc.ref, {
-          //     page: path,
-          //     subscribers: subscribers
-          //   });
-          //   console.log(`sub...`);
-          //   this.subscribed = true;
-          // });
         }).catch((error) => {
-          console.log("Error getting documents: ", error);
+          console.error("Error getting documents: ", error);
         });
-
-        console.log(`subscribe: ${this.subscribed}`);
       
     },
 
-    unsubscribe() {
+    unsubscribe(_path? : string) {
       const db = getFirestore();
-      const { path } = useRoute();
+
+      var path = _path || useRoute().path;
       const { currentUser } = getAuth();
+
+      // add trailing slash to path
+      if (path[path.length - 1] != '/') path += '/';
       
       const q = query(collection(db, "subscriptions"), where("page", "==", path));
+
+      console.log("unsubscribe: ", path, currentUser.email)
 
       getDocs(q)
         .then((querySnapshot) => {
@@ -264,13 +296,83 @@ export default {
               page: path,
               subscribers: remainingSubscribers
             });
-            this.subscribed = false;
+            this.getAllSubscriptions();
+            if (path == useRoute().path) this.subscribed = false;
           });
         }).catch((error) => {
-          console.log("Error getting documents: ", error);
+          console.error("Error getting documents: ", error);
         });
 
-      this.subscribed = false;
+      // if (path == useRoute().path) this.subscribed = false;
+
+      // this.getAllSubscriptions();
+      
+    },
+    
+    getAllSubscriptions() {
+      const db = getFirestore();
+      const { path } = useRoute();
+      const { currentUser } = getAuth();
+      
+      // get all documents that have user email in subscribers
+      const q = query(
+        collection(db, "subscriptions"),
+        where("subscribers", "array-contains", currentUser.email));
+
+      getDocs(q)
+        .then(async (querySnapshot) => {
+          const paths = Array.from(new Set<string>(
+            querySnapshot.docs.map((doc) => {
+              var path = doc.data().page;
+              if (path.endsWith("/")) path = path.slice(0, -1);
+              return path;
+            })
+          ));
+          // this.allSubscriptions = [];
+          const allSubs = []
+          queryContent<MarkdownParsedContent>()
+            .where({ _path: { $in: paths } })
+            .find()
+            .then((data) => {
+              data.forEach((page) => {
+                allSubs.push({
+                  title: page?.title || "",
+                  path: page?._path || "",
+                  category: page?.category[0] || page?.category || '',
+                  description: page?.description || "",
+                  date: page?.date || "",
+                  image: page?.image || "",
+                });
+              });
+
+              // remove subs that have been deleted
+              this.allSubscriptions = allSubs.filter((sub) => {
+                return allSubs.includes(sub);
+              })
+
+              // add new subs
+              allSubs.forEach((sub) => {
+                if (!this.allSubscriptions.includes(sub)) {
+                  this.allSubscriptions.push(sub);
+                }
+              })
+            })
+          }).catch((error) => {
+            console.error("Error getting documents: ", error);
+        });
+      console.log(this.allSubscriptions);
+    },
+
+    refreshSubscriptions() {
+      if (this.showAllSubscriptions) {
+        this.showAllSubscriptions = false;
+        this.$forceUpdate();
+        return;
+      }
+
+      this.getAllSubscriptions();
+      this.showAllSubscriptions = true;
+      this.$forceUpdate();
     },
 
     // sync subscription status with db
@@ -297,7 +399,7 @@ export default {
             }
           });
         }).catch((error) => {
-          console.log("Error getting document:", error);
+          console.error("Error getting document:", error);
         });
     },
     
@@ -359,6 +461,8 @@ export default {
     submitComment() {
 
       if (!this.comment) return;
+
+      var timeOut = 0;
       
       const { path } = useRoute();
 
@@ -377,93 +481,84 @@ export default {
       // if user has no avatar,
       //  (1) query for avatar
       //    (2) if no avatar, generate new one, and also push to db.
-      if (!this.avatar) {
+      if (this.avatar === '') {
         
         // query for avatar
-        const q = query(collection(db, "avatars"), where("uid", "==", currentUser?.uid));
+        const q = query(collection(db, "avatars"), where("uid", "==", currentUser.uid));
         getDocs(q)
           .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              this.avatar = doc.data().avatar || '';
-            });
-          }).catch((error) => {
-              console.error("Error adding document: ", error);
+
+            // if query is empty, generate new avatar
+            if (querySnapshot.size == 0) {
               const avatar = createAvatar(lorelei, {
-              seed: `${currentUser?.uid} @ ${new Date().toISOString()}`,
-            });
-            const _avatar = avatar.toString();
-            const newUserAvatar = {
-              uid: currentUser?.uid,
-              avatar: _avatar
+                seed: `${currentUser?.uid} @ ${new Date().toISOString()}`,
+              });
+              // const _avatar = avatar.toString();
+              const newUserAvatar = {
+                uid: currentUser.uid,
+                avatar: avatar.toString()
+              }
+              addDoc(collection(db, "avatars"), newUserAvatar);
+              this.avatar = avatar.toString();
+              timeOut = 1000;  // need to wait for avatar to be generated
+            } else {
+              // get first avatar in querySnapshot
+              const doc = querySnapshot.docs[0];
+              this.avatar = doc.data().avatar;
+
             }
-            addDoc(collection(db, "avatars"), newUserAvatar);
-            this.avatar = avatar.toString();
           });
+      }
+
+      setTimeout(() => {
+        const newComment = {
+          text: this.comment,
+          author: currentUser?.displayName,
+          avatar: this.avatar,
+          date: new Date().toISOString(),
+          path: path
+        }
         
-        // if no avatar, generate new one, and also push to db
-        // if (this.avatar === '') {
-        //   const avatar = createAvatar(lorelei, {
-        //     seed: `${currentUser?.uid} @ ${new Date().toISOString()}`,
-        //   });
-        //   const _avatar = avatar.toString();
-        //   const newUserAvatar = {
-        //     uid: currentUser?.uid,
-        //     avatar: _avatar
-        //   }
-        //   addDoc(collection(db, "avatars"), newUserAvatar);
-        //   this.avatar = avatar.toString();
-        // }
-
-      }
-
-      const newComment = {
-        text: this.comment,
-        author: currentUser?.displayName,
-        avatar: this.avatar,
-        date: new Date().toISOString(),
-        path: path
-      }
-      
-      addDoc(collection(db, "comments"), newComment)
-        .catch((error) => {
-          console.error("Error adding document: ", error);
-        });
-
-      // update comments!
-      this.updateComments();
-      this.comment = '';
-
-      // get subscribers to current page
-      const q = query(collection(db, "subscriptions"), where("page", "==", path));
-
-      // add notification message to mail collection
-      getDocs(q)
-        .then((querySnapshot) => {
-
-          // snapshot should contain single document with array of subscribers
-          const _subscribers: Array<Array<string>> = querySnapshot.docs.map(doc => doc.data().subscribers);
-
-          // if subscribers are > 0, 
-          //    create message body with link to current page
-          //    add message to mail collection
-
-          const subscribers = _subscribers[0] || [];
-          subscribers.filter(email => {
-            email !== currentUser?.email &&
-            email.length !== 0
+        addDoc(collection(db, "comments"), newComment)
+          .catch((error) => {
+            console.error("Error adding document: ", error);
           });
 
-          if (subscribers.length === 0) return;
+        // update comments!
+        this.updateComments();
+        this.comment = '';
 
-          // get latest comment HTML
-          const commentHTML = document.getElementById(`comment-${this.allComments.length - 1}`).innerHTML || '';
+        // get subscribers to current page
+        const q = query(collection(db, "subscriptions"), where("page", "==", path));
 
-          const latestComment = this.allComments[this.allComments.length - 1];
-          const outMail = {
-            to: subscribers,
-            message: {
-              subject: `altair.fyi`,
-              text: `
+        // add notification message to mail collection
+        getDocs(q)
+          .then((querySnapshot) => {
+
+            // snapshot should contain single document with array of subscribers
+            const _subscribers: Array<Array<string>> = querySnapshot.docs.map(doc => doc.data().subscribers);
+
+            // if subscribers are > 0, 
+            //    create message body with link to current page
+            //    add message to mail collection
+
+            const subscribers = _subscribers[0] || [];
+            subscribers.filter(email => {
+              email !== currentUser?.email &&
+              email.length !== 0
+            });
+
+            if (subscribers.length === 0) return;
+
+            // get latest comment HTML
+            const commentHTML = document.getElementById(`comment-${this.allComments.length - 1}`).innerHTML || '';
+
+            const latestComment = this.allComments[this.allComments.length - 1];
+            const outMail = {
+              to: subscribers,
+              message: {
+                subject: `altair.fyi`,
+                text: `
 There is a new comment on a post you are subscribed to.
 
 At ${getCommentDateAsString(latestComment.date)}, ${latestComment.author} said: 
@@ -473,20 +568,18 @@ ${latestComment.text}
 
 
 Check it out here: https://altair.fyi${path}.`,
-              // html: ''
+                // html: ''
+              }
             }
-          }
 
-          // add message to mail collection
-          addDoc(collection(db, "mail"), outMail)
-            .then(() => {
-              console.log("queued email for delivery.");
-            })
-            .catch((error) => {
-              console.error("Error adding document: ", error);
-            });
-        });
-    },
+            // add message to mail collection
+            addDoc(collection(db, "mail"), outMail)
+              .catch((error) => {
+                console.error("Error adding document: ", error);
+              });
+          });
+      }, timeOut);
+    }
   },
 
 
@@ -515,7 +608,6 @@ Check it out here: https://altair.fyi${path}.`,
 
       setTimeout(() => {
         this.syncSubscriptionStatus();
-        
         setTimeout(() => this.toggleUserDependency(), 500);
 
       }, 500)
@@ -539,6 +631,13 @@ section.comments
   border-top: 1px solid colors.color("lightest-background")
   padding-top: 3em !important
   padding-bottom: 0
+  -webkit-transition: all 0.1s ease-in-out
+  -ms-transition: all 0.1s ease-in-out
+  -moz-transition: all 0.1s ease-in-out
+  -o-transition: all 0.1s ease-in-out
+  transition: all 0.1s ease-in-out
+  
+  // transition: all 0.5s ease-in-out
 
   .section-title
     color: colors.color("secondary-highlight")
@@ -638,5 +737,64 @@ section.comments
           color: colors.color("primary-highlight")
           text-align: left
           font-family: typography.font("monospace")
+
+.all-subs-panel
+  // height: 0
+  overflow: hidden
+  width: 100%
+  height: auto !important
+
+  -webkit-transition: none
+  -ms-transition: none
+  -moz-transition: none
+  -o-transition: none
+  transition: none
+  height: fit-content !important
+  max-height: 60vh
+  overflow-y: scroll
+
+  
+  &::-webkit-scrollbar
+    display: none !important
+
+  .sub
+    .sub-title
+      font-weight: 600
+      font-size: 1.5rem
+      margin-bottom: 1rem
+      color: colors.color("secondary-highlight") !important
+
+    .sub-description
+      font-size: 1rem
+      margin-bottom: 1rem
+
+    .sub-date
+      font-size: 0.8rem
+      margin-bottom: 1rem
+      font-family: typography.font("monospace")
+      font-weight: 600
+      font-size: 0.7em
+      color: colors.color("secondary-highlight") !important
+      text-transform: uppercase
+
+    .sub-image
+      margin-bottom: 1rem
+      @include mixins.box-shadow
+      border-radius: geometry.var("border-radius")
+      
+    .sub-actions
+      width: 100%
+      .unsubscribe-button
+        @include mixins.big-button
+        margin: 1rem auto
+        width: 100%
+        background-color: colors.color("secondary-highlight")
+        color: colors.color("lightest-background")
+        border: 1px solid colors.color("secondary-highlight")
+        &:hover
+          background-color: colors.color("light-background")
+          color: colors.color("secondary-highlight")
+          border: 1px solid colors.color("secondary-highlight")
+          cursor: pointer
 
 </style>

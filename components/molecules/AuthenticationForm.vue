@@ -255,8 +255,6 @@ export default {
   z-index: 99
   background-color: rgba(colors.color("dark-background"), 0.95)
   display: flex
-  // align-items: center
-  // justify-content: center
   
   &.hidden
     display: none

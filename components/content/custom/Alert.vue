@@ -76,11 +76,8 @@ export default {
       width: fit-content
 
   &:hover
-    .title
+    & > .title-container > .title
       opacity: 1
-
-    
-
 
   &.info
     background-color: colors.color("info-background") !important
