@@ -4,7 +4,7 @@
   :class="type"
   >
     <div class="title-container">
-      <Icon :type="type" class="alert-icon" />
+      <!-- <Icon :type="type" class="alert-icon" /> -->
       <span class="title">
         {{ title || type }}
       </span>
@@ -58,8 +58,18 @@ export default {
     .title
       font-weight: 600
       font-family: typography.font("monospace")
-      text-transform: capitalize
+      text-transform: uppercase
+      font-size: 0.8em
+      margin: 0em 0 0.5em 0
+      border-bottom: 1px dotted
+      opacity: 0.5
       width: fit-content
+
+  &:hover
+    .title
+      opacity: 1
+
+    
 
 
   &.info
