@@ -12,6 +12,27 @@ with a subtle hint of [MongoDB](https://www.mongodb.com).
 
 ---
 
+## Tech Stack
+
+- [Nuxt 3](https://nuxt.com/v3)
+  - [Vue 3](https://vuejs.org/)
+    > Components, Composition API, and more!
+  - [Vite](https://vitejs.dev)
+    > Fast, modern, and efficient build tool.
+  - [Nuxt Content](https://content.nuxtjs.org/)
+    > Markdown-based content management.
+- [TypeScript](https://www.typescriptlang.org)
+  > Javascript with types is actually decent.
+- [SCSS/Sass](https://sass-lang.com)
+  > Just don't use tailwind (what is `w-4 h-4 m-5 p-1-1` supposed to mean? 🤔)
+- [Netlify](https://www.netlify.com)
+  > Static site hosting.
+- [Firebase](https://firebase.google.com)
+  > Authentication & user management.
+
+
+---
+
 ## Nuxt 3 Documentation
 
 Look at the [Nuxt 3 info page](https://v3.nuxtjs.org) to learn more:
