@@ -201,6 +201,7 @@ export default {
     },
 
     subscribe() {
+      console.log("subscribing")
       const db = getFirestore();
       const { path } = useRoute();
       const { currentUser } = getAuth();
@@ -209,18 +210,39 @@ export default {
 
       getDocs(q)
         .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const subscribers = doc.data().subscribers;
-            subscribers.push(currentUser.email);
-            setDoc(doc.ref, {
+          if (querySnapshot.size == 0) {
+            addDoc(collection(db, "subscriptions"), {
               page: path,
-              subscribers: subscribers
+              subscribers: [currentUser.email]
             });
             this.subscribed = true;
-          });
+          } else {
+            querySnapshot.forEach((doc) => {
+              const subscribers = doc.data().subscribers;
+              subscribers.push(currentUser.email);
+              setDoc(doc.ref, {
+                page: path,
+                subscribers: subscribers
+              });
+              this.subscribed = true;
+            });
+          }
+          // console.log(`snapshot size: ${querySnapshot.size}`)
+          // querySnapshot.forEach((doc) => {
+          //   const subscribers = doc.data().subscribers;
+          //   subscribers.push(currentUser.email);
+          //   setDoc(doc.ref, {
+          //     page: path,
+          //     subscribers: subscribers
+          //   });
+          //   console.log(`sub...`);
+          //   this.subscribed = true;
+          // });
         }).catch((error) => {
           console.log("Error getting documents: ", error);
         });
+
+        console.log(`subscribe: ${this.subscribed}`);
       
     },
 
@@ -540,6 +562,7 @@ section.comments
 
       a
         @include mixins.inline-link
+
         &:hover
           cursor: pointer
       
