@@ -13,8 +13,13 @@
         </Alert>
       </div>
   
-      <template v-for="comment in allComments">
-        <div class="comment" v-if="comment.text" :key="comment.id">
+      <template v-for="(comment, i) in allComments">
+        <div
+          class="comment"
+          :id="`comment-${i}`"
+          v-if="comment.text"
+          :key="comment.id"
+        >
           <div class="comment-header">
             <div class="author">
               <div
@@ -37,71 +42,63 @@
             {{ comment.text }}
           </div>
         </div>
-      
       </template>
     </div>
 
 
     <div class="new-comment">
       <h2 class="section-subtitle">Thoughts?</h2>
-      <p v-if="!isLoggedIn" class="signed-in-info">
-        You are not signed in. <br/>
-        Please sign in to comment.
-
+      
+      <p class="signed-in-info">
+        
+        <Alert :type="isLoggedIn ? 'info' : 'error'">
+          <span v-if="isLoggedIn">
+            You are signed in as <strong class="username"> {{ currentUser.displayName }}</strong>.
+            <br/>
+            <span v-if="subscribed">
+              You are subscribed to this article, you'll be notified when new comments are posted.
+              <br/>
+              If no longer interested
+              <a @click="unsubscribe">unsubscribe</a>.
+            </span>
+            <span v-else>
+              You are not subscribed to this article.
+              <br/>
+              If interested in getting updates,
+                <a @click="subscribe">subscribe</a>.
+            </span>
+          </span>
+          <span v-else>
+            You are not signed in. <br/>
+            Sign in (or sign up) to comment/subscribe.
+          </span>
+        
+      </Alert>
+          
         <br/>
         <br/>
-
-        The development of sophisticated language and communication skills
+  
+          The development of sophisticated language and communication skills
         <a href="https://www.theguardian.com/science/punctuated-equilibrium/2011/aug/04/1">
           redefined human evolution
         </a>
-        and, quite possibly, sparked the sequence of
-        events that led to modern civilization.
-      <br/>
-      <br/>
-        There is so much to get &mdash; and so much to give &mdash;
-        when we share thoughts, ideas, and opinions responsibly.
-      <br />
-        Let the world know what you think;
-        <strong class="username"> your ideas do matter </strong>.
-      <br/>
-      <br/>
-        I'll admit: sharing ideas can be scary,
-        especially when we are not even sure about them.
+          and, quite possibly, sparked the sequence of
+          events that led to modern civilization.
         <br/>
-        If you can, that's amazing.
-        If not, a start is better than nothing.
-      </p>
-      <p v-else class="signed-in-info">
-        
-      <br/>
-
-        You are signed in as <strong class="username">{{ currentUser.displayName }}</strong>.
-        
-      <br/>
-      <br/>
-
-        The development of sophisticated language and communication skills
-      <a href="https://www.theguardian.com/science/punctuated-equilibrium/2011/aug/04/1">
-        redefined human evolution
-      </a>
-        and, quite possibly, sparked the sequence of
-        events that led to modern civilization.
-      <br/>
-      <br/>
-        There is so much to get &mdash; and so much to give &mdash;
-        when we share thoughts, ideas, and opinions responsibly.
-      <br />
-        Let the world know what you think;
-        <strong class="username"> your ideas do matter </strong>.
-      <br/>
-      <br/>
-        I'll admit: sharing ideas can be scary,
-        especially when we are not even sure about them.
-      <br/>
-        If you can, that's amazing.
-        If not, a start is better than nothing.
-      </p>
+        <br/>
+          There is so much to get &mdash; and so much to give &mdash;
+          when we share thoughts, ideas, and opinions responsibly.
+        <br />
+          Let the world know what you think;
+          <strong class="username"> your ideas do matter </strong>.
+        <br/>
+        <br/>
+          I'll admit: sharing ideas can be scary,
+          especially when we are not even sure about them.
+        <br/>
+          If you can, that's amazing.
+          If not, a start is better than nothing.
+        </p>
       <form class="form">
         <textarea
           id="comment"
@@ -140,38 +137,7 @@
 </template>
 
 <script lang="ts" setup>
-
-// get comment date as string.
-// if date is today, return time
-// if date is yesterday, return 'yesterday'
-// if less than 5 days ago, return number of days.
-// else, return date as string
-function getCommentDateAsString(date: Date) {
-  const today = new Date();
-  const yesterday = new Date();
-  yesterday.setDate(today.getDate() - 1);
-  const daysAgo = new Date();
-  daysAgo.setDate(today.getDate() - 5);
-
-  if (date.toDateString() == today.toDateString()) {
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  } else if (date.toDateString() == yesterday.toDateString()) {
-    return 'Yesterday';
-  } else if (date > daysAgo) {
-    return `${Math.floor((today.getTime() - date.getTime()) / (1000 * 3600 * 24))} days ago`;
-  } else {
-  return date.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-  });
-  }
-}
-
+import { getCommentDateAsString } from '~/src/utils';
 </script>
 
 <script lang="ts">
@@ -183,11 +149,15 @@ import {
   , getDocs
   , query
   , orderBy
-  , where
+  , where,
+doc,
+setDoc,
+getDoc
 } from "@firebase/firestore";
 
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
+// import { getCommentDateAsString } from '~/src/utils';
 
 // comment interface
 interface Comment {
@@ -208,7 +178,8 @@ export default {
       allComments: [],
       showAuthPopup: false,
       avatar: '',
-      userDependency: 0
+      userDependency: 0,
+      subscribed: false
     };
   },
   watch: {
@@ -228,6 +199,86 @@ export default {
     resetAuthVisibility() {
       this.showAuthPopup = false;
     },
+
+    subscribe() {
+      const db = getFirestore();
+      const { path } = useRoute();
+      const { currentUser } = getAuth();
+      
+      const q = query(collection(db, "subscriptions"), where("page", "==", path));
+
+      getDocs(q)
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const subscribers = doc.data().subscribers;
+            subscribers.push(currentUser.email);
+            setDoc(doc.ref, {
+              page: path,
+              subscribers: subscribers
+            });
+            this.subscribed = true;
+          });
+        }).catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+      
+    },
+
+    unsubscribe() {
+      const db = getFirestore();
+      const { path } = useRoute();
+      const { currentUser } = getAuth();
+      
+      const q = query(collection(db, "subscriptions"), where("page", "==", path));
+
+      getDocs(q)
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const subscribers = doc.data().subscribers;
+            const remainingSubscribers = subscribers.filter((email) => {
+              return email != currentUser.email;
+            });
+            setDoc(doc.ref, {
+              page: path,
+              subscribers: remainingSubscribers
+            });
+            this.subscribed = false;
+          });
+        }).catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+
+      this.subscribed = false;
+    },
+
+    // sync subscription status with db
+    syncSubscriptionStatus() {
+      const db = getFirestore();
+      const { currentUser } = getAuth();
+      const { path } = useRoute();
+
+      // if user is not logged in, return
+      if (!currentUser) return;
+      
+      // query for current page in subscriptions
+      const q = query(collection(db, "subscriptions"), where("page", "==", path));
+
+      // get all subscriptions
+      getDocs(q)
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const subscribers = doc.data().subscribers;
+            if (subscribers.includes(currentUser.email)) {
+              this.subscribed = true;
+            } else {
+              this.subscribed = false;
+            }
+          });
+        }).catch((error) => {
+          console.log("Error getting document:", error);
+        });
+    },
+    
 
 
 
@@ -313,21 +364,33 @@ export default {
             querySnapshot.forEach((doc) => {
               this.avatar = doc.data().avatar || '';
             });
+          }).catch((error) => {
+              console.error("Error adding document: ", error);
+              const avatar = createAvatar(lorelei, {
+              seed: `${currentUser?.uid} @ ${new Date().toISOString()}`,
+            });
+            const _avatar = avatar.toString();
+            const newUserAvatar = {
+              uid: currentUser?.uid,
+              avatar: _avatar
+            }
+            addDoc(collection(db, "avatars"), newUserAvatar);
+            this.avatar = avatar.toString();
           });
         
         // if no avatar, generate new one, and also push to db
-        if (this.avatar === '') {
-          const avatar = createAvatar(lorelei, {
-            seed: `${currentUser?.uid} @ ${new Date().toISOString()}`,
-          });
-          const _avatar = avatar.toString();
-          const newUserAvatar = {
-            uid: currentUser?.uid,
-            avatar: _avatar
-          }
-          addDoc(collection(db, "avatars"), newUserAvatar);
-          this.avatar = avatar.toString();
-        }
+        // if (this.avatar === '') {
+        //   const avatar = createAvatar(lorelei, {
+        //     seed: `${currentUser?.uid} @ ${new Date().toISOString()}`,
+        //   });
+        //   const _avatar = avatar.toString();
+        //   const newUserAvatar = {
+        //     uid: currentUser?.uid,
+        //     avatar: _avatar
+        //   }
+        //   addDoc(collection(db, "avatars"), newUserAvatar);
+        //   this.avatar = avatar.toString();
+        // }
 
       }
 
@@ -347,7 +410,60 @@ export default {
       // update comments!
       this.updateComments();
       this.comment = '';
-      
+
+      // get subscribers to current page
+      const q = query(collection(db, "subscriptions"), where("page", "==", path));
+
+      // add notification message to mail collection
+      getDocs(q)
+        .then((querySnapshot) => {
+
+          // snapshot should contain single document with array of subscribers
+          const _subscribers: Array<Array<string>> = querySnapshot.docs.map(doc => doc.data().subscribers);
+
+          // if subscribers are > 0, 
+          //    create message body with link to current page
+          //    add message to mail collection
+
+          const subscribers = _subscribers[0] || [];
+          subscribers.filter(email => {
+            email !== currentUser?.email &&
+            email.length !== 0
+          });
+
+          if (subscribers.length === 0) return;
+
+          // get latest comment HTML
+          const commentHTML = document.getElementById(`comment-${this.allComments.length - 1}`).innerHTML || '';
+
+          const latestComment = this.allComments[this.allComments.length - 1];
+          const outMail = {
+            to: subscribers,
+            message: {
+              subject: `altair.fyi`,
+              text: `
+There is a new comment on a post you are subscribed to.
+
+At ${getCommentDateAsString(latestComment.date)}, ${latestComment.author} said: 
+
+
+${latestComment.text}
+
+
+Check it out here: https://altair.fyi${path}.`,
+              // html: ''
+            }
+          }
+
+          // add message to mail collection
+          addDoc(collection(db, "mail"), outMail)
+            .then(() => {
+              console.log("queued email for delivery.");
+            })
+            .catch((error) => {
+              console.error("Error adding document: ", error);
+            });
+        });
     },
   },
 
@@ -376,9 +492,14 @@ export default {
       this.avatar = '';
 
       setTimeout(() => {
-        this.toggleUserDependency();
-      }, 1000)
+        this.syncSubscriptionStatus();
+        
+        setTimeout(() => this.toggleUserDependency(), 500);
+
+      }, 500)
     });
+
+    // set subscription status
   }
 };
 </script>
@@ -416,6 +537,9 @@ section.comments
 
     .signed-in-info
       white-space: pre-line
+
+      a
+        @include mixins.inline-link
       
     .form
 

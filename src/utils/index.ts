@@ -82,3 +82,40 @@ export function elementIsAboveScreen(el: Element) {
   const rect = el.getBoundingClientRect();
   return rect.bottom < 0;
 }
+
+/**
+ * Get comment date as string.
+ * 
+ * `today?` return time as string.
+ * 
+ * `yesterday?`, return 'yesterday'.
+ * 
+ * `< 5 days ago?`, return number of days.
+ * 
+ * `otherwise`, return date as string
+ */
+export function getCommentDateAsString(date: Date) {
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+  const daysAgo = new Date();
+  daysAgo.setDate(today.getDate() - 5);
+
+  if (date.toDateString() == today.toDateString()) {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  } else if (date.toDateString() == yesterday.toDateString()) {
+    return 'Yesterday';
+  } else if (date > daysAgo) {
+    return `${Math.floor((today.getTime() - date.getTime()) / (1000 * 3600 * 24))} days ago`;
+  } else {
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  });
+  }
+}
