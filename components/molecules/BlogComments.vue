@@ -654,7 +654,7 @@ section.comments
 
   .new-comment
     padding-top: 2rem
-    margin: 2rem
+    margin: 2rem 0
 
     .signed-in-info
       white-space: pre-line
