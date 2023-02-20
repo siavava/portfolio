@@ -253,7 +253,6 @@ export default {
               page: path,
               subscribers: [currentUser.email]
             });
-            this.subscribed = true;
           } else {
             querySnapshot.forEach((doc) => {
               const subscribers = doc.data().subscribers;
@@ -262,10 +261,11 @@ export default {
                 page: path,
                 subscribers: subscribers
               });
-              this.getAllSubscriptions();
-              this.subscribed = true;
             });
           }
+          this.getAllSubscriptions();
+          this.subscribed = true;
+          
         }).catch((error) => {
           console.error("Error getting documents: ", error);
         });
@@ -788,13 +788,16 @@ section.comments
         @include mixins.big-button
         margin: 1rem auto
         width: 100%
+        font-weight: 600
+        
         background-color: colors.color("secondary-highlight")
         color: colors.color("lightest-background")
         border: 1px solid colors.color("secondary-highlight")
+        
         &:hover
+          cursor: pointer
+          
           background-color: colors.color("light-background")
           color: colors.color("secondary-highlight")
           border: 1px solid colors.color("secondary-highlight")
-          cursor: pointer
-
 </style>
