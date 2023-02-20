@@ -58,12 +58,12 @@ export default {
   margin-top: calc(0px - geometry.var("nav-height"))
   padding: 0 20px
 
-  @media(min-width: 1080px)
-    & > :is(h1), & > * > :is(h1, h2, h3)
-      opacity: 0.6
+  // @media(min-width: 1080px)
+  //   & > :is(h1), & > * > :is(h1, h2, h3)
+  //     opacity: 0.6
 
-      &:hover, &:focus
-        opacity: 1
+  //     &:hover, &:focus
+  //       opacity: 1
 
   @media(max-height: 720px)
     margin-top: 0
