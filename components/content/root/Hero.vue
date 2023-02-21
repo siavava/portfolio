@@ -99,6 +99,7 @@ export default {
   
   .email-link
     @include mixins.big-button
+    text-transform: uppercase !important
 
   .reduced
     font-size: clamp(30px,6vw, 80px)

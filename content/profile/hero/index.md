@@ -15,10 +15,11 @@ helping the company scale up its machine learning efforts.
 
 I am currently looking for my next challenge...
 
-:animated-styled-button[Down for a chat?]{
+:animated-styled-button[Down for a chat]{
   href="mailto:amittaijoel@outlook.com"
   target="_blank"
-  rel="noreferrer"}
+  rel="noreferrer"
+}
 
 
 [dartmouth]:  https://home.dartmouth.edu/
