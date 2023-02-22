@@ -27,22 +27,22 @@
           }}
         </span>
       </div>
+      <figure
+        v-if="image"
+        class="title-image-wrapper"
+      >
+        <img
+          class="title-image"
+          :src="`${path}/${image}`"
+          alt="Title Image"
+        />
+        <figcaption
+          v-if="caption"
+          class="title-image-caption">
+          {{ caption }}
+        </figcaption>
+      </figure>
     </div>
-    <figure
-      v-if="image"
-      class="title-image-wrapper"
-    >
-      <img
-        class="title-image"
-        :src="`${path}/${image}`"
-        alt="Title Image"
-      />
-      <figcaption
-        v-if="caption"
-        class="title-image-caption">
-        {{ caption }}
-      </figcaption>
-    </figure>
   </div>
 </template>
 
@@ -117,15 +117,15 @@
               margin: 0 0.5rem 0 0.5rem
 
       .title-heading
-        font-size: clamp(1.3rem, 2vw, 2rem)
-        font-weight: 700
+        font-size: clamp(2.3rem, 2vw, 3rem)
+        font-weight:900
         line-height: 130%
         margin: 0.5em 0
         color: colors.color("primary-highlight")
 
       .title-description
-        font-size: clamp(1rem, 1.5vw, 1.5rem)
-        font-weight: 500
+        font-size: clamp(1rem, 1.8vw, 1.5rem)
+        font-weight:500
         line-height: 1.5
         margin-bottom: 0.5rem
         color: colors.color("lightest-foreground")
@@ -133,13 +133,12 @@
       .date
         color: colors.color("primary-highlight")
         font-family: typography.font("monospace")
-        font-size: typography.font-size("xxs")
+        font-size: typography.font-size("xs")
         font-weight: 600
         text-transform: uppercase
 
 
   .title-image-wrapper
-    width: min(90%, 1200px)
     margin: auto
     margin-top: 2em
     max-width: 100%
@@ -150,7 +149,6 @@
 
   .title-image
     @include mixins.box-shadow
-    
     border-radius: geometry.var("border-radius")
     
     

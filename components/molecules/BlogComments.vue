@@ -702,7 +702,8 @@ section.comments
     .comment
       margin: 1.5em
       padding: 1.5em
-      border: 1px solid colors.color("lightest-background")
+      // border: 1px solid colors.color("lightest-background")
+      background: colors.color(light-background)
       border-radius: 0.5rem
       line-height: 1.5
 
