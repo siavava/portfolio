@@ -74,7 +74,7 @@
                 <span v-if="project.date" class="project-date">
                   {{ new Date(project.date)
                     .toLocaleDateString('en-us', {
-                      month: 'long',
+                      month: 'short',
                       year: 'numeric',
                     })
                   }}

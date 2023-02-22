@@ -18,7 +18,7 @@
                 :to="project.url"
               >
                 {{ project.title }}
-            </NuxtLink>
+              </NuxtLink>
               <span v-else>
                 {{ project.title }}
               </span>
@@ -45,7 +45,7 @@
               <span v-if="project.date" class="project-date">
                 {{ new Date(project.date)
                   .toLocaleDateString('en-us', {
-                    month: 'long',
+                    month: 'short',
                     year: 'numeric',
                   })
                 }}
@@ -90,7 +90,7 @@
 </template>
 
 <style lang="sass" scoped>
-@use "../styles/transitions"
+@use "~/styles/transitions"
 
 .project-title
   font-weight: 600

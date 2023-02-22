@@ -57,7 +57,6 @@ export default {
   max-width: 900px
   margin-top: calc(0px - geometry.var("nav-height"))
   padding: 0 20px
-
   // @media(min-width: 1080px)
   //   & > :is(h1), & > * > :is(h1, h2, h3)
   //     opacity: 0.6
