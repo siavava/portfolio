@@ -246,7 +246,7 @@ export default {
         height: 100%
         
         &:is(:hover, :focus, :selected)
-          color: inherit
+          color: colors.color(lightest-foreground)
 
         svg
           &:is(:hover, :selected, :focus)
