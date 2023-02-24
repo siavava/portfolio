@@ -161,9 +161,9 @@ export default {
 
     @media(max-height: 1020px)
       position: relative
-      // padding-top: 50px
+      padding: 2rem 0
     
-    padding: 2rem clamp(2rem, 5vw, 5rem)
+    padding: 2rem clamp(0px, 5vw, 5rem)
     min-height: 10%
     height: clamp(130px, 10vh, 150px)
     width: 100%
