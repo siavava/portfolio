@@ -2,12 +2,12 @@
   <section id="contact" class="contact-section">
     <h2 class="numbered-heading overline"> What's Next?</h2>
     <ContentDoc :value="contact" />
-    <a
+    <!-- <a
       :href="`mailto:${ contact.email }`"
       class="email-link"
     >
       Email
-    </a>
+    </a> -->
   </section>
 </template>
 

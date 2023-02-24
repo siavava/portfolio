@@ -6,7 +6,7 @@ navigation: false
 
 ## Get In Touch
 
-I am particularly excited to make new connections.
+I am particularly excited to make new connections.  
 Ping me an [email][email], or find me on [Instagram][instagram], [Twitter][twitter],
 [GitHub][github], [Behance][behance], [LinkedIn][linkedin], and beyond.
 

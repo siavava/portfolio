@@ -231,14 +231,15 @@ export default {
       width: 100%
 
     .down-link
-      height: 100%
+      height: 60px
+      width: 60px
       display: flex
       align-items: center
       justify-content: center
 
 
       .down-link-inner
-        width: fit-content
+        width: 100%
         height: 100%
         
         &:is(:hover, :focus, :selected)
