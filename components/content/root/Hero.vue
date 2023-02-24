@@ -22,12 +22,12 @@
         class="hero-container"
       />
     </div>
-    <!-- <div class="hero-footer">
-      <div class="name"> -->
+    <div class="hero-footer">
+      <div class="name">
         <!-- <div class="name-inner">
           altair
         </div> -->
-      <!-- </div>
+      </div>
       <div class="single-item">
         <div class="item-title">
           {{ heroFootItems[footItemIndex].title }}
@@ -47,13 +47,13 @@
           </div>
         </div>
       </div>
-      <div class="down-icon">
-        <NuxtLink class="arrow-link" to="/#about">
+      <div class="down-link">
+        <NuxtLink class="down-link-inner" to="/#about">
           <Icon type="down-arrow" />
         </NuxtLink>
       </div>
 
-    </div> -->
+    </div>
   </section>
 </template>
 
@@ -126,9 +126,6 @@ export default {
   flex-direction: column
   align-items: center
   min-height: 100vh
-  // max-width: 900px
-  // width: 100% !important
-  // background: yellow
   margin-top: calc(0px - geometry.var("nav-height"))
   padding: 0 20px
   // position: relative
@@ -167,16 +164,16 @@ export default {
     right: 0
     
     padding: 2rem clamp(2rem, 5vw, 5rem)
-    max-height: 10%
-    height: 10%
+    min-height: 10%
+    height: clamp(130px, 10vh, 150px)
     width: 100%
-    // text-align: center
-    // font-size: 0.8rem
-    
-    // opacity: 0.5
     display: flex
     justify-content: space-between
     text-align: left
+
+    background-color: rgba(colors.color(background), 0.4)
+    backdrop-filter: blur(10px)
+
 
     .name
       font-size: clamp(1.8rem, 1.6vw, 1rem)
@@ -193,14 +190,12 @@ export default {
       flex-direction: column
       justify-content: center
       align-items: center
-      // text-align: left
 
       @media(max-width: 960px)
         display: none
 
     .single-item
       display: none
-      background-color: yellow
       
 
       @media(max-width: 960px)
@@ -235,18 +230,27 @@ export default {
       color: colors.color(foreground)
       width: 100%
 
-    .arrow-link
-      all: unset
-      height: min(100%, 5vh)
-      width: min(100%, 5vh)
+    .down-link
+      height: 100%
       display: flex
       align-items: center
       justify-content: center
-      // background: yellow
 
 
-      &:is(::focus, ::hover)
-        color: green !important
+      .down-link-inner
+        width: fit-content
+        height: 100%
+        
+        &:is(:hover, :focus, :selected)
+          color: inherit
+
+        svg
+          &:is(:hover, :selected, :focus)
+            stroke-width: 0.7px
+            color: inherit !important
+            cursor: pointer
+            transform: scale(1.1)
+            transition: all 0.2s ease-out
 
 
 
