@@ -124,8 +124,8 @@ export default {
   @include mixins.flex-center
   flex-direction: column
   align-items: center
-  min-height: 100vh
-  margin-top: calc(0px - geometry.var("nav-height"))
+  min-height: calc(100vh - geometry.var("nav-height"))
+  padding-top: calc(geometry.var("nav-height"))
   padding: 0 20px
   // position: relative
   // @media(min-width: 1080px)
@@ -153,18 +153,15 @@ export default {
   //   background: radial-gradient(circle closest-side, colors.color("primary-highlight"), transparent)
     
 
-  @media(max-height: 720px)
-    margin-top: 0
-
   .hero-footer
     position: absolute
     bottom: 0
     left: 0
     right: 0
 
-    @media(max-height: 720px)
+    @media(max-height: 1020px)
       position: relative
-      margin-top: 2rem
+      // padding-top: 50px
     
     padding: 2rem clamp(2rem, 5vw, 5rem)
     min-height: 10%
@@ -265,13 +262,13 @@ export default {
 
 
   .hero-h1
-    margin: 0 0 30px 4px
+    margin: 0px 0 10px 4px
+
     color: colors.color("primary-highlight")
     font-family: typography.font("monospace")
     text-transform: uppercase
 
-    font-size: clamp(typography.font-size("xs"), 1vw, typography.font-size("m"))
-    // opacity: 0.5
+    font-size: clamp(typography.font-size("xxs"), 1vw, typography.font-size("m"))
     font-weight: 600
     width: 100%
 
@@ -283,6 +280,7 @@ export default {
     color: colors.color("foreground")
     line-height: 0.9
     padding-top: 0.3em
+    font-size: clamp(2.5rem, 4vw, 4rem) !important
   
   p
     margin: 20px 0
