@@ -18,6 +18,16 @@
 
 <style lang="sass">
 @use "~/styles/default"
+// @use "~/styles/colors"
+
+// #root
+//   // background: url("~/assets/images/noise.svg") !important
+
+//   body
+//     background-image: url("~/assets/images/noise.svg") !important
+//     background: rgba(colors.color("background"), 0.1) !important
+
+
 
 .container
   max-width: 1000px
