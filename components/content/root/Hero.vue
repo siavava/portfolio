@@ -22,12 +22,12 @@
         class="hero-container"
       />
     </div>
-    <div class="hero-footer">
-      <div class="name">
+    <!-- <div class="hero-footer">
+      <div class="name"> -->
         <!-- <div class="name-inner">
           altair
         </div> -->
-      </div>
+      <!-- </div>
       <div class="single-item">
         <div class="item-title">
           {{ heroFootItems[footItemIndex].title }}
@@ -53,7 +53,7 @@
         </NuxtLink>
       </div>
 
-    </div>
+    </div> -->
   </section>
 </template>
 
@@ -126,7 +126,9 @@ export default {
   flex-direction: column
   align-items: center
   min-height: 100vh
-  max-width: 900px
+  // max-width: 900px
+  // width: 100% !important
+  // background: yellow
   margin-top: calc(0px - geometry.var("nav-height"))
   padding: 0 20px
   // position: relative
@@ -198,6 +200,7 @@ export default {
 
     .single-item
       display: none
+      background-color: yellow
       
 
       @media(max-width: 960px)
