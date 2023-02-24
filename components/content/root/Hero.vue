@@ -22,38 +22,38 @@
         class="hero-container"
       />
     </div>
-  </section>
-  <div class="hero-footer">
-    <div class="name">
-      <!-- <div class="name-inner">
-        altair
-      </div> -->
-    </div>
-    <div class="single-item">
-      <div class="item-title">
-        {{ heroFootItems[footItemIndex].title }}
+    <div class="hero-footer">
+      <div class="name">
+        <!-- <div class="name-inner">
+          altair
+        </div> -->
       </div>
-      <div class="item-subscript">
-        {{ heroFootItems[footItemIndex].subscript }}
-      </div>
-    </div>
-    <div
-      class="item" v-for="item in footItems">
-      <div class="item">
+      <div class="single-item">
         <div class="item-title">
-          {{ item.title }}
+          {{ heroFootItems[footItemIndex].title }}
         </div>
         <div class="item-subscript">
-          {{ item.subscript }}
+          {{ heroFootItems[footItemIndex].subscript }}
         </div>
       </div>
+      <div
+        class="item" v-for="item in footItems">
+        <div class="item">
+          <div class="item-title">
+            {{ item.title }}
+          </div>
+          <div class="item-subscript">
+            {{ item.subscript }}
+          </div>
+        </div>
+      </div>
+      <div class="down-link">
+        <NuxtLink class="down-link-inner" to="/#about">
+          <Icon type="down-arrow" />
+        </NuxtLink>
+      </div>
     </div>
-    <div class="down-link">
-      <NuxtLink class="down-link-inner" to="/#about">
-        <Icon type="down-arrow" />
-      </NuxtLink>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts" setup>
@@ -153,6 +153,113 @@ export default {
   //   background: radial-gradient(circle closest-side, colors.color("primary-highlight"), transparent)
     
 
+  @media(max-height: 720px)
+    margin-top: 0
+
+  .hero-footer
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+
+    @media(max-height: 720px)
+      position: relative
+      margin-top: 2rem
+    
+    padding: 2rem clamp(2rem, 5vw, 5rem)
+    min-height: 10%
+    height: clamp(130px, 10vh, 150px)
+    width: 100%
+    display: flex
+    justify-content: space-between
+    text-align: left
+
+    background-color: rgba(colors.color(background), 0.4)
+    backdrop-filter: blur(10px)
+
+
+    .name
+      font-size: clamp(1.8rem, 1.6vw, 1rem)
+      color: colors.color(foreground)
+      font-weight: 600
+      font-family: typography.font(fredericka)
+      justify-content: center
+      align-items: center
+      display: flex
+
+    .item
+      flex: 1
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+
+      @media(max-width: 960px)
+        display: none
+
+    .single-item
+      display: none
+      
+
+      @media(max-width: 960px)
+        flex: 1
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: left
+        display: flex
+
+        .item-title
+          font-size: clamp(1.7rem, 1.6vw, 1.5rem)
+          margin-bottom: 0.5rem
+          color: rgba(colors.color(lightest-foreground), 0.9)
+          width: 100%
+
+        .item-subscript
+          font-size: clamp(0.8rem, 1.6vw, 1rem)
+          color: colors.color(foreground)
+          width: 100%
+      
+
+    .item-title
+      font-weight: 600
+      font-size: clamp(0.9rem, 2vw, 1.2rem)
+      margin-bottom: 0.5rem
+      color: rgba(colors.color(lightest-foreground), 0.9)
+      width: 100%
+
+    .item-subscript
+      font-size: clamp(0.7rem, 1.6vw, 1rem)
+      color: colors.color(foreground)
+      width: 100%
+
+    .down-link
+      height: 60px
+      width: 60px
+      display: flex
+      align-items: center
+      justify-content: center
+
+
+      .down-link-inner
+        width: 100%
+        height: 100%
+        
+        &:is(:hover, :focus, :selected)
+          color: inherit
+
+        svg
+          &:is(:hover, :selected, :focus)
+            stroke-width: 0.7px
+            color: inherit !important
+            cursor: pointer
+            transform: scale(1.1)
+            transition: all 0.2s ease-out
+
+
+
+    
+
   .hero-content-container
     width: auto
 
@@ -224,100 +331,4 @@ export default {
     color: colors.color("critical-foreground")
     mouse-events: none
 
-.hero-footer
-  position: absolute
-  bottom: 0%
-  left: 0
-  right: 0
-  
-  padding: 2rem clamp(2rem, 5vw, 5rem)
-  min-height: 10%
-  height: clamp(130px, 10vh, 150px)
-  width: 100%
-  display: flex
-  justify-content: space-between
-  text-align: left
-
-  background-color: rgba(colors.color(background), 0.4)
-  backdrop-filter: blur(10px)
-
-
-  .name
-    font-size: clamp(1.8rem, 1.6vw, 1rem)
-    color: colors.color(foreground)
-    font-weight: 600
-    font-family: typography.font(fredericka)
-    justify-content: center
-    align-items: center
-    display: flex
-
-  .item
-    flex: 1
-    display: flex
-    flex-direction: column
-    justify-content: center
-    align-items: center
-
-    @media(max-width: 960px)
-      display: none
-
-  .single-item
-    display: none
-    
-
-    @media(max-width: 960px)
-      flex: 1
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: left
-      display: flex
-
-      .item-title
-        font-size: clamp(1.7rem, 1.6vw, 1.5rem)
-        margin-bottom: 0.5rem
-        color: rgba(colors.color(lightest-foreground), 0.9)
-        width: 100%
-
-      .item-subscript
-        font-size: clamp(0.8rem, 1.6vw, 1rem)
-        color: colors.color(foreground)
-        width: 100%
-    
-
-  .item-title
-    font-weight: 600
-    font-size: clamp(0.9rem, 2vw, 1.2rem)
-    margin-bottom: 0.5rem
-    color: rgba(colors.color(lightest-foreground), 0.9)
-    width: 100%
-
-  .item-subscript
-    font-size: clamp(0.7rem, 1.6vw, 1rem)
-    color: colors.color(foreground)
-    width: 100%
-
-  .down-link
-    height: 60px
-    width: 60px
-    display: flex
-    align-items: center
-    justify-content: center
-
-
-    .down-link-inner
-      width: 100%
-      height: 100%
-      
-      &:is(:hover, :focus, :selected)
-        color: inherit
-
-      svg
-        &:is(:hover, :selected, :focus)
-          stroke-width: 0.7px
-          color: inherit !important
-          cursor: pointer
-          transform: scale(1.1)
-          transition: all 0.2s ease-out
-  
 </style>
