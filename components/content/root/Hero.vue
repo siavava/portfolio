@@ -1,5 +1,5 @@
 <template>
-  <section class="hero">
+  <section id="hero" class="hero">
     <!-- <div class="hero-background rubik-puddles">
       ALT
     </div> -->
@@ -22,12 +22,63 @@
         class="hero-container"
       />
     </div>
+    <div class="hero-footer">
+      <div class="name">
+        <!-- <div class="name-inner">
+          altair
+        </div> -->
+      </div>
+      <div class="single-item">
+        <div class="item-title">
+          {{ heroFootItems[footItemIndex].title }}
+        </div>
+        <div class="item-subscript">
+          {{ heroFootItems[footItemIndex].subscript }}
+        </div>
+      </div>
+      <div
+        class="item" v-for="item in footItems">
+        <div class="item">
+          <div class="item-title">
+            {{ item.title }}
+          </div>
+          <div class="item-subscript">
+            {{ item.subscript }}
+          </div>
+        </div>
+      </div>
+      <div class="down-icon">
+        <NuxtLink class="arrow-link" to="/#about">
+          <Icon type="down-arrow" />
+        </NuxtLink>
+      </div>
+
+    </div>
   </section>
 </template>
 
+<script lang="ts" setup>
+  import { heroFootItems } from "~/src/config";
+</script>
+
 <script lang="ts">
+// import { heroFootItems } from "~/src/config";
 export default {
   name: "Hero",
+  data() {
+    return {
+      footItemIndex: 0,
+    }
+  },
+  methods: {
+    tick() {
+      setTimeout(() => {
+        this.footItemIndex = (this.footItemIndex + 1) % heroFootItems.length;
+        this.tick();
+      }, 3000);
+
+    }
+  },
   computed: {
     font() {
       const fonts = [
@@ -38,7 +89,28 @@ export default {
         // "DM Mono",
       ]
       return fonts[Math.floor(Math.random() * fonts.length)];
+    },
+    footItems() {
+      const active = [];
+      
+      for (let i = this.footItemIndex; i < this.footItemIndex + 3; i++) {
+        const index = i % heroFootItems.length;
+        active.push(heroFootItems[index]);
+      }
+      return active;
     }
+  },
+  mounted() {
+    this.tick();
+    // let hero = document.getElementById('hero');
+    // hero.addEventListener('mousemove', e => {
+    //   let rect = hero.getBoundingClientRect();
+    //   let x = e.clientX - rect.left;
+    //   let y = e.clientY - rect.top;
+    //   hero.style.setProperty('--x', x + 'px');
+    //   hero.style.setProperty('--y', y + 'px');
+    // });
+    // this.$forceUpdate();
   }
 }
 </script>
@@ -57,15 +129,125 @@ export default {
   max-width: 900px
   margin-top: calc(0px - geometry.var("nav-height"))
   padding: 0 20px
+  // position: relative
   // @media(min-width: 1080px)
   //   & > :is(h1), & > * > :is(h1, h2, h3)
   //     opacity: 0.6
 
   //     &:hover, &:focus
   //       opacity: 1
+  // --x: 500
+  // --y: 200
+
+  // &::before
+  //   content: ''
+  //   color: colors.color(secondary-highlight)
+  //   // opacity: 0.5
+  //   $size: max(20vh, 10vw)
+    
+  //   position: absolute
+  //   left: var(--x)
+  //   top: var(--y)
+  //   width: $size
+  //   height: $size
+  //   transform: translate(-50%, -50%)
+  //   transition: all 0.5s ease-out
+  //   background: radial-gradient(circle closest-side, colors.color("primary-highlight"), transparent)
+    
 
   @media(max-height: 720px)
     margin-top: 0
+
+  .hero-footer
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    
+    padding: 2rem clamp(2rem, 5vw, 5rem)
+    max-height: 10%
+    height: 10%
+    width: 100%
+    // text-align: center
+    // font-size: 0.8rem
+    
+    // opacity: 0.5
+    display: flex
+    justify-content: space-between
+    text-align: left
+
+    .name
+      font-size: clamp(1.8rem, 1.6vw, 1rem)
+      color: colors.color(foreground)
+      font-weight: 600
+      font-family: typography.font(fredericka)
+      justify-content: center
+      align-items: center
+      display: flex
+
+    .item
+      flex: 1
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      // text-align: left
+
+      @media(max-width: 960px)
+        display: none
+
+    .single-item
+      display: none
+      
+
+      @media(max-width: 960px)
+        flex: 1
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: left
+        display: flex
+
+        .item-title
+          font-size: clamp(1.7rem, 1.6vw, 1.5rem)
+          margin-bottom: 0.5rem
+          color: rgba(colors.color(lightest-foreground), 0.9)
+          width: 100%
+
+        .item-subscript
+          font-size: clamp(0.8rem, 1.6vw, 1rem)
+          color: colors.color(foreground)
+          width: 100%
+      
+
+    .item-title
+      font-weight: 600
+      font-size: clamp(0.9rem, 2vw, 1.2rem)
+      margin-bottom: 0.5rem
+      color: rgba(colors.color(lightest-foreground), 0.9)
+      width: 100%
+
+    .item-subscript
+      font-size: clamp(0.7rem, 1.6vw, 1rem)
+      color: colors.color(foreground)
+      width: 100%
+
+    .arrow-link
+      all: unset
+      height: min(100%, 5vh)
+      width: min(100%, 5vh)
+      display: flex
+      align-items: center
+      justify-content: center
+      // background: yellow
+
+
+      &:is(::focus, ::hover)
+        color: green !important
+
+
+
+    
 
   .hero-content-container
     width: auto

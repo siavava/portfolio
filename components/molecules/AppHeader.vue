@@ -178,7 +178,7 @@ export default {
     },
     style() {
       return this.scrolledToTop
-        ? `box-shadow: none`
+        ? `box-shadow: none; background-color: none;`
         : `transform: translateY(-${this.scrollHeight}px)`;
     },
     scrolledToTop() {

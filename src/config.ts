@@ -60,27 +60,48 @@ const otherLinks = [
 
 const navLinks = { homeLinks, otherLinks };
 
-const colors = {
-    green: '#64ffda',
-    navy: '#0a192f',
-    darkNavy: '#020c1b',
-  };
+const heroFootItems = [
+  {
+    title: "Systems Engineering",
+    subscript: "scalable, high-performance design patterns",
+  },
+  {
+    title: "Theory of Computation",
+    subscript: "algorithms, automata theory",
+  },
+  { 
+    title: "Design",
+    subscript: "responsive and interactive experiences",
+  },
+  {
+    title: "Artificial Intelligence",
+    subscript: "deep learning, NLP, computer vision",
+  },
+  {
+    title: "Math",
+    subscript: "algebra, analysis, logic, game theory",
+  },
+  {
+    title: "Physics",
+    subscript: "particle physics",
+  },
+];
 
 const srConfig = (delay = 200, viewFactor = 0.25) => ({
-    origin: 'bottom',
-    distance: '20px',
-    duration: 500,
-    delay,
-    rotate: { x: 0, y: 0, z: 0 },
-    opacity: 0,
-    scale: 1,
-    easing: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
-    mobile: true,
-    reset: false,
-    useDelay: 'always',
-    viewFactor,
-    viewOffset: { top: 0, right: 0, bottom: 0, left: 0 },
-  });
+  origin: 'bottom',
+  distance: '20px',
+  duration: 500,
+  delay,
+  rotate: { x: 0, y: 0, z: 0 },
+  opacity: 0,
+  scale: 1,
+  easing: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
+  mobile: true,
+  reset: false,
+  useDelay: 'always',
+  viewFactor,
+  viewOffset: { top: 0, right: 0, bottom: 0, left: 0 },
+});
 
 const navHeight = 70; // px
 
@@ -89,4 +110,4 @@ const nonTocRoutes = [
   "/blog", "/blog/",
 ];
 
-export { email, social, navLinks, colors, srConfig, navHeight, nonTocRoutes };
+export { email, social, navLinks, heroFootItems, srConfig, navHeight, nonTocRoutes };
