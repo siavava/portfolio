@@ -61,7 +61,6 @@
 </script>
 
 <script lang="ts">
-// import { heroFootItems } from "~/src/config";
 export default {
   name: "Hero",
   data() {
@@ -127,6 +126,7 @@ export default {
   min-height: calc(100vh - geometry.var("nav-height"))
   padding-top: calc(geometry.var("nav-height"))
   padding: 0 20px
+
   // position: relative
   // @media(min-width: 1080px)
   //   & > :is(h1), & > * > :is(h1, h2, h3)
@@ -150,7 +150,7 @@ export default {
   //   height: $size
   //   transform: translate(-50%, -50%)
   //   transition: all 0.5s ease-out
-  //   background: radial-gradient(circle closest-side, colors.color("primary-highlight"), transparent)
+  //   background: radial-gradient(circle closest-side, rgba(colors.color("primary-highlight"), 0.4), transparent)
     
 
   .hero-footer
@@ -246,12 +246,24 @@ export default {
           color: colors.color(lightest-foreground)
 
         svg
+          // animate up and down
+          animation: up-down 1s ease-in-out infinite alternate
+
+
+
           &:is(:hover, :selected, :focus)
-            stroke-width: 0.7px
-            color: inherit !important
+            stroke-width: 1px
             cursor: pointer
-            transform: scale(1.1)
+            transform: scale(1.5)
             transition: all 0.2s ease-out
+
+          @keyframes up-down
+            0%
+              transform: translateY(0)
+            50%
+              transform: translateY(-5px)
+            100%
+              transform: translateY(0)
 
 
 
@@ -313,7 +325,6 @@ export default {
     font-family: typography.font("macondo")
     font-weight: 500
     font-size: clamp(40px, 6vw, 80px)
-    // opacity: 0.5
 
   .rubik-puddles
     font-family: typography.font("rubik-puddles")
