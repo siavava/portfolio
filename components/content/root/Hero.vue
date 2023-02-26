@@ -37,13 +37,15 @@
         </div>
       </div>
       <div
-        class="item" v-for="item in footItems">
-        <div class="item">
+        v-for="index in footItems"
+        class="item"
+      >
+        <div class="item-2">
           <div class="item-title">
-            {{ item.title }}
+            {{ heroFootItems[index].title }}
           </div>
           <div class="item-subscript">
-            {{ item.subscript }}
+            {{ heroFootItems[index].subscript }}
           </div>
         </div>
       </div>
@@ -73,7 +75,7 @@ export default {
       setTimeout(() => {
         this.footItemIndex = (this.footItemIndex + 1) % heroFootItems.length;
         this.tick();
-      }, 3000);
+      }, 4000);
 
     }
   },
@@ -93,7 +95,7 @@ export default {
       
       for (let i = this.footItemIndex; i < this.footItemIndex + 3; i++) {
         const index = i % heroFootItems.length;
-        active.push(heroFootItems[index]);
+        active.push(index);
       }
       return active;
     }
@@ -190,13 +192,13 @@ export default {
       flex-direction: column
       justify-content: center
       align-items: center
+      transition: all 0.5s ease-out
 
       @media(max-width: 960px)
         display: none
 
     .single-item
       display: none
-      
 
       @media(max-width: 960px)
         flex: 1

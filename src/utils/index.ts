@@ -38,6 +38,10 @@ export {
   joinPaths,
 };
 
+export function concatStrings(args: string[]) {
+  return args.join(" / ");
+}
+
 
 /**
  * Check if an element is in the viewport

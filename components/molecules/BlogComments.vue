@@ -17,7 +17,6 @@
           class="comment"
           :id="`comment-${i}`"
           v-if="comment.text"
-          :key="comment.id"
         >
           <div class="comment-header">
             <div class="author">
@@ -34,7 +33,7 @@
               class="comment-date"
               v-if="comment.date"
             >
-              {{ getCommentDateAsString(comment.date) }}
+              {{ getCommentDateAsString(new Date(comment.date)) }}
             </span>
           </div>
           <div class="comment-body">
@@ -59,18 +58,24 @@
               You are subscribed to this article, you'll be notified when new comments are posted.
               <br/>
               If no longer interested,
-              <a @click="() => { unsubscribe() }">unsubscribe</a>
+              <a @click="() => _unsubscribe()">unsubscribe</a>
               or <a @click="refreshSubscriptions">manage subscriptions</a>.
             </span>
             <span v-else>
               You are not subscribed to this article.
               <br/>
               If interested in getting updates,
-              <a @click="subscribe">subscribe</a>
+              <a @click="_subscribe">subscribe</a>
               or <a @click="refreshSubscriptions">manage subscriptions</a>.
             </span>
             <div class="all-subs-panel" >
             <div v-if="showAllSubscriptions">
+              <div v-if="allSubscriptions.length" class="active-subs-header">
+                Active Subscriptions:
+              </div>
+              <div v-else class="active-subs-header">
+                You are not subscribed to any articles.
+              </div>
               <div v-for="sub in allSubscriptions" class="sub">
                 <Alert class="user-alert" type="warning" :title="sub.category">
                   <NuxtLink :to="sub.path" class="sub-title">
@@ -86,14 +91,13 @@
                     <img alt="blog image" :src="`${sub.path}/${sub.image}`" />
                   </div>
                   <div class="sub-actions">
-                    <Button
-                      @click="() => { unsubscribe(sub.path) }"
-                      type="danger"
+                    <button
+                      @click="() => { _unsubscribe(sub.path) }"
                       size="small"
                       class="unsubscribe-button"
                     >
                       Unsubscribe
-                    </Button>
+                  </button>
                   </div>
                 </Alert>
                 </div>
@@ -175,39 +179,26 @@ import { getCommentDateAsString } from '~/src/utils';
 <script lang="ts">
 import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
 import {
-    getFirestore
-  , collection
-  , addDoc
-  , getDocs
-  , query
-  , orderBy
-  , where,
-doc,
-setDoc,
-getDoc
-} from "@firebase/firestore";
-
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
-import { MarkdownParsedContent } from '@nuxt/content/dist/runtime/types';
-
-// comment interface
-interface Comment {
-  id: string,
-  text: string,
-  author: string,
-  avatar: string,
-  date: Date,
-}
+  subscribe,
+  unsubscribe,
+  getAllSubscriptions,
+  syncSubscriptionStatus,
+  getCommentsByRoute,
+  getUserAvatar,
+  sendComment,
+  sendEmailToSubs,
+  Comment,
+  BlogPostMeta,
+normalizePath
+} from '~/src/users';
 
 export default {
   name: 'BlogComments',
 
-  // data
   data() {
     return {
       comment: '',
-      allComments: [],
+      allComments: new Array<Comment>(),
       showAuthPopup: false,
       avatar: '',
       userDependency: 0,
@@ -216,14 +207,37 @@ export default {
       allSubscriptions: [],
     };
   },
+
   watch: {
+
+    /**
+     * Show authentication popup
+     * when flag is set.
+     */
     showAuthPopup() {
       if (this.showAuthPopup && typeof document != 'undefined') {
         document.getElementById('auth-form-container')
           .classList.remove('hidden');
           this.showAuthPopup = false;
       }
-    }
+    },
+
+    /**
+     * Refresh relevant components
+     * when the user dependency changes.
+     */
+    userDependency() {
+      this.$forceUpdate();
+    },
+
+    /**
+     * Update subscriptions when flag is set to show all subs.
+     */
+    showAllSubscriptions() {
+      if (this.showAllSubscriptions) {
+        this._getAllSubscriptions();
+      }
+    },
   },
 
   methods: {
@@ -234,205 +248,90 @@ export default {
       this.showAuthPopup = false;
     },
 
-    subscribe() {
-      const db = getFirestore();
-      const { currentUser } = getAuth();
-      var { path } = useRoute();
+    /**
+     * Subscribe the user to current page.
+     */
+    _subscribe() {
+      subscribe().then((res) => {
+        this._getAllSubscriptions();
+        this.subscribed = res;
+        this.toggleUserDependency();
+      });
+    },
 
-      // add trailing slash if not present
-      if (path[path.length - 1] != '/') {
-        path += '/';
-      }
-      
-      const q = query(collection(db, "subscriptions"), where("page", "==", path));
+    /**
+     * Unsubscribes user from page at specified route
+     * 
+     * (defaults to current route).
+     */
+    _unsubscribe(_path? : string) {
 
-      getDocs(q)
-        .then((querySnapshot) => {
-          if (querySnapshot.size == 0) {
-            addDoc(collection(db, "subscriptions"), {
-              page: path,
-              subscribers: [currentUser.email]
-            });
-          } else {
-            querySnapshot.forEach((doc) => {
-              const subscribers = doc.data().subscribers;
-              subscribers.push(currentUser.email);
-              setDoc(doc.ref, {
-                page: path,
-                subscribers: subscribers
-              });
-            });
+      const currentPath = normalizePath(useRoute().path);
+      const path = _path ? normalizePath(_path) : currentPath;
+      unsubscribe(path).then((res) => {
+
+        if (path === currentPath) {
+          this.subscribed = false;
+        }
+
+        this._getAllSubscriptions();
+        this.allSubscriptions.filter((sub) => {
+          return sub.path !== path;
+        });
+      });
+    },
+    
+
+    /**
+     * Fetches all subscriptions for current user
+     * and updates this.allSubscriptions.
+     */
+    _getAllSubscriptions() {
+      getAllSubscriptions().then((res) => {
+
+        // remove unsubs
+        this.allSubscriptions = this.allSubscriptions.filter((sub) => {
+          return res.includes(sub);
+        });
+
+        // add new subs
+        res.forEach((sub) => {
+          if (!this.allSubscriptions.includes(sub)) {
+            this.allSubscriptions.push(sub);
           }
-          this.getAllSubscriptions();
-          this.subscribed = true;
-          
-        }).catch((error) => {
-          console.error("Error getting documents: ", error);
         });
-      
+        this.toggleUserDependency();
+      });
     },
 
-    unsubscribe(_path? : string) {
-      const db = getFirestore();
-
-      var path = _path || useRoute().path;
-      const { currentUser } = getAuth();
-
-      // add trailing slash to path
-      if (path[path.length - 1] != '/') path += '/';
-      
-      const q = query(collection(db, "subscriptions"), where("page", "==", path));
-
-      console.log("unsubscribe: ", path, currentUser.email)
-
-      getDocs(q)
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const subscribers = doc.data().subscribers;
-            const remainingSubscribers = subscribers.filter((email) => {
-              return email != currentUser.email;
-            });
-            setDoc(doc.ref, {
-              page: path,
-              subscribers: remainingSubscribers
-            });
-            this.getAllSubscriptions();
-            if (path == useRoute().path) this.subscribed = false;
-          });
-        }).catch((error) => {
-          console.error("Error getting documents: ", error);
-        });
-
-      // if (path == useRoute().path) this.subscribed = false;
-
-      // this.getAllSubscriptions();
-      
-    },
-    
-    getAllSubscriptions() {
-      const db = getFirestore();
-      const { path } = useRoute();
-      const { currentUser } = getAuth();
-      
-      // get all documents that have user email in subscribers
-      const q = query(
-        collection(db, "subscriptions"),
-        where("subscribers", "array-contains", currentUser.email));
-
-      getDocs(q)
-        .then(async (querySnapshot) => {
-          const paths = Array.from(new Set<string>(
-            querySnapshot.docs.map((doc) => {
-              var path = doc.data().page;
-              if (path.endsWith("/")) path = path.slice(0, -1);
-              return path;
-            })
-          ));
-          // this.allSubscriptions = [];
-          const allSubs = []
-          queryContent<MarkdownParsedContent>()
-            .where({ _path: { $in: paths } })
-            .find()
-            .then((data) => {
-              data.forEach((page) => {
-                allSubs.push({
-                  title: page?.title || "",
-                  path: page?._path || "",
-                  category: page?.category[0] || page?.category || '',
-                  description: page?.description || "",
-                  date: page?.date || "",
-                  image: page?.image || "",
-                });
-              });
-
-              // remove subs that have been deleted
-              this.allSubscriptions = allSubs.filter((sub) => {
-                return allSubs.includes(sub);
-              })
-
-              // add new subs
-              allSubs.forEach((sub) => {
-                if (!this.allSubscriptions.includes(sub)) {
-                  this.allSubscriptions.push(sub);
-                }
-              })
-            })
-          }).catch((error) => {
-            console.error("Error getting documents: ", error);
-        });
-      console.log(this.allSubscriptions);
-    },
-
+    /**
+     * Toggles whether all subs for current user are shown or not.
+     */
     refreshSubscriptions() {
-      if (this.showAllSubscriptions) {
-        this.showAllSubscriptions = false;
-        this.$forceUpdate();
-        return;
-      }
-
-      this.getAllSubscriptions();
-      this.showAllSubscriptions = true;
-      this.$forceUpdate();
+      this.showAllSubscriptions = !this.showAllSubscriptions;
     },
 
-    // sync subscription status with db
-    syncSubscriptionStatus() {
-      const db = getFirestore();
-      const { currentUser } = getAuth();
-      const { path } = useRoute();
-
-      // if user is not logged in, return
-      if (!currentUser) return;
-      
-      // query for current page in subscriptions
-      const q = query(collection(db, "subscriptions"), where("page", "==", path));
-
-      // get all subscriptions
-      getDocs(q)
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const subscribers = doc.data().subscribers;
-            if (subscribers.includes(currentUser.email)) {
-              this.subscribed = true;
-            } else {
-              this.subscribed = false;
-            }
-          });
-        }).catch((error) => {
-          console.error("Error getting document:", error);
-        });
+    /**
+     * Sync subscription status
+     * 
+     * (whether user is shown as subscribed to current page or not).
+     */
+    _syncSubscriptionStatus(_path?: string) {
+      syncSubscriptionStatus().then((res) => {
+        this.subscribed = res;
+      });
     },
     
 
 
 
-    // update comments
-    updateComments() {
-      const db = getFirestore();
-      const { path } = useRoute();
-      
-      const q = query(collection(db, "comments"), where("path", "==", path), orderBy("date", "asc"));
-      getDocs(q)
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-
-
-            // ignore if instance already in array
-            if (this.allComments.find(c => c.id === doc.id)) return;
-
-            // otherwise, construct and append.
-            const comment: Comment = {
-              id: doc.id,
-              text: doc.data().text,
-              author: doc.data().author || "anon",
-              avatar: doc.data().avatar,
-              date: new Date(doc.data().date),
-            }
-            
-            this.allComments.push(comment);
-          });
-        });
-        
+    /**
+     * Update Comments shown in the UI
+     */
+    _updateComments() {
+      getCommentsByRoute().then((res) => {
+        this.allComments = res;
+      });
     },
 
 
@@ -457,12 +356,17 @@ export default {
 
 
 
-    // submitComment
+    /**
+     * Submit a comment to the database.
+     * 
+     * If user is not logged in, show login popup.
+     * 
+     * If user is logged in but has no avatar,
+     *   generate an avatar and submit comment.
+     */
     submitComment() {
 
       if (!this.comment) return;
-
-      var timeOut = 0;
       
       const { path } = useRoute();
 
@@ -476,144 +380,91 @@ export default {
         return;
       }
       
-      const db = getFirestore();
-      
-      // if user has no avatar,
-      //  (1) query for avatar
-      //    (2) if no avatar, generate new one, and also push to db.
+      // generate avatar and submit comment.
       if (this.avatar === '') {
         
         // query for avatar
-        const q = query(collection(db, "avatars"), where("uid", "==", currentUser.uid));
-        getDocs(q)
-          .then((querySnapshot) => {
+        getUserAvatar().then((avatar) => {
+          this.avatar = avatar;
 
-            // if query is empty, generate new avatar
-            if (querySnapshot.size == 0) {
-              const avatar = createAvatar(lorelei, {
-                seed: `${currentUser?.uid} @ ${new Date().toISOString()}`,
-              });
-              // const _avatar = avatar.toString();
-              const newUserAvatar = {
-                uid: currentUser.uid,
-                avatar: avatar.toString()
-              }
-              addDoc(collection(db, "avatars"), newUserAvatar);
-              this.avatar = avatar.toString();
-              timeOut = 1000;  // need to wait for avatar to be generated
-            } else {
-              // get first avatar in querySnapshot
-              const doc = querySnapshot.docs[0];
-              this.avatar = doc.data().avatar;
-
-            }
+          const newComment: Comment = {
+            text: this.comment,
+            author: currentUser?.displayName,
+            avatar: this.avatar,
+            date: new Date().toISOString(),
+            path: normalizePath(path)
+          }
+          sendComment(newComment).then(() => {
+            sendEmailToSubs(path, newComment);
+            this._updateComments();
           });
-      }
-
-      setTimeout(() => {
-        const newComment = {
+        })
+      } else {
+        const newComment: Comment = {
           text: this.comment,
           author: currentUser?.displayName,
           avatar: this.avatar,
           date: new Date().toISOString(),
-          path: path
+          path: normalizePath(path)
         }
-        
-        addDoc(collection(db, "comments"), newComment)
-          .catch((error) => {
-            console.error("Error adding document: ", error);
-          });
+        sendComment(newComment).then(() => {
+          sendEmailToSubs(path, newComment);
+          this._updateComments();
+        });
+      }
 
-        // update comments!
-        this.updateComments();
-        this.comment = '';
-
-        // get subscribers to current page
-        const q = query(collection(db, "subscriptions"), where("page", "==", path));
-
-        // add notification message to mail collection
-        getDocs(q)
-          .then((querySnapshot) => {
-
-            // snapshot should contain single document with array of subscribers
-            const _subscribers: Array<Array<string>> = querySnapshot.docs.map(doc => doc.data().subscribers);
-
-            // if subscribers are > 0, 
-            //    create message body with link to current page
-            //    add message to mail collection
-
-            const subscribers = _subscribers[0] || [];
-            subscribers.filter(email => {
-              email !== currentUser?.email &&
-              email.length !== 0
-            });
-
-            if (subscribers.length === 0) return;
-
-            // get latest comment HTML
-            const commentHTML = document.getElementById(`comment-${this.allComments.length - 1}`).innerHTML || '';
-
-            const latestComment = this.allComments[this.allComments.length - 1];
-            const outMail = {
-              to: subscribers,
-              message: {
-                subject: `altair.fyi`,
-                text: `
-There is a new comment on a post you are subscribed to.
-
-At ${getCommentDateAsString(latestComment.date)}, ${latestComment.author} said: 
-
-
-${latestComment.text}
-
-
-Check it out here: https://altair.fyi${path}.`,
-                // html: ''
-              }
-            }
-
-            // add message to mail collection
-            addDoc(collection(db, "mail"), outMail)
-              .catch((error) => {
-                console.error("Error adding document: ", error);
-              });
-          });
-      }, timeOut);
+      // reset comment
+      this.comment = "";
     }
   },
 
 
   computed: {
+    
+    /**
+     * Get the currently logged in user.
+     * 
+     * The target is undefined in SSR mode, so ignore in SSR mode.
+     */
     currentUser() {
       this.userDependency;
       // ignore in SSR mode.
       if (typeof document == 'undefined') return;
 
-      return getAuth().currentUser;
+      const { currentUser } = getAuth();
+
+      return currentUser;
     },
+
+    /**
+     * Check if a user is logged in.
+     * 
+     * The target is undefined in SSR mode, so ignore in SSR mode.
+     */
     isLoggedIn() {
       this.userDependency;
       // ignore in SSR mode.
-      // if (typeof document == 'undefined') return false;
+      if (typeof document == 'undefined') return false;
 
       return this.currentUser ? true : false;
     }
   },
+
+  /**
+   * On mount (client-side only),
+   * 
+   * do some initial setup.
+   */
   mounted () {
-    this.updateComments();
+    this._updateComments();
 
     const auth  = getAuth();
     onAuthStateChanged(auth, () => {
       this.avatar = '';
-
-      setTimeout(() => {
-        this.syncSubscriptionStatus();
-        setTimeout(() => this.toggleUserDependency(), 500);
-
-      }, 500)
+      this._updateComments();
+      this._syncSubscriptionStatus();
+      this.toggleUserDependency();
     });
-
-    // set subscription status
   }
 };
 </script>
@@ -636,8 +487,6 @@ section.comments
   -moz-transition: all 0.1s ease-in-out
   -o-transition: all 0.1s ease-in-out
   transition: all 0.1s ease-in-out
-  
-  // transition: all 0.5s ease-in-out
 
   .section-title
     color: colors.color("secondary-highlight")
@@ -702,7 +551,6 @@ section.comments
     .comment
       margin: 1.5em
       padding: 1.5em
-      // border: 1px solid colors.color("lightest-background")
       background: colors.color(light-background)
       border-radius: 0.5rem
       line-height: 1.5
@@ -740,7 +588,6 @@ section.comments
           font-family: typography.font("monospace")
 
 .all-subs-panel
-  // height: 0
   overflow: hidden
   width: 100%
   height: auto !important
@@ -757,6 +604,12 @@ section.comments
   
   &::-webkit-scrollbar
     display: none !important
+
+  .active-subs-header
+    margin: 1rem 0
+    font-size: 1.5rem
+    font-weight: 600
+    // color: colors.color("secondary-highlight")
 
   .sub
     .sub-title
