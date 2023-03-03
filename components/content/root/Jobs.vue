@@ -31,7 +31,7 @@
       <StyledTabPanels>
         <TransitionGroup
           name="fade"
-          :timeout="50"
+          :timeout="250"
         >
           <StyledTabPanel
             v-for="job, i in jobs"

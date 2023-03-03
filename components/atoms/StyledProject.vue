@@ -138,7 +138,7 @@
     border-radius: geometry.var("border-radius")
     background-color: colors.color("light-background")
     color: colors.color("light-foreground")
-    // font-size: typography.font-size("m")
+    font-size: typography.font-size("l")
     z-index: 2
     display: flex
     flex-direction: column

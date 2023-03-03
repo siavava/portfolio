@@ -94,16 +94,13 @@ const { toc } = useContent();
   line-height: 2
   counter-reset: toc-0
 
-  
   .title
+    font-size: typography.font-size("xl")
     color: colors.color("primary-highlight")
-    font-weight: 800
+    font-weight: 700
     line-height: 2
+    text-decoration: underline
     min-width: 100%
-
-    text-transform: uppercase
-    font-size: typography.font-size("l")
-    font-family: typography.font("headings")
 
 
   .blog-categories

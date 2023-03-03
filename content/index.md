@@ -19,7 +19,7 @@ head:
 navigation:
   title: 'Home'
   icon: '🥶'
-layout: landing
+layout: default
 ---
 
 :hero

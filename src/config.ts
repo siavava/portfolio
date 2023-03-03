@@ -110,20 +110,4 @@ const nonTocRoutes = [
   "/blog", "/blog/",
 ];
 
-const heroCallOuts = [
-    { field: "tech", action: "build" }
-  , { field: "art", action: "create" }
-  , { field: "math", action: "solve" }
-  , { field: "physics", action: "explore" }
-]
-
-export {
-    email
-  , social
-  , navLinks
-  , heroFootItems
-  , srConfig
-  , navHeight
-  , nonTocRoutes
-  , heroCallOuts
-};
+export { email, social, navLinks, heroFootItems, srConfig, navHeight, nonTocRoutes };
