@@ -21,7 +21,15 @@ export default {
     "@nuxt/content",
     "@nuxt/ui",
     "@nuxt/image-edge",
+    '@nuxt/devtools',
   ],
+  devtools: {
+    // Enable devtools (default: true)
+    enabled: true,
+    // VS Code Server options
+    vscode: {},
+    // ...other options
+  },
   content: {
     documentDriven: {
       // Will fetch navigation, page and surround.

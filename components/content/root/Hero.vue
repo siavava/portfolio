@@ -1,5 +1,6 @@
 <template>
-  <section id="hero" class="hero">
+  <section id="hero">
+    <div class="hero">
     <!-- <div class="hero-background rubik-puddles">
       ALT
     </div> -->
@@ -79,6 +80,7 @@
             />
         </NuxtLink>
       </div>
+    </div>
     </div>
   </section>
 </template>
@@ -210,23 +212,27 @@ export default {
 @use "~/styles/typography"
 @use "~/styles/geometry"
 
-.hero
-  @include mixins.flex-center
-  flex-direction: column
-  align-items: center
+#hero
+
+  .hero
+    @include mixins.flex-center
+    flex-direction: column
+    width: 100%
+    min-height: 100%
+    align-items: center
+    position: absolute
+    top: 0
+    left: 0
+    
   min-height: calc(100vh - geometry.var("nav-height"))
-  padding-top: calc(geometry.var("nav-height"))
-  padding: 0 20px
   width: 100%
   position: relative
-  // background: yellow !important
 
   .hero-container
     .blurb-container
       width: fit-content
       font-family: typography.font("matter")
 
-      // transition: all 0.5s ease-in-out
       &.inactive
         display: none
       .big-title
@@ -234,8 +240,9 @@ export default {
         font-family: typography.font("big-heading")
         color: colors.color("white")
         font-size: clamp(20px, 8vw, 100px)
+        // font-size: 120px
         font-weight: 800
-        margin: 0
+        margin: 1rem 0
         padding: 0
 
         & > .strike-through
@@ -245,7 +252,7 @@ export default {
           color: colors.color(foreground)
 
     .pique
-      margin: 0px 0 10px 4px
+      margin: 1.5rem 0 1.5rem 0.2rem
 
       // color: colors.color("purple")
       // font-family: typography.font("sans-serif")
@@ -268,7 +275,8 @@ export default {
     .digression
       // font-family: typography.font("sans-serif")
       font-weight: 400
-      margin: 0 0 20px 4px
+      margin: 1.5rem 0 1.5rem 0.2rem
+
 
       &:is(:last-child)::after
         content: '.'
@@ -285,12 +293,16 @@ export default {
   .hero-footer
     position: absolute
     bottom: 0
-    left: 0
     right: 0
+    // bottom: 0
+    // right: 0
+    width: 100%
+    // background: red
+    align-self: flex-end
 
-    @media(max-height: 1020px)
-      position: relative
-      padding: 2rem 0
+    // @media(max-height: 1020px)
+    //   position: relative
+    //   padding: 2rem 0
 
     .down-link
       height: 60px
@@ -298,12 +310,16 @@ export default {
       display: flex
       align-items: center
       justify-content: center
-      position: relative
-      float: right
+      position: absolute
+      bottom: 0
+      right: 0
+      // float: right
       // margin: 0 80px 80px 0margin
       margin-right: 10%
       margin-bottom: 10%
-      display: none
+      // display: none
+      // background-color: yellow
+      float: right
       
 
 
