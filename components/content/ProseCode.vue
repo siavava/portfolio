@@ -139,11 +139,13 @@ export default {
               background-color: rgba(colors.color("lightest-background"), 0.3)
               width: 100%
               padding-right: 1em
+
               &::before
                 content: '+'
                 color: colors.color("critical-foreground")
                 color: colors.color("primary-highlight")
                 border-right: 1px solid
+                counter-increment: line
 
             &::before
               display: inline-block
@@ -154,7 +156,6 @@ export default {
               margin-right: 1em
               padding-right: 0.5em
               color: colors.color("lightest-background")
-              // font-weight: 600
               border-right: 1px solid colors.color("lightest-background")
 
             &:hover
@@ -162,11 +163,8 @@ export default {
 
               &::before
                 display: inline-block
-                // width: 2.5em
-                // text-align: right
                 content: counter(line)
                 counter-increment: line
-                // margin-right: 1em
                 padding-right: 0.5em
                 color: colors.color("lightest-foreground")
                 border-right: 1px solid
