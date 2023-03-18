@@ -99,7 +99,6 @@ const { toc } = useContent();
     color: colors.color("primary-highlight")
     font-weight: 700
     line-height: 2
-    text-decoration: underline
     min-width: 100%
 
 
@@ -143,20 +142,6 @@ const { toc } = useContent();
       &.active
         color: colors.color("primary-highlight")
         font-weight: 600
-
-
-// .navigation-old
-//   line-height: 2
-//   width: max-content
-//   color: colors.color("lightest-foreground")
-//   font-weight: 600
-
-//   display: flex
-//   flex-direction: column
-
-//   border-left: 3px solid colors.color("light-background")
-//   padding-left: 1em
-//   border-top: 1px solid colors.color("primary-highlight")
 
 </style>
 

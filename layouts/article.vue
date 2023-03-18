@@ -5,29 +5,22 @@
       <TableOfContents />
     </AppHeader>
     <BlogTitle />
-    <main>
+    <main class="article-main">
       <div class="body-and-panels">
-        <div class="left-panel">
+        <div class="left panel">
           <BlogNavigation class="article-blog-navigation" />
         </div>
         <body class="article-body">
           <div class="content">
-            <!-- <NuxtLink class="skip-to-content" to="#content"/> -->
-            <!-- <div class="container"> -->
-              <!-- <div class="content"> -->
-                <!-- <div> -->
-                  <slot id="content"/>
-                  <BlogComments id="blog-comments" ref="commentsSection" />
-                  <AuthenticationForm
-                    id="auth-form-container"
-                    class="hidden"
-                  />
-                <!-- </div> -->
-              <!-- </div> -->
-            <!-- </div> -->
+            <slot id="content"/>
+            <BlogComments id="blog-comments" ref="commentsSection" />
+            <AuthenticationForm
+              id="auth-form-container"
+              class="hidden"
+            />
           </div>
         </body>
-        <div class="right-panel">
+        <div class="right panel">
           <TableOfContents
             class="table-of-contents"
             v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
@@ -56,58 +49,39 @@ const authSection = ref<HTMLElement | null>(null);
 // function to toggle auth popup
 const toggleAuthPopup = () => {
   authPopUpVisible.value = !authPopUpVisible.value;
-  // commentsSection.value.showAuthPopup = authPopUpVisible.value;
 };
 </script>
 
-<script lang="ts">
-// export default {
-//   data() {
-
-//   },
-//   computed: {
-    
-//   },
-//   watch: {
-
-//   }
-// }
-</script>
 
 <style lang="sass" scoped>
 @use "../styles/default"
 @use "../styles/typography"
 @use "../styles/colors"
 @use "../styles/geometry"
-// @use "../styles/mixins"
+@use "../styles/mixins"
 
-// .article-body
-//   max-width: 100% !important
+.article-main
+  width: min(100%, 1300px)
 
 .article-blog-navigation
   position: sticky
   left: 0
-
-  // border-top: 1px solid colors.color("primary-highlight")
-  // border-bottom: 1px solid colors.color("primary-highlight")
 
 #root
   display: flex
   margin: 0 auto
   flex-direction: column
   min-height: 100vh
-  gap: 2vh
-  // max-width: 100vw
-  // overflow: hidden
+  gap: 10px
 
 .body-and-panels
   display: flex
   flex-direction: row
   margin: 0 auto
-  // width: 100%
+  gap: 10px
 
-  .right-panel
-    width: 300px
+  .panel
+    width: 350px
     padding: geometry.var("nav-height") 0
     height: fit-content
     position: sticky
@@ -117,45 +91,10 @@ const toggleAuthPopup = () => {
     @media(max-width: 1200px)
       display: none
 
-  .left-panel
-    width: 300px
-    padding: geometry.var("nav-height") 0
-    height: fit-content
-    position: sticky
-    top: 0
-    overflow: hidden
-
-    @media(max-width: 1200px)
-      display: none
-.container
-  position: relative
+.content
   margin: 0 auto
-  // padding: 0 1vw
+  width: min(100%, 80ch)
   font-size: typography.font-size("m")
-  display: flex
-  flex-direction: row
-  // background-color: green
-  width: min(90vw, 85ch)
-  // width: 100%
-  
-  // @media(max-width: 1200px)
-  //   padding: 0
-
-
-  .content
-    
-    // width: 70%
-    // max-width: 85ch
-    margin: 0 auto
-    background-color: yellow
-    width: min(90vw, 85ch)
-
-  // hide side-panel on mobile
-  // @media (max-width: 1200px)
-    
-  //   .content
-  //     width: 100%
-  //     max-width: 85ch
 
 
 h1

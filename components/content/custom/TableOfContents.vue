@@ -5,7 +5,7 @@
     <ul
       class="toc"
     >
-      <span class="title"> Table of Contents </span>
+      <span class="title"> Current Page </span>
       <li
         v-for="link in toc.links"
         :key="link.text"
@@ -198,7 +198,6 @@ const { toc } = useContent();
     color: colors.color("primary-highlight")
     font-weight: 600
     line-height: 2
-    text-decoration: underline
     min-width: 100%
 
   .toc-link-1
