@@ -10,21 +10,21 @@
         <div class="left-panel">
           <BlogNavigation class="article-blog-navigation" />
         </div>
-        <body>
+        <body class="article-body">
           <div class="content">
-            <a class="skip-to-content" href="#content"/>
-            <div class="container">
-              <div class="content">
-                <div>
+            <!-- <NuxtLink class="skip-to-content" to="#content"/> -->
+            <!-- <div class="container"> -->
+              <!-- <div class="content"> -->
+                <!-- <div> -->
                   <slot id="content"/>
                   <BlogComments id="blog-comments" ref="commentsSection" />
                   <AuthenticationForm
                     id="auth-form-container"
                     class="hidden"
                   />
-                </div>
-              </div>
-            </div>
+                <!-- </div> -->
+              <!-- </div> -->
+            <!-- </div> -->
           </div>
         </body>
         <div class="right-panel">
@@ -81,6 +81,9 @@ const toggleAuthPopup = () => {
 @use "../styles/geometry"
 // @use "../styles/mixins"
 
+// .article-body
+//   max-width: 100% !important
+
 .article-blog-navigation
   position: sticky
   left: 0
@@ -101,13 +104,10 @@ const toggleAuthPopup = () => {
   display: flex
   flex-direction: row
   margin: 0 auto
-  width: 100%
+  // width: 100%
 
   .right-panel
-    min-width: 240px
-    max-width: 240px
-    // margin-right: 10px
-    margin-left: 20px
+    width: 300px
     padding: geometry.var("nav-height") 0
     height: fit-content
     position: sticky
@@ -115,14 +115,10 @@ const toggleAuthPopup = () => {
     overflow: hidden
 
     @media(max-width: 1200px)
-      display: none !important
+      display: none
 
   .left-panel
-    min-width: 240px
-    max-width: 240px
-    width: 240px
-    margin-left: 10px
-    margin-right: 10px
+    width: 300px
     padding: geometry.var("nav-height") 0
     height: fit-content
     position: sticky
@@ -134,27 +130,32 @@ const toggleAuthPopup = () => {
 .container
   position: relative
   margin: 0 auto
-  padding: 0 1vw
+  // padding: 0 1vw
   font-size: typography.font-size("m")
   display: flex
   flex-direction: row
+  // background-color: green
+  width: min(90vw, 85ch)
+  // width: 100%
   
-  @media(max-width: 1200px)
-    padding: 0
+  // @media(max-width: 1200px)
+  //   padding: 0
 
 
   .content
-    // width: max(60vw, 75ch)
-    width: 100%
-    max-width: 85ch
+    
+    // width: 70%
+    // max-width: 85ch
     margin: 0 auto
+    background-color: yellow
+    width: min(90vw, 85ch)
 
   // hide side-panel on mobile
-  @media (max-width: 1200px)
+  // @media (max-width: 1200px)
     
-    .content
-      width: 100%
-      max-width: 85ch
+  //   .content
+  //     width: 100%
+  //     max-width: 85ch
 
 
 h1
