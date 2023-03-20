@@ -134,6 +134,7 @@ export default {
           flex-direction: column
 
           & > span
+            counter-increment: line
 
             &.highlight
               background-color: rgba(colors.color("lightest-background"), 0.3)
@@ -145,14 +146,12 @@ export default {
                 color: colors.color("critical-foreground")
                 color: colors.color("primary-highlight")
                 border-right: 1px solid
-                counter-increment: line
 
             &::before
               display: inline-block
               width: 2.5em
               text-align: right
               content: counter(line)
-              counter-increment: line
               margin-right: 1em
               padding-right: 0.5em
               color: colors.color("lightest-background")
@@ -164,7 +163,6 @@ export default {
               &::before
                 display: inline-block
                 content: counter(line)
-                counter-increment: line
                 padding-right: 0.5em
                 color: colors.color("lightest-foreground")
                 border-right: 1px solid
