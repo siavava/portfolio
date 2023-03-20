@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { heroFootItems, heroCallOuts } from "~/src/config";
+  import { heroFootItems, heroCallOuts } from "~/modules/config";
 </script>
 
 <script lang="ts">

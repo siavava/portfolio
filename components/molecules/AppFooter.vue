@@ -11,7 +11,7 @@
             aria-label="link to my {{ link.name }} page"
           >
             <Icon :type="link.title" />
-      </NuxtLink>
+          </NuxtLink>
         </li>
       </ul>
     </div>
@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { social } from '~/src/config';
+import { social } from '~/modules/config';
 
 interface GitHubInfo {
   stars?: Number;

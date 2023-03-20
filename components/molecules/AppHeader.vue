@@ -156,7 +156,7 @@
 
 <script lang="ts">
 
-import { navHeight, nonTocRoutes } from "~/src/config";
+import { navHeight, nonTocRoutes } from "~/modules/config";
 
 export default {
   name: "AppHeader",
@@ -316,8 +316,8 @@ export default {
 //
 //
 
-import { navLinks } from "~/src/config";
-import { loaderDelay as timeout } from '~/src/utils';
+import { navLinks } from "~/modules/config";
+import { loaderDelay as timeout } from '~/modules/utils';
 
 const { path: currentPage } = useRoute();
 const { toc } = useContent();

@@ -177,8 +177,8 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { getCommentDateAsString } from "~/src/utils";
-import { concatStrings } from "~/src/utils";
+import { getCommentDateAsString } from "~/modules/utils";
+import { concatStrings } from "~/modules/utils";
 const { data: blogs } = await useAsyncData(
   `blogs-${useRoute().path}`,
   async () => {

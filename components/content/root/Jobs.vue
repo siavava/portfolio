@@ -65,8 +65,8 @@
 
 import {
   NumRefManager
-} from "~/src/utils";
-import { KEY_CODES } from '~/src/utils';
+} from "~/modules/utils";
+import { KEY_CODES } from '~/modules/utils';
 import { ref } from "vue";
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 

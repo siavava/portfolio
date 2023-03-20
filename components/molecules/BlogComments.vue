@@ -173,7 +173,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCommentDateAsString } from '~/src/utils';
+import { getCommentDateAsString } from '~/modules/utils';
 </script>
 
 <script lang="ts">
@@ -190,7 +190,7 @@ import {
   Comment,
   BlogPostMeta,
 normalizePath
-} from '~/src/users';
+} from '~/modules/users';
 
 export default {
   name: 'BlogComments',

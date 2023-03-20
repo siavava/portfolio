@@ -51,7 +51,7 @@ import {
   elementIsAtTop,
   elementIsBelowScreen,
   elementIsAboveScreen
-} from "~/src/utils";
+} from "~/modules/utils";
 
 export default {
   name: "TableOfContents",

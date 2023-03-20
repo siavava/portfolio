@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { loaderDelay as timeout } from '~/src/utils';
+import { loaderDelay as timeout } from '~/modules/utils';
 </script>
 
 <script lang="ts">

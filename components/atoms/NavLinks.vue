@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { navLinks } from "~/src/config";
-  import { loaderDelay } from '~/src/utils';
+  import { navLinks } from "~/modules/config";
+  import { loaderDelay } from '~/modules/utils';
 
   const { homeLinks } = navLinks;
 

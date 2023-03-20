@@ -140,7 +140,7 @@ import {
   addDoc,
 collection
 } from '@firebase/firestore';
-import { NumRefManager } from '~/src/utils';
+import { NumRefManager } from '~/modules/utils';
 
 export default {
   name: 'AuthenticationForm',
