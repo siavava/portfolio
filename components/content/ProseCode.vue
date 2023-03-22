@@ -137,7 +137,7 @@ export default {
             counter-increment: line
 
             &.highlight
-              background-color: rgba(colors.color("lightest-background"), 0.3)
+              background-color: rgba(colors.color("light-background"), 1.0)
               width: 100%
               padding-right: 1em
 

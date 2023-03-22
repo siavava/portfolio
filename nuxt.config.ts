@@ -22,6 +22,7 @@ export default {
     "@nuxt/ui",
     "@nuxt/image-edge",
     '@nuxt/devtools',
+    "@pinia/nuxt",
   ],
   devtools: {
     // Enable devtools (default: true)

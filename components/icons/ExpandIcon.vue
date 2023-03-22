@@ -4,25 +4,31 @@
       aria-hidden="true"
       role="img"
       class="collapse"
-      viewBox="0 0 16 16"
-      width="16" height="16"
+      width="24" height="24"
       fill="currentColor"
-      style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 24 24"
     >
-      <path d="M10.896 2H8.75V.75a.75.75 0 00-1.5 0V2H5.104a.25.25 0 00-.177.427l2.896 2.896a.25.25 0 00.354 0l2.896-2.896A.25.25 0 0010.896 2zM8.75 15.25a.75.75 0 01-1.5 0V14H5.104a.25.25 0 01-.177-.427l2.896-2.896a.25.25 0 01.354 0l2.896 2.896a.25.25 0 01-.177.427H8.75v1.25zm-6.5-6.5a.75.75 0 000-1.5h-.5a.75.75 0 000 1.5h.5zM6 8a.75.75 0 01-.75.75h-.5a.75.75 0 010-1.5h.5A.75.75 0 016 8zm2.25.75a.75.75 0 000-1.5h-.5a.75.75 0 000 1.5h.5zM12 8a.75.75 0 01-.75.75h-.5a.75.75 0 010-1.5h.5A.75.75 0 0112 8zm2.25.75a.75.75 0 000-1.5h-.5a.75.75 0 000 1.5h.5z" />
+      <path 
+        fill="currentColor"
+        d="M12 7.59L7.05 2.64L5.64 4.05L12 10.41l6.36-6.36l-1.41-1.41L12 7.59zM5.64
+            19.95l1.41 1.41L12 16.41l4.95 4.95l1.41-1.41L12 13.59l-6.36 6.36z"/>
     </svg>
   
-    <svg
-      aria-hidden="true"
+    <svg aria-hidden="true"
       role="img"
       class="expand"
-      viewBox="0 0 16 16"
-      width="16" height="16"
+      viewBox="0 0 24 24"
+      width="24" height="24"
       fill="currentColor"
-      style="display: inline-block; user-select: none; vertical-align: text-bottom; overflow: visible;"
     >
-      <path d="M8.177.677l2.896 2.896a.25.25 0 01-.177.427H8.75v1.25a.75.75 0 01-1.5 0V4H5.104a.25.25 0 01-.177-.427L7.823.677a.25.25 0 01.354 0zM7.25 10.75a.75.75 0 011.5 0V12h2.146a.25.25 0 01.177.427l-2.896 2.896a.25.25 0 01-.354 0l-2.896-2.896A.25.25 0 015.104 12H7.25v-1.25zm-5-2a.75.75 0 000-1.5h-.5a.75.75 0 000 1.5h.5zM6 8a.75.75 0 01-.75.75h-.5a.75.75 0 010-1.5h.5A.75.75 0 016 8zm2.25.75a.75.75 0 000-1.5h-.5a.75.75 0 000 1.5h.5zM12 8a.75.75 0 01-.75.75h-.5a.75.75 0 010-1.5h.5A.75.75 0 0112 8zm2.25.75a.75.75 0 000-1.5h-.5a.75.75 0 000 1.5h.5z" />
+      <path
+        fill="currentColor"
+        d="m12 19.24l-4.95-4.95l-1.41 1.42L12 22.07l6.36-6.36l-1.41-1.42L12 
+            19.24zM5.64 8.29l1.41 1.42L12 4.76l4.95 4.95l1.41-1.42L12 1.93L5.64 8.29z"/>
     </svg>
+
   </div>
 </template>
 
@@ -33,14 +39,20 @@ export default {
 </script>
 
 <style lang="sass">
+@use "~/styles/colors"
 .expand-icon
-
+  color: colors.color("light-foreground")
   aspect-ratio: 1/1
-  max-height: 1em
+  height: 1.2em !important
+  
+  
+  svg
+    fill: none
+    stroke: currentcolor
+    stroke-width: 1
 
   .expand
     display: block !important
-    // color: yellow
 
   .collapse
     display: none !important

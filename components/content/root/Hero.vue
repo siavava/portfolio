@@ -156,7 +156,6 @@ export default {
         this.footItemIndex = (this.footItemIndex + 1) % heroFootItems.length;
         this.activeCallOutIndex = this.activeCallOutIndex + 1 % 1000;
         this.changeAction();
-        // this.tick();
       }, 5000);
 
     }
@@ -195,7 +194,7 @@ export default {
     }
   },
   mounted() {
-    this.changeAction();
+    // this.changeAction();
     this.tick();
   },
   watch: {
@@ -249,14 +248,10 @@ export default {
           // background: yellow
           text-decoration: line-through
           text-decoration-thickness: 2px
-          color: colors.color(foreground)
+          color: colors.color(dark-foreground)
 
     .pique
-      margin: 1.5rem 0 1.5rem 0.2rem
-
-      // color: colors.color("purple")
-      // font-family: typography.font("sans-serif")
-      // text-transform: uppercase
+      margin: 1.5em 0 0.5em 0.2rem
 
       font-size: clamp(typography.font-size("l"), 3vw, typography.font-size("xl"))
       font-weight: 800
@@ -275,7 +270,7 @@ export default {
     .digression
       // font-family: typography.font("sans-serif")
       font-weight: 400
-      margin: 1.5rem 0 1.5rem 0.2rem
+      margin: 0.5rem 0 1.5rem 0.2rem
 
 
       &:is(:last-child)::after

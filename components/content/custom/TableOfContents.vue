@@ -9,16 +9,16 @@
       <li
         v-for="link in toc.links"
         :key="link.text"
-        :class="{
-          'toc-link-1': true,
-          'active': activeTocElementIds.includes(link.id) ||
-            (link.children &&
-              link.children.some(child => activeTocElementIds.includes(child.id)))
-        }"
       >
         <a
           :href="`#${link.id}`"
           :id="`link-${link.id}`"
+          :class="{
+          'toc-link level-1': true,
+          'active': activeTocElementIds.includes(link.id) ||
+            (link.children &&
+              link.children.some(child => activeTocElementIds.includes(child.id)))
+        }"
         >
           {{ link.text }}
         </a>
@@ -26,14 +26,15 @@
           <li
             v-for="child in link.children"
             :key="child.text"
-            :class="{
-              'toc-link-2': true,
-              'active': activeTocElementIds.includes(child.id),
-            }"
+            
           >
             <a
               :href="`#${child.id}`"
               :id="`link-${child.id}`"
+              :class="{
+              'toc-link level-2': true,
+              'active': activeTocElementIds.includes(child.id),
+            }"
             >
               {{ child.text }}
             </a>
@@ -200,49 +201,38 @@ const { toc } = useContent();
     line-height: 2
     min-width: 100%
 
-  .toc-link-1
-    // margin-left: 1em
-    font-size: typography.font-size("s")
-    // font-size: 1
+  .toc-link
+    display: block
     font-weight: 500
     counter-reset: toc-2
-    // color: colors.color("lightest-foreground")
-    color: colors.color("fancy-background")
+    color: colors.color("dark-foreground")
+    position: relative
+    border-left: 3px solid
 
     -webkit-transition: all 0.1s ease-in-out
     -moz-transition: all 0.1s ease-in-out
     -ms-transition: all 0.1s ease-in-out
     -o-transition: all 0.1s ease-in-out
     transition: all 0.1s ease-in-out
+
+    &:hover
+      border-left: 3px solid colors.color("dark-foreground")
+      color: colors.color("primary-highlight") !important
+
     
-    &::before
-      counter-increment: toc-1
-      content: counter(toc-1) "."
-      margin-right: 0.5em
+
+    &.level-1
+      padding-left: 1em
+      font-size: typography.font-size("s")
+      
+
+    &.level-2
+      padding-left: 2em
+      font-size: typography.font-size("xs")
+
+    &.active, &.active:hover
+      border-left: 3px solid colors.color("primary-highlight")
       color: colors.color("primary-highlight")
 
-    &.active
-      color: colors.color("primary-highlight")
-.toc-link-2
-  margin-left: 1em
-  font-size: typography.font-size("xs")
-  font-weight: 400
-  line-height: 2
-  color: colors.color("fancy-background")
-
-  -webkit-transition: all 0.1s ease-in-out
-  -moz-transition: all 0.1s ease-in-out
-  -ms-transition: all 0.1s ease-in-out
-  -o-transition: all 0.1s ease-in-out
-  transition: all 0.1s ease-in-out
-
-  &::before
-    counter-increment: toc-2
-    content: counter(toc-1) "." counter(toc-2) "."
-    margin-right: 0.5em
-    color: colors.color("primary-highlight")
-
-  &.active
-    color: colors.color("primary-highlight")
 </style>
 

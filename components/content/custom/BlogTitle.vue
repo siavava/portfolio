@@ -73,8 +73,6 @@
     display: flex
     flex-direction: column
 
-
-
     .title
       width: 100%
 
@@ -97,10 +95,6 @@
           display: inline-flex
           flex-direction: row
           cursor: pointer
-          // position: absolute
-          // top: 50%
-          // transform: translateY(-60%)
-          // left: 2.5rem
 
 
           .category-label

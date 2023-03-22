@@ -27,6 +27,7 @@
   <BlogTheoryIcon   v-else-if="type?.toLowerCase() === 'blog-theory'" />
   <BlogPublicationsIcon v-else-if="type?.toLowerCase() === 'blog-publications'" />
   <ExpandIcon       v-else-if="type?.toLowerCase() === 'expand'" />
+  <ExpandDiagonalIcon       v-else-if="type?.toLowerCase() === 'expand-diagonal'" />
   <DownArrowIcon    v-else-if="type?.toLowerCase() === 'down-arrow'" />
   <ExternalLinkIcon v-else />
 </template>

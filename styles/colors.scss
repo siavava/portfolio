@@ -110,29 +110,35 @@ $palette: (
   "purple": #a374ff,
   "khaki": #ffd074,
   "white": #ecf7fa,
-  "black": #282723,
+  "black": #050505,
+  "ochre": #ff4e20,
+  "pastel": #fdfd96,
 
 
-  "primary-highlight": #DC4D4D,
-  // "primary-highlight": #16f1d1,
+  // "primary-highlight": #DC4D4D,
+  "primary-highlight": #d55959,
+  // "primary-highlight": #ff4e20,
 
 
   "primary-highlight-tint": rgba(202, 85, 85, 0.11) ,
   // "secondary-highlight": rgb(187, 255, 0),
-  "secondary-highlight": #ffd074,
+  // "secondary-highlight": #fdfd96,
+  "secondary-highlight": #ca8282,
+  // "secondary-highlight": #a374ff,
   
-  "background": #0a192f,
-  "dark-background": #020c1b,
-  "light-background": #112240,
-  "lightest-background": #233554,
+  "background": #1b1818,
+  // "background": #050505,
+  "dark-background": #000000,
+  "light-background": #2a2525,
+  "lightest-background": #906969,
   "fancy-background": lighten(#0a192f, 40%),
-  "shadow": rgba(2, 12, 27, 0.7),
+  "shadow": rgba(27, 2, 2, 0.7),
 
 
-  "dark-foreground": #495670,
-  "foreground": #8892b0,
-  "light-foreground": #a8b2d1,
-  "lightest-foreground": #ccd6f6,
+  "dark-foreground": #9f8585,
+  "foreground": #b9a0a0,
+  "light-foreground": #e9c9c9,
+  "lightest-foreground": #f8d0d0,
 
   "info-background": rgba(5, 95, 249, 0.1),
   "info-foreground": #7aade0,

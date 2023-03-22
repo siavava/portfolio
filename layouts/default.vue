@@ -35,7 +35,18 @@
 </style>
 
 <script setup lang="ts">
-// import observe from "~/src/observer";
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { useUserInfo } from '~/composables/users';
 
-// onMounted(observe);
+
+onMounted(() => {
+  const userInfo = useUserInfo();
+  // listen for auth state changes
+  const auth = getAuth();
+  userInfo.update();
+  onAuthStateChanged(auth, (user) => {
+      // update user info
+      userInfo.update();
+  });
+});
 </script>

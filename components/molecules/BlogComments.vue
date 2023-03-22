@@ -4,7 +4,7 @@
 
     <div class="current-comments">
       <div
-        v-if="!allComments.length"
+        v-if="!userInfo.getComments.length"
         class="no-comments"
       >
         <Alert type="info">
@@ -12,40 +12,17 @@
         </Alert>
       </div>
   
-      <template v-for="(comment, i) in allComments">
-        <div
-          class="comment"
-          :id="`comment-${i}`"
-          v-if="comment.text"
-        >
-          <div class="comment-header">
-            <div class="author">
-              <div
-                  v-if="comment.avatar"
-                  class="author-avatar"
-                  v-html="comment.avatar"
-                />
-              <div class="author-name">
-                {{ comment.author }}
-              </div>
-            </div>
-            <span
-              class="comment-date"
-              v-if="comment.date"
-            >
-              {{ getCommentDateAsString(new Date(comment.date)) }}
-            </span>
-          </div>
-          <div class="comment-body">
-            {{ comment.text }}
-          </div>
-        </div>
+      <template v-for="(comment, i) in userInfo.getComments">
+        <BlogComment :comment="comment" :id="i" />
+        <!-- </div> -->
       </template>
     </div>
 
 
     <div class="new-comment">
       <h2 class="section-subtitle">Thoughts?</h2>
+
+      {{  userInfo.getSubscriptionPaths }}
       
       <p class="signed-in-info">
 
@@ -54,29 +31,29 @@
           <span v-if="isLoggedIn">
             You are signed in as <strong class="username"> {{ currentUser.displayName }}</strong>.
             <br/>
-            <span v-if="subscribed">
+            <span v-if="userInfo.isSubscribed()">
               You are subscribed to this article, you'll be notified when new comments are posted.
               <br/>
               If no longer interested,
-              <a @click="() => _unsubscribe()">unsubscribe</a>
+              <a @click="() => userInfo.unsubscribe()">unsubscribe</a>
               or <a @click="refreshSubscriptions">manage subscriptions</a>.
             </span>
             <span v-else>
               You are not subscribed to this article.
               <br/>
               If interested in getting updates,
-              <a @click="_subscribe">subscribe</a>
+              <a @click="() => userInfo.subscribe()">subscribe</a>
               or <a @click="refreshSubscriptions">manage subscriptions</a>.
             </span>
             <div class="all-subs-panel" >
             <div v-if="showAllSubscriptions">
-              <div v-if="allSubscriptions.length" class="active-subs-header">
+              <div v-if="userInfo.subscriptions.size" class="active-subs-header">
                 Active Subscriptions:
               </div>
               <div v-else class="active-subs-header">
                 You are not subscribed to any articles.
               </div>
-              <div v-for="sub in allSubscriptions" class="sub">
+              <div v-for="sub in userInfo.subscriptions" class="sub">
                 <Alert class="user-alert" type="warning" :title="sub.category">
                   <NuxtLink :to="sub.path" class="sub-title">
                     {{ sub.title }}
@@ -92,7 +69,7 @@
                   </div>
                   <div class="sub-actions">
                     <button
-                      @click="() => { _unsubscribe(sub.path) }"
+                      @click="() => { userInfo.unsubscribe(sub.path) }"
                       size="small"
                       class="unsubscribe-button"
                     >
@@ -173,38 +150,28 @@
 </template>
 
 <script lang="ts" setup>
-import { getCommentDateAsString } from '~/modules/utils';
+import { getCommentDateAsString, normalizePath } from '~/modules/utils';
 </script>
 
 <script lang="ts">
 import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
-import {
-  subscribe,
-  unsubscribe,
-  getAllSubscriptions,
-  syncSubscriptionStatus,
-  getCommentsByRoute,
-  getUserAvatar,
-  sendComment,
-  sendEmailToSubs,
-  Comment,
-  BlogPostMeta,
-normalizePath
-} from '~/modules/users';
-
+import markdownParser from '@nuxt/content';
+import { useUserInfo } from '~/composables/users';
+import type { Comment, UserInfo, BlogPostMeta } from "~/modules/utils";
 export default {
   name: 'BlogComments',
 
   data() {
     return {
       comment: '',
-      allComments: new Array<Comment>(),
+      // allComments: new Array<Comment>(),
       showAuthPopup: false,
-      avatar: '',
+      // avatar: '',
       userDependency: 0,
-      subscribed: false,
+      // subscribed: false,
       showAllSubscriptions: false,
-      allSubscriptions: [],
+      // allSubscriptions: [],
+      userInfo: useUserInfo(),
     };
   },
 
@@ -229,15 +196,11 @@ export default {
     userDependency() {
       this.$forceUpdate();
     },
-
-    /**
-     * Update subscriptions when flag is set to show all subs.
-     */
-    showAllSubscriptions() {
-      if (this.showAllSubscriptions) {
-        this._getAllSubscriptions();
-      }
-    },
+    
+    userInfo() {
+      // this.toggleUserDependency();
+      this.$forceUpdate();
+    }
   },
 
   methods: {
@@ -248,61 +211,61 @@ export default {
       this.showAuthPopup = false;
     },
 
-    /**
-     * Subscribe the user to current page.
-     */
-    _subscribe() {
-      subscribe().then((res) => {
-        this._getAllSubscriptions();
-        this.subscribed = res;
-        this.toggleUserDependency();
-      });
-    },
+    // /**
+    //  * Subscribe the user to current page.
+    //  */
+    // _subscribe() {
+    //   subscribe().then((res) => {
+    //     this._getAllSubscriptions();
+    //     this.subscribed = res;
+    //     this.toggleUserDependency();
+    //   });
+    // },
 
-    /**
-     * Unsubscribes user from page at specified route
-     * 
-     * (defaults to current route).
-     */
-    _unsubscribe(_path? : string) {
+    // /**
+    //  * Unsubscribes user from page at specified route
+    //  * 
+    //  * (defaults to current route).
+    //  */
+    // _unsubscribe(_path? : string) {
 
-      const currentPath = normalizePath(useRoute().path);
-      const path = _path ? normalizePath(_path) : currentPath;
-      unsubscribe(path).then((res) => {
+    //   const currentPath = normalizePath(useRoute().path);
+    //   const path = _path ? normalizePath(_path) : currentPath;
+    //   unsubscribe(path).then((res) => {
 
-        if (path === currentPath) {
-          this.subscribed = false;
-        }
+    //     if (path === currentPath) {
+    //       this.subscribed = false;
+    //     }
 
-        this._getAllSubscriptions();
-        this.allSubscriptions.filter((sub) => {
-          return sub.path !== path;
-        });
-      });
-    },
+    //     this._getAllSubscriptions();
+    //     this.allSubscriptions.filter((sub) => {
+    //       return sub.path !== path;
+    //     });
+    //   });
+    // },
     
 
-    /**
-     * Fetches all subscriptions for current user
-     * and updates this.allSubscriptions.
-     */
-    _getAllSubscriptions() {
-      getAllSubscriptions().then((res) => {
+    // /**
+    //  * Fetches all subscriptions for current user
+    //  * and updates this.allSubscriptions.
+    //  */
+    // _getAllSubscriptions() {
+    //   getAllSubscriptions().then((res) => {
 
-        // remove unsubs
-        this.allSubscriptions = this.allSubscriptions.filter((sub) => {
-          return res.includes(sub);
-        });
+    //     // remove unsubs
+    //     this.allSubscriptions = this.allSubscriptions.filter((sub) => {
+    //       return res.includes(sub);
+    //     });
 
-        // add new subs
-        res.forEach((sub) => {
-          if (!this.allSubscriptions.includes(sub)) {
-            this.allSubscriptions.push(sub);
-          }
-        });
-        this.toggleUserDependency();
-      });
-    },
+    //     // add new subs
+    //     res.forEach((sub) => {
+    //       if (!this.allSubscriptions.includes(sub)) {
+    //         this.allSubscriptions.push(sub);
+    //       }
+    //     });
+    //     this.toggleUserDependency();
+    //   });
+    // },
 
     /**
      * Toggles whether all subs for current user are shown or not.
@@ -315,24 +278,24 @@ export default {
      * Sync subscription status
      * 
      * (whether user is shown as subscribed to current page or not).
-     */
-    _syncSubscriptionStatus(_path?: string) {
-      syncSubscriptionStatus().then((res) => {
-        this.subscribed = res;
-      });
-    },
+    //  */
+    // _syncSubscriptionStatus(_path?: string) {
+    //   syncSubscriptionStatus().then((res) => {
+    //     this.subscribed = res;
+    //   });
+    // },
     
 
 
 
-    /**
-     * Update Comments shown in the UI
-     */
-    _updateComments() {
-      getCommentsByRoute().then((res) => {
-        this.allComments = res;
-      });
-    },
+    // /**
+    //  * Update Comments shown in the UI
+    //  */
+    // _updateComments() {
+    //   getCommentsByRoute().then((res) => {
+    //     this.allComments = res;
+    //   });
+    // },
 
 
 
@@ -379,40 +342,14 @@ export default {
         this.signIn();
         return;
       }
-      
-      // generate avatar and submit comment.
-      if (this.avatar === '') {
-        
-        // query for avatar
-        getUserAvatar().then((avatar) => {
-          this.avatar = avatar;
-
-          const newComment: Comment = {
-            text: this.comment,
-            author: currentUser?.displayName,
-            avatar: this.avatar,
-            date: new Date().toISOString(),
-            path: normalizePath(path)
-          }
-          sendComment(newComment).then(() => {
-            sendEmailToSubs(path, newComment);
-            this._updateComments();
-          });
-        })
-      } else {
-        const newComment: Comment = {
-          text: this.comment,
-          author: currentUser?.displayName,
-          avatar: this.avatar,
-          date: new Date().toISOString(),
-          path: normalizePath(path)
-        }
-        sendComment(newComment).then(() => {
-          sendEmailToSubs(path, newComment);
-          this._updateComments();
-        });
+      const newComment: Comment = {
+        text: this.comment,
+        author: currentUser?.displayName,
+        avatar: this.userInfo.avatar,
+        date: new Date().toISOString(),
+        path: normalizePath(path)
       }
-
+      this.userInfo.sendComment(newComment);
       // reset comment
       this.comment = "";
     }
@@ -456,13 +393,10 @@ export default {
    * do some initial setup.
    */
   mounted () {
-    this._updateComments();
+    // this._updateComments();
 
     const auth  = getAuth();
     onAuthStateChanged(auth, () => {
-      this.avatar = '';
-      this._updateComments();
-      this._syncSubscriptionStatus();
       this.toggleUserDependency();
     });
   }
@@ -541,51 +475,6 @@ section.comments
       .button
         @include mixins.big-button
         margin: 1rem auto
-
-  .current-comments
-    .zero-comment-disclaimer-icon
-      width: 30px
-      font-size: 2rem
-      color: colors.color("secondary-highlight")
-      margin-bottom: 1rem
-    .comment
-      margin: 1.5em
-      padding: 1.5em
-      background: colors.color(light-background)
-      border-radius: 0.5rem
-      line-height: 1.5
-
-      .comment-body
-        white-space: pre-line
-        line-height: 1.3
-
-      .comment-header
-        margin: 0.5rem 0 1rem 0
-        .author
-          display: inline-flex
-          width: 100%
-          min-height: 30px
-          .author-avatar
-            width: 30px
-            height: 30px
-            border-radius: 50%
-            margin-right: 0.5rem
-
-          .author-name
-            font-weight: 600
-            width: fit-content
-            height: fit-content
-            vertical-align: middle
-            color: colors.color("secondary-highlight")
-            bottom: 0
-            transform: translateY(30%)
-          
-        .comment-date
-          font-size: 0.8em
-          margin-left: 1em
-          color: colors.color("primary-highlight")
-          text-align: left
-          font-family: typography.font("monospace")
 
 .all-subs-panel
   overflow: hidden

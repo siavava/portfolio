@@ -6,29 +6,27 @@
 $border-radius: geometry.radius("small")
 
 @mixin button
-  color: colors.color("primary-highlight")
-  background-color: transparent
   border-radius: geometry.var("border-radius")
   font-size: typography.font-size("xs")
   font-family: typography.font("monospace")
   line-height: 1
-  text-decoration: none
   cursor: pointer
-  padding: 1.25rem 1.75rem
-  transition: geometry.var("default-transition")
   padding: 1.25rem 1.75rem
 
   margin-top: 50px
   color: colors.color("lightest-foreground")
-  background-color: colors.color("primary-highlight-tint")
-  border: none  // remove terrible border
-  outline: none
+  background: linear-gradient(35deg, colors.color("primary-highlight-tint"), transparent)
+  background-size: 100% 200%
+  
 
+  // background: colors.color("primary-highlight-tint")
+  background-position: right
   &:hover, &:focus, &:active
+    background-position: left
     color: colors.color("primary-highlight")
     outline: none
-  &:after
-    display: none !important
+    // border: 4px solid transparent
+
 
 @mixin flex-center
   display: flex
@@ -191,7 +189,6 @@ $border-radius: geometry.radius("small")
     color: colors.color("light-foreground")
     font-family: typography.font("monospace")
     font-size: typography.font-size("xs")
-    // font-weight: 600
     white-space: nowrap
   
   @media (max-width: 768px) 
@@ -206,6 +203,61 @@ $border-radius: geometry.radius("small")
   margin: 0
 
 @mixin fancy-background
-  background-image: radial-gradient(circle at 2px 2px, rgba(colors.color(primary-highlight), 30%), 2px, transparent 0)
-  background-size: 20px 20px
+  background-image: radial-gradient(circle at 2px 2px, rgba(colors.color(primary-highlight), 30%), 5px, transparent 70%), linear-gradient(0deg, transparent 49%, rgba(colors.color(primary-highlight), 30%) 2px, transparent 51%)
+  background-size: 80px 80px
   background-repeat: repeat
+
+@mixin fancy-card
+  // border: 3px solid colors.color("purple")
+  position: relative
+  // background-color: colors.color("black")
+  transition: scale 250ms ease
+
+  *
+    position: relative
+    z-index: 12 !important
+
+    &::hover
+      color: white !important
+
+
+  &::before
+    content: ""
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    background: linear-gradient(130deg, transparent 0 33%, colors.color("teal") 46%, colors.color("purple") 73.5%, colors.color("ochre") 100%)
+    background-position: 0% 0%
+    background-size: 300% 300%
+    z-index: 10
+    pointer-events: none
+    transition: background-position 350ms ease, transform 650ms ease
+
+  &::after
+    content: ""
+    position: absolute
+    left: 0
+    top: 0
+    width: 98%
+    height: 100%
+    background: radial-gradient(colors.color("white") 8%, transparent 8%)
+    background-size: 10px 10px
+    transition: background-position 650ms ease, transform 650ms ease
+    z-index: 11
+    pointer-events: none
+    transform: translateX(2%)
+
+  &:hover
+    border-color: transparent
+    scale: 1.005
+    
+    &::before
+      background-position: 100% 100%
+
+      *
+        color: colors.color("white") !important
+
+    &::after
+      transform: translateX(0%)

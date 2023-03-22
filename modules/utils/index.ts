@@ -123,3 +123,44 @@ export function getCommentDateAsString(date: Date) {
   });
   }
 }
+
+/**
+ * Normalize a path by removing trailing slash.
+ */
+export function normalizePath(path: string) {
+  return (path[path.length - 1] == '/')
+  ? path.slice(0, -1)
+  : path;
+}
+
+/**
+ * Comment Interface
+ */ 
+interface Comment {
+  text: string,
+  author: string,
+  avatar: string,
+  date: string,
+  path: string,
+}
+
+interface BlogPostMeta {
+  title: string,
+  path: string,
+  category: string,
+  description: string,
+  date: Date,
+  image: string,
+}
+
+interface UserInfo {
+  active: boolean,
+  userName: string,
+  avatar: string,
+  email: string,
+  uid: string,
+  subscriptions: Set<BlogPostMeta>,
+  currentRouteComments: Comment[],
+}
+
+export type { Comment, BlogPostMeta, UserInfo };

@@ -115,6 +115,29 @@
             Home
           </NuxtLink>
         </div>
+        <!-- <div class="user-info">
+          <div v-if="userInfo.active">
+            <div class="user-header">
+              <div
+                class="user-avatar"
+                v-html="userInfo.avatar"
+              />
+              <div class="user-header-text">
+                <div class="user-name">
+                  {{ userInfo.userName }}
+                </div>
+                <div class="user-email">
+                  {{ userInfo.email }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <div class="user-info-name">
+              Not logged in
+            </div>
+          </div>
+        </div> -->
         <div class="menu-extras-footer">
           <AppFooter class="menu-footer in-header"/>
         </div>
@@ -310,14 +333,13 @@ export default {
 
 <script lang="ts" setup>
 
-//
-//
-// MENU BUTTON STUFF
-//
-//
 
 import { navLinks } from "~/modules/config";
 import { loaderDelay as timeout } from '~/modules/utils';
+import { useUserInfo } from "~~/composables/users";
+// import { UserInfo } from "~/modules/users";
+
+const userInfo = useUserInfo();
 
 const { path: currentPage } = useRoute();
 const { toc } = useContent();
@@ -451,7 +473,7 @@ const { data: researchMeta } = await useAsyncData(
 .header-nav
   @include mixins.flex-between
   position: relative
-  color: colors.color("lightest-foreground")
+  color: colors.color("light-foreground")
   font-family: typography.font("monospace")
   counter-reset: item
   margin: 0 auto
@@ -487,7 +509,7 @@ const { data: researchMeta } = await useAsyncData(
   width: 100%
   margin: 0 auto
   overflow-y: scroll
-  color: colors.color("lightest-foreground")
+  color: colors.color("light-foreground")
   font-weight: 500
   line-height: 2
   max-height: 0
@@ -535,7 +557,7 @@ const { data: researchMeta } = await useAsyncData(
 .menu-column-header
   font-family: typography.font("sans-serif")
   font-size: typography.font-size("xl")
-  color: colors.color("lightest-foreground")
+  color: colors.color("light-foreground")
 
 .menu-column-item
   font-family: typography.font("sans-serif")
@@ -548,7 +570,7 @@ const { data: researchMeta } = await useAsyncData(
   justify-content: space-between
   height: 100%
   width: 100%
-  border-top: 1px solid colors.color("lightest-background")
+  border-top: 1px solid colors.color("light-background")
 
 .menu-extras-links
   display: flex
@@ -606,7 +628,7 @@ const { data: researchMeta } = await useAsyncData(
     white-space: nowrap
     align-items: flex-start
     font-size: typography.font-size("m")
-    color: colors.color('fancy-background')
+    color: colors.color('foreground')
     font-weight: 500
 
     margin-top: 0
@@ -677,5 +699,49 @@ const { data: researchMeta } = await useAsyncData(
 
   * > .toc .toc-link-2
     display: none
+
+.user-info
+  display: flex
+  justify-content: center
+  align-items: center
+  margin: auto 0
+  padding: 0 2vw
+  background: red
+  .user-header
+    display: flex
+    flex-direction: row
+    align-items: center
+    margin-bottom: 10px
+
+    .user-avatar
+      width: 40px
+      height: 40px
+      border-radius: 50%
+      margin-right: 10px
+      margin-top: 10px
+      margin-bottom: 10px
+      background-size: cover
+      background-position: center
+      background-repeat: no-repeat
+
+    .user-header-text
+      display: flex
+      flex-direction: column
+      justify-content: center
+      background: yellow
+      line-height: 1.5
+
+
+      .user-name
+        font-family: typography.font("sans-serif")
+        font-size: typography.font-size("m")
+        color: colors.color("lightest-foreground")
+        font-weight: 500
+
+      .user-email
+        font-family: typography.font("sans-serif")
+        font-size: typography.font-size("m")
+        color: colors.color("light-foreground")
+        font-weight: 400
 
 </style>

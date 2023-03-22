@@ -14,3 +14,22 @@
     layout: 'error' // you can set a custom layout for the error page
   }
 </script>
+
+<script setup lang="ts">
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { useUserInfo } from '~~/composables/users';
+
+
+onMounted(() => {
+  const { updateUserInfo } = useUserInfo();
+  // listen for auth state changes
+  const auth = getAuth();
+  updateUserInfo();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // update user info
+      updateUserInfo();
+    }
+  });
+});
+</script>

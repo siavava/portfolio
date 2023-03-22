@@ -34,6 +34,8 @@
 </template>
 
 <script setup lang="ts">
+import { useUserInfo}  from "~/composables/users";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 const { path: currentPage } = useRoute();
 const { toc } = useContent();
 
@@ -50,6 +52,16 @@ const authSection = ref<HTMLElement | null>(null);
 const toggleAuthPopup = () => {
   authPopUpVisible.value = !authPopUpVisible.value;
 };
+
+onMounted(() => {
+  const userInfo = useUserInfo();
+  // listen for auth state changes
+  const auth = getAuth();
+  userInfo.update();
+  onAuthStateChanged(auth, (_user) => {
+    userInfo.update();
+  });
+});
 </script>
 
 
