@@ -42,14 +42,7 @@
 
               <ContentDoc :value="project" />
 
-              <span v-if="project.date" class="project-date">
-                {{ new Date(project.date)
-                  .toLocaleDateString('en-us', {
-                    month: 'short',
-                    year: 'numeric',
-                  })
-                }}
-              </span>
+              <Date v-if="project.date" class="featured-project-date" :date="project.date" :weekday="false" :left="i % 2 == 0" />
             </div>
           </div>
           <ul class="project-tech-list">

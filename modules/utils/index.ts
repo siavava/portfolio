@@ -1,3 +1,4 @@
+import { MarkdownRoot } from "@nuxt/content/dist/runtime/types";
 import { NumRefManager } from "./AllAboutRefs";
 import { joinPaths } from "./paths";
 
@@ -151,6 +152,7 @@ interface BlogPostMeta {
   description: string,
   date: Date,
   image: string,
+  excerpt: string | MarkdownRoot,
 }
 
 interface UserInfo {

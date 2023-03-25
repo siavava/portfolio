@@ -20,6 +20,6 @@ h1
   margin-top: 1.5rem
   margin-bottom: 1.5rem
   font-weight: 700
-  font-size: typography.font-size("heading")
+  font-size: typography.font-size("xxl")
   color: colors.color("primary-highlight")
 </style>

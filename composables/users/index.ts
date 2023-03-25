@@ -34,6 +34,9 @@ export const useUserInfo = defineStore("userInfo", {
     },
     getAvatar() {
       return this.avatar;
+    },
+    getSubscriptionCount() {
+      return this.subscriptions.size;
     }
     
   },
@@ -128,6 +131,19 @@ export const useUserInfo = defineStore("userInfo", {
       });
     },
 
+    toggleSubscription(blogPath?: string) {
+      const path = normalizePath(blogPath || useRoute().path);
+      this.isSubscribed(path)
+        ? this.unsubscribe(path)
+        : this.subscribe(path);
+    },
+
+    /**
+     * Sends email to all subscribers of a page
+     * on a new comment.
+     * 
+     * @param comment comment to send email about
+     */
     async sendEmailToSubs(comment: Comment) {
       const db = getFirestore();
       const { currentUser } = getAuth();
@@ -257,6 +273,7 @@ export const useUserInfo = defineStore("userInfo", {
                 description: page?.description || "",
                 date: page?.date || "",
                 image: page?.image || "",
+                excerpt: page?.excerpt || "",
               });
             });
           });

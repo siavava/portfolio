@@ -12,9 +12,15 @@ export default {
 
 <style lang="sass">
 @use "~/styles/mixins"
+@use "~/styles/colors"
 
 .styled-button
   @include mixins.big-button
-  margin: calc(min(2em, 2vw))
+  margin: 1em min(2em, 2vw)
+  border: 2px solid colors.color("lightest-background")
+
+  &:hover
+    cursor: pointer
+    border: 2px solid transparent
 </style>
 

@@ -3,8 +3,6 @@ title: Test of Blog Elements
 description: Setting Up and Running Nuxt in 4 Steps.
 category:
   - misc
-  - featured
-  - development
 draft: false
 layout: article
 date: 2022-12-21
@@ -17,33 +15,10 @@ navigation: true
 
 # This is H1 that Spans Multiple Lines
 
-My given name is [Amittai][amittai], but my preferred name ad 2022
-is [Altair][altair].
-I am a current student at Dartmouth College, and some would say
-a wannabe software engineer. I am passionate about data and computation,
-especially in the context of society and how those two can drive changes.
-My interests include deep learning and everything in the AI space,
-data engineering, systems, and, somehow, lately, a little bit of
-web development. I am also a big fan of the [Haskell][haskell]
-programming language and functional programming patterns in general.
+This page is a test of various blog elements.
+Nothing important to be found here.  But, it lives anyhow.
 
-When not coding or studying Math, I am probably sleeping,
-playing online chess, shooting photos that I will never
-put out into the world, or, on occasion, playing
-[Assassin's Creed][assassins-creed] 
-([Origins][assassins-creed-origins], anyone?).
-
-<!-- ::code-group
-```bash [Yarn]
-yarn create nuxt-app <project-name>
-```
-```bash [NPX]
-npx create-nuxt-app <project-name>
-```
-```bash [NPM]
-npm init nuxt-app <project-name>
-```
-:: -->
+<!-- more -->
 
 > Art is standing with one hand extended into the universe
 > and one hand extended into the world
@@ -57,7 +32,8 @@ npm init nuxt-app <project-name>
 >   - Physicist
 >   - Nobel Laureate
 > </quote-author>
-> 
+
+
 
 ## This is H2 that Spans Multiple Lines
 

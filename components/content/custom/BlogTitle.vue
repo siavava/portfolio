@@ -17,15 +17,7 @@
         </div>
         <h1 class="title-heading">{{title}}</h1>
         <p class="title-description">{{description}}</p>
-        <span class="date">
-          {{ new Date(date)
-            .toLocaleDateString('en-us', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })
-          }}
-        </span>
+        <Date :date="date" />
       </div>
       <figure
         v-if="image"

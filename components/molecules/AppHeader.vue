@@ -50,10 +50,10 @@
             to="/blog"
             class="menu-column-header"
           >
-            <strong> Blog </strong>
+            <strong> Featured </strong>
           </NuxtLink>
           <ul>
-            <li v-for="item in featuredBlogsMeta">
+            <li v-for="item in featuredBlogs">
               <NuxtLink
                 :to="item._path"
                 class="menu-column-item"
@@ -68,10 +68,10 @@
             to="/blog"
             class="menu-column-header"
           >
-            <strong> Publications </strong>
+            <strong> Latest </strong>
           </NuxtLink>
           <ul>
-            <li v-for="item in publicationsMeta">
+            <li v-for="item in latestBlogs">
               <NuxtLink
                 :to="item._path"
                 class="menu-column-item"
@@ -82,62 +82,18 @@
           </ul>
         </div>
         <div class="menu-column">
-          <NuxtLink
-            to="/blog"
-            class="menu-column-header"
-          >
-            <strong> Research </strong>
-          </NuxtLink>
-          <ul>
-            <li v-for="item in researchMeta">
-              <NuxtLink
-                :to="item._path"
-                class="menu-column-item"
-              >
-                {{ item.title }}
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="menu-extras">
-        <div class="menu-extras-links">
-          <NuxtLink
-            to="/#about"
-            class="menu-column-header"
-          >
-            About
-          </NuxtLink>
           <NuxtLink
             to="/"
             class="menu-column-header"
           >
-            Home
+            <strong> Apps </strong>
           </NuxtLink>
+          <div>
+            happening soon.
+          </div>
         </div>
-        <!-- <div class="user-info">
-          <div v-if="userInfo.active">
-            <div class="user-header">
-              <div
-                class="user-avatar"
-                v-html="userInfo.avatar"
-              />
-              <div class="user-header-text">
-                <div class="user-name">
-                  {{ userInfo.userName }}
-                </div>
-                <div class="user-email">
-                  {{ userInfo.email }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            <div class="user-info-name">
-              Not logged in
-            </div>
-          </div>
-        </div> -->
+      </div>
+      <div class="menu-extras">
         <div class="menu-extras-footer">
           <AppFooter class="menu-footer in-header"/>
         </div>
@@ -212,10 +168,6 @@ export default {
     route() {
       return useRoute().path;
     },
-    // tocValid() {
-    //   // console.log(`toc.links: ${toc.links}`)
-    //   return toc.links;
-    // }
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -224,20 +176,6 @@ export default {
     this.height = navHeight; //this.$el.offsetHeight;
 
     this.setup();
-
-    // const rawAnchors = document.getElementsByTagName("h2");
-
-    // for (let i=0; i<Math.min(5, rawAnchors.length); i++) {
-    //   const name = rawAnchors.item(i).innerText;
-    //   const url = `${this.route}#${rawAnchors.item(i).id.toString()}`;
-    //   this.anchors.push({ name, url });
-    // }
-
-    // update height on resize!
-    //! No longer necessary since we no longer shift from 100px to 70px
-    // window.addEventListener("resize", () => {
-    //   this.height = this.$el.offsetHeight || 0;
-    // });
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.handleScroll);
@@ -373,7 +311,7 @@ const toggleMenu = () => {
 }
 
 /// DATA 
-const { data: featuredBlogsMeta } = await useAsyncData(
+const { data: featuredBlogs } = await useAsyncData(
   `featured-blogs-meta`,
   async () => {
     const _blogs = queryContent("blog/posts")
@@ -387,16 +325,13 @@ const { data: featuredBlogsMeta } = await useAsyncData(
 });
 
 /// PUBLICATIONS
-const { data: publicationsMeta } = await useAsyncData(
+const { data: latestBlogs } = await useAsyncData(
   `publication-blogs-meta`,
   async () => {
     const _blogs = queryContent("blog/posts")
       .where({ draft: false })
-
-      // select blogs that have publications as one of the categories
-      .where({ category: { $contains: "publications" } } )
       .only(["_path", "title", "date", "description", "tags",])
-      .limit(5)
+      .limit(7)
       .sort({ date: -1 })
       .find();
     return await _blogs;
@@ -455,7 +390,6 @@ const { data: researchMeta } = await useAsyncData(
 
   @media (prefers-reduced-motion: no-preference)
     box-shadow: 0 10px 30px -10px colors.color("shadow")
-    box-shadow: 0 10px 30px -10px colors.color("shadow")
 
   max-height: 90vh
   overflow-y: scroll
@@ -468,6 +402,13 @@ const { data: researchMeta } = await useAsyncData(
 
   // &.collapse-into-page
   //   border-bottom: 1px solid colors.color(lightest-background)
+
+  .footer-link
+    background: none !important
+    border: 2px solid colors.color("light-background") !important
+
+    &:hover
+      background: colors.color("light-background") !important
 
 
 .header-nav
@@ -572,29 +513,27 @@ const { data: researchMeta } = await useAsyncData(
   width: 100%
   border-top: 1px solid colors.color("light-background")
 
-.menu-extras-links
-  display: flex
-  justify-items: center
-  flex-direction: column
-  margin-left: 10px
-  align-items: left
-  margin: 40px
-  color: colors.color("primary-highlight")
 
 .menu-extras-footer
-  width: 50%
-
-  @media (max-width: 768px)
-    width: 100%
+  width: 100%
 
   .menu-footer
-    float: right
+    // float: right
     margin-top: 20px
-    top: 0px
+    // top: 0px
     width: 100%
+    margin: 0 auto
 
     &.in-header
       border-top: none
+
+      .styled-button
+        background: transparent !important
+        border: 2px solid colors.color("lightest-background") !important
+
+        &:hover
+          background: colors.color("lightest-background") !important
+          border: 2px solid transparent
 
 .search-bar
   border-top: 3px dotted colors.color("lightest-background")
@@ -706,7 +645,6 @@ const { data: researchMeta } = await useAsyncData(
   align-items: center
   margin: auto 0
   padding: 0 2vw
-  background: red
   .user-header
     display: flex
     flex-direction: row

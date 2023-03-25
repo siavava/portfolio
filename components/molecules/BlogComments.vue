@@ -22,69 +22,55 @@
     <div class="new-comment">
       <h2 class="section-subtitle">Thoughts?</h2>
 
-      {{  userInfo.getSubscriptionPaths }}
+      <!-- {{  userInfo.getSubscriptionPaths }} -->
       
       <p class="signed-in-info">
 
         
-        <Alert  class="user-alert" :type="isLoggedIn ? 'info' : 'error'">
-          <span v-if="isLoggedIn">
+        <Alert :type="isLoggedIn ? 'info' : 'error'">
+          <div v-if="isLoggedIn">
             You are signed in as <strong class="username"> {{ currentUser.displayName }}</strong>.
             <br/>
             <span v-if="userInfo.isSubscribed()">
               You are subscribed to this article, you'll be notified when new comments are posted.
-              <br/>
-              If no longer interested,
-              <a @click="() => userInfo.unsubscribe()">unsubscribe</a>
-              or <a @click="refreshSubscriptions">manage subscriptions</a>.
             </span>
             <span v-else>
               You are not subscribed to this article.
-              <br/>
-              If interested in getting updates,
-              <a @click="() => userInfo.subscribe()">subscribe</a>
-              or <a @click="refreshSubscriptions">manage subscriptions</a>.
             </span>
-            <div class="all-subs-panel" >
-            <div v-if="showAllSubscriptions">
-              <div v-if="userInfo.subscriptions.size" class="active-subs-header">
-                Active Subscriptions:
+              <div>
+                <StyledButton @click="() => { userInfo.toggleSubscription() }">
+                  {{  userInfo.isSubscribed() ? 'Unsubscribe' : 'Subscribe' }}
+                </StyledButton>
+                <StyledButton href="/blog">manage subscriptions</StyledButton>
+                <StyledButton
+                  class="button"
+                  type="button"
+                  @click="() => userInfo.active ? _signOut() : signIn()"
+                >
+                  {{ userInfo.active ? "sign out" : "sign in" }}
+                </StyledButton>
               </div>
-              <div v-else class="active-subs-header">
-                You are not subscribed to any articles.
-              </div>
-              <div v-for="sub in userInfo.subscriptions" class="sub">
-                <Alert class="user-alert" type="warning" :title="sub.category">
-                  <NuxtLink :to="sub.path" class="sub-title">
-                    {{ sub.title }}
-                  </NuxtLink>
-                  <div class="sub-description">
-                    {{ sub.description }}
-                  </div>
-                  <div v-if="sub.date" class="sub-date">
-                    {{ getCommentDateAsString(new Date(sub.date)) }}
-                  </div>
-                  <div class="sub-image">
-                    <img alt="blog image" :src="`${sub.path}/${sub.image}`" />
-                  </div>
-                  <div class="sub-actions">
-                    <button
-                      @click="() => { userInfo.unsubscribe(sub.path) }"
-                      size="small"
-                      class="unsubscribe-button"
-                    >
-                      Unsubscribe
-                  </button>
-                  </div>
-                </Alert>
-                </div>
-              </div>
-            </div>
-          </span>
-          <span v-else>
+          </div>
+          <div v-else>
             You are not signed in. <br/>
             Sign in (or sign up) to comment/subscribe.
-          </span>
+            <StyledButton
+            v-if="isLoggedIn"
+            class="button"
+            type="button"
+            @click="_signOut"
+          >
+            sign out
+          </StyledButton>
+          <StyledButton
+            v-else
+            class="button"
+            type="button"
+            @click="signIn"
+          >
+            sign in
+          </StyledButton>
+          </div>
         
       </Alert>
           
@@ -120,29 +106,29 @@
           v-model="comment"
         />
         <div class="button-container">
-          <button
+          <StyledButton
             class="button"
             type="button"
             @click="submitComment"
           >
             comment
-          </button>
-          <button
+        </StyledButton>
+          <StyledButton
             v-if="isLoggedIn"
             class="button"
             type="button"
             @click="_signOut"
           >
             sign out
-          </button>
-          <button
+          </StyledButton>
+          <StyledButton
             v-else
             class="button"
             type="button"
             @click="signIn"
           >
             sign in
-          </button>
+        </StyledButton>
         </div>
       </form>
     </div>
@@ -211,61 +197,6 @@ export default {
       this.showAuthPopup = false;
     },
 
-    // /**
-    //  * Subscribe the user to current page.
-    //  */
-    // _subscribe() {
-    //   subscribe().then((res) => {
-    //     this._getAllSubscriptions();
-    //     this.subscribed = res;
-    //     this.toggleUserDependency();
-    //   });
-    // },
-
-    // /**
-    //  * Unsubscribes user from page at specified route
-    //  * 
-    //  * (defaults to current route).
-    //  */
-    // _unsubscribe(_path? : string) {
-
-    //   const currentPath = normalizePath(useRoute().path);
-    //   const path = _path ? normalizePath(_path) : currentPath;
-    //   unsubscribe(path).then((res) => {
-
-    //     if (path === currentPath) {
-    //       this.subscribed = false;
-    //     }
-
-    //     this._getAllSubscriptions();
-    //     this.allSubscriptions.filter((sub) => {
-    //       return sub.path !== path;
-    //     });
-    //   });
-    // },
-    
-
-    // /**
-    //  * Fetches all subscriptions for current user
-    //  * and updates this.allSubscriptions.
-    //  */
-    // _getAllSubscriptions() {
-    //   getAllSubscriptions().then((res) => {
-
-    //     // remove unsubs
-    //     this.allSubscriptions = this.allSubscriptions.filter((sub) => {
-    //       return res.includes(sub);
-    //     });
-
-    //     // add new subs
-    //     res.forEach((sub) => {
-    //       if (!this.allSubscriptions.includes(sub)) {
-    //         this.allSubscriptions.push(sub);
-    //       }
-    //     });
-    //     this.toggleUserDependency();
-    //   });
-    // },
 
     /**
      * Toggles whether all subs for current user are shown or not.
@@ -274,41 +205,16 @@ export default {
       this.showAllSubscriptions = !this.showAllSubscriptions;
     },
 
-    /**
-     * Sync subscription status
-     * 
-     * (whether user is shown as subscribed to current page or not).
-    //  */
-    // _syncSubscriptionStatus(_path?: string) {
-    //   syncSubscriptionStatus().then((res) => {
-    //     this.subscribed = res;
-    //   });
-    // },
-    
-
-
-
-    // /**
-    //  * Update Comments shown in the UI
-    //  */
-    // _updateComments() {
-    //   getCommentsByRoute().then((res) => {
-    //     this.allComments = res;
-    //   });
-    // },
-
-
-
     toggleUserDependency() {
       this.userDependency = (this.userDependency + 1) % 100;
     },
 
 
 
-    _signOut() {
+    async _signOut() {
       const auth  = getAuth();
       
-      signOut(auth);
+      await signOut(auth);
     },
 
 
@@ -410,6 +316,11 @@ export default {
 @use "~/styles/mixins"
 @use "~/styles/default"
 
+.styled-button::hover
+  cursor: pointer
+  text-decoration: none !important
+  background: yellow !important
+
 section.comments
   margin-top: 20px
   margin-bottom: 20px
@@ -421,6 +332,8 @@ section.comments
   -moz-transition: all 0.1s ease-in-out
   -o-transition: all 0.1s ease-in-out
   transition: all 0.1s ease-in-out
+
+
 
   .section-title
     color: colors.color("secondary-highlight")

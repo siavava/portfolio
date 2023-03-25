@@ -205,15 +205,15 @@ const { toc } = useContent();
     display: block
     font-weight: 500
     counter-reset: toc-2
-    color: colors.color("dark-foreground")
+    // color: colors.color("dark-foreground")
     position: relative
     border-left: 3px solid
 
-    -webkit-transition: all 0.1s ease-in-out
-    -moz-transition: all 0.1s ease-in-out
-    -ms-transition: all 0.1s ease-in-out
-    -o-transition: all 0.1s ease-in-out
-    transition: all 0.1s ease-in-out
+    // -webkit-transition: all 0.1s ease-in-out
+    // -moz-transition: all 0.1s ease-in-out
+    // -ms-transition: all 0.1s ease-in-out
+    // -o-transition: all 0.1s ease-in-out
+    // transition: all 0.1s ease-in-out
 
     &:hover
       border-left: 3px solid colors.color("dark-foreground")
@@ -224,13 +224,19 @@ const { toc } = useContent();
     &.level-1
       padding-left: 1em
       font-size: typography.font-size("s")
+
+      &:hover
+        transform: scale(1.02) translateX(2px)
       
 
     &.level-2
       padding-left: 2em
       font-size: typography.font-size("xs")
 
-    &.active, &.active:hover
+      &:hover
+        transform: scale(1.02) translateX(2px)
+
+    &.active
       border-left: 3px solid colors.color("primary-highlight")
       color: colors.color("primary-highlight")
 

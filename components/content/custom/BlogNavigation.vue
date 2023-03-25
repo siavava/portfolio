@@ -149,7 +149,7 @@ const { path } = useRoute();
     font-weight: 700
     position: relative
     margin: 0
-    color:  colors.color("dark-foreground")
+    // color:  colors.color("dark-foreground")
     height: fit-content
     transition: height 5.2s ease-in-out
 

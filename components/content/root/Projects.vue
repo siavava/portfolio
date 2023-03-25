@@ -29,7 +29,7 @@
             <StyledArchivedProject
             >
               <div class="project-inner">
-                <header>
+                <header class="archived-project-text">
                   <div class="project-top">
                     <div class="folder">
                       <Icon type="Folder" />
@@ -71,14 +71,7 @@
                   <ContentDoc :value="project" />
                 </header>
 
-                <span v-if="project.date" class="project-date">
-                  {{ new Date(project.date)
-                    .toLocaleDateString('en-us', {
-                      month: 'short',
-                      year: 'numeric',
-                    })
-                  }}
-                </span>
+                <Date v-if="project.date" class="archived-project-date" :weekday="false" :date="project.date" />
 
                 <footer>
                   <ul class="project-tech-list">
@@ -95,14 +88,14 @@
           </Transition>
         </TransitionGroup>
 
-    <button
+    <StyledButton
       v-if="projects.length > 6"
       class="more-button"
       ref="showMoreButton"
       id="more-button"
       @click="toggleShowMore">
       Show {{ showMore ? 'Less' : 'More' }}
-    </button>
+      </StyledButton>
   </StyledArchivedProjectsSection>
 </template>
 
@@ -190,11 +183,12 @@ onUnmounted(() => {
 * > h3
   font-weight: 600
 
-.project-date
-  font-size: 0.8rem
-  font-weight: 400
-  color: colors.color("primary-highlight")
-  font-family: typography.font("monospace")
-
+.archived-project-date
   margin-top: 2em
+  justify-self: end
+  margin-top: auto
+  margin-bottom: 10px
+
+.archived-project-text
+  margin-bottom: 2em
 </style>

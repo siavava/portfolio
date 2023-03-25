@@ -1,5 +1,5 @@
 <template>
-  <span class="highlight">
+  <span class="highlight-inner">
     <slot />
   </span>
 </template>
@@ -10,8 +10,14 @@
   }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @use "~/styles/colors"
-.highlight
+@use "~/styles/typography"
+.highlight-inner
   color: colors.color("secondary-highlight")
+  font-size: inherit
+
+:not(.paragraph)
+  .highlight-inner
+    padding-top: 4em
 </style>

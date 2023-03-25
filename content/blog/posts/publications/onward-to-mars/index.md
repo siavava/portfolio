@@ -2,8 +2,7 @@
 title: The New Space Race
 description: The Past, Present, and Future of Space Exploration.
 category:
-  - publications
-  - research
+  - tech
   - featured
 draft: false
 featured: true
@@ -22,15 +21,25 @@ that human life might someday need to relocate from a dying earth,
 space exploration is becoming an increasingly important endeavor for humanity.
 
 This paper explores the history of space exploration,
-current trends, and future possibilities [^1].
+current trends, and future possibilities.
 
 :highlight[Collaborative publication with
   [Dev Kapadia][kapadia], [Audrey Herrald][herrald], [Anahita Kodali][anahita],
-  [Kristal Wong][kristal], [Isaiah Menning][menning], and [Sam Neff][neff]
+  [Kristal Wong][kristal], [Isaiah Menning][menning], and [Sam Neff][neff].
   
 ]
 
+[kapadia]: https://www.linkedin.com/in/dev-kapadia/
+[herrald]: https://www.linkedin.com/in/audrey-herrald/
+[anahita]: https://www.linkedin.com/in/anahitatkodali/
+[kristal]: https://www.linkedin.com/in/kristal-wong/
+[menning]: https://www.linkedin.com/in/isaiah-menning/
+[neff]:    https://www.linkedin.com/in/sam-neff-8b72a5194/
+
+<!--more-->
+
 [**Link :rocket:**](https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/188)
+
 
 ---
 
@@ -97,12 +106,12 @@ has fostered?
 Making sense of the entire space exploration landscape;
 what should we expect, and how will it affect our lives?
 
-[kapadia]: https://www.linkedin.com/in/dev-kapadia/
+<!-- [kapadia]: https://www.linkedin.com/in/dev-kapadia/
 [herrald]: https://www.linkedin.com/in/audrey-herrald/
 [anahita]: https://www.linkedin.com/in/anahitatkodali/
 [kristal]: https://www.linkedin.com/in/kristal-wong/
 [menning]: https://www.linkedin.com/in/isaiah-menning/
-[neff]:    https://www.linkedin.com/in/sam-neff-8b72a5194/
+[neff]:    https://www.linkedin.com/in/sam-neff-8b72a5194/ -->
 
 [musk]:     https://en.wikipedia.org/wiki/Elon_Musk
 [bezos]:    https://en.wikipedia.org/wiki/Jeff_Bezos

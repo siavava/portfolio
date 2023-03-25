@@ -1,40 +1,21 @@
 <template>
   <footer class="styled-footer">
-    <div class="styled-social-links">
-      <ul>
-        <li
-          v-for="(link, i) in social"
-          :key="i"
-        >
-          <NuxtLink
-            :href="link._path"
-            aria-label="link to my {{ link.name }} page"
-          >
-            <Icon :type="link.title" />
-          </NuxtLink>
-        </li>
-      </ul>
-    </div>
-    <NuxtLink to="https://github.com/siavava/altair">
-      <div class="styled-credit-section">
-        <div class="year">
-          {{ new Date().getFullYear() }}, Altair
-        </div>
-        <div
-          class="github-stats"
-          aria-label="GitHub stats"
-        >
-          <span>
-            <Icon type="star" />
-            <span v-if="repoInfo.stars"> {{ repoInfo.stars }}</span>
-          </span>
-          <span>
-            <Icon type="fork" />
-            <span v-if="repoInfo.forks"> {{ repoInfo.forks }}</span>
-          </span>
-        </div>
+    <div class="footer-inner">
+      <div class="styled-links">
+          <StyledButton href="/">
+            home
+          </StyledButton>
+          <StyledButton href="/blog">
+            blog
+          </StyledButton>
       </div>
-    </NuxtLink>
+      <div class="styled-credit-section">
+        <NuxtLink to="https://github.com/siavava/altair" target="_blank" class="year">
+          {{ new Date().getFullYear() }} Amittai. All rights reserved.
+        </NuxtLink>
+      </div>
+
+    </div>
   </footer>
 </template>
 
@@ -76,70 +57,67 @@ await fetch('https://api.github.com/repos/siavava/altair')
 @use "../styles/typography"
 @use "../styles/colors"
 
-.year::before
-  content: "©"
-  font-family: typography.font("sans-serif")
-  font-size: typography.font-size("s")
-  margin-right: 0.5em
-
 .styled-footer
   @include mixins.flex-center
-  flex-direction: column
-  height: auto
+  flex-direction: row
   min-height: 70px
-  padding: 15px
-  text-align: center
+  padding: 30px
   border-top: 1px solid colors.color("light-background")
+  color: colors.color("primary-highlight")
+  display: flex
+  flex-direction: column
 
-.styled-credit-section
-  color: inherit
-  font-family: typography.font("monospace")
-  font-size: typography.font-size("xxs")
-  line-height: 1
-
-  .github-stats
-    margin-top: 10px
-
-    & > span
-      display: inline-flex
-      align-items: center
-      margin: 0 7px
-
-    svg
-      display: inline-block
-      margin-right: 5px
-      width: 14px
-      height: 14px
-
-.styled-social-links
-  display: block
-  width: 100%
-  max-width: 270px
-  margin: 0 auto 10px
-  margin: 0 auto 10px
-  color: colors.color("light-foreground")
-
-  @media (max-width 768px)
-    display: block
-    width: 100%
-    max-width: 270px
-    margin: 0 auto 10px
-    color: colors.color("light-foreground")
-
-  ul
+  .footer-inner
     @include mixins.flex-between
-    padding: 0
-    margin: 0
-    list-style:  none
+    width: 100%
+    max-width: 848px
+
+  .styled-links
+    width: fit-content
+    display: inline-flex
+    gap: 10px
+
+    // .footer-link
+    //   @include mixins.big-button
 
 
-    a
-      padding: 10px
+  .styled-credit-section
+    color: inherit
+    line-height: 3
+    font-size: 0.8em
+    display: inline-flex
+    justify-content: space-between
+    color: colors.color("primary-highlight")
+    
+    
+    .year
+      width: fit-content
+      font-size: typography.font-size("m")
+
+      &:hover
+        scale: 1.02
+        color: colors.color("secondary-highlight")
+
+      &::before
+        content: "©"
+        font-family: typography.font("sans-serif")
+
+
+    .github-stats
+      font-family: typography.font("monospace")
+      font-size: typography.font-size("xxs")
+      align-self: flex-start
+      // margin-top: 10px
+
+      & > span
+        display: inline-flex
+        align-items: center
+        margin: 0 7px
 
       svg
-        width: 20px
-        height: 20px
-        stroke-width: 3px
-
+        display: inline-block
+        margin-right: 5px
+        width: 14px
+        height: 14px
 
 </style>

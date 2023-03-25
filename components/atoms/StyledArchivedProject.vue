@@ -1,5 +1,5 @@
 <template>
-  <li class="styled-list-item">
+  <li class="styled-archived-list-item">
     <slot />
   </li>
 </template>
@@ -20,7 +20,7 @@ export default {
 @use "~/styles/mixins"
 
 
-.styled-list-item
+.styled-archived-list-item
   position: relative
   cursor: default
   transition: geometry.var("default-transition")

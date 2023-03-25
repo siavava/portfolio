@@ -1,6 +1,13 @@
 // Description: Transitions for page transitions
 
 @use "geometry"
+
+.translate-card-enter-active, .translate-card-leave-active
+  transition: all 2s ease
+
+.translate-card-enter, .translate-card-leave-to
+  opacity: 0
+  transform: translateY(30px)
     
 .fade-in
   opacity: 100%

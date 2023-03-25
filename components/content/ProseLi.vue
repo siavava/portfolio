@@ -5,7 +5,5 @@
 <style lang="sass" scoped>
 
 .prose-li
-  // font-size: 1em
-  // line-height: 1
-  // margin: 0.4em 0
+  font-size: 1
 </style>

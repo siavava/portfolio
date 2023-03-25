@@ -268,15 +268,6 @@
           object-position: center
           filter: grayscale(100%) contrast(1) brightness(50%)
 
-.project-date
-  font-size: 0.8rem
-  font-weight: 400
-  color: colors.color("primary-highlight")
-
-  margin-top: 2em
-  font-family: typography.font("monospace")
-
-  position: relative
-  align-self: flex-end
-  right: 0
+  .featured-project-date
+    margin-top: 2em
 </style>

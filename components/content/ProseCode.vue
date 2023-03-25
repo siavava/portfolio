@@ -93,7 +93,7 @@ export default {
 
 .code-container
   background: colors.color("light-background")
-  background: rgba(colors.color("light-background"), 0.3)
+  background: rgba(colors.color("light-background"), 0.7)
   position: relative
   margin: 1rem 0
   padding: 0.5rem
@@ -144,7 +144,7 @@ export default {
               &::before
                 content: '+'
                 color: colors.color("critical-foreground")
-                color: colors.color("primary-highlight")
+                // color: colors.color("primary-highlight")
                 border-right: 1px solid
 
             &::before
@@ -154,7 +154,7 @@ export default {
               content: counter(line)
               margin-right: 1em
               padding-right: 0.5em
-              color: colors.color("lightest-background")
+              color: colors.color("foreground")
               border-right: 1px solid colors.color("lightest-background")
 
             &:hover

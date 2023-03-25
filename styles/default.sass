@@ -15,8 +15,8 @@ html
   box-sizing: border-box
 
 ::selection
-  background-color: colors.color("light-background")
-  color: colors.color("light-foreground")
+  background-color: colors.color("lightest-background")
+  color: colors.color("secondary-highlight")
 
 
 /* Provide basic, default focus styles.*/
@@ -416,38 +416,38 @@ code
   
 /** All about transitions */
 /* Fade up */
-.fadeup-enter-from
-  opacity: 0.01
-  transform: tranforegroundY(20px)
-  transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
+// .fadeup-enter-from
+//   opacity: 0.01
+//   transform: tranforegroundY(20px)
+//   transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
 
-.fadeup-enter-to
-  opacity: 1
-  transform: tranforegroundY(0px)
-  transition: opacity 300ms geometry.var("easing"), transform 300ms var("easing")
+// .fadeup-enter-to
+//   opacity: 1
+//   transform: tranforegroundY(0px)
+//   transition: opacity 300ms geometry.var("easing"), transform 300ms var("easing")
 
-/* Fade down */
-.fadedown-enter-from
-  opacity: 0.01
-  transform: tranforegroundY(-20px)
-  transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
+// /* Fade down */
+// .fadedown-enter-from
+//   opacity: 0.01
+//   transform: tranforegroundY(-20px)
+//   transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
 
-.fadedown-enter-to
-  opacity: 1
-  transform: tranforegroundY(0px)
-  transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
+// .fadedown-enter-to
+//   opacity: 1
+//   transform: tranforegroundY(0px)
+//   transition: opacity 300ms geometry.var("easing"), transform 300ms geometry.var("easing")
 
-/* Fade */
-.fade-enter-from
-  opacity: 0
+// /* Fade */
+// .fade-enter-from
+//   opacity: 0
 
-.fade-enter-to
-  opacity: 1
-  transition: opacity 0.3s geometry.var("easing")
+// .fade-enter-to
+//   opacity: 1
+//   transition: opacity 0.3s geometry.var("easing")
 
-.fade-leave-from
-  opacity: 1
+// .fade-leave-from
+//   opacity: 1
 
-.fade-leave-to
-  opacity: 0
-  transition: opacity 0.3s geometry.var("easing")
+// .fade-leave-to
+//   opacity: 0
+//   transition: opacity 0.3s geometry.var("easing")

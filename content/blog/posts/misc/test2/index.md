@@ -2,8 +2,6 @@
 title: Test of Navigation
 description: Setting Up and Running Nuxt in 4 Steps.
 category:
-  - misc
-  - featured
   - development
 draft: true
 layout: article

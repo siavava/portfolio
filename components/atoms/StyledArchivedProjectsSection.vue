@@ -23,14 +23,12 @@
 
     &:after
       bottom: 0.1em
-      content: " →" // >>
+      content: " →"
 
   .projects-grid
     @include mixins.reset-list
     display: grid
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
-
-    // grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
 
     grid-gap: 15px
     position: relative
@@ -39,10 +37,7 @@
     @media (max-width: 1080px)
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
 
-      // grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
-
   .more-button
-    @include mixins.button
     margin: 80px auto 0
     
 </style>

@@ -2,8 +2,7 @@
 title: Technology in the Developing World
 description: How Technology is Changing the Developing World.
 category:
-  - publications
-  - research
+  - tech
   - featured
 draft: false
 featured: true
@@ -21,6 +20,8 @@ Technology is one of the primary drivers of accelerated development in developin
 This paper explores the role of technology in the developing world,
 looking at the possibilities and challenges, and addressing
 how the technology disparity between developing and developed nations arose in the first place.
+
+<!--more-->
 
 [**Link :rocket:**](https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/16)
 

@@ -1,47 +1,32 @@
 <template>
+  <div class="blog-hero">
+    
+  </div>
   <div class="blog-list-container">
-    <div v-for="category in categories" class="blog-category">
+    <div class="blog-category" v-if="userInfo.getSubscriptionCount">
       <!-- <div v-for="blog in blogs.filter(blog => blog.category.)" -->
-      <span class="blog-category-title"> {{  category  }} </span>
-      <Button class="scroll-button left">
+      <div class="blog-category-section-title"> Subscribed </div>
+      <!-- <Button class="scroll-button left">
         &lt;
       </Button>
       <Button class="scroll-button right">
         &gt;
-      </Button>
+      </Button> -->
       <div class="horizontal-scroll">
-        <div v-for="blog in blogsByCategory(category)" :key="blog.id" class="blog-card2">
-          <div class="blog-card">
-              <NuxtLink :to="blog.path" class="blog-click">
-                <Icon type="expand-diagonal" class="expand-article-icon" />
-              </NuxtLink>
-              <h1 class="blog-title">
-                {{ blog.title }}
-              </h1>
-              <div class="blog-description">
-                {{ blog.description }}
-              </div>
-              <div v-if="blog.date" class="blog-date">
-                {{ getCommentDateAsString(new Date(blog.date)) }}
-              </div>
-              <img 
-              alt="blog image"
-              class="blog-image"
-              :src="`${blog._path}/${blog.image}`"
-              />
-              <div class="blog-actions">
-                <Button
-                  @click="() => { toggleSubscription(blog._path) }"
-                  type="danger"
-                  size="small"
-                  class="unsubscribe-button"
-                  >
-                  <!-- {{ userInfo.subs  }},  -->
-                  {{  userInfo.isSubscribed(blog._path) ? 'Unsubscribe' : 'Subscribe'  }}
-                </Button>
-              </div>
-            </div>
-        </div>
+        <BlogCard v-for="blog in blogsSubscribedTo(blogs)" :blog="blog" />
+      </div>
+    </div>
+
+    <div v-for="category in categories" class="blog-category">
+      <div class="blog-category-section-title"> {{  category  }} </div>
+      <!-- <Button class="scroll-button left">
+        &lt;
+      </Button>
+      <Button class="scroll-button right">
+        &gt;
+      </Button> -->
+      <div class="horizontal-scroll">
+        <BlogCard v-for="blog in blogsByCategory(category)" :key="blog.id" :blog="blog" />
       </div>
     </div>
   </div>
@@ -49,22 +34,14 @@
 
 
 <script lang="ts">
-import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
-import {
-    getFirestore
-  , collection
-  , addDoc
-  , getDocs
-  , query
-  , orderBy
-  , where,
-doc,
-setDoc,
-getDoc
-} from "@firebase/firestore";
-
 export default {
   name: "BlogList",
+  props: {
+    subscribedOnly: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       userInfo: useUserInfo(),
@@ -78,86 +55,21 @@ export default {
         this.userInfo.subscribe(blogPath);
       }
     },
-    // subscribe() {
-    //   const db = getFirestore();
-    //   const { currentUser } = getAuth();
-    //   var { path } = useRoute();
 
-    //   // add trailing slash if not present
-    //   if (path[path.length - 1] != '/') {
-    //     path += '/';
-    //   }
-      
-    //   const q = query(collection(db, "subscriptions"), where("page", "==", path));
-
-    //   getDocs(q)
-    //     .then((querySnapshot) => {
-    //       if (querySnapshot.size == 0) {
-    //         addDoc(collection(db, "subscriptions"), {
-    //           page: path,
-    //           subscribers: [currentUser.email]
-    //         });
-    //       } else {
-    //         querySnapshot.forEach((doc) => {
-    //           const subscribers = doc.data().subscribers;
-    //           subscribers.push(currentUser.email);
-    //           setDoc(doc.ref, {
-    //             page: path,
-    //             subscribers: subscribers
-    //           });
-    //         });
-    //       }
-    //       this.getAllSubscriptions();
-    //       this.subscribed = true;
-          
-    //     }).catch((error) => {
-    //       console.error("Error getting documents: ", error);
-    //     });
-      
-    // },
-
-    // unsubscribe(_path? : string) {
-    //   const db = getFirestore();
-
-    //   var path = _path || useRoute().path;
-    //   const { currentUser } = getAuth();
-
-    //   // add trailing slash to path
-    //   if (path[path.length - 1] != '/') path += '/';
-      
-    //   const q = query(collection(db, "subscriptions"), where("page", "==", path));
-
-    //   console.log("unsubscribe: ", path, currentUser.email)
-
-    //   getDocs(q)
-    //     .then((querySnapshot) => {
-    //       querySnapshot.forEach((doc) => {
-    //         const subscribers = doc.data().subscribers;
-    //         const remainingSubscribers = subscribers.filter((email) => {
-    //           return email != currentUser.email;
-    //         });
-    //         setDoc(doc.ref, {
-    //           page: path,
-    //           subscribers: remainingSubscribers
-    //         });
-    //         this.getAllSubscriptions();
-    //         if (path == useRoute().path) this.subscribed = false;
-    //       });
-    //     }).catch((error) => {
-    //       console.error("Error getting documents: ", error);
-    //     });
-    // },
+    blogsSubscribedTo(allBlogs: ParsedContent[]) {
+      return allBlogs.filter((blog) => {
+        return this.userInfo.isSubscribed(blog._path);
+      });
+    }
   }
 }
 </script>
 
 <script lang="ts" setup>
-import { getCommentDateAsString, UserInfo } from "~/modules/utils";
-// import { concatStrings } from "~/modules/utils";
-import { useUserInfo } from "~/composables/users";
-// import { BlogPostMeta } from "~/modules/users";
 
-// const userInfo = useUserInfo();
+import { ParsedContent } from "@nuxt/content/dist/runtime/types";
+import { useUserInfo } from "~/composables/users";
+
 const { data: blogs } = await useAsyncData(
   `blogs-${useRoute().path}`,
   async () => {
@@ -188,6 +100,8 @@ const blogsByCategory = (category: string) => {
     }
   });
 }
+
+
 </script>
 
 <style lang="sass" scoped>
@@ -197,7 +111,6 @@ const blogsByCategory = (category: string) => {
 @use "~/styles/geometry"
 
 .blog-list-container
-  @include mixins.fancy-background
   display: flex-row
 
 .blog-click
@@ -209,7 +122,6 @@ const blogsByCategory = (category: string) => {
     cursor: pointer !important
 
   .expand-article-icon
-    // float: right
     width: 30px
     height: 30px
     color: colors.color("secondary-highlight")
@@ -221,20 +133,19 @@ const blogsByCategory = (category: string) => {
   display: flex-column
   width: 100%
   position: relative
-  // border-top: 1px solid colors.color("secondary-highlight")
-  padding-top: 20px
+  border-top: 1px solid colors.color("lightest-background")
+  padding: 30px 0
 
-  .blog-category-title
+  .blog-category-section-title
     color: colors.color("secondary-highlight")
-    margin: 10px 0
-    // font-size: 1.3rem
-    font-weight: 600
-    width: 100%
-    font-family: typography.font("monospace")
-    text-transform: uppercase
-    margin-left: 30px
-    text-decoration: underline
-    text-decoration-thickness: 4px
+    font-weight: 500
+    width: fit-content
+    text-transform: lowercase
+
+    padding: 0 0 0 20px
+
+
+    
 
 
 .scroll-button
@@ -270,66 +181,5 @@ const blogsByCategory = (category: string) => {
   
   &::-webkit-scrollbar
     display: none
-
-
-
-  .blog-card
-    // @include mixins.fancy-card
-    width: 400px
-    aspect-ratio: 1/1
-    padding: 1rem
-    margin: 1rem
-
-    .blog-title
-      font-weight: 600
-      font-size: 1.5rem
-      margin-bottom: 1rem
-      color: colors.color("secondary-highlight")
-      font-family: typography.font("anek-latin")
-      
-
-      &::hover
-        cursor: pointer
-
-    .blog-description
-      font-size: 1rem
-      margin-bottom: 1rem
-      font-family: typography.font("anek-latin")
-      color: colors.color("white")
-
-    .blog-date
-      font-size: 0.8rem
-      margin-bottom: 1rem
-      font-family: typography.font("monospace")
-      font-weight: 600
-      font-size: 0.7em
-      color: colors.color("secondary-highlight") !important
-      text-transform: uppercase
-
-    .blog-image
-      margin-bottom: 1rem
-      @include mixins.box-shadow
-      border-radius: geometry.var("border-radius")
-      max-height: 200px
-      object-fit: cover
-      
-    .blog-actions
-      width: 100%
-      .unsubscribe-button
-        @include mixins.button
-        margin: 1rem auto
-        width: 100%
-        font-weight: 600
-        
-        // background-color: colors.color("secondary-highlight")
-        // color: colors.color("lightest-background")
-        // border: 1px solid colors.color("secondary-highlight")
-        
-        &:hover
-          cursor: pointer
-          
-          // background-color: colors.color("light-background")
-          // color: colors.color("secondary-highlight")
-          // border: 1px solid colors.color("secondary-highlight")
 
 </style>

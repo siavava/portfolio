@@ -2,8 +2,7 @@
 title: Data-driven Behavior Change
 description: How Machine Learning is Transforming other Industries.
 category:
-  - publications
-  - research
+  - artificial intelligence
   - featured
 draft: false
 featured: true
@@ -24,9 +23,12 @@ and relationships between humans and machines are re-imagined.
 
 This paper explores this context around machine learning and the effects it is having in other industries.
 
-[**Link :rocket:**](https://issuu.com/dartmouthjournalofscience/docs/21w_dujs_print_v1/16)
+<!--more-->
 
-[**Project code: :computer:**](https://github.com/siavava/neural)
+:styled-button[read the full paper :rocket:]{href=https://issuu.com/dartmouthjournalofscience/docs/21w_dujs_print_v1/16 size="small" externalIcon}
+
+:styled-button[Project code :bookmark:]{href=https://github.com/siavava/neural}
+
 
 ---
 
