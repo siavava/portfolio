@@ -74,9 +74,10 @@ export default {
 
 .blog-card
   @include mixins.box-shadow
-  min-width: 400px
-  max-width: 400px
-  aspect-ratio: 2.5/3
+  // min-width: 400px
+  // max-width: 400px
+  width: 400px
+  // aspect-ratio: 2.5/3
   padding: 1rem
   margin: 1rem 1rem 0 1rem
   background: colors.color("light-background")
