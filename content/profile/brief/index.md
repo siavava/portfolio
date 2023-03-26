@@ -5,22 +5,15 @@ navigation: false
 
 :styled-image
 
-My given name is [Amittai][amittai], but my preferred name ad 2022 is [Altair][altair].
-I am a [Kenyan][kenya] student at [Dartmouth College][dartmouth]
-where I am a dual major in Computer Science and Mathematics.
-
-My primary interests in computer science are data engineering and deep learning,
-but I am also interested in functional programming ([Haskell][haskell]?),
-web development (Vue > React), graph algorithms (and graph neural networks),
-and theory of computation.
+My name is [Amittai][amittai],
+a current student at [Dartmouth][dartmouth],
+primary interested in design, functional programming, data systems engineering, and theory of computation.
 I am currently learning theory of computation and computer vision.
+I am also interested in abstract algebra mathematical logic, and particle physics.  
+You may also find me playing chess, reading or watching sci-fi, shooting with my camera,
+or playing [Assassin's Creed][assassins-creed].
 
-My primary interests in mathematics are in abstract algebra, analysis, and logic,
-but I also find the power of differential equations fascinating.
-
-Beyond academics, find me playing chess, reading or writing,
-shooting with my camera, or playing 
-[Assassin's Creed][assassins-creed].
+I am also a minimalist. 
 
 I have been an alumni / student at:
 

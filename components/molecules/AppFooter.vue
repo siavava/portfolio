@@ -20,28 +20,28 @@
 </template>
 
 <script setup lang="ts">
-import { social } from '~/modules/config';
+// import { social } from '~/modules/config';
 
-interface GitHubInfo {
-  stars?: Number;
-  forks?: Number;
-  watchers?: Number;
-}
+// interface GitHubInfo {
+//   stars?: Number;
+//   forks?: Number;
+//   watchers?: Number;
+// }
 
 
-const repoInfo = ref<GitHubInfo>({} as GitHubInfo);
+// const repoInfo = ref<GitHubInfo>({} as GitHubInfo);
 
-await fetch('https://api.github.com/repos/siavava/altair')
-.then((response) => {
-  response.json()
-  .then((data) => {
-    repoInfo.value = {
-      stars: data?.stargazers_count || 0,
-      forks: data?.forks || 0,
-      watchers: data?.watchers_count || 0,
-    }
-  });
-});
+// await fetch('https://api.github.com/repos/siavava/altair')
+// .then((response) => {
+//   response.json()
+//   .then((data) => {
+//     repoInfo.value = {
+//       stars: data?.stargazers_count || 0,
+//       forks: data?.forks || 0,
+//       watchers: data?.watchers_count || 0,
+//     }
+//   });
+// });
 
 </script>
 
@@ -62,7 +62,7 @@ await fetch('https://api.github.com/repos/siavava/altair')
   flex-direction: row
   min-height: 70px
   padding: 30px
-  border-top: 1px solid colors.color("light-background")
+  border-top: 2px solid colors.color("light-background")
   color: colors.color("primary-highlight")
   display: flex
   flex-direction: column
@@ -77,8 +77,8 @@ await fetch('https://api.github.com/repos/siavava/altair')
     display: inline-flex
     gap: 10px
 
-    // .footer-link
-    //   @include mixins.big-button
+    @media screen and (max-width: 768px)
+      display: none
 
 
   .styled-credit-section
@@ -88,6 +88,9 @@ await fetch('https://api.github.com/repos/siavava/altair')
     display: inline-flex
     justify-content: space-between
     color: colors.color("primary-highlight")
+
+    @media screen and (max-width: 768px)
+      margin: 0 auto
     
     
     .year
@@ -95,7 +98,7 @@ await fetch('https://api.github.com/repos/siavava/altair')
       font-size: typography.font-size("m")
 
       &:hover
-        scale: 1.02
+        scale: 1.01
         color: colors.color("secondary-highlight")
 
       &::before

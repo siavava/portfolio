@@ -8,7 +8,7 @@
       <div class="blurb-container">
         <div class="big-title">
           <span class="strike-through">
-            Talkers
+            {{ "Talkers" }}
           </span>
           <span>Doers.</span>
         </div>
@@ -31,7 +31,6 @@
         </div>
     
       </div>
-
 
 
 
@@ -211,6 +210,12 @@ export default {
 @use "~/styles/typography"
 @use "~/styles/geometry"
 
+.profile
+  background: colors.color("light-background")
+  width: 400px
+  aspect-ratio: 2/1
+  border-radius: geometry.var("border-radius")
+
 #hero
 
   .hero
@@ -223,7 +228,7 @@ export default {
     top: 0
     left: 0
     
-  min-height: calc(100vh - geometry.var("nav-height"))
+  min-height: calc(100vh - 2 *  geometry.var("nav-height"))
   width: 100%
   position: relative
 
@@ -249,6 +254,8 @@ export default {
           text-decoration: line-through
           text-decoration-thickness: 2px
           color: colors.color(dark-foreground)
+          padding-right: 0.5em
+          margin-right: 0
 
     .pique
       margin: 1.5em 0 0.5em 0.2rem

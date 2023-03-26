@@ -42,7 +42,7 @@
 
               <ContentDoc :value="project" />
 
-              <Date v-if="project.date" class="featured-project-date" :date="project.date" :weekday="false" :left="i % 2 == 0" />
+              <Date v-if="project.date" class="featured-project-date" :date="project.date" :weekday="false" :left="(!isMobile()) && i % 2 === 0" />
             </div>
           </div>
           <ul class="project-tech-list">
@@ -93,6 +93,30 @@
 <script lang="ts">
   export default {
     name: "Featured",
+    data() {
+      return {
+        size: 0
+      }
+    },
+    methods: {
+      isMobile() {
+        return this.size < 768;
+      }
+    },
+
+    mounted() {
+      this.size = window.innerWidth;
+
+      window.addEventListener('resize', () => {
+        this.size = window.innerWidth;
+      });
+    },
+
+    beforeDestroy() {
+      window.removeEventListener('resize', () => {
+        this.size = window.innerWidth;
+      });
+    }
   }
 </script>
 
