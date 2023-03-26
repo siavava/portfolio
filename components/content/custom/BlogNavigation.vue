@@ -12,13 +12,15 @@
     <ContentNavigation
       v-slot="{ navigation }"
     >
+      <!-- {{  navigation }} -->
       <ul v-if="navigation">
         <li
-          v-for="item in navigation[0].children"
-          :key="item.id"
+          v-for="directory in navigation[0].children.map((item) => item.children).flat()"
+          :key="directory.id"
         >
-          <ul v-if="item.children">
-            <template v-for="category in item.children">
+          <!-- {{ directory }} -->
+          <ul v-if="directory.children">
+            <template v-for="category in directory.children">
               <li
                 v-if="category && category.children"
                 :key="category.id"
@@ -67,7 +69,6 @@
 </template>
 
 <script lang="ts">
-
 export default {
   name: "BlogNavigation",
   props: {

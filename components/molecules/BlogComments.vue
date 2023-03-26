@@ -53,7 +53,8 @@
           </div>
           <div v-else>
             You are not signed in. <br/>
-            Sign in (or sign up) to comment/subscribe.
+            Sign in (or sign up) to comment/subscribe. <br/>
+            
             <StyledButton
             v-if="isLoggedIn"
             class="button"

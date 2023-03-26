@@ -16,7 +16,7 @@
           </ul>
         </div>
         <h1 class="title-heading">{{title}}</h1>
-        <p class="title-description">{{description}}</p>
+        <div class="title-description">{{description}}</div>
         <Date :date="date" />
       </div>
       <figure

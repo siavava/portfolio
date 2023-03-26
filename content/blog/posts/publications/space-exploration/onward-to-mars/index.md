@@ -2,7 +2,7 @@
 title: The New Space Race
 description: The Past, Present, and Future of Space Exploration.
 category:
-  - tech
+  - space exploration
   - featured
 draft: false
 featured: true
@@ -26,7 +26,6 @@ current trends, and future possibilities.
 :highlight[Collaborative publication with
   [Dev Kapadia][kapadia], [Audrey Herrald][herrald], [Anahita Kodali][anahita],
   [Kristal Wong][kristal], [Isaiah Menning][menning], and [Sam Neff][neff].
-  
 ]
 
 [kapadia]: https://www.linkedin.com/in/dev-kapadia/
@@ -37,9 +36,9 @@ current trends, and future possibilities.
 [neff]:    https://www.linkedin.com/in/sam-neff-8b72a5194/
 
 <!--more-->
+<br>
 
-[**Link :rocket:**](https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/188)
-
+:styled-button[read the full paper :rocket:]{href=https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/188}
 
 ---
 

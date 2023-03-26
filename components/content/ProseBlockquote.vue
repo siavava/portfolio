@@ -1,5 +1,5 @@
 <template>
-  <blockquote>
+  <blockquote class="prose-blockquote">
     <slot />
   </blockquote>
 </template>
@@ -9,19 +9,19 @@
 @use "~/styles/colors"
 @use "~/styles/mixins"
 
-blockquote
+.prose-blockquote
   width: 100%
   text-align: left
   position: relative
   margin: 2rem auto
   border-left: none
 
-  padding: 3rem 2rem 0 2rem
+  padding: 0 2rem 0 2rem
   border-left: 2px solid colors.color("secondary-highlight")
   margin-left: 2rem
   // background: yellow
 
-  .paragraph
+  .prose-p
     width: 80%
     font-size: clamp(1rem, 1.7vw, 1.5rem) //1.2em
     font-weight: 500

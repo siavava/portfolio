@@ -36,8 +36,14 @@
 <script setup lang="ts">
 import { useUserInfo}  from "~/composables/users";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+// import twitter widgets
+// import "https://platform.twitter.com/widgets.js";
+
+
 const { path: currentPage } = useRoute();
 const { toc } = useContent();
+
 
 // reference to comments section for detecting when to show auth popup
 const commentsSection = ref<HTMLElement | null>(null);
