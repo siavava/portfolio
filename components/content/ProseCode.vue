@@ -137,7 +137,7 @@ export default {
             counter-increment: line
 
             &.highlight
-              background-color: rgba(colors.color("light-background"), 1.0)
+              background-color: rgba(colors.color("lightest-background"), 0.5)
               width: 100%
               padding-right: 1em
 
@@ -158,7 +158,7 @@ export default {
               border-right: 1px solid colors.color("lightest-background")
 
             &:hover
-              background-color: rgba(colors.color("lightest-background"), 0.3)
+              background-color: rgba(colors.color("lightest-background"), 0.7)
 
               &::before
                 display: inline-block
