@@ -29,11 +29,11 @@ const props = defineProps({
   }
 })
 const refinedSrc = computed(() => {
-  if (props.src?.startsWith('/') && !props.src.startsWith('//')) {
-    // return withBase(props.src, useRuntimeConfig().app.baseURL)
-    return withBase(props.src, useRoute().path)
-  }
-  return props.src
+  return withBase(props.src, useRoute().path)
+  // if (props.src?.startsWith('/') && !props.src.startsWith('//')) {
+  //   // return withBase(props.src, useRuntimeConfig().app.baseURL)
+  // }
+  // return props.src
 })
 </script>
 

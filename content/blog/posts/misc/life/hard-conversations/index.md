@@ -29,7 +29,7 @@ authoritarian like my father, so we were going to try diplomacy.
 
 Talking about my dad, ha—did I mention the incident where my elder brother relaxed his hair after completing high school? Yeah, rebellious guy was feeling invincible. My father casually called him, handed him a five-hundred shilling note, gave him instructions on what to buy at the shops, then added: “halafu change uende kinyozi.” (use the balance to go to the barbershop). Beneah had not seen it coming, probably never even realized what hit him. Now, any African will tell you that if an African parent says to do something, don’t dare contravene; by sundown Beneah was back, head shining like a new coin! My father was such — sly and obsequious without scruples. I’m left to wonder what he would have said about my new look. But one thing I know for sure, it wouldn’t have have lasted.
 
-![Do I look like a girl? Who cares...](./smiley.webp)
+![Do I look like a girl? Who cares...](smiley.webp)
 
 
 ## I get where you’re coming from.
