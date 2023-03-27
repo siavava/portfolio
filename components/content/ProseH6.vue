@@ -1,5 +1,5 @@
 <template>
-  <h6 :id="id">
+  <h6 class="prose-h6" :id="id">
     <slot />
   </h6>
 </template>
@@ -15,7 +15,7 @@ const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes
 <style lang="sass" scoped>
 
 @use "../styles/colors"
-h6
+.prose-h6
   margin-top: 0.5em
   margin-bottom: 0.5em
   font-weight: 300
