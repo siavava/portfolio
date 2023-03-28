@@ -1,6 +1,7 @@
 <template>
   <section id="contact" class="contact-section">
     <h2 class="numbered-heading overline"> What's Next?</h2>
+    <h2 class="title">{{ contact.title }}</h2>
     <ContentDoc :value="contact" />
     <!-- <a
       :href="`mailto:${ contact.email }`"
@@ -55,7 +56,7 @@ const { data: contact } = await useAsyncData(
     &:after 
       display: none
 
-  div > h2
+  .title
     font-size: clamp(40px, 5vw, 60px)
     font-weight: 600
     color: colors.color("lightest-foreground")

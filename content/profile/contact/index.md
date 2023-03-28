@@ -2,9 +2,10 @@
 category: 'contact'
 email: 'amittaijoel@outlook.com'
 navigation: false
+title: Get In Touch
 ---
 
-## Get In Touch
+<!-- ## Get In Touch -->
 
 I am particularly excited to make new connections.  
 Ping me an [email][email], or find me on [Instagram][instagram], [Twitter][twitter],
