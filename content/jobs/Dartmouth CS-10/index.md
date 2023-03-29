@@ -3,7 +3,7 @@ date: '2023-03-21'
 title: 'Teaching Assistant, CS-10'
 company: 'Dartmouth'
 location: 'Hanover, NH'
-range: 'Winter 2023'
+range: 'Winter 2023 - Spring 2023'
 url: 'https://web.cs.dartmouth.edu/'
 category: 'jobs-info'
 navigation: false
