@@ -196,11 +196,11 @@ export default {
       },
     },
   },
-  imports: {
-    dirs: [
-      "modules/*.ts",
-      "modules/*/index.ts",
-      "composables"
-    ]
-  }
+  // imports: {
+  //   dirs: [
+  //     "modules/*.ts",
+  //     "modules/*/index.ts",
+  //     "composables"
+  //   ]
+  // }
 };
