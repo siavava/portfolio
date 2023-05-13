@@ -51,7 +51,7 @@
     "@firebase/auth": "^0.23.0",
     "@firebase/firestore": "^3.10.1",
     "@nuxt/content": "nuxt/content#feat/rehype-plugins",
-    "@nuxt/vite-builder": "latest",
+    "@nuxt/vite-builder": "^3.2.2",
     "@pinia/nuxt": "^0.4.7",
     "autoprefixer": "^10.4.14",
     "autosize": "^6.0.1",

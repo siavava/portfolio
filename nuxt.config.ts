@@ -172,6 +172,11 @@ export default {
 
     // Nuxt Image
     "@nuxt/image",
+
+    // local
+
+    "~/modules/users",
+    "~/modules/utils",
   ],
   layouts: {
     default: "~/layouts/clean.vue",
@@ -191,4 +196,11 @@ export default {
       },
     },
   },
+  imports: {
+    dirs: [
+      "modules/*.ts",
+      "modules/*/index.ts",
+      "composables"
+    ]
+  }
 };
