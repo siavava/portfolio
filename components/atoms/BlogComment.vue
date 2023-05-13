@@ -37,6 +37,8 @@
 import markdownParser from "@nuxt/content/transformers/markdown";
 import { Comment } from "~/modules/utils";
 
+// types
+
 export default {
   name: "BlogComment",
   components: {},
