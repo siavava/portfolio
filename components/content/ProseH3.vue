@@ -3,7 +3,12 @@
     :id="id"
     class="prose-h3"
   >
+  <NuxtLink :to="`#${id}`" v-if="generate">
     <slot />
+  </NuxtLink>
+  <template v-else>
+    <slot />
+  </template>
   </h3>
 </template>
 
@@ -13,16 +18,26 @@ import { useRuntimeConfig } from "#imports";
 defineProps<{ id: string }>();
 const heading = 3;
 const { anchorLinks } = useRuntimeConfig().public.content;
-const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes(heading);
+const generate = anchorLinks?.depth >= heading;
 </script>
 
 <style lang="sass" scoped>
 
-@use "../styles/colors"
+@use "~/styles/colors"
+@use "~/styles/geometry"
 .prose-h3
-  margin-top: 0.5em
-  margin-bottom: 0.5em
+  margin-top: 1.5rem
+  margin-bottom: 1.5rem
   font-weight: 400
   font-size: 1rem
   color: colors.color("primary-highlight")
+
+  &::before
+    content: "###"
+    margin-right: 0.5rem
+    opacity: 0.5
+    transition: geometry.var("default-transition")
+    
+  &:hover::before
+    opacity: 1
 </style>

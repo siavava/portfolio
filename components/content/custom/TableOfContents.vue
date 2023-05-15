@@ -15,6 +15,7 @@
           :href="`#${link.id}`"
           :class="{
             'toc-link level-1': true,
+            'main': activeTocElementIds.includes(link.id),
             'active': activeTocElementIds.includes(link.id) ||
               (link.children &&
                 link.children.some(child => activeTocElementIds.includes(child.id)))
@@ -32,6 +33,7 @@
               :href="`#${child.id}`"
               :class="{
                 'toc-link level-2': true,
+                'main': activeTocElementIds.includes(link.id),
                 'active': activeTocElementIds.includes(child.id),
               }"
             >
@@ -183,7 +185,6 @@ const { toc } = useContent();
 @use "~/styles/geometry"
 .toc
   line-height: 2
-  counter-reset: toc-1
   position: relative
 
   .title
@@ -196,37 +197,24 @@ const { toc } = useContent();
   .toc-link
     display: block
     font-weight: 500
-    counter-reset: toc-2
-    // color: colors.color("dark-foreground")
-    position: relative
-    border-left: 3px solid
+    border-left: 1px solid transparent
 
-    // -webkit-transition: all 0.1s ease-in-out
-    // -moz-transition: all 0.1s ease-in-out
-    // -ms-transition: all 0.1s ease-in-out
-    // -o-transition: all 0.1s ease-in-out
-    // transition: all 0.1s ease-in-out
 
     &:hover
-      border-left: 3px solid colors.color("dark-foreground")
       color: colors.color("primary-highlight") !important
 
     &.level-1
       padding-left: 1em
-      font-size: typography.font-size("s")
-
-      &:hover
-        transform: scale(1.02) translateX(2px)
+      font-size: typography.font-size("xs")
 
     &.level-2
       padding-left: 2em
       font-size: typography.font-size("xs")
 
-      &:hover
-        transform: scale(1.02) translateX(2px)
-
     &.active
-      border-left: 3px solid colors.color("primary-highlight")
       color: colors.color("primary-highlight")
+
+      &.main
+        border-left: 1px solid colors.color("primary-highlight")
 
 </style>

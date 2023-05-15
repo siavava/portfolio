@@ -3,7 +3,12 @@
     :id="id"
     class="prose-h4"
   >
-    <slot />
+    <NuxtLink :to="`#${id}`" v-if="generate">
+      <slot />
+    </NuxtLink>
+    <template v-else>
+      <slot />
+    </template>
   </h4>
 </template>
 
@@ -18,11 +23,22 @@ const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes
 
 <style lang="sass" scoped>
 
-@use "../styles/colors"
+@use "~/styles/colors"
+@use "~/styles/geometry"
 .prose-h4
   margin-top: 0.5em
   margin-bottom: 0.5em
   font-weight: 500
   font-size: 1.2rem
   color: colors.color("lightest-foreground")
+
+
+  &::before
+    content: "####"
+    margin-right: 0.5rem
+    opacity: 0.5
+    transition: geometry.var("default-transition")
+    
+  &:hover::before
+    opacity: 1
 </style>

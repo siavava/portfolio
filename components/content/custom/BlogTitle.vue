@@ -218,24 +218,24 @@ export default {
     gap: 20px
     place-items: center
     padding: 0 1em
-    margin: 1em 0
+    margin: 2em 0
     pointer-events: all
-
 
     .blog-action
       height: 25px
       width: 25px
       pointer-events: all
-
-      &::hover
+      transition: geometry.var("default-transition")
+      
+      &:hover
         cursor: pointer
+        color: colors.color("primary-highlight")
 
       &.composite
         display: flex
         flex-direction: row
         width: fit-content
         align-items: center
-        justify-content: center
         gap: 5px
         
         & > span

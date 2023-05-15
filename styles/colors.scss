@@ -164,8 +164,10 @@ $palette: (
 
 
   // "primary-highlight": #DC4D4D,
-  "primary-highlight": #1db954,
+  // "primary-highlight": #1db954,
+  "primary-highlight": #1e52f3,
   "secondary-highlight": #8982ee,
+  // "secondary-highlight": lighten(#1e52f3, 15%),
   // "primary-highlight": #ff4e20,
 
 
@@ -175,6 +177,7 @@ $palette: (
   // "secondary-highlight": #a374ff,
   
   "background": #121212,
+  // "background": #252525,
   // "background": #050505,
   "dark-background": #000000,
   "light-background": #181818,
@@ -185,7 +188,7 @@ $palette: (
 
   "dark-foreground": #434343,
   // "foreground": #a9a9a9,
-  "foreground": #a9a9a9,
+  "foreground": #c1bed0,
   "light-foreground": #c1bed0,
   "lightest-foreground": #ffffff,
 

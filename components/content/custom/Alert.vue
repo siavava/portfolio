@@ -32,7 +32,7 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @use "~/styles/colors"
 @use "~/styles/typography"
 
@@ -41,17 +41,11 @@ export default {
   padding: 1em 1em 0.5em 1em
   border-radius: 0.5rem
 
-  & > ul
+  .prose-ul
     font-size: inherit !important
-    margin: 0.5em 0 0.5em 0.5em
 
-    li
-      margin: 0
-      line-height: 1.75
-      font-size: inherit !important
-      font-size: inherit !important
 
-    &::before
+    li::before
       color: inherit !important
 
   .alert-icon
