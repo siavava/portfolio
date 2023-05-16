@@ -39,7 +39,6 @@ const props = defineProps({
   },
 });
 const refinedSrc = computed(() => {
-  console.log(`refinedSrc: ${withBase(props.src, useRoute().path)}`)
   return withBase(props.src, useRoute().path);
 });
 </script>
