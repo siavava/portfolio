@@ -37,20 +37,19 @@ onMounted(() => {
     userInfo.update();
   });
 });
+
 </script>
 
 <style lang="sass">
 @use "~/styles/default"
-// @use "~/styles/colors"
-
-// #root
-//   // background: url("~/assets/images/noise.svg") !important
-
-  // body
-  //   background-image: url("~/assets/images/noise.svg") !important
-  //   background: rgba(colors.color("background"), 0.1) !important
-
+@use "~/styles/colors"
 .container
   // max-width: 1000px
   margin: 0 auto
+
+body
+  z-index: 2 !important
+  background: rgba(colors.color("background"), 0.95) !important
+
+
 </style>

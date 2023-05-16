@@ -28,7 +28,7 @@ svg
   aspect-ratio: 1/1
   
   &:hover
-    transform: scale(1.3) rotate(-10deg)
+    transform: rotate(-10deg)
     cursor: pointer
 
 </style>

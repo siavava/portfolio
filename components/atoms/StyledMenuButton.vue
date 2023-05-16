@@ -12,22 +12,10 @@
     >
       <rect
         class="line top"
-        width="80%"
-        height="6px"
-        fill="currentColor"
-        x="10"
-        y="40"
-        rx="0"
       />
 
       <rect
         class="line bottom"
-        width="56%"
-        height="6px"
-        fill="currentColor"
-        x="34"
-        y="60"
-        rx="0"
       />
 
     </svg>
@@ -67,6 +55,18 @@ export default {
   color: colors.color("primary-highlight")
 
   .line
+    height: 8px
+    fill: currentcolor
+
+    &.top
+      width: 80%
+      x: 10
+      y: 40
+
+    &.bottom
+      width: 50%
+      x: 40
+      y: 60
 
     -webkit-transition: 0.1s
     -moz-transition: 0.1s
@@ -80,23 +80,21 @@ export default {
     -o-transform-origin: center
     transform-origin: center
 
-.menu-button
+.menu-button:hover
+  .top
+    width: 50%
+    x: 40
 
-  &:hover
-    .top
-      width: 56%
-      x: 34
-
-    .bottom
-      width: 80%
-      x: 10
+  .bottom
+    width: 80%
+    x: 10
 
   &.clicked
 
     .top, .bottom
       width: 70%
-      x: 15%
-      y: 47%
+      x: 15
+      y: 47
 
     .top
       -webkit-transform: rotate(45deg)

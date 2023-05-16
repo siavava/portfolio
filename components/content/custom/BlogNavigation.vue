@@ -128,8 +128,9 @@ const { path } = useRoute();
 </script>
 
 <style lang="sass">
-@use "../styles/typography"
-@use "../styles/colors"
+@use "~/styles/typography"
+@use "~/styles/colors"
+@use "~/styles/geometry"
 
 // .list-item
 //   margin: 0 !important
@@ -178,22 +179,24 @@ const { path } = useRoute();
         text-transform: uppercase
         width: fit-content
         padding-top: 0.5em
+        transition: geometry.var("default-transition")
+
+        &:hover
+          color: colors.color("primary-highlight")
 
       .expand-icon
         position: absolute
         right: 0
-        // height: 1.2em
-        // margin-top: 0.2em
 
     .category-child
       font-size: typography.font-size("xs")
       font-weight: 400
       margin-left: 0.6rem
       padding-left: 1rem
-      border-left: 3px solid
+      border-left: 1px solid
 
       &:hover > *
-        transform: scale(1.02)
+        transform: translateX(-6px)
 
       &.active
         color: colors.color("primary-highlight")

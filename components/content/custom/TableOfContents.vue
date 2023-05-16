@@ -21,7 +21,7 @@
                 link.children.some(child => activeTocElementIds.includes(child.id)))
           }"
         >
-          {{ link.text }}
+          <span class="link-text"> {{ link.text }} </span>
         </a>
         <ul v-if="link.children">
           <li
@@ -37,7 +37,7 @@
                 'active': activeTocElementIds.includes(child.id),
               }"
             >
-              {{ child.text }}
+              <span class="link-text"> {{ child.text }} </span>
             </a>
           </li>
         </ul>
@@ -199,9 +199,15 @@ const { toc } = useContent();
     font-weight: 500
     border-left: 1px solid transparent
 
+    .link-text
+      transition: geometry.var("default-transition")
+
 
     &:hover
       color: colors.color("primary-highlight") !important
+      
+      & > .link-text
+        margin-left: -5px
 
     &.level-1
       padding-left: 1em
