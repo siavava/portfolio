@@ -62,6 +62,8 @@ body
   
   margin: 0
   width: 100%
+  // height: 100vh
+  // overflow-x: scroll
   min-height: 100%
   overflow-x: hidden
   -moz-osx-font-smoothing: grayscale
@@ -74,25 +76,23 @@ body
   @media (max-width: 480px) 
     font-size: typography.font-size("l")
   
-  // &.hidden 
+  // &.blur 
   //   overflow: hidden
-  
-  &.blur 
-    overflow: hidden
-    header 
-      background-color: transparent
+  //   header 
+  //     background-color: transparent
     
-    #content > * 
-      filter: blur(5px) brightness(0.7)
-      transition: geometry.var("default-transition")
-      pointer-events: none
-      user-select: none
+  //   #content > * 
+  //     filter: blur(5px) brightness(0.7)
+  //     transition: geometry.var("default-transition")
+  //     pointer-events: none
+  //     user-select: none
     
 #root
   display: flex
   flex-direction: column
-
-  min-height: 100vh
+  // min-height: 100vh
+  // // height: 100%
+  height: max(100vh, 100%)
 
   .default-footer
     align-self: flex-end
@@ -105,8 +105,6 @@ body
 
 main
   margin: 0 auto
-  // width: 100%
-  // max-width: 1300px
   height: max-content
   padding: 0 clamp(0.5em, 3vw, 3em)
   
