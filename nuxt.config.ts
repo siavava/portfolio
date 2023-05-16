@@ -123,7 +123,7 @@ export default {
     },
   },
   image: {
-    // The screen sizes predefined by `@nuxt/image`:
+    // The screen sizes predefined by `@nuxt/image-edge`:
     screens: {
       xs: 320,
       sm: 640,
@@ -137,9 +137,9 @@ export default {
     ipx: {},
     dir: "static"
   }, 
-  serverMiddleware: {
-    '/_ipx': '~/server/middleware/ipx.js'
-  },
+  // serverMiddleware: {
+  //   '/_ipx': '~/server/middleware/ipx.js'
+  // },
 
   head: {
     link: [
@@ -178,7 +178,7 @@ export default {
     "@nuxtjs/google-fonts",
 
     // Nuxt Image
-    "@nuxt/image",
+    // "@nuxt/image-edge",
 
     // local
 
