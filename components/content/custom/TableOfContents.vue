@@ -33,7 +33,7 @@
               :href="`#${child.id}`"
               :class="{
                 'toc-link level-2': true,
-                'main': activeTocElementIds.includes(link.id),
+                'main': activeTocElementIds.includes(child.id),
                 'active': activeTocElementIds.includes(child.id),
               }"
             >
