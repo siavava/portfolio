@@ -45,11 +45,11 @@
         v-if="image"
         class="title-image-wrapper"
       >
-        <img
+        <NuxtImg
           class="title-image"
           :src="`${path}/${image}`"
           alt="Title Image"
-        >
+        />
         <figcaption
           v-if="caption"
           class="title-image-caption"

@@ -133,7 +133,14 @@ export default {
       xxl: 1536,
       "2xl": 1536,
     },
+    provider: 'ipx',
+    ipx: {},
+    dir: "static"
+  }, 
+  serverMiddleware: {
+    '/_ipx': '~/server/middleware/ipx.js'
   },
+
   head: {
     link: [
       {

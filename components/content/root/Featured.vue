@@ -80,12 +80,12 @@
         </div>
         <div class="project-image">
           <a>
-            <img
-              :src="`/${project.cover}`"
+            <NuxtImg
+              :src="`${project.cover}`"
               :alt="project.title"
               loading="lazy"
               class="img-project"
-            >
+            />
           </a>
         </div>
       </StyledProject>

@@ -13,7 +13,7 @@ I am also interested in abstract algebra mathematical logic, and particle physic
 You may also find me playing chess, reading or watching sci-fi, shooting with my camera,
 or playing [Assassin's Creed][assassins-creed].
 
-I am also a minimalist. 
+I am also a minimalist.
 
 I have been an alumni / student at:
 

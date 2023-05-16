@@ -1,12 +1,12 @@
 <template>
   <figure class="prose-img-wrapper">
-    <img
+    <NuxtImg
       class="prose-img"
       :src="refinedSrc"
       :alt="alt"
       :width="width"
       :height="height"
-    >
+    />
     <caption
       v-if="alt"
       class="prose-img-alt"
@@ -39,11 +39,8 @@ const props = defineProps({
   },
 });
 const refinedSrc = computed(() => {
+  console.log(`refinedSrc: ${withBase(props.src, useRoute().path)}`)
   return withBase(props.src, useRoute().path);
-  // if (props.src?.startsWith('/') && !props.src.startsWith('//')) {
-  //   // return withBase(props.src, useRuntimeConfig().app.baseURL)
-  // }
-  // return props.src
 });
 </script>
 

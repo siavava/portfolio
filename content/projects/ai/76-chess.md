@@ -16,7 +16,7 @@ navigation: false
 ---
 
 A chess bot that uses various strategies including
-<highlight> minimax, alpha-beta pruning, iterative deepening,
+:highlight[minimax, alpha-beta pruning, iterative deepening,
 transposition table, move ordering, null-move pruning,
-aspiration windows, and quiescence search </highlight> to maximize outcome
+aspiration windows, and quiescence search] to maximize outcome
 against an opponent (human or otherwise).

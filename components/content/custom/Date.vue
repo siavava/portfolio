@@ -52,20 +52,17 @@ export default {
 @use "~/styles/colors"
 @use "~/styles/typography"
 .date-component
-  // font-size: 1rem !important
-  padding-top: 0.5rem
   font-weight: 400
   font-size: 0.8em
   color: colors.color("secondary-highlight") !important
   font-family: typography.font("sans-serif")
   background: transparent
-  // width: fit-content
 
   border-left: 1px solid
   border-right: none
 
   padding-left: 1rem
-  padding-right: 0
+  line-height: 2
 
   &.left
     border-left: none

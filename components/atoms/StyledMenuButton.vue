@@ -76,14 +76,15 @@ export default {
     -o-transform-origin: center
     transform-origin: center
 
-.menu-button:hover
-  .top
-    width: 50%
-    x: 40
+.menu-button
+  &:hover
+    .top
+      width: 50%
+      x: 40
 
-  .bottom
-    width: 80%
-    x: 10
+    .bottom
+      width: 80%
+      x: 10
 
   &.clicked
 

@@ -1,16 +1,15 @@
 <template>
   <div id="styled-image">
     <div class="wrapper">
-      <img
-        src="~assets/images/profile-image.jpg"
+      <NuxtImg
+        src="profile/head-shot.jpg"
         class="img"
         width="500"
         quality="100"
         formats="AUTO, WEBP, AVIF"
         alt="head shot"
         loading="lazy"
-      >
-      <!-- <slot /> -->
+      />
     </div>
   </div>
 </template>
