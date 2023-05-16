@@ -14,6 +14,5 @@
   font-family: typography.font("sans-serif")
   font-size: typography.font-size("m")
   line-height: 1.7
-  // color: colors.color("foreground")
   margin: 0 0 1.5em 0
 </style>

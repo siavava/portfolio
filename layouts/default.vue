@@ -49,7 +49,5 @@ onMounted(() => {
 
 body
   z-index: 2 !important
-  background: rgba(colors.color("background"), 0.95) !important
-
-
+  background: colors.color("background")
 </style>

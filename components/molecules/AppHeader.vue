@@ -482,6 +482,12 @@ const { data: latestBlogs } = await useAsyncData(
   font-size: typography.font-size("m")
   color: colors.color("light-foreground")
 
+.menu-column-header, .menu-column-item
+
+  &:hover
+    transform: translateX(-5px)
+    
+
 .menu-extras
   display: flex
   flex-direction: row

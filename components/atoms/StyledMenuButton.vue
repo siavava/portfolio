@@ -10,13 +10,9 @@
       class="hamburger"
       viewBox="0 0 100 100"
     >
-      <rect
-        class="line top"
-      />
+      <rect class="line top" />
 
-      <rect
-        class="line bottom"
-      />
+      <rect class="line bottom" />
 
     </svg>
   </button>
