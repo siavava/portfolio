@@ -85,7 +85,6 @@
               :alt="project.title"
               loading="lazy"
               class="img-project"
-              placeholder
             />
           </a>
         </div>
