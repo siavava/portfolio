@@ -56,13 +56,13 @@ export default {
 
     &.top
       width: 80%
-      x: 10
-      y: 40
+      x: 10%
+      y: 40%
 
     &.bottom
       width: 50%
-      x: 40
-      y: 60
+      x: 40%
+      y: 60%
 
     -webkit-transition: 0.1s
     -moz-transition: 0.1s
@@ -80,11 +80,11 @@ export default {
   &:hover
     .top
       width: 50%
-      x: 40
+      x: 40%
 
     .bottom
       width: 80%
-      x: 10
+      x: 10%
 
   &.clicked
 
