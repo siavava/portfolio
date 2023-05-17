@@ -18,11 +18,11 @@
       :value="blog"
       :excerpt="true"
     />
-    <img
+    <NuxtImg
       alt="blog image"
       class="blog-image"
       :src="`${blog._path}/${blog.image}`"
-    >
+    />
     <div class="blog-actions">
       <NuxtLink
         :to="blog._path"
