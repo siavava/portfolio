@@ -16,7 +16,7 @@
     <ContentRenderer
       v-if="blog.excerpt"
       :value="blog"
-      :excerpt="true"
+      excerpt
     />
     <NuxtImg
       alt="blog image"
