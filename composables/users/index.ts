@@ -45,6 +45,8 @@ const useUserInfo = defineStore("userInfo", {
 
   actions: {
     async init() {
+      const { path } = useRoute();
+
       const { currentUser: newUser } = getAuth();
       if (newUser) {
         this.active = true;
@@ -52,23 +54,34 @@ const useUserInfo = defineStore("userInfo", {
         this.avatar = await this.getUserAvatar();
         this.email = newUser.email || "";
         this.uid = newUser.uid;
-        this.updateSubscriptions(true).then(() => {
-          onAuthStateChanged(getAuth(), () => this.update());
-        });
+
+        if (!["/", "/blog"].includes(path)) {
+          this.updateSubscriptions(true).then(() => {
+            onAuthStateChanged(getAuth(), () => this.update());
+          });
+        }
       }
-      this.getCommentsByRoute();
+      if (!["/", "/blog"].includes(path)) {
+        this.getCommentsByRoute();
+      }
     },
     async update() {
       const { currentUser: newUser } = getAuth();
+      const { path } = useRoute();
       if (newUser) {
         this.active = true;
         this.userName = newUser.displayName || "";
         this.avatar = await this.getUserAvatar();
         this.email = newUser.email || "";
         this.uid = newUser.uid;
-        await this.updateSubscriptions(false);
+
+        if (!["/", "/blog"].includes(path)) {
+          this.updateSubscriptions(true);
+        }
       }
-      await this.getCommentsByRoute();
+      if (!["/", "/blog"].includes(path)) {
+        await this.getCommentsByRoute();
+      }
     },
 
     async updateSubscriptions(clear = false) {
