@@ -76,9 +76,9 @@ export default {
     },
 
     blogsSubscribedTo(allBlogs: ParsedContent[]) {
-      return allBlogs.filter((blog) => {
-        return this.userInfo.isSubscribed(blog._path);
-      });
+      return allBlogs
+        ? allBlogs.filter((blog) => this.userInfo.isSubscribed(blog._path))
+        : [];
     },
   },
 };
@@ -107,6 +107,8 @@ blogs.value?.forEach((blog) => {
     });
   }
 });
+
+console.log(`categories: ${categories}`);
 
 const blogsByCategory = (category: string) => {
   return blogs.value?.filter((blog) => {
