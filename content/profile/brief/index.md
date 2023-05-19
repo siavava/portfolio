@@ -46,7 +46,7 @@ If interested in something particularly, [let me know][email].
 
 ### Stats & Languages
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)">
+<div style="max-width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)">
   <div>
 
   ![GitHub activity.](https://raw.githubusercontent.com/siavava/github-stats/master/generated/overview.svg#gh-dark-mode-only)
