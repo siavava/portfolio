@@ -6,6 +6,7 @@
       :alt="alt"
       :width="width"
       :height="height"
+      loading="lazy"
     />
     <caption
       v-if="alt"
@@ -18,7 +19,7 @@
 
 <script setup lang="ts">
 import { withBase } from "ufo";
-import { useRuntimeConfig, computed } from "#imports";
+import { computed } from "#imports";
 
 const props = defineProps({
   src: {
