@@ -46,13 +46,13 @@ If interested in something particularly, [let me know][email].
 
 ### Stats & Languages
 
-<div style="display: flex; flex-direction: row">
-  <div style="width: 50%">
+<div style="display: grid; grid-template-columns: repeat(autofit, minmax(720px, 50%)">
+  <div>
 
   ![GitHub activity.](https://raw.githubusercontent.com/siavava/github-stats/master/generated/overview.svg#gh-dark-mode-only)
 
   </div>
-  <div style="width: 50%">
+  <div>
 
   ![Most-used programming languages.](https://raw.githubusercontent.com/siavava/github-stats/master/generated/languages.svg#gh-dark-mode-only)
 
@@ -61,7 +61,7 @@ If interested in something particularly, [let me know][email].
 
 ### What am I Listening to?
 
-![What am I listening to?](https://spotify-recently-played-readme.vercel.app/api?user=1vjcu6bwe77050bqaz0awjw0p&count=10&unique=true&width=1000)
+![What am I listening to?](https://spotify-recently-played-readme.vercel.app/api?user=1vjcu6bwe77050bqaz0awjw0p&count=10&unique=true&width=1000){style="height: fit-content"}
 
 ---
 
