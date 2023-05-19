@@ -2,7 +2,7 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { defineStore } from "pinia";
 import {
-  getFirestore, collection, addDoc, getDocs, query, where, setDoc, orderBy, onSnapshot,
+  getFirestore, collection, addDoc, getDocs, query, where, orderBy, onSnapshot, updateDoc, arrayUnion, arrayRemove,
 } from "firebase/firestore";
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 import { createAvatar } from "@dicebear/core";
@@ -26,7 +26,9 @@ const useUserInfo = defineStore("userInfo", {
   getters: {
     getSubscriptionPaths() {
       const _subs = [...this.subscriptions];
-      return _subs.map((sub) => sub.path);
+      const paths = _subs.map((sub) => sub.path);
+      console.log(`paths: ${paths}`);
+      return paths;
     },
     getComments() {
       return this.currentRouteComments;
@@ -47,7 +49,7 @@ const useUserInfo = defineStore("userInfo", {
     async init() {
       const { path } = useRoute();
 
-      const { currentUser: newUser } = getAuth();
+      const { currentUser: newUser } = await getAuth();
       if (newUser) {
         this.active = true;
         this.userName = newUser.displayName || "";
@@ -55,12 +57,12 @@ const useUserInfo = defineStore("userInfo", {
         this.email = newUser.email || "";
         this.uid = newUser.uid;
 
-        if (!["/", "/blog"].includes(path)) {
-          this.updateSubscriptions(true).then(() => {
-            onAuthStateChanged(getAuth(), () => this.update());
-          });
-        }
+        // if (!["/", "/blog"].includes(path)) {
+        // }
+        // console.log("init");
       }
+      this.updateSubscriptions(true);
+      // onAuthStateChanged(getAuth(), () => this.init());
       if (!["/", "/blog"].includes(path)) {
         this.getCommentsByRoute();
       }
@@ -75,7 +77,7 @@ const useUserInfo = defineStore("userInfo", {
         this.email = newUser.email || "";
         this.uid = newUser.uid;
 
-        if (!["/", "/blog"].includes(path)) {
+        if (!["/"].includes(path)) {
           this.updateSubscriptions(true);
         }
       }
@@ -84,23 +86,23 @@ const useUserInfo = defineStore("userInfo", {
       }
     },
 
-    async updateSubscriptions(clear = false) {
-      const allSubscriptions = await this.getAllSubscriptions();
+    // async updateSubscriptions(clear = false) {
+    //   const allSubscriptions = await this.getAllSubscriptions();
 
-      if (clear) {
-        this.subscriptions = allSubscriptions;
-      } else {
-        // remove any subscriptions that are no longer valid
-        this.subscriptions = new Set<string>([...this.subscriptions].filter((sub) => {
-          return allSubscriptions.includes(sub);
-        }));
+    //   if (clear) {
+    //     this.subscriptions = allSubscriptions;
+    //   } else {
+    //     // remove any subscriptions that are no longer valid
+    //     this.subscriptions = new Set<string>([...this.subscriptions].filter((sub) => {
+    //       return allSubscriptions.includes(sub);
+    //     }));
 
-        // add any new subscriptions
-        allSubscriptions.forEach((sub) => {
-          this.subscriptions.add(sub);
-        });
-      }
-    },
+    //     // add any new subscriptions
+    //     allSubscriptions.forEach((sub) => {
+    //       this.subscriptions.add(sub);
+    //     });
+    //   }
+    // },
 
     /**
     * Subscribes the user to a specific page.
@@ -111,7 +113,6 @@ const useUserInfo = defineStore("userInfo", {
     */
     async subscribe(_path? : string) {
       const db = getFirestore();
-      // const userInfo = useUserInfo();
       const { currentUser } = getAuth();
       const path = normalizePath(_path || useRoute().path);
       const q = query(
@@ -126,16 +127,12 @@ const useUserInfo = defineStore("userInfo", {
             subscribers: [currentUser.email],
           });
         } else {
-          querySnapshot.forEach((doc) => {
-            const { subscribers } = doc.data();
-            subscribers.push(currentUser.email);
-            setDoc(doc.ref, {
-              page: path,
-              subscribers,
-            });
+          const doc = querySnapshot.docs[0];
+          updateDoc(doc.ref, {
+            subscribers: arrayUnion(currentUser.email),
           });
         }
-        this.updateSubscriptions();
+        // this.updateSubscriptions();
         return true;
       }).catch((error) => {
         console.error("Error getting documents: ", error);
@@ -196,10 +193,10 @@ const useUserInfo = defineStore("userInfo", {
       
       
       Check it out here: https://altair.fyi${path}.`,
-          // html: ''
+            // html: ''
           },
         };
-        // add message to mail collection
+          // add message to mail collection
         addDoc(collection(db, "mail"), outMail)
           .catch((error) => {
             console.error(`Error adding document: ${error}`);
@@ -226,17 +223,11 @@ const useUserInfo = defineStore("userInfo", {
 
       try {
         const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          const { subscribers } = doc.data();
-          const remainingSubscribers = subscribers.filter((email) => {
-            return email !== currentUser.email;
-          });
-          setDoc(doc.ref, {
-            page: path,
-            subscribers: remainingSubscribers,
-          });
+        const doc = querySnapshot.docs[0];
+        updateDoc(doc.ref, {
+          subscribers: arrayRemove(currentUser.email),
         });
-        this.updateSubscriptions();
+        // this.updateSubscriptions();
         return true;
       } catch (error) {
         console.error("Error getting documents: ", error);
@@ -250,7 +241,8 @@ const useUserInfo = defineStore("userInfo", {
      * @returns {Array} array of all subscriptions
      *
      */
-    async getAllSubscriptions() {
+    async updateSubscriptions() {
+      if (!this.active) return;
       const db = getFirestore();
       const { currentUser } = getAuth();
 
@@ -260,21 +252,27 @@ const useUserInfo = defineStore("userInfo", {
         where("subscribers", "array-contains", currentUser.email),
       );
 
-      const _results: BlogPostMeta[] = [];
-      return getDocs(q).then(async (querySnapshot) => {
-        const paths = Array.from(new Set<string>(
+      // const _results: BlogPostMeta[] = [];
+      getDocs(q).then(async (querySnapshot) => {
+        const newPaths = Array.from(new Set<string>(
           querySnapshot.docs.map((doc) => {
             const path = doc.data().page;
             return normalizePath(path);
+          }).filter((path) => {
+            return !this.isSubscribed(path);
           }),
         ));
 
-        await queryContent<MarkdownParsedContent>()
-          .where({ _path: { $in: paths } })
+        this.subscriptions = new Set<BlogPostMeta>([...this.subscriptions].filter((sub) => {
+          return querySnapshot.docs.includes(sub.path);
+        }));
+
+        queryContent<MarkdownParsedContent>()
+          .where({ _path: { $in: newPaths } })
           .find()
           .then((data) => {
             data.forEach((page) => {
-              _results.push({
+              this.subscriptions.add({
                 title: page?.title || "",
                 path: page?._path || "",
                 category: page?.category[0] || page?.category || "",
@@ -285,10 +283,52 @@ const useUserInfo = defineStore("userInfo", {
               });
             });
           });
-        return _results;
+        // this.subscriptions = _results;
+
+        console.log("subscriptions: ", this.subscriptions);
       }).catch((error) => {
         console.error("Error getting documents: ", error);
-        return _results;
+        // return _results;
+      });
+
+      onSnapshot(q, (newQuerySnapshot) => {
+        // const _newResults = new Set<BlogPostMeta>();
+        // getDocs(q).then(async (querySnapshot) => {
+        const paths = Array.from(new Set<string>(
+          newQuerySnapshot.docs.map((doc) => {
+            const path = doc.data().page;
+            return normalizePath(path);
+          }).filter((path) => {
+            return !this.isSubscribed(path);
+          }),
+        ));
+
+        this.subscriptions = new Set<BlogPostMeta>([...this.subscriptions].filter((sub) => {
+          return newQuerySnapshot.docs.includes(sub.path);
+        }));
+
+        queryContent<MarkdownParsedContent>()
+          .where({ _path: { $in: paths } })
+          .find()
+          .then((data) => {
+            data.forEach((page) => {
+              this.subscriptions.add({
+                title: page?.title || "",
+                path: page?._path || "",
+                category: page?.category[0] || page?.category || "",
+                description: page?.description || "",
+                date: page?.date || "",
+                image: page?.image || "",
+                excerpt: page?.excerpt || "",
+              });
+            });
+            console.log("new subscriptions: ", this.subscriptions);
+            // this.subscriptions = _results;
+          })
+          .catch((error) => {
+            console.error("Error getting documents: ", error);
+            // return _results;
+          });
       });
     },
 
