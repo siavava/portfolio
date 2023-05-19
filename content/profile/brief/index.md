@@ -61,7 +61,11 @@ If interested in something particularly, [let me know][email].
 
 ### What am I Listening to?
 
-![What am I listening to?](https://spotify-recently-played-readme.vercel.app/api?user=1vjcu6bwe77050bqaz0awjw0p&count=10&unique=true&width=1000){style="height: fit-content"}
+<div style="overflow: hidden; height: max-content;">
+
+![What am I listening to?](https://spotify-recently-played-readme.vercel.app/api?user=1vjcu6bwe77050bqaz0awjw0p&count=10&unique=true&width=1000)
+
+</div>
 
 ---
 
