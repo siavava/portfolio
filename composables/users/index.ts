@@ -361,7 +361,6 @@ const useUserInfo = defineStore("userInfo", {
 
         onSnapshot(q, (newQuerySnapshot) => {
           const _newResults: Comment[] = [];
-          console.log(`new query snapshot; ${newQuerySnapshot}`);
           newQuerySnapshot.forEach((doc) => {
             const comment: Comment = {
               text: doc.data().text,
