@@ -1,14 +1,14 @@
 // import { getUserAvatar } from "~/modules/users";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { defineStore } from "pinia";
 import {
   getFirestore, collection, addDoc, getDocs, query, where, orderBy, onSnapshot, updateDoc, arrayUnion, arrayRemove,
 } from "firebase/firestore";
-import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
+// import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 import { createAvatar } from "@dicebear/core";
 import { lorelei } from "@dicebear/collection";
 import {
-  getCommentDateAsString, normalizePath, UserInfo, Comment, BlogPostMeta,
+  getCommentDateAsString, normalizePath, Comment,
 } from "~/modules/utils";
 
 const useUserInfo = defineStore("userInfo", {
@@ -19,16 +19,13 @@ const useUserInfo = defineStore("userInfo", {
     avatar: "",
     email: "",
     uid: "",
-    subscriptions: new Set<BlogPostMeta>(),
+    subscriptions: new Set<string>(),
     currentRouteComments: [],
-  } as UserInfo),
+  }),
 
   getters: {
     getSubscriptionPaths() {
-      const _subs = [...this.subscriptions];
-      const paths = _subs.map((sub) => sub.path);
-      console.log(`paths: ${paths}`);
-      return paths;
+      return [...this.subscriptions];
     },
     getComments() {
       return this.currentRouteComments;
@@ -263,29 +260,32 @@ const useUserInfo = defineStore("userInfo", {
           }),
         ));
 
-        this.subscriptions = new Set<BlogPostMeta>([...this.subscriptions].filter((sub) => {
-          return querySnapshot.docs.includes(sub.path);
+        const pages = querySnapshot.docs.map((doc) => doc.data().page);
+        this.subscriptions = new Set<string>([...this.subscriptions].filter((sub) => {
+          return pages.includes(sub);
         }));
 
-        queryContent<MarkdownParsedContent>()
-          .where({ _path: { $in: newPaths } })
-          .find()
-          .then((data) => {
-            data.forEach((page) => {
-              this.subscriptions.add({
-                title: page?.title || "",
-                path: page?._path || "",
-                category: page?.category[0] || page?.category || "",
-                description: page?.description || "",
-                date: page?.date || "",
-                image: page?.image || "",
-                excerpt: page?.excerpt || "",
-              });
-            });
-          });
-        // this.subscriptions = _results;
+        newPaths.forEach((path) => {
+          this.subscriptions.add(path);
+        });
 
-        console.log("subscriptions: ", this.subscriptions);
+        // queryContent<MarkdownParsedContent>()
+        //   .where({ path: { $in: newPaths } })
+        //   .find()
+        //   .then((data) => {
+        //     data.forEach((page) => {
+        //       this.subscriptions.add({
+        //         title: page?.title || "",
+        //         path: page?._path || "",
+        //         category: page?.category[0] || page?.category || "",
+        //         description: page?.description || "",
+        //         date: page?.date || "",
+        //         image: page?.image || "",
+        //         excerpt: page?.excerpt || "",
+        //       });
+        //     });
+        //   });
+        // this.subscriptions = _results;
       }).catch((error) => {
         console.error("Error getting documents: ", error);
         // return _results;
@@ -303,32 +303,37 @@ const useUserInfo = defineStore("userInfo", {
           }),
         ));
 
-        this.subscriptions = new Set<BlogPostMeta>([...this.subscriptions].filter((sub) => {
-          return newQuerySnapshot.docs.includes(sub.path);
+        const pages = newQuerySnapshot.docs.map((doc) => doc.data().page);
+        this.subscriptions = new Set<string>([...this.subscriptions].filter((sub) => {
+          return pages.includes(sub);
         }));
 
-        queryContent<MarkdownParsedContent>()
-          .where({ _path: { $in: paths } })
-          .find()
-          .then((data) => {
-            data.forEach((page) => {
-              this.subscriptions.add({
-                title: page?.title || "",
-                path: page?._path || "",
-                category: page?.category[0] || page?.category || "",
-                description: page?.description || "",
-                date: page?.date || "",
-                image: page?.image || "",
-                excerpt: page?.excerpt || "",
-              });
-            });
-            console.log("new subscriptions: ", this.subscriptions);
-            // this.subscriptions = _results;
-          })
-          .catch((error) => {
-            console.error("Error getting documents: ", error);
-            // return _results;
-          });
+        paths.forEach((path) => {
+          this.subscriptions.add(path);
+        });
+
+        // queryContent<MarkdownParsedContent>()
+        //   .where({ _path: { $in: paths } })
+        //   .find()
+        //   .then((data) => {
+        //     data.forEach((page) => {
+        //       this.subscriptions.add({
+        //         title: page?.title || "",
+        //         path: page?._path || "",
+        //         category: page?.category[0] || page?.category || "",
+        //         description: page?.description || "",
+        //         date: page?.date || "",
+        //         image: page?.image || "",
+        //         excerpt: page?.excerpt || "",
+        //       });
+        //     });
+        //     console.log("new subscriptions: ", this.subscriptions);
+        //     // this.subscriptions = _results;
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error getting documents: ", error);
+        //     // return _results;
+        //   });
       });
     },
 

@@ -103,12 +103,12 @@ export function getCommentDateAsString(date: Date) {
   const daysAgo = new Date();
   daysAgo.setDate(today.getDate() - 5);
 
-  if (date.toDateString() == today.toDateString()) {
+  if (date.toDateString() === today.toDateString()) {
     return date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
     });
-  } else if (date.toDateString() == yesterday.toDateString()) {
+  } else if (date.toDateString() === yesterday.toDateString()) {
     return "Yesterday";
   } else if (date > daysAgo) {
     return `${Math.floor((today.getTime() - date.getTime()) / (1000 * 3600 * 24))} days ago`;
@@ -126,7 +126,7 @@ export function getCommentDateAsString(date: Date) {
  * Normalize a path by removing trailing slash.
  */
 export function normalizePath(path: string) {
-  return (path[path.length - 1] == "/")
+  return (path[path.length - 1] === "/")
     ? path.slice(0, -1)
     : path;
 }
