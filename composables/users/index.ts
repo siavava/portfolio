@@ -2,7 +2,7 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { defineStore } from "pinia";
 import {
-  getFirestore, collection, addDoc, getDocs, query, where, setDoc, orderBy,
+  getFirestore, collection, addDoc, getDocs, query, where, setDoc, orderBy, onSnapshot,
 } from "firebase/firestore";
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 import { createAvatar } from "@dicebear/core";
@@ -29,7 +29,7 @@ const useUserInfo = defineStore("userInfo", {
       return _subs.map((sub) => sub.path);
     },
     getComments() {
-      return this.currentRouteComments.reverse();
+      return this.currentRouteComments;
     },
     getUserName() {
       return this.userName;
@@ -356,7 +356,25 @@ const useUserInfo = defineStore("userInfo", {
 
           _results.push(comment);
         });
+
         this.currentRouteComments = _results;
+
+        onSnapshot(q, (newQuerySnapshot) => {
+          const _newResults: Comment[] = [];
+          console.log(`new query snapshot; ${newQuerySnapshot}`);
+          newQuerySnapshot.forEach((doc) => {
+            const comment: Comment = {
+              text: doc.data().text,
+              author: doc.data().author || "anon",
+              avatar: doc.data().avatar,
+              date: doc.data().date,
+              path: doc.data().page || "",
+            };
+
+            _newResults.push(comment);
+          });
+          this.currentRouteComments = _newResults;
+        });
       });
     },
 
@@ -379,7 +397,6 @@ const useUserInfo = defineStore("userInfo", {
           return false;
         });
 
-      this.currentRouteComments.push(comment);
       this.sendEmailToSubs(comment);
     },
 

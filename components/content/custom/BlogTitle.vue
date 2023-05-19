@@ -241,7 +241,7 @@ export default {
       &.composite
         display: flex
         flex-direction: row
-        width: fit-content
+        width: auto
         align-items: center
         gap: 5px
 

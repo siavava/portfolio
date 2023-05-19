@@ -1,5 +1,9 @@
 <template>
-  <div id="comments-section" ref="comments" class="comments-section-wrapper hidden">
+  <div
+    id="comments-section"
+    ref="comments"
+    class="comments-section-wrapper hidden"
+  >
     <section class="comments">
       <div class="section-title">
         Responses ({{ userInfo.getComments.length }})
@@ -54,13 +58,13 @@
         </template>
         <template v-else>
           <div class="no-active-user">
-          <StyledButton
-            class="auth-button"
-            type="button"
-            @click="() => userInfo.active ? _signOut() : signIn()"
-          >
-            {{ userInfo.active ? "sign out" : "sign in" }}
-          </StyledButton>
+            <StyledButton
+              class="auth-button"
+              type="button"
+              @click="() => userInfo.active ? _signOut() : signIn()"
+            >
+              {{ userInfo.active ? "sign out" : "sign in" }}
+            </StyledButton>
           </div>
         </template>
       </form>
@@ -79,7 +83,7 @@
 
         <template
           v-for="(com, i) in userInfo.getComments"
-          :key="i"
+          :key="com"
         >
           <BlogComment
             :id="i"
@@ -93,22 +97,21 @@
 </template>
 
 <script lang="ts" setup>
-const variable = ref(0);
-const { textarea: commentTextArea, input: comment } = useTextareaAutosize();
-
-const comments = ref(null);
-onClickOutside(comments, () => {
-  console.log(`clicked outside`);
-  comments.value.classList.add("hidden");
-});
-</script>
-
-<script lang="ts">
 import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
 import { normalizePath } from "~/modules/utils";
 import useUserInfo from "~/composables/users";
 import type { Comment } from "~/modules/utils";
 
+const { textarea: commentTextArea, input: comment } = useTextareaAutosize();
+
+const comments = ref(null);
+onClickOutside(comments, () => {
+  console.log("clicked outside");
+  comments.value.classList.add("hidden");
+});
+</script>
+
+<script lang="ts">
 
 export default {
   name: "BlogComments",
@@ -237,9 +240,7 @@ export default {
      *   generate an avatar and submit comment.
      */
     submitComment() {
-      if (comment.value === '') return;
-
-      console.log("submitting;....")
+      if (comment.value === "") return;
 
       const { path } = useRoute();
 
@@ -289,7 +290,7 @@ export default {
   overflow-y: scroll
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7)
   width: 414px
-  
+
   @media only screen and (max-width: 720px)
     width: 100%
     height: 90vh
@@ -314,7 +315,6 @@ section.comments
   -o-transition: all 0.1s ease-in-out
   transition: all 0.1s ease-in-out
   pointer-events: all
-
 
   .new-comment
     width: 100%
@@ -423,8 +423,9 @@ section.comments
 
     margin: 0
     margin-left: auto
-    background: rgba(colors.color("primary-highlight"), 0.5)
-    color: colors.color("lightest-background")
+    background: rgba(colors.color("primary-highlight"), 0.7)
+    color: colors.color("background")
+    font-weight: 600
 
 .comments
   display: flex
@@ -435,6 +436,5 @@ section.comments
     background: inherit
     border-bottom: 1px solid colors.color("lightest-background")
     margin-top: 20px
-
 
 </style>
