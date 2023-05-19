@@ -98,7 +98,7 @@ const { data: blogs } = await useAsyncData(
 );
 
 const categories = new Set<string>();
-blogs.value.forEach((blog) => {
+blogs.value?.forEach((blog) => {
   if (typeof blog.category === "string") {
     categories.add(blog.category);
   } else {
@@ -109,7 +109,7 @@ blogs.value.forEach((blog) => {
 });
 
 const blogsByCategory = (category: string) => {
-  return blogs.value.filter((blog) => {
+  return blogs.value?.filter((blog) => {
     if (typeof blog.category === "string") {
       return blog.category === category;
     } else {
