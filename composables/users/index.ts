@@ -52,10 +52,11 @@ const useUserInfo = defineStore("userInfo", {
         this.avatar = await this.getUserAvatar();
         this.email = newUser.email || "";
         this.uid = newUser.uid;
-        await this.updateSubscriptions(true);
-        onAuthStateChanged(getAuth(), () => this.update());
+        this.updateSubscriptions(true).then(() => {
+          onAuthStateChanged(getAuth(), () => this.update());
+        });
       }
-      await this.getCommentsByRoute();
+      this.getCommentsByRoute();
     },
     async update() {
       const { currentUser: newUser } = getAuth();
