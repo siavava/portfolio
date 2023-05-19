@@ -6,6 +6,7 @@
           <ul class="category-labels">
             <li
               v-for="_category in categories"
+              :key="_category"
               class="category-label"
               purpose="button"
               @click="showCategory(_category)"
@@ -24,21 +25,28 @@
       </div>
       <div class="blog-actions">
         <button class="blog-action composite left">
-          <Icon class="blog-action left" type="like" :active="false" />
+          <Icon
+            class="blog-action left"
+            type="like"
+            :active="false"
+          />
         </button>
         <button class="blog-action composite left">
-          <Icon type="comment" :active="false" @click="showComments" />
+          <Icon
+            type="comment"
+            :active="false"
+            @click="showComments"
+          />
           <span class="action-text">
             {{ userInfo.getComments.length }}
           </span>
-
         </button>
         <button class="blog-action composite right">
           <BookMarkIcon
-          :active="userInfo.isSubscribed()"
-          class="blog-action"
-          @click="() => userInfo.toggleSubscription()"
-        />
+            :active="userInfo.isSubscribed()"
+            class="blog-action"
+            @click="() => userInfo.toggleSubscription()"
+          />
         </button>
       </div>
       <figure
@@ -62,11 +70,11 @@
 </template>
 
 <script lang="ts" setup>
-// import useUserInfo from "@/composables/users";
+import useUserInfo from "@/composables/users";
 // const userInfo = useUserInfo();
 const { path } = useRoute();
 const {
- categories, image, caption, date, title, description,
+  categories, image, caption, date, title, description,
 } = await queryContent(path)
   .only(["category", "date", "image", "caption", "title", "description"])
   .findOne()
@@ -96,7 +104,6 @@ function showCategory(category) {
 </script>
 
 <script lang="ts">
-import useUserInfo from "@/composables/users";
 const userInfo = useUserInfo();
 export default {
   name: "BlogTitle",
@@ -226,7 +233,7 @@ export default {
       width: 25px
       pointer-events: all
       transition: geometry.var("default-transition")
-      
+
       &:hover
         cursor: pointer
         color: colors.color("primary-highlight")
@@ -237,7 +244,7 @@ export default {
         width: fit-content
         align-items: center
         gap: 5px
-        
+
         & > span
           display: inline-flex
           vertical-align: middle
@@ -247,6 +254,5 @@ export default {
 
       &.right
         margin-left: auto
-      
 
 </style>

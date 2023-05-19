@@ -51,7 +51,7 @@
                     :key="child.id"
                     :class="{
                       'category-child': true,
-                      'active': path.includes(child._path)
+                      'active': path === child._path,
                     }"
                   >
                     <a
@@ -100,9 +100,13 @@ export default {
     await queryContent("/blog")
       .where({ _path: { $eq: currentPath } })
       .findOne().then((page) => {
-        page?.category?.forEach((category) => {
-          this.toggleCategory(category);
-        });
+        if (typeof page?.category === "string") {
+          page.category = [page.category];
+        } else {
+          page?.category?.forEach((category) => {
+            this.toggleCategory(category);
+          });
+        }
       });
   },
   methods: {

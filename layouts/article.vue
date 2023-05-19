@@ -99,10 +99,10 @@ onMounted(() => {
   display: flex
   flex-direction: row
   margin: 0 auto
-  gap: 10px
+  gap: 30px
 
   .panel
-    width: 350px
+    width: 400px
     padding: geometry.var("nav-height") 0
     height: fit-content
     position: sticky

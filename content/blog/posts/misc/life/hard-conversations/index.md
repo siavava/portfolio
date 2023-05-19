@@ -15,12 +15,11 @@ navigation: true
 
 # Let’s Talk about Optics
 
-
 ## Reactives
 
 > You look like a girl.
 
-That was my mom’s reaction when she first saw me with dreadlocks. She wasn’t just amused, she was bewildered. A fair share of the day was spent stealing glances at my hair, perhaps trying to make sense of this new predicament that had befallen her son, and definitely contemplating dragging me to grandma’s house and giving me a clean haircut. When my aunt arrived the next day, it was obvious that my mom had called her. She was never 
+That was my mom’s reaction when she first saw me with dreadlocks. She wasn’t just amused, she was bewildered. A fair share of the day was spent stealing glances at my hair, perhaps trying to make sense of this new predicament that had befallen her son, and definitely contemplating dragging me to grandma’s house and giving me a clean haircut. When my aunt arrived the next day, it was obvious that my mom had called her. She was never
 authoritarian like my father, so we were going to try diplomacy.
 
 <!-- more -->
@@ -31,8 +30,7 @@ Talking about my dad, ha—did I mention the incident where my elder brother rel
 
 ![Do I look like a girl? Who cares...](smiley.webp)
 
-
-## I get where you’re coming from.
+## I get where you’re coming from
 
 My aunt, being a puritan, tends to attribute any immoral or otherwise indecorous behavior to the allure of the devil, and she did. She went on and on about secular ways misleading the youth it never being too late to repent and return to the ways of the light. What really struck me, however, was the idea she was trying to communicate about the supposed image of a “real man.”
 
@@ -42,9 +40,9 @@ My aunt, being a puritan, tends to attribute any immoral or otherwise indecorous
 > pupils nationwide. All the kids want to study hard and go to a national school too,
 > you inspire them. But what kind of example are you giving with that hair?
 > You have to be a real man Joel, like your father.
-> 
+>
 > ---
-> 
+>
 > <quote-author>
 >   My aunt eyeing my hair in amusement.
 > </quote-author>
@@ -69,7 +67,6 @@ equally important to seek the equality of opportunity, and a fundamental part
 of that is changing the way we have been raised to perceive gender and associated roles.
 That is my challenge to myself, and I would like to extend it to you.
 
-
 I’m still the same quirky kid with a dream to change the world.
 About my hairdo, I still have dreadlocks, and they have never made me any
 greater or lesser of a person irrespective of societal expectations.
@@ -83,4 +80,3 @@ But to me it’s just… it’s just me, and that’s all that matters.
 :br
 
 :highlight[_That’s all that should matter_.]
-
