@@ -1,8 +1,8 @@
 ---
-title: "altair"
-description: 'This blog talks about science, math, art, and computing.'
+title: "amittai"
+description: "Amittai's portfolio website. Showcases work an projects."
 image:
-  src: '/assets/connection.svg'
+  src: '/assets/connection.png'
   alt: 'An image showcasing My Page.'
   width: 400
   height: 300
@@ -13,7 +13,7 @@ head:
     - name: 'robots'
       content: 'index, follow'
     - name: 'author'
-      content: 'Altair'
+      content: 'Amittai'
     - name: 'copyright'
       content: '© 2022 Altair'
 navigation:

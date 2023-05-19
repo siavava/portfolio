@@ -33,7 +33,6 @@ onMounted(() => {
   const auth = getAuth();
   userInfo.update();
   onAuthStateChanged(auth, () => {
-    // update user info
     userInfo.update();
   });
 });

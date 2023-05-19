@@ -71,15 +71,6 @@ export default {
   },
   ssr: true,
 
-  link: [
-    {
-      hid: "icon",
-      rel: "icon",
-      type: "image/x-icon",
-      href: "/favicon.png",
-    },
-  ],
-
   css: [
     "~/styles/raw-fonts.scss",
     "~/styles/typography.scss",
@@ -133,21 +124,27 @@ export default {
       xxl: 1536,
       "2xl": 1536,
     },
-    provider: 'ipx',
+    provider: "ipx",
     ipx: {},
-    dir: "static"
-  }, 
+    dir: "static",
+  },
   // serverMiddleware: {
   //   '/_ipx': '~/server/middleware/ipx.js'
   // },
 
   head: {
-    link: [
+    title: "amittai",
+    meta: [
+      // meta: [
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        rel: "icon",
-        type: "image/png",
-        href: "/favicon.png",
+        hid: "description",
+        name: "description",
+        content: "Amittai's portfolio. A summary of his work, thoughts, and interests.",
       },
+      // ],
+      // link: [{ rel: "icon", type: "image/png", href: "/assets/images/connection.svg" }],
     ],
   },
   googleFonts: {
