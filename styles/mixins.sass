@@ -64,9 +64,8 @@ $border-radius: geometry.radius("small")
   &::before, &::after
     content: ''
     display: block
-    // width: 100%
     height: 1px
-    bottom: 0.2em
+    bottom: 0.3em
     background-color: colors.color("primary-highlight")
     transition: geometry.var("default-transition")
     position: absolute
@@ -151,6 +150,7 @@ $border-radius: geometry.radius("small")
     padding-left: 20px
     margin-bottom: 10px
     font-weight: 400
+    line-height: inherit
 
     &::before 
       content: '-'
@@ -180,8 +180,8 @@ $border-radius: geometry.radius("small")
   li
     font-family: typography.font("monospace")
     font-weight: 400
-    font-size: typography.font-size("s")
-    line-height: 1.5
+    font-size: typography.font-size("xs")
+    line-height: 1.5rem
 
     &::before
       font-weight: 400

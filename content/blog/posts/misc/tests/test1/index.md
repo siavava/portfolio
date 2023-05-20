@@ -258,8 +258,8 @@ Another way to get started with Nuxt is to use [CodeSandbox](https://template.nu
 
 Here is a list:
 
-  - Something
-  - Something else.
+- Something
+- Something else.
 
 **And a nested code-block**:
 
