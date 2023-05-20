@@ -17,7 +17,7 @@
       </Button> -->
       <div class="horizontal-scroll">
         <BlogCard
-          v-for="(blog, i) in blogsSubscribedTo(blogs)"
+          v-for="(blog, i) in blogsSubscribedTo()"
           :key="i"
           :blog="blog"
         />
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { ParsedContent } from "@nuxt/content/dist/runtime/types";
+// import { ParsedContent } from "@nuxt/content/dist/runtime/types";
 import useUserInfo from "~/composables/users";
 
 export default {
@@ -63,9 +63,9 @@ export default {
   },
   async setup() {
     const { data: blogs } = await useAsyncData(
-      `blogs-${useRoute().path}`,
+      "blogs-list",
       async () => {
-        const _blogs = queryContent("blog/posts")
+        const _blogs = await queryContent("blog/posts")
           .where({ draft: false })
           .sort({ date: -1 })
           .find();
@@ -73,7 +73,7 @@ export default {
       },
     );
     const categories = new Set<string>();
-    blogs.value?.forEach((blog) => {
+    blogs.value.forEach((blog) => {
       if (typeof blog.category === "string") {
         categories.add(blog.category);
       } else {
@@ -100,9 +100,9 @@ export default {
       }
     },
 
-    blogsSubscribedTo(allBlogs: ParsedContent[]) {
-      return allBlogs
-        ? allBlogs.filter((blog) => this.userInfo.isSubscribed(blog._path))
+    blogsSubscribedTo() {
+      return this.blogs
+        ? [...this.blogs].filter((blog) => this.userInfo.isSubscribed(blog._path))
         : [];
     },
     blogsByCategory(category) {
