@@ -7,7 +7,7 @@
     >
       <!-- <div v-for="blog in blogs.filter(blog => blog.category.)" -->
       <div class="blog-category-section-title">
-        Subscribed ({{ userInfo.getSubscriptionCount }})
+        Subscribed ({{ userInfo.getSubscriptionCount }}) {{ categories }}
       </div>
       <!-- <Button class="scroll-button left">
         &lt;
