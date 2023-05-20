@@ -5,16 +5,9 @@
       v-if="userInfo.getSubscriptionCount"
       class="blog-category"
     >
-      <!-- <div v-for="blog in blogs.filter(blog => blog.category.)" -->
       <div class="blog-category-section-title">
-        Subscribed ({{ userInfo.getSubscriptionCount }}) {{ categories }}
+        Subscribed ({{ userInfo.getSubscriptionCount }})
       </div>
-      <!-- <Button class="scroll-button left">
-        &lt;
-      </Button>
-      <Button class="scroll-button right">
-        &gt;
-      </Button> -->
       <div class="horizontal-scroll">
         <BlogCard
           v-for="(blog, i) in blogsSubscribedTo()"
@@ -32,12 +25,6 @@
       <div class="blog-category-section-title">
         {{ category }}
       </div>
-      <!-- <Button class="scroll-button left">
-        &lt;
-      </Button>
-      <Button class="scroll-button right">
-        &gt;
-      </Button> -->
       <div class="horizontal-scroll">
         <BlogCard
           v-for="blog in blogsByCategory(category)"
