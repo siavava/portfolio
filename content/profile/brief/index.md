@@ -34,7 +34,7 @@ and [functional programming][functional-prg].
 I'm a hobbyist [visual designer][design].
 
 I am currently a student at [Dartmouth College][dartmouth].
-In the past, I have at [Y Combinator][yc], [Carnegie Mellon University][cmu],
+In the past, I have been at [Y Combinator][yc], [Carnegie Mellon University][cmu],
 and [Starehe Boys' Center & School][starehe].
 
 For more about myself, read on.  
