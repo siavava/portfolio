@@ -7,7 +7,7 @@
     >
       <!-- <div v-for="blog in blogs.filter(blog => blog.category.)" -->
       <div class="blog-category-section-title">
-        Subscribed
+        Subscribed ({{ userInfo.getSubscriptionCount }})
       </div>
       <!-- <Button class="scroll-button left">
         &lt;
@@ -61,6 +61,31 @@ export default {
       default: false,
     },
   },
+  async setup() {
+    const { data: blogs } = await useAsyncData(
+      `blogs-${useRoute().path}`,
+      async () => {
+        const _blogs = queryContent("blog/posts")
+          .where({ draft: false })
+          .sort({ date: -1 })
+          .find();
+        return _blogs;
+      },
+    );
+    const categories = new Set<string>();
+    blogs.value?.forEach((blog) => {
+      if (typeof blog.category === "string") {
+        categories.add(blog.category);
+      } else {
+        blog.category.forEach((category) => {
+          categories.add(category);
+        });
+      }
+    });
+    return {
+      blogs, categories,
+    };
+  },
   data() {
     return {
       userInfo: useUserInfo(),
@@ -80,46 +105,17 @@ export default {
         ? allBlogs.filter((blog) => this.userInfo.isSubscribed(blog._path))
         : [];
     },
+    blogsByCategory(category) {
+      return this.blogs.filter((blog) => {
+        if (typeof blog.category === "string") {
+          return blog.category === category;
+        } else {
+          return blog.category.includes(category);
+        }
+      });
+    },
   },
 };
-</script>
-
-<script lang="ts" setup>
-
-const { data: blogs } = await useAsyncData(
-  `blogs-${useRoute().path}`,
-  async () => {
-    const _blogs = queryContent("blog/posts")
-      .where({ draft: false })
-      .sort({ date: -1 })
-      .find();
-    return _blogs;
-  },
-);
-
-const categories = new Set<string>();
-blogs.value?.forEach((blog) => {
-  if (typeof blog.category === "string") {
-    categories.add(blog.category);
-  } else {
-    blog.category.forEach((category) => {
-      categories.add(category);
-    });
-  }
-});
-
-console.log(`categories: ${categories}`);
-
-const blogsByCategory = (category: string) => {
-  return blogs.value?.filter((blog) => {
-    if (typeof blog.category === "string") {
-      return blog.category === category;
-    } else {
-      return blog.category.includes(category);
-    }
-  });
-};
-
 </script>
 
 <style lang="sass" scoped>
