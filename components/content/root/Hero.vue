@@ -23,51 +23,14 @@
             <span class="normal"> but first, let's </span>
             <span
               id="action"
-              class="highlight"
               :style="{ 'color':getColor(activeCallOutIndex) }"
             >
               {{ currentAction }}
             </span>
           </div>
         </div>
-
-      <!-- <h3 class="hero-h3 big-heading reduced">
-        I build systems at scale.
-      </h3> -->
-
-      <!-- <ContentDoc
-        path="profile/hero"
-        tag="div"
-        class="hero-container"
-      /> -->
       </div>
       <div class="hero-footer">
-        <!-- <div class="name">
-        <div class="name-inner">
-          altair
-        </div>
-      </div>
-      <div class="single-item">
-        <div class="item-title">
-          {{ heroFootItems[footItemIndex].title }}
-        </div>
-        <div class="item-subscript">
-          {{ heroFootItems[footItemIndex].subscript }}
-        </div>
-      </div>
-      <div
-        v-for="index in footItems"
-        class="item"
-      >
-        <div class="item-2">
-          <div class="item-title">
-            {{ heroFootItems[index].title }}
-          </div>
-          <div class="item-subscript">
-            {{ heroFootItems[index].subscript }}
-          </div>
-        </div>
-      </div> -->
         <div class="down-link">
           <NuxtLink
             class="down-link-inner"
@@ -242,15 +205,17 @@ export default {
 
       &.inactive
         display: none
+
       .big-title
         width: fit-content
         font-family: typography.font("big-heading")
         color: colors.color("white")
-        font-size: clamp(20px, 8vw, 100px)
+        font-size: clamp(50px, 8vw, 100px)
         // font-size: 120px
         font-weight: 800
         margin: 1rem 0
         padding: 0
+        line-height: 1
 
         & > .strike-through
           // background: yellow
@@ -262,6 +227,8 @@ export default {
 
     .pique
       margin: 1.5em 0 0.5em 0.2rem
+      margin: 0 0 0 0.5em
+      line-height: 2
 
       font-size: clamp(typography.font-size("l"), 3vw, typography.font-size("xl"))
       font-weight: 800
@@ -273,13 +240,15 @@ export default {
       -o-transition: all 3s ease-in-out
       transition: all 3s ease-in-out
 
-      @media (max-width: 480px)
-        margin: 0 0 20px 2px
+      @media screen and (min-width: 720px)
+        line-height: 3
 
     .digression
       // font-family: typography.font("sans-serif")
       font-weight: 400
       margin: 0.5rem 0 1.5rem 0.2rem
+      margin: 0 0 0 0.5em
+      line-height: 1
 
       &:is(:last-child)::after
         content: '.'
@@ -289,7 +258,6 @@ export default {
         color: colors.color("white")
 
       @media (max-width: 480px)
-        margin: 0 0 20px 2px
 
   .hero-footer
     position: absolute
