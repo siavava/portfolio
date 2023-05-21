@@ -1,11 +1,4 @@
 <template>
-  <!-- <meta
-    name="viewport"
-    content="width=device-width,
-    initial-scale=1,
-    minimum-scale=1,
-    shrink-to-fit=no"
-  > -->
   <div id="root">
     <AppHeader>
       <TableOfContents />
@@ -16,7 +9,7 @@
         <div class="left panel">
           <BlogNavigation class="article-blog-navigation" />
         </div>
-        <body class="article-body">
+        <div class="article-body">
           <div class="content">
             <slot id="content" />
             <BlogComments
@@ -28,7 +21,7 @@
               class="hidden"
             />
           </div>
-        </body>
+        </div>
         <div class="right panel">
           <TableOfContents
             v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
