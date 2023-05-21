@@ -36,7 +36,7 @@
     "import/extensions": 0,
     "vue/no-multiple-template-root": 0,
     "vue/multi-word-component-names": 0,
-    "vue/no-v-html": 1,
+    "vue/no-v-html": 0,
     "import/no-extraneous-dependencies": 1
   },
   "plugins": [
