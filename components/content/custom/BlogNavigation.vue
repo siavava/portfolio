@@ -141,6 +141,7 @@ const { path } = useRoute();
 .navigation
   line-height: 2
   counter-reset: toc-0
+  width: 100%
 
   .title
     font-size: typography.font-size("xl")
@@ -174,6 +175,7 @@ const { path } = useRoute();
       height: fit-content
       display: inline-flex
       width: 100%
+      font-size: typography.font-size("xs")
       // background: yellow
 
       .category-label-text
@@ -193,10 +195,10 @@ const { path } = useRoute();
         right: 0
 
     .category-child
-      font-size: typography.font-size("xs")
+      font-size: typography.font-size("xxs")
       font-weight: 400
-      margin-left: 0.6rem
-      padding-left: 1rem
+      margin-left: 0.3rem
+      padding-left: 0.5rem
       border-left: 1px solid
 
       &:hover > *

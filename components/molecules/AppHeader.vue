@@ -486,7 +486,6 @@ const { data: latestBlogs } = await useAsyncData(
 
   &:hover
     transform: translateX(-5px)
-    
 
 .menu-extras
   display: flex

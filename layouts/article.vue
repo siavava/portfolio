@@ -79,10 +79,12 @@ onMounted(() => {
 
 .article-main
   width: min(100%, 1300px)
+  position: relative
 
 .article-blog-navigation
   position: sticky
   left: 0
+  top: 0
 
 #root
   display: flex
@@ -90,51 +92,33 @@ onMounted(() => {
   flex-direction: column
   min-height: 100vh
   gap: 10px
+  position: relative
 
 .body-and-panels
   display: flex
   flex-direction: row
   margin: 0 auto
-  gap: 30px
+  gap: 10px
+  width: 100%
+  height: 100%
+
+  .article-body
+    max-width: 100% !important
 
   .panel
-    width: 400px
+    width: 500px
     padding: geometry.var("nav-height") 0
     height: fit-content
     position: sticky
     top: 0
-    overflow: hidden
 
     @media(max-width: 1200px)
       display: none
 
 .content
   margin: 0 auto
-  width: min(100%, 80ch)
+  width: min(100%, 75ch)
   font-size: typography.font-size("m")
-
-h1
-  font-size: 36px
-  font-weight: 600
-  line-height: 40px
-
-h2
-  font-size: 24px
-  font-weight: 600
-  line-height: 33px
-
-h3
-  font-size: 20px
-  font-weight: 600
-  line-height: 28px
-
-hr
-  color: inherit
-  margin-left: 0
-  margin-right: 0
-  margin-top: 1rem
-  margin-bottom: 1rem
-  // margin: 1rem
 
 .description
   font-size: 18px
