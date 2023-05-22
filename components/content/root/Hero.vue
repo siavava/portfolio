@@ -210,7 +210,7 @@ export default {
         width: fit-content
         font-family: typography.font("big-heading")
         color: colors.color("white")
-        font-size: clamp(50px, 8vw, 100px)
+        font-size: clamp(45px, 8vw, 100px)
         // font-size: 120px
         font-weight: 800
         margin: 1rem 0
