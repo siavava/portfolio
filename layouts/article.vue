@@ -98,16 +98,21 @@ onMounted(() => {
   display: flex
   flex-direction: row
   margin: 0 auto
-  gap: 10px
+  //gap: 30px
   width: 100%
   height: 100%
 
   .article-body
     max-width: 100% !important
+    width: calc(100% - 460px)
+
+    @media(max-width: 1200px)
+      width: 100%
 
   .panel
-    width: 500px
-    padding: geometry.var("nav-height") 0
+    width: 230px
+    max-width: 300px
+    padding: geometry.var("nav-height") 10px
     height: fit-content
     position: sticky
     top: 0

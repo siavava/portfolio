@@ -49,7 +49,7 @@
 <script lang="ts">
 import {
   elementIsInWindow,
-  elementIsAtBottom,
+  // elementIsAtBottom,
   elementIsAtTop,
   elementIsBelowScreen,
   elementIsAboveScreen,
@@ -159,7 +159,7 @@ export default {
       });
     },
     handleScroll() {
-      this.refreshKey = this.refreshKey == 999 ? 0 : this.refreshKey + 1;
+      this.refreshKey = this.refreshKey === 999 ? 0 : this.refreshKey + 1;
 
       const currentScrollPosition = window.scrollY || document.documentElement.scrollTop;
       this.scrollDirection = (currentScrollPosition > this.scrollY)
@@ -174,7 +174,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-const { path } = useRoute();
+// const { path } = useRoute();
 const { toc } = useContent();
 
 </script>
@@ -186,6 +186,7 @@ const { toc } = useContent();
 .toc
   line-height: 2
   position: relative
+  max-width: 100%
 
   .title
     font-size: typography.font-size("xl")
@@ -198,14 +199,18 @@ const { toc } = useContent();
     display: block
     font-weight: 500
     border-left: 1px solid transparent
+    width: 100%
+    overflow: hidden
+    text-overflow: ellipsis
 
     .link-text
       transition: geometry.var("default-transition")
-
+      white-space: nowrap
+      overflow: hidden
 
     &:hover
       color: colors.color("primary-highlight") !important
-      
+
       & > .link-text
         margin-left: -5px
 
