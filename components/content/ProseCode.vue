@@ -140,10 +140,10 @@ export default {
 
           & > span
             counter-increment: line
+            min-width: 100%
 
             &.highlight
               background-color: rgba(colors.color("lightest-background"), 0.5)
-              width: 100%
               padding-right: 1em
 
               &::before
