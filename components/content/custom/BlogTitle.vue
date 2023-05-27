@@ -234,6 +234,9 @@ export default {
       display: flex
       //flex-direction: row
       gap: 5px
+      margin: 0
+      padding: 0
+      background: red
       //justify-items: right
 
       &:hover
