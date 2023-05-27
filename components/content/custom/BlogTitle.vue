@@ -26,8 +26,8 @@
       <div class="blog-actions">
         <button class="blog-action left">
           <Icon
-            class="blog-action left"
             type="like"
+            class="blog-action-icon"
             :active="false"
           />
         </button>
@@ -35,6 +35,7 @@
           <Icon
             type="comment"
             :active="false"
+            class="blog-action-icon"
             @click="showComments"
           />
           <span>
@@ -44,7 +45,7 @@
         <button class="blog-action right">
           <BookMarkIcon
             :active="userInfo.isSubscribed()"
-            class="blog-action"
+            class="blog-action-icon"
             @click="() => userInfo.toggleSubscription()"
           />
         </button>
@@ -237,7 +238,7 @@ export default {
       margin: 0
       padding: 0
       background: red
-      width: fit-content
+      //width: 70px
       //justify-items: right
 
       &:hover
@@ -253,5 +254,11 @@ export default {
 
       &.right
         margin-left: auto
+
+      .blog-action-icon
+        height: 100% !important
+        width: 30px !important
+        aspect-ratio: 1/1 !important
+        background: yellow
 
 </style>
