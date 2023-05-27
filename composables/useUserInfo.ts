@@ -53,13 +53,8 @@ const useUserInfo = defineStore("userInfo", {
         this.avatar = await this.getUserAvatar();
         this.email = newUser.email || "";
         this.uid = newUser.uid;
-
-        // if (!["/", "/blog"].includes(path)) {
-        // }
-        // console.log("init");
       }
       this.updateSubscriptions(true);
-      // onAuthStateChanged(getAuth(), () => this.init());
       if (!["/", "/blog"].includes(path)) {
         this.getCommentsByRoute();
       }
@@ -82,24 +77,6 @@ const useUserInfo = defineStore("userInfo", {
         await this.getCommentsByRoute();
       }
     },
-
-    // async updateSubscriptions(clear = false) {
-    //   const allSubscriptions = await this.getAllSubscriptions();
-
-    //   if (clear) {
-    //     this.subscriptions = allSubscriptions;
-    //   } else {
-    //     // remove any subscriptions that are no longer valid
-    //     this.subscriptions = new Set<string>([...this.subscriptions].filter((sub) => {
-    //       return allSubscriptions.includes(sub);
-    //     }));
-
-    //     // add any new subscriptions
-    //     allSubscriptions.forEach((sub) => {
-    //       this.subscriptions.add(sub);
-    //     });
-    //   }
-    // },
 
     /**
     * Subscribes the user to a specific page.
@@ -268,32 +245,11 @@ const useUserInfo = defineStore("userInfo", {
         newPaths.forEach((path) => {
           this.subscriptions.add(path);
         });
-
-        // queryContent<MarkdownParsedContent>()
-        //   .where({ path: { $in: newPaths } })
-        //   .find()
-        //   .then((data) => {
-        //     data.forEach((page) => {
-        //       this.subscriptions.add({
-        //         title: page?.title || "",
-        //         path: page?._path || "",
-        //         category: page?.category[0] || page?.category || "",
-        //         description: page?.description || "",
-        //         date: page?.date || "",
-        //         image: page?.image || "",
-        //         excerpt: page?.excerpt || "",
-        //       });
-        //     });
-        //   });
-        // this.subscriptions = _results;
       }).catch((error) => {
         console.error("Error getting documents: ", error);
-        // return _results;
       });
 
       onSnapshot(q, (newQuerySnapshot) => {
-        // const _newResults = new Set<BlogPostMeta>();
-        // getDocs(q).then(async (querySnapshot) => {
         const paths = Array.from(new Set<string>(
           newQuerySnapshot.docs.map((doc) => {
             const path = doc.data().page;
@@ -311,29 +267,6 @@ const useUserInfo = defineStore("userInfo", {
         paths.forEach((path) => {
           this.subscriptions.add(path);
         });
-
-        // queryContent<MarkdownParsedContent>()
-        //   .where({ _path: { $in: paths } })
-        //   .find()
-        //   .then((data) => {
-        //     data.forEach((page) => {
-        //       this.subscriptions.add({
-        //         title: page?.title || "",
-        //         path: page?._path || "",
-        //         category: page?.category[0] || page?.category || "",
-        //         description: page?.description || "",
-        //         date: page?.date || "",
-        //         image: page?.image || "",
-        //         excerpt: page?.excerpt || "",
-        //       });
-        //     });
-        //     console.log("new subscriptions: ", this.subscriptions);
-        //     // this.subscriptions = _results;
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error getting documents: ", error);
-        //     // return _results;
-        //   });
       });
     },
 

@@ -50,7 +50,6 @@
 
 <script lang="ts">
 import { ParsedContent } from "@nuxt/content/dist/runtime/types";
-import useUserInfo from "~/composables/users";
 
 export default {
   name: "BlogList",

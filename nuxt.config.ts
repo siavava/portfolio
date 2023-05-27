@@ -204,10 +204,10 @@ export default {
   },
   build: {
     postcss: {
-      plugins: [
-        autoprefixer(),
-      ],
       postcssOptions: {
+        preset: {
+          autoprefixer: autoprefixer(),
+        },
         // preset name
         // order: "cssnanoLast",
         // ordered plugin names

@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
-import useUserInfo from "~/composables/users";
+// import useUserInfo from "~/composables/users";
 
 // import twitter widgets
 // import "https://platform.twitter.com/widgets.js";

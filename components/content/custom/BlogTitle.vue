@@ -70,8 +70,6 @@
 </template>
 
 <script lang="ts" setup>
-import useUserInfo from "@/composables/users";
-// const userInfo = useUserInfo();
 const { path } = useRoute();
 const {
   categories, image, caption, date, title, description,

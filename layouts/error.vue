@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
-import useUserInfo from "~/composables/users";
+// import useUserInfo from "~/composables/users";
 
 export default {
   layout: "error",

@@ -1,6 +1,6 @@
 <template>
   <div class="expand-icon">
-    <svg
+    <!-- <svg
       aria-hidden="true"
       role="img"
       class="collapse"
@@ -32,7 +32,7 @@
         d="m12 19.24l-4.95-4.95l-1.41 1.42L12 22.07l6.36-6.36l-1.41-1.42L12
             19.24zM5.64 8.29l1.41 1.42L12 4.76l4.95 4.95l1.41-1.42L12 1.93L5.64 8.29z"
       />
-    </svg>
+    </svg> -->
   </div>
 </template>
 
@@ -44,32 +44,53 @@ export default {
 
 <style lang="sass">
 @use "~/styles/colors"
+
 .expand-icon
-  color: colors.color("light-foreground")
+  color: colors.color("lightest-background")
+  width: 2ch
   aspect-ratio: 1/1
-  height: 1.2em !important
+  display: flex
+  place-items: center
+  transition: all 0.3s ease-in-out
+  position: relative
+  line-height: 1.5
+  font-size: 1.2em
+  align-self: right
 
-  svg
-    fill: none
-    stroke: currentcolor
-    stroke-width: 1
-
-  .expand
-    display: block !important
-
-  .collapse
-    display: none !important
+  &::before
+    margin-top: 0.7em
+    content: "\232A"
+    font-weight: 700
 
   &.expanded
-    .expand
-      display: none !important
+    transform: rotate(180deg)
 
-    .collapse
-      display: block !important
-
-  -webkit-transition: all 0.1s ease-in-out
-  -moz-transition: all 0.1s ease-in-out
-  -ms-transition: all 0.1s ease-in-out
-  -o-transition: all 0.1s ease-in-out
-  transition: all 0.1s ease-in-out
+//.expand-icon
+//  color: colors.color("light-foreground")
+//  aspect-ratio: 1/1
+//  height: 1.2em !important
+//
+//  svg
+//    fill: none
+//    stroke: currentcolor
+//    stroke-width: 1
+//
+//  .expand
+//    display: block !important
+//
+//  .collapse
+//    display: none !important
+//
+//  &.expanded
+//    .expand
+//      display: none !important
+//
+//    .collapse
+//      display: block !important
+//
+//  -webkit-transition: all 0.1s ease-in-out
+//  -moz-transition: all 0.1s ease-in-out
+//  -ms-transition: all 0.1s ease-in-out
+//  -o-transition: all 0.1s ease-in-out
+//  transition: all 0.1s ease-in-out
 </style>

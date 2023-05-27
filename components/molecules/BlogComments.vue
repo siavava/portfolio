@@ -99,7 +99,6 @@
 <script lang="ts" setup>
 import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
 import { normalizePath } from "~/modules/utils";
-import useUserInfo from "~/composables/users";
 import type { Comment } from "~/modules/utils";
 
 const { textarea: commentTextArea, input: comment } = useTextareaAutosize();

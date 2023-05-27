@@ -252,9 +252,6 @@ export default {
 </script>
 
 <script lang="ts" setup>
-// import { UserInfo } from "~/modules/users";
-
-// const userInfo = useUserInfo();
 
 const { path: currentPage } = useRoute();
 const { toc } = useContent();

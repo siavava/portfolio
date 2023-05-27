@@ -127,7 +127,7 @@ export default {
 
 const hasCompany = (project: any) => typeof project.company !== "undefined";
 
-// read 'job-info' data
+// read 'featured projects' data
 const { data } = await useAsyncData(
   `projects-${useRoute().path}`,
   async () => {
@@ -135,7 +135,7 @@ const { data } = await useAsyncData(
       .where({ featured: true })
       .sort({ date: -1, order: 1 })
       .find();
-    return await _projectsData;
+    return _projectsData;
   },
 );
 
