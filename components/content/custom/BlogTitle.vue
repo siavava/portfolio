@@ -215,13 +215,14 @@ export default {
 
   .blog-actions
     width: 100%
-    height: 60px
+    height: 50px
     border-top: 0.5px solid colors.color("lightest-background")
     border-bottom: 0.5px solid colors.color("lightest-background")
     display: flex
     flex-direction: row
     gap: 20px
-    place-items: center
+    //place-items: center
+    justify-content: flex-start
     padding: 10px 1em
     margin: 2em 0
     pointer-events: all
@@ -231,9 +232,9 @@ export default {
       pointer-events: all
       transition: geometry.var("default-transition")
       display: flex
-      flex-direction: row
+      //flex-direction: row
       gap: 5px
-      justify-items: center
+      //justify-items: right
 
       &:hover
         cursor: pointer
@@ -243,7 +244,7 @@ export default {
         font-family: typography.font("sans-serif")
         font-size: typography.font-size("l")
         //background-color: yellow
-        line-height: 2.3
+        line-height: 1.8
         height: 100%
 
       &.right
