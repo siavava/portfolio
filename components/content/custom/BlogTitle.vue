@@ -237,7 +237,6 @@ export default {
       gap: 5px
       margin: 0
       padding: 0
-      background: red
       //width: 70px
       //justify-items: right
 
@@ -259,6 +258,5 @@ export default {
         height: 100% !important
         width: 30px !important
         aspect-ratio: 1/1 !important
-        background: yellow
 
 </style>
