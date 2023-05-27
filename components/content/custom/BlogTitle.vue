@@ -24,24 +24,24 @@
         <Date :date="date" />
       </div>
       <div class="blog-actions">
-        <button class="blog-action composite left">
+        <button class="blog-action left">
           <Icon
             class="blog-action left"
             type="like"
             :active="false"
           />
         </button>
-        <button class="blog-action composite left">
+        <button class="blog-action left">
           <Icon
             type="comment"
             :active="false"
             @click="showComments"
           />
-          <span class="action-text">
+          <span>
             {{ userInfo.getComments.length }}
           </span>
         </button>
-        <button class="blog-action composite right">
+        <button class="blog-action right">
           <BookMarkIcon
             :active="userInfo.isSubscribed()"
             class="blog-action"
@@ -119,7 +119,7 @@ export default {
 
 .title-container
   width: 100%
-  height: fit-content
+  //height: fit-content
   align-content: center
   padding: 0.5rem 0 2rem 0
 
@@ -147,7 +147,7 @@ export default {
         margin: 0.5rem 0 0 0
 
         .category-icon
-          width: fit-content
+          //width: fit-content
           height: 70%
           margin-right: 1rem
           vertical-align: middle
@@ -204,7 +204,7 @@ export default {
     border-radius: geometry.var("border-radius")
 
   .title-image-caption
-    width: fit-content
+    //width: fit-content
     align-self: flex-end
     margin-top: 2rem
     margin-right: clamp(3em, 4vw, 5em)
@@ -215,40 +215,36 @@ export default {
 
   .blog-actions
     width: 100%
-    height: 40px
+    height: 60px
     border-top: 0.5px solid colors.color("lightest-background")
     border-bottom: 0.5px solid colors.color("lightest-background")
     display: flex
     flex-direction: row
     gap: 20px
     place-items: center
-    padding: 0 1em
+    padding: 10px 1em
     margin: 2em 0
     pointer-events: all
 
     .blog-action
-      height: 25px
-      width: 25px
+      height: 100%
       pointer-events: all
       transition: geometry.var("default-transition")
+      display: flex
+      flex-direction: row
+      gap: 5px
+      justify-items: center
 
       &:hover
         cursor: pointer
         color: colors.color("primary-highlight")
 
-      &.composite
-        display: flex
-        flex-direction: row
-        width: auto
-        align-items: center
-        gap: 5px
-
-        & > span
-          display: inline-flex
-          vertical-align: middle
-          font-size: 14px
-          font-weight: 600
-          line-height: 1
+      & > span
+        font-family: typography.font("sans-serif")
+        font-size: typography.font-size("l")
+        //background-color: yellow
+        line-height: 2.3
+        height: 100%
 
       &.right
         margin-left: auto

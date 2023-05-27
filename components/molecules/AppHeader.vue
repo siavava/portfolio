@@ -377,8 +377,8 @@ const { data: latestBlogs } = await useAsyncData(
   -o-transition: all 0.1s ease-in-out
   transition: all 0.1s ease-in-out
 
-  &.collapse-into-page
-    border-bottom: 1px solid colors.color(lightest-background)
+  //&.collapse-into-page
+  //  border-bottom: 1px solid colors.color(lightest-background)
 
   .footer-link
     background: none !important
