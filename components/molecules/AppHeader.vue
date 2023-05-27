@@ -547,6 +547,9 @@ const { data: latestBlogs } = await useAsyncData(
     font-size: typography.font-size("m")
     color: colors.color('foreground')
     font-weight: 500
+    display: flex
+    place-items: center
+    gap: 10px
 
     margin-top: 0
     padding-top: 0
