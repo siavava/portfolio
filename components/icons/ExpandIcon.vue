@@ -46,24 +46,31 @@ export default {
 @use "~/styles/colors"
 
 .expand-icon
-  color: colors.color("lightest-background")
-  width: 2ch
+  // color: colors.color("primary-highlight")
+  width: 2.5ch
   aspect-ratio: 1/1
   display: flex
   place-items: center
-  transition: all 0.3s ease-in-out
   position: relative
   line-height: 1.5
   font-size: 1.2em
   align-self: right
+  //  background: yellow
+  justify-self: center
 
   &::before
-    margin-top: 0.7em
+    transition: all 0.3s ease-in-out
     content: "\232A"
+    width: 0.6ch
     font-weight: 700
+    transform: rotate(90deg)
+    // background: red
+    display: flex
+    position: absolute
+    left: 30%
 
-  &.expanded
-    transform: rotate(180deg)
+  &.expanded::before
+    transform: rotate(270deg)
 
 //.expand-icon
 //  color: colors.color("light-foreground")
