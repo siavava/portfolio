@@ -237,6 +237,7 @@ export default {
       margin: 0
       padding: 0
       background: red
+      width: fit-content
       //justify-items: right
 
       &:hover
