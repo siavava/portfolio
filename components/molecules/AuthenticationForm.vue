@@ -207,23 +207,23 @@ export default {
     },
 
     // sign in
-    signIn() {
+    async signIn() {
       const auth = getAuth();
 
-      signInWithEmailAndPassword(auth, this.email, this.password);
-      // .then((userCredential) => {
-      //   // Signed in
-      //   const { user } = userCredential;
-      //   // ...
-      //   // close sign-in popup after sign-in;
-      //   this.closePopUp();
-      // })
-      // .catch((error) => {
-      //   const errorCode = error.code;
-      //   const errorMessage = error.message;
-      //   console.error(`errorCode: ${errorCode}, errorMessage: ${errorMessage}`);
-      //   // ..
-      // });
+      signInWithEmailAndPassword(auth, this.email, this.password)
+        .then((userCredential) => {
+        // Signed in
+          // const { user } = userCredential;
+          // ...
+          // close sign-in popup after sign-in;
+          this.closePopUp();
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error(`errorCode: ${errorCode}, errorMessage: ${errorMessage}`);
+        // ..
+        });
     },
     closePopUp() {
       if (typeof document !== "undefined") {

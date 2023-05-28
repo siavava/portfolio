@@ -63,9 +63,9 @@ onMounted(() => {
   const userInfo = useUserInfo();
   // listen for auth state changes
   const auth = getAuth();
-  userInfo.update();
+  userInfo.init();
   onAuthStateChanged(auth, () => {
-    userInfo.update();
+    userInfo.init();
   });
 });
 </script>

@@ -45,15 +45,15 @@ const useUserInfo = defineStore("userInfo", {
   actions: {
     async init() {
       const { path } = useRoute();
+      const { currentUser: newUser } = getAuth();
+      // const auth = getAuth();
+      this.active = !!newUser;
 
-      const { currentUser: newUser } = await getAuth();
-      if (newUser) {
-        this.active = true;
-        this.userName = newUser.displayName || "";
-        this.avatar = await this.getUserAvatar();
-        this.email = newUser.email || "";
-        this.uid = newUser.uid;
-      }
+      this.userName = newUser?.displayName || "";
+      this.avatar = await this.getUserAvatar();
+      this.email = newUser?.email || "";
+      this.uid = newUser?.uid;
+
       this.updateSubscriptions(true);
       if (!["/", "/blog"].includes(path)) {
         this.getCommentsByRoute();
@@ -61,18 +61,20 @@ const useUserInfo = defineStore("userInfo", {
     },
     async update() {
       const { currentUser: newUser } = getAuth();
+      const auth = getAuth();
       const { path } = useRoute();
-      if (newUser) {
-        this.active = true;
-        this.userName = newUser.displayName || "";
-        this.avatar = await this.getUserAvatar();
-        this.email = newUser.email || "";
-        this.uid = newUser.uid;
+      // if (newUser?.email !== undefined) {
+      this.active = auth.currentUser.email !== null;
 
-        if (!["/"].includes(path)) {
-          this.updateSubscriptions(true);
-        }
+      this.userName = newUser.displayName || "";
+      this.avatar = await this.getUserAvatar();
+      this.email = newUser.email || "";
+      this.uid = newUser.uid;
+
+      if (!["/"].includes(path)) {
+        this.updateSubscriptions(true);
       }
+      // }
       if (!["/", "/blog"].includes(path)) {
         await this.getCommentsByRoute();
       }
@@ -219,11 +221,15 @@ const useUserInfo = defineStore("userInfo", {
       if (!this.active) return;
       const db = getFirestore();
       const { currentUser } = getAuth();
+      if (!currentUser) return;
+      console.log(`this.active: ${this.active}`);
+      console.log(`currentUser.email: ${currentUser?.email}`);
+      console.log(`currentUser: ${currentUser}`);
 
       // get all documents that have user email in subscribers
       const q = query(
         collection(db, "subscriptions"),
-        where("subscribers", "array-contains", currentUser.email),
+        where("subscribers", "array-contains", currentUser?.email),
       );
 
       // const _results: BlogPostMeta[] = [];
@@ -282,13 +288,13 @@ const useUserInfo = defineStore("userInfo", {
       const { currentUser } = getAuth();
 
       if (!currentUser) {
-        console.error("Call to getUserAvatar with no user logged in.");
+        // console.error("Call to getUserAvatar with no user logged in.");
         return "";
       }
 
       const q = query(
         collection(db, "avatars"),
-        where("uid", "==", currentUser.uid),
+        where("uid", "==", currentUser?.uid),
       );
 
       return getDocs(q).then((querySnapshot) => {

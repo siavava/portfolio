@@ -103,9 +103,8 @@ import type { Comment } from "~/modules/utils";
 
 const { textarea: commentTextArea, input: comment } = useTextareaAutosize();
 
-const comments = ref(null);
+const comments = ref<HTMLElement>(null);
 onClickOutside(comments, () => {
-  console.log("clicked outside");
   comments.value.classList.add("hidden");
 });
 </script>
@@ -221,12 +220,20 @@ export default {
     },
 
     async _signOut() {
-      const auth = getAuth();
+      // first, hide comments popup
+      const commentsElement = document.getElementsByClassName("comments-section-wrapper")[0];
+      commentsElement.classList.add("hidden");
 
+      // sign out
+      const auth = getAuth();
       await signOut(auth);
     },
 
     signIn() {
+      // first, hide comments popup
+      const commentsElement = document.getElementsByClassName("comments-section-wrapper")[0];
+      commentsElement.classList.add("hidden");
+
       this.showAuthPopup = true;
     },
 
