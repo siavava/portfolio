@@ -26,6 +26,8 @@ export default {
           content: "Amittai's portfolio. A summary of his work, thoughts, and interests.",
         },
         // favicon
+      ],
+      link: [
         { rel: "icon", type: "image/x-icon", href: "/favicons/favicon.ico" },
         {
           rel: "icon", type: "image/png", sizes: "32x32", href: "/favicons/favicon-32x32.png",
