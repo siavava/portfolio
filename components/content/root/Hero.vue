@@ -201,7 +201,8 @@ export default {
   .hero-container
     .blurb-container
       width: fit-content
-      font-family: typography.font("matter")
+      //font-family: typography.font("matter")
+      font-family: typography.font("sans-serif")
 
       &.inactive
         display: none

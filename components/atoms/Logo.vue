@@ -1,19 +1,19 @@
 <template>
-  <div
+  <!-- <div
     class="logo"
     tabindex="-1"
+  > -->
+  <NuxtLink
+    class="logo-link"
+    to="/"
+    aria-label="home"
   >
-    <NuxtLink
-      class="logo-link"
-      to="/"
-      aria-label="home"
-    >
-      <Icon
-        type="logo"
-        class="raw-logo"
-      />
-    </NuxtLink>
-  </div>
+    <Icon
+      type="logo"
+      class="raw-logo"
+    />
+  </NuxtLink>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -28,6 +28,12 @@ export default {
 @use "~/styles/typography"
 @use "~/styles/geometry"
 @use "~/styles/mixins"
+
+//.raw-logo
+  //height: 60px
+  //width: 380px
+  //background: none
+  //padding: 10px !important
 
 // .logo
 //   @include mixins.flex-center

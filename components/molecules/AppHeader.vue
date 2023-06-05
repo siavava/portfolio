@@ -402,9 +402,9 @@ const { data: latestBlogs } = await useAsyncData(
     position: relative
     align-self: left
     height: 70px
-    aspect-ratio: 1 / 1
+    aspect-ratio: 16/9
     margin-left: 0
-    padding: 20px 30px 20px 10px
+    //padding: 20px 30px 20px 10px
 
   .header-nav-links
     position: relative

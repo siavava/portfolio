@@ -1001,3 +1001,20 @@
   src: url('~/assets/fonts/Apercu/ApercuProMono.otf') format('truetype');
 }
 
+// cohere variable font
+@font-face {
+  font-family: 'Cohere Variable';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('~/assets/fonts/Cohere/CohereVariable.woff2') format('truetype');
+}
+
+// cohere regular font
+@font-face {
+  font-family: 'Cohere Regular';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('~/assets/fonts/Cohere/CohereRegular.woff2') format('truetype');
+}
