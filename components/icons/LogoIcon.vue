@@ -182,6 +182,7 @@ export default {
   place-items: center
   justify-content: flex-start
   height: 100%
+  padding: 0 20px
 
   .icon
     transition: geometry.var("default-transition")
