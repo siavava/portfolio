@@ -214,6 +214,7 @@ export default {
         font-variation-settings: "cuts" 300
         color: colors.color("white")
         font-size: clamp(45px, 8vw, 100px)
+        text-transform: uppercase
         // font-size: 120px
         font-weight: 800
         margin: 1rem 0
@@ -236,6 +237,7 @@ export default {
       font-size: clamp(typography.font-size("l"), 3vw, typography.font-size("xl"))
       font-weight: 800
       width: 100%
+      font-variation-settings: "cuts" 50
       // animate change of color
       -webkit-transition: all 3s ease-in-out
       -moz-transition: all 3s ease-in-out

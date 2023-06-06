@@ -40,6 +40,10 @@ and [Starehe Boys' Center & School][starehe].
 For more about myself, read on.  
 If interested in something particularly, [let me know][email].
 
+Amittai loves Charite :heart:
+
+Charite loves Amittai too :rocket:
+
 ---
 
 ## Fun Facts
