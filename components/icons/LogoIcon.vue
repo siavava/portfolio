@@ -37,25 +37,28 @@
       d="M0 0h24v24H0z"
     /></svg> -->
 
-  <svg
-    id="katman_1"
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    x="0px"
-    y="0px"
-    viewBox="0 0 841.89 595.28"
-    style="enable-background:new 0 0 841.89 595.28;"
-    xml:space="preserve"
-  >
-    <!-- <style type="text/css">
+  <div class="container">
+    <svg
+      id="katman_1"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      viewBox="100 140 50.89 300.89"
+      xml:space="preserve"
+      class="icon"
+    >
+      <!-- viewBox="0 0 600.89 595.28" -->
+
+      <!-- <style type="text/css">
       .st0{fill:#3A594D;}
       .st1{clip-path:url(#SVGID_00000054235013404132769400000006162829445624733592_);}
       .st2{fill-rule:evenodd;clip-rule:evenodd;fill:#3A594D;}
       .st3{fill-rule:evenodd;clip-rule:evenodd;fill:#BD8FC0;}
       .st4{fill:#EE765C;}
     </style> -->
-    <path
+      <!-- <path
       class="st0"
       d="M266.94,356.28c17.5,0,32.81-8.75,38.86-26.41c1.18-3.54-0.51-5.89-3.87-5.89h-6.56c-3.03,0-5.04,1.34-6.4,4.2
         c-5.21,10.27-12.45,13.96-21.53,13.96c-16.15,0-26.08-11.28-26.08-30.11c0-18.84,10.27-30.11,25.73-30.11
@@ -86,61 +89,66 @@
     <g>
       <defs>
 
-        <!-- <rect
-          id="SVGID_1_"
-          x="68.05"
-          y="238.52"
-          width="117.78"
-          height="117.78"
-        > -->
-        <text
-          x="100"
-          y="0"
-          width="500"
-          height="117.78"
-          class="name first"
-        >{{ "amitt" }}</text>
-        <text class="name second">{{ "ai" }}</text>
-        <!-- </rect> -->
-      </defs>
-
-    </g>
-    <g>
-      <defs>
         <rect
           id="SVGID_1_"
           x="68.05"
           y="238.52"
           width="117.78"
           height="117.78"
-        />
-      </defs>
-      <clipPath id="SVGID_00000075852095293250014550000008258792261602485387_">
-        <use
-          xlink:href="#SVGID_1_"
-          style="overflow:visible;"
-        />
-      </clipPath>
-      <g style="clip-path:url(#SVGID_00000075852095293250014550000008258792261602485387_);">
-        <path
-          class="st2"
-          d="M106.21,308.65c3.17,0,9.48-0.17,18.19-3.76c10.16-4.18,30.37-11.77,44.94-19.57
+        >
+    <text
+      x="100"
+      y="0"
+      width="500"
+      height="117.78"
+      class="name first"
+    >{{ "amitt" }}</text>
+    <text class="name second">{{ "ai" }}</text>
+    </rect>
+    </defs>
+
+    </g> -->
+      <!-- <g> -->
+      <!-- <defs>
+          <rect
+            id="SVGID_1_"
+            x="68.05"
+            y="238.52"
+            width="117.78"
+            height="117.78"
+          />
+        </defs> -->
+      <!-- <clipPath id="SVGID_00000075852095293250014550000008258792261602485387_">
+          <use
+            xlink:href="#SVGID_1_"
+            style="overflow:visible;"
+          />
+        </clipPath> -->
+      <!-- <g style="clip-path:url(#SVGID_00000075852095293250014550000008258792261602485387_);"> -->
+      <path
+        class="st2"
+        d="M106.21,308.65c3.17,0,9.48-0.17,18.19-3.76c10.16-4.18,30.37-11.77,44.94-19.57
             c10.2-5.45,14.66-12.67,14.66-22.38c0-13.48-10.93-24.41-24.41-24.41h-56.49c-19.37,0-35.06,15.7-35.06,35.06
             S82.75,308.65,106.21,308.65z"
-        />
-        <path
-          class="st3"
-          d="M115.77,332.79c0-9.49,5.71-18.05,14.48-21.69l17.79-7.38c17.99-7.47,37.8,5.76,37.8,25.24
+      />
+      <path
+        class="st3"
+        d="M115.77,332.79c0-9.49,5.71-18.05,14.48-21.69l17.79-7.38c17.99-7.47,37.8,5.76,37.8,25.24
             c0,15.09-12.24,27.33-27.33,27.32l-19.26,0C126.28,356.27,115.77,345.76,115.77,332.79z"
-        />
-        <path
-          class="st4"
-          d="M88.27,313.27L88.27,313.27c-11.16,0-20.21,9.05-20.21,20.21v2.62c0,11.16,9.05,20.21,20.21,20.21h0
+      />
+      <path
+        class="st4"
+        d="M88.27,313.27L88.27,313.27c-11.16,0-20.21,9.05-20.21,20.21v2.62c0,11.16,9.05,20.21,20.21,20.21h0
             c11.16,0,20.21-9.05,20.21-20.21v-2.62C108.48,322.32,99.43,313.27,88.27,313.27z"
-        />
-      </g>
-    </g>
-  </svg>
+      />
+      <!-- </g> -->
+      <!-- </g> -->
+    </svg>
+    <div class="logo-text">
+      <span class="name first">amitt</span>
+      <span class="name second">ai</span>
+    </div>
+  </div>
 
   <!-- <svg
     width="800px"
@@ -169,27 +177,42 @@ export default {
 @use "~/styles/geometry"
 @use "~/styles/typography"
 
-svg
-  transition: geometry.var("default-transition")
-  user-select: none
-  //aspect-ratio: 1/1
-  //height: 100% !important
-  max-height: 100% !important
-
-  &:hover
-    //transform: rotate(-180deg)
-    transform: scale(1.1)
-    cursor: pointer
-
 .container
   display: inline-flex
+  place-items: center
+  justify-content: flex-start
+  height: 100%
+
+  .icon
+    transition: geometry.var("default-transition")
+    user-select: none
+    margin: 0
+    padding: 0 !important
+    margin: 0 !important
+    height: 32px !important
+    aspect-ratio: 1/1
+
+    height: 100%
+    aspect-ratio: 1/1
+    display: none
+
+    &:hover
+      //transform: rotate(-180deg)
+      transform: scale(1.1)
+      cursor: pointer
 
   .name
-    background: red
+    //background: red
     font-family: typography.font("sans-serif")
+    font-weight: 800
+    font-variation-settings: "cuts" 300
 
     &.first
       color: #EE765C
+
+      &::after
+        content: "."
+        color: #BD8FC0
 
     &.second
       color: #3A594D
