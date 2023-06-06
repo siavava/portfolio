@@ -205,7 +205,7 @@ export default {
   .name
     //background: red
     font-family: typography.font("sans-serif")
-    font-weight: 800
+    font-weight: 600
     font-variation-settings: "cuts" 300
 
     &.first
