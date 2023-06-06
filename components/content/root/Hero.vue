@@ -64,6 +64,10 @@ export default {
         khaki: "#ffd074",
         white: "#ecf7fa",
         black: "#282723",
+
+        one: "#EE765C",
+        two: "#3A594D",
+        three: "#BD8FC0",
       },
       currentAction: heroCallOuts[0].action,
       changingAction: null,
@@ -75,11 +79,14 @@ export default {
       return heroCallOuts[index];
     },
     heroColors() {
-      return [
-        this.heroColorsDict.teal,
-        this.heroColorsDict.purple,
+      return Array.from([
         this.heroColorsDict.khaki,
-      ];
+        // this.heroColorsDict.one,
+        this.heroColorsDict.three,
+        this.heroColorsDict.purple,
+        this.heroColorsDict.two,
+        // this.heroColorsDict.teal,
+      ]);
     },
     font() {
       const fonts = [
@@ -212,7 +219,7 @@ export default {
         //font-family: typography.font("big-heading")
         font-family: typography.font("sans-serif")
         font-variation-settings: "cuts" 300
-        color: colors.color("white")
+        color: colors.color(three)
         font-size: clamp(45px, 8vw, 100px)
         text-transform: uppercase
         // font-size: 120px
@@ -225,9 +232,14 @@ export default {
           // background: yellow
           text-decoration: line-through
           text-decoration-thickness: 2px
-          color: colors.color(dark-foreground)
+          //color: colors.color(dark-foreground)
           padding-right: 0.5em
           margin-right: 0
+
+          //color: black
+          -webkit-text-fill-color: colors.color(background)
+          -webkit-text-stroke-width: 3px
+          -webkit-text-stroke-color: colors.color(two)
 
     .pique
       margin: 1.5em 0 0.5em 0.2rem
