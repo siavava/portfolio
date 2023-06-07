@@ -10,16 +10,11 @@
 @use "~/styles/mixins"
 
 .prose-blockquote
-  width: 100%
+  width: calc(100% - 4rem)
   text-align: left
   position: relative
-  margin: 2rem auto
-  border-left: none
-
+  margin: 2rem
   padding: 0 2rem 0 2rem
-  border-left: 2px solid colors.color("secondary-highlight")
-  margin-left: 2rem
-  // background: yellow
 
   .prose-p
     width: 80%
