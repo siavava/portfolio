@@ -3,7 +3,10 @@
     :id="id"
     class="prose-h2"
   >
-    <NuxtLink :to="`#${id}`" v-if="generate">
+    <NuxtLink
+      v-if="generate"
+      :to="`#${id}`"
+    >
       <slot />
     </NuxtLink>
     <template v-else>
@@ -29,8 +32,8 @@ const generate = anchorLinks?.depth >= heading;
 .prose-h2
   margin-top: 1rem
   margin-bottom: 1rem
-  font-weight: 400
-  font-size: 1.3rem
+  font-weight: 600
+  font-size: 1.1rem
   color: colors.color("primary-highlight")
 
   &::before
@@ -38,7 +41,7 @@ const generate = anchorLinks?.depth >= heading;
     margin-right: 0.5rem
     opacity: 0.5
     transition: geometry.var("default-transition")
-    
+
   &:hover::before
     opacity: 1
 </style>

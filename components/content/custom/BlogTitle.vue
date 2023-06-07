@@ -173,10 +173,11 @@ export default {
 
       .title-heading
         font-size: clamp(2.3rem, 2vw, 3rem)
-        font-weight:900
+        font-weight: 600
         line-height: 130%
         margin: 0.5em 0
         color: colors.color("primary-highlight")
+        font-variation-settings: "cuts" 300
 
       .title-description
         font-size: clamp(1rem, 1.8vw, 1.5rem)
