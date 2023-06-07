@@ -108,6 +108,8 @@ onMounted(() => {
 
     @media(max-width: 1200px)
       width: 100%
+      max-width: 100vw !important
+      margin: 0 !important
 
   .panel
     width: 230px
