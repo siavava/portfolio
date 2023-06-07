@@ -23,13 +23,13 @@
 
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 
-const { data: contact } = await useAsyncData(
+const { data: contact } = useAsyncData(
   `contact-${useRoute().path}`,
   async () => {
     const _contactData = queryContent<MarkdownParsedContent>("profile")
       .where({ category: "contact" })
       .findOne();
-    return await _contactData;
+    return _contactData;
   },
 );
 </script>
@@ -68,9 +68,9 @@ const { data: contact } = await useAsyncData(
     font-size: clamp(40px, 5vw, 60px)
     font-weight: 600
     color: colors.color("lightest-foreground")
+    font-variation-settings: "cuts" 300
 
   .email-link
     @include mixins.big-button
     margin-top: 50px
-
 </style>

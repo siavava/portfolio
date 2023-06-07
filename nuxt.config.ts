@@ -29,7 +29,7 @@ export default {
       ],
       link: [
 
-        { rel: "icon", type: "image/png", href: "/coherence2.png" },
+        { rel: "icon", type: "image/png", href: "/favicon.png" },
         // { rel: "icon", type: "image/x-icon", href: "/favicons/favicon.ico" },
         // {
         //   rel: "icon", type: "image/png", sizes: "32x32", href: "/favicons/favicon-32x32.png",

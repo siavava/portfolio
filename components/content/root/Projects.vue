@@ -109,7 +109,7 @@
 <script lang="ts" setup>
 
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
-import { delimiter } from "path";
+// import { delimiter } from "path";
 
 const projectsGrid = ref<HTMLElement | null>(null);
 const GRID_LIMIT = 6;
@@ -122,7 +122,7 @@ const { data: projectData } = await useAsyncData(
       .where({ featured: false })
       .sort({ date: -1 })
       .find();
-    return await _projectsData;
+    return _projectsData;
   },
 );
 
@@ -186,6 +186,7 @@ export default {
 
 .other-projects-header
   font-weight: 600
+  font-variation-settings: "cuts" 300
 
 * > h3
   font-weight: 600

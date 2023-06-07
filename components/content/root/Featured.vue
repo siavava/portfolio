@@ -148,5 +148,6 @@ const projects = data.value || [];
 
 .project-title
   font-weight: 600
+  font-variation-settings: "cuts" 300
 
 </style>
