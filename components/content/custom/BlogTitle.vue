@@ -172,7 +172,7 @@ export default {
               margin: 0 0.5rem 0 0.5rem
 
       .title-heading
-        font-size: clamp(2.3rem, 2vw, 3rem)
+        font-size: clamp(1.7rem, 1vw, 2rem)
         font-weight: 600
         line-height: 130%
         margin: 0.5em 0
