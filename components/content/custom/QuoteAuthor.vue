@@ -42,8 +42,11 @@ export default {
       letter-spacing: 0.01rem
 
       &::before
-        content: ''
+        content: none
 
       &:not(:last-child)::after
         content: ','
+
+      &:hover::before
+        content: none
 </style>
