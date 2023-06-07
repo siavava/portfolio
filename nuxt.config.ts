@@ -28,23 +28,25 @@ export default {
         // favicon
       ],
       link: [
-        { rel: "icon", type: "image/x-icon", href: "/favicons/favicon.ico" },
-        {
-          rel: "icon", type: "image/png", sizes: "32x32", href: "/favicons/favicon-32x32.png",
-        },
-        {
-          rel: "icon", type: "image/png", sizes: "16x16", href: "/favicons/favicon-16x16.png",
-        },
-        {
-          rel: "icon", type: "image/png", sizes: "96x96", href: "/favicons/favicon-96x96.png",
-        },
-        {
-          rel: "icon", type: "image/png", sizes: "256x256", href: "/favicons/favicon-256x256.png",
-        },
-        { rel: "manifest", href: "/favicons/site.webmanifest" },
-        { rel: "mask-icon", href: "/favicons/safari-pinned-tab.svg", color: "#5bbad5" },
-        { rel: "shortcut icon", href: "/favicons/favicon.ico" },
-        { rel: "apple-touch-icon", sizes: "180x180", href: "/favicons/apple-touch-icon.png" },
+
+        { rel: "icon", type: "image/png", href: "/coherence2.png" },
+        // { rel: "icon", type: "image/x-icon", href: "/favicons/favicon.ico" },
+        // {
+        //   rel: "icon", type: "image/png", sizes: "32x32", href: "/favicons/favicon-32x32.png",
+        // },
+        // {
+        //   rel: "icon", type: "image/png", sizes: "16x16", href: "/favicons/favicon-16x16.png",
+        // },
+        // {
+        //   rel: "icon", type: "image/png", sizes: "96x96", href: "/favicons/favicon-96x96.png",
+        // },
+        // {
+        //   rel: "icon", type: "image/png", sizes: "256x256", href: "/favicons/favicon-256x256.png",
+        // },
+        // { rel: "manifest", href: "/favicons/site.webmanifest" },
+        // { rel: "mask-icon", href: "/favicons/safari-pinned-tab.svg", color: "#5bbad5" },
+        // { rel: "shortcut icon", href: "/favicons/favicon.ico" },
+        // { rel: "apple-touch-icon", sizes: "180x180", href: "/favicons/apple-touch-icon.png" },
       ],
     },
   },
