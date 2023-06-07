@@ -350,7 +350,7 @@ const { data: latestBlogs } = await useAsyncData(
   min-height: 70px
   max-height: 90vh
   display: table
-  padding: 0 clamp(10px, 2vw, 20px)
+  padding: 0 clamp(10px, 2vw, 20px) !important
 
   // trick: make header stick out a bit
   // by filtering it with grayscale.
