@@ -2,7 +2,7 @@
 title: Test of Blog Elements
 description: Setting Up and Running Nuxt in 4 Steps.
 category:
-  - misc
+  - tests
 draft: false
 layout: article
 date: 2022-12-21

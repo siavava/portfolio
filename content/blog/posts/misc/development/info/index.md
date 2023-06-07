@@ -2,7 +2,7 @@
 title: About this Website
 description: Summary of the Dev Process.
 category:
-  - misc
+  - development
 draft: false
 featured: false
 # image: talkers.gif

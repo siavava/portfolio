@@ -38,8 +38,8 @@
                   <span class="category-label-text">
                     {{ category.title }}
                   </span>
-                  <Icon
-                    :id="`navigation-${category.title?.toLowerCase()}`"
+                  <ExpandIcon
+                    :id="`navigation-${category.title?.toLowerCase().replace(/ /g, '-')}`"
                     class="expand-icon"
                     type="expand"
                   />
@@ -110,15 +110,15 @@ export default {
       });
   },
   methods: {
-    toggleCategory(category) {
+    toggleCategory(category: string) {
       const _category = category.toLowerCase();
-      const element = document.getElementById(`navigation-${_category}`);
+      const elements = document.querySelectorAll(`#navigation-${_category.replace(/ /g, "-")}`);
       if (this.expandedCategories.has(_category)) {
         this.expandedCategories.delete(_category);
-        element?.classList.remove("expanded");
+        elements?.forEach((element) => element?.classList.remove("expanded"));
       } else {
         this.expandedCategories.add(_category);
-        element?.classList.add("expanded");
+        elements?.forEach((element) => element?.classList.add("expanded"));
       }
     },
   },

@@ -30,7 +30,7 @@
         </div>
       </div>
     </main>
-    <BlogNavigation class="article-blog-navigation-footer fancy-background" />
+    <BlogNavigation class="article-blog-navigation-footer" />
     <AppFooter />
   </div>
 </template>
