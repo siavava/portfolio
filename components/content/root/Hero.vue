@@ -219,11 +219,11 @@ export default {
         //font-family: typography.font("big-heading")
         font-family: typography.font("sans-serif")
         font-variation-settings: "cuts" 300
-        color: colors.color(three)
+        color: white
         font-size: clamp(45px, 8vw, 100px)
         text-transform: uppercase
         // font-size: 120px
-        font-weight: 800
+        font-weight: 600
         margin: 1rem 0
         padding: 0
         line-height: 1
@@ -238,8 +238,8 @@ export default {
 
           //color: black
           -webkit-text-fill-color: colors.color(background)
-          -webkit-text-stroke-width: 3px
-          -webkit-text-stroke-color: colors.color(two)
+          -webkit-text-stroke-width: 1px
+          -webkit-text-stroke-color: colors.color(dark-foreground)
 
     .pique
       margin: 1.5em 0 0.5em 0.2rem
