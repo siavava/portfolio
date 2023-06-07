@@ -71,11 +71,16 @@ onMounted(() => {
 </script>
 
 <style lang="sass" scoped>
-@use "../styles/default"
+//@use "../styles/default"
 @use "../styles/typography"
 @use "../styles/colors"
 @use "../styles/geometry"
 @use "../styles/mixins"
+
+*, *::before, *::after
+  outline: 1px solid red !important
+  opacity: 1 !important
+  visibility: visible !important
 
 .article-main
   width: min(100%, 1300px)
