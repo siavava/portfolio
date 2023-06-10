@@ -105,9 +105,19 @@
           >
             <strong> Apps </strong>
           </NuxtLink>
-          <div>
-            happening soon.
-          </div>
+          <ul>
+            <li
+              v-for="(item, i) in apps"
+              :key="i"
+            >
+              <NuxtLink
+                :to="item._path"
+                class="menu-column-item"
+              >
+                {{ item.title }}
+              </NuxtLink>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="menu-extras">
@@ -314,22 +324,8 @@ const { data: latestBlogs } = await useAsyncData(
   },
 );
 
-/// RESEARCH
-// const { data: researchMeta } = await useAsyncData(
-//   "research-blogs-meta",
-//   async () => {
-//     const _blogs = queryContent("blog/posts")
-//       .where({ draft: false })
-
-//       // select blogs that have publications as one of the categories
-//       .where({ category: { $contains: "research" } })
-//       .only(["_path", "title", "date", "description", "tags"])
-//       .limit(5)
-//       .sort({ date: -1 })
-//       .find();
-//     return _blogs;
-//   },
-// );
+/// APPS
+const { data: apps } = await useFetch("/api/apps");
 </script>
 
 <style lang="sass">
