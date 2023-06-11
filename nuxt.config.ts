@@ -60,6 +60,10 @@ export default {
     "@nuxt/image-edge",
     "@nuxt/devtools",
     "@pinia/nuxt",
+    ["@nuxtjs/algolia", {
+      applicationId: process.env.ALGOLIA_APP_ID,
+      apiKey: process.env.ALGOLIA_API_KEY,
+    }],
   ],
   devtools: {
     // Enable devtools (default: true)

@@ -9,6 +9,10 @@
     <nav class="header-nav">
       <Logo class="header-logo" />
       <!-- <NavLinks class="header-nav-links" /> -->
+      <SearchBar
+        ref="searchBar"
+        class="search-bar"
+      />
       <StyledMenuButton
         ref="buttonRef"
         :aria-expanded="menuOpen"
@@ -23,10 +27,15 @@
         'menu-open': menuOpen,
       }"
     >
-      <SearchBar
+      <!-- <SearchBar
         ref="searchBar"
         class="search-bar"
-      />
+      /> -->
+
+      <!-- <SearchResults
+        ref="searchBar"
+        class="search-bar"
+      /> -->
       <div class="menu-columns-wrapper">
         <div
           v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
@@ -113,6 +122,7 @@
               <NuxtLink
                 :to="item._path"
                 class="menu-column-item"
+                style="text-transform: capitalize;"
               >
                 {{ item.title }}
               </NuxtLink>
