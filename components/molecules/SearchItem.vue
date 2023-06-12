@@ -86,9 +86,12 @@ export default {
 .search-result-info
   margin-left: 20px
   //color: colors.color(primary-highlight)
-  font-size: typography.font-size(m)
   font-family: typography.font(sans-serif), sans-serif
   width: 100%
+  font-size: typography.font-size(xxs)
+
+  @media screen only and (max-width: 800px)
+    font-size: typography.font-size(xxs)
 
   *
     max-width: 100% !important

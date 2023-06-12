@@ -190,6 +190,9 @@ export default {
     transition: all 0.3s ease-in-out
     width: clamp(300px, 100svw, 800px)
 
+    @media screen only and (max-width: 800px)
+      font-size: typography.font-size("xxs") !important
+
     &.hidden
       display: none
 

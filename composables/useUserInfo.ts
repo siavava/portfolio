@@ -222,9 +222,9 @@ const useUserInfo = defineStore("userInfo", {
       const db = getFirestore();
       const { currentUser } = getAuth();
       if (!currentUser) return;
-      console.log(`this.active: ${this.active}`);
-      console.log(`currentUser.email: ${currentUser?.email}`);
-      console.log(`currentUser: ${currentUser}`);
+      // console.log(`this.active: ${this.active}`);
+      // console.log(`currentUser.email: ${currentUser?.email}`);
+      // console.log(`currentUser: ${currentUser}`);
 
       // get all documents that have user email in subscribers
       const q = query(
