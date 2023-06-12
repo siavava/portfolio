@@ -172,9 +172,9 @@
 </template>
 
 <script lang="ts">
-import { navHeight, nonTocRoutes, navLinks } from "~/modules/config";
 import { loaderDelay as timeout } from "~/modules/utils";
 
+const { navHeight, nonTocRoutes, navLinks } = useConfig();
 export default {
   name: "AppHeader",
   data() {

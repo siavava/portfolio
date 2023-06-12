@@ -1,9 +1,6 @@
 <template>
   <section id="hero">
     <div class="hero">
-      <!-- <div class="hero-background rubik-puddles">
-      ALT
-    </div> -->
       <div class="hero-container">
         <div class="blurb-container">
           <div class="big-title">
@@ -47,11 +44,8 @@
   </section>
 </template>
 
-<script lang="ts" setup>
-import { heroFootItems, heroCallOuts } from "~/modules/config";
-</script>
-
 <script lang="ts">
+const { heroFootItems, heroCallOuts } = useConfig();
 export default {
   name: "Hero",
   data() {
@@ -190,6 +184,9 @@ export default {
   border-radius: geometry.var("border-radius")
 
 #hero
+  min-height: calc(100svh - 2 *  geometry.var("nav-height"))
+  width: 100%
+  position: relative
 
   .hero
     @include mixins.flex-center
@@ -201,14 +198,9 @@ export default {
     top: 0
     left: 0
 
-  min-height: calc(100svh - 2 *  geometry.var("nav-height"))
-  width: 100%
-  position: relative
-
   .hero-container
     .blurb-container
       width: fit-content
-      //font-family: typography.font("matter")
       font-family: typography.font("sans-serif")
 
       &.inactive
@@ -222,7 +214,6 @@ export default {
         color: white
         font-size: clamp(45px, 8vw, 100px)
         text-transform: uppercase
-        // font-size: 120px
         font-weight: 600
         margin: 1rem 0
         padding: 0

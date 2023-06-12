@@ -117,13 +117,13 @@ const heroCallOuts = [
   { field: "physics", action: "explore" },
 ];
 
-export {
-  email
-  , social
-  , navLinks
-  , heroFootItems
-  , srConfig
-  , navHeight
-  , nonTocRoutes
-  , heroCallOuts,
-};
+export default () => ({
+  email,
+  social,
+  navLinks,
+  heroFootItems,
+  srConfig,
+  navHeight,
+  nonTocRoutes,
+  heroCallOuts,
+});

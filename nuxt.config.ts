@@ -3,15 +3,6 @@
 import autoprefixer from "autoprefixer";
 
 export default {
-  publicRuntimeConfig: {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID,
-    measurementId: process.env.MEASUREMENT_ID,
-  },
   app: {
     pageTransition: { name: "page", mode: "out-in" },
     head: {
@@ -206,6 +197,7 @@ export default {
 
     "~/modules/users",
     "~/modules/utils",
+    "@nuxtjs/firebase",
   ],
   layouts: {
     default: "~/layouts/clean.vue",
@@ -225,11 +217,17 @@ export default {
       },
     },
   },
-  // imports: {
-  //   dirs: [
-  //     "modules/*.ts",
-  //     "modules/*/index.ts",
-  //     "composables",
-  //   ],
-  // },
+  runtimeConfig: {
+    public: {
+      firebaseConfig: {
+        apiKey: process.env.DATABASE_API_KEY,
+        authDomain: process.env.DATABASE_AUTH_DOMAIN,
+        projectId: process.env.DATABASE_PROJECT_ID,
+        storageBucket: process.env.DATABASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.DATABASE_MESSAGING_SENDER_ID,
+        appId: process.env.DATABASE_APP_ID,
+        measurementId: process.env.DATABASE_MEASUREMENT_ID,
+      },
+    },
+  },
 };
