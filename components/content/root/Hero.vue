@@ -201,7 +201,7 @@ export default {
     top: 0
     left: 0
 
-  min-height: calc(100vh - 2 *  geometry.var("nav-height"))
+  min-height: calc(100svh - 2 *  geometry.var("nav-height"))
   width: 100%
   position: relative
 
