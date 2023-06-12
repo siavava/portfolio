@@ -337,7 +337,7 @@ const { data: latestBlogs } = await useAsyncData(
 /// APPS
 // const { data: apps } = await useFetch("/api/apps");
 // fetch with key as 'header'
-const { data: apps } = await useFetch("/api/apps", { key: "header" });
+const { data: apps } = await useFetch(() => "/api/apps");
 </script>
 
 <style lang="sass">
