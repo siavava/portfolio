@@ -15,11 +15,18 @@ navigation: true
 
 # Polyamorous Triad — the End??
 
+As a starry-eyed teenager, I made song and dance when the new
+installments in the Star Wars franchise were announced;
+I was excited to see my favorite stories resume on the screen.
+Yet, the newest installment, [Rogue One](https://en.wikipedia.org/wiki/Rogue_One),
+has come out to mixed fanfare. What is all the fuss about?
+
+<!-- more -->
+
 ## Introduction
 
 There’s something about Star Wars: The Force Awakens that feels both delightful and urgent, as if it were a both a joy to create and a story that must be told at this particular moment in history. People who lined up to see the film when it released last December—and then immediately bought tickets to see it again—are now buying the DVD or Blu-Ray or streaming version so they can watch The Force Awakens for the fifth (or tenth) time at home. They’re also creating fanart, writing their own narratives, and celebrating the idea that the Hero’s Journey has been opened up to a new group of heroes.
 
-<!-- more -->
 
 At The Guardian, Steven W. Thrasher calls The Force Awakens “Black Lives Matter’s first science fiction film,” noting that “the key to the political and moral liberation of everyone depends upon the rebellion and emancipation of black people.” Meanwhile, Natalie Fisher at Hypable builds a case that Star Wars is setting up the character of Poe Dameron (Oscar Isaac) to be a canonically gay character and the series’ “first queer protagonist.”
 

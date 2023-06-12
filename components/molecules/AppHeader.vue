@@ -520,8 +520,6 @@ const { data: apps } = await useFetch("/api/apps");
           border: 2px solid transparent
 
 .search-bar
-  border-top: 3px dotted colors.color("lightest-background")
-  border-bottom: 3px dotted colors.color("lightest-background")
   padding: 0 2vw
   align-content: center
   vertical-align: middle

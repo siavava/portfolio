@@ -33,8 +33,6 @@ Nothing important to be found here.  But, it lives anyhow.
 >   - Nobel Laureate
 > </quote-author>
 
-
-
 ## This is H2 that Spans Multiple Lines
 
 My given name is [Amittai][amittai], but my preferred name ad 2022

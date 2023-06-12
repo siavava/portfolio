@@ -14,6 +14,12 @@ navigation: true
 
 # Symmetric Groups
 
+A **group** is a set of elements with a binary operation that satisfies certain
+mathematical axioms, allowing us to interpret operations between elements in
+a more _general_ way.
+
+<!--more-->
+
 ## Definition
 
 Given any non-empty set $\Omega$, we define $S_\Omega$ to be the set of all bijections
@@ -41,8 +47,6 @@ $$
     3 & 4
   \end{bmatrix}
 $$
-
-<!--more-->
 
 For any set $\Omega$, the symmetric group $S_\Omega$ is a superset of all other
 maps (functions) from $\Omega$ to $\Omega$, since the symmetric group captures

@@ -15,11 +15,15 @@ navigation: true
 
 # The Fate of the Furious
 
+Fast & Furious 8, the $8$'th installment in the Fast and the Furious franchise, is
+out in cinemas. Is it worth your time and money?
+
+<!-- more -->
+
 ## Introduction
 
 In the year 2013 the world was shocked by the tragic death of actor Paul Walker, myself included. I remember it vividly, like it was yesterday. It is strange that with events like those, you still remember what you were doing at the time. I had just finished eating breakfast and put on the television to check the news, and then I read it: Paul Walker killed in car accident. I literally screamed out loud at the television screen. I was shocked and devastated that such a young and promising actor was killed in such a way. The filming of part 7 of the franchise he was so well known for, the Fast and the Furious, was already well under way.
 
-<!-- more -->
 
 The way they eventually dealt with his death was done in a very respectful way. And now, this year we have the release of part 8, where we get to see how the franchise will continue without Paul.
 

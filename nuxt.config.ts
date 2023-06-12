@@ -61,8 +61,8 @@ export default {
     "@nuxt/devtools",
     "@pinia/nuxt",
     ["@nuxtjs/algolia", {
-      applicationId: process.env.ALGOLIA_APP_ID,
-      apiKey: process.env.ALGOLIA_API_KEY,
+      applicationId: process.env.ALGOLIA_SEARCH_APP_ID,
+      apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
     }],
   ],
   devtools: {

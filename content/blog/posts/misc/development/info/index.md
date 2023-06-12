@@ -26,6 +26,8 @@ with a subtle hint of [MongoDB](https://www.mongodb.com).
 
 <!-- ![talkers](talkers.gif) -->
 
+<!-- more -->
+
 ---
 
 ## Tech Stack

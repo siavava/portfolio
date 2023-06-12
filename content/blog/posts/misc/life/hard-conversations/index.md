@@ -15,6 +15,13 @@ navigation: true
 
 # Let’s Talk about Optics
 
+As we grow up and become more intentionally ourselves, we have to confront
+assumptions and expectations that others have of us. This can be tricky, difficult even.
+But it’s a necessary part of growing up.
+Here's a short story from the archives.
+
+<!-- more -->
+
 ## Reactives
 
 > You look like a girl.
@@ -22,7 +29,6 @@ navigation: true
 That was my mom’s reaction when she first saw me with dreadlocks. She wasn’t just amused, she was bewildered. A fair share of the day was spent stealing glances at my hair, perhaps trying to make sense of this new predicament that had befallen her son, and definitely contemplating dragging me to grandma’s house and giving me a clean haircut. When my aunt arrived the next day, it was obvious that my mom had called her. She was never
 authoritarian like my father, so we were going to try diplomacy.
 
-<!-- more -->
 
 ## Precedence
 

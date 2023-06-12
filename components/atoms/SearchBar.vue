@@ -16,25 +16,41 @@
         @click="search"
       /> -->
     </form>
-    <div class="search-results">
-      <SearchItem
-        v-for="hit in result?.hits"
-        :key="hit.objectID"
-        :hit="hit"
-        style="z-index: 10000000000;"
-      />
+    <div
+      v-if="result"
+      ref="searchResultsBackground"
+      class="search-results-background"
+    />
+    <div
+      v-if="result"
+      ref="searchResults"
+      class="search-results"
+    >
+      <div class="search-results-container">
+        <SearchItem
+          v-for="hit in result?.hits.slice(0, 5)"
+          :key="hit.objectID"
+          :hit="hit"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-
-// const search = () => console.log("search");
 const textBar = ref(null);
+
+const searchResults = ref<HTMLElement>(null);
+const searchResultsBackground = ref<HTMLElement>(null);
+onClickOutside(searchResults, () => {
+  searchResults.value?.classList.add("hidden");
+  searchResultsBackground.value?.classList.add("hidden");
+});
 
 </script>
 
 <script lang="ts">
+
 export default {
   name: "SearchBar",
   data() {
@@ -48,13 +64,14 @@ export default {
     searchTerm() {
       this.search();
     },
-    result() {
-      console.log(this.result);
-    },
+    // hideResults() {
+    //   console.log(`hideResults: ${this.hideResults}`);
+    // },
+    // result() {
+    //   console.log(this.result);
+    // },
   },
   mounted() {
-    // console.log("mounted searchBar");
-    // console.log(this.$refs.textBar);
   },
 
   methods: {
@@ -66,14 +83,18 @@ export default {
       const { search } = useAlgoliaSearch("netlify_e0f5d7d0-9d2a-45ae-8962-6e3af2ec4cf3_main_all");
       search({ query: this.searchTerm })
         .then((result) => {
+          result.hits = result.hits.filter((hit) => !["/", "/blog/"].includes(hit.url));
           this.result = result;
+          const _searchResults = this.$refs.searchResults as HTMLElement;
+          const _searchResultsBackground = this.$refs.searchResultsBackground as HTMLElement;
+          _searchResults?.classList.remove("hidden");
+          _searchResultsBackground?.classList.remove("hidden");
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
     focus() {
-      // console.log("focusing");
       this.$refs.textBar.focus();
     },
   },
@@ -89,9 +110,10 @@ export default {
   // padding-top: 5px
   // padding-bottom: 5px
   // justify: space-between
-  background-color: colors.color(lightest-background)
-  width: 70%
-  position: relative
+  width: clamp(200px, 70%, 600px)
+  margin-left: auto
+  //position: relative
+  height: 70%
 
   .site-search-input
     width: 100%
@@ -103,6 +125,12 @@ export default {
     color: colors.color("primary-highlight")
     font-size: typography.font-size("xl")
     font-family: typography.font("sans-serif")
+    background: red
+    background-color: colors.color(light-background)
+    padding: 0 30px
+    border-radius: 10px
+
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2)
 
     &::placeholder
       font-size: typography.font-size("xl")
@@ -127,20 +155,53 @@ export default {
     opacity: 0.8
     cursor: pointer
 
+  .search-results-background
+    position: fixed
+    top: 0
+    left: 0
+    width: 200vw
+    height: 200vh
+    background: rgba(colors.color(background), 0.9)
+    backdrop-filter: blur(10px)
+    z-index: 9
+    margin-top: 70px
+
+    &.hidden
+      display: none !important
+
   .search-results
     position: absolute
-    top: 100%
-    left: 0
-    right: 0
+    top: 200%
+    left: 50%
+    transform: translateX(-50%)
     width: 100%
     background: colors.color("primary")
-    z-index: 100000
+    z-index: 10
     display: flex
     flex-direction: column
     background: colors.color(light-background)
     padding: 10px
-    // bottom border radius
-    border-bottom-left-radius: 10px
-    border-bottom-right-radius: 10px
+    border-radius: 10px
+    max-height: 80svh
+    transition: all 0.3s ease-in-out
+    width: clamp(300px, 100svw, 800px)
+
+    &.hidden
+      display: none
+
+    .search-results-container
+      display: flex
+      flex-direction: column
+      align-items: center
+      width: 100%
+      overflow-y: scroll
+
+      &::-webkit-scrollbar-track
+        background: colors.color(light-background) !important
+
+      &::-webkit-scrollbar-thumb
+        background-color: colors.color(lightest-background) !important
+        border: 3px solid colors.color(light-background)
+        border-radius: 10px
 
 </style>
