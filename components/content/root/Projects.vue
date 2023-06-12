@@ -3,10 +3,6 @@
     <h2 class="other-projects-header">
       Other Noteworthy Projects
     </h2>
-
-    <!-- <NuxtLink class="inline-link archive-link" to="/archive" ref="revealArchiveLink">
-      view the archive
-    </NuxtLink> -->
     <TransitionGroup
       ref="projectsGrid"
       component="null"
@@ -82,8 +78,8 @@
             <footer>
               <ul class="project-tech-list">
                 <li
-                  v-for="tech, i in project?.tech"
-                  :key="i"
+                  v-for="(tech, techIndex) in project?.tech"
+                  :key="techIndex"
                 >
                   {{ tech }}
                 </li>

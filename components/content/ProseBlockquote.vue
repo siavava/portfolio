@@ -24,7 +24,6 @@
     color: colors.color("secondary-highlight")
 
   & > hr
-    // max-width: 20%
     max-width: 80%
     size:  10px
     margin: 1em 0 !important

@@ -10,11 +10,6 @@
         tabindex="1"
         placeholder="search"
       >
-      <!-- <Icon
-        type="search"
-        class="search-icon"
-        @click="search"
-      /> -->
     </form>
     <div
       v-if="result"

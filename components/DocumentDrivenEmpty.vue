@@ -56,7 +56,6 @@ export default {
     top: 50%
     left: 50%
     transform: translate(-50%, -50%)
-    // background: yellow
     min-width: max(480px, 100vw)
 
     .not-found-background
@@ -66,8 +65,6 @@ export default {
       display: flex
       flex-direction: column
       align-items: center
-      // min-height: 0px
-      // background: yellow
 
       .error-code
         font-size: clamp(30px, min(40vw, 30vh), 1000px)

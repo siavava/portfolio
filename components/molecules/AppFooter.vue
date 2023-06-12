@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-// import { social } from '~/modules/config';
+// const { social } = useConfig();
 
 // interface GitHubInfo {
 //   stars?: Number;

@@ -174,7 +174,6 @@ export default {
 </script>
 
 <script lang="ts" setup>
-// const { path } = useRoute();
 const { toc } = useContent();
 
 </script>

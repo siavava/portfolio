@@ -8,7 +8,6 @@
   >
     <nav class="header-nav">
       <Logo class="header-logo" />
-      <!-- <NavLinks class="header-nav-links" /> -->
       <SearchBar
         ref="searchBar"
         class="search-bar"
@@ -27,15 +26,6 @@
         'menu-open': menuOpen,
       }"
     >
-      <!-- <SearchBar
-        ref="searchBar"
-        class="search-bar"
-      /> -->
-
-      <!-- <SearchResults
-        ref="searchBar"
-        class="search-bar"
-      /> -->
       <div class="menu-columns-wrapper">
         <div
           v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
@@ -534,8 +524,6 @@ const { apps } = useApps();
   min-height: 40px
   border-top: 3px dotted colors.color("lightest-background")
   border-bottom: 3px dotted colors.color("lightest-background")
-  // background: none
-  // backdrop-filter: blur(2px) !important
 
   .toc-wrapper
     width: 100%
@@ -587,7 +575,7 @@ const { apps } = useApps();
     -o-transition: all 0.1s ease-in-out
     transition: all 0.1s ease-in-out
 
-    overflow: hidden //: none
+    overflow: hidden
     max-height: 100%
 
     * > .toc > .title

@@ -10,12 +10,6 @@
       {{ contact.title }}
     </h2>
     <ContentDoc :value="contact" />
-    <!-- <a
-      :href="`mailto:${ contact.email }`"
-      class="email-link"
-    >
-      Email
-    </a> -->
   </section>
 </template>
 

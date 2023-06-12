@@ -1,29 +1,9 @@
 <template>
   <div className="search-item">
-    <!-- <div className="aa-ItemContent"> -->
-    <!-- <div className="aa-ItemIcon aa-ItemIcon--alignTop"> -->
-    <!-- <NuxtImg
-      v-if="hit.image"
-      :src="`${hit.url}${hit.image}`"
-      :alt="hit.name"
-      width="40"
-      height="40"
-      class="search-item-image"
-    /> -->
     <NuxtLink
       :to="hit.url"
       class="search-result-info"
     >
-      <!-- <h1> {{ hit.title }} </h1>
-      <p> {{ hit.description }} </p> -->
-      <!-- <p> {{ hit.content }} </p> -->
-      <!-- <p> {{ Object.keys(hit) }}</p> -->
-
-      <!-- get date -->
-      <!-- <ContentQuery
-        v-slot="blog"
-        :path="hit.url?.slice(0, -1)"
-      > -->
       <Date :date="blog.date" />
       <ContentRenderer
         v-if="blog.excerpt"
@@ -31,7 +11,6 @@
         excerpt
       />
       <p> {{ hit.date }} </p>
-      <!-- </contentquery> -->
     </NuxtLink>
   </div>
 </template>
@@ -44,14 +23,8 @@ export default {
       type: Object,
       required: true,
     },
-    // components: {
-    //   type: Object,
-    //   required: true,
-    // },
   },
   async setup(props) {
-    /// DATA
-    // const { hit } = props;
     const { data: blog } = await useAsyncData(
       `search@${props.hit.url?.slice(0, -1)}`,
       () => {
@@ -60,7 +33,6 @@ export default {
         return _blogs;
       },
     );
-    // console.log(`blog: ${Object.keys(blog.value)}`);
     return {
       blog,
     };
@@ -85,7 +57,6 @@ export default {
 
 .search-result-info
   margin-left: 20px
-  //color: colors.color(primary-highlight)
   font-family: typography.font(sans-serif), sans-serif
   width: 100%
   font-size: typography.font-size(xxs)

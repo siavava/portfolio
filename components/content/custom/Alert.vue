@@ -44,7 +44,6 @@ export default {
   .prose-ul
     font-size: inherit !important
 
-
     li::before
       color: inherit !important
 

@@ -43,9 +43,6 @@ export default {
 <style lang="sass" scoped>
 @use "~/styles/colors"
 
-// svg
-//   padding: 0 5px
-
 .menu-button
   background: transparent
   z-index: 25

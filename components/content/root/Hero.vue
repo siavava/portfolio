@@ -252,7 +252,6 @@ export default {
         line-height: 3
 
     .digression
-      // font-family: typography.font("sans-serif")
       font-weight: 400
       margin: 0.5rem 0 1.5rem 0.2rem
       margin: 0 0 0 0.5em

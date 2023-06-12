@@ -1,10 +1,8 @@
-// import { getUserAvatar } from "~/modules/users";
 import { getAuth } from "firebase/auth";
 import { defineStore } from "pinia";
 import {
   getFirestore, collection, addDoc, getDocs, query, where, orderBy, onSnapshot, updateDoc, arrayUnion, arrayRemove,
 } from "firebase/firestore";
-// import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 import { createAvatar } from "@dicebear/core";
 import { lorelei } from "@dicebear/collection";
 import {

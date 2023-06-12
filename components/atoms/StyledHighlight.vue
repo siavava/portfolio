@@ -5,9 +5,7 @@
       'horizontal': mode === 'horizontal'
     }"
     :style="style"
-  >
-    <!-- <slot /> -->
-  </div>
+  />
 </template>
 
 <script lang="ts">
@@ -145,10 +143,5 @@ export default {
     width: geometry.var("tab-width")
     max-width: geometry.var("tab-width")
     height: 2px
-    // margin-left: 50px
-    // transform: translateX(geometry.var("tab-width"))
-
-  // @media (max-width: 480px)
-  //   margin-left: 2
 
 </style>

@@ -33,17 +33,12 @@ export default {
   padding: 10px 30px 30px 10px
   float: right
 
-  // @media (max-width: 768px)
-  //   margin: 50px auto 0 auto
-  //   width: 70%
-
   .wrapper
     @include mixins.box-shadow
     display: block
     position: relative
     width: 100%
     border-radius: geometry.var("border-radius")
-    // background-color: colors.color("primary-highlight")
 
     &:hover, &:focus
       outline: 0

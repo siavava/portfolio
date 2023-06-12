@@ -116,14 +116,9 @@ export default {
 
   data() {
     return {
-      // comment: "",
-      // allComments: new Array<Comment>(),
       showAuthPopup: false,
-      // avatar: '',
       userDependency: 0,
-      // subscribed: false,
       showAllSubscriptions: false,
-      // allSubscriptions: [],
       userInfo: useUserInfo(),
     };
   },
@@ -446,9 +441,5 @@ section.comments
     background: transparent
     border-bottom: 1px solid colors.color(lightest-background)
     margin-top: 20px
-    //background: rgba(colors.color(light-background), 0.9)
-    //border: 1px solid colors.color(lightest-background)
-    //border-radius: 5px
-    //box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7)
 
 </style>

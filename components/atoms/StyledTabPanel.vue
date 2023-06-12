@@ -25,15 +25,12 @@ export default {
   },
   methods: {
     activateTab() {
-      // console.log(`activated tab!!`);
       this.active = 1;
     },
     muteTab() {
-      // console.log(`muted tab!!`);
       this.active = 0;
     },
     focus() {
-      // console.log(`focusing tab!!`);
       this.$refs.tab.focus();
     },
   },

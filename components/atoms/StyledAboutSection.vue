@@ -22,10 +22,8 @@ export default {
 
 .about-section
   max-width: 900px
-  // width: 100%
   .inner
     display: grid
-    // grid-template-columns: 3fr 2fr
     grid-gap: 50px
     @media (max-width: 768px)
       display: block

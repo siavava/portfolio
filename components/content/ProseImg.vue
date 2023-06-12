@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import { withBase } from "ufo";
-import { computed } from "#imports";
 
 const props = defineProps({
   src: {

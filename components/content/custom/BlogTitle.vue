@@ -234,12 +234,9 @@ export default {
       pointer-events: all
       transition: geometry.var("default-transition")
       display: flex
-      //flex-direction: row
       gap: 5px
       margin: 0
       padding: 0
-      //width: 70px
-      //justify-items: right
 
       &:hover
         cursor: pointer
@@ -248,7 +245,6 @@ export default {
       & > span
         font-family: typography.font("sans-serif")
         font-size: typography.font-size("l")
-        //background-color: yellow
         line-height: 1.8
         height: 100%
 

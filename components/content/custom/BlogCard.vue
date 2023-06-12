@@ -1,18 +1,5 @@
 <template>
   <div class="blog-card">
-    <!-- <NuxtLink :to="blog.path" class="blog-click">
-      <Icon type="expand-diagonal" class="expand-article-icon" />
-    </NuxtLink> -->
-    <!-- <h1 class="blog-title">
-      {{ blog.title }}
-    </h1>
-    <div class="blog-description">
-      {{ blog.description }}
-    </div> -->
-    <Date :date="blog.date" />
-    <!-- <div v-if="blog.date" class="blog-date">
-      {{ getCommentDateAsString(new Date(blog.date)) }}
-    </div> -->
     <ContentRenderer
       v-if="blog.excerpt"
       :value="blog"
@@ -82,8 +69,6 @@ export default {
   @include mixins.box-shadow
   min-width: 400px
   max-width: 400px
-  // width: 400px
-  // aspect-ratio: 2.5/3
   padding: 1rem
   margin: 1rem 1rem 0 1rem
   background: colors.color("light-background")

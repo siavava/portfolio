@@ -12,6 +12,7 @@
         <StyledTabButton
           v-for="job, i in jobs"
           ref="tabButtons"
+          :key="i"
           :identifier="i"
           :tabindex="activeTabId === i ? '0' : '-1'"
           :aria-controls="`panel-${i}`"
@@ -83,7 +84,7 @@ const { data: jobsData } = await useAsyncData(
       .where({ category: "jobs-info" })
       .sort({ date: -1 })
       .find();
-    return await _jobsData;
+    return _jobsData;
   },
 );
 
