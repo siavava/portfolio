@@ -26,7 +26,7 @@
       >
         <Date :date="blog.data[0].date" />
         <ContentRenderer
-          v-if="blog.data[0].excerpt"
+          v-if="blog?.data[0].excerpt"
           :value="blog.data[0]"
           excerpt
         />

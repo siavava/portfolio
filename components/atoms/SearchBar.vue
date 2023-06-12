@@ -8,7 +8,7 @@
         type="text"
         class="site-search-input"
         tabindex="1"
-        placeholder="search @altair.fyi"
+        placeholder="search"
       >
       <!-- <Icon
         type="search"
@@ -126,15 +126,14 @@ export default {
     font-size: typography.font-size("xl")
     font-family: typography.font("sans-serif")
     background: red
-    background-color: colors.color(light-background)
+    background-color: rgba(colors.color(light-background), 0.5)
     padding: 0 30px
     border-radius: 10px
-
+    font-size: typography.font-size("m")
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2)
 
     &::placeholder
-      font-size: typography.font-size("xl")
-      //font-family: typography.font("font-sans")
+      font-size: typography.font-size("m")
       color: colors.color("primary-highlight")
       opacity: 0.6
 
