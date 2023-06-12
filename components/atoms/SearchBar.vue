@@ -126,6 +126,7 @@ export default {
     font-family: typography.font("sans-serif")
     background: red
     background-color: rgba(colors.color(light-background), 0.5)
+    border: 1px solid colors.color(lightest-background)
     padding: 0 30px
     border-radius: 10px
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2)
@@ -179,11 +180,12 @@ export default {
     left: 50%
     transform: translateX(-50%)
     width: 100%
-    background: colors.color("primary")
+    background: colors.color(light-background)
     z-index: 10
     display: flex
     flex-direction: column
-    background: colors.color(light-background)
+    background: rgba(colors.color(light-background), 0.7)
+    border: 1px solid colors.color(lightest-background)
     padding: 10px
     border-radius: 10px
     max-height: 80svh

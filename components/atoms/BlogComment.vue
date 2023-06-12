@@ -70,7 +70,7 @@ export default {
   width: 100%
 
   .comment
-    border: 3px solid colors.color("light-background")
+    //border: 3px solid colors.color("light-background")
     border-radius: 0.5rem
     line-height: 1.5
     align-self: flex-end

@@ -289,20 +289,21 @@ export default {
   position: fixed
   top: 0
   right: 0
-  background: colors.color("light-background")
   z-index: 1
   height: 100vh
   z-index: 100
   overflow-y: scroll
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7)
-  width: 414px
+  width: 614px
 
-  @media only screen and (max-width: 720px)
+  background: rgba(colors.color(light-background), 0.9)
+  border: 1px solid colors.color(lightest-background)
+
+  @media only screen and (max-width: 960px)
     width: 100%
     height: 90vh
     top: 10vh
-    border-radius: 30px 30px 0 0
-    padding: 0 10px
+    border-radius: 10px 10px 0 0
 
   &::-webkit-scrollbar
     display: none
@@ -312,8 +313,6 @@ export default {
     pointer-events: none
 
 section.comments
-  margin: 0 10px 20px 10px
-  border-top: 1px solid colors.color("lightest-background")
   padding-bottom: 0
   -webkit-transition: all 0.1s ease-in-out
   -ms-transition: all 0.1s ease-in-out
@@ -328,6 +327,8 @@ section.comments
     border-radius: 5px
     padding: 0 20px
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5)
+    background: rgba(colors.color(light-background), 0.9)
+    border: 1px solid colors.color(lightest-background)
 
     .new-comment-header
       height: 50px
@@ -352,6 +353,7 @@ section.comments
       .auth-button
         margin-left: auto
         height: fit-content
+        padding: 0 2em
 
     .input
       width: 100%
@@ -429,18 +431,24 @@ section.comments
 
     margin: 0
     margin-left: auto
-    background: rgba(colors.color("primary-highlight"), 0.7)
-    color: colors.color("background")
+    background: rgba(colors.color(primary-highlight), 0.5)
+    color: colors.color(background)
     font-weight: 600
+    padding: 0 2em
 
 .comments
   display: flex
   flex-direction: column
   gap: 30px
+  background: rgba(colors.color(light-background), 0.9)
 
   .comment
-    background: inherit
-    border-bottom: 1px solid colors.color("lightest-background")
+    background: transparent
+    border-bottom: 1px solid colors.color(lightest-background)
     margin-top: 20px
+    //background: rgba(colors.color(light-background), 0.9)
+    //border: 1px solid colors.color(lightest-background)
+    //border-radius: 5px
+    //box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7)
 
 </style>
