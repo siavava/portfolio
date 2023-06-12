@@ -123,14 +123,19 @@ export default {
     margin: 15px 0
     padding-right: 50px
     color: colors.color("primary-highlight")
-    font-size: typography.font-size("xl")
     font-family: typography.font("sans-serif")
     background: red
     background-color: rgba(colors.color(light-background), 0.5)
     padding: 0 30px
     border-radius: 10px
-    font-size: typography.font-size("m")
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2)
+    //font-size: typography.font-size("m")
+
+    // prevent zooming
+    font-size: 16px
+    -moz-text-size-adjust: none
+    -webkit-text-size-adjust: none
+    -ms-text-size-adjust: none
 
     &::placeholder
       font-size: typography.font-size("m")
