@@ -20,18 +20,18 @@
       <!-- <p> {{ Object.keys(hit) }}</p> -->
 
       <!-- get date -->
-      <ContentQuery
+      <!-- <ContentQuery
         v-slot="blog"
         :path="hit.url?.slice(0, -1)"
-      >
-        <Date :date="blog.data[0].date" />
-        <ContentRenderer
-          v-if="blog?.data[0].excerpt"
-          :value="blog.data[0]"
-          excerpt
-        />
-      </ContentQuery>
+      > -->
+      <Date :date="blog.date" />
+      <ContentRenderer
+        v-if="blog.excerpt"
+        :value="blog"
+        excerpt
+      />
       <p> {{ hit.date }} </p>
+      <!-- </contentquery> -->
     </NuxtLink>
   </div>
 </template>
@@ -48,6 +48,22 @@ export default {
     //   type: Object,
     //   required: true,
     // },
+  },
+  async setup(props) {
+    /// DATA
+    // const { hit } = props;
+    const { data: blog } = await useAsyncData(
+      `search@${props.hit.url?.slice(0, -1)}`,
+      () => {
+        const _blogs = queryContent(`${props.hit.url?.slice(0, -1)}`)
+          .findOne();
+        return _blogs;
+      },
+    );
+    // console.log(`blog: ${Object.keys(blog.value)}`);
+    return {
+      blog,
+    };
   },
 };
 </script>
