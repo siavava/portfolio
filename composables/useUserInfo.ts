@@ -166,7 +166,7 @@ const useUserInfo = defineStore("userInfo", {
       ${comment.text}
       
       
-      Check it out here: https://altair.fyi${path}.`,
+      Check it out here: https://amitt.ai${path}.`,
             // html: ''
           },
         };
