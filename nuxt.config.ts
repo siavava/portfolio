@@ -186,7 +186,7 @@ export default {
   buildModules: [
 
     // Google Fonts
-    "@nuxtjs/google-fonts",
+    // "@nuxtjs/google-fonts",
 
     // Nuxt Image
     // "@nuxt/image-edge",
