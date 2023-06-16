@@ -1,7 +1,5 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 
-import autoprefixer from "autoprefixer";
-
 export default {
   app: {
     pageTransition: { name: "page", mode: "out-in" },
@@ -202,21 +200,7 @@ export default {
   layouts: {
     default: "~/layouts/clean.vue",
   },
-  build: {
-    postcss: {
-      postcssOptions: {
-        preset: {
-          autoprefixer: autoprefixer(),
-        },
-        // preset name
-        // order: "cssnanoLast",
-        // ordered plugin names
-        // order: ["postcss-import", "postcss-preset-env", "cssnano"],
-        // Function to calculate plugin order
-        // order: (names, presets) => presets.cssnanoLast(names),
-      },
-    },
-  },
+  build: { },
   runtimeConfig: {
     public: {
       firebaseConfig: {
