@@ -33,6 +33,14 @@ export default () => {
         title: "kahoots-api",
         _path: "https://kahoots-api.amitt.ai/",
       },
+      {
+        title: "networking platform",
+        _path: "https://networking-platform.amitt.ai/",
+      },
+      {
+        title: "networking api",
+        _path: "https://github.com/siavava/networking-platform-api",
+      },
     ],
   };
 };
