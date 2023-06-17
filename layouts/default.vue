@@ -14,8 +14,8 @@
         </div>
         <!-- <slot id="content"/> -->
       </main>
-      <AppFooter class="default-footer" />
     </div>
+    <AppFooter class="default-footer" />
   </div>
 </template>
 
@@ -41,6 +41,14 @@ onMounted(() => {
 .container
   // max-width: 1000px
   margin: 0 auto
+
+#root
+  min-height: 100svh
+  display: flex
+  flex-direction: column
+
+.default-footer
+  margin-top: auto
 
 body
   z-index: 2 !important

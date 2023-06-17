@@ -1,36 +1,17 @@
 <template>
   <section class="not-found">
-    <div class="not-found-main">
-      <div class="not-found-background">
-        <span class="error-code">404</span>
-        <span class="error-message"> Page not found.</span>
-      </div>
-      <div class="message-wrapper">
-        <p class="error-message-paragraph">
-          The page you tried navigating to was not found.
-        </p>
-        <div class="buttons">
-          <button
-            class="error-page-button"
-            @click="$router.back()"
-          >
-            Go back
-          </button>
-          <NuxtLink
-            class="error-page-button"
-            to="/"
-          >
-            Go home
-          </NuxtLink>
-          <NuxtLink
-            class="error-page-button"
-            to="/blog"
-          >
-            Show me the blog
-          </NuxtLink>
-        </div>
-      </div>
-    </div>
+    <!-- <div class="message-wrapper"> -->
+    <h1> 404 </h1>
+    <p> Nice to meet you tho!</p>
+
+    <!-- link to previous page  -->
+    <NuxtLink
+      class="error-page-button"
+      @click="$router.back()"
+    >
+      <span>cd ..</span>
+    </NuxtLink>
+    <!-- </div> -->
   </section>
 </template>
 
@@ -46,50 +27,44 @@ export default {
 @use "~/styles/typography"
 @use "~/styles/geometry"
 
-.not-found
-  @include mixins.flex-center
-  height: max-content
+section.not-found
+  display: flex
+  flex-direction: column
+  height: 100%
+  flex-grow: 1
 
-  min-height: calc(100vh - 270px)
+  h1
+    font-size: 2.5rem
+    font-weight: 900
+    margin: 0
+    font-family: typography.font(sans-serif), sans-serif
+    font-variation-settings: "cuts" 300
+    margin: 20px 0
 
-  .not-found-main
-    position: absolute
-    top: 50%
-    left: 50%
-    transform: translate(-50%, -50%)
-    // background: yellow
-    min-width: max(480px, 100vw)
+  p
+    font-size: 1.2rem
+    font-weight: 300
+    margin: 0
+    font-family: typography.font(sans-serif), sans-serif
+    margin: 0 0 50px 0
 
-    .not-found-background
-      font-family: typography.font("fredericka")
-      opacity: 0.3
-      z-index: 0
-      display: flex
-      flex-direction: column
-      align-items: center
+  .error-page-button
+    color: rgba(colors.color(lightest-foreground), 0.4)
+    transition: all 0.2s ease-in-out
+    //width: fit-content
+    display: table
+    margin-right: auto
 
-      .error-code
-        font-size: clamp(30px, min(40vw, 30vh), 1000px)
+    & > span
+      transition: all 0.2s ease-in-out
+      padding-bottom: 0.1rem
 
-      .error-message
-        font-size: min(6vw, clamp(10px, min(8vw, 8vh), 90px))
+    &::before
+      content: "❯"
+      margin-right: 0.5rem
 
-  .message-wrapper
-    display: flex
-    flex-direction: column
-    align-items: center
-    z-index: 1
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    @include mixins.flex-center
+    &:hover > span
+      color: white
+      border-bottom: 1px solid white
 
-    .error-message-paragraph
-      font-size: clamp(20px, 2vw, typography.font-size("xl"))
-      color: colors.color("primary-highlight")
-
-    .error-page-button
-      @include mixins.big-button
 </style>
