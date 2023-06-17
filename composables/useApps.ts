@@ -29,6 +29,10 @@ export default () => {
         title: "jekyll blog",
         _path: "https://jekyll-blog.amitt.ai/",
       },
+      {
+        title: "kahoots-api",
+        _path: "https://kahoots-api.amitt.ai/",
+      },
     ],
   };
 };
