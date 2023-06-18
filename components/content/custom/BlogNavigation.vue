@@ -80,10 +80,30 @@ export default {
       default: "",
     },
   },
+  async setup() {
+    const { toc } = useContent();
+    const { path } = useRoute();
+    const { data: _current } = await useAsyncData(
+      `categories@${path}`,
+      () => {
+        const _blogs = queryContent("blog")
+          .where({ _path: { $eq: path } })
+          .only(["category"])
+          .findOne();
+        return _blogs;
+      },
+    );
+    const currentCategories = _current?.value?.category || [];
+    return {
+      currentCategories,
+      toc,
+      path,
+    };
+  },
   data() {
     return {
       refreshKey: 0,
-      expandedCategories: new Set<string>(),
+      expandedCategories: new Set<string>(this.currentCategories),
     };
   },
   watch: {
@@ -91,24 +111,26 @@ export default {
       this.$forceUpdate();
     },
   },
-  async mounted() {
-    let { path: currentPath } = useRoute();
+  // async mounted() {
+  //   let { path: currentPath } = useRoute();
 
-    // trim trailing slash if any
-    currentPath = currentPath.replace(/\/$/, "");
+  //   // trim trailing slash if any
+  //   currentPath = currentPath.replace(/\/$/, "");
 
-    await queryContent("/blog")
-      .where({ _path: { $eq: currentPath } })
-      .findOne().then((page) => {
-        if (typeof page?.category === "string") {
-          page.category = [page.category];
-        } else {
-          page?.category?.forEach((category) => {
-            this.toggleCategory(category);
-          });
-        }
-      });
-  },
+  //   await queryContent("/blog")
+  //     .where({ _path: { $eq: currentPath } })
+  //     .only(["category"])
+  //     .findOne()
+  //     .then((page) => {
+  //       if (typeof page?.category === "string") {
+  //         page.category = [page.category];
+  //       } else {
+  //         page?.category?.forEach((category) => {
+  //           this.toggleCategory(category);
+  //         });
+  //       }
+  //     });
+  // },
   methods: {
     toggleCategory(category: string) {
       const _category = category.toLowerCase();
@@ -123,12 +145,6 @@ export default {
     },
   },
 };
-</script>
-
-<script lang="ts" setup>
-const { toc } = useContent();
-const { path } = useRoute();
-
 </script>
 
 <style lang="sass">
