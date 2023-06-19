@@ -12,6 +12,8 @@
         <div class="article-body">
           <div class="content">
             <slot id="content" />
+
+            <Surround />
             <BlogComments
               id="blog-comments"
               ref="commentsSection"
