@@ -50,6 +50,9 @@ const { data: surround } = await useAsyncData(
 );
 
 console.log(`surround after call: ${JSON.stringify(surround)}`);
+if (surround) {
+  console.info("surround loaded");
+}
 
 </script>
 

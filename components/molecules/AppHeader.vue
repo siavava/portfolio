@@ -325,10 +325,9 @@ const { data: latestBlogs } = await useAsyncData(
   },
 );
 
-/// APPS
-// const { data: apps } = await useFetch("/api/apps");
-// fetch with key as 'header'
 const { apps } = useApps();
+
+if (featuredBlogs && latestBlogs) console.info("loaded header data");
 </script>
 
 <style lang="sass">
