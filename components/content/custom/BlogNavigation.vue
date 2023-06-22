@@ -54,12 +54,12 @@
                       'active': path === child._path,
                     }"
                   >
-                    <a
+                    <NuxtLink
                       :id="`link-${child._path}`"
                       :href="`${child._path}`"
                     >
                       {{ child.title }}
-                    </a>
+                    </NuxtLink>
                   </li>
                 </ul>
               </li>
