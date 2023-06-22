@@ -28,9 +28,13 @@ export default {
 .edit-button-container
   width: 100%
   padding: 2rem 0
-  padding-left: 1rem
 
   .edit-button
     display: inline-flex
     gap: 0.5rem
+    line-height: 1em
+    justify-content: flex-end
+    align-items: center
+    width: 100%
+
 </style>

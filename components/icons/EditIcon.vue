@@ -49,8 +49,8 @@ export default {
 
 <style lang="sass" scoped>
 svg
-  width: 1.2rem
-  height: 1.2rem
+  width: 1em
+  height: 1em
   fill: currentColor
 
 </style>
