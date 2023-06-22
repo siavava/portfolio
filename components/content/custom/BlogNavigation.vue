@@ -82,12 +82,12 @@ export default {
   },
   async setup() {
     const { toc } = useContent();
-    const { path } = useRoute();
+    const { path } = useTrimmedPath();
     const { data: _current } = await useAsyncData(
       `categories@${path}`,
-      () => {
-        const _blogs = queryContent("blog")
-          .where({ _path: { $eq: path } })
+      async () => {
+        const _blogs = await queryContent("blog")
+          .where({ _path: path })
           .only(["category"])
           .findOne();
         return _blogs;
