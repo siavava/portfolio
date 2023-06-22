@@ -57,6 +57,7 @@
                     <NuxtLink
                       :id="`link-${child._path}`"
                       :to="`${child._path}`"
+                      no-prefetch
                     >
                       {{ child.title }}
                     </NuxtLink>
