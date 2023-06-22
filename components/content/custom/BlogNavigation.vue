@@ -56,7 +56,7 @@
                   >
                     <NuxtLink
                       :id="`link-${child._path}`"
-                      :href="`${child._path}`"
+                      :to="`${child._path}`"
                     >
                       {{ child.title }}
                     </NuxtLink>
