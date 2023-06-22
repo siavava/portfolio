@@ -36,10 +36,6 @@ const { path } = useTrimmedPath();
 console.log(`path: ${JSON.stringify(path)}`);
 console.log(`path: ${JSON.stringify(useRoute().path)}`);
 
-// fetch the prev and next pages
-// const { prev, next } = useContent();
-// const surround = ref([prev.value, next.value]);
-// console.log(surround.value);
 const { data: surround } = await useAsyncData(
   "prev-next",
   async () => {
@@ -48,9 +44,12 @@ const { data: surround } = await useAsyncData(
       .only(["_path", "title", "category", "date"])
       .sort({ date: -1 })
       .findSurround(path);
+    console.log(`surround in call: ${JSON.stringify(surround)}`);
     return surround;
   },
 );
+
+console.log(`surround after call: ${JSON.stringify(surround)}`);
 
 </script>
 
