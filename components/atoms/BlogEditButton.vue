@@ -28,6 +28,8 @@ export default {
 .edit-button-container
   width: 100%
   padding: 2rem 0
+  display: inline-flex
+  justify-content: flex-end
 
   .edit-button
     display: inline-flex
@@ -35,7 +37,6 @@ export default {
     line-height: 1em
     justify-content: flex-end
     align-items: center
-    width: 100%
     font-weight: 500
 
     & > span
