@@ -32,6 +32,7 @@
   <ExpandIcon v-else-if="type?.toLowerCase() === 'expand'" />
   <ExpandDiagonalIcon v-else-if="type?.toLowerCase() === 'expand-diagonal'" />
   <DownArrowIcon v-else-if="type?.toLowerCase() === 'down-arrow'" />
+  <EditIcon v-else-if="type?.toLowerCase() === 'edit'" />
   <LikeIcon
     v-else-if="type?.toLowerCase() === 'like'"
     :active="active"

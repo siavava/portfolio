@@ -48,7 +48,7 @@ solve1 bound divisors =
 -- 233168
 ```
 
-### What's Really Happening in #1?
+### #1, Explained?
 
 You might be thinking we do not need to generate a list of all the values,
 and you would be right.
@@ -205,7 +205,7 @@ solve2 bound divisors = iter 0 0 bound
 -- 271066
 ```
 
-### What's Really Happening in #2?
+### #2, Explained?
 
 Using tail recursion, we effectively iterate through all values in the range
 and, when a value is a multiple of any of the divisors, we adjust the value of the accumulator
@@ -238,7 +238,7 @@ solve3 bound divisors = unsafePerformIO $ do
 -- 233168
 ```
 
-### What's Really Happening in #3?
+### #3, Explained
 
 Instead of a tail recursion (which is unrolled into a loop by [GHC](https://www.haskell.org/ghc/)) anyway,
 use the state monad to maintain the state of the accumulator

@@ -1,10 +1,11 @@
 <template>
-  <div class="edit-button-vontainer">
+  <div class="edit-button-container">
     <NuxtLink
       :to="editLink"
       class="edit-button"
     >
-      Edit this Page on GitHub
+      <Icon type="edit" />
+      <span> Edit on GitHub</span>
     </NuxtLink>
   </div>
 </template>
@@ -22,3 +23,14 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.edit-button-container
+  width: 100%
+  padding: 2rem 0
+  padding-left: 1rem
+
+  .edit-button
+    display: inline-flex
+    gap: 0.5rem
+</style>
