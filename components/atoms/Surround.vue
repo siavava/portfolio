@@ -1,52 +1,66 @@
 <template>
   <div
-    v-if="data"
+    v-if="surround"
     class="surround"
   >
-    <NuxtLink
-      v-for="(link, i) in data"
-      :key="i"
-      :to="link._path"
-      class="surround-link"
+    <template
+      v-for="(link, i) in surround"
     >
-      <div class="surround-category">
-        {{ link.category[0] }}
-      </div>
-      <div class="surround-title">
-        {{ link.title }}
-      </div>
-      <div class="surround-date">
-        <!-- print date as MM/DD/YYYY -->
-        {{ new Date(link.date).toLocaleDateString("en-US") }}
-      </div>
-    </NuxtLink>
+      <!-- {{ link }} -->
+      <NuxtLink
+        v-if="link"
+        :key="i"
+        :to="link._path"
+        class="surround-link"
+      >
+        <div class="surround-category">
+          {{ link.category[0] }}
+        </div>
+        <div class="surround-title">
+          {{ link.title }}
+        </div>
+        <div class="surround-date">
+          <!-- print date as MM/DD/YYYY -->
+          {{ new Date(link.date).toLocaleDateString("en-US") }}
+        </div>
+      </NuxtLink>
+      <div
+        v-else
+        :key="i+10"
+        class="surround-link"
+      />
+    </template>
   </div>
 </template>
+
+<script setup lang="ts">
+const { path } = useRoute();
+
+// fetch the prev and next pages
+const { data: surround } = useAsyncData(
+  `prev-next@${path}@${new Date().getTime()}}`,
+  async () => {
+    const surround = await queryContent("/blog")
+      .where({ draft: false })
+      .only(["_path", "title", "category", "date"])
+      .sort({ date: 1 })
+      .findSurround(path);
+    return surround;
+  },
+);
+
+</script>
 
 <script lang="ts">
 // fetch the current route
 
 export default {
   name: "Surround",
-  setup() {
-    const { path } = useRoute();
+  // setup() {
 
-    // fetch the prev and next pages
-    const { data } = useAsyncData(
-      `prev-next@${path}`,
-      async () => {
-        const [prev, next] = await queryContent("/blog")
-          .where({ draft: false })
-          .only(["_path", "title", "category", "date"])
-          .sort({ date: 1 })
-          .findSurround(path);
-        return [prev, next];
-      },
-    );
-
-    console.log(data);
-    return { data };
-  },
+  //   console.log(data);
+  //   return { data };
+  // },
 };
 </script>
 <style lang="sass" scoped>
@@ -57,7 +71,7 @@ export default {
   justify-content: space-between
 
   .surround-link
-    width: 40%
+    width: 45%
     display: flex
     flex-direction: column
     gap: 0.5rem
@@ -65,7 +79,10 @@ export default {
     border: 1px solid rgba(colors.color(foreground), 0.5)
     border-radius: 0.5rem
     transition: all 0.2s ease-in-out
-    margin: 10px auto
+    margin: 10px 0
+
+    &:is(div)
+      border: none
 
     // if first child, align left)
     &:first-child

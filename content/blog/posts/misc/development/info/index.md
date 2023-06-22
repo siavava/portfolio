@@ -3,7 +3,7 @@ title: About this Website
 description: Summary of the Dev Process.
 category:
   - development
-draft: false
+draft: true
 featured: false
 # image: talkers.gif
 # caption: Doers, not Talkers.

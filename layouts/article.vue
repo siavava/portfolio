@@ -12,7 +12,8 @@
         <div class="article-body">
           <div class="content">
             <slot id="content" />
-
+            <!-- Add edit button -->
+            <BlogEditButton />
             <Surround />
             <BlogComments
               id="blog-comments"
