@@ -37,10 +37,10 @@
 const { path } = useRoute();
 
 // fetch the prev and next pages
-const { data: surround } = useAsyncData(
+const { data: surround } = await useAsyncData(
   `prev-next@${path}@${new Date().getTime()}}`,
-  async () => {
-    const surround = await queryContent("/blog")
+  () => {
+    const surround = queryContent("/blog")
       .where({ draft: false })
       .only(["_path", "title", "category", "date"])
       .sort({ date: 1 })
