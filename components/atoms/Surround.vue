@@ -50,10 +50,6 @@ const { data: surround } = await useAsyncData(
       .findSurround(path);
     return surround;
   },
-
-  {
-    server: false,
-  },
 );
 
 </script>
