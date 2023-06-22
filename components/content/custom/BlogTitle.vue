@@ -25,11 +25,11 @@
       </div>
       <div class="blog-actions">
         <button class="blog-action left">
-          <Icon
+          <!-- <Icon
             type="like"
             class="blog-action-icon"
             :active="false"
-          />
+          /> -->
         </button>
         <button class="blog-action left">
           <Icon
