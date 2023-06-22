@@ -3,6 +3,7 @@
 export default {
   experimental: {
     viewTransition: true,
+    payloadExtraction: false,
   },
   app: {
     pageTransition: { name: "page", mode: "out-in" },
