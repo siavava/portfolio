@@ -36,5 +36,13 @@ export default {
     justify-content: flex-end
     align-items: center
     width: 100%
+    font-weight: 500
+
+    & > span
+      border-bottom: 2px dotted
+
+    &:hover
+      & > span
+        border-bottom: 2px solid
 
 </style>

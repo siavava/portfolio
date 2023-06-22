@@ -32,19 +32,21 @@
 </template>
 
 <script setup lang="ts">
-const { path } = useRoute();
+const { path } = useTrimmedPath();
+console.log(`path: ${JSON.stringify(path)}`);
+console.log(`path: ${JSON.stringify(useRoute().path)}`);
 
 // fetch the prev and next pages
 // const { prev, next } = useContent();
 // const surround = ref([prev.value, next.value]);
 // console.log(surround.value);
 const { data: surround } = await useAsyncData(
-  `prev-next@${path}@${new Date().getTime()}}`,
+  `prev-next@${path}`,
   async () => {
     const surround = await queryContent("/blog")
       .where({ draft: false })
       .only(["_path", "title", "category", "date"])
-      .sort({ date: 1 })
+      .sort({ date: -1 })
       .findSurround(path);
     return surround;
   },

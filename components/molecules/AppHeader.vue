@@ -194,7 +194,8 @@ export default {
       return this.lastScrollPosition <= 0;
     },
     route() {
-      return useRoute().path;
+      const { path } = useTrimmedPath();
+      return path;
     },
   },
   watch: {
@@ -228,7 +229,7 @@ export default {
     },
 
     setup() {
-      const { path } = useRoute();
+      const { path } = useTrimmedPath();
       if (path === "/") {
         this.anchors = navLinks.homeLinks;
       }
@@ -263,7 +264,7 @@ export default {
 
 <script lang="ts" setup>
 
-const { path: currentPage } = useRoute();
+const { path: currentPage } = useTrimmedPath();
 const { toc } = useContent();
 
 const menuOpen = ref(false);
@@ -302,8 +303,8 @@ const { data: featuredBlogs } = await useAsyncData(
     const _blogs = await queryContent("blog/posts")
       .where({ draft: false })
       .where({ category: { $contains: "featured" } })
-      .only(["_path", "title", "date", "description"])
       .limit(7)
+      .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })
       .find();
     return _blogs;
@@ -317,8 +318,8 @@ const { data: latestBlogs } = await useAsyncData(
     const _blogs = await queryContent("blog/posts")
       .where({ draft: false })
       .only(["_path", "title", "date", "description", "tags"])
-      .limit(7)
       .sort({ date: -1 })
+      .limit(7)
       .find();
     return _blogs;
   },
