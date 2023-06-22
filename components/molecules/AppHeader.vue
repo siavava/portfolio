@@ -299,7 +299,7 @@ const toggleMenu = () => {
 const { data: featuredBlogs } = await useAsyncData(
   "featured-blogs-meta",
   async () => {
-    const _blogs = queryContent("blog/posts")
+    const _blogs = await queryContent("blog/posts")
       .where({ draft: false })
       .where({ category: { $contains: "featured" } })
       .only(["_path", "title", "date", "description"])
@@ -314,7 +314,7 @@ const { data: featuredBlogs } = await useAsyncData(
 const { data: latestBlogs } = await useAsyncData(
   "publication-blogs-meta",
   async () => {
-    const _blogs = queryContent("blog/posts")
+    const _blogs = await queryContent("blog/posts")
       .where({ draft: false })
       .only(["_path", "title", "date", "description", "tags"])
       .limit(7)

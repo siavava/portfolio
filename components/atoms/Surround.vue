@@ -6,7 +6,6 @@
     <template
       v-for="(link, i) in surround"
     >
-      <!-- {{ link }} -->
       <NuxtLink
         v-if="link"
         :key="i"
@@ -20,7 +19,6 @@
           {{ link.title }}
         </div>
         <div class="surround-date">
-          <!-- print date as MM/DD/YYYY -->
           {{ new Date(link.date).toLocaleDateString("en-US") }}
         </div>
       </NuxtLink>
@@ -37,10 +35,13 @@
 const { path } = useRoute();
 
 // fetch the prev and next pages
+// const { prev, next } = useContent();
+// const surround = ref([prev.value, next.value]);
+// console.log(surround.value);
 const { data: surround } = await useAsyncData(
   `prev-next@${path}@${new Date().getTime()}}`,
-  () => {
-    const surround = queryContent("/blog")
+  async () => {
+    const surround = await queryContent("/blog")
       .where({ draft: false })
       .only(["_path", "title", "category", "date"])
       .sort({ date: 1 })
