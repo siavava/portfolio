@@ -3,12 +3,12 @@ title: Test of Blog Elements
 description: Setting Up and Running Nuxt in 4 Steps.
 category:
   - tests
-draft: false
+draft: true
 layout: article
 date: 2022-12-21
 image: title-image.jpg
 caption: This is the image caption.
-navigation: true
+navigation: false
 ---
 
 <!-- ![Title Image](/blog/posts/misc/test1/title-image.jpg) -->

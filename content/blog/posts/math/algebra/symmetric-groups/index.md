@@ -3,13 +3,13 @@ title: Symmetric Groups
 description: Just a simple post on symmetric groups.
 category:
   - algebra
-draft: false
+draft: true
 featured: false
 image: socratica.jpeg
 caption: The Group S4.
 layout: article
 date: 2023-05-19
-navigation: true
+navigation: false
 ---
 
 # Symmetric Groups
