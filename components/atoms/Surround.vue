@@ -41,7 +41,7 @@ console.log(`path: ${JSON.stringify(useRoute().path)}`);
 // const surround = ref([prev.value, next.value]);
 // console.log(surround.value);
 const { data: surround } = await useAsyncData(
-  `prev-next@${path}`,
+  "prev-next",
   async () => {
     const surround = await queryContent("/blog")
       .where({ draft: false })
