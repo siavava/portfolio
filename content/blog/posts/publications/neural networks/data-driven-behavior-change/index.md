@@ -2,7 +2,7 @@
 title: Data-driven Behavior Change
 description: How Machine Learning is Transforming other Industries.
 category:
-  - artificial intelligence
+  - neural networks
   - featured
 draft: false
 featured: true

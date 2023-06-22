@@ -2,7 +2,7 @@
 title: The New Space Race
 description: The Past, Present, and Future of Space Exploration.
 category:
-  - space exploration
+  - alien worlds
   - featured
 draft: false
 featured: true
