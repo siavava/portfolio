@@ -38,8 +38,8 @@ export default {
       },
     );
 
-    console.log(`raw search path: ${JSON.stringify(props.hit.url)}`);
-    console.log(`search path: ${JSON.stringify(useTrimmedPath(props.hit.url).path)}`);
+    // console.log(`raw search path: ${JSON.stringify(props.hit.url)}`);
+    // console.log(`search path: ${JSON.stringify(useTrimmedPath(props.hit.url).path)}`);
     // console.log(`blog search: ${JSON.stringify(blog)}`);
     return {
       blog,

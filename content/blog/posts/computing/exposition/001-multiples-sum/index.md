@@ -204,7 +204,7 @@ solve2 bound divisors = iter 0 0 bound
       | otherwise = iter acc (curr + 1) end
 
 -- >>> solve2 1000 [3,5]
--- 271066
+-- 233168
 ```
 
 ### #2, Explained?
