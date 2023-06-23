@@ -69,6 +69,10 @@ export default {
   router: {
     trailingSlash: true,
   },
+  sitemap: {
+    hostname: "https://amitt.ai",
+    trailingSlash: true,
+  },
   devtools: {
     // Enable devtools (default: true)
     enabled: true,
