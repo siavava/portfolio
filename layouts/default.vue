@@ -1,5 +1,10 @@
 <template>
   <div id="root">
+    <SeoKit />
+    <!-- a. Generates browser screenshots for every page -->
+    <OgImageScreenshot />
+    <!-- b. Generate static images for every page (uses the default template) -->
+    <OgImageStatic />
     <AppHeader />
     <div class="navy">
       <!-- header in body == not sticky -->

@@ -6,7 +6,7 @@
     <template
       v-for="(link, i) in surround"
     >
-      <a
+      <NuxtLink
         v-if="link"
         :key="i"
         :href="link._path"
@@ -21,7 +21,7 @@
         <div class="surround-date">
           {{ new Date(link.date).toLocaleDateString("en-US") }}
         </div>
-      </a>
+      </NuxtLink>
       <div
         v-else
         :key="i+10"
