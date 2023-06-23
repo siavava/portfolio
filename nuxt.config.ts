@@ -4,9 +4,6 @@ export default {
   // experimental: {
   //   viewTransition: true,
   // },
-  extends: [
-    "nuxt-seo-kit",
-  ],
   app: {
     // pageTransition: { name: "page", mode: "out-in" },
     // layoutTransition: { name: "layout", mode: "out-in" },
@@ -63,18 +60,15 @@ export default {
     }],
     // ["@nuxtjs/redirect-module",
     //   {
-    //     from: "^.*(?<!\/)$",
+    //     from: "^.*(?<!/)$",
     //     to: (from, req) => `${req.url}/`,
+    //     statusCode: 301,
     //   },
     // ],
   ],
-
-  redirect: [
-    // {
-    //   from: "^.*(?<!\/)$",
-    //   to: (from, req) => `${req.url}/`,
-    // },
-  ],
+  router: {
+    trailingSlash: true,
+  },
   devtools: {
     // Enable devtools (default: true)
     enabled: true,
@@ -217,6 +211,13 @@ export default {
     "~/modules/users",
     "~/modules/utils",
     "@nuxtjs/firebase",
+    ["@nuxtjs/redirect-module",
+      {
+        from: "^.*(?<!/)$",
+        to: (from, req) => (req.url.endsWith("/") ? req.url : `${req.url}/`),
+        statusCode: 301,
+      },
+    ],
   ],
   layouts: {
     default: "~/layouts/clean.vue",
@@ -229,7 +230,7 @@ export default {
       // siteDescription: "Portfolio / Blog!",
       // language: "en-US", // prefer more explicit language codes like `en-AU` over `en`
       // // titleSeparator: " | ",
-      trailingSlash: true,
+      // trailingSlash: true,
       firebaseConfig: {
         apiKey: process.env.DATABASE_API_KEY,
         authDomain: process.env.DATABASE_AUTH_DOMAIN,
