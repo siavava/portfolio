@@ -61,6 +61,19 @@ export default {
       applicationId: process.env.ALGOLIA_SEARCH_APP_ID,
       apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
     }],
+    // ["@nuxtjs/redirect-module",
+    //   {
+    //     from: "^.*(?<!\/)$",
+    //     to: (from, req) => `${req.url}/`,
+    //   },
+    // ],
+  ],
+
+  redirect: [
+    {
+      from: "^.*(?<!\/)$",
+      to: (from, req) => `${req.url}/`,
+    },
   ],
   devtools: {
     // Enable devtools (default: true)
