@@ -74,7 +74,7 @@
 const { path } = useTrimmedPath();
 const {
   categories, image, caption, date, title, description,
-} = await queryContent(path)
+} = await queryContent()
   .where({ _path: path })
   .only(["category", "date", "image", "caption", "title", "description"])
   .findOne()
