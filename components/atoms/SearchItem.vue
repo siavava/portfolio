@@ -1,5 +1,8 @@
 <template>
-  <div className="search-item">
+  <div
+    v-if="blog"
+    className="search-item"
+  >
     <NuxtLink
       :to="hit.url"
       class="search-result-info"
@@ -26,14 +29,18 @@ export default {
   },
   async setup(props) {
     const { data: blog } = await useAsyncData(
-      `search@${props.hit.url?.slice(0, -1)}`,
-      () => {
-        const _blogs = queryContent()
-          .where({ _path: useTrimmedPath(props.hit.url) })
+      props.hit.url,
+      async () => {
+        const _blogs = await queryContent()
+          .where({ _path: useTrimmedPath(props.hit.url).path })
           .findOne();
         return _blogs;
       },
     );
+
+    console.log(`raw search path: ${JSON.stringify(props.hit.url)}`);
+    console.log(`search path: ${JSON.stringify(useTrimmedPath(props.hit.url).path)}`);
+    // console.log(`blog search: ${JSON.stringify(blog)}`);
     return {
       blog,
     };

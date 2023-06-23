@@ -14,6 +14,6 @@ export default (currentPath?: string) => {
 
   // remove trailing slash
   const path = rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath;
-  console.log(`path: ${path}`);
+  // console.log(`path: ${path}`);
   return { path };
 };
