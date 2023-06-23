@@ -43,7 +43,7 @@
               class="blog-action"
               @click="() => userInfo.toggleSubscription()"
             />
-            <NuxtLink :to="useRedirect('/blog')">
+            <NuxtLink to="/blog">
               <ListIcon class="blog-action" />
             </NuxtLink>
 

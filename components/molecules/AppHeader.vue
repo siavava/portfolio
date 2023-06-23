@@ -32,7 +32,7 @@
           class="menu-column toc-current-page"
         >
           <NuxtLink
-            :to="useRedirect(currentPage)"
+            :to="currentPage"
             class="menu-column-header"
           >
             <strong> Current Page </strong>
@@ -57,7 +57,7 @@
         </div>
         <div class="menu-column">
           <NuxtLink
-            :to="useRedirect('/blog')"
+            to="/blog"
             class="menu-column-header"
           >
             <strong> Featured </strong>
@@ -68,7 +68,7 @@
               :key="i"
             >
               <NuxtLink
-                :to="useRedirect(item._path)"
+                :to="item._path"
                 class="menu-column-item"
               >
                 {{ item.title }}
@@ -78,7 +78,7 @@
         </div>
         <div class="menu-column">
           <NuxtLink
-            :to="useRedirect('/blog')"
+            to="/blog"
             class="menu-column-header"
           >
             <strong> Latest </strong>
@@ -89,7 +89,7 @@
               :key="i"
             >
               <NuxtLink
-                :to="useRedirect(item._path)"
+                :to="item._path"
                 class="menu-column-item"
               >
                 {{ item.title }}
@@ -99,7 +99,7 @@
         </div>
         <div class="menu-column">
           <NuxtLink
-            :to="useRedirect('/')"
+            to="/"
             class="menu-column-header"
           >
             <strong> Apps </strong>
@@ -110,7 +110,7 @@
               :key="i"
             >
               <NuxtLink
-                :to="useRedirect(item._path)"
+                :to="item._path"
                 class="menu-column-item"
                 style="text-transform: capitalize;"
               >

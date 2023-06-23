@@ -11,7 +11,7 @@
       </div>
       <div class="styled-credit-section">
         <NuxtLink
-          :to="useRedirect('https://github.com/siavava/altair')"
+          to="https://github.com/siavava/altair"
           target="_blank"
           class="year"
         >
