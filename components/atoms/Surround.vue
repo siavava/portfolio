@@ -39,7 +39,7 @@ console.log(`path: ${JSON.stringify(useRoute().path)}`);
 const { data: surround } = await useAsyncData(
   // "prev-next",
   async () => {
-    const surround = await queryContent("/blog")
+    const surround = await queryContent(path)
       .where({ draft: false })
       .only(["_path", "title", "category", "date"])
       .sort({ date: -1 })
