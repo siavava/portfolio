@@ -3,8 +3,9 @@
 export default {
   experimental: {
     viewTransition: false,
-    loadPayload: true,
-    preloadPayload: true,
+    // loadPayload: true,
+    // preloadPayload: true,
+    payloadExtraction: false,
   },
   app: {
     // pageTransition: { name: "page", mode: "out-in" },
