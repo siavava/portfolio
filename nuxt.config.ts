@@ -1,9 +1,9 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 
 export default {
-  // experimental: {
-  //   viewTransition: true,
-  // },
+  experimental: {
+    viewTransition: false,
+  },
   app: {
     // pageTransition: { name: "page", mode: "out-in" },
     // layoutTransition: { name: "layout", mode: "out-in" },
@@ -11,7 +11,6 @@ export default {
     head: {
       title: "whatever",
       meta: [
-        // meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
@@ -19,28 +18,9 @@ export default {
           name: "description",
           content: "Amittai's portfolio. A summary of his work, thoughts, and interests.",
         },
-        // favicon
       ],
       link: [
-
         { rel: "icon", type: "image/png", href: "/favicon.png" },
-        // { rel: "icon", type: "image/x-icon", href: "/favicons/favicon.ico" },
-        // {
-        //   rel: "icon", type: "image/png", sizes: "32x32", href: "/favicons/favicon-32x32.png",
-        // },
-        // {
-        //   rel: "icon", type: "image/png", sizes: "16x16", href: "/favicons/favicon-16x16.png",
-        // },
-        // {
-        //   rel: "icon", type: "image/png", sizes: "96x96", href: "/favicons/favicon-96x96.png",
-        // },
-        // {
-        //   rel: "icon", type: "image/png", sizes: "256x256", href: "/favicons/favicon-256x256.png",
-        // },
-        // { rel: "manifest", href: "/favicons/site.webmanifest" },
-        // { rel: "mask-icon", href: "/favicons/safari-pinned-tab.svg", color: "#5bbad5" },
-        // { rel: "shortcut icon", href: "/favicons/favicon.ico" },
-        // { rel: "apple-touch-icon", sizes: "180x180", href: "/favicons/apple-touch-icon.png" },
       ],
     },
   },
@@ -58,13 +38,6 @@ export default {
       applicationId: process.env.ALGOLIA_SEARCH_APP_ID,
       apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
     }],
-    // ["@nuxtjs/redirect-module",
-    //   {
-    //     from: "^.*(?<!/)$",
-    //     to: (from, req) => `${req.url}/`,
-    //     statusCode: 301,
-    //   },
-    // ],
   ],
   router: {
     trailingSlash: true,
@@ -109,7 +82,6 @@ export default {
         "bash",
         "c",
         "cpp",
-        "c++",
         "java",
         "julia",
         "python",
@@ -145,24 +117,6 @@ export default {
       "vue-freezeframe",
     ],
   },
-  plugins: [
-    // { src: "~/plugins/resize.ts", mode: "client" },
-    // { src: "~/plugins/reveal.ts", mode: "client", ssr: false },
-  ],
-  vue: {
-    compilerOptions: {
-      directiveTransforms: {
-        // resizetrack: () => ({
-        //   props: [],
-        //   needRuntime: false,
-        // }),
-        // reveal: () => ({
-        //   props: [],
-        //   needRuntime: false,
-        // })
-      },
-    },
-  },
   image: {
     // The screen sizes predefined by `@nuxt/image-edge`:
     screens: {
@@ -178,9 +132,6 @@ export default {
     ipx: {},
     dir: "static",
   },
-  // serverMiddleware: {
-  //   '/_ipx': '~/server/middleware/ipx.js'
-  // },
   googleFonts: {
     families: {
       "DM+Sans": true, // [200, 300, 400, 500, 600, 700],
@@ -192,27 +143,8 @@ export default {
     preload: true,
     display: "swap",
     useStyleSheet: true,
-    // download: true,
-    // base64: false,
-    // inject: true,
-    // fontsDir: "fonts",
-    // base64: true,
-    // inject: true,
-    // fontsDir: "fonts",
-    // fontsPath: "~assets/fonts",
-    // stylePath: "styles/google-fonts.scss",
-    // overwriting: false,
   },
   buildModules: [
-
-    // Google Fonts
-    // "@nuxtjs/google-fonts",
-
-    // Nuxt Image
-    // "@nuxt/image-edge",
-
-    // local
-
     "~/modules/users",
     "~/modules/utils",
     "@nuxtjs/firebase",
@@ -230,12 +162,6 @@ export default {
   build: { },
   runtimeConfig: {
     public: {
-      // siteUrl: "https://amitt.ai/",
-      // siteName: "amittai",
-      // siteDescription: "Portfolio / Blog!",
-      // language: "en-US", // prefer more explicit language codes like `en-AU` over `en`
-      // // titleSeparator: " | ",
-      // trailingSlash: true,
       firebaseConfig: {
         apiKey: process.env.DATABASE_API_KEY,
         authDomain: process.env.DATABASE_AUTH_DOMAIN,
@@ -247,7 +173,4 @@ export default {
       },
     },
   },
-  // unhead: {
-  //   ogTitleTemplate: "%s | amittai",
-  // },
 };
