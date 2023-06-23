@@ -70,10 +70,10 @@ export default {
   ],
 
   redirect: [
-    {
-      from: "^.*(?<!\/)$",
-      to: (from, req) => `${req.url}/`,
-    },
+    // {
+    //   from: "^.*(?<!\/)$",
+    //   to: (from, req) => `${req.url}/`,
+    // },
   ],
   devtools: {
     // Enable devtools (default: true)
@@ -242,6 +242,6 @@ export default {
     },
   },
   unhead: {
-    ogTitleTemplate: "%s | My Website",
+    ogTitleTemplate: "%s | amittai",
   },
 };
