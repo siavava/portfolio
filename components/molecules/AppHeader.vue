@@ -298,11 +298,11 @@ const toggleMenu = () => {
 
 /// DATA
 const { data: featuredBlogs } = await useAsyncData(
-  "featured-blogs-meta",
+  // "featured-blogs-meta",
   async () => {
     const _blogs = await queryContent()
       // match '/blog/posts...'
-      .where({ _path: { $regex: "^/blog" } })
+      // .where({ _path: { $regex: "^/blog" } })
       .where({ draft: false })
       .where({ category: { $contains: "featured" } })
       .limit(7)
@@ -315,11 +315,11 @@ const { data: featuredBlogs } = await useAsyncData(
 
 /// PUBLICATIONS
 const { data: latestBlogs } = await useAsyncData(
-  "publication-blogs-meta",
+  // "publication-blogs-meta",
   async () => {
     const _blogs = await queryContent()
       // match '/blog/posts...'
-      .where({ _path: { $regex: "^/blog" } })
+      // .where({ _path: { $regex: "^/blog" } })
       .where({ draft: false })
       .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })
