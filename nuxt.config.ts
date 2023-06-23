@@ -109,6 +109,7 @@ export default {
         "bash",
         "c",
         "cpp",
+        "c++",
         "java",
         "julia",
         "python",
@@ -215,17 +216,17 @@ export default {
     "~/modules/users",
     "~/modules/utils",
     "@nuxtjs/firebase",
-    ["@nuxtjs/redirect-module",
-      {
-        from: "^.*(?<!/)$",
-        to: (from, req) => (req.url.endsWith("/") ? req.url : `${req.url}/`),
-        statusCode: 301,
-      },
-    ],
+    // ["@nuxtjs/redirect-module",
+    //   {
+    //     from: "^.*(?<!/)$",
+    //     to: (from, req) => (req.url.endsWith("/") ? req.url : `${req.url}/`),
+    //     statusCode: 301,
+    //   },
+    // ],
   ],
-  layouts: {
-    default: "~/layouts/clean.vue",
-  },
+  // layouts: {
+  //   default: "~/layouts/clean.vue",
+  // },
   build: { },
   runtimeConfig: {
     public: {
