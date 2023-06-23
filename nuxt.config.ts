@@ -224,11 +224,11 @@ export default {
   build: { },
   runtimeConfig: {
     public: {
-      siteUrl: "https://amitt.ai/",
-      siteName: "amittai",
-      siteDescription: "Portfolio / Blog!",
-      language: "en-US", // prefer more explicit language codes like `en-AU` over `en`
-      // titleSeparator: " | ",
+      // siteUrl: "https://amitt.ai/",
+      // siteName: "amittai",
+      // siteDescription: "Portfolio / Blog!",
+      // language: "en-US", // prefer more explicit language codes like `en-AU` over `en`
+      // // titleSeparator: " | ",
       trailingSlash: true,
       firebaseConfig: {
         apiKey: process.env.DATABASE_API_KEY,
@@ -241,7 +241,7 @@ export default {
       },
     },
   },
-  unhead: {
-    ogTitleTemplate: "%s | amittai",
-  },
+  // unhead: {
+  //   ogTitleTemplate: "%s | amittai",
+  // },
 };
