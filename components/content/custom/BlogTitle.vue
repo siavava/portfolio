@@ -71,10 +71,11 @@
 </template>
 
 <script lang="ts" setup>
-const { path } = useRoute();
+const { path } = useTrimmedPath();
 const {
   categories, image, caption, date, title, description,
 } = await queryContent(path)
+  .where({ _path: path })
   .only(["category", "date", "image", "caption", "title", "description"])
   .findOne()
   .then((data) => {

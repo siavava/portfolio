@@ -114,7 +114,9 @@ const GRID_LIMIT = 6;
 const { data: projectData } = await useAsyncData(
   `archived-projects-${useRoute().path}`,
   async () => {
-    const _projectsData = queryContent<MarkdownParsedContent>("projects")
+    const _projectsData = queryContent<MarkdownParsedContent>()
+      // match '/projects...'
+      .where({ _path: { $regex: "^/projects" } })
       .where({ featured: false })
       .sort({ date: -1 })
       .find();

@@ -80,7 +80,7 @@ import {
 const { data: jobsData } = await useAsyncData(
   `jobs-${useRoute().path}`,
   async () => {
-    const _jobsData = queryContent<MarkdownParsedContent>("jobs")
+    const _jobsData = queryContent<MarkdownParsedContent>()
       .where({ category: "jobs-info" })
       .sort({ date: -1 })
       .find();

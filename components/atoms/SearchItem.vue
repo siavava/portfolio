@@ -28,7 +28,8 @@ export default {
     const { data: blog } = await useAsyncData(
       `search@${props.hit.url?.slice(0, -1)}`,
       () => {
-        const _blogs = queryContent(`${props.hit.url?.slice(0, -1)}`)
+        const _blogs = queryContent()
+          .where({ _path: useTrimmedPath(props.hit.url) })
           .findOne();
         return _blogs;
       },

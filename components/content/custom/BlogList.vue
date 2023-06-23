@@ -49,7 +49,7 @@ export default {
     const { data: blogs } = await useAsyncData(
       "blogs-list",
       async () => {
-        const _blogs = await queryContent("blog/posts")
+        const _blogs = await queryContent("")
           .where({ draft: false })
           .sort({ date: -1 })
           .find();

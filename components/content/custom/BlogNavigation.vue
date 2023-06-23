@@ -86,7 +86,7 @@ export default {
     const { data: _current } = await useAsyncData(
       `categories@${path}`,
       async () => {
-        const _blogs = await queryContent("blog")
+        const _blogs = await queryContent()
           .where({ _path: path })
           .only(["category"])
           .findOne();

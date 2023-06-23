@@ -131,7 +131,9 @@ const hasCompany = (project: any) => typeof project.company !== "undefined";
 const { data } = await useAsyncData(
   `projects-${useRoute().path}`,
   async () => {
-    const _projectsData = queryContent("projects")
+    const _projectsData = queryContent()
+      // match '/projects...'
+      .where({ _path: { $regex: "^/projects" } })
       .where({ featured: true })
       .sort({ date: -1, order: 1 })
       .find();
