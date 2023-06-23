@@ -5,11 +5,13 @@
  */
 export default () => {
   const { path: rawPath } = useRoute();
+  console.log(`rawPath: ${rawPath}`);
 
   // avoid trimming the index route.
   if (rawPath === "/") return { path: rawPath };
 
   // remove trailing slash
   const path = rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath;
+  console.log(`path: ${path}`);
   return { path };
 };
