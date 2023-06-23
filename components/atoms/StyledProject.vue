@@ -131,7 +131,7 @@ export default {
     padding: 25px
     border-radius: geometry.var("border-radius")
     background-color: colors.color("light-background")
-    color: colors.color("light-foreground")
+    color: colors.color("foreground")
     font-size: typography.font-size("l")
     z-index: 2
     display: flex

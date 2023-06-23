@@ -330,10 +330,6 @@ const { data: latestBlogs } = await useAsyncData(
 );
 
 const { apps } = useApps();
-
-// if (featuredBlogs && latestBlogs) console.info("loaded header data");
-console.info(`featuredBlogs: ${featuredBlogs}`);
-console.info(`latestBlogs: ${latestBlogs}`);
 </script>
 
 <style lang="sass">

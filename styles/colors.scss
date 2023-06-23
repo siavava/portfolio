@@ -165,20 +165,20 @@ $palette: (
 
   // "primary-highlight": #DC4D4D,
   // "primary-highlight": #1db954,
-  // "primary-highlight": #1e52f3,
-  "primary-highlight": #EE765C,
+  "primary-highlight": #1e52f3,
+  // "primary-highlight": #EE765C,
 
   "one": #EE765C,
   "two": #3A594D,
   "three": #BD8FC0,
 
-  "secondary-highlight": #EE765C,
+  "secondary-highlight": #1e52f3,
   // "secondary-highlight": #8982ee,
   // "secondary-highlight": lighten(#1e52f3, 15%),
   // "primary-highlight": #ff4e20,
 
 
-  "primary-highlight-tint": rgba(85, 202, 122, 0.11) ,
+  // "primary-highlight-tint": rgba(85, 202, 122, 0.11) ,
   // "secondary-highlight": rgb(187, 255, 0),
   // "secondary-highlight": #fdfd96,
   // "secondary-highlight": #a374ff,
@@ -197,10 +197,13 @@ $palette: (
   "dark-foreground": #434343,
   // "foreground": #a9a9a9,
   // "foreground": #c1bed0,
-  "foreground": #BD8FC0,
-  "light-foreground": #d9aedc,
+  // "foreground": #BD8FC0,
+  "foreground": #99a2b5,
+  // "light-foreground": #d9aedc,
+  "light-foreground": #c2c6d1,
 
-  "lightest-foreground": #eecaf0,
+  // "lightest-foreground": #eecaf0,
+  "lightest-foreground": #dce4f6,
   // "foreground": #999999,
   // "light-foreground": #c1bed0,
   // "lightest-foreground": #ffffff,

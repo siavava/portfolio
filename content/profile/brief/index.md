@@ -69,9 +69,7 @@ If interested in something particularly, [let me know][email].
 
 ---
 
-## Tools / Programming Languages
-
-<!-- force a new line here!!  -->
+<!-- ## Tools / Programming Languages
 
 ::dashboard
 <div>
@@ -144,13 +142,9 @@ style: "justify-content: right; width: 70%; "
 
 ::
 
-<!-- <div style="padding-bottom: 20px;"> -->
-
 ---
 
 ## Domain knowledge
-
-<!-- </div> -->
 
 ::dashboard
 
@@ -229,7 +223,7 @@ style: "justify-content: right; width: 70%; "
 ::
 
 </div>
-::
+:: -->
 
 [nuxt]:                     https://nuxtjs.org/
 [dartmouth]:                https://home.dartmouth.edu/

@@ -20,7 +20,7 @@ export default {
   width: 100%
   margin-left: 20px
   min-height: 512px
-  color: colors.color("light-foreground")
+  color: colors.color(foreground)
 
   @media (max-width: 600px)
     margin-left: 0

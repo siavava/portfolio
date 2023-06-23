@@ -147,9 +147,11 @@ const projects = data.value || [];
 
 <style lang="sass" scoped>
 @use "~/styles/transitions"
+@use "~/styles/typography"
 
 .project-title
   font-weight: 600
+  font-family: typography.font(fancy)
   font-variation-settings: "cuts" 300
 
 </style>

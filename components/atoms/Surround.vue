@@ -33,8 +33,6 @@
 
 <script setup lang="ts">
 const { path } = useTrimmedPath();
-console.log(`path: ${JSON.stringify(path)}`);
-console.log(`path: ${JSON.stringify(useRoute().path)}`);
 
 const { data: surround } = await useAsyncData(
   // "prev-next",
@@ -44,15 +42,9 @@ const { data: surround } = await useAsyncData(
       .only(["_path", "title", "category", "date"])
       .sort({ date: -1 })
       .findSurround(path);
-    console.log(`surround in call: ${JSON.stringify(surround)}`);
     return surround;
   },
 );
-
-console.log(`surround after call: ${JSON.stringify(surround)}`);
-if (surround) {
-  console.info("surround loaded");
-}
 
 </script>
 
@@ -61,13 +53,9 @@ if (surround) {
 
 export default {
   name: "Surround",
-  // setup() {
-
-  //   console.log(data);
-  //   return { data };
-  // },
 };
 </script>
+
 <style lang="sass" scoped>
 @use "~/styles/colors"
 .surround

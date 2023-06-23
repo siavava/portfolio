@@ -98,7 +98,6 @@ const showComments = () => {
 };
 
 function showCategory(category) {
-  console.log(`Showing category: ${category}`);
   return category !== "featured";
 }
 </script>
@@ -177,6 +176,7 @@ export default {
         font-weight: 600
         line-height: 130%
         margin: 0.5em 0
+        font-family: typography.font(fancy)
         color: colors.color("primary-highlight")
         font-variation-settings: "cuts" 300
 

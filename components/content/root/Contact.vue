@@ -60,6 +60,7 @@ const { data: contact } = useAsyncData(
 
   .title
     font-size: clamp(40px, 5vw, 60px)
+    font-family: typography.font(fancy)
     font-weight: 600
     color: colors.color("lightest-foreground")
     font-variation-settings: "cuts" 300

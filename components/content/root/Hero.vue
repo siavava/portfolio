@@ -209,7 +209,7 @@ export default {
       .big-title
         width: fit-content
         //font-family: typography.font("big-heading")
-        font-family: typography.font("sans-serif")
+        font-family: typography.font("fancy")
         font-variation-settings: "cuts" 300
         color: white
         font-size: clamp(45px, 8vw, 100px)

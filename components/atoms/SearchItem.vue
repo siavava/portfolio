@@ -37,13 +37,7 @@ export default {
         return _blogs;
       },
     );
-
-    // console.log(`raw search path: ${JSON.stringify(props.hit.url)}`);
-    // console.log(`search path: ${JSON.stringify(useTrimmedPath(props.hit.url).path)}`);
-    // console.log(`blog search: ${JSON.stringify(blog)}`);
-    return {
-      blog,
-    };
+    return { blog };
   },
 };
 </script>
@@ -67,10 +61,10 @@ export default {
   margin-left: 20px
   font-family: typography.font(sans-serif), sans-serif
   width: 100%
-  font-size: typography.font-size(xxs)
+  //font-size: typography.font-size(xxs)
 
-  @media screen only and (max-width: 800px)
-    font-size: typography.font-size(xxs)
+  //@media screen only and (max-width: 800px)
+  //  font-size: typography.font-size(xxs)
 
   *
     max-width: 100% !important
