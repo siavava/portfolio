@@ -229,7 +229,7 @@ export default {
       siteDescription: "Portfolio / Blog!",
       language: "en-US", // prefer more explicit language codes like `en-AU` over `en`
       // titleSeparator: " | ",
-      // trailingSlash: true,
+      trailingSlash: true,
       firebaseConfig: {
         apiKey: process.env.DATABASE_API_KEY,
         authDomain: process.env.DATABASE_AUTH_DOMAIN,
