@@ -36,23 +36,23 @@ const { path } = useTrimmedPath();
 console.log(`path: ${JSON.stringify(path)}`);
 console.log(`path: ${JSON.stringify(useRoute().path)}`);
 
-// const { data: surround } = await useAsyncData(
-//   "prev-next",
-//   async () => {
-const surround = await queryContent("/blog")
-  .where({ draft: false })
-  .only(["_path", "title", "category", "date"])
-  .sort({ date: -1 })
-  .findSurround(path);
-console.log(`surround in call: ${JSON.stringify(surround)}`);
-// return surround;
-  // },
-// );
+const { data: surround } = await useAsyncData(
+  // "prev-next",
+  async () => {
+    const surround = await queryContent("/blog")
+      .where({ draft: false })
+      .only(["_path", "title", "category", "date"])
+      .sort({ date: -1 })
+      .findSurround(path);
+    console.log(`surround in call: ${JSON.stringify(surround)}`);
+    return surround;
+  },
+);
 
-// console.log(`surround after call: ${JSON.stringify(surround)}`);
-// if (surround) {
-//   console.info("surround loaded");
-// }
+console.log(`surround after call: ${JSON.stringify(surround)}`);
+if (surround) {
+  console.info("surround loaded");
+}
 
 </script>
 
