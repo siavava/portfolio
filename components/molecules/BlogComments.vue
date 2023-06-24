@@ -295,10 +295,11 @@ export default {
   border: 1px solid colors.color(lightest-background)
 
   @media only screen and (max-width: 960px)
-    width: 100%
+    width: 100vw
     height: 90vh
     top: 10vh
     border-radius: 10px 10px 0 0
+    padding: 0 50px
 
   &::-webkit-scrollbar
     display: none
@@ -363,6 +364,7 @@ section.comments
     margin-bottom: 1rem
     font-weight: 600
     font-size: 1.5rem
+    //padding: 0 1rem
 
   .section-subtitle
     color: colors.color("secondary-highlight")
