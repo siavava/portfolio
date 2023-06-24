@@ -291,7 +291,7 @@ export default {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7)
   width: 614px
 
-  background: rgba(colors.color(light-background), 0.9)
+  background: rgba(colors.color(light-background), 0.95)
   border: 1px solid colors.color(lightest-background)
 
   @media only screen and (max-width: 960px)
@@ -299,7 +299,7 @@ export default {
     height: 90vh
     top: 10vh
     border-radius: 10px 10px 0 0
-    padding: 0 50px
+    padding: 0 20px
 
   &::-webkit-scrollbar
     display: none
@@ -437,7 +437,7 @@ section.comments
   display: flex
   flex-direction: column
   gap: 30px
-  background: rgba(colors.color(light-background), 0.9)
+  // background: rgba(colors.color(light-background), 0.9)
 
   .comment
     background: transparent
