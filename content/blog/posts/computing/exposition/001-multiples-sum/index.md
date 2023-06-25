@@ -20,9 +20,13 @@ Find the sum of all the multiples of $3$ and $5$ below $1000$.
 
 <!--more-->
 
+::inline-flex
+
 :styled-button[more information]{href=https://projecteuler.net/archives}
 
 :styled-button[code repository]{href=https://github.com/siavava/epsilon/tree/main}
+
+::
 
 ## Utility Functions
 

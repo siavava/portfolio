@@ -135,9 +135,10 @@ Here, you will find information on setting up and running a Nuxt project in 4 st
 
 You can play with Nuxt online directly on CodeSandbox or StackBlitz:
 
+::inline-flex
 :styled-button[Play on CodeSandbox]{href=https://codesandbox.io/s/github/nuxt/codesandbox-nuxt/tree/master/ size="small" externalIcon}
 :styled-button[Play on StackBlitz]{href=https://stackblitz.com/github/nuxt/starter/tree/v2-stackblitz size="small" externalIcon .mt-1}
-
+::
 ## Prerequisites
 
 - [node](https://nodejs.org) - _We recommend you have the latest LTS version installed_.

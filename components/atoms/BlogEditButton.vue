@@ -14,7 +14,7 @@
 export default {
   name: "BlogEditButton",
   data() {
-    const { path } = useRoute();
+    const { path } = useTrimmedPath();
     return {
 
       // https://github.com/siavava/amitt.ai/blob/main/content/blog/posts/publications/artificial-intelligence/data-driven-behavior-change/index.md

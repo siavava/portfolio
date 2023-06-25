@@ -99,7 +99,7 @@ export default {
 
 .code-container
   background: colors.color("light-background")
-  background: rgba(colors.color("light-background"), 0.7)
+  //background: rgba(colors.color("light-background"), 0.9)
   position: relative
   margin: 1rem 0
   padding: 0.5rem

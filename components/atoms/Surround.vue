@@ -73,6 +73,7 @@ export default {
     border-radius: 0.5rem
     transition: all 0.2s ease-in-out
     margin: 10px 0
+    transition: background 0.5s ease-in-out
 
     &:is(div)
       border: none
@@ -102,8 +103,9 @@ export default {
           margin-left: 0.75rem
 
     &:hover
-      border-color: colors.color("primary-highlight")
+      //border-color: colors.color("primary-highlight")
       color: colors.color("primary-highlight")
+      background: colors.color("light-background")
 
       &:first-child
         .surround-title::before

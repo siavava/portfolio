@@ -57,7 +57,15 @@
           </div>
         </template>
         <template v-else>
-          <div class="no-active-user">
+          <div class="new-comment-header">
+            <!-- <div
+              alt="avatar"
+              class="avatar"
+              v-html="userInfo.avatar"
+            /> -->
+            <div class="username">
+              {{ "not signed in" }}
+            </div>
             <StyledButton
               class="auth-button"
               type="button"
@@ -66,10 +74,33 @@
               {{ userInfo.active ? "sign out" : "sign in" }}
             </StyledButton>
           </div>
+          <textarea
+            id="comment"
+            v-model="comment"
+            class="input"
+            placeholder="Sign in to comment."
+            disabled
+          />
+          <div class="blog-actions">
+            <BookMarkIcon
+              :active="userInfo.isSubscribed()"
+              class="blog-action"
+              @click="() => userInfo.toggleSubscription()"
+            />
+            <NuxtLink to="/blog">
+              <ListIcon class="blog-action" />
+            </NuxtLink>
+
+            <StyledButton
+              class="respond-button"
+              type="button"
+              @click="submitComment"
+            >
+              Respond
+            </StyledButton>
+          </div>
         </template>
       </form>
-      <!-- </section> -->
-      <!-- </div> -->
 
       <div class="current-comments">
         <div
@@ -77,7 +108,7 @@
           class="no-comments"
         >
           <Alert type="info">
-            There are no comments yet. Be the first to comment!
+            There are no comments yet. Be the first to comment.
           </Alert>
         </div>
 
@@ -310,10 +341,6 @@ export default {
 
 section.comments
   padding-bottom: 0
-  -webkit-transition: all 0.1s ease-in-out
-  -ms-transition: all 0.1s ease-in-out
-  -moz-transition: all 0.1s ease-in-out
-  -o-transition: all 0.1s ease-in-out
   transition: all 0.1s ease-in-out
   pointer-events: all
 
@@ -364,26 +391,12 @@ section.comments
     margin-bottom: 1rem
     font-weight: 600
     font-size: 1.5rem
-    //padding: 0 1rem
 
   .section-subtitle
     color: colors.color("secondary-highlight")
 
   .username
     color: colors.color("secondary-highlight")
-
-  .new-comment
-    padding-top: 2rem
-    margin: 2rem 0
-
-    .signed-in-info
-      white-space: pre-line
-
-      a
-        @include mixins.inline-link
-
-        &:hover
-          cursor: pointer
 
     .form
       .input
@@ -437,7 +450,6 @@ section.comments
   display: flex
   flex-direction: column
   gap: 30px
-  // background: rgba(colors.color(light-background), 0.9)
 
   .comment
     background: transparent
