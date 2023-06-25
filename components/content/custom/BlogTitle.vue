@@ -198,6 +198,7 @@ export default {
     margin: auto
     margin-top: 2em
     max-width: 100%
+    width: 100%
     display: flex
     flex-direction: column
     align-items: center
@@ -207,14 +208,10 @@ export default {
     border-radius: geometry.var("border-radius")
 
   .title-image-caption
-    //width: fit-content
-    align-self: flex-end
-    margin-top: 2rem
-    margin-right: clamp(3em, 4vw, 5em)
-    font-size: clamp(typography.font-size("s"), 2vw,  typography.font-size("l"))
-    font-weight: 600
-    font-style: italic
-    color: colors.color("primary-highlight")
+    margin-top: 0.5rem
+    font-size: typography.font-size("s")
+    color: colors.color("secondary-highlight")
+    text-align: center
 
   .blog-actions
     width: 100%
@@ -224,7 +221,6 @@ export default {
     display: flex
     flex-direction: row
     gap: 20px
-    //place-items: center
     justify-content: flex-start
     padding: 10px 1em
     margin: 2em 0

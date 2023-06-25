@@ -54,7 +54,7 @@ export default {
       color: colors.color(one)
 
       &::after
-        content: "."
+        content: ""
         color: colors.color(three)
 
     &.second

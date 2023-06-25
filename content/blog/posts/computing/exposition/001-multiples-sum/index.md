@@ -5,7 +5,8 @@ category:
   - exposition
 draft: false
 featured: true
-image: mathematical-steps.webp
+image: cover6.gif
+caption: disjunctive frequencies.
 layout: article
 date: 2023-06-21 00:00:00
 navigation: true
@@ -33,10 +34,12 @@ Find the sum of all the multiples of $3$ and $5$ below $1000$.
 Here, we just take a number $n$ and a list of divisors then check if any of the divisors divides $n$.
 
 ```haskell
--- | Check if any of the divisors divides the number n.
-anyDivisor :: (Foldable container, Integral a) => a -> container a -> Bool
+-- | Check if any of the divisors divide the number n.
+anyDivisor :: (Foldable c, Integral a) => a -> c a -> Bool
 anyDivisor n divisors =
-  foldr (\x acc -> acc || n `mod` x == 0) False divisors
+  any (\x -> n `mod` x == 0) divisors
+  -- ^ NOTE: this short-circuits,
+  --   i.e. stops as soon as it finds a single divisor.
 ```
 
 ## Approach 1: Exploiting Laziness
