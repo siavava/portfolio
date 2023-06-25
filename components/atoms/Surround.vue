@@ -25,7 +25,7 @@
       <div
         v-else
         :key="i+10"
-        class="surround-link"
+        class="surround-link inactive"
       />
     </template>
   </div>
@@ -102,7 +102,7 @@ export default {
         &:hover::after
           margin-left: 0.75rem
 
-    &:hover
+    &:not(.inactive):hover
       //border-color: colors.color("primary-highlight")
       color: colors.color("primary-highlight")
       background: colors.color("light-background")
