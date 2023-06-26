@@ -143,7 +143,7 @@ export default {
   border-top: 2px solid colors.color("light-background");
   color: colors.color("primary-highlight");
   flex-direction: column;
-  padding: 1em 0;
+  padding: 1em;
 
   .footer-inner {
     @include mixins.flex-between;
