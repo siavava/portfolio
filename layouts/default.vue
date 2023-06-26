@@ -15,7 +15,7 @@
         <!-- <slot id="content"/> -->
       </main>
     </div>
-    <AppFooter class="default-footer" />
+    <AppFooter identifier="in-page" />
   </div>
 </template>
 

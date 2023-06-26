@@ -122,7 +122,10 @@
       </div>
       <div class="menu-extras">
         <div class="menu-extras-footer">
-          <AppFooter class="menu-footer in-header" />
+          <AppFooter
+            class="menu-footer in-header"
+            identifier="in-header"
+          />
         </div>
       </div>
     </div>

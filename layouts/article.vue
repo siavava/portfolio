@@ -37,7 +37,7 @@
       </div>
     </main>
     <BlogNavigation class="article-blog-navigation-footer" />
-    <AppFooter />
+    <AppFooter identifier="in-page" />
   </div>
 </template>
 
