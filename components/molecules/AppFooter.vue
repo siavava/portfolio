@@ -59,11 +59,11 @@ export default {
     return {
       parsedMarkdown: await markdownParser.parse(
         "footer-comment",
-        `I’m reciting that _quality affects all aspects of my pursuits_.
+        `I’m reciting that _quality affects all aspects of my pursuits._
         I want to _imbue quality_ in everything I do.
-        This skill develops while _doing_.
+        This skill develops while doing.
         Not thinking, not imagining, _doing_.
-        It is learned through learning and experimenting and consistency and pacing.`,
+        It is acquired through learning and experimenting and consistency and pacing.`,
       ),
     };
   },
