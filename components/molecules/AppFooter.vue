@@ -1,48 +1,44 @@
 <template>
   <footer class="styled-footer">
-    <div class="footer-inner">
-      <!-- <div class="styled-links">
-        <StyledButton href="/">
-          home
-        </StyledButton>
-        <StyledButton href="/blog">
-          blog
-        </StyledButton>
-      </div> -->
-      <div
-        :id="`footer-short-text-${identifier}`"
-        class="left-section"
-      >
-        Find flow.
-      </div>
-      <div class="right-section">
-        <div class="year">
-          {{ new Date().getFullYear() }}
-        </div>
+    <div class="footer-vertical">
+      <div class="footer-inner">
         <div
-          class="clock"
-          @click="toggleComment"
+          :id="`footer-short-text-${identifier}`"
+          class="left-section"
         >
-          <div class="clock-face">
-            <div class="hand hour-hand" />
-            <div class="hand min-hand" />
-            <div class="hand second-hand" />
-          </div>
+          Find flow.
         </div>
-        <div id="clock-info">
-          <span :id="`time-zone-inner-text-${identifier}`" />
+        <div class="right-section">
+          <div class="year">
+            {{ new Date().getFullYear() }}
+          </div>
+          <div
+            class="clock"
+            @click="toggleComment"
+          >
+            <div class="clock-face">
+              <div class="hand hour-hand" />
+              <div class="hand min-hand" />
+              <div class="hand second-hand" />
+            </div>
+          </div>
+          <div id="clock-info">
+            <span :id="`time-zone-inner-text-${identifier}`" />
+          </div>
         </div>
       </div>
     </div>
     <div
-      :id="`footer-comment-${identifier}`"
-      class="footer-inner hide"
+      v-if="extendedMessageActive"
+      class="footer-vertical"
     >
-      <div class="footer-paragraph">
-        <ContentRenderer
-          class="markdown-comment"
-          :value="parsedMarkdown"
-        />
+      <div class="footer-inner">
+        <div class="footer-paragraph">
+          <ContentRenderer
+            class="markdown-comment"
+            :value="parsedMarkdown"
+          />
+        </div>
       </div>
     </div>
   </footer>
@@ -74,6 +70,7 @@ export default {
   data() {
     return {
       interval: null,
+      extendedMessageActive: false,
     };
   },
   mounted() {
@@ -154,12 +151,7 @@ export default {
       this.interval = setInterval(setTime, 1000);
     },
     toggleComment() {
-      const comment = document.getElementById(`footer-comment-${this.identifier}`) as HTMLElement;
-      if (comment.classList.contains("hide")) {
-        comment.classList.remove("hide");
-      } else {
-        comment.classList.add("hide");
-      }
+      this.extendedMessageActive = !this.extendedMessageActive;
     },
   },
 };
@@ -172,13 +164,17 @@ export default {
 @use "../styles/colors";
 
 .styled-footer {
-  @include mixins.flex-center;
   flex-direction: column;
   //min-height: 0px;
-  border-top: 2px solid colors.color("light-background");
   color: colors.color("primary-highlight");
   flex-direction: column;
-  padding: 1em;
+
+  .footer-vertical {
+    @include mixins.flex-center;
+    width: 100%;
+    border-top: 2px solid colors.color("light-background");
+    padding: 1em;
+  }
 
   .footer-inner {
     @include mixins.flex-between;
