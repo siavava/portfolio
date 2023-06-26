@@ -172,7 +172,7 @@ export default {
   .footer-vertical {
     @include mixins.flex-center;
     width: 100%;
-    border-top: 2px solid colors.color("light-background");
+    border-top: 1px solid colors.color(lightest-background);
     padding: 1em;
   }
 
