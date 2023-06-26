@@ -27,9 +27,8 @@
           </div>
         </div>
         <div id="clock-info">
-          <span>
-            {{ new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
-            {{ new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2] }}
+          <span class="time-zone-inner-text">
+            {{ timeZoneInfo }}
           </span>
         </div>
       </div>
@@ -81,6 +80,11 @@ export default {
       ],
     };
   },
+  watch: {
+    timeZoneInfo() {
+      this.$forceUpdate();
+    },
+  },
   mounted() {
     this.tick();
   },
@@ -111,6 +115,28 @@ export default {
 
         Array.from(hourHands).forEach((hand) => {
           hand.style.transform = `rotate(${hourDegree}deg)`;
+        });
+
+        const timeZoneInfo = `${new Date()
+          .toLocaleTimeString(
+            [],
+            {
+              hour12: false,
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            },
+          )} ${new Date()
+          .toLocaleTimeString(
+            "en-us",
+            {
+              timeZoneName: "short",
+            },
+          ).split(" ")[2]}`;
+
+        const timeZoneElements = document.getElementsByClassName("time-zone-inner-text") as HTMLCollectionOf<HTMLElement>;
+        Array.from(timeZoneElements).forEach((element) => {
+          element.innerText = timeZoneInfo;
         });
       }
 
