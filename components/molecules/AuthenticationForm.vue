@@ -103,7 +103,8 @@ import {
   addDoc,
   collection,
 } from "@firebase/firestore";
-import { NumRefManager } from "~/modules/utils";
+
+const { NumRefManager } = useUtils();
 
 const panes = ["sign in", "sign up"];
 

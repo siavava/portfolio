@@ -71,10 +71,8 @@
 
 import { ref } from "vue";
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
-import {
-  NumRefManager,
-  KEY_CODES,
-} from "~/modules/utils";
+
+const { NumRefManager, KEY_CODES } = useUtils();
 
 // read 'job-info' data from Markdown files
 const { data: jobsData } = await useAsyncData(

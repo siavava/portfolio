@@ -1,10 +1,8 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 
-export default {
+export default defineNuxtConfig({
   experimental: {
     viewTransition: false,
-    loadPayload: true,
-    preloadPayload: true,
     payloadExtraction: true,
   },
   app: {
@@ -41,14 +39,17 @@ export default {
       applicationId: process.env.ALGOLIA_SEARCH_APP_ID,
       apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
     }],
+
+    // "@nuxtjs/firebase",
+    // ["@nuxtjs/redirect-module",
+    //   {
+    //     from: "^.*(?<!/)$",
+    //     to: (from, req) => (req.url.endsWith("/") ? req.url : `${req.url}/`),
+    //     statusCode: 301,
+    //   },
+    // ],
   ],
-  router: {
-    trailingSlash: true,
-  },
-  sitemap: {
-    hostname: "https://amitt.ai",
-    trailingSlash: true,
-  },
+  router: { },
   devtools: {
     // Enable devtools (default: true)
     enabled: true,
@@ -65,9 +66,7 @@ export default {
 
       // Will inject `[...slug].vue` as the root page.
       injectPage: true,
-      ignores: [
-        "content/jobs",
-      ],
+      trailingSlash: true,
     },
     markdown: {
       remarkPlugins: [
@@ -115,11 +114,6 @@ export default {
       "~/components",
     ],
   },
-  compilerOptions: {
-    isCustomElement: [
-      "vue-freezeframe",
-    ],
-  },
   image: {
     // The screen sizes predefined by `@nuxt/image-edge`:
     screens: {
@@ -135,30 +129,16 @@ export default {
     ipx: {},
     dir: "static",
   },
-  googleFonts: {
-    families: {
-      "DM+Sans": true, // [200, 300, 400, 500, 600, 700],
-      "DM+Mono": true, // [200, 300, 400, 500, 600, 700],
-      "Space+Mono": true, // [200, 300, 400, 500, 600, 700],
-    },
-    prefetch: true,
-    preconnect: true,
-    preload: true,
-    display: "swap",
-    useStyleSheet: true,
-  },
-  buildModules: [
-    "~/modules/users",
-    "~/modules/utils",
-    "@nuxtjs/firebase",
-    ["@nuxtjs/redirect-module",
-      {
-        from: "^.*(?<!/)$",
-        to: (from, req) => (req.url.endsWith("/") ? req.url : `${req.url}/`),
-        statusCode: 301,
-      },
-    ],
-  ],
+  // buildModules: [
+  //   "@nuxtjs/firebase",
+  //   ["@nuxtjs/redirect-module",
+  //     {
+  //       from: "^.*(?<!/)$",
+  //       to: (from, req) => (req.url.endsWith("/") ? req.url : `${req.url}/`),
+  //       statusCode: 301,
+  //     },
+  //   ],
+  // ],
   layouts: {
     default: "~/layouts/clean.vue",
   },
@@ -176,4 +156,4 @@ export default {
       },
     },
   },
-};
+});

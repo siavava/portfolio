@@ -1,22 +1,42 @@
-import { MarkdownRoot } from "@nuxt/content/dist/runtime/types";
-import { NumRefManager } from "./AllAboutRefs";
-import { joinPaths } from "./paths";
+/**
+ * Manage the state of a number ref in a clean way.
+ *
+ * Supports, setting, incrementing, decrementing, and resetting.
+ *
+ * Access the raw ref through the `ref` property.
+ */
+class NumRefManager {
+  max: number;
 
-export const hex2rgba = (hex, alpha = 1) => {
-  const [r, g, b] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
-  return `rgba(${r},${g},${b},${alpha})`;
-};
+  current: number = 0;
 
-export function toTitleCase(str: string) {
-  return str.replace(/(^|\s)\S/g, (t) => {
-    return t.toUpperCase();
-  });
+  min: number = 0;
+
+  constructor(max?: number, min?: number) {
+    this.max = max || 0;
+    this.min = min || 0;
+  }
+
+  public set value(index: number) {
+    this.current = index % (this.max + 1);
+  }
+
+  public get value() {
+    return this.current;
+  }
+
+  public next = () => {
+    this.current += 1;
+    if (this.current > this.max) this.current = this.min;
+  };
+
+  public prev = () => {
+    this.current -= 1;
+    if (this.current < this.min) this.current = this.max;
+  };
 }
 
-export const navDelay = 1000;
-export const loaderDelay = 2000;
-
-export const KEY_CODES = {
+const KEY_CODES = {
   ARROW_LEFT: "ArrowLeft",
   ARROW_LEFT_IE11: "Left",
   ARROW_RIGHT: "ArrowRight",
@@ -32,15 +52,6 @@ export const KEY_CODES = {
   SPACE_IE11: "Spacebar",
   ENTER: "Enter",
 };
-
-export {
-  NumRefManager,
-  joinPaths,
-};
-
-export function concatStrings(args: string[]) {
-  return args.join(" / ");
-}
 
 /**
  * Check if an element is in the viewport
@@ -122,44 +133,14 @@ export function getCommentDateAsString(date: Date) {
   }
 }
 
-/**
- * Normalize a path by removing trailing slash.
- */
-export function normalizePath(path: string) {
-  return (path[path.length - 1] === "/")
-    ? path.slice(0, -1)
-    : path;
-}
-
-/**
- * Comment Interface
- */
-interface Comment {
-  text: string,
-  author: string,
-  avatar: string,
-  date: string,
-  path: string,
-}
-
-interface BlogPostMeta {
-  title: string,
-  path: string,
-  category: string,
-  description: string,
-  date: Date,
-  image: string,
-  excerpt: string | MarkdownRoot,
-}
-
-interface UserInfo {
-  active: boolean,
-  userName: string,
-  avatar: string,
-  email: string,
-  uid: string,
-  subscriptions: Set<BlogPostMeta>,
-  currentRouteComments: Comment[],
-}
-
-export type { Comment, BlogPostMeta, UserInfo };
+export default () => ({
+  NumRefManager,
+  getCommentDateAsString,
+  KEY_CODES,
+  loaderDelay: 2000,
+  elementIsInWindow,
+  elementIsAtTop,
+  elementIsAtBottom,
+  elementIsBelowScreen,
+  elementIsAboveScreen,
+});

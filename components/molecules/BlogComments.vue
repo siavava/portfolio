@@ -129,8 +129,14 @@
 
 <script lang="ts" setup>
 import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
-import { normalizePath } from "~/modules/utils";
-import type { Comment } from "~/modules/utils";
+
+interface Comment {
+  text: string,
+  author: string,
+  avatar: string,
+  date: string,
+  path: string,
+}
 
 const { textarea: commentTextArea, input: comment } = useTextareaAutosize();
 
@@ -274,8 +280,6 @@ export default {
     submitComment() {
       if (comment.value === "") return;
 
-      const { path } = useRoute();
-
       // if user not logged in, show login popup
       const auth = getAuth();
       const { currentUser } = auth;
@@ -289,7 +293,7 @@ export default {
         author: currentUser?.displayName,
         avatar: this.userInfo.avatar,
         date: new Date().toISOString(),
-        path: normalizePath(path),
+        path: useTrimmedPath().path,
       };
       this.userInfo.sendComment(newComment);
       // reset comment

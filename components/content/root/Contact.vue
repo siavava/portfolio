@@ -17,10 +17,10 @@
 
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 
-const { data: contact } = useAsyncData(
-  `contact-${useRoute().path}`,
+const { data: contact } = await useAsyncData(
+  "personal-contact",
   async () => {
-    const _contactData = queryContent<MarkdownParsedContent>()
+    const _contactData = await queryContent<MarkdownParsedContent>()
       .where({ category: "contact" })
       .findOne();
     return _contactData;

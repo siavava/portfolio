@@ -35,7 +35,15 @@
 
 <script lang="ts">
 import markdownParser from "@nuxt/content/transformers/markdown";
-import { Comment } from "~/modules/utils";
+// import { Comment } from "~/modules/utils";
+
+interface Comment {
+  text: string,
+  author: string,
+  avatar: string,
+  date: string,
+  path: string,
+}
 
 // types
 

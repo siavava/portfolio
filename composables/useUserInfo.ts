@@ -5,9 +5,16 @@ import {
 } from "firebase/firestore";
 import { createAvatar } from "@dicebear/core";
 import { lorelei } from "@dicebear/collection";
-import {
-  getCommentDateAsString, normalizePath, Comment,
-} from "~/modules/utils";
+
+const { getCommentDateAsString } = useUtils();
+
+interface Comment {
+  text: string,
+  author: string,
+  avatar: string,
+  date: string,
+  path: string,
+}
 
 const useUserInfo = defineStore("userInfo", {
 
@@ -88,7 +95,7 @@ const useUserInfo = defineStore("userInfo", {
     async subscribe(_path? : string) {
       const db = getFirestore();
       const { currentUser } = getAuth();
-      const path = normalizePath(_path || useRoute().path);
+      const { path } = useTrimmedPath(_path);
       const q = query(
         collection(db, "subscriptions"),
         where("page", "==", path),
@@ -115,7 +122,7 @@ const useUserInfo = defineStore("userInfo", {
     },
 
     toggleSubscription(blogPath?: string) {
-      const path = normalizePath(blogPath || useRoute().path);
+      const { path } = useTrimmedPath(blogPath);
       if (this.isSubscribed(path)) {
         this.unsubscribe(path);
       } else {
@@ -133,7 +140,7 @@ const useUserInfo = defineStore("userInfo", {
       const db = getFirestore();
       const { currentUser } = getAuth();
 
-      const path = normalizePath(useRoute().path);
+      const { path } = useTrimmedPath();
 
       // get subscribers to current page
       const q = query(
@@ -187,7 +194,7 @@ const useUserInfo = defineStore("userInfo", {
     async unsubscribe(_path? : string) {
       const db = getFirestore();
 
-      const path = normalizePath(_path || useRoute().path);
+      const { path } = useTrimmedPath(_path);
       const { currentUser } = getAuth();
 
       const q = query(
@@ -235,7 +242,7 @@ const useUserInfo = defineStore("userInfo", {
         const newPaths = Array.from(new Set<string>(
           querySnapshot.docs.map((doc) => {
             const path = doc.data().page;
-            return normalizePath(path);
+            return useTrimmedPath(path).path;
           }).filter((path) => {
             return !this.isSubscribed(path);
           }),
@@ -257,7 +264,7 @@ const useUserInfo = defineStore("userInfo", {
         const paths = Array.from(new Set<string>(
           newQuerySnapshot.docs.map((doc) => {
             const path = doc.data().page;
-            return normalizePath(path);
+            return useTrimmedPath(path).path;
           }).filter((path) => {
             return !this.isSubscribed(path);
           }),
@@ -329,7 +336,7 @@ const useUserInfo = defineStore("userInfo", {
      */
     async getCommentsByRoute(_path?: string) {
       const db = getFirestore();
-      const path = normalizePath(_path || useRoute().path);
+      const { path } = useTrimmedPath(_path);
 
       // get comments for the current path
       // sorted by date.
@@ -383,7 +390,7 @@ const useUserInfo = defineStore("userInfo", {
     async sendComment(comment: Comment) {
       const db = getFirestore();
 
-      comment.path = normalizePath(comment.path);
+      comment.path = useTrimmedPath(comment.path).path;
 
       await addDoc(collection(db, "comments"), comment)
         .then(() => { return true; })
@@ -399,7 +406,7 @@ const useUserInfo = defineStore("userInfo", {
      * Check if active user is subscribed to a given route.
      */
     isSubscribed(_path?: string) {
-      const path = normalizePath(_path || useRoute().path);
+      const { path } = useTrimmedPath(_path);
       return this.getSubscriptionPaths.includes(path);
     },
   },

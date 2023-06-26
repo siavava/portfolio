@@ -47,13 +47,13 @@
 </template>
 
 <script lang="ts">
-import {
+const {
   elementIsInWindow,
   // elementIsAtBottom,
   elementIsAtTop,
   elementIsBelowScreen,
   elementIsAboveScreen,
-} from "~/modules/utils";
+} = useUtils();
 
 export default {
   name: "TableOfContents",

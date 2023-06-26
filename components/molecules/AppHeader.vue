@@ -165,9 +165,9 @@
 </template>
 
 <script lang="ts">
-import { loaderDelay as timeout } from "~/modules/utils";
-
+const { loaderDelay: timeout } = useUtils();
 const { navHeight, nonTocRoutes, navLinks } = useConfig();
+
 export default {
   name: "AppHeader",
   data() {

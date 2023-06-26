@@ -9,6 +9,7 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "lib": ["ESNext", "DOM", "es5", "es6", "DOM.Iterable"],
+    "module": "ESNext",
     // "esModuleInterop": true,
     // "noUnusedLocals": true,
     // "resolveJsonModule": true,
