@@ -115,6 +115,10 @@ const highlight = ref(null);
 const activeTabId = ref(0);
 const tabFocus = new NumRefManager(panes.length - 1);
 
+const focusTab = () => {
+  tabButtons.value[tabFocus.value]?.focus();
+};
+
 const setActiveTabId = (id: number) => {
   tabs.value[activeTabId.value]?.muteTab();
 
@@ -126,10 +130,8 @@ const setActiveTabId = (id: number) => {
 
   // show the corresponding tab panel
   highlight.value?.highlight(id);
-};
 
-const focusTab = () => {
-  tabButtons.value[tabFocus.value]?.focus();
+  focusTab();
 };
 
 let selectedTab = 0;
@@ -142,7 +144,7 @@ const selectTab = (id: number) => {
 };
 
 // Only re-run the effect if tabFocus changes
-watch(tabFocus.ref, focusTab);
+// watch(tabFocus.ref, focusTab);
 </script>
 
 <script lang="ts">

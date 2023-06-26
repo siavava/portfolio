@@ -139,9 +139,9 @@ export default defineNuxtConfig({
   //     },
   //   ],
   // ],
-  layouts: {
-    default: "~/layouts/clean.vue",
-  },
+  // layouts: {
+  //   default: "~/layouts/clean.vue",
+  // },
   build: { },
   runtimeConfig: {
     public: {

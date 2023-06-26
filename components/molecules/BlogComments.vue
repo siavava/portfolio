@@ -130,13 +130,13 @@
 <script lang="ts" setup>
 import { getAuth, onAuthStateChanged, signOut } from "@firebase/auth";
 
-interface Comment {
-  text: string,
-  author: string,
-  avatar: string,
-  date: string,
-  path: string,
-}
+// interface Comment {
+//   text: string,
+//   author: string,
+//   avatar: string,
+//   date: string,
+//   path: string,
+// }
 
 const { textarea: commentTextArea, input: comment } = useTextareaAutosize();
 
@@ -288,7 +288,7 @@ export default {
         this.signIn();
         return;
       }
-      const newComment: Comment = {
+      const newComment = {
         text: comment.value,
         author: currentUser?.displayName,
         avatar: this.userInfo.avatar,

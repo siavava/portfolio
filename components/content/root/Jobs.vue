@@ -127,7 +127,7 @@ const selectTab = (id: number) => {
 };
 
 // Only re-run the effect if tabFocus changes
-watch(tabFocus.ref, focusTab);
+// watch(tabFocus, focusTab);
 
 // Focus on tabs when using up & down arrow keys
 const onKeyDown = (event) => {
@@ -148,6 +148,7 @@ const onKeyDown = (event) => {
       break;
     }
   }
+  focusTab();
 };
 
 </script>
