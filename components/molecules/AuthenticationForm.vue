@@ -104,8 +104,6 @@ import {
   collection,
 } from "@firebase/firestore";
 
-const { NumRefManager } = useUtils();
-
 const panes = ["sign in", "sign up"];
 
 const tabs = ref([]);

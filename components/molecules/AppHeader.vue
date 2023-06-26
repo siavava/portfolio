@@ -165,7 +165,6 @@
 </template>
 
 <script lang="ts">
-const { loaderDelay: timeout } = useUtils();
 const { navHeight, nonTocRoutes, navLinks } = useConfig();
 
 export default {
@@ -285,7 +284,7 @@ const openMenu = () => {
   if (window.innerWidth > 768) {
     setTimeout(() => {
       document.getElementById("searchbar")?.focus();
-    }, timeout);
+    }, 2000);
   }
 };
 

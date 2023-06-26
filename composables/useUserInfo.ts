@@ -6,8 +6,6 @@ import {
 import { createAvatar } from "@dicebear/core";
 import { lorelei } from "@dicebear/collection";
 
-const { getCommentDateAsString } = useUtils();
-
 interface Comment {
   text: string,
   author: string,

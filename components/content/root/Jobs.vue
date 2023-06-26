@@ -72,13 +72,11 @@
 import { ref } from "vue";
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 
-const { NumRefManager, KEY_CODES } = useUtils();
-
 // read 'job-info' data from Markdown files
 const { data: jobsData } = await useAsyncData(
   `jobs-${useRoute().path}`,
   async () => {
-    const _jobsData = queryContent<MarkdownParsedContent>()
+    const _jobsData = await queryContent<MarkdownParsedContent>()
       .where({ category: "jobs-info" })
       .sort({ date: -1 })
       .find();

@@ -47,13 +47,6 @@
 </template>
 
 <script lang="ts">
-const {
-  elementIsInWindow,
-  // elementIsAtBottom,
-  elementIsAtTop,
-  elementIsBelowScreen,
-  elementIsAboveScreen,
-} = useUtils();
 
 export default {
   name: "TableOfContents",

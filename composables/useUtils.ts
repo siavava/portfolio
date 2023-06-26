@@ -5,7 +5,7 @@
  *
  * Access the raw ref through the `ref` property.
  */
-class NumRefManager {
+export class NumRefManager {
   max: number;
 
   current: number = 0;
@@ -36,7 +36,7 @@ class NumRefManager {
   };
 }
 
-const KEY_CODES = {
+export const KEY_CODES = {
   ARROW_LEFT: "ArrowLeft",
   ARROW_LEFT_IE11: "Left",
   ARROW_RIGHT: "ArrowRight",
