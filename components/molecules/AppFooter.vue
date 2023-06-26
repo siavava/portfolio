@@ -9,8 +9,11 @@
           blog
         </StyledButton>
       </div> -->
-      <div class="left-section">
-        {{ msg[Math.floor(Math.random() * msg.length)] }}
+      <div
+        :id="`footer-short-text-${identifier}`"
+        class="left-section"
+      >
+        Find flow.
       </div>
       <div class="right-section">
         <div class="year">
@@ -27,9 +30,7 @@
           </div>
         </div>
         <div id="clock-info">
-          <span class="time-zone-inner-text">
-            {{ timeZoneInfo }}
-          </span>
+          <span :id="`time-zone-inner-text-${identifier}`" />
         </div>
       </div>
     </div>
@@ -63,7 +64,7 @@ export default {
       parsedMarkdown: await markdownParser.parse(
         "footer-comment",
         `I’m reciting that _quality affects all aspects of my pursuits_.
-        I want to imbue quality in everything I do.
+        I want to _imbue quality_ in everything I do.
         This skill develops while _doing_.
         Not thinking, not imagining, _doing_.
         It is learned through learning and experimenting and consistency and pacing.`,
@@ -72,29 +73,31 @@ export default {
   },
   data() {
     return {
-      msg: [
-        "Find flow.",
-        "Sit with your ambient ambition.",
-        "Shine, constantly and steadily.",
-        "Pray at the altar of hard work.",
-      ],
+      interval: null,
     };
-  },
-  watch: {
-    timeZoneInfo() {
-      this.$forceUpdate();
-    },
   },
   mounted() {
     this.tick();
   },
+  beforeUnmount() {
+    clearInterval(this.interval);
+  },
   methods: {
     tick() {
+      const shortMessage = [
+        "Find flow.",
+        "Sit with your ambient ambition.",
+        "Shine, constantly and steadily.",
+        "Pray at the altar of hard work.",
+      ];
       const secondHands = document.getElementsByClassName("second-hand") as HTMLCollectionOf<HTMLElement>;
       const minutesHands = document.getElementsByClassName("min-hand")! as HTMLCollectionOf<HTMLElement>;
       const hourHands = document.getElementsByClassName("hour-hand")! as HTMLCollectionOf<HTMLElement>;
 
-      function setTime() {
+      let index = Math.round(Math.random() * shortMessage.length);
+      let counter = 0;
+
+      const setTime = () => {
         const now = new Date();
 
         const seconds = now.getSeconds();
@@ -117,6 +120,16 @@ export default {
           hand.style.transform = `rotate(${hourDegree}deg)`;
         });
 
+        // set short text and change it every 5 seconds
+        const shortText = document.getElementById(`footer-short-text-${this.identifier}`) as HTMLElement;
+        shortText.innerText = shortMessage[index];
+
+        counter += 1;
+        if (counter >= 7) {
+          index = (index + 1) % shortMessage.length;
+          counter = 0;
+        }
+
         const timeZoneInfo = `${new Date()
           .toLocaleTimeString(
             [],
@@ -134,18 +147,14 @@ export default {
             },
           ).split(" ")[2]}`;
 
-        const timeZoneElements = document.getElementsByClassName("time-zone-inner-text") as HTMLCollectionOf<HTMLElement>;
-        Array.from(timeZoneElements).forEach((element) => {
-          element.innerText = timeZoneInfo;
-        });
-      }
+        const timeZoneElement = document.getElementById(`time-zone-inner-text-${this.$props.identifier}`)!;
+        timeZoneElement.innerText = timeZoneInfo;
+      };
 
-      setInterval(setTime, 1000);
+      this.interval = setInterval(setTime, 1000);
     },
     toggleComment() {
-      console.log(`this.identifier: ${this.identifier}`);
       const comment = document.getElementById(`footer-comment-${this.identifier}`) as HTMLElement;
-      console.log(`comment: ${JSON.stringify(comment)}`);
       if (comment.classList.contains("hide")) {
         comment.classList.remove("hide");
       } else {
@@ -256,15 +265,15 @@ export default {
         }
 
         .hour-hand {
-          height: 1px;
+          height: 2px;
         }
 
         .min-hand {
-            height: 1px;
+          height: 1px;
         }
 
         .second-hand {
-            height: 1px;
+          height: 1px;
         }
       }
     }
