@@ -211,7 +211,7 @@ export default {
         //font-family: typography.font("big-heading")
         font-family: typography.font("fancy")
         font-variation-settings: "cuts" 300
-        color: white
+        color:  darken(colors.color(primary-highlight), 10%) //white
         font-size: clamp(45px, 8vw, 100px)
         text-transform: uppercase
         font-weight: 600
@@ -222,15 +222,16 @@ export default {
         & > .strike-through
           // background: yellow
           text-decoration: line-through
-          text-decoration-thickness: 2px
+          text-decoration-thickness: clamp(5px, 1vw, 10px)
+          text-decoration-color: darken(colors.color(primary-highlight), 10%)
           //color: colors.color(dark-foreground)
           padding-right: 0.5em
           margin-right: 0
 
           //color: black
           -webkit-text-fill-color: colors.color(background)
-          -webkit-text-stroke-width: 1px
-          -webkit-text-stroke-color: colors.color(dark-foreground)
+          -webkit-text-stroke-color: darken(colors.color(primary-highlight), 30%)
+          -webkit-text-stroke-width: clamp(1px, 0.3vw, 3px)
 
     .pique
       margin: 1.5em 0 0.5em 0.2rem

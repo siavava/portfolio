@@ -5,7 +5,7 @@ category:
   - exposition
 draft: false
 featured: true
-image: ../cover2.gif
+image: ../cover11.gif
 caption: disjunctive frequencies.
 layout: article
 date: 2023-06-21 00:00:00

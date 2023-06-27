@@ -4,9 +4,9 @@ import { initializeApp } from "firebase/app";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 export default defineNuxtPlugin((nuxtApp) => {
-  // const { firebaseConfig } = useRuntimeConfig();
+  // const { firebaseConfig } = useRuntimeConfig()!;
   // console.log(`firebaseConfig: ${firebaseConfig}`);
-  // console.log(`${JSON.stringify(useRuntimeConfig)}`);
+  // console.log(`${JSON.stringify(useRuntimeConfig())}`);
 
   const config = {
     apiKey: "AIzaSyCtHIhBCYkQeafAn_ICQowTWumlPRwxkU0",
