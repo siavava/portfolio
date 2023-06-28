@@ -5,7 +5,6 @@
     "dev": "nuxi dev",
     "generate": "nuxi generate",
     "preview": "nuxi preview",
-    "postinstall": "rm -rf ./node_modules/@types/react",
     "lint": "eslint ."
   },
   "lint-staged": {
