@@ -362,6 +362,7 @@ const { apps } = useApps();
   // background-color: colors.color("background")
   background-color: rgba(colors.color("background"), 0.8)
   backdrop-filter: blur(2px)
+  //background-color: red
 
   pointer-events: auto !important
   user-select: auto !important
