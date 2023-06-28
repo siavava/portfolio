@@ -129,7 +129,7 @@ export default {
     text-transform: lowercase
     transition: all 0.3s ease-in-out
 
-    &:is(:focus, :active)
+    &:is(:hover, :focus, :active)
       background-color: rgba(colors.color(light-background), 0.9)
       border-bottom: 1px solid colors.color(primary-highlight)
 

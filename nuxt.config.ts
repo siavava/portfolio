@@ -158,7 +158,7 @@ export default defineNuxtConfig({
   // layouts: {
   //   default: "~/layouts/clean.vue",
   // },
-  build: { },
+  // build: { },
   runtimeConfig: {
     public: {
       firebaseConfig: {
