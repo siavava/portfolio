@@ -38,16 +38,16 @@ export default {
 
 .container
   display: inline-flex
-  place-items: center
-  justify-content: flex-start
+  place-content: center
   height: 100%
   aspect-ratio: 1/1
   padding: 0
+  place-items: center
 
   svg
     //background: yellow
-    width: 50%
-    height: 50%
+    width: 40%
+    height: 40%
     color: colors.color(primary-highlight)
 
   .icon

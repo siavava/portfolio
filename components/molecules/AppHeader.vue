@@ -417,7 +417,7 @@ const { apps } = useApps();
   .menu-button
     position: relative
     height: 70px
-    aspect-ratio: 1 / 1
+    aspect-ratio: 1/1
     margin: auto 0
     padding: 15px 0px 15px 5px
 
