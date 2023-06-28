@@ -48,8 +48,8 @@ export default {
 
   svg
     //background: yellow
-    width: 40%
-    height: 40%
+    width: 50%
+    height: 50%
     color: colors.color(primary-highlight)
 
   .icon
