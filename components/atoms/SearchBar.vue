@@ -123,16 +123,15 @@ export default {
     font-family: typography.font("sans-serif")
     background: red
     background-color: rgba(colors.color(light-background), 0.5)
-    border-bottom: 1px solid colors.color(primary-highlight)
+    border-bottom: 1px solid rgba(colors.color(primary-highlight), 0.5)
     padding: 0 15px
-    //border-radius: 10px
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2)
-    //font-size: typography.font-size("m")
     text-transform: lowercase
     transition: all 0.3s ease-in-out
 
     &:is(:focus, :active)
       background-color: rgba(colors.color(light-background), 0.9)
+      border-bottom: 1px solid colors.color(primary-highlight)
 
     // prevent zooming
     font-size: 16px
