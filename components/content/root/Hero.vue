@@ -1,4 +1,11 @@
 <template>
+  <div class="misc">
+    <div id="wanderer-container" />
+    <div
+      id="wanderer"
+      :style="{ 'background-color': getColor(activeCallOutIndex) }"
+    />
+  </div>
   <section id="hero">
     <div class="hero">
       <div class="hero-container">
@@ -20,7 +27,7 @@
             <span class="normal"> but first, let's </span>
             <span
               id="action"
-              :style="{ 'color':getColor(activeCallOutIndex) }"
+              :style="{ 'color': getColor(activeCallOutIndex) }"
             >
               {{ currentAction }}
             </span>
@@ -35,7 +42,7 @@
           >
             <Icon
               type="down-arrow"
-              :style="{ 'color':getColor(activeCallOutIndex) }"
+              :style="{ 'color': getColor(activeCallOutIndex) }"
             />
           </NuxtLink>
         </div>
@@ -111,10 +118,34 @@ export default {
   mounted() {
     // this.changeAction();
     this.tick();
+
+    // on mouse move, move the wanderer
+    const wanderer = document.getElementById("wanderer");
+    const wandererContainer = document.getElementById("wanderer-container");
+    wandererContainer.onpointermove = (e) => {
+      // animate wanderer
+      const { clientX: x, clientY: y } = e;
+
+      // offset by scroll
+      const { top } = wandererContainer.getBoundingClientRect();
+      const yOff = top;
+
+      wanderer.animate({
+        top: `${y - yOff}px`,
+        left: `${x}px`,
+      }, {
+        duration: 3000,
+        fill: "forwards",
+      });
+      // }
+    };
   },
 
   unmounted() {
     clearInterval(this.changingActions);
+
+    // remove the wanderer event listener
+    document.removeEventListener("mousemove", () => {});
   },
 
   methods: {
@@ -177,6 +208,38 @@ export default {
 @use "~/styles/typography"
 @use "~/styles/geometry"
 
+.misc
+  position: absolute
+  top: 0
+  left: 0
+  width: 100svw
+  height: 100svh
+  overflow: hidden
+
+#wanderer-container
+  background-color: rgba(colors.color(background), 0.9)
+  background: linear-gradient(rgba(colors.color(background), 1), rgba(colors.color(background), 0.9), rgba(colors.color(background), 1))
+  width: 200svw
+  height: 100svh
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 2 !important
+  pointer-events: all
+  backdrop-filter: blur(80px)
+
+#wanderer
+  width: 400px
+  aspect-ratio: 1/1
+  border-radius: 50%
+  z-index: 1 !important
+  position: absolute
+  top: 50%
+  left: 25%
+  transform: translate(-50%, -50%)
+
+  transition: all 3s ease-in-out
+
 .profile
   background: colors.color("light-background")
   width: 400px
@@ -187,6 +250,8 @@ export default {
   min-height: calc(100svh - 2 *  geometry.var("nav-height"))
   width: 100%
   position: relative
+  z-index: 3
+  pointer-events: none
 
   .hero
     @include mixins.flex-center
@@ -229,7 +294,7 @@ export default {
           margin-right: 0
 
           //color: black
-          -webkit-text-fill-color: colors.color(background)
+          -webkit-text-fill-color: transparent //colors.color(background)
           -webkit-text-stroke-color: darken(colors.color(primary-highlight), 30%)
           -webkit-text-stroke-width: clamp(1px, 0.3vw, 3px)
 
@@ -286,6 +351,7 @@ export default {
       margin-right: 10%
       margin-bottom: 10%
       float: right
+      pointer-events: all
 
       .down-link-inner
         width: 100%

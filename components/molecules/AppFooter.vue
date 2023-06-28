@@ -261,7 +261,6 @@ export default {
 
         .hour-hand {
           height: 2px;
-          //transform: none;
           width: 35%;
           left: 15%;
         }
@@ -282,7 +281,7 @@ export default {
 
     .footer-paragraph {
       width: min(100%, 548px);
-      color: colors.color(lightest-foreground);
+      color: colors.color(foreground);
       margin: 0 auto;
       padding: 60px 0;
 
