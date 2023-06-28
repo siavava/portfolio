@@ -55,7 +55,7 @@ export default {
       required: true,
     },
   },
-  async setup(props) {
+  async setup() {
     return {
       parsedMarkdown: await markdownParser.parse(
         "footer-comment",
@@ -165,7 +165,6 @@ export default {
 
 .styled-footer {
   flex-direction: column;
-  //min-height: 0px;
   color: colors.color("primary-highlight");
   flex-direction: column;
 
@@ -262,21 +261,28 @@ export default {
 
         .hour-hand {
           height: 2px;
+          //transform: none;
+          width: 35%;
+          left: 15%;
         }
 
         .min-hand {
           height: 1px;
+          width: 35%;
+          left: 15%;
         }
 
         .second-hand {
           height: 1px;
+          width: 40%;
+          left: 10%;
         }
       }
     }
 
     .footer-paragraph {
       width: min(100%, 548px);
-      color: colors.color(foreground);
+      color: colors.color(lightest-foreground);
       margin: 0 auto;
       padding: 60px 0;
 

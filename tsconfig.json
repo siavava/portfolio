@@ -6,7 +6,6 @@
     "sourceMap": true,
     "target": "ESNext",
     "allowJs": false,
-    "module": "CommonJS",
     "moduleResolution": "Node",
     "lib": ["ESNext", "DOM", "es5", "es6", "DOM.Iterable"],
     "module": "ESNext",

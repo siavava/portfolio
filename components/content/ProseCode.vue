@@ -98,8 +98,8 @@ export default {
 @use "../styles/typography"
 
 .code-container
-  background: colors.color("light-background")
-  //background: rgba(colors.color("light-background"), 0.9)
+  //background: colors.color("light-background")
+  background: rgba(colors.color(light-background), 0.7)
   position: relative
   margin: 1rem 0
   padding: 0.5rem
