@@ -45,10 +45,8 @@ export default {
   place-items: center
   margin: auto
   margin-left: -1.5px
-  background: red
 
   svg
-    background: yellow
     width: 50%
     height: 50%
     color: colors.color(primary-highlight)
