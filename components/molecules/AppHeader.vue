@@ -523,8 +523,8 @@ const { apps } = useApps();
   padding: 10px 0
   margin: 0 auto
   min-height: 40px
-  border-top: 3px dotted colors.color("lightest-background")
-  border-bottom: 3px dotted colors.color("lightest-background")
+  border-top: 2px dotted colors.color("lightest-background")
+  border-bottom: 2px dotted colors.color("lightest-background")
 
   .toc-wrapper
     width: 100%

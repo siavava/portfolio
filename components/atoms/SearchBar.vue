@@ -115,17 +115,23 @@ export default {
     height: 40px
     background: inherit
     font-size: 20px
-    margin: 15px 0
+    //margin: 15px 0
+    justify-self: center
+    align-self: center
     padding-right: 50px
     color: colors.color("primary-highlight")
     font-family: typography.font("sans-serif")
     background: red
     background-color: rgba(colors.color(light-background), 0.5)
-    border: 1px solid colors.color(lightest-background)
-    padding: 0 30px
-    border-radius: 10px
+    border-bottom: 1px solid colors.color(lightest-background)
+    padding: 0 15px
+    //border-radius: 10px
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2)
     //font-size: typography.font-size("m")
+    text-transform: lowercase
+
+    &:is(:focus, :active)
+      background-color: rgba(colors.color(light-background), 0.9)
 
     // prevent zooming
     font-size: 16px
@@ -141,19 +147,6 @@ export default {
     &::selection
       color: colors.color("primary-highlight")
       opacity: 0.8
-
-  .search-icon
-    max-width: 40px
-    max-height: 40px
-    aspect-ratio: 1/1
-    position: absolute
-    left: auto
-    right: 10px
-    top: 15px
-    fill: colors.color("primary-highlight")
-    stroke: colors.color("primary-highlight")
-    opacity: 0.8
-    cursor: pointer
 
   .search-results-background
     position: fixed
