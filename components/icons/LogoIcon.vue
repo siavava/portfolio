@@ -44,7 +44,7 @@ export default {
   padding: 0
   place-items: center
   margin: auto
-  margin-left: -3px
+  margin-left: -1.5px
   background: red
 
   svg
