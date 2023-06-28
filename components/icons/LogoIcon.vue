@@ -39,10 +39,12 @@ export default {
 .container
   display: inline-flex
   place-content: center
-  height: 100%
+  height: 70%
   aspect-ratio: 1/1
   padding: 0
   place-items: center
+  margin: auto
+  margin-left: -10px
 
   svg
     //background: yellow

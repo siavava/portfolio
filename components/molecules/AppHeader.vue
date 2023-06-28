@@ -405,14 +405,10 @@ const { apps } = useApps();
     position: relative
     align-self: left
     height: 70px
-    aspect-ratio: 16/9
+    width: 70px
     margin-left: 0
+    display: flex
     //padding: 20px 30px 20px 10px
-
-  .header-nav-links
-    position: relative
-    height: 70px
-    padding: 10px
 
   .menu-button
     position: relative
