@@ -78,7 +78,7 @@ export default {
       const { search } = useAlgoliaSearch("netlify_e0f5d7d0-9d2a-45ae-8962-6e3af2ec4cf3_main_all");
       search({ query: this.searchTerm })
         .then((result) => {
-          result.hits = result.hits.filter((hit) => !["/", "/blog/"].includes(hit.url));
+          result.hits = result.hits.filter((hit) => !["/", "/writing/"].includes(hit.url));
           this.result = result;
           const _searchResults = this.$refs.searchResults as HTMLElement;
           const _searchResultsBackground = this.$refs.searchResultsBackground as HTMLElement;

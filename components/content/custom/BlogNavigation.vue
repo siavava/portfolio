@@ -12,10 +12,22 @@
     <ContentNavigation
       v-slot="{ navigation }"
     >
-      <!-- {{  navigation }} -->
+      <!-- {{ navigation }} -->
       <ul v-if="navigation">
+        <!-- home button -->
+        <li class="blog-category">
+          <NuxtLink
+            :id="`link-${navigation[0]._path}`"
+            :to="`${navigation[0]._path}`"
+            class="category-label"
+          >
+            <span class="category-label-text">
+              {{ navigation[0].title }}
+            </span>
+          </NuxtLink>
+        </li>
         <li
-          v-for="directory in navigation[0].children.map((item) => item.children).flat()"
+          v-for="directory in navigation[1].children"
           :key="directory.id"
         >
           <!-- {{ directory }} -->
@@ -111,26 +123,7 @@ export default {
       this.$forceUpdate();
     },
   },
-  // async mounted() {
-  //   let { path: currentPath } = useRoute();
 
-  //   // trim trailing slash if any
-  //   currentPath = currentPath.replace(/\/$/, "");
-
-  //   await queryContent("/blog")
-  //     .where({ _path: { $eq: currentPath } })
-  //     .only(["category"])
-  //     .findOne()
-  //     .then((page) => {
-  //       if (typeof page?.category === "string") {
-  //         page.category = [page.category];
-  //       } else {
-  //         page?.category?.forEach((category) => {
-  //           this.toggleCategory(category);
-  //         });
-  //       }
-  //     });
-  // },
   methods: {
     toggleCategory(category: string) {
       const _category = category.toLowerCase();

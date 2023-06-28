@@ -43,7 +43,7 @@
               class="blog-action"
               @click="() => userInfo.toggleSubscription()"
             />
-            <NuxtLink to="/blog">
+            <NuxtLink to="/writing">
               <ListIcon class="blog-action" />
             </NuxtLink>
 
@@ -87,7 +87,7 @@
               class="blog-action"
               @click="() => userInfo.toggleSubscription()"
             />
-            <NuxtLink to="/blog">
+            <NuxtLink to="/writing">
               <ListIcon class="blog-action" />
             </NuxtLink>
 

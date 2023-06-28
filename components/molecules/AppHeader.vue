@@ -57,7 +57,7 @@
         </div>
         <div class="menu-column">
           <NuxtLink
-            to="/blog"
+            to="/writing"
             class="menu-column-header"
           >
             <strong> Featured </strong>
@@ -78,7 +78,7 @@
         </div>
         <div class="menu-column">
           <NuxtLink
-            to="/blog"
+            to="/writing"
             class="menu-column-header"
           >
             <strong> Latest </strong>
@@ -282,9 +282,9 @@ const openMenu = () => {
   menuOpen.value = true;
   // auto-focus on search bar on desktop
   if (window.innerWidth > 768) {
-    setTimeout(() => {
-      document.getElementById("searchbar")?.focus();
-    }, 2000);
+    // setTimeout(() => {
+    //   document.getElementById("searchbar")?.focus();
+    // }, 2000);
   }
 };
 
@@ -303,8 +303,6 @@ const { data: featuredBlogs } = await useAsyncData(
   // "featured-blogs-meta",
   async () => {
     const _blogs = await queryContent()
-      // match '/blog/posts...'
-      // .where({ _path: { $regex: "^/blog" } })
       .where({ draft: false })
       .where({ category: { $contains: "featured" } })
       .limit(7)
@@ -320,8 +318,6 @@ const { data: latestBlogs } = await useAsyncData(
   // "publication-blogs-meta",
   async () => {
     const _blogs = await queryContent()
-      // match '/blog/posts...'
-      // .where({ _path: { $regex: "^/blog" } })
       .where({ draft: false })
       .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })

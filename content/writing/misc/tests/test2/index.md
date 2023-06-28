@@ -11,7 +11,6 @@ caption: This is the image caption.
 navigation: false
 ---
 
-<!-- ![Title Image](/blog/posts/misc/test1/title-image.jpg) -->
 
 # This is H1 that Spans Multiple Lines
 

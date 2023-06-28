@@ -5,7 +5,7 @@ year: 2021
 date: 2021-03-15
 title: 'Neural Networks'
 cover: 'featured-neural-networks.gif'
-url: '/blog/posts/publications/neural-networks/data-driven-behavior-change'
+url: '/writing/computing/neural-networks/data-driven-behavior-change'
 repo: 'https://github.com/siavava/neural'
 tech:
   - Julia

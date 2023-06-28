@@ -40,8 +40,8 @@ const homeLinks = [
 
 const otherLinks = [
   {
-    title: "Blog",
-    _path: "/blog",
+    title: "Writing",
+    _path: "/writing",
     show: true,
   },
   {
@@ -107,7 +107,7 @@ const navHeight = 70; // px
 
 const nonTocRoutes = [
   "/",
-  "/blog", "/blog/",
+  "/writing", "/writing/",
 ];
 
 const heroCallOuts = [

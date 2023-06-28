@@ -16,8 +16,6 @@ export default {
   data() {
     const { path } = useTrimmedPath();
     return {
-
-      // https://github.com/siavava/amitt.ai/blob/main/content/blog/posts/publications/artificial-intelligence/data-driven-behavior-change/index.md
       editLink: `https://github.com/siavava/amitt.ai/blob/main/content/${path}/index.md`,
     };
   },

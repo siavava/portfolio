@@ -58,7 +58,7 @@ const useUserInfo = defineStore("userInfo", {
       this.uid = newUser?.uid;
 
       this.updateSubscriptions(true);
-      if (!["/", "/blog"].includes(path)) {
+      if (!["/", "/writing"].includes(path)) {
         this.getCommentsByRoute();
       }
     },
@@ -78,7 +78,7 @@ const useUserInfo = defineStore("userInfo", {
         this.updateSubscriptions(true);
       }
       // }
-      if (!["/", "/blog"].includes(path)) {
+      if (!["/", "/writing"].includes(path)) {
         await this.getCommentsByRoute();
       }
     },
