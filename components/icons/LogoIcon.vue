@@ -44,10 +44,11 @@ export default {
   padding: 0
   place-items: center
   margin: auto
-  margin-left: -10px
+  //margin-left: -10px
+  background: red
 
   svg
-    //background: yellow
+    background: yellow
     width: 50%
     height: 50%
     color: colors.color(primary-highlight)
