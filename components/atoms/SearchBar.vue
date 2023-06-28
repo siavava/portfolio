@@ -115,7 +115,7 @@ export default {
     height: 40px
     background: inherit
     font-size: 20px
-    //margin: 15px 0
+    margin: 15px 0
     justify-self: center
     align-self: center
     padding-right: 50px
