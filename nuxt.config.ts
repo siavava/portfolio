@@ -26,7 +26,16 @@ export default defineNuxtConfig({
         },
       ],
       link: [
-        { rel: "icon", type: "image/png", href: "/favicon.png" },
+        { rel: "icon", type: "image/svg", href: "/favicon.svg" },
+        {
+          rel: "mask-icon", type: "image/svg", href: "/favicon.svg", color: "#f42e4f",
+        },
+        {
+          rel: "apple-touch-icon", type: "image/svg", href: "/favicon.svg",
+        },
+        {
+          rel: "manifest", href: "/manifest.json",
+        },
       ],
     },
   },

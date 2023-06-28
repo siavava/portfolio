@@ -1,0 +1,11 @@
+{
+  "name": "amittai",
+  "short_name": "amittai",
+  "icons": [{
+      "src": "favicon.svg",
+      "sizes": "512x512"
+  }],
+  "background_color": "#000000",
+  "theme_color": "#55719C",
+  "display": "fullscreen"
+}
