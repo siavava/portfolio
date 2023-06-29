@@ -105,7 +105,7 @@ export default {
         return _blogs;
       },
     );
-    const currentCategories = _current?.value?.category || [];
+    const currentCategories: string[] = _current?.value?.category || [];
     return {
       currentCategories,
       toc,
@@ -113,9 +113,13 @@ export default {
     };
   },
   data() {
+    const expandedCategories = new Set<string>();
+    this.currentCategories?.forEach((category) => {
+      expandedCategories.add(category.toLowerCase());
+    });
     return {
       refreshKey: 0,
-      expandedCategories: new Set<string>(this.currentCategories),
+      expandedCategories, // : new Set<string>(this.currentCategories),
     };
   },
   watch: {
