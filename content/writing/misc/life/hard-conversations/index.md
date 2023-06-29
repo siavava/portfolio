@@ -7,7 +7,7 @@ category:
   - life
 draft: false
 featured: true
-image: title-image.webp
+image: ../cover.gif
 layout: article
 date: 2020-07-15
 navigation: true
@@ -60,6 +60,8 @@ This issue runs deeper than the surface. Not having an effeminate or otherwise e
 Case in point; when my elder sister finished high school and did very well, everyone had an idea of what she should do in college. Herself? She wanted to be an engineer. “No,” my father said. That was supposedly not a girl’s trade. She was devastated. To reiterate what I said earlier, when an African parent tells you to do something, you simply do not disobey. That’s how my sister ended up in Medical school — and thrived, nevertheless. Just last year, she was nominated the best dental student in the country by the Kenya Dental Association. But imagine the kind of engineer she could have been!
 
 My sister’s case might seem less harmful, but the reality is that such stringent notions of gender and gender-related roles do much more harm than good in our society. I was recently chatting with Phelan, a friend from high school and current student at Minerva. He mentioned that when he was young, everyone wanted everything of him too, but mostly they all really wanted him to be someone who would help better their lives, and so he strives to achieve the same to date. However, as a man, no one compelled him into an academic discipline he wasn’t passionate about. The same can be said for myself and most of my male friends, but the situation could have easily panned out differently for a woman. Having grown up in a rural environment and schooled at a rural primary school, I have witnessed cases of girls being forced out of school because their parents — mostly the father — has arranged a marriage for them. Similar stories can be told for other socio-cultural issues and transgressions such as FGM, wife inheritance, and even the traditional property inheritance practices where male descendants are entitled to the family’s land and property while girls are told to “get a husband.”
+
+![Courage is not the absence of fear, but rather the judgement that something else is more important than fear.](selfie.webp)
 
 ## Digression
 

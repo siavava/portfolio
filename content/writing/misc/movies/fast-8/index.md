@@ -7,7 +7,7 @@ category:
   - movies
 draft: false
 featured: true
-image: title-image.webp
+image: ../cover.gif
 layout: article
 date: 2017-04-17
 navigation: true

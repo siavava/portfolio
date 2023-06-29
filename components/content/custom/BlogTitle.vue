@@ -55,6 +55,14 @@
         class="title-image-wrapper"
       >
         <NuxtImg
+          v-if="image.endsWith('.gif')"
+          class="title-image gif"
+          :src="`${path}/${image}`"
+          alt="Title Image"
+        />
+
+        <NuxtImg
+          v-else
           class="title-image"
           :src="`${path}/${image}`"
           alt="Title Image"
@@ -197,7 +205,6 @@ export default {
   .title-image-wrapper
     margin: auto
     margin-top: 2em
-    max-width: 100%
     width: 100%
     display: flex
     flex-direction: column
@@ -206,6 +213,8 @@ export default {
   .title-image
     @include mixins.box-shadow
     border-radius: geometry.var("border-radius")
+    margin-bottom: 1rem
+    max-width: max(500px, 50%)
 
   .title-image-caption
     margin-top: 0.5rem

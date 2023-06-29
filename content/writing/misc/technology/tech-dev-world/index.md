@@ -6,7 +6,7 @@ category:
   - featured
 draft: false
 featured: true
-image: kenya-tech.webp
+image: ../cover.webp
 layout: article
 date: 2020-12-15
 navigation: true
@@ -22,9 +22,9 @@ looking at the possibilities and challenges, and addressing
 how the technology disparity between developing and developed nations arose in the first place.
 
 <!--more-->
-
-:styled-button[read the full paper :rocket:]{href=https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/16}
-
+::inline-flex
+:styled-button[read the full paper]{href=https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/16}
+::
 ---
 
 ## Introduction
@@ -51,6 +51,9 @@ How did this disparity arise, and what are the implications?
 What are some avenues for developing nations
 addressing the technology gap and
 meeting their immediate technology needs?
+
+![Emerging technologies are driving developments in upcoming countries.](./kenya-tech.webp)
+
 
 ### Technology Transfer
 

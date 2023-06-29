@@ -1,12 +1,21 @@
 <template>
-  <button class="styled-button">
+  <NuxtLink
+    class="styled-button"
+    :to="href"
+  >
     <slot />
-  </button>
+  </NuxtLink>
 </template>
 
 <script lang="ts">
 export default {
   name: "StyledButton",
+  props: {
+    href: {
+      type: String,
+      default: "",
+    },
+  },
 };
 </script>
 

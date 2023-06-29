@@ -6,7 +6,7 @@ category:
   - featured
 draft: false
 featured: true
-image: shooting-rocket.jpg
+image: ../cover2.gif
 layout: article
 date: 2020-12-15
 navigation: true
@@ -38,8 +38,9 @@ current trends, and future possibilities.
 <!--more-->
 <br>
 
-:styled-button[read the full paper :rocket:]{href=https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/188}
-
+::inline-flex
+:styled-button[read the full paper]{to=https://issuu.com/dartmouthjournalofscience/docs/20f_dujs_print_journal_v3/188}
+::
 ---
 
 ## Introduction

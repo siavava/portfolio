@@ -305,7 +305,7 @@ const { data: featuredBlogs } = await useAsyncData(
     const _blogs = await queryContent()
       .where({ draft: false })
       .where({ category: { $contains: "featured" } })
-      .limit(7)
+      .limit(10)
       .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })
       .find();
@@ -321,7 +321,7 @@ const { data: latestBlogs } = await useAsyncData(
       .where({ draft: false })
       .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })
-      .limit(7)
+      .limit(10)
       .find();
     return _blogs;
   },

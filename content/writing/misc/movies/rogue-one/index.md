@@ -7,7 +7,7 @@ category:
   - movies
 draft: false
 featured: true
-image: title-image.jpg
+image: ../cover.gif
 layout: article
 date: 2016-04-12
 navigation: true
@@ -43,6 +43,8 @@ As J.K. Rowling famously tweeted:
 That’s where we’re going, with the Hero’s Journey and heroic stories. Fans on Tumblr draw the representation they want to see, Harry Potter gets a canonical black Hermione, and Lin-Manuel Miranda recasts the Founding Fathers as men of color in Hamilton. Steven Universe, a Cartoon Network series designed for young audiences (and voiced almost entirely by actors of color), features a lesbian relationship at its center. Archie Comics prints an issue where Jughead Jones casually speaks about his asexuality.
 
 Clearly we have a long journey ahead; it isn’t enough to make queer characters and polyamorous characters and characters of color heroes in fiction if the world isn’t granting them the same status in life, for starters. Likewise, until we get greater representation among the people who create and tell our biggest cultural narratives, we’ll end up with situations like J.K. Rowling’s egregious characterization of Native Americans in her recent History of Magic in North America. As researcher Adrienne Keene writes, in “Magic in North America”: The Harry Potter franchise veers too close to home” at Native Appropriations: “We fight so hard every single day as Native peoples to be seen as contemporary, real, full, and complete human beings and to push away from the stereotypes that restrict us in stock categories of mystical-connected-to-nature-shamans or violent-savage-warriors.”
+
+![Fiery Triad](./fiery-triad.jpg)
 
 A lot of Star Wars fans see a character like Poe Dameron as a complete human being, but that’s also because we’ve ascribed characteristics to him from the few hints we’re given in his brief screen time. We’ve created the character we wanted, and we’re hoping that the remaining Star Wars episodes deliver, if not precisely the Poe we’ve written for ourselves, one that feels similarly whole. If he becomes a stereotype, we’ll turn away from Star Wars. We’ve done it before.
 

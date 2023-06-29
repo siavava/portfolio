@@ -6,7 +6,7 @@ category:
   - featured
 draft: false
 featured: true
-image: neural-network.jpg
+image: ../cover.gif
 layout: article
 date: 2021-03-14
 navigation: true
@@ -26,9 +26,9 @@ This paper explores this context around machine learning and the effects it is h
 <!--more-->
 
 ::inline-flex
-:styled-button[read the full paper :rocket:]{href=https://issuu.com/dartmouthjournalofscience/docs/21w_dujs_print_v1/16}
+:styled-button[read the full paper]{href=https://issuu.com/dartmouthjournalofscience/docs/21w_dujs_print_v1/16}
 
-:styled-button[Project code :bookmark:]{href=https://github.com/siavava/neural}
+:styled-button[Project code]{href=https://github.com/siavava/neural}
 ::
 
 ---
