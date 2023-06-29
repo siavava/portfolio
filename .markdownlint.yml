@@ -9,9 +9,11 @@ MD013: false
 MD024: false
 # Allow multiple top-level headings
 MD025: false
-# Allow inline HTML
-MD033: false
 # Allow non blank lines around list
 MD032: false
+# Allow inline HTML
+MD033: false
+# Allow bare urls
+MD034: false
 MD046:
   style: fenced
