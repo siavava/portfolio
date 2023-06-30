@@ -210,12 +210,13 @@ export default {
       height: 100%
       opacity: 0.5
 
-    a
+    .image-wrapper
       width: 100%
       height: 100%
       background-color: colors.color("primary-highlight")
       border-radius: geometry.var("border-radius")
       vertical-align: middle
+      transition: all 0.8s ease-in-out
 
       &:is(:hover,:focus)
         background: transparent

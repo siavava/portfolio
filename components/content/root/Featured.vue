@@ -32,10 +32,7 @@
                   &nbsp;@&nbsp;
                 </span>
                 <NuxtLink
-                  v-if="
-                    project.company !== null
-                      && project.company.url !== null &&
-                      project?.company?.name !== null"
+                  v-if="project.company.url"
                   :to="project.company.url"
                 >
                   {{ project.company.name }}
@@ -79,14 +76,14 @@
           </div>
         </div>
         <div class="project-image">
-          <a>
+          <div class="image-wrapper">
             <NuxtImg
               :src="`${project.cover}`"
               :alt="project.title"
               loading="lazy"
               class="img-project"
             />
-          </a>
+          </div>
         </div>
       </StyledProject>
     </StyledProjectsGrid>
