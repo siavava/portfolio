@@ -1,15 +1,34 @@
 ---
-title: Sum of Multiples
-description: Common Problems Across Multiple Paradigms.
+title: Functionally Summing Multiples
+description: Problem-solving with Functional Programming Patterns.
 category:
   - exposition
 draft: false
 featured: true
 image: ../cover.gif
-caption: disjunctive frequencies.
+caption: sit with your ambient ambition.
 layout: article
 date: 2023-06-21 00:00:00
 navigation: true
+
+head:
+  meta:
+    - name: 'description'
+      content: Problem-solving with Functional Programming Patterns.
+    - name: 'keywords'
+      content: 'functional programming, lazy evaluation, tail recursion, generators, haskell, project euler'
+    - name: 'robots'
+      content: 'index, follow'
+    - name: 'author'
+      content: 'Amittai'
+    - name: 'copyright'
+      content: 'Amittai'
+    - name: 'og:title'
+      content: 'Functionally Summing Multiples'
+    - name: 'og:description'
+      content: Problem-solving with Functional Programming Patterns.
+    - name: 'og:image'
+      content: ../cover.gif
 ---
 
 # Project Euler, Problem 1

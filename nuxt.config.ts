@@ -20,11 +20,11 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "theme-color", content: "#f42e4f" },
-        {
-          hid: "description",
-          name: "description",
-          content: "Amittai's portfolio. A summary of his work, thoughts, and interests.",
-        },
+        // {
+        //   hid: "description",
+        //   name: "description",
+        //   content: "Amittai's portfolio. A summary of his work, thoughts, and interests.",
+        // },
       ],
       link: [
         { rel: "icon", type: "image/svg", href: "/favicon.svg" },
