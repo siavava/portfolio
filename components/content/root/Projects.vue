@@ -95,6 +95,7 @@
       id="more-button"
       ref="showMoreButton"
       class="more-button"
+      to="#"
       @click="toggleShowMore"
     >
       Show {{ showMore ? 'Less' : 'More' }}
