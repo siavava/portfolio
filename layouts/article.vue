@@ -51,12 +51,20 @@ const { toc } = useContent();
 // reference to comments section for detecting when to show auth popup
 const commentsSection = ref<HTMLElement | null>(null);
 
+// query for the imageUrl of the current page
+const { imageUrl: image } = await queryContent()
+  .where({ _path: currentPage })
+  .only(["imageUrl"])
+  .findOne();
+
+console.log(`image: ${image}`);
+
 onMounted(() => {
   const img = useImage();
 
   // console.log(`img: ${JSON.stringify(img)}`);
 
-  const coverImageURL = img(`${currentPage}/../cover.svg`);
+  const coverImageURL = img(`${currentPage}/${image}`);
   // console.log(`coverImageURL: ${coverImageURL}`);
   if (coverImageURL) {
     // const ogImage = document.createElement("meta");

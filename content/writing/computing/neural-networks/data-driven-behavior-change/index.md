@@ -6,7 +6,7 @@ category:
   - featured
 draft: false
 featured: true
-image: ../cover.gif
+imageUrl: ../cover.gif
 layout: article
 date: 2021-03-14
 navigation: true

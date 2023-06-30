@@ -6,7 +6,7 @@ category:
   - featured
 draft: false
 featured: true
-image: ../cover.webp
+imageUrl: ../cover.webp
 layout: article
 date: 2020-12-15
 navigation: true

@@ -7,7 +7,7 @@ category:
   - movies
 draft: false
 featured: true
-image: ../cover.gif
+imageUrl: ../cover.gif
 layout: article
 date: 2016-04-12
 navigation: true

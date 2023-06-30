@@ -5,7 +5,7 @@ category:
   - exposition
 draft: false
 featured: true
-image: ../cover.gif
+imageUrl: ../cover.gif
 caption: sit with your ambient ambition.
 layout: article
 date: 2023-06-21 00:00:00

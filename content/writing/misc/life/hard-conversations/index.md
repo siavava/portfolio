@@ -7,7 +7,7 @@ category:
   - life
 draft: false
 featured: true
-image: ../cover.gif
+imageUrl: ../cover.gif
 layout: article
 date: 2020-07-15
 navigation: true

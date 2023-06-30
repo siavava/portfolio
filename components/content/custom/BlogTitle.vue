@@ -84,7 +84,7 @@ const {
   categories, image, caption, date, title, description,
 } = await queryContent()
   .where({ _path: path })
-  .only(["category", "date", "image", "caption", "title", "description"])
+  .only(["category", "date", "imageUrl", "caption", "title", "description"])
   .findOne()
   .then((data) => {
     return {
@@ -93,7 +93,7 @@ const {
       date: data.date,
       title: data.title,
       description: data.description,
-      image: data.image || null,
+      image: data.imageUrl || null,
       caption: data.caption || null,
     };
   });

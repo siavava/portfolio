@@ -8,7 +8,7 @@
     <NuxtImg
       alt="blog image"
       class="blog-image"
-      :src="`${blog._path}/${blog.image}`"
+      :src="`${blog._path}/${blog.imageUrl}`"
     />
     <div class="blog-actions">
       <NuxtLink
