@@ -69,7 +69,7 @@ export default {
     flex-direction: column
     gap: 0.5rem
     padding: 0.5rem
-    border: 1px solid rgba(colors.color(foreground), 0.5)
+    border: 1px solid rgba(colors.color(primary-highlight), 0.5)
     border-radius: 0.5rem
     transition: all 0.2s ease-in-out
     margin: 10px 0
@@ -104,8 +104,8 @@ export default {
 
     &:not(.inactive):hover
       //border-color: colors.color("primary-highlight")
-      color: colors.color("primary-highlight")
-      background: colors.color("light-background")
+      color: colors.color(primary-highlight)
+      background: colors.color(light-background)
 
       &:first-child
         .surround-title::before
@@ -117,11 +117,11 @@ export default {
 
     .surround-category
       font-size: 0.8rem
-      color: rgba(colors.color(foreground), 0.5)
+      color: rgba(colors.color(foreground), 0.8)
       text-transform: capitalize
 
     .surround-title
-      color: colors.color(foreground)
+      color: colors.color(primary-highlight)
       font-size: 0.8rem
       font-weight: bold
 
