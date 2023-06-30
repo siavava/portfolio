@@ -217,6 +217,9 @@ export default {
   height: 100svh
   overflow: hidden
 
+  @media screen and (max-width: 960px)
+    display: none
+
 #wanderer-container
   background-color: rgba(colors.color(background), 0.9)
   background: linear-gradient(rgba(colors.color(background), 1), rgba(colors.color(background), 0.9), rgba(colors.color(background), 1))
@@ -235,8 +238,8 @@ export default {
   border-radius: 50%
   z-index: 1 !important
   position: absolute
-  top: 50%
-  left: 25%
+  top: 0
+  left: 0
   transform: translate(-50%, -50%)
 
   transition: all 3s ease-in-out
