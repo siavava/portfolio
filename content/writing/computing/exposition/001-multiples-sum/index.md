@@ -85,10 +85,6 @@ solve1 bound divisors =
 -- 233168
 ```
 
-::alert
----
-type: info
----
 [Haskell](https://www.haskell.org/) is a lazy language.
 Instead of explicitly generating the entire list of values,
 it keeps the combined specification at hand
@@ -96,10 +92,14 @@ and generates the values on-demand,
 then discards each value as soon as it is no longer needed and
 it is efficient to discard it.
 
+::alert
+---
+type: info
+---
 Haskell's list mechanics are more in line with [generators](https://en.wikipedia.org/wiki/Generator_(computer_programming))
 in other programming languages, such as [`range`](https://docs.python.org/3/library/stdtypes.html#range) in Python
-and [`std::iota`](https://en.cppreference.com/w/cpp/algorithm/iota) in C++.
-
+and [`std::iota`](https://en.cppreference.com/w/cpp/algorithm/iota) in C++.  
+If you create an infinite `list` in Python, **your program will crash**.
 ::
 
 ## Approach 2: Tail Recursion
