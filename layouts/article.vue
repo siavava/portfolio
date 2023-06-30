@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
-import { render, createVNode } from "vue";
+// import { render, createVNode } from "vue";
 
 const { path: currentPage } = useTrimmedPath();
 const { toc } = useContent();
