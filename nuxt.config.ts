@@ -87,7 +87,7 @@ export default defineNuxtConfig({
 
       // Will inject `[...slug].vue` as the root page.
       injectPage: true,
-      // trailingSlash: true,
+      trailingSlash: true,
     },
     markdown: {
       remarkPlugins: [
