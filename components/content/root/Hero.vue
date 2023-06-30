@@ -39,6 +39,7 @@
           <NuxtLink
             class="down-link-inner"
             to="/#about"
+            aria-label="scroll down to about section"
           >
             <Icon
               type="down-arrow"

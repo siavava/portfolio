@@ -7,7 +7,7 @@
         v-model="searchTerm"
         type="text"
         class="site-search-input"
-        tabindex="1"
+        tabindex="0"
         placeholder="search"
       >
     </form>

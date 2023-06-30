@@ -70,6 +70,7 @@
             <NuxtLink
               v-if="project.url"
               :to="project.url"
+              aria-label="External Link"
             >
               <Icon type="ExternalLink" />
             </NuxtLink>
