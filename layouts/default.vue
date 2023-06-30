@@ -1,17 +1,20 @@
 <template>
   <div id="root">
     <AppHeader />
-    <div class="navy">
-      <!-- header in body == not sticky -->
-      <main>
-        <!-- <body> -->
-        <div class="container">
-          <slot id="content" />
-        </div>
-        <!-- <slot id="content"/> -->
-      </main>
-    </div>
-    <AppFooter identifier="in-page" />
+    <!-- <div class="navy"> -->
+    <!-- header in body == not sticky -->
+    <!-- <main> -->
+    <!-- <body> -->
+    <!-- <div class="container"> -->
+    <slot id="content" />
+    <!-- </div> -->
+    <!-- <slot id="content"/> -->
+    <!-- </main> -->
+    <!-- </div> -->
+    <AppFooter
+      class="default-footer"
+      identifier="in-page"
+    />
   </div>
 </template>
 
@@ -44,7 +47,7 @@ onMounted(() => {
   flex-direction: column
 
 .default-footer
-  margin-top: auto
+  margin-top: 0
 
 body
   z-index: 2 !important

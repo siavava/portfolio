@@ -1,16 +1,24 @@
 <template>
   <section class="not-found">
     <!-- <div class="message-wrapper"> -->
-    <h1> 404 </h1>
-    <p> Nice to meet you tho!</p>
+    <!-- <h1> 404 </h1> -->
+    <NuxtImg
+      src="/404.gif"
+      alt="404"
+      width="100%"
+      height="auto"
+      class="not-found-image"
+    />
 
-    <!-- link to previous page  -->
-    <NuxtLink
-      class="error-page-button"
-      @click="$router.back()"
-    >
-      <span>cd ..</span>
-    </NuxtLink>
+    <div class="not-found-instructions">
+      <p> Nice to meet you tho!</p>
+      <NuxtLink
+        class="error-page-button"
+        @click="$router.back()"
+      >
+        <span>cd ..</span>
+      </NuxtLink>
+    </div>
     <!-- </div> -->
   </section>
 </template>
@@ -30,41 +38,53 @@ export default {
 section.not-found
   display: flex
   flex-direction: column
-  height: 100%
-  flex-grow: 1
+  margin: auto
+  width: min(90vw, 1200px)
+  gap: 100px
+  padding: 10px
 
-  h1
-    font-size: 2.5rem
-    font-weight: 900
-    margin: 0
-    font-family: typography.font(sans-serif), sans-serif
-    font-variation-settings: "cuts" 300
-    margin: 20px 0
+  .not-found-image
+    margin: auto
+    width: 100%
+    height: auto
+    max-width: 600px
+    max-height: 600px
 
-  p
-    font-size: 1.2rem
-    font-weight: 300
-    margin: 0
-    font-family: typography.font(sans-serif), sans-serif
-    margin: 0 0 50px 0
+  .not-found-instructions
+    display: flex
+    flex-direction: column
+    justify-content: center
+    padding: 20px
+    gap: 20px
 
-  .error-page-button
-    color: rgba(colors.color(lightest-foreground), 0.4)
-    transition: all 0.2s ease-in-out
-    //width: fit-content
-    display: table
-    margin-right: auto
+    p
+      font-size: 1.2rem
+      font-weight: 500
+      margin: 0
+      font-family: typography.font(sans-serif), sans-serif
+      color: colors.color(primary-highlight)
+      display: table
+      margin: auto
+      margin-left: 0
 
-    & > span
+    .error-page-button
+      color: rgba(colors.color(primary-highlight), 0.8)
       transition: all 0.2s ease-in-out
-      padding-bottom: 0.1rem
+      display: table
+      display: table
+      margin: auto
+      margin-left: 0
 
-    &::before
-      content: "❯"
-      margin-right: 0.5rem
+      & > span
+        transition: all 0.2s ease-in-out
+        padding-bottom: 0.1rem
 
-    &:hover > span
-      color: white
-      border-bottom: 1px solid white
+      &::before
+        content: "❯"
+        margin-right: 0.5rem
+
+      &:hover > span
+        color: colors.color(primary-highlight)
+        border-bottom: 1px solid
 
 </style>
