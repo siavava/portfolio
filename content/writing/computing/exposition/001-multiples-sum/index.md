@@ -23,20 +23,16 @@ head:
       content: 'Amittai'
     - name: 'copyright'
       content: 'Amittai'
-    - name: 'og:title'
+    - property: 'og:title'
       content: 'Functionally Summing Multiples'
-    - name: 'og:description'
+    - property: 'og:description'
       content: Problem-solving with Functional Programming Patterns.
-    - name: 'og:image'
+    - property: 'og:image'
       content: /_ipx/_/writing/computing/exposition/cover.gif
-    - name: 'og:url'
-      content: 'https://amitt.ai/writing/computing/exposition/001-multiples-sum/'
+    - property: 'og:url'
+      content: 'https://amitt.ai/writing/computing/exposition/001-multiples-sum'
     - name: 'twitter:card'
       content: summary_large_image
-    - name: 'twitter:domain'
-      content: 'https://amitt.ai'
-    - name: 'twitter:title'
-      content: 'Functionally Summing Multiples'
 ---
 
 # Project Euler, Problem 1
