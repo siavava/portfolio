@@ -29,6 +29,14 @@ head:
       content: Problem-solving with Functional Programming Patterns.
     # - name: 'og:image'
     #   content: ../cover.gif
+    - name: 'og:url'
+      content: 'https://amittaijoel.com/writing/computing/exposition/001-multiples-sum/'
+    - name: 'twitter:card'
+      content: summary_large_image
+    - name: 'twitter:domain'
+      content: 'https://amitt.ai'
+    - name: 'twitter:title'
+      content: 'Functionally Summing Multiples'
 ---
 
 # Project Euler, Problem 1
