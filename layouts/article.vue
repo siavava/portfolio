@@ -60,29 +60,29 @@ const { imageUrl: image } = await queryContent()
 console.log(`image: ${image}`);
 
 onMounted(() => {
-  const img = useImage();
+  // const img = useImage();
 
-  // console.log(`img: ${JSON.stringify(img)}`);
+  // // console.log(`img: ${JSON.stringify(img)}`);
 
-  const coverImageURL = img(`${currentPage}/${image}`);
-  // console.log(`coverImageURL: ${coverImageURL}`);
-  if (coverImageURL) {
-    // const ogImage = document.createElement("meta");
-    const ogImage = createVNode("meta", {
-      property: "og:image",
-      content: coverImageURL,
-    });
+  // const coverImageURL = img(`${currentPage}/${image}`);
+  // // console.log(`coverImageURL: ${coverImageURL}`);
+  // if (coverImageURL) {
+  //   // const ogImage = document.createElement("meta");
+  //   const ogImage = createVNode("meta", {
+  //     property: "og:image",
+  //     content: coverImageURL,
+  //   });
 
-    // const ogUrl = createVNode("meta", {
-    //   property: "og:url",
-    //   content: window.location.href,
-    // });
+  //   // const ogUrl = createVNode("meta", {
+  //   //   property: "og:url",
+  //   //   content: window.location.href,
+  //   // });
 
-    console.log(`window.location.href: ${window.location.href}`);
+  //   console.log(`window.location.href: ${window.location.href}`);
 
-    render(ogImage, document.head);
-    // render(ogUrl, document.head);
-  }
+  //   render(ogImage, document.head);
+  //   // render(ogUrl, document.head);
+  // }
   const userInfo = useUserInfo();
   // listen for auth state changes
   const auth = getAuth();

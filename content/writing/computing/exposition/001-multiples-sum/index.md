@@ -27,10 +27,10 @@ head:
       content: 'Functionally Summing Multiples'
     - name: 'og:description'
       content: Problem-solving with Functional Programming Patterns.
-    # - name: 'og:image'
-    #   content: ../cover.gif
+    - name: 'og:image'
+      content: /_ipx/_/writing/computing/exposition/cover.gif
     - name: 'og:url'
-      content: 'https://amittaijoel.com/writing/computing/exposition/001-multiples-sum/'
+      content: 'https://amitt.ai/writing/computing/exposition/001-multiples-sum/'
     - name: 'twitter:card'
       content: summary_large_image
     - name: 'twitter:domain'
