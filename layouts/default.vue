@@ -4,10 +4,6 @@
     <div class="navy">
       <!-- header in body == not sticky -->
       <main>
-        <a
-          class="skip-to-content"
-          href="#content"
-        />
         <!-- <body> -->
         <div class="container">
           <slot id="content" />
