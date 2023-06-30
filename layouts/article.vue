@@ -73,14 +73,15 @@ onMounted(() => {
       content: coverImageURL,
     });
 
+    const ogUrl = createVNode("meta", {
+      property: "og:url",
+      content: window.location.href,
+    });
+
+    console.log(`window.location.href: ${window.location.href}`);
+
     render(ogImage, document.head);
-
-    // console.log(`ogImage: ${JSON.stringify(ogImage.el)}`);
-
-    // // insert vnode to page head
-    // const ogImageElement = ogImage.el as HTMLElement;
-    // // document.head.appendChild();
-    // console.log(`document.head: ${JSON.stringify(document.head.)}`);
+    render(ogUrl, document.head);
   }
   const userInfo = useUserInfo();
   // listen for auth state changes

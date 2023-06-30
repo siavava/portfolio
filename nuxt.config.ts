@@ -20,6 +20,8 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "theme-color", content: "#f42e4f" },
+        { property: "og:type", content: "article" },
+        { property: "og:site_name", content: "amittai" },
         // {
         //   hid: "description",
         //   name: "description",
