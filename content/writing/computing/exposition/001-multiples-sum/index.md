@@ -1,6 +1,6 @@
 ---
-title: Functionally Summing Multiples
-description: Problem-solving with Functional Programming Patterns.
+title: Efficient Multiple Discovery
+description: Given an arbitrary set of numbers, how do we most-efficiently find their smallest common multiple?
 category:
   - exposition
 draft: false
@@ -14,7 +14,7 @@ navigation: true
 head:
   meta:
     - name: 'description'
-      content: Problem-solving with Functional Programming Patterns.
+      content: Given an arbitrary set of numbers, how do we most-efficiently find their smallest common multiple?
     - name: 'keywords'
       content: 'functional programming, lazy evaluation, tail recursion, generators, haskell, project euler'
     - name: 'robots'
@@ -24,7 +24,7 @@ head:
     - name: 'copyright'
       content: 'Amittai'
     - property: 'og:title'
-      content: 'Functionally Summing Multiples'
+      content: 'Efficient Multiple Discovery'
     - property: 'og:description'
       content: Problem-solving with Functional Programming Patterns.
     - property: 'og:image'
