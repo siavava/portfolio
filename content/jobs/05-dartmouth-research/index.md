@@ -13,7 +13,7 @@ navigation: false
   [Mingi Jeong][mingi-jeong] at the Dartmouth Reality and Robotics Lab (D-RLab).
 - Research work focused on applications of modern [deep learning][deep-learning] and [computer vision][computer-vision]
   techniques in [robotics][robotics] for more robust [waterline detection][waterline-detection].
-- You can view the project proposal [here][project-proposal].
+- You can view the [project proposal][project-proposal] for now.
 - Comprehensive report of the project will be available soon.
 
 [quattrini-li]: https://web.cs.dartmouth.edu/people/alberto-quattrini-li
@@ -24,4 +24,4 @@ navigation: false
 [robotics]: https://en.wikipedia.org/wiki/Robotics
 [waterline-detection]: https://en.wikipedia.org/wiki/Waterline
 
-[project-proposal]: /rlab-project-proposal.pdf
+[project-proposal]: /rlab-project-proposal.pdf/
