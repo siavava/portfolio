@@ -73,15 +73,15 @@ onMounted(() => {
       content: coverImageURL,
     });
 
-    const ogUrl = createVNode("meta", {
-      property: "og:url",
-      content: window.location.href,
-    });
+    // const ogUrl = createVNode("meta", {
+    //   property: "og:url",
+    //   content: window.location.href,
+    // });
 
     console.log(`window.location.href: ${window.location.href}`);
 
     render(ogImage, document.head);
-    render(ogUrl, document.head);
+    // render(ogUrl, document.head);
   }
   const userInfo = useUserInfo();
   // listen for auth state changes
