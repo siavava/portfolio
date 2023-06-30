@@ -27,8 +27,8 @@ head:
       content: 'Functionally Summing Multiples'
     - name: 'og:description'
       content: Problem-solving with Functional Programming Patterns.
-    - name: 'og:image'
-      content: ../cover.gif
+    # - name: 'og:image'
+    #   content: ../cover.gif
 ---
 
 # Project Euler, Problem 1

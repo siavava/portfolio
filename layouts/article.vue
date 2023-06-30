@@ -43,14 +43,37 @@
 
 <script setup lang="ts">
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
+import { render, createVNode } from "vue";
 
-const { path: currentPage } = useRoute();
+const { path: currentPage } = useTrimmedPath();
 const { toc } = useContent();
 
 // reference to comments section for detecting when to show auth popup
 const commentsSection = ref<HTMLElement | null>(null);
 
 onMounted(() => {
+  const img = useImage();
+
+  // console.log(`img: ${JSON.stringify(img)}`);
+
+  const coverImageURL = img(`${currentPage}/../cover.png`);
+  // console.log(`coverImageURL: ${coverImageURL}`);
+  if (coverImageURL) {
+    // const ogImage = document.createElement("meta");
+    const ogImage = createVNode("meta", {
+      property: "og:image",
+      content: coverImageURL,
+    });
+
+    render(ogImage, document.head);
+
+    // console.log(`ogImage: ${JSON.stringify(ogImage.el)}`);
+
+    // // insert vnode to page head
+    // const ogImageElement = ogImage.el as HTMLElement;
+    // // document.head.appendChild();
+    // console.log(`document.head: ${JSON.stringify(document.head.)}`);
+  }
   const userInfo = useUserInfo();
   // listen for auth state changes
   const auth = getAuth();
