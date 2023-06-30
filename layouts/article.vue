@@ -56,7 +56,7 @@ onMounted(() => {
 
   // console.log(`img: ${JSON.stringify(img)}`);
 
-  const coverImageURL = img(`${currentPage}/../cover.png`);
+  const coverImageURL = img(`${currentPage}/../cover.svg`);
   // console.log(`coverImageURL: ${coverImageURL}`);
   if (coverImageURL) {
     // const ogImage = document.createElement("meta");
