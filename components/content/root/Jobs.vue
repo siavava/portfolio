@@ -25,7 +25,7 @@
             }"
         >
           <span>
-            {{ `${job.company}` }}
+            {{ job.company }}
           </span>
         </StyledTabButton>
         <StyledHighlight ref="highlight" />

@@ -14,6 +14,8 @@
   max-width: 100%
   width: fit-content
   border: 1px solid colors.color("lightest-background")
+  line-height: 2
+  font-size: typography.font-size(xs)
 
   th
     border-bottom: 1px solid colors.color("lightest-background")
