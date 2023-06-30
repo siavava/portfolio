@@ -28,7 +28,7 @@ head:
     - property: 'og:description'
       content: Problem-solving with Functional Programming Patterns.
     - property: 'og:image'
-      content: https://amitt.ai/_ipx/_/writing/computing/exposition/cover.gif
+      content: /_ipx/_/writing/computing/exposition/cover.gif
     - property: 'og:url'
       content: 'https://amitt.ai/writing/computing/exposition/001-multiples-sum'
     - name: 'twitter:card'
