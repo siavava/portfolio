@@ -9,8 +9,8 @@ featured: true
 imageUrl: ../cover.gif
 caption: |
   If life transcends death <br/>
-  Then I will seek for you there <br/>
-  If not, then there too
+  Then I will seek for you there. <br/>
+  If not, then there too.
 layout: article
 date: 2023-06-21 00:00:00
 navigation: true
@@ -259,15 +259,15 @@ programming gives us when our functions are pure.
 
 ```haskell
 solve3 :: (Foldable c, Integral a) => a -> c a -> a
-solve3 bound divisors = unsafePerformIO $ do
-  
-  total <- newIORef 0                       -- initialize sum to 0
-
-  for [1..bound-1] $ \curr -> do            -- iterate upto bound using curr as index
-    when (curr `anyDivisor` divisors) $ do  -- when curr is a multiple...
-      modifyIORef total (+ curr)            -- add curr to sum
-
-  readIORef total                           -- return final value of sum
+solve3 :: (Foldable c, Integral a) => a -> c a -> a
+solve3 bound divisors =
+  runST $ newSTRef 0 >>= compute
+  where
+    compute total = do
+      for [1..bound-1] $ \curr -> do
+        when (curr `anyDivisor` divisors) $ do
+          modifySTRef total (+ curr)
+      readSTRef total
 
 -- >>> solve3 1000 [3,5]
 -- 233168
@@ -276,8 +276,8 @@ solve3 bound divisors = unsafePerformIO $ do
 ### #3, Explained
 
 Instead of a tail recursion (which is unrolled into a loop by [GHC](https://www.haskell.org/ghc/)) anyway,
-use the state monad to maintain the state of the accumulator
-an explicit loop to check multiples.
+use the state monad to maintain the accumulator, and an explicit loop to check multiples
+and sum up values in the accumulator.
 
 ::alert
 ---
