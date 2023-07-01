@@ -1,10 +1,10 @@
-[redirects]
+[[redirects]]
   from = "https://altair.fyi/*"
   to = "https://amitt.ai/:splat"
   status = 301
   force = true
 
-[redirects]
+[[redirects]]
   from = "https://altair.fyi"
   to = "https://amitt.ai"
   status = 301
