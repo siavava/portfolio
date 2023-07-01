@@ -71,7 +71,10 @@
           v-if="caption"
           class="title-image-caption"
         >
-          {{ caption }}
+          <div
+            style="text-align: left; margin-top: 0.5rem;"
+            v-html="caption"
+          />
         </figcaption>
       </figure>
     </div>

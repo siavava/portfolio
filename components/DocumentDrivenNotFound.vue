@@ -1,7 +1,5 @@
 <template>
   <section class="not-found">
-    <!-- <div class="message-wrapper"> -->
-    <!-- <h1> 404 </h1> -->
     <NuxtImg
       src="/404.gif"
       alt="404"

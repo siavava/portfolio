@@ -7,7 +7,10 @@ category:
 draft: false
 featured: true
 imageUrl: ../cover.gif
-caption: sit with your ambient ambition.
+caption: |
+  If life transcends death <br/>
+  Then I will seek for you there <br/>
+  If not, then there too
 layout: article
 date: 2023-06-21 00:00:00
 navigation: true
@@ -144,10 +147,6 @@ In contrast to iteration, the recursive call must perform two iterations:
 one "forward" iteration setting up the nested recursive calls needed to compute the result,
 and one "backward" iteration to unwind the stack and compile the final result from the nested calls.
 
-The real problem is that memory allocated for any specific recursive call's stack frame
-in the forward iteration may not be freed until the backward iteration reaches the specific
-call and the specific recursive call completes execution and returns.
-We effectively use $\Theta(n)$ memory.
 For example, a call to `factorial 5` would result in the following stack trace.
 
 ```haskell
@@ -165,12 +164,17 @@ factorial 5                                   -- call 1
 120                                           -- unwind 1 (final return)
 ```
 
+The real problem is that memory allocated for any specific recursive call's stack frame
+in the forward iteration may not be freed until the backward iteration reaches the specific
+call and the specific recursive call completes execution and returns.
+We effectively use $\Theta(n)$ memory.
+
 If we can do better, shouldn't we?
 
-The main idea behind [tail recursion](https://en.wikipedia.org/wiki/Tail_call)
-is that if a non-branching recursive call is the last computation in a function,
-then we can pass the context forward and avoid setting up a new stack frame for the recursive call.
-Eventually, the terminating call(i.e. "base case") return the solution back to the original caller.
+If a non-branching recursive call is the last computation in a function,
+why not pass the context forward and avoid setting up a new stack frame for the recursive call?
+This is the main idea behind [tail recursion](https://en.wikipedia.org/wiki/Tail_call)
+&mdash; eventually, the terminating call (i.e. _base case_) returns the solution back to the original caller.
 
 ```python
 def factorial(n, acc=1):
@@ -191,7 +195,7 @@ factorial n = iter n 1
       | otherwise = iter (n - 1) (acc * n)
 ```
 
-Now, our stack trace looks like this:
+Now, our stack trace is much simpler, and we only use $O(1)$ memory:
 
 ```haskell
 factorial 5     -- call 
@@ -211,12 +215,13 @@ type: info
 The canon Haskell compiler, [GHC](https://www.haskell.org/ghc/),
 guarantees tail call elimination for tail recursive functions.  
 As [Peter Deutsch](https://en.wikipedia.org/wiki/L._Peter_Deutsch) once said:
-**To iterate is human, to recur, divine.**
+**To iterate is human, to recur, divine.** Be careful with your recursion, though!
+
 ::
 
 ### A Tail Recursive Solution
 
-[Please remember to solve your original problem!](https://www.youtube.com/watch?v=XKu_SEDAykw)
+[Please remember to solve your original problem.](https://www.youtube.com/watch?v=XKu_SEDAykw)
 
 ```haskell
 solve2 :: (Foldable c, Integral a) => a -> c a -> a
@@ -236,6 +241,11 @@ solve2 bound divisors = iter 0 0
 With tail recursion, we effectively iterate (recursively!) through all values in the range
 and, when a value is a multiple of any of the divisors, we adjust[^1] the value of the accumulator
 that is passed forward to the next recursive call.
+
+[^1]: We adjust the value passed to the next recursive call, but we do not
+      mutate the accumulator directly in the current call! The function
+      is still pure and referentially transparent.
+
 
 ## Approach 3: Monadic State Management
 
@@ -281,7 +291,3 @@ This approach is the closest to imperative code that we can get in Haskell, synt
 However, since tail recursions are usually unrolled into loops by the compiler anyway,
 they are the preferred programming pattern in most functional programming languages.
 ::
-
-[^1]: We adjust the value passed to the next recursive call, but we do not
-      mutate the accumulator directly in the current call! The function
-      is still pure and referentially transparent.
