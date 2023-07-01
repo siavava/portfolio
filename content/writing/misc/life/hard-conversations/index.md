@@ -5,7 +5,7 @@ description:
   sometimes requires hard conversations with yourself and disappointing a person or two.
 category:
   - life
-draft: false
+draft: true
 featured: true
 imageUrl: ../cover.gif
 layout: article
