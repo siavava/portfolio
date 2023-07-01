@@ -113,7 +113,7 @@ onMounted(() => {
   display: flex
   margin: 0 auto
   flex-direction: column
-  min-height: 100vh
+  min-height: 100svh
   gap: 10px
   position: relative
 
