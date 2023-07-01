@@ -31,7 +31,7 @@ I also have interests and experiences in
 [database systems][database-systems], [high-performance computing][hpc],
 and [functional programming][functional-prg].
 
-I'm a hobbyist [visual designer][design].
+I'm also a hobbyist [designer][design].
 
 I am currently a student at [Dartmouth College][dartmouth].
 In the past, I have been at [Y Combinator][yc], [Carnegie Mellon University][cmu],
@@ -238,4 +238,4 @@ style: "justify-content: right; width: 70%; "
 [database-systems]:         https://hevodata.com/learn/database-systems/
 [hpc]:                      https://www.netapp.com/data-storage/high-performance-computing/what-is-hpc/
 [functional-prg]:           https://spectrum.ieee.org/functional-programming
-[design]:                   https://www.designcouncil.org.uk/our-work/championing-the-value-of-design/design-made-it-possible/
+[design]:             https://www.designcouncil.org.uk/our-work/what-is-design/
