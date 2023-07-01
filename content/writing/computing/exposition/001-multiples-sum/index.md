@@ -87,7 +87,7 @@ solve1 bound divisors =
 
 [Haskell](https://www.haskell.org/) is a lazy language.
 Instead of explicitly generating the entire list of values,
-it keeps the combined specification at hand
+it keeps the specification at hand
 and generates the values on-demand,
 then discards each value as soon as it is no longer needed and
 it is efficient to discard it.
