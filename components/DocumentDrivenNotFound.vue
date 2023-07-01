@@ -83,8 +83,10 @@ section.not-found
         content: "❯"
         margin-right: 0.5rem
 
-      &:hover > span
-        color: colors.color(primary-highlight)
-        border-bottom: 1px solid
+      &:hover
+        cursor: pointer
+        & > span
+          color: colors.color(primary-highlight)
+          border-bottom: 1px solid
 
 </style>
