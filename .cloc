@@ -1,20 +1,18 @@
-     100 files     200 files     202 text files.
-classified 199 filesDuplicate file check 199 files (181 known unique)Unique:      100 files                                               194 unique files.                              
-Counting:  100     138 files ignored.
-
-github.com/AlDanial/cloc v 1.94  T=0.07 s (2823.0 files/s, 189607.1 lines/s)
+github.com/AlDanial/cloc v 1.94  T=0.35 s (590.1 files/s, 53367.8 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Vuejs Component                 99            954            500           5355
-Markdown                        56            579              0           2228
-SCSS                             4            128            101            633
-Text                             9            149              0            590
-Sass                             5            185             50            553
-TypeScript                      15            112            123            525
-SVG                              2              2              0            140
-YAML                             3             16             33             50
-JSON                             1              0              0             24
+Vuejs Component                107           1015            390           7618
+SVG                              8              3              1           2792
+Markdown                        54            575              0           2156
+SCSS                             4            206            199            992
+TypeScript                       9             97            151            728
+Text                            10            150              0            611
+Sass                             5            175             60            563
+JSON                             4              0              0            107
+YAML                             4             16             41             61
+TOML                             1              1              0             10
+XML                              1              0              0              2
 -------------------------------------------------------------------------------
-SUM:                           194           2125            807          10098
+SUM:                           207           2238            842          15640
 -------------------------------------------------------------------------------
