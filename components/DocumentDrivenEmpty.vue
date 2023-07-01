@@ -56,10 +56,10 @@ section.not-found
     justify-content: center
     padding: 20px
     gap: 20px
+    font-size: 1rem
 
     p
-      font-size: typography.font(xs)
-      font-weight: 300
+      font-weight: 500
       margin: 0
       font-family: typography.font(sans-serif), sans-serif
       color: colors.color(primary-highlight)
@@ -83,8 +83,10 @@ section.not-found
         content: "❯"
         margin-right: 0.5rem
 
-      &:hover > span
-        color: colors.color(primary-highlight)
-        border-bottom: 1px solid
+      &:hover
+        cursor: pointer
+        & > span
+          color: colors.color(primary-highlight)
+          border-bottom: 1px solid
 
 </style>
