@@ -59,7 +59,10 @@
             <p class="range">
               {{ job.range }}
             </p>
-            <ContentDoc :value="job" />
+            <ContentDoc
+              class="jobs-doc"
+              :value="job"
+            />
           </StyledTabPanel>
         </TransitionGroup>
       </StyledTabPanels>
@@ -157,7 +160,9 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
-// @use "~/styles/default"
-
+<style lang="sass">
+@use "~/styles/typography"
+.jobs-doc
+  .prose-table
+    font-size: typography.font-size(xs) !important
 </style>

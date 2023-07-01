@@ -15,7 +15,7 @@
   width: fit-content
   border: 1px solid colors.color("lightest-background")
   line-height: 2
-  font-size: typography.font-size(xs)
+  font-size: 1rem
 
   th
     border-bottom: 1px solid colors.color("lightest-background")
@@ -23,12 +23,11 @@
     color: colors.color("primary-highlight")
     background-color: colors.color("light-background")
     padding: 10px
-    text-align: right
+    text-align: center
 
   td
     border-bottom: 1px solid colors.color("lightest-background")
     padding: 10px
-
     border-right: 1px solid colors.color("lightest-background")
 
   tr
