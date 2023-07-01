@@ -26,6 +26,9 @@
 <script lang="ts">
 export default {
   name: "403",
+  setup() {
+    setPageLayout("article");
+  },
 };
 </script>
 
@@ -40,6 +43,7 @@ section.not-found
   flex-direction: column
   margin: auto
   width: min(90vw, 1200px)
+  min-height: calc(100vh - 10px)
   gap: 100px
   padding: 10px
 

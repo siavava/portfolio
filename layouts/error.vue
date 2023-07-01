@@ -1,16 +1,7 @@
 <template>
   <div id="root">
     <AppHeader />
-    <!-- <div class="navy"> -->
-    <!-- header in body == not sticky -->
-    <main>
-      <!-- <body> -->
-      <!-- <div class="container"> -->
-      <slot id="content" />
-      <!-- </div> -->
-      <!-- <slot id="content"/> -->
-    </main>
-    <!-- </div> -->
+    <slot id="content" />
     <AppFooter
       class="default-footer"
       identifier="in-page"
@@ -34,18 +25,22 @@ onMounted(() => {
 
 </script>
 
-<style lang="sass">
-//@use "~/styles/default"
+<style lang="sass" scoped>
+@use "~/styles/default"
 @use "~/styles/colors"
+.container
+  // max-width: 1000px
+  margin: 0 auto
 
 #root
   min-height: 100vh
   display: flex
   flex-direction: column
 
-main
-  margin: auto
-  max-width: 100vw
-  padding: 0 clamp(0.5em, 3vw, 3em)
+.default-footer
+  margin-top: 0
 
+body
+  z-index: 2 !important
+  background: colors.color("background")
 </style>

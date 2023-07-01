@@ -53,15 +53,19 @@ html
 /* Scrollbar Styles */
 html 
   scrollbar-width: thin
-  scrollbar-color: colors.color("dark-foreground") colors.color("background")
+  scrollbar-color: colors.color(foreground) // colors.color(")
 
 ::-webkit-scrollbar-track 
-  background: colors.color("background")
+  background: colors.color(light-background)
 
 ::-webkit-scrollbar-thumb 
-  background-color: colors.color("lightest-background")
-  border: 3px solid colors.color("background")
+  background: colors.color(foreground)
+  border: 3px solid
   border-radius: 10px
+
+  &:hover
+    background: colors.color(primary-highlight)
+    border: 3px solid
 
 body
   
@@ -85,26 +89,6 @@ body
   @media (max-width: 480px) 
     font-size: typography.font-size("l")
   
-  // &.blur 
-  //   overflow: hidden
-  //   header 
-  //     background-color: transparent
-    
-  //   #content > * 
-  //     filter: blur(5px) brightness(0.7)
-  //     transition: geometry.var("default-transition")
-  //     pointer-events: none
-  //     user-select: none
-    
-// #root
-//   display: flex
-//   flex-direction: column
-//   // min-height: 100vh
-//   // // height: 100%
-//   height: max(100vh, 100%)
-
-//   .default-footer
-//     align-self: flex-end
 
 :root
   min-height: 100vh
@@ -114,8 +98,9 @@ body
   //grid-template-columns: 100%
 
 main
-  margin: 0 auto
-  height: max-content
+  margin: auto
+  //height: auto
+  max-width: 100vw
   padding: 0 clamp(0.5em, 3vw, 3em)
   
   &.fill-height 
