@@ -56,9 +56,9 @@ section.not-found
     justify-content: center
     padding: 20px
     gap: 20px
+    font-size: 1rem
 
     p
-      font-size: 1.2rem
       font-weight: 500
       margin: 0
       font-family: typography.font(sans-serif), sans-serif

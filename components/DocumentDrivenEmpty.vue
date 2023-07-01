@@ -25,10 +25,7 @@
 
 <script lang="ts">
 export default {
-  name: "403",
-  setup() {
-    setPageLayout("article");
-  },
+  name: "404",
 };
 </script>
 
@@ -43,7 +40,6 @@ section.not-found
   flex-direction: column
   margin: auto
   width: min(90vw, 1200px)
-  min-height: calc(100vh - 10px)
   gap: 100px
   padding: 10px
 
@@ -62,8 +58,8 @@ section.not-found
     gap: 20px
 
     p
-      font-size: 1.2rem
-      font-weight: 500
+      font-size: typography.font(xs)
+      font-weight: 300
       margin: 0
       font-family: typography.font(sans-serif), sans-serif
       color: colors.color(primary-highlight)
