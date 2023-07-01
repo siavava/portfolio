@@ -3,6 +3,7 @@ title: Efficient Multiple Discovery
 description: Given an arbitrary set of numbers, how do we most-efficiently find their smallest common multiple?
 category:
   - exposition
+  - featured
 draft: false
 featured: true
 imageUrl: ../cover.gif
