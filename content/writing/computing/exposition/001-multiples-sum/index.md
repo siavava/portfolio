@@ -177,7 +177,7 @@ This is the main idea behind [tail recursion](https://en.wikipedia.org/wiki/Tail
 &mdash; eventually, the terminating call (i.e. _base case_) returns the solution back to the original caller.
 
 ```python
-def factorial(n, acc=1):
+def factorial(n: int, acc=1):
   if n == 0:
     return acc
   return factorial(n - 1, acc * n)
@@ -258,7 +258,6 @@ Albeit without some of the safety guarantees that functional
 programming gives us when our functions are pure.
 
 ```haskell
-solve3 :: (Foldable c, Integral a) => a -> c a -> a
 solve3 :: (Foldable c, Integral a) => a -> c a -> a
 solve3 bound divisors =
   runST $ newSTRef 0 >>= compute
