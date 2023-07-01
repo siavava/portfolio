@@ -12,12 +12,26 @@
 
     <div class="not-found-instructions">
       <p> Nice to meet you tho!</p>
-      <NuxtLink
-        class="error-page-button"
-        @click="$router.back()"
-      >
-        <span>cd ..</span>
-      </NuxtLink>
+      <div class="buttons-container">
+        <NuxtLink
+          class="error-page-button"
+          @click="$router.back()"
+        >
+          <span>cd -</span>
+        </NuxtLink>
+        <NuxtLink
+          class="error-page-button"
+          to="/"
+        >
+          <span>cd /</span>
+        </NuxtLink>
+        <NuxtLink
+          class="error-page-button"
+          to="/writing"
+        >
+          <span>cd ..</span>
+        </NuxtLink>
+      </div>
     </div>
     <!-- </div> -->
   </section>
@@ -67,13 +81,13 @@ section.not-found
       margin: auto
       margin-left: 0
 
+    .buttons-container
+      display: inline-flex
+      justify-content: space-between
+
     .error-page-button
       color: rgba(colors.color(primary-highlight), 0.8)
       transition: all 0.2s ease-in-out
-      display: table
-      display: table
-      margin: auto
-      margin-left: 0
 
       & > span
         transition: all 0.2s ease-in-out

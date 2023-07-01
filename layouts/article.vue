@@ -52,12 +52,10 @@ const { toc } = useContent();
 const commentsSection = ref<HTMLElement | null>(null);
 
 // query for the imageUrl of the current page
-const { imageUrl: image } = await queryContent()
-  .where({ _path: currentPage })
-  .only(["imageUrl"])
-  .findOne();
-
-console.log(`image: ${image}`);
+// const { imageUrl: image } = await queryContent()
+//   .where({ _path: currentPage })
+//   .only(["imageUrl"])
+//   .findOne();
 
 onMounted(() => {
   // const img = useImage();
