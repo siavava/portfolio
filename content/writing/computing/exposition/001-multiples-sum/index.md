@@ -246,7 +246,6 @@ that is passed forward to the next recursive call.
       mutate the accumulator directly in the current call! The function
       is still pure and referentially transparent.
 
-
 ## Approach 3: Monadic State Management
 
 Tail recursion emulates iteration with recursion.

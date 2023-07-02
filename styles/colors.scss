@@ -1,158 +1,5 @@
 @use "sass:map";
 
-$red: #DC4D4D;
-// $red: #A80506;
-// $red: #E30707;
-$black: #040404;
-$green: #64ffda;
-
-$navy: (
-
-  "primary-highlight": #DC4D4D,
-  "primary-highlight-tint": rgba(202, 85, 85, 0.11) ,
-  "secondary-highlight": rgb(187, 255, 0),
-  
-  "background": #0a192f,
-  "dark-background": #020c1b,
-  "light-background": #112240,
-  "lightest-background": #233554,
-  "fancy-background": lighten(#0a192f, 40%),
-  "shadow": rgba(2, 12, 27, 0.7),
-
-
-  "dark-foreground": #495670,
-  "foreground": #8892b0,
-  "light-foreground": #a8b2d1,
-  "lightest-foreground": #ccd6f6,
-
-  "info-background": rgba(5, 95, 249, 0.1),
-  "info-foreground": #7aade0,
-  "success-background": rgba(6, 251, 128, 0.1),
-  "success-foreground": #CFF09E,
-  "error-background": rgba(96, 32, 32, 0.1),
-  "error-foreground": #fcb9b9,
-  "warning-background": rgba(137, 33, 30, 0.15),
-  "warning-foreground": #fd7c7c,
-  "critical-background": rgba(238, 12, 12, 0.15),
-  "critical-foreground": #f42e4f,
-);
-
-$new: (
-
-  // "primary-highlight": #DC4D4D,
-  "primary-highlight":#ba6477,
-  "primary-highlight-tint": rgba(202, 85, 85, 0.11) ,
-  "secondary-highlight": rgb(187, 255, 0),
-  
-  // "background": #0a192f,
-  // set background to charcoal-black
-  "background": #121722,
-  "dark-background": #020c1b,
-  "light-background": #1e2532,
-  "lightest-background": #233554,
-  "fancy-background": lighten(#0a192f, 40%),
-  "shadow": rgba(2, 12, 27, 0.7),
-
-
-  "dark-foreground": #495670,
-  "foreground": #98a4c7,
-  "light-foreground": #a8b2d1,
-  "lightest-foreground": #b0b8d5,
-
-  "info-background": rgba(5, 95, 249, 0.1),
-  "info-foreground": #7aade0,
-  "success-background": rgba(6, 251, 128, 0.1),
-  "success-foreground": #CFF09E,
-  "error-background": rgba(96, 32, 32, 0.1),
-  "error-foreground": #fcb9b9,
-  "warning-background": rgba(137, 33, 30, 0.15),
-  "warning-foreground": #fd7c7c,
-  "critical-background": rgba(238, 12, 12, 0.15),
-  "critical-foreground": #f42e4f,
-);
-
-$neon: (
-  "secondary-highlight": yellow,
-  
-  "primary-highlight": $green,
-  "primary-highlight-tint": rgba(100, 255, 218, 0.1),
-  
-  "background": #0a192f,
-  "dark-background": #020c1b,
-  "light-background": #112240,
-  "lightest-background": #233554,
-  "shadow": rgba(2, 12, 27, 0.7),
-
-  "dark-foreground": #495670,
-  "foreground": #8892b0,
-  "light-foreground": #a8b2d1,
-  "lightest-foreground": #ccd6f6,
-
-);
-
-// $theme: null;
-
-// .neon {
-//   $theme: $neon !global;
-//   // @debug map.get($theme, "primary-highlight");
-// }
-
-// .navy {
-//   $theme: $navy !global;
-//   // @debug map.get($theme, "primary-highlight");
-// }
-
-$theme: $navy;
-
-
-$palette2: (
-  "teal": #16f1d1,
-  "purple": #a374ff,
-  "khaki": #ffd074,
-  "white": #ecf7fa,
-  "black": #050505,
-  "ochre": #ff4e20,
-  "pastel": #fdfd96,
-
-
-  // "primary-highlight": #DC4D4D,
-  "primary-highlight": #d55959,
-  // "primary-highlight": #ff4e20,
-
-
-  "primary-highlight-tint": rgba(202, 85, 85, 0.11) ,
-  // "secondary-highlight": rgb(187, 255, 0),
-  // "secondary-highlight": #fdfd96,
-  "secondary-highlight": #ca8282,
-  // "secondary-highlight": #a374ff,
-  
-  "background": #18181b,
-  // "background": #050505,
-  "dark-background": #000000,
-  "light-background": #2a2525,
-  "lightest-background": #906969,
-  "fancy-background": lighten(#0a192f, 40%),
-  "shadow": rgba(27, 2, 2, 0.7),
-
-
-  "dark-foreground": #9f8585,
-  "foreground": #b9a0a0,
-  "light-foreground": #e9c9c9,
-  "lightest-foreground": #f8d0d0,
-
-  "info-background": rgba(5, 95, 249, 0.1),
-  "info-foreground": #7aade0,
-  "success-background": rgba(6, 251, 128, 0.1),
-  "success-foreground": #CFF09E,
-  "error-background": rgba(96, 32, 32, 0.1),
-  "error-foreground": #fcb9b9,
-  "warning-background": rgba(137, 33, 30, 0.15),
-  "warning-foreground": #fd7c7c,
-  "critical-background": rgba(238, 12, 12, 0.15),
-  "critical-foreground": #f42e4f,
-);
-
-
 $palette: (
   "teal": #00ffd9,
   "purple": #a374ff,
@@ -163,35 +10,14 @@ $palette: (
   "pastel": #fdfd96,
 
 
-  // "primary-highlight": #DC4D4D,
-  // "primary-highlight": #1db954,
-  // "primary-highlight": #1e52f3,
-  // "primary-highlight": #55719C,
   "primary-highlight": #BD998F,
-  // "primary-highlight": #EE765C,
 
   "one": #EE765C,
   "two": #3A594D,
   "three": #BD8FC0,
 
-  // "secondary-highlight": #1e52f3,
   "secondary-highlight": #BD998F,
-  // "secondary-highlight": #8982ee,
-  // "secondary-highlight": lighten(#1e52f3, 15%),
-  // "primary-highlight": #ff4e20,
-
-
-  // "primary-highlight-tint": rgba(85, 202, 122, 0.11) ,
-  // "secondary-highlight": rgb(187, 255, 0),
-  // "secondary-highlight": #fdfd96,
-  // "secondary-highlight": #a374ff,
-  
-  // "background": #121212,
   "background": #000000,
-  // "background": #050505,
-  // "background": #010101,
-  // "background": #252525,
-  // "background": #050505,
   "dark-background": #000000,
   "light-background": #100f0f,
   "lightest-background": #1e1e1e,
@@ -200,20 +26,9 @@ $palette: (
 
 
   "dark-foreground": #434343,
-  // "foreground": #a9a9a9,
-  // "foreground": #c1bed0,
-  // "foreground": #BD8FC0,
-  // "foreground": #99a2b5,
   "foreground": #a0a0a0,
-  // "foreground": #bbbbbb,
-  // "light-foreground": #d9aedc,
   "light-foreground": #c2c6d1,
-
-  // "lightest-foreground": #eecaf0,
   "lightest-foreground": #dce4f6,
-  // "foreground": #999999,
-  // "light-foreground": #c1bed0,
-  // "lightest-foreground": #ffffff,
 
   "info-background": rgba(5, 95, 249, 0.1),
   "info-foreground": #7aade0,

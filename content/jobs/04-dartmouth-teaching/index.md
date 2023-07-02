@@ -14,8 +14,8 @@ navigation: false
 | :--- | ---: | :--- |
 | [Artificial Intelligence][cs76] | Fall '23 | [Devin Balkcom][devin-balkcom] |
 | [Database Systems][cs61] | Summer '23 | [Adam Goldstein][adam-goldstein] |
-| [Problem Solving with OOP][cs10] | Spring '23 <br/> Winter '23 | [Devin Balkcom][devin-balkcom] <br/> [Timothy Pierson][timothy-pierson] |
-| [Software Design and Implementation][cs50] |  Spring '22 <br/> Winter '22 <br/> Fall '21 | [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
+| [Object-Oriented Programming][cs10] | Spring '23 <br/> Winter '23 | [Devin Balkcom][devin-balkcom] <br/> [Timothy Pierson][timothy-pierson] |
+| [Software Design][cs50] |  Spring '22 <br/> Winter '22 <br/> Fall '21 | [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
 ::
 
 [devin-balkcom]: https://web.cs.dartmouth.edu/people/devin-j-balkcom

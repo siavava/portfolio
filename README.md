@@ -4,7 +4,7 @@ Built with [Nuxt 3](https://nuxt.com/v3),
 [Sass](https://sass-lang.com), and [TypeScript](https://www.typescriptlang.org),
 with a subtle hint of [MongoDB](https://www.mongodb.com).
 
-### Deploy Status:
+## Deploy Status
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/e0f5d7d0-9d2a-45ae-8962-6e3af2ec4cf3/deploy-status)](https://app.netlify.com/sites/amittai/deploys)
 
@@ -29,7 +29,6 @@ with a subtle hint of [MongoDB](https://www.mongodb.com).
   > Static site hosting.
 - [Firebase](https://firebase.google.com)
   > Authentication & user management.
-
 
 ---
 
