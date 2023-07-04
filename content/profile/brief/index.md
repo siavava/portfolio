@@ -3,8 +3,6 @@ category: 'profile-brief'
 navigation: false
 ---
 
-
-
 # Hello There
 
 Introducing myself is hard; I never know what to say.

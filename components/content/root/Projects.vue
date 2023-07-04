@@ -100,6 +100,15 @@
     >
       Show {{ showMore ? 'Less' : 'More' }}
     </StyledButton>
+    <NuxtImg
+      src="/404.gif"
+      alt="404"
+      width="0"
+      height="0"
+      class="not-found-image"
+      loading="lazy"
+      format="avif,webp"
+    />
   </StyledArchivedProjectsSection>
 </template>
 
@@ -175,6 +184,11 @@ export default {
 <style lang="sass">
 @use "~/styles/typography"
 @use "~/styles/colors"
+
+.not-found-image
+  width: 0
+  height: 0
+  display: none
 
 .list-enter-active, .list-leave-active
   transition: all 2s ease

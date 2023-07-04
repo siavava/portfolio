@@ -7,6 +7,7 @@
       :width="width"
       :height="height"
       loading="lazy"
+      format="avif,webp"
     />
     <caption
       v-if="alt"
