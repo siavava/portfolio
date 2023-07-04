@@ -24,4 +24,4 @@ navigation: false
 [robotics]: https://en.wikipedia.org/wiki/Robotics
 [waterline-detection]: https://en.wikipedia.org/wiki/Waterline
 
-[project-proposal]: /rlab-project-proposal.pdf
+[project-proposal]: https://github.com/siavava/waterline-detection/blob/main/waterline-detection/00-proposal/main.pdf
