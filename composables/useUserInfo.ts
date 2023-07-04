@@ -1,8 +1,8 @@
-import { getAuth } from "firebase/auth";
+// import { getAuth } from "firebase/auth";
 import { defineStore } from "pinia";
-import {
-  getFirestore, collection, addDoc, getDocs, query, where, orderBy, onSnapshot, updateDoc, arrayUnion, arrayRemove,
-} from "firebase/firestore";
+// import {
+//   getFirestore, collection, addDoc, getDocs, query, where, orderBy, onSnapshot, updateDoc, arrayUnion, arrayRemove,
+// } from "firebase/firestore";
 import { createAvatar } from "@dicebear/core";
 import { lorelei } from "@dicebear/collection";
 
@@ -52,6 +52,9 @@ const useUserInfo = defineStore("userInfo", {
   actions: {
     async init() {
       const { path } = useRoute();
+      // dynamic import getAuth
+      const { getAuth } = await import("firebase/auth");
+
       const { currentUser: newUser } = getAuth();
       // const auth = getAuth();
       this.active = !!newUser;
@@ -67,6 +70,9 @@ const useUserInfo = defineStore("userInfo", {
       }
     },
     async update() {
+      // dynamic imports
+      const { getAuth } = await import("firebase/auth");
+
       const { currentUser: newUser } = getAuth();
       const auth = getAuth();
       const { path } = useRoute();
@@ -95,6 +101,11 @@ const useUserInfo = defineStore("userInfo", {
     * if not provided, uses current route.
     */
     async subscribe(_path? : string) {
+      // dynamic imports
+      const { getAuth } = await import("firebase/auth");
+      const {
+        getFirestore, collection, addDoc, getDocs, query, where, updateDoc, arrayUnion,
+      } = await import("firebase/firestore");
       const db = getFirestore();
       const { currentUser } = getAuth();
       const { path } = useTrimmedPath(_path);
@@ -139,6 +150,11 @@ const useUserInfo = defineStore("userInfo", {
      * @param comment comment to send email about
      */
     async sendEmailToSubs(comment: Comment) {
+      // dynamic imports
+      const { getAuth } = await import("firebase/auth");
+      const {
+        getFirestore, collection, addDoc, getDocs, query, where,
+      } = await import("firebase/firestore");
       const db = getFirestore();
       const { currentUser } = getAuth();
 
@@ -194,6 +210,11 @@ const useUserInfo = defineStore("userInfo", {
      * if not provided, uses current route.
      */
     async unsubscribe(_path? : string) {
+      // dynamic imports
+      const { getAuth } = await import("firebase/auth");
+      const {
+        getFirestore, collection, getDocs, query, where, updateDoc, arrayRemove,
+      } = await import("firebase/firestore");
       const db = getFirestore();
 
       const { path } = useTrimmedPath(_path);
@@ -225,6 +246,11 @@ const useUserInfo = defineStore("userInfo", {
      *
      */
     async updateSubscriptions() {
+      // dynamic imports
+      const { getAuth } = await import("firebase/auth");
+      const {
+        getFirestore, collection, getDocs, query, where, onSnapshot,
+      } = await import("firebase/firestore");
       if (!this.active) return;
       const db = getFirestore();
       const { currentUser } = getAuth();
@@ -291,6 +317,11 @@ const useUserInfo = defineStore("userInfo", {
      * @returns the (possibly new) avatar of the current user
      */
     async getUserAvatar() {
+      // dynamic imports
+      const { getAuth } = await import("firebase/auth");
+      const {
+        getFirestore, collection, getDocs, query, where, addDoc,
+      } = await import("firebase/firestore");
       const db = getFirestore();
       const { currentUser } = getAuth();
 
@@ -337,6 +368,10 @@ const useUserInfo = defineStore("userInfo", {
      * Returns empty array if no comments or an error occurs.
      */
     async getCommentsByRoute(_path?: string) {
+      // dynamic imports
+      const {
+        getFirestore, collection, getDocs, query, where, orderBy, onSnapshot,
+      } = await import("firebase/firestore");
       const db = getFirestore();
       const { path } = useTrimmedPath(_path);
 
@@ -390,6 +425,9 @@ const useUserInfo = defineStore("userInfo", {
      * @returns true if comment was sent successfully, false otherwise
      */
     async sendComment(comment: Comment) {
+      // dynamic imports
+      const { getFirestore, collection, addDoc } = await import("firebase/firestore");
+
       const db = getFirestore();
 
       comment.path = useTrimmedPath(comment.path).path;
