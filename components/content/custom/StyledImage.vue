@@ -4,10 +4,6 @@
       <NuxtImg
         src="profile/head-shot.jpg"
         class="img"
-        width="450"
-        height="800"
-        quality="100"
-        formats="avif,webp"
         alt="head shot"
         loading="lazy"
       />
