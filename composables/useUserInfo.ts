@@ -27,20 +27,24 @@ const useUserInfo = defineStore("userInfo", {
   }),
 
   getters: {
-    getSubscriptionPaths() {
-      return [...this.subscriptions];
+    getSubscriptionPaths(): Array<string> {
+      // return [...this.subscriptions];
+      return Array.from(this.subscriptions);
     },
-    getComments() {
+    getComments(): Array<Comment> {
       return this.currentRouteComments;
     },
-    getUserName() {
+    getUserName(): string {
       return this.userName;
     },
-    getAvatar() {
+    getAvatar(): string {
       return this.avatar;
     },
-    getSubscriptionCount() {
+    getSubscriptionCount(): number {
       return this.subscriptions.size;
+    },
+    getCommentCount(): number {
+      return this.currentRouteComments.length;
     },
 
   },

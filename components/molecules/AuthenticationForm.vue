@@ -1,6 +1,6 @@
 <template>
   <div
-    class="auth-form-container"
+    class="auth-form-container auth-modal"
     @click.self="closePopUp"
   >
     <div class="auth-form">

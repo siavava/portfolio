@@ -7,9 +7,10 @@
     @click="click"
   >
     <svg
-      class="hamburger"
+      class="menu-icon"
       viewBox="0 0 100 100"
-      xmlns="http://www.w3.org/2000/svg" version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
     >
       <rect class="line top" />
 
@@ -48,6 +49,10 @@ export default {
   z-index: 25
   color: colors.color("primary-highlight")
 
+  .menu-icon
+    width: 100%
+    height: 100%
+
   .line
     height: 8px
     fill: currentcolor
@@ -62,16 +67,7 @@ export default {
       x: 40%
       y: 60%
 
-    -webkit-transition: 0.1s
-    -moz-transition: 0.1s
-    -ms-transition: 0.1s
-    -o-transition: 0.1s
     transition: 0.1s
-
-    -webkit-transform-origin: center
-    -moz-transform-origin: center
-    -ms-transform-origin: center
-    -o-transform-origin: center
     transform-origin: center
 
 .menu-button
@@ -92,17 +88,9 @@ export default {
       y: 47%
 
     .top
-      -webkit-transform: rotate(45deg)
-      -moz-transform: rotate(45deg)
-      -ms-transform: rotate(45deg)
-      -o-transform: rotate(45deg)
       transform: rotate(45deg)
 
     .bottom
-      -webkit-transform: rotate(-45deg)
-      -moz-transform: rotate(-45deg)
-      -ms-transform: rotate(-45deg)
-      -o-transform: rotate(-45deg)
       transform: rotate(-45deg)
 
 </style>

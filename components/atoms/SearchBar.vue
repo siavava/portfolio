@@ -97,7 +97,7 @@ export default {
 
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @use "~/styles/colors"
 @use "~/styles/typography"
 

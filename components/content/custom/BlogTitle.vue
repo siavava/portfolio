@@ -9,7 +9,6 @@
               :key="_category"
               class="category-label"
               purpose="button"
-              @click="showCategory(_category)"
             >
               {{ _category }}
             </li>
@@ -21,49 +20,43 @@
         <div class="title-description">
           {{ description }}
         </div>
-        <Date :date="date" />
       </div>
-      <div class="blog-actions">
-        <button class="blog-action left">
-          <!-- <Icon
-            type="like"
-            class="blog-action-icon"
-            :active="false"
-          /> -->
-        </button>
-        <button class="blog-action left">
-          <Icon
-            type="comment"
-            :active="false"
-            class="blog-action-icon"
-            @click="showComments"
-          />
-          <span>
-            {{ userInfo.getComments.length }}
-          </span>
-        </button>
-        <button class="blog-action right">
-          <BookMarkIcon
-            :active="userInfo.isSubscribed()"
-            class="blog-action-icon"
-            @click="() => userInfo.toggleSubscription()"
-          />
-        </button>
+      <div class="blog-actions-and-date">
+        <div class="blog-actions">
+          <button class="blog-action left">
+            <Icon
+              type="comment"
+              :active="false"
+              class="blog-action-icon"
+              @click="showComments"
+            />
+            <span class="blog-action-count">
+              {{ userInfo.getCommentCount }}
+            </span>
+          </button>
+          <button class="blog-action">
+            <BookMarkIcon
+              :active="userInfo.isSubscribed()"
+              class="blog-action-icon"
+              @click="toggleSubscription"
+            />
+          </button>
+        </div>
+        <Date
+          :date="date"
+          class="blog-action-date"
+          left
+        />
       </div>
       <figure
         v-if="image"
         class="title-image-wrapper"
       >
         <NuxtImg
-          v-if="image.endsWith('.gif')"
-          class="title-image gif"
-          :src="`${path}/${image}`"
-          alt="Title Image"
-        />
-
-        <NuxtImg
-          v-else
-          class="title-image"
+          :class="{
+            'title-image': true,
+            'gif': image.endsWith('.gif'),
+          }"
           :src="`${path}/${image}`"
           alt="Title Image"
         />
@@ -101,6 +94,16 @@ const {
     };
   });
 
+const toggleSubscription = () => {
+  // if user logged in, toggle subscription
+  if (userInfo.active) userInfo.toggleSubscription();
+  // otherwise, show auth modal
+  else {
+    const authModal = document.getElementsByClassName("auth-modal")[0];
+    authModal?.classList.remove("hidden");
+  }
+};
+
 const showComments = () => {
   const commentsContainer = document.getElementsByClassName("comments-section-wrapper")[0];
   if (commentsContainer) {
@@ -108,9 +111,6 @@ const showComments = () => {
   }
 };
 
-function showCategory(category) {
-  return category !== "featured";
-}
 </script>
 
 <script lang="ts">
@@ -131,7 +131,6 @@ export default {
 
 .title-container
   width: 100%
-  //height: fit-content
   align-content: center
   padding: 0.5rem 0 2rem 0
 
@@ -159,7 +158,6 @@ export default {
         margin: 0.5rem 0 0 0
 
         .category-icon
-          //width: fit-content
           height: 70%
           margin-right: 1rem
           vertical-align: middle
@@ -217,7 +215,9 @@ export default {
     @include mixins.box-shadow
     border-radius: geometry.var("border-radius")
     margin-bottom: 1rem
-    max-width: max(500px, 50%)
+
+    &.gif
+      width: clamp(500px, 50%, 1000px)
 
   .title-image-caption
     margin-top: 0.5rem
@@ -225,44 +225,50 @@ export default {
     color: colors.color("secondary-highlight")
     text-align: center
 
-  .blog-actions
+  .blog-actions-and-date
     width: 100%
-    height: 50px
-    border-top: 0.5px solid colors.color("lightest-background")
-    border-bottom: 0.5px solid colors.color("lightest-background")
+    height: 30px
     display: flex
     flex-direction: row
-    gap: 20px
-    justify-content: flex-start
-    padding: 10px 1em
-    margin: 2em 0
-    pointer-events: all
+    justify-content: space-between
+    margin: 1rem 0
 
-    .blog-action
-      height: 100%
+    .blog-actions
+      width: 100px
+      height: 30px
+      display: inline-flex
+      gap: 20px
       pointer-events: all
-      transition: geometry.var("default-transition")
-      display: flex
-      gap: 5px
-      margin: 0
-      padding: 0
 
-      &:hover
-        cursor: pointer
-        color: colors.color("primary-highlight")
-
-      & > span
-        font-family: typography.font("sans-serif")
-        font-size: typography.font-size("l")
-        line-height: 1.8
+      .blog-action
         height: 100%
+        pointer-events: all
+        display: inline-flex
+        gap: 5px
+        align-items: center
 
-      &.right
-        margin-left: auto
+        &:not(:last-child)::after
+          content: "|"
+          color: colors.color(dark-foreground)
+          margin: 0 0 0 0.5rem
 
-      .blog-action-icon
-        height: 100% !important
-        width: 30px !important
-        aspect-ratio: 1/1 !important
+        &:hover
+          cursor: pointer
+          color: colors.color("primary-highlight")
+
+        .blog-action-count
+          height: 100%
+          padding-left: 0.3rem
+          font-family: typography.font(sans-serif)
+          font-size: typography.font-size(xs)
+          font-weight: 600
+
+          // align centrally
+          display: flex
+          align-items: center
+
+    //.blog-action-date
+      //height: auto
+      //margin-right: 100px
 
 </style>

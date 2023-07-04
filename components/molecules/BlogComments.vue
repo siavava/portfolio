@@ -87,7 +87,9 @@
               class="blog-action"
               @click="() => userInfo.toggleSubscription()"
             />
-            <NuxtLink to="/writing">
+            <NuxtLink
+              to="/writing"
+            >
               <ListIcon class="blog-action" />
             </NuxtLink>
 
@@ -262,7 +264,6 @@ export default {
     },
 
     signIn() {
-      // first, hide comments popup
       const commentsElement = document.getElementsByClassName("comments-section-wrapper")[0];
       commentsElement.classList.add("hidden");
 
@@ -319,15 +320,16 @@ export default {
   position: fixed
   top: 0
   right: 0
-  z-index: 1
   height: 100svh
   z-index: 100
   overflow-y: scroll
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7)
-  width: 614px
+  width: 514px
 
   background: rgba(colors.color(light-background), 0.95)
   border: 1px solid colors.color(lightest-background)
+
+  transition: all 1s
 
   @media only screen and (max-width: 960px)
     width: 100vw
@@ -435,10 +437,16 @@ section.comments
   position: relative
   padding: 20px 0
 
+  // center elements vertically
+  align-items: center
+
   .blog-action
     height: 30px
     width: 40px
     aspect-ratio: 1/1
+
+    &:hover
+      cursor: pointer
 
   .respond-button
     // align self to right of parent
