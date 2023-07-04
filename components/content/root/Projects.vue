@@ -105,11 +105,8 @@
     <NuxtImg
       src="/404.gif"
       alt="404"
-      width="0"
-      height="0"
       class="not-found-image"
       loading="lazy"
-      format="avif,webp"
     />
   </StyledArchivedProjectsSection>
 </template>
