@@ -100,6 +100,8 @@
     >
       Show {{ showMore ? 'Less' : 'More' }}
     </StyledButton>
+
+    <!-- include error image here so it is processed by nuxt-img -->
     <NuxtImg
       src="/404.gif"
       alt="404"
