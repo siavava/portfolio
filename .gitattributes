@@ -1,2 +1,6 @@
+*.md   linguist-detectable=true
+*.md   linguist-language=Markdown
 *.scss linguist-detectable=true
 *.scss linguist-language=sass
+*.yml linguist-detectable=true
+*.yml linguist-language=yaml
