@@ -1,4 +1,4 @@
 *.md   linguist-detectable=true
 *.md   linguist-language=Markdown
 *.scss linguist-detectable=true
-*.scss linguist-language=Sass
+*.scss linguist-language=sass
