@@ -70,6 +70,10 @@ export default {
     height: 1.5rem
     border-radius: 5px
     padding: 5px
+    font-size: typography.font-size(xxs)
+
+    @media (max-width: 200px)
+      display: none
 
     &:hover
       cursor: pointer

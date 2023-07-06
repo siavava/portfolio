@@ -83,12 +83,16 @@ export default {
 @use "~/styles/geometry"
 
 .blog-list-container
-  width: min(100svw, 640px)
-  margin: 0 auto
+  width: min(100%, 640px)
   line-height: 3
   font-size: typography.font-size(m)
   color: colors.color(lightest-foreground)
   transition: all 50ms ease-in-out
+  padding: 0 20px
+  margin: 0 auto
+
+  @media (max-width: 640px)
+    font-size: typography.font-size(xs)
 
   *
     transition: all 50ms ease-in-out
@@ -101,7 +105,7 @@ export default {
     font-size: 1rem
     font-weight: 500
     color: colors.color(lightest-foreground)
-    text-align: left
+    //text-align: left
 
   .blog-list-year
     display: inline-flex
@@ -111,7 +115,7 @@ export default {
 
     .blog-list-year-title
       width: 15%
-      padding-left: 0.5rem
+      //padding-left: 0.5rem
       color: colors.color(foreground)
       font-weight: 400
 
