@@ -20,7 +20,9 @@
         />
       </ul>
     </div>
-    <RouterButtons />
+    <div style="padding: 0 40px;">
+      <RouterButtons />
+    </div>
   </div>
 </template>
 

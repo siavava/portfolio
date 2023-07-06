@@ -63,14 +63,23 @@ export default {
   .blog-list-item-category
 
     // align left
-    text-align: left
+    text-align: right
     background: rgba(colors.color(three), 0.3)
     line-height: 1
     margin: auto 20px auto auto
     height: 1.5rem
+    max-width: 5ch
     border-radius: 5px
     padding: 5px
     font-size: typography.font-size(xxs)
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    position: absolute
+    top: 50%
+    right: 7%
+    transform: translateY(-50%)
+    transition: all 0.9s ease-in-out
 
     @media (max-width: 200px)
       display: none
@@ -84,6 +93,17 @@ export default {
 
     :is(.blog-list-item-title, .blog-list-item-date, .blog-list-item-category)
       color: colors.color(lightest-foreground)
+
+    .blog-list-item-category
+
+      // on hover, expand to show full category name
+      max-width: 100%
+
+  .blog-list-item-title
+    width: 80%
+    height: 2rem
+    overflow: hidden
+    text-overflow: ellipsis
 
   .blog-list-item-date
     color: colors.color(dark-foreground)
