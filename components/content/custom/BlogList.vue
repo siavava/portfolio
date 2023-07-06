@@ -83,7 +83,8 @@ export default {
 @use "~/styles/geometry"
 
 .blog-list-container
-  width: min(100%, 640px)
+  width: 100%
+  max-width: 640px //min(100%, 640px)
   line-height: 3
   font-size: typography.font-size(m)
   color: colors.color(lightest-foreground)

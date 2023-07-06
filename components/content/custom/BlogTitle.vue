@@ -4,14 +4,15 @@
       <div class="title">
         <div class="category">
           <ul class="category-labels">
-            <li
+            <NuxtLink
               v-for="_category in categories"
               :key="_category"
               class="category-label"
               purpose="button"
+              :to="categoryPaths[_category]"
             >
               {{ _category }}
-            </li>
+            </NuxtLInk>
           </ul>
         </div>
         <h1 class="title-heading">
@@ -76,6 +77,7 @@
 
 <script lang="ts" setup>
 const { path } = useTrimmedPath();
+const categoryPaths = useNavigationRoutes();
 const {
   categories, image, caption, date, title, description,
 } = await queryContent()
@@ -266,9 +268,5 @@ export default {
           // align centrally
           display: flex
           align-items: center
-
-    //.blog-action-date
-      //height: auto
-      //margin-right: 100px
 
 </style>

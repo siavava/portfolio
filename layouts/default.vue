@@ -46,6 +46,7 @@ onMounted(() => {
 main
   margin: auto
   max-width: 100vw
+  width: 100vw
   padding: 0 clamp(0.5em, 3vw, 3em)
 
 </style>
