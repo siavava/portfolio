@@ -1,38 +1,26 @@
 <template>
-  <div class="blog-hero" />
   <div class="blog-list-container">
+    <h1 class="blog-list-title">
+      {{ title || "Writing" }}
+    </h1>
+
     <div
-      v-if="userInfo.getSubscriptionCount"
-      class="blog-category"
+      v-for="year in years"
+      :key="year"
+      class="blog-list-year"
     >
-      <div class="blog-category-section-title">
-        Subscribed ({{ userInfo.getSubscriptionCount }})
+      <div class="blog-list-year-title">
+        {{ year }}
       </div>
-      <div class="horizontal-scroll">
-        <BlogCard
-          v-for="(blog, i) in blogsSubscribedTo()"
+      <ul class="blog-list">
+        <BlogListItem
+          v-for="(blog, i) in blogs.filter((blog) => new Date(blog.date).getFullYear() === year)"
           :key="i"
           :blog="blog"
         />
-      </div>
+      </ul>
     </div>
-
-    <div
-      v-for="(category, i) in categories"
-      :key="i"
-      class="blog-category"
-    >
-      <div class="blog-category-section-title">
-        {{ category }}
-      </div>
-      <div class="horizontal-scroll">
-        <BlogCard
-          v-for="blog in blogsByCategory(category)"
-          :key="blog.id"
-          :blog="blog"
-        />
-      </div>
-    </div>
+    <RouterButtons />
   </div>
 </template>
 
@@ -40,64 +28,50 @@
 export default {
   name: "BlogList",
   props: {
-    subscribedOnly: {
-      type: Boolean,
-      default: false,
+    category: {
+      type: Array<string>,
+      default: "",
+    },
+    title: {
+      type: String,
+      default: "",
     },
   },
-  async setup() {
-    const { data: blogs } = await useAsyncData(
-      "blogs-list",
-      async () => {
-        const _blogs = await queryContent()
-          .where({ draft: false })
-          .sort({ date: -1 })
-          .find();
-        return _blogs;
-      },
-    );
-    const categories = new Set<string>();
-    blogs.value.forEach((blog) => {
-      if (typeof blog.category === "string") {
-        categories.add(blog.category);
-      } else {
-        blog.category.forEach((category) => {
-          categories.add(category);
-        });
-      }
-    });
+  async setup(props) {
+    const { data: blogs } = props.category.length
+      ? await useAsyncData(
+        `blogs-list-${props.category}`,
+        async () => {
+          const _blogs = await queryContent()
+            .where({ draft: false })
+            .where({ category: { $containsAny: props.category } })
+            .sort({ date: -1 })
+            .only(["title", "date", "category", "_path"])
+            .find();
+          return _blogs;
+        },
+      )
+      : await useAsyncData(
+        "blogs-list",
+        async () => {
+          const _blogs = await queryContent()
+            .where({ draft: false })
+            .sort({ date: -1 })
+            .find();
+          return _blogs;
+        },
+      );
+
+    const _years = blogs.value.map((blog) => new Date(blog.date).getFullYear());
+    const years = [...new Set(_years)];
     return {
-      blogs, categories,
+      blogs, years,
     };
   },
   data() {
     return {
       userInfo: useUserInfo(),
     };
-  },
-  methods: {
-    toggleSubscription(blogPath: string) {
-      if (this.userInfo.isSubscribed(blogPath)) {
-        this.userInfo.unsubscribe(blogPath);
-      } else {
-        this.userInfo.subscribe(blogPath);
-      }
-    },
-
-    blogsSubscribedTo() {
-      return this.blogs
-        ? [...this.blogs].filter((blog) => this.userInfo.isSubscribed(blog._path))
-        : [];
-    },
-    blogsByCategory(category) {
-      return this.blogs.filter((blog) => {
-        if (typeof blog.category === "string") {
-          return blog.category === category;
-        } else {
-          return blog.category.includes(category);
-        }
-      });
-    },
   },
 };
 </script>
@@ -109,71 +83,39 @@ export default {
 @use "~/styles/geometry"
 
 .blog-list-container
-  display: flex-row
+  width: min(100svw, 640px)
+  margin: 0 auto
+  line-height: 3
+  font-size: typography.font-size(m)
+  color: colors.color(lightest-foreground)
+  transition: all 50ms ease-in-out
 
-.blog-click
-  pointer-events: all
-  float: right
-  z-index: 20 !important
-
-  &::hover
-    cursor: pointer !important
-
-  .expand-article-icon
-    width: 30px
-    height: 30px
-    color: colors.color("secondary-highlight")
-
-    &::hover
-      cursor: pointer
-
-.blog-category
-  display: flex-column
-  width: 100%
-  position: relative
-  border-top: 1px solid colors.color("lightest-background")
-  padding: 30px 0
-
-  .blog-category-section-title
-    color: colors.color("secondary-highlight")
-    font-weight: 500
-    width: fit-content
-    text-transform: lowercase
-
-    padding: 0 0 0 20px
-
-.scroll-button
-  position: absolute
-  width: 50px
-  height: 200px
-  top: 31%
-  background-color: rgba(colors.color("dark-background"), 0.3)
-  background-filter: blur(50px)
-  color: colors.color("secondary-highlight")
-  display: flex
-  justify-content: center
-  align-items: center
-  cursor: pointer
-  z-index: 1
-  transition: all 0.2s ease-in-out
+  *
+    transition: all 50ms ease-in-out
 
   &:hover
-    background-color: rgba(colors.color("light-background"), 0.5)
+    color: colors.color(foreground)
 
-  &.left
-    left: 0
+  .blog-list-title
+    margin-bottom: 5rem
+    font-size: 1rem
+    font-weight: 500
+    color: colors.color(lightest-foreground)
+    text-align: left
 
-  &.right
-    right: 0
+  .blog-list-year
+    display: inline-flex
+    border-top: 1px solid colors.color(lightest-background)
+    width: 100%
+    justify-content: space-between
 
-.horizontal-scroll
-  display: flex
-  flex-wrap: nowrap
-  overflow-x: scroll
-  width: 100%
-  position: relative
+    .blog-list-year-title
+      width: 15%
+      padding-left: 0.5rem
+      color: colors.color(foreground)
+      font-weight: 400
 
-  &::-webkit-scrollbar
-    display: none
+    .blog-list
+      width: 85%
 
 </style>

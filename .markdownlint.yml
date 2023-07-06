@@ -2,6 +2,9 @@
 default: true
 # Disable 'different heading style' and 'headings should be surrounded by blank lines'
 MD003: false
+
+# Disable list indent
+MD007: false
 MD022: false
 # Disable max line length
 MD013: false

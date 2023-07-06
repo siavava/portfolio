@@ -17,6 +17,9 @@ export default {
   color: colors.color("secondary-highlight")
   font-size: inherit
 
+  & > *
+    padding: 0.2em 0
+
 :not(.paragraph)
   .highlight-inner
     padding-top: 4em

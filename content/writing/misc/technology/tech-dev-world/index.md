@@ -2,8 +2,8 @@
 title: Technology in the Developing World
 description: How Technology is Changing the Developing World.
 category:
-  - technology
   - featured
+  - technology
 draft: false
 featured: true
 imageUrl: ../cover.webp

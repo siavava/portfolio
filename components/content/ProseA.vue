@@ -23,4 +23,6 @@ defineProps({
 a
   @include mixins.inline-link
 
+  padding: 0.1em 0
+
 </style>

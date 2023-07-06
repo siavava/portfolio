@@ -223,7 +223,7 @@ style: "justify-content: right; width: 70%; "
 </div>
 :: -->
 
-[nuxt]:                     https://nuxtjs.org/
+<!-- [nuxt]:                     https://nuxtjs.org/ -->
 [dartmouth]:                https://home.dartmouth.edu/
 [starehe]:                  https://www.stareheboyscentre.ac.ke/sbc/
 [yc]:                       https://www.startupschool.org/

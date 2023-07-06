@@ -134,6 +134,11 @@ section
     border-top: 1px solid colors.color("lightest-background")
     padding-top: 3em !important
     padding-bottom: 0
+
+
+    // grab the links and add some space!!
+    & > * > * > *
+      padding: 0.2em 0
       
     #footnote-label
       color: colors.color("secondary-highlight")
@@ -222,8 +227,8 @@ a
   position: relative
   transition: geometry.var("default-transition")
 
-  &:hover, &:focus 
-    color: colors.color("primary-highlight")
+  // &:hover, &:focus 
+  //   color: colors.color("primary-highlight")
   
   &.inline-link 
     @include mixins.inline-link
