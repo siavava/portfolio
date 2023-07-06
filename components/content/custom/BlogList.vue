@@ -30,7 +30,7 @@ export default {
   props: {
     category: {
       type: Array<string>,
-      default: "",
+      default: [],
     },
     title: {
       type: String,
