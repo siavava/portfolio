@@ -1,7 +1,7 @@
 <template>
   <div
-    v-if="blog"
-    className="search-item"
+    v-if="blog && show"
+    class="search-item"
   >
     <NuxtLink
       :to="hit.url"
@@ -37,7 +37,8 @@ export default {
         return _blogs;
       },
     );
-    return { blog };
+    const show = !blog.value.category.includes("meta");
+    return { blog, show };
   },
 };
 </script>

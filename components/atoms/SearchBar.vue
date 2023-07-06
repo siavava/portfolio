@@ -78,7 +78,15 @@ export default {
       const { search } = useAlgoliaSearch("netlify_e0f5d7d0-9d2a-45ae-8962-6e3af2ec4cf3_main_all");
       search({ query: this.searchTerm })
         .then((result) => {
-          result.hits = result.hits.filter((hit) => !["/", "/writing/"].includes(hit.url));
+          /**
+           * Only show content pages in serch results.
+           * NOTE on depths:
+           * 1: /
+           * 2: /writing
+           * 3: /writing/{computing, math, misc, etc}
+           * 4: /writing/{computing, math, misc, etc}/{post}
+          */
+          result.hits = result.hits.filter((hit) => hit.urlDepth === 4);
           this.result = result;
           const _searchResults = this.$refs.searchResults as HTMLElement;
           const _searchResultsBackground = this.$refs.searchResultsBackground as HTMLElement;
