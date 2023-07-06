@@ -84,7 +84,7 @@ export default {
 
 .blog-list-container
   width: 100%
-  max-width: 640px //min(100%, 640px)
+  max-width: 640px
   line-height: 3
   font-size: typography.font-size(m)
   color: colors.color(lightest-foreground)
@@ -106,7 +106,6 @@ export default {
     font-size: 1rem
     font-weight: 500
     color: colors.color(lightest-foreground)
-    //text-align: left
 
   .blog-list-year
     display: inline-flex
@@ -116,7 +115,6 @@ export default {
 
     .blog-list-year-title
       width: 15%
-      //padding-left: 0.5rem
       color: colors.color(foreground)
       font-weight: 400
 
