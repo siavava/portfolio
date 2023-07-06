@@ -93,13 +93,9 @@ body
 :root
   min-height: 100svh
   min-width: 100vw
-  //display: grid
-  //grid-template-rows: 1fr auto
-  //grid-template-columns: 100%
 
 main
   margin: auto
-  //height: auto
   max-width: 100vw
   padding: 0 clamp(0.5em, 3vw, 3em)
   
@@ -227,8 +223,8 @@ a
   position: relative
   transition: geometry.var("default-transition")
 
-  // &:hover, &:focus 
-  //   color: colors.color("primary-highlight")
+  &:hover, &:focus 
+    color: colors.color("primary-highlight")
   
   &.inline-link 
     @include mixins.inline-link

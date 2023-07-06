@@ -1,13 +1,14 @@
 <template>
-  <NuxtLink
+  <div
     class="blog-list-item"
-    :to="blog._path"
   >
-    <div
+    <NuxtLink
       class="blog-list-item-title"
+
+      :to="blog._path"
     >
       {{ title }}
-    </div>
+    </NuxtLink>
     <NuxtLink
       class="blog-list-item-category"
       :to="mainCategoryPath"
@@ -17,7 +18,7 @@
     <div class="blog-list-item-date">
       {{ date }}
     </div>
-  </NuxtLink>
+  </div>
 </template>
 <script lang="ts">
 export default {
@@ -56,6 +57,7 @@ export default {
   padding-right: 0.5rem
   justify-content: space-between
   color: inherit
+  position: relative
 
   &:not(:last-of-type)
     border-bottom: 1px solid colors.color(lightest-background)
@@ -68,7 +70,7 @@ export default {
     line-height: 1
     margin: auto 20px auto auto
     height: 1.5rem
-    max-width: 5ch
+    max-width: 10ch
     border-radius: 5px
     padding: 5px
     font-size: typography.font-size(xxs)
@@ -80,9 +82,6 @@ export default {
     right: 7%
     transform: translateY(-50%)
     transition: all 0.9s ease-in-out
-
-    @media (max-width: 200px)
-      display: none
 
     &:hover
       cursor: pointer

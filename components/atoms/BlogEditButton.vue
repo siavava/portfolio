@@ -23,6 +23,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+@use "@/styles/colors"
 .edit-button-container
   width: 100%
   padding: 2rem 0
@@ -41,6 +42,7 @@ export default {
       border-bottom: 2px dotted
 
     &:hover
+      color: colors.color(primary-highlight)
       & > span
         border-bottom: 2px solid
 
