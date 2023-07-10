@@ -22,6 +22,7 @@
       <slot />
     </h1>
   </div>
+  <br>
 </template>
 
 <script setup lang="ts">
