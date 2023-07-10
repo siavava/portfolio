@@ -4,23 +4,23 @@
     :to="`#${id}`"
     class="prose-title-wrapper"
   >
-    <h1
+    <h4
       :id="id"
       class="prose-h4"
     >
       <slot />
-    </h1>
+    </h4>
   </NuxtLink>
   <div
     v-else
     class="prose-title-wrapper"
   >
-    <h1
+    <h4
       :id="id"
       class="prose-h4"
     >
       <slot />
-    </h1>
+    </h4>
   </div>
   <br>
 </template>
