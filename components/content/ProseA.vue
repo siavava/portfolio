@@ -13,7 +13,9 @@ defineProps({
 
 <template>
   <NuxtLink :href="href">
-    <slot />
+    <span>
+      <slot />
+    </span>
   </NuxtLink>
 </template>
 

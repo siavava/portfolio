@@ -1,19 +1,27 @@
 <template>
-  <h2
-    :id="id"
-    class="prose-h2"
+  <NuxtLink
+    v-if="generate"
+    :to="`#${id}`"
+    class="prose-title-wrapper"
   >
-    <NuxtLink
-      v-if="generate"
-      :to="`#${id}`"
+    <h1
+      :id="id"
+      class="prose-h2"
     >
       <slot />
-    </NuxtLink>
-    <template v-else>
+    </h1>
+  </NuxtLink>
+  <div
+    v-else
+    class="prose-title-wrapper"
+  >
+    <h1
+      :id="id"
+      class="prose-h2"
+    >
       <slot />
-    </template>
-    <!-- <slot /> -->
-  </h2>
+    </h1>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -29,19 +37,23 @@ const generate = anchorLinks?.depth >= heading;
 
 @use "~/styles/colors"
 @use "~/styles/geometry"
-.prose-h2
+
+.prose-title-wrapper
   margin-top: 1rem
   margin-bottom: 1rem
-  font-weight: 600
-  font-size: 1.1rem
-  color: colors.color("primary-highlight")
 
-  &::before
-    content: "##"
-    margin-right: 0.5rem
-    opacity: 0.5
-    transition: geometry.var("default-transition")
+  .prose-h2
+    font-weight: 600
+    font-size: 1.1rem
+    color: colors.color("primary-highlight")
+    display: inline
 
-  &:hover::before
-    opacity: 1
+    &::before
+      content: "##"
+      margin-right: 0.5rem
+      opacity: 0.5
+      transition: geometry.var("default-transition")
+
+    &:hover::before
+      opacity: 1
 </style>
