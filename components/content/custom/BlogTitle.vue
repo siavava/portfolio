@@ -135,10 +135,9 @@ export default {
   width: 100%
   align-content: center
   padding: 0.5rem 0 2rem 0
-
   overflow: hidden
 
-  @include mixins.fancy-background
+  //@include mixins.fancy-background
 
   .text-container
     width: min(100%, 1200px)
@@ -184,11 +183,11 @@ export default {
 
       .title-heading
         font-size: clamp(1.7rem, 1vw, 2rem)
-        font-weight: 600
         line-height: 130%
         margin: 0.5em 0
-        font-family: typography.font(fancy)
+        font-family: typography.font(sans-serif)
         color: colors.color("primary-highlight")
+        font-weight: 700
         font-variation-settings: "cuts" 300
 
       .title-description

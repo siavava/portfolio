@@ -117,6 +117,7 @@ onMounted(() => {
   margin: 0 auto
   width: min(100%, 75ch)
   font-size: typography.font-size("m")
+  //font-weight: 500
 
 .description
   font-size: 18px
