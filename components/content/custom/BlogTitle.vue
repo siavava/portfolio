@@ -185,7 +185,7 @@ export default {
         font-size: clamp(1.7rem, 1vw, 2rem)
         line-height: 130%
         margin: 0.5em 0
-        font-family: typography.font(sans-serif)
+        font-family: typography.font(fancy)
         color: colors.color("primary-highlight")
         font-weight: 700
         font-variation-settings: "cuts" 300

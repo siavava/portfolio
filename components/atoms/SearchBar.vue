@@ -191,6 +191,9 @@ export default {
     @media screen only and (max-width: 800px)
       font-size: typography.font-size("xxs") !important
 
+      .highlight-inner
+        font-size: typography.font-size("xxs") !important
+
     &.hidden
       display: none
 

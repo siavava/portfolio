@@ -22,5 +22,5 @@ export default {
 
 :not(.paragraph)
   .highlight-inner
-    padding-top: 4em
+    padding-top: 0
 </style>
