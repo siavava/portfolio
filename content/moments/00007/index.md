@@ -1,11 +1,11 @@
 ---
-title: nowhere people
+title: possibilities
 category:
   - moments
 draft: false
 featured: true
 layout: moment
-date: 2019-02-11 23:00:00
+date: 2019-08-03 23:00:00
 navigation: false
 
 head:
@@ -18,13 +18,11 @@ head:
       content: 'Amittai'
 ---
 
-that's what we were: [nowhere people](http://www.nowherepeople.org/).  
-born to a pretty anyhow world.  
-born to nightmares.  
-and to dreams worse than nightmares.
+it hurts, doesn't it?
 
-a haunted fate.
+the blur of possibilities.
 
-but who are we now? a disaster of our own making.
+just another "what if"  
+in a world full of empty souls.
 
 <!-- more -->

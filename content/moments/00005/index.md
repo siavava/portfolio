@@ -1,12 +1,11 @@
 ---
-title: Bearing an Untold Story
-# description: Given an arbitrary set of numbers, how do we most-efficiently find their smallest common multiple?
+title: audacity
 category:
   - moments
 draft: false
 featured: true
 layout: moment
-date: 2023-07-15 00:00:00
+date: 2020-05-17 23:00:00
 navigation: false
 
 head:
@@ -19,26 +18,40 @@ head:
       content: 'Amittai'
 ---
 
-&nbsp; &nbsp; We often underestimate the stories that live in our hearts,
-stories that square our truth clearly to feelings unchanged by
-time. We may reject these stories in fear of their pain, denying
-rather than holding, or burying rather than revealing, in hopes
-that they may fade or vanish entirely.
-But such materials do not easily wane.
-They may not disappear, lessen, or even age at all.
-In the mechanics of the emotional landscape, these
-stories may in fact grow, snowballing deeper down the valleys of
-the psyche, in perpetual search of a shadow to call home.
-Without acknowledgment, they persist, yet, undirected,
-they remain lost.
+Let blatant audacity be our hallmark.
+
+Let us dream beyond our capacity to imagine,
+let us set unobtainable goals, and hold ourselves to unattainable standards.
+
+Let us commit to an impossible task.
+
+And then:
+let us go out and fail until we lose the fear of failure.
+Let us be naïve. After all, we are still too young to realize that
+certain things are impossible &mdash; so let us do them anyway.
+
+Years from now, when we look back at our youth;
+let us wonder at how we greatly dared, how naïve we were in
+our sincerity and in our yearnings to make a difference.
+
+Let us be amazed at the great odds we took on, by the
+great feats we accomplished, and if our fate is such, let
+us at least look back at how bravely we fell and went back
+out in search of another dose of failure &mdash; how futile it was,
+yet how fulfilling.
+
+May our story be one of triumph or one of failure, but not anything in between.
+May we be counted among those that poured
+immeasurable portions of themselves towards a worthy cause.
+
+Should we not succeed;  
+let us regret that we failed miserably,
+not that we did not try hard enough.  
+Or were not audacious enough.  
+Or blatant enough.
+
+Let us dare.
+
+&ndash; [Obura Tongoi](https://youtu.be/iTFq9p6WWpk?t=287).
 
 <!-- more -->
-
-When we intervene in these stories with an open curiosity, we shine light onto the
-shape of their experience, uncovering memories as hope
-belonging to meaning. We investigate our hidden language, a
-literacy of strength in the knowing of one's truth. Our journey
-extends outward beyond its previous reach, reclaiming direction
-through destination and discovery. When we connect to the
-untold stories we've buried, we release the pain of where we
-began, to eventually reveal the story of where we might go.

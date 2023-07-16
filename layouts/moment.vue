@@ -141,6 +141,7 @@ const title = _title.data;
   margin: 0 auto
   width: min(100%, 75ch)
   font-size: typography.font-size("m")
+  padding: 50px 0
   //font-weight: 500
 
   .moment-container
@@ -166,10 +167,10 @@ const title = _title.data;
       flex-direction: row
       justify-content: space-between
       align-items: center
-      //margin-bottom: 20px
       padding-bottom: 0.5em
       border-bottom: 1px solid colors.color(lightest-background)
       font-weight: 500
+      text-transform: lowercase
 
 .description
   font-size: 18px

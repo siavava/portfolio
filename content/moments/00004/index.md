@@ -1,11 +1,11 @@
 ---
-title: nowhere people
+title: unreasonable
 category:
   - moments
 draft: false
 featured: true
 layout: moment
-date: 2019-02-11 23:00:00
+date: 2020-05-17 23:00:00
 navigation: false
 
 head:
@@ -18,13 +18,9 @@ head:
       content: 'Amittai'
 ---
 
-that's what we were: [nowhere people](http://www.nowherepeople.org/).  
-born to a pretty anyhow world.  
-born to nightmares.  
-and to dreams worse than nightmares.
-
-a haunted fate.
-
-but who are we now? a disaster of our own making.
+why else  
+are we here if not  
+to live with unreasonable  
+passion for things.
 
 <!-- more -->
