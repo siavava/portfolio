@@ -58,6 +58,7 @@ export default {
         async () => {
           const _blogs = await queryContent()
             .where({ draft: false })
+            .where({ category: { $not: { $contains: "moments" } } })
             .sort({ date: -1 })
             .find();
           return _blogs;

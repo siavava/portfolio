@@ -13,7 +13,7 @@
         class="surround-link"
       >
         <div class="surround-category">
-          {{ link.category[0] }}
+          {{ link.category[link.category.length - 1] }}
         </div>
         <div class="surround-title">
           {{ link.title }}
@@ -34,14 +34,30 @@
 <script setup lang="ts">
 const { path } = useTrimmedPath();
 
+// use props
+const props = defineProps({
+  category: {
+    type: String,
+    default: "",
+  },
+});
+
 const { data: surround } = await useAsyncData(
   // "prev-next",
   async () => {
-    const surround = await queryContent()
-      .where({ draft: false })
-      .only(["_path", "title", "category", "date"])
-      .sort({ date: -1 })
-      .findSurround(path);
+    const surround = props.category
+      ? await queryContent()
+        .where({ draft: false })
+        .where({ category: { $contains: props.category } })
+        .only(["_path", "title", "category", "date"])
+        .sort({ date: -1 })
+        .findSurround(path)
+      : await queryContent()
+        .where({ draft: false })
+        .where({ category: { $not: { $contains: "moments" } } })
+        .only(["_path", "title", "category", "date"])
+        .sort({ date: -1 })
+        .findSurround(path);
     return surround;
   },
 );
