@@ -19,8 +19,10 @@ head:
 ---
 
 **The Man in Black**  
-It's beautifully done, really.
-But you see the cracks after a while. That's why I like the basic emotions.
+It's beautifully done, really.  
+But you see the cracks after a while.  
+That's why I like the basic emotions.
+
 You know why?
 
 **Host**  
