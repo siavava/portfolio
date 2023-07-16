@@ -1,11 +1,11 @@
 ---
-title: teardrop
+title: contradiction
 category:
   - moments
 draft: false
 featured: true
 layout: moment
-date: 2018-08-13 23:00:00
+date: 2018-08-13 00:00:00
 navigation: false
 
 head:

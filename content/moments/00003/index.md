@@ -1,11 +1,11 @@
 ---
-title: teardrop
+title: nowhere people
 category:
   - moments
 draft: false
 featured: true
 layout: moment
-date: 2018-08-13 23:00:00
+date: 2019-02-11 23:00:00
 navigation: false
 
 head:
@@ -18,8 +18,13 @@ head:
       content: 'Amittai'
 ---
 
-teardrop.  
-misunderstood pain and joy mingle.  
-emotional contradiction.
+that's what we were: nowhere people.  
+born to a pretty anyhow world.  
+to nightmares.  
+and to dreams worse than nightmares.
+
+a haunted fate.
+
+but who are we now, a disaster of our own making.
 
 <!-- more -->

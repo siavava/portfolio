@@ -57,12 +57,20 @@
         </div>
         <div class="menu-column">
           <NuxtLink
-            to="/writing"
+            to="/moments"
             class="menu-column-header"
           >
             <strong> Featured </strong>
           </NuxtLink>
           <ul>
+            <li>
+              <NuxtLink
+                to="/moments"
+                class="menu-column-item"
+              >
+                Moments
+              </NuxtLink>
+            </li>
             <li
               v-for="(item, i) in featuredBlogs"
               :key="i"
@@ -305,6 +313,7 @@ const { data: featuredBlogs } = await useAsyncData(
     const _blogs = await queryContent()
       .where({ draft: false })
       .where({ category: { $contains: "featured" } })
+      .where({ category: { $not: { $contains: "moments" } } })
       .limit(10)
       .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })
@@ -319,6 +328,7 @@ const { data: latestBlogs } = await useAsyncData(
   async () => {
     const _blogs = await queryContent()
       .where({ draft: false })
+      .where({ category: { $not: { $contains: "moments" } } })
       .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })
       .limit(10)
