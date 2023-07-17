@@ -131,7 +131,7 @@ const title = _title.data;
     flex-direction: column
     justify-content: center
     position: relative
-    padding-top: 50px
+    padding-top: 100px
 
     .moment-header
       position: absolute
