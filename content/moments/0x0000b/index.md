@@ -19,7 +19,7 @@ head:
 ---
 
 Do I contradict myself?  
-Very well then I contradict myself.  
+Very well then, I contradict myself.  
 
 I am vast, I contain multitudes.
 

@@ -12,9 +12,10 @@
     <caption
       v-if="alt"
       class="prose-img-alt"
-    >
-      {{ alt }}
-    </caption>
+      v-html="alt"
+    />
+    <!-- {{ alt }}
+    </caption> -->
   </figure>
 </template>
 

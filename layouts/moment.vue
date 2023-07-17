@@ -8,9 +8,12 @@
         <div class="content">
           <div class="moment-container">
             <div class="moment-header">
-              <span class="moment-title-left">
-                {{ title }}
-              </span>
+              <span
+                class="moment-title-left"
+                v-html="title"
+              />
+              <!-- {{ title }} -->
+              <!-- </span> -->
               <span class="moment-title-right">
                 Moments
               </span>
@@ -50,9 +53,9 @@ const _title = await useAsyncData(async () => {
   const { path } = useTrimmedPath();
   const moment = await queryContent()
     .where({ _path: path })
-    .only("title")
+    .only(["title", "fancyTitle"])
     .findOne();
-  return moment?.title;
+  return moment.fancyTitle || moment.title;
   // return _title;
 });
 
@@ -146,6 +149,7 @@ const title = _title.data;
       border-bottom: 1px solid colors.color(lightest-background)
       font-weight: 500
       text-transform: lowercase
+      padding: 0 0.5em
 
 .description
   font-size: 18px
