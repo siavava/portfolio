@@ -1,5 +1,5 @@
 ---
-title: unreasonable
+title: passion for things
 category:
   - moments
 draft: false
@@ -18,9 +18,8 @@ head:
       content: 'Amittai'
 ---
 
-why else  
-are we here if not  
-to live with unreasonable  
-passion for things.
+why else are we here  
+if not to live  
+with unreasonable passion for things!
 
 <!-- more -->

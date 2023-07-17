@@ -1,5 +1,5 @@
 ---
-title: an untold story
+title: bearing an untold story
 # description: Given an arbitrary set of numbers, how do we most-efficiently find their smallest common multiple?
 category:
   - moments
@@ -20,25 +20,32 @@ head:
 ---
 
 We often underestimate the stories that live in our hearts.
-These stories that square our truth clearly to feelings unchanged by
-time. We may reject these stories in fear of their pain, denying
-rather than holding, or burying rather than revealing, in hopes
-that they may fade or vanish entirely.
-But such materials do not easily wane.
-They may not disappear, lessen, or even age at all.
-In the mechanics of the emotional landscape, these
-stories may in fact grow, snowballing deeper down the valleys of
-the psyche, in perpetual search of a shadow to call home.
-Without acknowledgment, they persist, yet, undirected,
-they remain lost.
+Stories that square our truth to feelings unchanged by time.
+We may reject them in fear of their pain
+&mdash; denying, rather than holding, and concealing, rather than revealing &mdash;
+hoping that they fade or vanish entirely.
+But such artifacts do not easily faint;
+instead, they grow in perpetual search for a shadow to call home.
 
+::right
+  They persist.  
+  Unadmitted and undirected.  
+  Insistent, yet lost.
+::
+
+:right[&ndash; Amittai]
+
+---
+
+::left
+  **Hypothesis**  
+  All the worlds that almost were matter just as much as the world we’re in.
+  
+  **Corollary**  
+  These hidden worlds cause us great pain.
+::
+
+::right
+  &ndash; [Maniac](https://www.netflix.com/title/80124522), Season 1, Episode 1 (The Chosen One!)
+::
 <!-- more -->
-
-When we intervene in these stories with an open curiosity, we shine light onto the
-shape of their experience, uncovering memories as hope
-belonging to meaning. We investigate our hidden language, a
-literacy of strength in the knowing of one's truth. Our journey
-extends outward beyond its previous reach, reclaiming direction
-through destination and discovery. When we connect to the
-untold stories we've buried, we release the pain of where we
-began, to eventually reveal the story of where we might go.

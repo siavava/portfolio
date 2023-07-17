@@ -52,6 +52,7 @@ Or blatant enough.
 
 Let us dare.
 
-&ndash; [Obura Tongoi](https://youtu.be/iTFq9p6WWpk?t=287).
-
+::right
+  &ndash; [Obura Tongoi](https://youtu.be/iTFq9p6WWpk?t=287).
+::
 <!-- more -->

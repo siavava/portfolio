@@ -23,6 +23,7 @@ Very well then I contradict myself.
 
 I am vast, I contain multitudes.
 
-&ndash; Walt Whitman, [Song of Myself](https://www.penguin.co.uk/articles/2020/09/walt-whitman-leaves-of-grass-i-contain-multitudes-twitter-meme)
-
+::right
+  &ndash; Walt Whitman, [Song of Myself](https://www.penguin.co.uk/articles/2020/09/walt-whitman-leaves-of-grass-i-contain-multitudes-twitter-meme)
+::
 <!-- more -->

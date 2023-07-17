@@ -1,5 +1,5 @@
 ---
-title: amittai::writing::moments
+title: amittai::moments
 layout: default
 navigation: false
 category: meta

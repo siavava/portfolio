@@ -31,6 +31,8 @@ Please.
 **The Man in Black**  
 When you're suffering, that's when you're most real.
 
-&ndash; [Westworld](https://www.hbo.com/westworld), Season 1, Episode 2 (Chestnut)
+::right
+  &ndash; [Westworld](https://www.hbo.com/westworld), Season 1, Episode 2 (Chestnut)
+::
 
 <!-- more -->

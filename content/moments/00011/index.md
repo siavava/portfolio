@@ -28,6 +28,7 @@ But until then, we have to be smarter than them.
 Or they will find us.  
 And they will kill us.
 
-&ndash; [Westworld](https://www.hbo.com/westworld), Season 3, Episode 3 (The Absence of Field)
-
+::right
+  &ndash; [Westworld](https://www.hbo.com/westworld), Season 3, Episode 3 (The Absence of Field)
+::
 <!-- more -->

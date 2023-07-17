@@ -1,17 +1,9 @@
 <template>
   <div id="root">
-    <!-- <SeoKit />
-    <OgImageScreenshot />
-    <OgImageStatic /> -->
     <AppHeader>
       <TableOfContents />
     </AppHeader>
-    <!-- <BlogTitle /> -->
     <main class="article-main">
-      <!-- <div class="body-and-panels"> -->
-      <!-- <div class="left panel">
-          <BlogNavigation class="article-blog-navigation" />
-        </div> -->
       <div class="article-body">
         <div class="content">
           <div class="moment-container">
@@ -25,28 +17,11 @@
             </div>
             <slot id="content" />
           </div>
-          <!-- Add edit button -->
           <BlogEditButton />
           <Surround category="moments" />
-          <!-- <BlogComments
-              id="blog-comments"
-              ref="commentsSection"
-            />
-            <AuthenticationForm
-              id="auth-form-container"
-              class="hidden"
-            /> -->
         </div>
       </div>
-      <!-- <div class="right panel">
-          <TableOfContents
-            v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
-            class="table-of-contents"
-          />
-        </div> -->
-      <!-- </div> -->
     </main>
-    <!-- <BlogNavigation class="article-blog-navigation-footer" /> -->
     <AppFooter identifier="in-page" />
   </div>
 </template>

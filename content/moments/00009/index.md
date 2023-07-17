@@ -26,6 +26,8 @@ Leave.
 
 Can't you see? Hell is empty and all the devils are here.
 
-&ndash; [Westworld](https://www.hbo.com/westworld), Season 1, Episode 1 (The Original)
+::right
+  &ndash; [Westworld](https://www.hbo.com/westworld), Season 1, Episode 1 (The Original)
+::
 
 <!-- more -->
