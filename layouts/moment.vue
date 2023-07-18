@@ -147,11 +147,13 @@ const title = _title.data;
       flex-direction: row
       justify-content: space-between
       align-items: center
-      padding-bottom: 0.5em
       border-bottom: 1px solid colors.color(lightest-background)
       font-weight: 500
       text-transform: lowercase
-      padding: 0 0.5em
+      padding: 0 0.5em 0.5em
+
+      a
+        color: colors.color(primary-highlight)
 
 .description
   font-size: 18px
