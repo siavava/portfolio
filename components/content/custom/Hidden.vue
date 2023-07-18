@@ -40,11 +40,11 @@ export default {
 
   .hidden-cover
     position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    background: rgba(colors.color(background), 0.5)
+    top: -1rem
+    left: -1rem
+    width: calc(100% + 2rem)
+    height: calc(100% + 2rem)
+    background: rgba(colors.color(background), 0.7)
     backdrop-filter: blur(2px)
     transition: all 0.2s ease-in-out
     z-index: 10
