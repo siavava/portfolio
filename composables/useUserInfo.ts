@@ -429,6 +429,7 @@ const useUserInfo = defineStore("userInfo", {
       const { getFirestore, collection, addDoc } = await import("firebase/firestore");
 
       const db = getFirestore();
+      //          ^?
 
       comment.path = useTrimmedPath(comment.path).path;
 

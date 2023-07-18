@@ -19,17 +19,13 @@ head:
 ---
 
 **The Man in Black**  
-It's beautifully done, really.  
+It's beautifully done, really.
 But you see the cracks after a while.  
 That's why I like the basic emotions.
 
 You know why?
 
-**Host**  
-Please.
-
-**The Man in Black**  
-When you're suffering, that's when you're most real.
+Because when you're suffering, that's when you're most real.
 
 ::right
   &ndash; [Westworld](https://www.hbo.com/westworld), Season 1, Episode 2 (Chestnut)
