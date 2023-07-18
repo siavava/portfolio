@@ -5,6 +5,9 @@
   >
     <div class="hidden-cover">
       <span v-if="hidden">click/hover to reveal</span>
+      <p v-if="hidden">
+        Not important but good context.
+      </p>
     </div>
     <slot />
   </div>
@@ -47,6 +50,7 @@ export default {
     z-index: 10
 
     display: flex
+    flex-direction: column
     place-content: center
     place-items: center
 
@@ -57,6 +61,8 @@ export default {
       text-transform: uppercase
       letter-spacing: 0.1rem
       text-shadow: 0 0 0.5rem rgba(colors.color(primary-highlight), 0.5)
+
+    & > span, p
       transition: inherit
 
   &:hover
@@ -64,6 +70,6 @@ export default {
       background: none
       backdrop-filter: none
 
-      & > span
+      & > span, p
         opacity: 0
 </style>

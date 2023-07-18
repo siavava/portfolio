@@ -23,8 +23,8 @@ We tell ourselves stories in order to live.
 
 ::hidden
   We look for the sermon in the suicide,
-  for the social or moral lesson in the murder of five.  
-  We interpret what we see, select the most workable of the multiple choices.  
+  for the social or moral lesson in the murder of five.
+  We interpret what we see, select the most workable of the multiple choices.
   We live entirely, especially if we are writers,
   by the imposition of a narrative line upon disparate images,
   by the "ideas" with which we have learned to freeze
