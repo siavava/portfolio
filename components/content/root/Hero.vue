@@ -291,7 +291,7 @@ export default {
         & > .strike-through
           // background: yellow
           text-decoration: line-through
-          text-decoration-thickness: clamp(5px, 1vw, 10px)
+          text-decoration-thickness: clamp(3px, 1vw, 7px)
           text-decoration-color: darken(colors.color(primary-highlight), 10%)
           //color: colors.color(dark-foreground)
           padding-right: 0.5em
@@ -299,8 +299,8 @@ export default {
 
           //color: black
           -webkit-text-fill-color: transparent //colors.color(background)
-          -webkit-text-stroke-color: darken(colors.color(primary-highlight), 30%)
-          -webkit-text-stroke-width: clamp(1px, 0.3vw, 3px)
+          -webkit-text-stroke-color: darken(grey, 30%)
+          -webkit-text-stroke-width: clamp(1px, 0.3vw, 2px)
 
     .pique
       margin: 1.5em 0 0.5em 0.2rem
