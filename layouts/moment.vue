@@ -14,9 +14,12 @@
               />
               <!-- {{ title }} -->
               <!-- </span> -->
-              <span class="moment-title-right">
+              <NuxtLink
+                to="/moments"
+                class="moment-title-right"
+              >
                 Moments
-              </span>
+              </NuxtLink>
             </div>
             <slot id="content" />
           </div>
@@ -123,7 +126,6 @@ const title = _title.data;
   //font-weight: 500
 
   .moment-container
-    background: colors.color(twoo)
     color: colors.color(light-foreground)
     border-radius: 10px
     padding: 20px
