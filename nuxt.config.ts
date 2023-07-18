@@ -61,6 +61,10 @@ export default defineNuxtConfig({
       applicationId: process.env.ALGOLIA_SEARCH_APP_ID,
       apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
     }],
+    ["@nuxtjs/robots", {
+      UserAgent: "*",
+      Disallow: "",
+    }],
 
     // "@nuxtjs/firebase",
     // ["@nuxtjs/redirect-module",
