@@ -26,6 +26,7 @@ export default defineNuxtConfig({
         { property: "og:type", content: "article" },
         { property: "og:site_name", content: "amittai" },
         { property: "og:locale", content: "en_US" },
+        { name: "robots", content: "index, follow" },
         // {
         //   hid: "description",
         //   name: "description",
