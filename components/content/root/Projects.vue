@@ -197,7 +197,8 @@ export default {
   transform: translateY(30px)
 
 .other-projects-header
-  font-weight: 600
+  font-weight: 700
+  font-family: typography.font("fancy")
   font-variation-settings: "cuts" 300
 
 * > h3

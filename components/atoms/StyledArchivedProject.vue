@@ -79,6 +79,11 @@ export default {
     margin: 0 0 10px
     color: colors.color("lightest-slate")
     font-size: typography.font-size("xxl")
+
+    font-weight: 600
+    font-family: typography.font("fancy")
+    font-variation-settings: "cuts" 300
+
     a
       position: static
       &:before
