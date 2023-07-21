@@ -8,8 +8,13 @@ layout: default
 ---
 
 :hero
+
 :about
+
 :jobs
+
 :featured
+
 :projects
+
 :contact
