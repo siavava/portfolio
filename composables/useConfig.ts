@@ -110,6 +110,10 @@ const nonTocRoutes = [
   "/writing", "/writing/",
 ];
 
+const ignorePrefixes = [
+  "/moments", "/aphorisms",
+];
+
 const heroCallOuts = [
   { field: "tech", action: "build" },
   { field: "art", action: "create" },
@@ -125,5 +129,6 @@ export default () => ({
   srConfig,
   navHeight,
   nonTocRoutes,
+  ignorePrefixes,
   heroCallOuts,
 });

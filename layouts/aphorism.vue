@@ -18,7 +18,7 @@
                 to="/apriori"
                 class="moment-title-right"
               >
-                a priori
+                aphorisms
               </NuxtLink>
             </div>
             <slot id="content" />

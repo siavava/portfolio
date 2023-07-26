@@ -28,7 +28,7 @@
     >
       <div class="menu-columns-wrapper">
         <div
-          v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
+          v-if="showToc && (toc && toc.links && toc.links.length > 0)"
           class="menu-column toc-current-page"
         >
           <NuxtLink
@@ -146,8 +146,8 @@
       </div>
     </div>
     <div
-      v-if="currentPage === '/' || (toc && toc.links && toc.links.length > 0)"
-      v-show="nonTocRoutes.indexOf(route) === -1"
+      v-if="toc && toc.links && toc.links.length > 0"
+      v-show="showToc"
       class="header-toc-plus-button"
     >
       <div class="toc-wrapper">
@@ -181,7 +181,9 @@
 </template>
 
 <script lang="ts">
-const { navHeight, nonTocRoutes, navLinks } = useConfig();
+const {
+  navHeight, nonTocRoutes, ignorePrefixes, navLinks,
+} = useConfig();
 
 export default {
   name: "AppHeader",
@@ -214,6 +216,13 @@ export default {
     route() {
       const { path } = useTrimmedPath();
       return path;
+    },
+    showToc() {
+      const { path } = useTrimmedPath();
+      if (ignorePrefixes.some((prefix) => path.startsWith(prefix))) {
+        return false;
+      }
+      return nonTocRoutes.indexOf(path) === -1;
     },
   },
   watch: {
