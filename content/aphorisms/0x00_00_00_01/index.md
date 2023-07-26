@@ -1,9 +1,9 @@
 ---
 title: Fundamental Theorem of Rationality
 category:
-  - a priori
+  - aphorisms
 draft: true
-layout: apriori
+layout: aphorism
 date: 2023-07-24 23:00:00
 navigation: false
 

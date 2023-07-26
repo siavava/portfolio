@@ -1,5 +1,5 @@
 ---
-title: amittai::a priori
+title: amittai::aphorisms
 layout: default
 navigation: false
 category: meta
@@ -9,6 +9,6 @@ category: meta
 ---
 title: a priori
 category:
-  - a priori
+  - aphorisms
 ---
 ::

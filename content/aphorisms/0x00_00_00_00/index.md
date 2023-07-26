@@ -20,7 +20,7 @@ head:
 We can solve any problem by introducing an extra level of indirection.[^indirection]
 
 ::right
-  &ndash; [David Wheeler][david-wheeler]
+  &ndash; [David Wheeler][david-wheeler], [Andrew Koenig][koenig]
 ::
 
 ::left
@@ -32,6 +32,7 @@ And [too much indirection][semantic-compression] is the third root of all evil.[
 ::
 
 [david-wheeler]:          https://www.forbes.com/sites/forbestechcouncil/2020/08/20/indirection-the-unsung-hero-of-software-engineering
+[koenig]:                 https://en.wikipedia.org/wiki/Andrew_Koenig_(programmer)
 [semantic-compression]:   https://caseymuratori.com/blog_0015
 [premature-optimization]: https://wiki.c2.com/?PrematureOptimization
 [naming-things]:          https://www.goodreads.com/quotes/6341736-any-fool-can-write-code-that-a-computer-can-understand
