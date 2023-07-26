@@ -58,7 +58,7 @@ And [too much indirection][semantic-compression] is the third root of all evil.[
       - To [parallelize][parallel-systems] and [distribute][distributed-systems] access, an indirection over a [_load balancer_][load-balancer].
         On each request, the load balancer decides which storage node to forward the request to.
       - To reduce iterated strength[^3] &mdash; such as by refactoring logic out of loops or functions when computed effects
-        are shared across iterations or function calls (a sort of caching?).
+        can be shared across iterations or function calls (a sort of caching?).
       - At this scale of complexity, one perhaps needs yet another indirection in the form of a [compiler][compiler]
         (even [real programmers][real-programmers] need a compiler!).
 
