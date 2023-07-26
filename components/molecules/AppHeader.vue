@@ -68,7 +68,15 @@
                 to="/moments"
                 class="menu-column-item"
               >
-                Moments
+                <strong>Moments</strong>
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                to="/apriori"
+                class="menu-column-item"
+              >
+                <strong>A Priori</strong>
               </NuxtLink>
             </li>
             <li
@@ -313,7 +321,7 @@ const { data: featuredBlogs } = await useAsyncData(
     const _blogs = await queryContent()
       .where({ draft: false })
       .where({ category: { $contains: "featured" } })
-      .where({ category: { $not: { $contains: "moments" } } })
+      .where({ category: { $not: { $containsAny: ["moments", "a priori"] } } })
       .limit(10)
       .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })
@@ -328,7 +336,7 @@ const { data: latestBlogs } = await useAsyncData(
   async () => {
     const _blogs = await queryContent()
       .where({ draft: false })
-      .where({ category: { $not: { $contains: "moments" } } })
+      .where({ category: { $not: { $containsAny: ["moments", "a priori"] } } })
       .only(["_path", "title", "date", "description"])
       .sort({ date: -1 })
       .limit(10)

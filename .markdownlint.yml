@@ -18,5 +18,4 @@ MD032: false
 MD033: false
 # Allow bare urls
 MD034: false
-MD046:
-  style: fenced
+MD046: false

@@ -13,6 +13,6 @@
   font-family: typography.font("sans-serif")
   font-size: inherit
   line-height: 1.5rem
-  margin: 0 0 1.5em 1em
+  margin: 1em 0 1em 1em
 
 </style>

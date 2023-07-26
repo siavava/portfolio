@@ -74,6 +74,6 @@ Your problems will never go away [until you deal with them][problems-foroux].
 [impostor-syndrome]:  https://www.imd.org/research-knowledge/diversity-and-equity-and-inclusion/articles/contextualizing-the-impostor-syndrome/#:~:text=This%20line%20of%20research%20therefore,impostors%E2%80%9D%20when%20in%20those%20institutions.
 [livelihood]:         https://www.merriam-webster.com/dictionary/livelihood#:~:text=the%20quality%20or%20state%20of%20being%20lively
 [betterup]:           https://www.betterup.com/
-[first-step]:         https://www.betterup.com/blog/what-is-imposter-syndrome-and-how-to-avoid-it 
+[first-step]:         https://www.betterup.com/blog/what-is-imposter-syndrome-and-how-to-avoid-it
 [resources]:          https://www.betterup.com/search-results?term=impostor+syndrome
 [problems-foroux]:    https://dariusforoux.com/deal-with-your-problem/

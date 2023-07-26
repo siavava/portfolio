@@ -71,7 +71,7 @@ How did private rocketry emerge to challenge the status quo?
 
 Move aside NASA, here comes a new status quo.
 How is it feasible for privately-owned companies to delve into space exploration,
-a field that usually lacks immediate returns on investment?[^2]
+a field that usually lacks immediate returns on investment?[^note]
 
 ### SpaceX
 
@@ -79,13 +79,11 @@ a field that usually lacks immediate returns on investment?[^2]
 most recently buyer of Twitter for a whopping $44 billion.
 What are some of the achievements and future plans of SpaceX?
 
-
 ### Blue Origin
 
 Close on the heels of Elon Musk, Amazon founder [Jeff Bezos][bezos]
 has also set his sights on space exploration through the [Blue Origin][blue-origin] company.
 What have they been up to?
-
 
 ### Virgin Galactic
 
@@ -121,12 +119,11 @@ what should we expect, and how will it affect our lives?
 [blue-origin]: https://en.wikipedia.org/wiki/Blue_Origin
 [virgin-galactic]: https://en.wikipedia.org/wiki/Virgin_Galactic
 
-[^1]: This is literally out of this world!
-[^2]: Perhaps it is not feasible.  
+<!-- [^1]: This is literally out of this world! -->
+[^note]: Perhaps it is not feasible.  
       [Elon Musk][musk] funds :highlight[SpaceX],
       [Jeff Bezos][bezos] funds :highlight[Blue Origin],
-      and [Richard Branson][branson] funds :highlight[Virgin Galactic].
-      
+      and [Richard Branson][branson] funds :highlight[Virgin Galactic].  
       These are billionaires who have the flexibility to fund projects
       that may not have immediate returns as long as they believe in the
       promise of eventual advantage in the long run.
