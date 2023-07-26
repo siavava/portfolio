@@ -15,7 +15,7 @@
               <!-- {{ title }} -->
               <!-- </span> -->
               <NuxtLink
-                to="/apriori"
+                to="/aphorisms"
                 class="moment-title-right"
               >
                 aphorisms
