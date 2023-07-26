@@ -68,15 +68,15 @@
                 to="/moments"
                 class="menu-column-item"
               >
-                <strong>Moments</strong>
+                <strong>moments</strong>
               </NuxtLink>
             </li>
             <li>
               <NuxtLink
-                to="/apriori"
+                to="/aphorisms"
                 class="menu-column-item"
               >
-                <strong>A Priori</strong>
+                <strong>aphorisms</strong>
               </NuxtLink>
             </li>
             <li

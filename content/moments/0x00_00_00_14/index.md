@@ -4,7 +4,7 @@ category:
   - moments
 draft: true
 layout: moment
-date: 2023-07-17 23:00:00
+date: 2023-07-25 23:00:00
 navigation: false
 
 head:
