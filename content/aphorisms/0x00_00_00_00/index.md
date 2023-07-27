@@ -64,7 +64,7 @@ And [too much indirection][semantic-compression] is the third root of all evil.[
       _"atomic"_ components, each abstracting away specific complexities and exposing a reasonable [API][api]
       for the next level of indirection to consume.
       But the complexity of each subsystem soon matches that of the original system.
-      **Voilà: the original pain is rediscovered, and recursion beckons.**
+      **Voilà: the original pain is rediscovered, and recursion[^too-much-indirection] beckons.**
 
 [^roots-of-evil]:                     The first two are _[premature optimization][premature-optimization]_, [_atrocious naming_][naming-things],
                           and [_off-by-one errors_][off-by-one].
