@@ -5,23 +5,49 @@ navigation: false
 
 # Hello There
 
-Introducing myself is hard; I never know what to say.
-It's hard to talk about myself without either feeling that I'm bragging
-or feeling that I'm a failure.
-Or, for the less technically inclined, boring you with
-vacuous innuendos on categories and functors.
+<!-- 
+
+Throughout my life, I've always put a lot of dedication and effort into everything that I did.
+I think that that is important:
+to put one's mind and effort into something and see how that effort5 equates to success.
+
+I am a rising senior at Dartmouth College studying Computer Science and Mathematics. My primary interests are in deep learning,
+systems engineering, cryptography, category theory, functional programming, and a little bit of design. I love to problem-solve across
+a wide range of domains, and I am excited to learn about and work on challenging problems and discover new perspectives.
+I am originally from Kenya. Having grown up in an environment with limited resources, I learned resourcefulness, resilience, and a keen
+sense of responsibility. These are values I carry in all my activities, including engineering work. I love to iterate fast, but also acknowledge
+the limitations that bootstrapped solutions might have when employed in real-world scenarios.
+Why 2 𝜎?
+I’m reciting that quality affects all aspects of my pursuits. I want to imbue quality in everything I do. This skill develops while doing. Not
+thinking, not imagining, doing. It is acquired through learning and experimenting and consistency and pacing. I admire the impeccably
+high bar of achievement at 2 𝜎, which would both challenge me to perform at the best of my abilities and inspire me to go beyond my
+assumed limits in working around novel problems in the industry. Above all, 2 𝜎 will be instrumental in helping me grow intellectually,
+hone my skills, and develop the appetite for risk that is required to make real-world impact.
+ -->
+
+## Who?
 
 :styled-image
 
-## What do I do?
+I'm [Amittai][linkedin], a current student at [Dartmouth College][dartmouth].
+My primary interests are in [deep learning][dl], [functional programming][functional-prg], and a _little bit_ of [design][design].
+However, I love to problem-solve across a wide range of domains &mdash; as reflected in my projects &mdash;
+and I am excited to learn about and work on challenging problems and discover new perspectives.
 
-In specious phrasing, I tell computers what to do.
-I speak Python, Haskell, and C++ well.
-My Rust is rusty :crab:, but I am working on it.
-I am learning new ways of figuring out
-_what_ to tell computers to do, and occasionally
-help other learners pick up the whats and the hows.
+## Life Philosophy
+I am originally from [Kenya][kenya]. Having grown up in a community with limited resources,
+I learned resourcefulness, resilience, and a keen sense of responsibility.
+These are values I carry in all my endeavors, including engineering work.
+For instance, I love to iterate fast, but also acknowledge
+the limitations that bootstrapped solutions might have when employed in real-world scenarios,
+with _real_ impact to people's livelihoods.
+I’m reciting that _quality affects all aspects of my pursuits_.
+I want to imbue quality in everything I do.
+This skill develops while doing.
+Not thinking, not imagining, _doing_ &mdash; 
+it is acquired through learning and experimenting and consistency and pacing.
 
+## Recent Travails
 Most recently, I am learning and doing research around
 the applications of [deep learning][dl] in [computer vision][cv].
 I also have interests and experiences in
@@ -29,12 +55,7 @@ I also have interests and experiences in
 [database systems][database-systems], [high-performance computing][hpc],
 and [functional programming][functional-prg].
 
-I'm also a hobbyist [designer][design].
-
-I am currently a student at [Dartmouth College][dartmouth].
-In the past, I have been at [Y Combinator][yc], [Carnegie Mellon University][cmu],
-and [Starehe Boys' Center & School][starehe].
-
+## What Now?
 For more about myself, read on.  
 If interested in something particularly, [let me know][email].
 
@@ -236,4 +257,6 @@ style: "justify-content: right; width: 70%; "
 [database-systems]:         https://hevodata.com/learn/database-systems/
 [hpc]:                      https://www.netapp.com/data-storage/high-performance-computing/what-is-hpc/
 [functional-prg]:           https://spectrum.ieee.org/functional-programming
-[design]:             https://www.designcouncil.org.uk/our-work/what-is-design/
+[design]:                   https://www.designcouncil.org.uk/our-work/what-is-design/
+[linkedin]:                 https://www.linkedin.com/in/siavava
+[kenya]:                    https://www.bbc.com/news/world-africa-13681341

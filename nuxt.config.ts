@@ -57,6 +57,7 @@ export default defineNuxtConfig({
     "@nuxt/image-edge",
     "@nuxt/devtools",
     "@pinia/nuxt",
+    "@nuxthq/studio",
     ["@nuxtjs/algolia", {
       applicationId: process.env.ALGOLIA_SEARCH_APP_ID,
       apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
