@@ -2,7 +2,7 @@
 
 export default defineNuxtConfig({
   experimental: {
-    viewTransition: false,
+    viewTransition: true,
     payloadExtraction: true,
   },
   routeRules: {
@@ -57,7 +57,7 @@ export default defineNuxtConfig({
     "@nuxt/image-edge",
     "@nuxt/devtools",
     "@pinia/nuxt",
-    "@nuxthq/studio",
+    // "@nuxthq/studio",
     ["@nuxtjs/algolia", {
       applicationId: process.env.ALGOLIA_SEARCH_APP_ID,
       apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
