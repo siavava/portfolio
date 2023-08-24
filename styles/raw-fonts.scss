@@ -220,22 +220,22 @@ explicitly, e.g.
 /////// GRAPHIK ///////
 
 // thin
-@font-face {
-  font-family: 'Graphik';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url('~/assets/fonts/Graphik/Graphik-Thin.otf') format('truetype');
-}
+// @font-face {
+//   font-family: 'Graphik';
+//   font-style: normal;
+//   font-weight: 300;
+//   font-display: swap;
+//   src: url('~/assets/fonts/Graphik/Graphik-Thin.otf') format('truetype');
+// }
 
 // graphic thin italic
-@font-face {
-  font-family: 'Graphik';
-  font-style: italic;
-  font-weight: 300;
-  font-display: swap;
-  src: url('~/assets/fonts/Graphik/Graphik-ThinItalic.otf') format('truetype');
-}
+// @font-face {
+//   font-family: 'Graphik';
+//   font-style: italic;
+//   font-weight: 300;
+//   font-display: swap;
+//   src: url('~/assets/fonts/Graphik/Graphik-ThinItalic.otf') format('truetype');
+// }
 
 // light
 @font-face {
@@ -253,6 +253,15 @@ explicitly, e.g.
   font-weight: 400;
   font-display: swap;
   src: url('~/assets/fonts/Graphik/Graphik-Web-Regular.woff2') format('truetype');
+}
+
+// regular italic
+@font-face {
+  font-family: 'Graphik';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('~/assets/fonts/Graphik/Graphik-Web-RegularItalic.woff2') format('truetype');
 }
 
 // semibold
