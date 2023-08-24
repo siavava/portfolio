@@ -22,13 +22,17 @@ export default {
 <style lang="sass">
 @use "~/styles/mixins"
 @use "~/styles/colors"
+@use "~/styles/typography"
 
 .styled-button
-  @include mixins.big-button
-  margin: 1em min(2em, 2vw)
-  border: 2px solid colors.color("lightest-background")
+  background: colors.color(light-background)
+  font-size: typography.font-size(s)
+  width: fit-content
+  padding: 0 1em
+  border-radius: 20px
+  margin: 0.5em 0
 
   &:hover
     cursor: pointer
-    border: 2px solid transparent
+    color: colors.color(foreground)
 </style>

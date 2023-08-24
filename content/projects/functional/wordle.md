@@ -11,7 +11,7 @@ tech:
   - Cabal
   - Functional Programming
 category: 'featured-project'
-featured: true
+featured: false
 navigation: false
 ---
 

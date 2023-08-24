@@ -11,10 +11,12 @@ layout: default
 
 :about
 
+:education
+
 :jobs
 
 :featured
 
-:projects
+<!-- :projects -->
 
 :contact

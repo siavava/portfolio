@@ -3,19 +3,23 @@ date: 2023-06-01
 title: 'Teaching Assistant'
 company: 'Dartmouth'
 location: 'Hanover, NH'
-range: 'Fall 2021 - Fall 2023'
+start: 09/21
+end: Now
 url: 'https://web.cs.dartmouth.edu/'
 category: 'jobs-info'
 navigation: false
 ---
 
+Assisted in the instruction and facilitation
+of various courses:
+
 ::inline-flex
 | Course | Term | Instructor |
-| :--- | ---: | :--- |
-| [Artificial Intelligence][cs76] | Fall '23 | [Devin Balkcom][devin-balkcom] |
+| :--- | ---: | :------- |
+| [Systems][cs50] |  Fall '23 <br/> Spring '22 <br/> Winter '22 <br/> Fall '21 | [Charles Palmer][charles-palmer] <br/> [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
 | [Database Systems][cs61] | Summer '23 | [Adam Goldstein][adam-goldstein] |
-| [Object-Oriented Programming][cs10] | Spring '23 <br/> Winter '23 | [Devin Balkcom][devin-balkcom] <br/> [Timothy Pierson][timothy-pierson] |
-| [Software Design][cs50] |  Spring '22 <br/> Winter '22 <br/> Fall '21 | [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
+| [Data Structures & OOP][cs10] | Spring '23 <br/> Winter '23 | [Devin Balkcom][devin-balkcom] <br/> [Timothy Pierson][timothy-pierson] |
+<!-- | [Artificial Intelligence][cs76] | Fall '23 | [Devin Balkcom][devin-balkcom] | -->
 ::
 
 [devin-balkcom]: https://web.cs.dartmouth.edu/people/devin-j-balkcom

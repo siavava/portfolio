@@ -14,16 +14,19 @@ featured: true
 navigation: false
 ---
 
-A multiplayer command-line game of :highlight[nuggets].
-Players join over :highlight[web sockets].
-The maze is revealed to each player as they and view it.
+A multiplayer command-line game of [nuggets][nuggets].
+Players join over [web sockets][web-sockets].
+The maze is gradually revealed to each player as they view
+different sectors of it.
 The game ends when all the nuggets are collected,
-and we print a leader-board of the players' scores.
+and the player with the most nuggets wins.
 
 <br/>
 
-:highlight[Collaborative project with [Alphonso Bradham][alphonso]
-and [Zimehr Abbasi][zimehr]].
+Collaborative project with [Alphonso Bradham][alphonso]
+and [Zimehr Abbasi][zimehr].
 
 [alphonso]: https://www.linkedin.com/in/alphonso-bradham
 [zimehr]: https://in.linkedin.com/in/zimehr-abbasi-aa8865154
+[nuggets]: https://en.wikipedia.org/wiki/Nuggets_(game)
+[web-sockets]: https://en.wikipedia.org/wiki/WebSocket

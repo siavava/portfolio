@@ -1,7 +1,7 @@
 <template>
   <section class="jobs">
-    <ProseH1 id="work">
-      Work Experience
+    <ProseH1 id="education">
+      Education
     </ProseH1>
     <div class="jobs-list">
       <div
@@ -44,10 +44,10 @@ import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 
 // read 'job-info' data from Markdown files
 const { data: jobsData } = await useAsyncData(
-  `jobs-${useRoute().path}`,
+  `school-${useRoute().path}`,
   async () => {
     const _jobsData = await queryContent<MarkdownParsedContent>()
-      .where({ category: "jobs-info" })
+      .where({ category: "school-info" })
       .sort({ date: -1 })
       .find();
     return _jobsData;
@@ -62,7 +62,7 @@ const jobs = jobsData.value || [];
 
 <script lang="ts">
 export default {
-  name: "Jobs",
+  name: "Education",
 };
 </script>
 

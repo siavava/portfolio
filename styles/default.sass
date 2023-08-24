@@ -10,9 +10,6 @@ html
   height: 100svh
   width: 100vw
   max-width: 100vw
-
-  // overflow-y: scroll
-  //overflow-x: hidden
   scroll-behavior: smooth
 
 *, *::before, *::after
@@ -27,8 +24,8 @@ html
 //   visibility: visible !important
 
 ::selection
-  background-color: colors.color(lightest-background)
-  color: colors.color(secondary-highlight)
+  background-color: colors.color(lightt-background)
+  color: colors.color(primary-highlight)
 
 
 /* Provide basic, default focus styles.*/
@@ -218,19 +215,19 @@ svg
   transition: color 0.3s ease-in-out
   
 
-a 
-  display: inline-block
-  text-decoration: none
-  text-decoration-skip-ink: auto
-  color: inherit
-  position: relative
-  transition: geometry.var("default-transition")
+// a 
+//   display: inline-block
+//   text-decoration: none
+//   text-decoration-skip-ink: auto
+//   color: inherit
+//   position: relative
+//   transition: geometry.var("default-transition")
 
-  &:hover, &:focus 
-    color: colors.color("primary-highlight")
+//   &:hover, &:focus 
+//     color: colors.color("primary-highlight")
   
-  &.inline-link 
-    @include mixins.inline-link
+//   &.inline-link 
+//     @include mixins.inline-link
   
 
 button 
@@ -258,8 +255,8 @@ p
   &:last-child, &:last-of-type 
     margin: 0
   
-  & > a 
-    @include mixins.inline-link
+  // & > a 
+  //   @include mixins.inline-link
   
   // & > code 
   //   background-color: colors.color("light-background")
@@ -319,26 +316,7 @@ code
   font-family: typography.font("monospace")
   font-size: typography.font-size("m")
 
-.skip-to-content 
-  @include mixins.button
-  position: absolute
-  top: auto
-  left: -999px
-  width: 1px
-  height: 1px
-  overflow: hidden
-  z-index: -99
 
-
-  &:focus, &:active 
-    background-color: colors.color("primary-highlight")
-    color: colors.color("background")
-    top: 0
-    left: 0
-    width: auto
-    height: auto
-    overflow: auto
-    z-index: 99
   
 
 .logo
@@ -364,9 +342,9 @@ code
   @media (max-width: 768px) 
     font-size: typography.font-size("xs")
   
-  a 
-    @include mixins.inline-link
-    line-height: 1.5
+  // a 
+  //   @include mixins.inline-link
+  //   line-height: 1.5
   
 .breadcrumb 
   display: flex
@@ -380,18 +358,16 @@ code
     margin-right: 10px
     padding-top: 4px
   
-  a 
-    @include mixins.inline-link
-    font-family: typography.font("monospace")
-    font-size: typography.font-size("s")
-    font-weight: 600
-    line-height: 1.5
-    text-transform: uppercase
-    letter-spacing: 0.1em
+  // a 
+  //   @include mixins.inline-link
+  //   font-family: typography.font("monospace")
+  //   font-size: typography.font-size("s")
+  //   font-weight: 600
+  //   line-height: 1.5
+  //   text-transform: uppercase
+  //   letter-spacing: 0.1em
   
 
 .image-outer-wrapper 
   height: 100%
 
-.fancy-background
-  @include mixins.fancy-background

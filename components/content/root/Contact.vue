@@ -1,15 +1,30 @@
 <template>
-  <section
-    id="contact"
-    class="contact-section"
-  >
-    <h2 class="numbered-heading overline">
-      What's Next?
-    </h2>
-    <h2 class="title">
-      {{ contact.title }}
-    </h2>
-    <ContentDoc :value="contact" />
+  <section>
+    <ProseH1 id="contact">
+      Contact
+    </ProseH1>
+    <div class="contacts-list">
+      <div
+        v-for="link, i in contact.links"
+        :key="i"
+        class="contact-item"
+      >
+        <div class="range">
+          {{ link.name }}
+        </div>
+        <div class="work-info">
+          <ProseA
+            :href="link.url"
+            class="link"
+            fancy
+          >
+            <span>
+              {{ link.username }}
+            </span>
+          </ProseA>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -29,43 +44,17 @@ const { data: contact } = await useAsyncData(
 </script>
 
 <style lang="sass">
-@use "~/styles/mixins"
-@use "~/styles/typography"
-@use "~/styles/colors"
+@use "@/styles/mixins"
+@use "@/styles/typography"
+@use "@/styles/colors"
 
-.contact-section
-  max-width: 600px
-  margin: 0 auto
-  text-align: center
+.contact-item
+  @include mixins.split
+  display: flex
+  flex-direction: row
+  gap: 2em
+  font-size: typography.font-size(m)
 
-  @media (max-width: 768px)
-    margin: 0 auto 50px
+  margin-bottom: 0.5em !important
 
-  .overline
-    display: block
-    margin-bottom: 20px
-    color: colors.color("primary-highlight")
-    font-family: typography.font("monospace")
-    font-size: typography.font-size("m")
-    font-weight: 400
-    text-decoration: none
-
-    &:before
-      bottom: 0
-      font-size: typography.font-size("s")
-      font-weight: 600
-
-    &:after
-      display: none
-
-  .title
-    font-size: clamp(40px, 5vw, 60px)
-    font-family: typography.font(fancy)
-    font-weight: 600
-    color: colors.color("lightest-foreground")
-    font-variation-settings: "cuts" 300
-
-  .email-link
-    @include mixins.big-button
-    margin-top: 50px
 </style>

@@ -8,11 +8,11 @@
 @use "~/styles/mixins"
 @use "~/styles/typography"
 .prose-ul
-  @include mixins.styled-list
+  //@include mixins.styled-list
   margin-left: 0.5em
   font-family: typography.font("sans-serif")
   font-size: inherit
-  line-height: 1.5rem
+  line-height: 22px
   margin: 1em 0 1em 1em
 
 </style>

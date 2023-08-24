@@ -14,10 +14,12 @@ featured: true
 navigation: false
 ---
 
-A hyper-efficient :highlight[search engine]
-that :highlight[crawls webpages] (whose domain can be restricted
-to a given subset) and :highlight[indexes them],
-then :highlight[handles user queries] on the collection of pages,
-with results :highlight[ranked by frequency].
-It also supports query modifiers such as :highlight[AND], :highlight[OR],
-and :highlight[NOT].
+A hyper-efficient [search engine][search-engine]
+that crawls webpages (whose domain can be restricted
+to a given subset) and indexes them,
+then handles user queries on the contents of the collection of pages,
+with results ranked by frequency.
+It also supports query modifiers such as AND, OR,
+and NOT.
+
+[search-engine]: https://en.wikipedia.org/wiki/Web_search_engine

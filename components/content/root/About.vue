@@ -1,13 +1,10 @@
 <template>
-  <StyledAboutSection
-    id="about"
-    class="about-section"
-  >
+  <section class="about">
     <ContentDoc
       path="profile/brief"
       class="doc"
     />
-  </StyledAboutSection>
+  </section>
 </template>
 
 <script lang="ts">

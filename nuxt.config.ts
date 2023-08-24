@@ -58,10 +58,6 @@ export default defineNuxtConfig({
     "@nuxt/devtools",
     "@pinia/nuxt",
     // "@nuxthq/studio",
-    ["@nuxtjs/algolia", {
-      applicationId: process.env.ALGOLIA_SEARCH_APP_ID,
-      apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
-    }],
     ["@nuxtjs/robots", {
       UserAgent: "*",
       Disallow: "",

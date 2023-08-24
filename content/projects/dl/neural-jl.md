@@ -16,11 +16,10 @@ featured: true
 navigation: false
 ---
 
-As part of a <highlight> publication
-exploring the emergence and the state of the art
-in machine learning</highlight> and most-importantly
-<highlight> the utilities and caveats </highlight>
-that machine learning afford us,
-I implemented <highlight> neural networks </highlight> to demonstrate
+As part of a
+[publication exploring the emergence of and the state of the art in machine learning][publication],
+I implemented neural networks to demonstrate
 how predictions work in the context of simple classification
 and regression problems.
+
+[publication]: '/writing/computing/neural-networks/data-driven-behavior-change'

@@ -3,286 +3,30 @@
 @use "typography"
 @use "geometry"
 
-$border-radius: geometry.radius("small")
-
-@mixin button
-  border-radius: geometry.var("border-radius")
-  font-size: typography.font-size("xs")
-  font-family: typography.font("monospace")
-  line-height: 1
-  cursor: pointer
-  padding: 1.25rem 1.75rem
-
-  margin-top: 50px
-  color: colors.color("lightest-foreground")
-  background: linear-gradient(35deg, colors.color("primary-highlight-tint"), transparent)
-  background-size: 100% 200%
-  
-
-  // background: colors.color("primary-highlight-tint")
-  background-position: right
-  &:hover, &:focus, &:active
-    background-position: left
-    color: colors.color("primary-highlight")
-    outline: none
-    // border: 4px solid transparent
 
 
-@mixin flex-center
+
+@mixin split
   display: flex
-  justify-content: center
-  align-items: center
+  flex-direction: row
+  gap: 2em
+  font-size: typography.font-size(m)
 
-@mixin flex-between
-  display: flex
-  justify-content: space-between
-  align-items: center
+  &:not(:last-child)
+    margin-bottom: 2em
 
+  // first descendant
+  & > :first-child
+    width: 20%
+    gap: 0.5em
+    display: flex
 
-@mixin link
-  display: inline-block
-  text-decoration: none
-  text-decoration-skip-ink: auto
-  color: inherit
-  position: relative
-  transition: geometry.var("default-transition")
-  &:hover, &:active, &:focus
-    color: colors.color("primary-highlight")
-    outline: 0
-
-
-@mixin inline-link
-  display: inline
-  text-decoration: none
-  text-decoration-skip-ink: auto
-  position: relative
-  transition: geometry.var("default-transition")
-  color: colors.color("primary-highlight")
-  outline: none
-
-  &:hover > span
-    color: colors.color("primary-highlight")
-    border-bottom: 1px solid colors.color("primary-highlight")
-
-  & > span
-
-    border-bottom: 1px dotted colors.color("primary-highlight")
-  
-
-    // &::before, &::after
-    //   content: ''
-    //   display: block
-    //   height: 1px
-    //   bottom: 0
-    //   background-color: colors.color("primary-highlight")
-    //   transition: geometry.var("default-transition")
-    //   position: absolute
-    //   display: inline
-
-
-    // &::before
-    //   width: 0
-    //   left: 0
-    //   right: 0
-    //   dsiplay: inline
-    //   transition-delay: 0.25s
-
-    // &::after
-    //   width: 100%
-    //   right: 0
+  & > :last-child
+    width: 80%
     
-    // &:is(:hover, :focus, :active)
+  .range
+    font-size: typography.font-size(xs)
+    color: colors.color(dark-foreground)
 
-    //   &::before
-    //     width: 100%
-        
-    //   &:after
-    //     width: 0
-
-    //   & > *
-    //     color: colors.color("primary-highlight") !important
-    //     transition: geometry.var("default-transition")
-
-  
-
-@mixin small-button
-  color: colors.color("primary-highlight")
-  background-color: transparent
-  border: 1px solid colors.color("primary-highlight")
-  border-radius: geometry.var("border-radius")
-  padding: 0.75rem 1rem
-  font-size: typography.font-size("xs")
-  font-family: typography.font("monospace")
-  // font-weight: 600
-  line-height: 1
-  text-decoration: none
-  cursor: pointer
-  transition: geometry.var("default-transition")
-  &:hover, &:focus, &:active
-    background-color: colors.color("primary-highlight-tint")
-    outline: none
-
-  &:after
-    display: none !important
-
-@mixin big-button
-  color: colors.color("primary-highlight")
-  font-size: typography.font-size("m")
-  font-family: typography.font("sans-serif")
-  transition: all 1.5s ease-in-out
-  text-transform: lowercase
-  // border: 2px solid colors.color("light-background")
-  background-color: colors.color("light-background")
-  padding: 0 20px
-  // padding-top: 4px
-  border-radius: 20px
-  line-height: 2
-
-  -webkit-transition: all 0.5s ease-in-out
-  -moz-transition: all 0.5s ease-in-out
-  -ms-transition: all 0.5s ease-in-out
-  -o-transition: all 0.5s ease-in-out
-  transition: all 0.5s ease-in-out
-
-
-  &:hover
-    background: colors.color("lightest-background")
-
-@mixin box-shadow
-  box-shadow: 0 10px 30px -15px colors.color("shadow")
-  transition: geometry.transition(all, 0.2s, ease-in-out)
-
-  &:hover,
-  &:focus
-    box-shadow: 0 20px 30px -15px colors.color("shadow")
-
-@mixin styled-list
-  li
-    position: relative
-    padding-left: 20px
-    margin-bottom: 10px
-    font-weight: 400
-    line-height: inherit
-
-    &::before 
-      content: '-'
-      position: absolute
-      left: 0
-      color: colors.color("primary-highlight")
-      font-family: typography.font("monospace")
-      font-weight: 300
-
-      transition: all 0.2s ease-out
-
-    &:hover::before
-      content: '\2192'
-      transform: translateX(5px)
-
-    
-
-
-@mixin small-list
-  @include styled-list 
-
-  display: grid
-  grid-gap: 0 10px
-  padding: 0
-  margin: 1em 0
-
-  li
-    font-family: typography.font("monospace")
-    font-weight: 400
-    font-size: typography.font-size("xs")
-    line-height: 1.5rem
-
-    &::before
-      font-weight: 400
-
-@mixin small-list-inline
-  display: flex
-  flex-wrap: wrap
-  position: relative
-  margin: 25px 0 10px
-  padding: 0
-  list-style: none
-  z-index: 2
-  pointer-events: none
-
-  li
-    margin: 0 20px 5px 0
-    color: colors.color("light-foreground")
-    font-family: typography.font("monospace")
-    font-size: typography.font-size("xs")
-    white-space: nowrap
-  
-  @media (max-width: 768px) 
-    margin: 10px 0
-    li 
-      margin: 0 10px 5px 0
-      color: colors.color("lightest-foreground")
-
-@mixin reset-list
-  list-style: none
-  padding: 0
-  margin: 0
-
-@mixin fancy-background
-  // background-image: radial-gradient(circle at 2px 2px, rgba(colors.color(primary-highlight), 30%), 5px, transparent 70%), linear-gradient(0deg, transparent 49%, rgba(colors.color(primary-highlight), 30%) 2px, transparent 51%)
-  // background-size: 80px 80px
-  background-repeat: repeat
-  // background-color: colors.color("light-background")
-
-@mixin fancy-card
-  // border: 3px solid colors.color("purple")
-  position: relative
-  // background-color: colors.color("black")
-  transition: scale 250ms ease
-
-  *
-    position: relative
-    z-index: 12 !important
-
-    &::hover
-      color: white !important
-
-
-  &::before
-    content: ""
-    position: absolute
-    left: 0
-    top: 0
-    width: 100%
-    height: 100%
-    background: linear-gradient(130deg, transparent 0 33%, colors.color("teal") 46%, colors.color("purple") 73.5%, colors.color("ochre") 100%)
-    background-position: 0% 0%
-    background-size: 300% 300%
-    z-index: 10
-    pointer-events: none
-    transition: background-position 350ms ease, transform 650ms ease
-
-  &::after
-    content: ""
-    position: absolute
-    left: 0
-    top: 0
-    width: 98%
-    height: 100%
-    background: radial-gradient(colors.color("white") 8%, transparent 8%)
-    background-size: 10px 10px
-    transition: background-position 650ms ease, transform 650ms ease
-    z-index: 11
-    pointer-events: none
-    transform: translateX(2%)
-
-  &:hover
-    border-color: transparent
-    scale: 1.005
-    
-    &::before
-      background-position: 100% 100%
-
-      *
-        color: colors.color("white") !important
-
-    &::after
-      transform: translateX(0%)
+    .date
+      width: 40%

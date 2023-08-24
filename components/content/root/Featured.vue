@@ -1,93 +1,65 @@
 <template>
   <section id="projects">
-    <h2 class="numbered-heading">
-      Some Things I've Built
-    </h2>
-    <StyledProjectsGrid>
-      <StyledProject
-        v-for="project, i in projects"
-        :key="i"
-        class="hide fade-in"
-      >
-        <div class="project-content">
-          <div>
-            <p class="project-overline">
-              Featured Project
-            </p>
-            <h3 class="project-title">
-              <NuxtLink
-                v-if="project?.url"
-                :to="project.url"
-              >
-                {{ project.title }}
-              </NuxtLink>
-              <span v-else>
-                {{ project.title }}
-              </span>
-              <template v-if="hasCompany(project)">
-                <span
-                  v-if="hasCompany(project)"
-                  class="project-company"
-                >
-                  &nbsp;@&nbsp;
-                </span>
-                <NuxtLink
-                  v-if="project.company.url"
-                  :to="project.company.url"
-                >
-                  {{ project.company.name }}
-                </nuxtLink>
-              </template>
-            </h3>
-            <div class="project-description">
-              <ContentDoc :value="project" />
-
-              <Date
-                v-if="project.date"
-                class="featured-project-date"
-                :date="project.date"
-                :weekday="false"
-                :left="(!isMobile()) && i % 2 === 0"
-              />
-            </div>
-          </div>
-          <ul class="project-tech-list">
-            <li
-              v-for="tech in project.tech"
-              :key="tech"
+    <ProseH1 id="projects">
+      Projects
+    </ProseH1>
+    <!-- <StyledProjectsGrid> -->
+    <div
+      v-for="project, i in projects"
+      :key="i"
+      class="project"
+    >
+      <div class="range">
+        {{
+          new Date(project.date)
+            .toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "numeric",
+            })
+        }}
+      </div>
+      <div class="project-content">
+        <div>
+          <ProseA
+            v-if="project?.url"
+            :to="project.url"
+            fancy
+          >
+            {{ project.title }}
+          </ProseA>
+          <ProseH1 v-else>
+            {{ project.title }}
+          </ProseH1>
+          <template v-if="hasCompany(project)">
+            <span
+              v-if="hasCompany(project)"
+              class="project-company"
             >
-              {{ tech }}
-            </li>
-          </ul>
-          <div class="project-links">
+              &nbsp;@&nbsp;
+            </span>
             <NuxtLink
-              v-if="project.repo"
-              :to="project.repo"
-              aria-label="GitHub Link"
+              v-if="project.company.url"
+              :to="project.company.url"
             >
-              <Icon type="GitHub" />
+              {{ project.company.name }}
             </NuxtLink>
-            <NuxtLink
-              v-if="project.url"
-              :to="project.url"
-              aria-label="External Link"
-            >
-              <Icon type="ExternalLink" />
-            </NuxtLink>
+          </template>
+          <div class="project-description">
+            <ContentDoc :value="project" />
           </div>
         </div>
-        <div class="project-image">
-          <div class="image-wrapper">
-            <NuxtImg
-              :src="`${project.cover}`"
-              :alt="project.title"
-              loading="lazy"
-              class="img-project"
-            />
-          </div>
+        <div class="project-links">
+          <NuxtLink
+            v-if="project.repo"
+            :to="project.repo"
+            aria-label="GitHub Link"
+            class="link"
+          >
+            <Icon type="GitHub" />
+          </NuxtLink>
         </div>
-      </StyledProject>
-    </StyledProjectsGrid>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -130,7 +102,6 @@ const { data } = await useAsyncData(
   `projects-${useRoute().path}`,
   async () => {
     const _projectsData = queryContent()
-      // match '/projects...'
       .where({ _path: { $regex: "^/projects" } })
       .where({ featured: true })
       .sort({ date: -1, order: 1 })
@@ -144,12 +115,34 @@ const projects = data.value || [];
 </script>
 
 <style lang="sass" scoped>
-@use "~/styles/transitions"
-@use "~/styles/typography"
+@use "@/styles/transitions"
+@use "@/styles/typography"
+@use "@/styles/mixins"
+
+.project
+  @include mixins.split
 
 .project-title
   font-weight: 600
   font-family: typography.font(fancy)
   font-variation-settings: "cuts" 300
+
+.project-links
+  height: 1em
+  //width: fit-content
+  //background: yellow
+  width: 100%
+  display: inline-flex
+  justify-content: flex-start
+
+  .link
+    height: 100%
+    width: fit-content
+    aspect-ratio: 1/1
+
+    svg
+      max-height: 100% !important
+      aspect-ratio: 1/1
+      width: auto
 
 </style>
