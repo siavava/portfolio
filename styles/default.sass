@@ -11,12 +11,13 @@ html
   width: 100vw
   max-width: 100vw
   scroll-behavior: smooth
+  font-size: typography.font-size(m)
+  font-family: typography.font("sans-serif")
 
 *, *::before, *::after
   box-sizing: border-box
   padding: 0
   margin: 0
-  font-variation-settings: "slnt" 0deg
 
 // *, *::before, *::after
 //   outline: 1px solid red !important
@@ -51,13 +52,13 @@ html
 /* Scrollbar Styles */
 html 
   scrollbar-width: thin
-  scrollbar-color: colors.color(foreground) // colors.color(")
+  scrollbar-color: colors.color(light-background) // colors.color(")
 
 ::-webkit-scrollbar-track 
-  background: colors.color(light-background)
+  background: colors.color(background)
 
 ::-webkit-scrollbar-thumb 
-  background: colors.color(foreground)
+  background: colors.color(light-foreground)
   border: 3px solid
   border-radius: 10px
 
@@ -114,29 +115,13 @@ main
 section 
   margin: 0 auto
   padding: 100px 30px   // fix hero section.
-  max-width: 1000px
+  // max-width: 1000px
 
-  @media (max-width: 768px) 
-    padding: 80px 0
+  // @media (max-width: 768px) 
+  //   padding: 80px 0
   
-  @media (max-width: 480px) 
-    padding: 60px 0
-
-  &.footnotes
-    margin-top: 20px
-    margin-bottom: 20px
-    border-top: 1px solid colors.color("lightest-background")
-    padding-top: 3em !important
-    padding-bottom: 0
-    line-height: 2
-
-
-    // grab the links and add some space!!
-    & > * > * > *
-      padding: 0.2em 0
-      
-    #footnote-label
-      color: colors.color("secondary-highlight")
+  // @media (max-width: 480px) 
+  //   padding: 60px 0
 
 
 h1, h2, h3, h4, h5, h6 
@@ -145,50 +130,7 @@ h1, h2, h3, h4, h5, h6
   color: colors.color("lightest-foreground")
   line-height: 1.1
 
-.big-heading 
-  margin: 0
-  font-size: clamp(40px, 8vw, typography.font-size("big-heading"))
-  font-variation-settings: "cuts" 300
 
-.medium-heading 
-  margin: 0
-  font-size: clamp(40px, 8vw, 60px)
-
-.numbered-heading 
-  display: flex
-  align-items: center
-  position: relative
-  margin: 10px 0 40px
-  width: 100%
-  font-size: clamp(26px, 5vw, typography.font-size("heading"))
-  font-family: typography.font("fancy")
-  white-space: nowrap
-  font-variation-settings: "cuts" 300
-  font-weight: 700
-  
-  &::before
-    content: '0' counter(sections) '.'
-    counter-increment: sections
-
-    position: relative
-    margin-right: 0.5em
-
-    color: colors.color("primary-highlight")
-    font-family: typography.font("monospace")
-    font-size: typography.font-size("xl")
-    font-weight: 400
-    
-  
-  &::after 
-    content: ''
-    position: relative
-    margin: auto
-    width: 100%
-    height: 1px
-    margin-left: 0.5em
-    background: colors.color("lightest-background")
-    
-  
 
 img, svg, .image-wrapper 
   width: 100%
@@ -202,33 +144,10 @@ img, svg, .image-wrapper
   -webkit-user-drag: none !important
   user-drag: none !important
 
-img[alt=""], img:not([alt]) 
-  filter: blur(5px)
 
-svg 
-  // width: 100%
-  // height: 100%
-  // vertical-align: middle
-  // stroke-width: 3px
-  // // fill: currentcolor
 
-  transition: color 0.3s ease-in-out
-  
 
-// a 
-//   display: inline-block
-//   text-decoration: none
-//   text-decoration-skip-ink: auto
-//   color: inherit
-//   position: relative
-//   transition: geometry.var("default-transition")
 
-//   &:hover, &:focus 
-//     color: colors.color("primary-highlight")
-  
-//   &.inline-link 
-//     @include mixins.inline-link
-  
 
 button 
   cursor: pointer
@@ -246,128 +165,4 @@ input, textarea
   &:active 
     &::placeholder 
       opacity: 1
-    
-  
-
-p 
-  margin: 0 0 15px 0
-
-  &:last-child, &:last-of-type 
-    margin: 0
-  
-  // & > a 
-  //   @include mixins.inline-link
-  
-  // & > code 
-  //   background-color: colors.color("light-background")
-  //   color: colors.color("white")
-  //   font-size: typography.font-size("s")
-  //   border-radius: geometry.var("border-radius")
-  //   padding: 0.3em 0.5em
-  
-
-// ul
-//   &.styled-list 
-//     padding: 0
-//     margin: 0
-//     list-style: none
-//     font-size: typography.font-size("l")
-
-
-//     li 
-//       position: relative
-//       padding-left: 30px
-//       margin-bottom: 10px
-
-//       &:before 
-//         content: '▹'
-//         position: absolute
-//         left: 0
-//         color: colors.color("primary-highlight")
-      
-.styled-content
-  display: flex
-  flex-direction: column
-  min-height: 100svh
-
-blockquote 
-  border-left-color: colors.color("primary-highlight")
-  border-left-style: solid
-  border-left-width: 1px
-  margin-left: 0px
-  margin-right: 0px
-  padding-left: 1.5rem
-
-  p 
-    font-style: italic
-    font-size: 24px
-  
-
-hr 
-  background-color: colors.color("lightest-background")
-  height: 1px
-  border-width: 0px
-  border-style: initial
-  border-color: initial
-  border-image: initial
-  margin: 1rem
-
-code 
-  font-family: typography.font("monospace")
-  font-size: typography.font-size("m")
-
-
-  
-
-.logo
-  color: colors.color("primary-highlight")
-
-.overline 
-  color: colors.color("primary-highlight")
-  font-family: typography.font("monospace")
-  font-size: typography.font-size("m")
-  font-weight: 400
-
-.subtitle 
-  color: colors.color("primary-highlight")
-  margin: 0 0 20px 0
-  font-size: typography.font-size("m")
-  font-family: typography.font("monospace")
-  font-weight: 400
-  line-height: 1.5
-
-  @media (max-width: 1080px) 
-    font-size: typography.font-size("s")
-  
-  @media (max-width: 768px) 
-    font-size: typography.font-size("xs")
-  
-  // a 
-  //   @include mixins.inline-link
-  //   line-height: 1.5
-  
-.breadcrumb 
-  display: flex
-  align-items: center
-  margin-bottom: 50px
-  color: colors.color("primary-highlight")
-
-
-  .arrow 
-    display: block
-    margin-right: 10px
-    padding-top: 4px
-  
-  // a 
-  //   @include mixins.inline-link
-  //   font-family: typography.font("monospace")
-  //   font-size: typography.font-size("s")
-  //   font-weight: 600
-  //   line-height: 1.5
-  //   text-transform: uppercase
-  //   letter-spacing: 0.1em
-  
-
-.image-outer-wrapper 
-  height: 100%
 

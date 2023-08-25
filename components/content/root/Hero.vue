@@ -16,7 +16,6 @@
             {{ profile.title }} at
           </span>
           <ProseA
-            :key="profile.company.name"
             :href="profile.company.url"
             fancy
           >
@@ -80,7 +79,7 @@ export default {
     height: auto
     display: flex
     flex-direction: column
-    height: fit-content
+    //height: fit-content
 
     .title
       font-size: typography.font-size(l)

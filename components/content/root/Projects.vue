@@ -196,13 +196,13 @@ export default {
 
   .project-links
     height: 1em
-    width: fit-content
+    //width: fit-content
     display: inline-flex
     justify-content: flex-start
 
     .link
       height: 100%
-      width: fit-content
+      //width: fit-content
       aspect-ratio: 1/1
 
       svg

@@ -10,6 +10,16 @@
   gap: 2em
   font-size: typography.font-size(m)
 
+  @media screen and ( max-width: 540px )
+    flex-direction: column
+    gap: 1em
+
+    & > :first-child
+      width: 100%
+
+    & > :last-child
+      width: 100%
+
   &:not(:last-child)
     margin-bottom: 2em
 
@@ -19,8 +29,14 @@
     gap: 0.5em
     display: flex
 
+    @media screen and ( max-width: 540px )
+      margin-top: 2em
+
   & > :last-child
     width: 80%
+
+    @media screen and ( max-width: 540px )
+      width: 100%
     
   .range
     font-size: typography.font-size(xs)

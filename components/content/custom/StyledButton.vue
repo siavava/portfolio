@@ -27,7 +27,9 @@ export default {
 .styled-button
   background: colors.color(light-background)
   font-size: typography.font-size(s)
-  width: fit-content
+  //width: fit-content
+  display: table
+  margin-right: auto
   padding: 0 0.5em
   border-radius: 20px
 
