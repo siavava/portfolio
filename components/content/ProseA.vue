@@ -66,14 +66,11 @@ defineProps({
   align-items: center
   gap: 7px
   display: inline
-  display: table
-  margin-right: auto
 
   &:hover
     border-bottom: 0
 
 .link
-  background: rgba(yellow, 0.1)
   color: colors.color(lightest-foreground)
   border-bottom: 1px transparent
   margin: 0
