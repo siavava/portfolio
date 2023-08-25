@@ -17,10 +17,7 @@ defineProps({
 
 <template>
   <div
-    class="link-wrapper"
-    :style="{
-      'margin-bottom': fancy ? '1em' : '0',
-    }"
+    :class="{'link-wrapper': true, 'fancy': fancy}"
   >
     <NuxtLink
       :href="href"
@@ -57,11 +54,16 @@ defineProps({
 <style lang="sass" scoped>
 @use "@/styles/mixins"
 @use "@/styles/colors"
+@use "@/styles/typography"
 
 .link-wrapper
   align-items: center
   gap: 7px
   display: inline
+
+  &.fancy
+    font-size: typography.font-size(m)
+    font-weight: 500
 
 .link
   color: colors.color(lightest-foreground)
@@ -82,8 +84,6 @@ defineProps({
 
 .pointer
   height: 1em
-  margin: 0 !important
   aspect-ratio: 1/1 !important
-  padding: 0 !important
   display: inline
 </style>

@@ -47,7 +47,7 @@ const generate = anchorLinks?.depth >= heading;
 .prose-h2
   font-size: typography.font-size(m)
   //background: rgba(yellow, 0.2)
-  margin-bottom: 1em
+  //margin-bottom: 1em
   font-weight: 500
   color: colors.color(lightest-foreground)
   margin: 0.4em 0 -0.5em 0

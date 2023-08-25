@@ -14,4 +14,7 @@
   font-family: typography.font("sans-serif")
   font-size: typography.font-size("m")
   margin-bottom: 1em
+
+  &:first-child
+    margin-top: 1em
 </style>
