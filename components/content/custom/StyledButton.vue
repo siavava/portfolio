@@ -35,5 +35,5 @@ export default {
 
   &:hover
     cursor: pointer
-    color: colors.color(foreground)
+    color: colors.color(light-foreground)
 </style>

@@ -11,7 +11,7 @@
         <h1 class="title">
           {{ profile.name }}
         </h1>
-        <p class="text">
+        <div class="text">
           <span>
             {{ profile.title }} at
           </span>
@@ -21,8 +21,11 @@
           >
             {{ profile.company.name }}
           </ProseA>
-        </p>
-        <StyledButton :href="`https://${profile.website}`">
+        </div>
+        <StyledButton
+          id="profile-link"
+          :href="`https://${profile.website}`"
+        >
           {{ profile.website }}
         </StyledButton>
       </div>
@@ -88,6 +91,6 @@ export default {
     .text
       font-size: typography.font-size(m)
       font-weight: 400
-      margin-top: 0.5em
+      margin: 0.5em 0
 
 </style>

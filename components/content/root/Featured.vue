@@ -73,8 +73,8 @@
         </div>
       </div>
     </div>
-    <ProseP
-      style="margin-top: 4em;"
+    <div
+      class="archive-link"
     >
       <ProseA
         href="/archive"
@@ -82,7 +82,7 @@
       >
         archive
       </ProseA>
-    </ProseP>
+    </div>
   </section>
 </template>
 
@@ -184,5 +184,10 @@ const projects = data.value || [];
       &:not(:last-child)::after
         content: "/"
         margin: 0 0.5em
+
+.archive-link
+  font-family: typography.font("sans-serif")
+  font-size: typography.font-size("m")
+  margin-bottom: 4em 0 1em 0
 
 </style>
