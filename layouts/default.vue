@@ -3,7 +3,6 @@
     <main>
       <slot id="content" />
     </main>
-    <Analytics />
     <AppFooter
       class="default-footer"
       identifier="in-page"
@@ -11,14 +10,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import Analytics from "@vercel/analytics";
-
-</script>
-
 <style lang="sass">
-//@use "~/styles/default"
-@use "~/styles/colors"
+@use "@/styles/colors"
 @use "@/styles/typography"
 
 #root
