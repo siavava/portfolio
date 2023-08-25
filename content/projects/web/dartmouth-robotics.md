@@ -10,7 +10,7 @@ tech:
   - Next
 featured: false
 navigation: false
-tag: 'design / web'
+tag: design / web
 ---
 
 New website design for the Dartmouth Robotics Club.
