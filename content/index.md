@@ -17,4 +17,6 @@ layout: default
 
 :featured
 
+<!-- :projects -->
+
 :contact

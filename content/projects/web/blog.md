@@ -10,7 +10,7 @@ tech:
   - Nuxt
 featured: true
 navigation: false
-tag: design / web
+tag: 'design / web'
 ---
 
 New blog website design and, along with it, a new domain!

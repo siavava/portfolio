@@ -25,4 +25,4 @@ Research work focused on applications of modern [deep learning][deep-learning] a
 [robotics]: https://en.wikipedia.org/wiki/Robotics
 [waterline-detection]: https://en.wikipedia.org/wiki/Waterline
 
-[project-proposal]: https://github.com/siavava/waterline-detection/blob/main/waterline-detection/00-proposal/main.pdf
+<!-- [project-proposal]: https://github.com/siavava/waterline-detection/blob/main/waterline-detection/00-proposal/main.pdf -->

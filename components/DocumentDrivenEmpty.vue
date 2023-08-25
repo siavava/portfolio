@@ -1,25 +1,6 @@
 <template>
   <section class="not-found">
-    <!-- <div class="message-wrapper"> -->
-    <!-- <h1> 404 </h1> -->
-    <NuxtImg
-      src="/404.gif"
-      alt="404"
-      width="100%"
-      height="auto"
-      class="not-found-image"
-    />
-
-    <div class="not-found-instructions">
-      <p> Nice to meet you tho!</p>
-      <NuxtLink
-        class="error-page-button"
-        @click="$router.back()"
-      >
-        <span>cd ..</span>
-      </NuxtLink>
-    </div>
-    <!-- </div> -->
+    <div class="not-found-instructions" />
   </section>
 </template>
 

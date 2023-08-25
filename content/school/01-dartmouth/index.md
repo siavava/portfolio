@@ -5,7 +5,7 @@ company: Dartmouth College
 location: Hanover, NH
 start: 09/20
 end: 06/24
-url: https://home.dartmouth.edu/
+url: 'https://home.dartmouth.edu'
 category: school-info
 navigation: false
 ---
