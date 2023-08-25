@@ -2,16 +2,15 @@
 category: 'profile'
 navigation: false
 name: 'Amittai Siavava'
-title: 'Software Engineer'
+title: 'Student'
 company:
-  name: 'Jane Street'
-  url: 'https://www.janestreet.com/'
+  name: 'Dartmouth College'
+  url: 'https://home.dartmouth.edu/'
 website: amittai.studio
 ---
 
 # About
 
-Software Engineering (incoming) at [Jane Street][jane-street].
 My primary interests are in [deep learning][dl], [category theory][category-theory] and [functional programming][functional-prg], and a _little bit_ of [design][design].
 However, I love to problem-solve across a wide range of domains.
 
