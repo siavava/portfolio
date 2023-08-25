@@ -84,10 +84,10 @@
         class="archive-link"
       >
         <ProseA
-          href="/archive"
+          href="/"
           fancy
         >
-          archive
+          home
         </ProseA>
       </div>
     </div>
