@@ -1,6 +1,6 @@
 ---
 # order: 10
-date: 2023-08/21
+date: 2023-08-21
 title: 'Resume Website'
 url: 'https://amittai.studio'
 repo: 'https://github.com/siavava/amittai.studio'

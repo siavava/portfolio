@@ -1,6 +1,6 @@
 ---
 # order: 10
-date: 2023-08/10
+date: 2023-08-10
 title: 'Dartmouth Robotics Website'
 url: 'https://amittai.studio'
 repo: 'https://github.com/Dartmouth-Robotics/website'
