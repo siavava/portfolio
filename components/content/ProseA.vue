@@ -65,18 +65,30 @@ defineProps({
 .link-wrapper
   align-items: center
   gap: 0.5em
+  display: inline
+  display: table
+  margin-right: auto
 
   &:hover
     border-bottom: 0
 
 .link
+  background: rgba(yellow, 0.1)
   color: colors.color(lightest-foreground)
   border-bottom: 1px transparent
   margin: 0
   padding: 0
   line-height: 0.9em
+  display: inline
 
   &:hover > span
     border-bottom: 1px solid
+    display: inline
+
+    &:not(:last-child)
+      margin-right: 0.5em
+
+  &.arrow
+    height: 1em
 
 </style>
