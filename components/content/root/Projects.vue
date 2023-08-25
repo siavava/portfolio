@@ -177,10 +177,12 @@ export default {
   margin-top: 200px
   font-size: typography.font-size(s)
   font-weight: 600
-
-  // center text vertically
   display: flex
   align-items: center
+
+  @media screen and (max-width: 540px)
+    margin-top: 100px
+    height: 200px
 
 .project
   @include mixins.split
@@ -212,9 +214,6 @@ export default {
 
   .project-tech-list
     display: inline-flex
-
-    @media (max-width: 540px)
-      display: none
 
     .project-tech-item
       font-size: typography.font-size(xs)

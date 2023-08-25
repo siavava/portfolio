@@ -165,7 +165,6 @@ export default {
 
 .styled-footer {
   flex-direction: column;
-  color: colors.color("primary-highlight");
   flex-direction: column;
 
   .footer-vertical {
@@ -185,7 +184,7 @@ export default {
     }
 
     .left-section {
-      color: colors.color(foreground);
+      color: colors.color(dark-foreground);
       font-size: 1rem;
     }
 
@@ -196,9 +195,9 @@ export default {
 
       .year {
         font-size: 1rem;
-        font-weight: 300;
         font-family: typography.font(sans-serif);
-        color: colors.color(foreground);
+        color: colors.color(dark-foreground);
+        font-weight: 500
       }
       align-items: center;
     }
@@ -281,7 +280,7 @@ export default {
 
     .footer-paragraph {
       width: min(100%, 548px);
-      color: colors.color(foreground);
+      color: colors.color(light-foreground);
       margin: 0 auto;
       padding: 60px 0;
 

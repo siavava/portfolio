@@ -22,17 +22,14 @@ defineProps({
       'margin-bottom': fancy ? '1em' : '0',
     }"
   >
-    <!-- 'display': fancy ? 'inline-flex' : 'inline' -->
     <NuxtLink
       :href="href"
       :class="{'link': true, 'arrow': fancy}"
     >
-      <slot />
+      <span>
+        <slot />
+      </span>
     </NuxtLink>
-    <!-- <span
-      v-if="fancy"
-      class="pointer"
-    > -->
     <svg
       v-if="fancy"
       class="pointer"
@@ -54,7 +51,6 @@ defineProps({
         fill="#eee"
       />
     </svg>
-    <!-- </span> -->
   </div>
 </template>
 
@@ -66,10 +62,6 @@ defineProps({
   align-items: center
   gap: 7px
   display: inline
-  background: rgba(yellow, 0.1)
-
-  &:hover
-    border-bottom: 0
 
 .link
   color: colors.color(lightest-foreground)
@@ -79,13 +71,13 @@ defineProps({
   line-height: 0.9em
   display: inline
 
-  a
-    border-bottom: 1px solid transparent
+  //a
+  border-bottom: 1px solid transparent
 
-    &:not(:last-child)
-      margin-right: 7px
+  &:not(:last-child)
+    margin-right: 7px
 
-  &:hover > a
+  &:hover > span
     border-bottom: 1px solid
 
 .pointer

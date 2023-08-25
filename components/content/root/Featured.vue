@@ -176,9 +176,6 @@ const projects = data.value || [];
   .project-tech-list
     display: inline-flex
 
-    @media (max-width: 540px)
-      display: none
-
     .project-tech-item
       font-size: typography.font-size(xs)
       font-weight: 600
