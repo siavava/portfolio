@@ -61,10 +61,6 @@ defineProps({
   gap: 7px
   display: inline
 
-  &.fancy
-    font-size: typography.font-size(m)
-    font-weight: 500
-
 .link
   color: colors.color(lightest-foreground)
   border-bottom: 1px transparent

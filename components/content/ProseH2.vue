@@ -50,7 +50,7 @@ const generate = anchorLinks?.depth >= heading;
   //margin-bottom: 1em
   font-weight: 500
   color: colors.color(lightest-foreground)
-  margin: 0.4em 0 -0.5em 0
+  margin: 0.3em 0 -1.3em 0
   padding: 0
   line-height: 0.9em
 </style>
