@@ -64,7 +64,7 @@ defineProps({
 
 .link-wrapper
   align-items: center
-  gap: 0.5em
+  gap: 7px
   display: inline
   display: table
   margin-right: auto
