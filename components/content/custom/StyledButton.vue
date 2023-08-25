@@ -28,9 +28,8 @@ export default {
   background: colors.color(light-background)
   font-size: typography.font-size(s)
   width: fit-content
-  padding: 0 1em
+  padding: 0 0.5em
   border-radius: 20px
-  margin: 0.5em 0
 
   &:hover
     cursor: pointer

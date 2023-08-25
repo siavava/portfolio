@@ -10,6 +10,7 @@ tech:
   - Physical Simulation
 featured: false
 navigation: false
+tag: 'visual computing'
 ---
 
 Using Physics-based simulation to animate a hair strand using connection

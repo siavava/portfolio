@@ -1,215 +1,228 @@
 <template>
-  <StyledArchivedProjectsSection>
-    <h2 class="other-projects-header">
-      Other Noteworthy Projects
-    </h2>
-    <TransitionGroup
-      ref="projectsGrid"
-      component="null"
-      tag="ul"
-      class="projects-grid"
+  <section id="projects">
+    <ProseH1 id="projects">
+      Projects Archive
+    </ProseH1>
+    <div
+      v-for="category, index in sortedCategories"
+      :key="index"
     >
-      <Transition
-        v-for="project, i in projects"
-        v-show="i < currentlyShowing"
+      <div class="category-title">
+        {{ category[0] }}
+      </div>
+      <div
+        v-for="project, i in category[1]"
         :key="i"
-        class="fadeup"
-        :timeout="i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300"
-        :exit="false"
-        mode="in-out"
-        tag="StyledArchivedProject"
-        :style="{
-          transitionDelay: `${i >= GRID_LIMIT ? (i - GRID_LIMIT) * 100 : 0}ms`,
-        }"
+        class="project"
       >
-        <StyledArchivedProject>
-          <div class="project-inner">
-            <header class="archived-project-text">
-              <div class="project-top">
-                <div class="folder">
-                  <Icon type="Folder" />
-                </div>
-                <div class="project-links">
-                  <a
-                    v-if="project.repo"
-                    :href="project.repo"
-                    aria-label="GitHub Link"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Icon type="GitHub" />
-                  </a>
-                  <a
-                    v-if="project.url"
-                    :href="project.url"
-                    aria-label="External Link"
-                    class="external"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Icon type="External" />
-                  </a>
-                </div>
-              </div>
-
-              <h3 class="project-title">
-                <a
-                  v-if="(project?.url || project.repo)"
-                  :href="project.url ? project.url : project.repo"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {{ project.title }}
-                </a>
-                <span v-else>
-                  {{ project.title }}
-                </span>
-              </h3>
+        <div class="range">
+          {{
+            new Date(project.date)
+              .toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "numeric",
+              })
+          }}
+        </div>
+        <div class="project-content">
+          <div>
+            <ProseA
+              v-if="project?.url"
+              :href="project.url"
+              fancy
+            >
+              {{ project.title }}
+            </ProseA>
+            <ProseH2 v-else>
+              {{ project.title }}
+            </ProseH2>
+            <template v-if="hasCompany(project)">
+              <span
+                v-if="hasCompany(project)"
+                class="project-company"
+              >
+                &nbsp;@&nbsp;
+              </span>
+              <NuxtLink
+                v-if="project.company.url"
+                :to="project.company.url"
+              >
+                {{ project.company.name }}
+              </NuxtLink>
+            </template>
+            <div class="project-description">
               <ContentDoc :value="project" />
-            </header>
-
-            <Date
-              v-if="project.date"
-              class="archived-project-date"
-              :weekday="false"
-              :date="project.date"
-            />
-
-            <footer>
-              <ul class="project-tech-list">
-                <li
-                  v-for="(tech, techIndex) in project?.tech"
-                  :key="techIndex"
-                >
-                  {{ tech }}
-                </li>
-              </ul>
-            </footer>
+            </div>
           </div>
-        </StyledArchivedProject>
-      </Transition>
-    </TransitionGroup>
+          <div class="project-footer">
+            <div class="project-links">
+              <NuxtLink
+                v-if="project.repo"
+                :to="project.repo"
+                aria-label="GitHub Link"
+                class="link"
+              >
+                <Icon type="GitHub" />
+              </NuxtLink>
+            </div>
+            <ul
+              v-if="project.tech"
+              class="project-tech-list"
+            >
+              <li
+                v-for="(tech, techIndex) in project?.tech"
+                :key="techIndex"
+                class="project-tech-item"
+              >
+                {{ tech }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-    <StyledButton
-      v-if="projects.length > 6"
-      id="more-button"
-      ref="showMoreButton"
-      class="more-button"
-      to="#"
-      @click="toggleShowMore"
-    >
-      Show {{ showMore ? 'Less' : 'More' }}
-    </StyledButton>
-
-    <!-- include error image here so it is processed by nuxt-img -->
-    <NuxtImg
-      src="/404.gif"
-      alt="404"
-      class="not-found-image"
-      loading="lazy"
-    />
-  </StyledArchivedProjectsSection>
+      <ProseP
+        style="margin-top: 4em;"
+      >
+        <ProseA
+          href="/"
+          fancy
+        >
+          home
+        </ProseA>
+      </ProseP>
+    </div>
+  </section>
 </template>
 
 <script lang="ts" setup>
+// @eslint-ignore-file
+import { ParsedContent } from "@nuxt/content/dist/runtime/types";
 
-import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
-// import { delimiter } from "path";
+const hasCompany = (project: any) => typeof project.company !== "undefined";
 
-const projectsGrid = ref<HTMLElement | null>(null);
-const GRID_LIMIT = 6;
-
-// read 'job-info' data from Markdown files
-const { data: projectData } = await useAsyncData(
-  `archived-projects-${useRoute().path}`,
+// read 'featured projects' data
+const { data } = await useAsyncData(
   async () => {
-    const _projectsData = queryContent<MarkdownParsedContent>()
-      // match '/projects...'
+    const _projectsData = queryContent()
       .where({ _path: { $regex: "^/projects" } })
-      .where({ featured: false })
-      .sort({ date: -1 })
+      .sort({ date: -1, order: 1 })
       .find();
     return _projectsData;
   },
 );
 
-const projects = projectData.value;
-
-const showMore = ref(false);
-const showMoreButton = ref(null);
-const totalCount = ref(projects.length);
-const currentlyShowing = ref(Math.min(GRID_LIMIT, totalCount.value));
-
-const toggleShowMore = () => {
-  showMore.value = !showMore.value;
-};
-
-const isMax = () => currentlyShowing.value > (projects.length - 1);
-const isMin = () => currentlyShowing.value <= GRID_LIMIT;
-
-function showAnotherProject() {
-  if (!isMax()) {
-    currentlyShowing.value += 1;
+const _projects = data.value || [];
+const categorized = new Map<string, ParsedContent[]>();
+for (const project of _projects) {
+  const subcategory = project.tag || "misc";
+  if (categorized.has(subcategory)) {
+    categorized.get(subcategory)?.push(project);
+  } else {
+    categorized.set(subcategory, [project]);
   }
 }
 
-function hideAnotherProject() {
-  if (!isMin()) {
-    currentlyShowing.value -= 1;
-  }
+// sort by date
+for (const category of categorized.values()) {
+  category.sort((a, b) => {
+    const aDate = new Date(a.date);
+    const bDate = new Date(b.date);
+    return bDate.getTime() - aDate.getTime();
+  });
 }
 
-let timer = null; /// debug: I should catch this on destruction!
-onMounted(() => {
-  timer = setInterval(() => {
-    showMore.value
-      ? showAnotherProject()
-      : hideAnotherProject();
-  }, 1000);
-});
-
-onUnmounted(() => {
-  clearInterval(timer);
-});
+// sort categories by latest date
+const sortedCategories = Array.from(categorized.entries()).sort(
+  (a, b) => {
+    const aDate = new Date(a[1][0].date);
+    const bDate = new Date(b[1][0].date);
+    return bDate.getTime() - aDate.getTime();
+  },
+);
 
 </script>
 
 <script lang="ts">
 export default {
   name: "Projects",
+  data() {
+    return {
+      size: 0,
+    };
+  },
 };
 </script>
 
-<style lang="sass">
-@use "~/styles/typography"
-@use "~/styles/colors"
+<style lang="sass" scoped>
+@use "@/styles/transitions"
+@use "@/styles/typography"
+@use "@/styles/mixins"
+@use "@/styles/colors"
 
-.not-found-image
-  width: 0
-  height: 0
-  display: none
+.projects-archive-container
+  width: 100vw
+  height: 100vh
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 1000
+  overflow: scroll
+  background: colors.color(background)
 
-.list-enter-active, .list-leave-active
-  transition: all 2s ease
-
-.list-enter, .list-leave-to
-  opacity: 0
-  transform: translateY(30px)
-
-.other-projects-header
-  font-weight: 700
-  font-family: typography.font("fancy")
-  font-variation-settings: "cuts" 300
-
-* > h3
+.category-title
+  text-transform: uppercase
+  width: 100%
+  height: 400px
+  margin-top: 200px
+  font-size: typography.font-size(s)
   font-weight: 600
 
-.archived-project-date
-  margin-top: 2em
-  justify-self: end
-  margin-top: auto
-  margin-bottom: 10px
+  // center text vertically
+  display: flex
+  align-items: center
 
-.archived-project-text
-  margin-bottom: 2em
+.project
+  @include mixins.split
+
+.project-title
+  font-weight: 600
+
+.project-footer
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+
+  .project-links
+    height: 1em
+    width: fit-content
+    display: inline-flex
+    justify-content: flex-start
+
+    .link
+      height: 100%
+      width: fit-content
+      aspect-ratio: 1/1
+
+      svg
+        max-height: 100% !important
+        aspect-ratio: 1/1
+        width: auto
+
+  .project-tech-list
+    display: inline-flex
+
+    @media (max-width: 540px)
+      display: none
+
+    .project-tech-item
+      font-size: typography.font-size(xs)
+      font-weight: 600
+      text-transform: lowercase
+
+      &:not(:last-child)::after
+        content: "/"
+        margin: 0 0.5em
+
 </style>

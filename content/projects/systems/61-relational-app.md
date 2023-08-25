@@ -9,11 +9,11 @@ repo: 'https://github.com/siavava/relational'
 tech:
   - Python
   - MySQL
-  - Relational Design
   - Database Systems
 category: 'featured-project'
 featured: true
 navigation: false
+tag: 'systems'
 ---
 
 A [relational database][relational-db] with a

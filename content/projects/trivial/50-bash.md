@@ -5,15 +5,16 @@ title: 'Bash Scripting'
 # cover: 
 repo: 'https://github.com/siavava/bash'
 tech:
-  - bash scripting
-  - regular expressions
+  - bash
+  - regex
 featured: false
 navigation: false
+tag: systems
 ---
 
 Hacking our way out of various scenarios with bash scripting.
 
-Includes processing streams of data using :highlight[sed],
-matching string patters in files using :highlight[grep],
-extracting bits of data from files using :highlight[head] / :highlight[tail],
+Includes processing streams of data using _sed_,
+matching string patters in files using _grep_,
+extracting bits of data from files using _head_ / _tail_ / _cut_ / _sort_ / _uniq_,
 and more.

@@ -10,6 +10,7 @@ tech:
 category: 'featured-project'
 featured: false
 navigation: false
+tag: 'data structures and algorithms'
 ---
 
 Interactive program that allows the user to draw on a canvas

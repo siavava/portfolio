@@ -8,11 +8,12 @@ cover: 'featured-chess-ai.jpeg'
 repo: 'https://github.com/siavava/ai/tree/main/03-ChessAI'
 tech:
   - Python
-  - Adversarial Search
+  - adversarial search
   - AI
 category: 'featured-project'
 featured: true
 navigation: false
+tag: 'artificial intelligence'
 ---
 
 A chess bot that uses various strategies including
@@ -31,4 +32,3 @@ in chess.
 [null-move-pruning]: https://en.wikipedia.org/wiki/Null-move_heuristic
 [aspiration-windows]: https://en.wikipedia.org/wiki/Aspiration_window
 [quiescence-search]: https://en.wikipedia.org/wiki/Quiescence_search
-

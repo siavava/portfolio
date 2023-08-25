@@ -9,8 +9,11 @@ tech:
   - Machine Learning
 featured: false
 navigation: false
+tag: 'machine learning'
 ---
 
-Using :highlight[regression] models to classify provided data.
-The models are not pre-trained, se we use :highlight[gradient descent]
+Using regression models to classify provided data.
+The models are not pre-trained, se we use [gradient descent][gradient-descent]
 to find the optimal parameters for the model.
+
+[gradient-descent]: https://en.wikipedia.org/wiki/Gradient_descent

@@ -23,7 +23,6 @@
     font-weight: 600
 
   td
-    border-bottom: 1px solid colors.color("lightest-background")
     padding: 10px
 
   // align text to top of cell

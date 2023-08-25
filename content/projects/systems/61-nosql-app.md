@@ -14,6 +14,7 @@ tech:
 category: 'featured-project'
 featured: false
 navigation: false
+tag: 'systems'
 ---
 
 A blog server built with a [Python](https://www.python.org/) frontend
@@ -21,6 +22,6 @@ and a [MongoDB](https://www.mongodb.com/) backend.
 It supports registered users posting updates and comments, querying for posts
 and comments, and deleting posts and comments.
 
-:highlight[Collaborative project with [Ke Lou][lou]].
+Collaborative project with [Ke Lou][lou].
 
 [lou]: https://www.linkedin.com/in/ke-lou-898301133

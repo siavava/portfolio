@@ -10,8 +10,11 @@ tech:
 category: 'featured-project'
 featured: false
 navigation: false
+tag: 'visual computing'
 ---
 
-A Physics-accurate simulation of mass bodies (stars, planets, etc.) in a 2D space. The program uses the :highlight[PyQt5] library to display graphics and
+A Physics-accurate simulation of mass bodies (stars, planets, etc.) in a 2D space. The program uses the [PyQt5][pyqt5] library to display graphics and
 allows the user to arbitrarily add more bodies to the simulation by clicking,
 adding bigger bodies by holding for longer, etc.
+
+[pyqt5]: https://pypi.org/project/PyQt5/

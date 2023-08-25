@@ -9,6 +9,7 @@ tech:
   - Data Processing
 featured: false
 navigation: false
+tag: 'data insights'
 ---
 
 An interactive program that processes provided raw data about world city populations

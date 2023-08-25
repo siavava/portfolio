@@ -11,10 +11,13 @@ tech:
 category: 'featured-project'
 featured: false
 navigation: false
+tag: 'data structures and algorithms'
 ---
 
 The infamous Kevin Bacon game;
 given any two actors, find the shortest social connection path between them.
-We use :highlight[breadth-first search]
-and :highlight[depth-first search] as the two strategies
-to find the shortest path (favoring BFS).
+We use [breadth-first search][bfs] the strategy
+to find the shortest path in the [graph][graph] of connections.
+
+[bfs]:      https://en.wikipedia.org/wiki/Breadth-first_search
+[graph]:    https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)

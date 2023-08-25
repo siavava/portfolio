@@ -9,11 +9,15 @@ tech:
 category: 'featured-project'
 featured: false
 navigation: false
+tag: 'artificial intelligence'
 ---
 
-A bot that uses <highlight> hidden markov models </highlight> to tag parts of speech in a sentence.
-We use the <highlight>viterbi algorithm</highlight> to
-<highlight>generate a sequence of tags</highlight>
+A bot that uses [hidden markov models][hmm] to tag parts of speech in a sentence.
+We use the [viterbi algorithm][viterbi] to
+generate a sequence of tags
 for the sentence keeping in mind the
-<highlight>tag probabilities for each word</highlight> and the
-<highlight>transition probabilities between tags</highlight>. 
+tag probabilities for each word and the
+transition probabilities between tags.
+
+[hmm]:      https://en.wikipedia.org/wiki/Hidden_Markov_model
+[viterbi]:  https://en.wikipedia.org/wiki/Viterbi_algorithm

@@ -116,6 +116,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+
   ssr: true,
 
   css: [
@@ -133,7 +134,6 @@ export default defineNuxtConfig({
   components: {
     dirs: [
       "~/components/icons",
-      "~/components/atoms",
       "~/components/molecules",
       "~/components",
     ],
@@ -153,32 +153,5 @@ export default defineNuxtConfig({
     provider: "ipx",
     ipx: {},
     dir: "static",
-  },
-  // buildModules: [
-  //   "@nuxtjs/firebase",
-  //   ["@nuxtjs/redirect-module",
-  //     {
-  //       from: "^.*(?<!/)$",
-  //       to: (from, req) => (req.url.endsWith("/") ? req.url : `${req.url}/`),
-  //       statusCode: 301,
-  //     },
-  //   ],
-  // ],
-  // layouts: {
-  //   default: "~/layouts/clean.vue",
-  // },
-  // build: { },
-  runtimeConfig: {
-    public: {
-      firebaseConfig: {
-        apiKey: process.env.DATABASE_API_KEY,
-        authDomain: process.env.DATABASE_AUTH_DOMAIN,
-        projectId: process.env.DATABASE_PROJECT_ID,
-        storageBucket: process.env.DATABASE_STORAGE_BUCKET,
-        messagingSenderId: process.env.DATABASE_MESSAGING_SENDER_ID,
-        appId: process.env.DATABASE_APP_ID,
-        measurementId: process.env.DATABASE_MEASUREMENT_ID,
-      },
-    },
   },
 });

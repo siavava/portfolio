@@ -10,6 +10,7 @@ tech:
   - Physical Simulation
 featured: false
 navigation: false
+tag: 'visual computing'
 ---
 
 Using a position-based system with constraints (instead of the more common mass-spring model)

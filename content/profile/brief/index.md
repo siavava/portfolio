@@ -1,6 +1,12 @@
 ---
-category: 'profile-brief'
+category: 'profile'
 navigation: false
+name: 'Amittai Siavava'
+title: 'Software Engineer'
+company:
+  name: 'Jane Street'
+  url: 'https://www.janestreet.com/'
+website: amittai.studio
 ---
 
 # About
@@ -11,10 +17,12 @@ However, I love to problem-solve across a wide range of domains.
 
 I love spending time crafting things, among them:
 
-- Writing [long-form technical articles about mathematics and computer science][blog].
+- Writing [long-form technical articles][blog] about mathematics
+  and computer science.
 - Writing [short-form technical articles][blog] about things I find funny.
 - Writing [short-form non-technical articles][blog] about literature and art.
 - Creating [generative art][art] with [p5.js][p5js].
+- [Photography][insta-art], once in a while.
 
 [jane-street]: https://www.janestreet.com/
 [blog]: https://amittai.blog
@@ -24,6 +32,7 @@ I love spending time crafting things, among them:
 [dl]:                       https://www.simplilearn.com/tutorials/deep-learning-tutorial/what-is-deep-learning
 [design]:                   https://www.designcouncil.org.uk/our-work/what-is-design/
 [functional-prg]:           https://spectrum.ieee.org/functional-programming
+[insta-art]:                https://www.instagram.com/amittai.art
 
 <!-- [dartmouth]:                https://home.dartmouth.edu/
 [starehe]:                  https://www.stareheboyscentre.ac.ke/sbc/

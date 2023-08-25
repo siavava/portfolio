@@ -9,7 +9,11 @@ tech:
   - Machine Learning
 featured: false
 navigation: false
+tag: 'machine learning'
 ---
 
-Using :highlight[ridge regression] and :highlight[lasso regression]
+Using [ridge regression][ridge-regression] and [lasso regression][lasso-regression]
 models to find an optimal learning strategy for a given set of data.
+
+[ridge-regression]: https://en.wikipedia.org/wiki/Tikhonov_regularization
+[lasso-regression]: https://en.wikipedia.org/wiki/Lasso_(statistics)

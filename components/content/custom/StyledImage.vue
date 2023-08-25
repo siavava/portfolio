@@ -31,7 +31,6 @@ export default {
   float: right
 
   .wrapper
-    @include mixins.box-shadow
     display: block
     position: relative
     width: 100%

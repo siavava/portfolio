@@ -10,7 +10,12 @@ tech:
   - Physical Simulation
 featured: false
 navigation: false
+tag: 'visual computing'
 ---
 
-We use rotational dynamics to simulate a :highlight[rigid-body] helicopter, using rotor blades to generate lift and thrust.
+We use rotational dynamics to simulate a [rigid-body][rigid-body] [helicopter][multi-copter],
+using rotor blades to generate lift and thrust.
 We use the [Euler method](https://en.wikipedia.org/wiki/Euler_method) to numerically integrate the equations of motion.
+
+[rigid-body]: https://en.wikipedia.org/wiki/Rigid_body
+[multi-copter]: https://en.wikipedia.org/wiki/Multirotor

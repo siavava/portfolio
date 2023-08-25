@@ -29,7 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-
 import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
 
 const { data: contact } = await useAsyncData(
@@ -54,7 +53,7 @@ const { data: contact } = await useAsyncData(
   flex-direction: row
   gap: 2em
   font-size: typography.font-size(m)
-
   margin-bottom: 0.5em !important
 
+  text-transform: lowercase
 </style>

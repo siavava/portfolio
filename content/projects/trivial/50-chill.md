@@ -10,9 +10,10 @@ tech:
   - Linux
 featured: false
 navigation: false
+tag: systems
 ---
 
 Three different command-line utilities written in C:
-:highlight[chill] calculates the chill factor of a given temperature and wind speed.
-:highlight[words] efficiently prints out the words in a file.
-:highlight[histo] prints a histogram for a stream of numbers.
+- _chill_ calculates the chill factor of a given temperature and wind speed.
+- _words_ efficiently prints out the words in a file.
+- _histo_ prints a histogram for a stream of numbers.

@@ -6,18 +6,19 @@ cover: 'featured-robot-colocation.gif'
 repo: 'https://github.com/siavava/ai/tree/main/06-HiddenMarkovModels'
 tech:
   - Python
-  - Markov Decision Processes
+  - MDP
   - Robotics
   - AI
 category: 'featured-project'
-featured: true
+featured: false
 navigation: false
+tag: 'artificial intelligence'
 ---
 
 A common problem in robotics is localizing a robot in a novel environment
 given sensor readings. This project uses [hidden markov models][hmm]
 and the [forward-backward algorithm][forward-backward]
-and [viterbi][viterbi] algorithms to decipher where a robot's
+and the [viterbi algorithm][viterbi] to decipher where a robot's
 situation probabilities in a maze, given a sequence of
 sensor readings from the robot.
 Emissions due to sensor inaccuracies are also factored in.

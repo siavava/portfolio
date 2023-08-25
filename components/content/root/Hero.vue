@@ -9,18 +9,41 @@
       />
       <div class="profile-text">
         <h1 class="title">
-          Amittai Siavava
+          {{ profile.name }}
         </h1>
         <p class="text">
-          Software Engineer at Jane Street
+          <span>
+            {{ profile.title }} at
+          </span>
+          <ProseA
+            :key="profile.company.name"
+            :href="profile.company.url"
+            fancy
+          >
+            {{ profile.company.name }}
+          </ProseA>
         </p>
-        <StyledButton href="/contact">
-          {{ "amittai.studio" }}
+        <StyledButton :href="`https://${profile.website}`">
+          {{ profile.website }}
         </StyledButton>
       </div>
     </div>
   </section>
 </template>
+
+<script lang="ts" setup>
+import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
+
+const { data: profile } = await useAsyncData(
+  async () => {
+    const _contactData = await queryContent<MarkdownParsedContent>()
+      .where({ category: "profile" })
+      .only(["name", "title", "company", "website"])
+      .findOne();
+    return _contactData;
+  },
+);
+</script>
 
 <script lang="ts">
 export default {
@@ -58,5 +81,14 @@ export default {
     display: flex
     flex-direction: column
     height: fit-content
+
+    .title
+      font-size: typography.font-size(l)
+      font-weight: 600
+
+    .text
+      font-size: typography.font-size(m)
+      font-weight: 400
+      margin-top: 0.5em
 
 </style>

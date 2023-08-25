@@ -10,11 +10,15 @@ tech:
   - AI
 featured: false
 navigation: false
+tag: 'artificial intelligence'
 ---
 
-Using :highlight[backtracking] and :highlight[forward-checking]
+Using [backtracking][backtracking] and [forward-checking][forward]
 to solve constraint satisfaction problems such as
 map coloring and circuit placement.
-We use heuristics such as :highlight[least-constraining value],
-:highlight[most-constraining variable] and :highlight[minimum remaining values]
+We use heuristics such as least-constraining value,
+most-constraining variable and minimum remaining values
 to intelligently narrow the search space.
+
+[backtracking]:         https://en.wikipedia.org/wiki/Backtracking
+[forward]:              https://en.wikipedia.org/wiki/Forward_checking

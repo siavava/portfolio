@@ -9,11 +9,11 @@ url: '/writing/computing/neural-networks/data-driven-behavior-change'
 repo: 'https://github.com/siavava/neural'
 tech:
   - Julia
-  - Neural Computing
   - Deep Learning
 category: 'featured-project'
-featured: true
+featured: false
 navigation: false
+tag: 'deep learning'
 ---
 
 As part of a

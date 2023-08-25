@@ -11,11 +11,16 @@ tech:
   - Data Structures
 featured: false
 navigation: false
+tag: data structures and algorithms
 ---
 
 Efficient implementations of various data structures in C.
 
-A :highlight[bag] stores unique items without duplication.
-A :highlight[set] stores unique key-value pairs without duplication.
-A :highlight[hashtable] mimics the set, but uses hashing with chaining
-for improved efficiency.
+- A [bag][bag] stores unique items without duplication.  
+- A [set][set] stores unique key-value pairs without duplication.  
+- A [hashtable][hashtable] mimics the set, but uses hashing with chaining
+  for improved efficiency.
+
+[bag]: https://en.wikipedia.org/wiki/Set_(abstract_data_type)
+[set]: https://en.wikipedia.org/wiki/Set_(abstract_data_type)
+[hashtable]: https://en.wikipedia.org/wiki/Hash_table

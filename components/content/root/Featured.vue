@@ -1,9 +1,8 @@
 <template>
   <section id="projects">
     <ProseH1 id="projects">
-      Projects
+      Featured Projects
     </ProseH1>
-    <!-- <StyledProjectsGrid> -->
     <div
       v-for="project, i in projects"
       :key="i"
@@ -22,14 +21,14 @@
         <div>
           <ProseA
             v-if="project?.url"
-            :to="project.url"
+            :href="project.url"
             fancy
           >
             {{ project.title }}
           </ProseA>
-          <ProseH1 v-else>
+          <ProseH2 v-else>
             {{ project.title }}
-          </ProseH1>
+          </ProseH2>
           <template v-if="hasCompany(project)">
             <span
               v-if="hasCompany(project)"
@@ -48,18 +47,42 @@
             <ContentDoc :value="project" />
           </div>
         </div>
-        <div class="project-links">
-          <NuxtLink
-            v-if="project.repo"
-            :to="project.repo"
-            aria-label="GitHub Link"
-            class="link"
+        <div class="project-footer">
+          <div class="project-links">
+            <NuxtLink
+              v-if="project.repo"
+              :to="project.repo"
+              aria-label="GitHub Link"
+              class="link"
+            >
+              <Icon type="GitHub" />
+            </NuxtLink>
+          </div>
+          <ul
+            v-if="project.tech"
+            class="project-tech-list"
           >
-            <Icon type="GitHub" />
-          </NuxtLink>
+            <li
+              v-for="(tech, techIndex) in project?.tech"
+              :key="techIndex"
+              class="project-tech-item"
+            >
+              {{ tech }}
+            </li>
+          </ul>
         </div>
       </div>
     </div>
+    <ProseP
+      style="margin-top: 4em;"
+    >
+      <ProseA
+        href="/archive"
+        fancy
+      >
+        archive
+      </ProseA>
+    </ProseP>
   </section>
 </template>
 
@@ -104,7 +127,7 @@ const { data } = await useAsyncData(
     const _projectsData = queryContent()
       .where({ _path: { $regex: "^/projects" } })
       .where({ featured: true })
-      .sort({ date: -1, order: 1 })
+      .sort({ date: -1 })
       .find();
     return _projectsData;
   },
@@ -127,22 +150,41 @@ const projects = data.value || [];
   font-family: typography.font(fancy)
   font-variation-settings: "cuts" 300
 
-.project-links
-  height: 1em
-  //width: fit-content
-  //background: yellow
-  width: 100%
-  display: inline-flex
-  justify-content: flex-start
+.project-footer
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
 
-  .link
-    height: 100%
+  .project-links
+    height: 1em
     width: fit-content
-    aspect-ratio: 1/1
+    display: inline-flex
+    justify-content: flex-start
 
-    svg
-      max-height: 100% !important
+    .link
+      height: 100%
+      width: fit-content
       aspect-ratio: 1/1
-      width: auto
+
+      svg
+        max-height: 100% !important
+        aspect-ratio: 1/1
+        width: auto
+
+  .project-tech-list
+    display: inline-flex
+
+    @media (max-width: 540px)
+      display: none
+
+    .project-tech-item
+      font-size: typography.font-size(xs)
+      font-weight: 600
+      text-transform: lowercase
+
+      &:not(:last-child)::after
+        content: "/"
+        margin: 0 0.5em
 
 </style>

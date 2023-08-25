@@ -10,8 +10,14 @@ tech:
   - AI
 featured: false
 navigation: false
+tag: 'artificial intelligence'
 ---
 
-Using informed search techniques such as :highlight[A* search] and :highlight[Greedy search]
-and heuristics such as :highlight[manhattan distance] and :highlight[euclidean distance]
+Using informed search techniques such as [A* search][a-star] and [Greedy search][greedy-search]
+and heuristics such as [manhattan distance][manhattan-heuristic] and [euclidean distance][euclidean-heuristic]
 to navigate a robot through a maze with obstacles to a goal location.
+
+[a-star]:               https://en.wikipedia.org/wiki/A*_search_algorithm
+[greedy-search]:        https://en.wikipedia.org/wiki/Greedy_algorithm
+[manhattan-heuristic]:  https://en.wikipedia.org/wiki/Taxicab_geometry
+[euclidean-heuristic]:  https://en.wikipedia.org/wiki/Euclidean_distance

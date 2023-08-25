@@ -18,7 +18,7 @@ of various courses:
 | :--- | ---: | :------- |
 | [Systems][cs50] |  Fall '23 <br/> Spring '22 <br/> Winter '22 <br/> Fall '21 | [Charles Palmer][charles-palmer] <br/> [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
 | [Database Systems][cs61] | Summer '23 | [Adam Goldstein][adam-goldstein] |
-| [Data Structures & OOP][cs10] | Spring '23 <br/> Winter '23 | [Devin Balkcom][devin-balkcom] <br/> [Timothy Pierson][timothy-pierson] |
+| [Data Structures & OOP][cs10] | Spring '23 <br/> Winter '23 | [Devin Balkcom][devin-balkcom] <br/> [Tim Pierson][timothy-pierson] |
 <!-- | [Artificial Intelligence][cs76] | Fall '23 | [Devin Balkcom][devin-balkcom] | -->
 ::
 

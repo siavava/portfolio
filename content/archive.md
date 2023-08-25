@@ -2,19 +2,8 @@
 title: "amittai"
 description: "Amittai's portfolio website. Showcases work an projects."
 navigation:
-  title: 'Home'
-  icon: '🥶'
+  title: 'archive'
 layout: default
 ---
 
-:hero
-
-:about
-
-:education
-
-:jobs
-
-:featured
-
-:contact
+:projects

@@ -10,11 +10,15 @@ tech:
   - AI
 featured: false
 navigation: false
+tag: 'artificial intelligence'
 ---
 
 Using uninformed search algorithms
-such as :highlight[breadth-first search] and :highlight[depth-first search]
+such as [breadth-first search][bfs] and [depth-first search][dfs]
 to search the solution space for elementary problems such as
 the :chicken: and :dog: problem (we wish to get x chicken and y foxes across
 a crossway with limited carriage capacity
-without leaving any chicken unattended with the foxes.
+without leaving any chicken unattended with the foxes).
+
+[dfs]:  https://en.wikipedia.org/wiki/Depth-first_search
+[bfs]:  https://en.wikipedia.org/wiki/Breadth-first_search

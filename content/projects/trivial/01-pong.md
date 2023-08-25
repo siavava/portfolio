@@ -9,8 +9,11 @@ tech:
   - Graphics Simulation
 featured: false
 navigation: false
+tag: 'visual computing'
 ---
 
-An interactive GUI game of pong that uses the :highlight[PyQt5]
+An interactive GUI game of pong that uses the [PyQt5][pyqt5]
 library to display graphics and handles user inputs, detects collisions (for the game),
 and tracks scores as well as the high score in the current streak of games.
+
+[pyqt5]: https://pypi.org/project/PyQt5/

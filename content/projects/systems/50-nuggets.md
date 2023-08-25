@@ -10,8 +10,9 @@ tech:
   - Make
   - Web Sockets
 category: 'featured-project'
-featured: true
+featured: false
 navigation: false
+tag: 'systems'
 ---
 
 A multiplayer command-line game of [nuggets][nuggets].

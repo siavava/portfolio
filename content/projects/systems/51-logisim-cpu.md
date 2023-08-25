@@ -6,11 +6,11 @@ cover: 'featured-logisim-cpu.gif'
 repo: 'https://github.com/siavava/assembly/tree/main/cs51/practice/hw8'
 tech:
   - Assembly
-  - Circuit Design
   - Computer Architecture
 category: 'featured-project'
 featured: true
 navigation: false
+tag: 'systems'
 ---
 
 A fully functional 16-bit [CPU][cpu] implemented in [Logisim][logisim].
@@ -29,4 +29,3 @@ All CPU components including the [ALU][alu], [registers][register],
 [micro-sequencer]: https://en.wikipedia.org/wiki/Microsequencer
 [fsm]: https://en.wikipedia.org/wiki/Finite-state_machine
 [io]: https://en.wikipedia.org/wiki/Input/output
-

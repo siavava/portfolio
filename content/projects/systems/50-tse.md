@@ -12,6 +12,7 @@ tech:
 category: 'featured-project'
 featured: true
 navigation: false
+tag: 'systems'
 ---
 
 A hyper-efficient [search engine][search-engine]
