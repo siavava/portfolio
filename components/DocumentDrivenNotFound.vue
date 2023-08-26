@@ -1,6 +1,13 @@
 <template>
   <section class="not-found">
-    <div class="not-found-instructions" />
+    <div class="container">
+      <div class="error-code">
+        404
+      </div>
+      <p class="error-message">
+        This page does not exist.
+      </p>
+    </div>
   </section>
 </template>
 
@@ -18,56 +25,24 @@ export default {
 
 section.not-found
   display: flex
-  flex-direction: column
+
+.container
+  display: inline-flex
   margin: auto
-  width: min(90vw, 1200px)
-  gap: 100px
-  padding: 10px
 
-  .not-found-image
+  .error-code
+    font-size: 24px
+    font-weight: 600
     margin: auto
-    width: 100%
-    height: auto
-    max-width: 600px
-    max-height: 600px
+    color: colors.color(dark-foreground)
+    height: 2em
+    line-height: 2em
+    padding-right: 20px
+    margin-right: 20px
+    border-right: 1px solid colors.color(dark-foreground)
 
-  .not-found-instructions
-    display: flex
-    flex-direction: column
-    justify-content: center
-    padding: 20px
-    gap: 20px
-    font-size: 1rem
-
-    p
-      font-weight: 500
-      margin: 0
-      font-family: typography.font(sans-serif), sans-serif
-      color: colors.color(primary-highlight)
-      display: table
-      margin: auto
-      margin-left: 0
-
-    .buttons-container
-      display: inline-flex
-      justify-content: space-between
-
-    .error-page-button
-      color: rgba(colors.color(primary-highlight), 0.8)
-      transition: all 0.2s ease-in-out
-
-      & > span
-        transition: all 0.2s ease-in-out
-        padding-bottom: 0.1rem
-
-      &::before
-        content: "❯"
-        margin-right: 0.5rem
-
-      &:hover
-        cursor: pointer
-        & > span
-          color: colors.color(primary-highlight)
-          border-bottom: 1px solid
-
+  .error-message
+    //font-weight: 600
+    color: colors.color(foreground)
+    line-height: 5rem
 </style>

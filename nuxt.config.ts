@@ -57,7 +57,6 @@ export default defineNuxtConfig({
     "@nuxt/image-edge",
     "@nuxt/devtools",
     "@pinia/nuxt",
-    // "@nuxthq/studio",
     ["@nuxtjs/robots", {
       UserAgent: "*",
       Disallow: "",
