@@ -73,7 +73,7 @@ defineProps({
   border-bottom: 1px solid transparent
 
   &:not(:last-child)
-    margin-right: 7px
+    margin-right: 3px
 
   &:hover > span
     border-bottom: 1px solid

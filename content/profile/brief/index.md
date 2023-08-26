@@ -14,16 +14,19 @@ website: amittai.studio
 My primary interests are in [deep learning][dl], [category theory][category-theory] and [functional programming][functional-prg], and a _little bit_ of [design][design].
 However, I love to problem-solve across a wide range of domains.
 
-I love spending time crafting things, among them:
+I love spending time crafting things&mdash;
 
+- [Designing and building things][archive]!
 - Writing [long-form technical articles][blog] about mathematics
-  and computer science.
-- Writing [short-form technical articles][blog] about things I find funny.
-- Writing [short-form non-technical articles][blog] about literature and art.
-- Creating [generative art][art] with [p5.js][p5js].
-- [Photography][insta-art], once in a while.
+  and computer science and short-form technical articles
+  about things I find interesting, including _[math and computer science][blog]_
+  and _[literature and art][blog]_.
+- Creating [generative art][art] (with [p5.js][p5js]), and [shooting photos][insta-art] sometimes.
 
-[jane-street]: https://www.janestreet.com/
+[blog](https://txt.amittai.studio){fancy style="margin-right: 1rem;"}
+[art](https://amittai.art){fancy style="margin-right: 1rem;"}
+[photography](https://www.instagram.com/amittai.art){fancy style="margin-right: 1rem;"}
+
 [blog]: https://amittai.blog
 [category-theory]:          https://plato.stanford.edu/entries/category-theory/
 [art]:                      https://amittai.art
@@ -32,8 +35,11 @@ I love spending time crafting things, among them:
 [design]:                   https://www.designcouncil.org.uk/our-work/what-is-design/
 [functional-prg]:           https://spectrum.ieee.org/functional-programming
 [insta-art]:                https://www.instagram.com/amittai.art
+[archive]:                  /archive
 
-<!-- [dartmouth]:                https://home.dartmouth.edu/
+<!--
+[jane-street]: https://www.janestreet.com/
+[dartmouth]:                https://home.dartmouth.edu/
 [starehe]:                  https://www.stareheboyscentre.ac.ke/sbc/
 [yc]:                       https://www.startupschool.org/
 [cmu]:                      https://www.cs.cmu.edu/
@@ -44,4 +50,5 @@ I love spending time crafting things, among them:
 [database-systems]:         https://hevodata.com/learn/database-systems/
 [hpc]:                      https://www.netapp.com/data-storage/high-performance-computing/what-is-hpc/
 [linkedin]:                 https://www.linkedin.com/in/siavava
-[kenya]:                    https://www.bbc.com/news/world-africa-13681341 -->
+[kenya]:                    https://www.bbc.com/news/world-africa-13681341
+-->
