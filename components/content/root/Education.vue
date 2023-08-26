@@ -11,7 +11,7 @@
       >
         <div class="range">
           <span class="date">{{ job.start }}</span>
-          &mdash;
+          <span class="date"> &mdash; </span>
           <span class="date"> {{ job.end }} </span>
         </div>
         <div class="work-info">
