@@ -19,7 +19,6 @@
   th
     color: colors.color("light-foreground")
     padding: 10px
-    text-align: left
     font-weight: 600
 
   td
