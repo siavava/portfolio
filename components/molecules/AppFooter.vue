@@ -79,8 +79,11 @@ const shortMessage = [
   "Pray at the altar of hard work.",
 ];
 
+let index = -1;
+
 function updateBlurb() {
-  const index = Math.floor(Math.random() * shortMessage.length);
+  index += 1;
+  index %= shortMessage.length;
   shortMessageElement.value.innerText = shortMessage[index];
 }
 
@@ -94,23 +97,17 @@ function tick() {
 
     const seconds = now.getSeconds();
     const secondsDegree = ((seconds / 60) * 360) + 90;
-    // Array.from(secondHands).forEach((hand) => {
     secondHand.value.style.transform = `rotate(${secondsDegree}deg)`;
-    // });
 
     const minutes = now.getMinutes();
     const minutesDegree = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
 
-    // Array.from(minutesHands).forEach((hand) => {
     minuteHand.value.style.transform = `rotate(${minutesDegree}deg)`;
-    // });
 
     const hour = now.getHours();
     const hourDegree = ((hour / 12) * 360) + ((minutes / 60) * 30) + 90;
 
-    // Array.from(hourHands).forEach((hand) => {
     hourHand.value.style.transform = `rotate(${hourDegree}deg)`;
-    // });
 
     const timeZoneInfo = `${new Date()
       .toLocaleTimeString(
