@@ -1,9 +1,8 @@
 ---
-title: "amittai"
-description: "Amittai's portfolio website. Showcases work an projects."
+title: Amittai
+description: Portfolio website showcasing work and projects.
 navigation:
   title: 'Home'
-  icon: '🥶'
 layout: default
 ---
 
@@ -16,7 +15,5 @@ layout: default
 :jobs
 
 :featured
-
-<!-- :projects -->
 
 :contact
