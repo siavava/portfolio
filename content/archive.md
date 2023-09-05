@@ -1,8 +1,8 @@
 ---
-title: "amittai"
-description: "Amittai's portfolio website. Showcases work an projects."
+title: Projects Archive | Amittai
+description: Archive of all projects, past and present.
 navigation:
-  title: 'archive'
+  title: archive
 layout: default
 ---
 
