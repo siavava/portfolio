@@ -1,8 +1,8 @@
 ---
 date: 2023-05-03
-title: Notes Platform API
+title: Posts Platform API
 url: 'https://platform-api.amittai.studio'
-repo: 'https://github.com/siavava/kahoots-api'
+repo: 'https://github.com/siavava/platform-api'
 tech:
   - TypeScript
   - Express
