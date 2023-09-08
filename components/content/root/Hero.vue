@@ -76,7 +76,7 @@ export default {
     object-fit: cover
 
     // grayscale
-    filter: grayscale(100%) contrast(1)
+    // filter: grayscale(100%) contrast(1)
 
   .profile-text
     height: auto
