@@ -14,6 +14,7 @@
         </div>
         <div class="work-info">
           <ProseA
+            v-if="link.url"
             :href="link.url"
             class="link"
             fancy
@@ -22,6 +23,12 @@
               {{ link.username }}
             </span>
           </ProseA>
+          <span
+            v-else
+            class="link"
+          >
+            {{ link.username }}
+          </span>
         </div>
       </div>
     </div>
@@ -42,7 +49,7 @@ const { data: contact } = await useAsyncData(
 );
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @use "@/styles/mixins"
 @use "@/styles/typography"
 @use "@/styles/colors"
@@ -51,9 +58,12 @@ const { data: contact } = await useAsyncData(
   @include mixins.split
   display: flex
   flex-direction: row
-  gap: 2em
+  gap: 1em
   font-size: typography.font-size(m)
   margin-bottom: 0.5em !important
 
   text-transform: lowercase
+
+.link
+  color: colors.color(lightest-foreground)
 </style>
