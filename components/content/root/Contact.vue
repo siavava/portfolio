@@ -56,12 +56,7 @@ const { data: contact } = await useAsyncData(
 
 .contact-item
   @include mixins.split
-  display: flex
-  flex-direction: row
-  gap: 1em
-  font-size: typography.font-size(m)
   margin-bottom: 0.5em !important
-
   text-transform: lowercase
 
 .link
