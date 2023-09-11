@@ -172,7 +172,7 @@ export default {
 .category-title
   text-transform: uppercase
   width: 100%
-  height: 400px
+  height: 300px
   margin-top: 200px
   font-size: typography.font-size(s)
   font-weight: 600
@@ -185,6 +185,9 @@ export default {
 
 .project
   @include mixins.split
+
+  &:not(:first-of-type)
+    margin-top: 4em
 
 .project-title
   font-weight: 600

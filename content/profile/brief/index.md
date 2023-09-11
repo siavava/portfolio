@@ -17,17 +17,15 @@ However, I love to problem-solve across a wide range of domains.
 I love spending time crafting things&mdash;
 
 - [Designing and building things][archive]!
-- Writing [long-form technical articles][blog] about mathematics
-  and computer science and short-form technical articles
-  about things I find interesting, including _[math and computer science][blog]_
-  and _[literature and art][blog]_.
-- Creating [generative art][art] (with [p5.js][p5js]), and [shooting photos][insta-art] sometimes.
+- [Writing about experiences and things I find interesting][blog].
+- [Shooting photos][insta-art] sometimes.
+- Making [generative art (coming soon)][art] with [p5.js][p5js].
 
 [blog](https://txt.amittai.studio){fancy style="margin-right: 1rem;"}
 [art](https://amittai.art){fancy style="margin-right: 1rem;"}
 [photography](https://www.instagram.com/amittai.art){fancy style="margin-right: 1rem;"}
 
-[blog]: https://amittai.blog
+[blog]:                     https://txt.amittai.studio
 [category-theory]:          https://plato.stanford.edu/entries/category-theory/
 [art]:                      https://amittai.art
 [p5js]:                     https://p5js.org/
@@ -36,19 +34,3 @@ I love spending time crafting things&mdash;
 [functional-prg]:           https://spectrum.ieee.org/functional-programming
 [insta-art]:                https://www.instagram.com/amittai.art
 [archive]:                  /archive
-
-<!--
-[jane-street]: https://www.janestreet.com/
-[dartmouth]:                https://home.dartmouth.edu/
-[starehe]:                  https://www.stareheboyscentre.ac.ke/sbc/
-[yc]:                       https://www.startupschool.org/
-[cmu]:                      https://www.cs.cmu.edu/
-[email]:                    mailto:amittaijoel@outlook.com
-[cv]:                       https://www.simplilearn.com/computer-vision-article?tag=computer%20vision
-[rl]:                       https://www.synopsys.com/ai/what-is-reinforcement-learning.html#:~:text=Definition,environment%20to%20obtain%20maximum%20reward.
-[nlp]:                      https://www.sas.com/en_us/insights/analytics/what-is-natural-language-processing-nlp.html
-[database-systems]:         https://hevodata.com/learn/database-systems/
-[hpc]:                      https://www.netapp.com/data-storage/high-performance-computing/what-is-hpc/
-[linkedin]:                 https://www.linkedin.com/in/siavava
-[kenya]:                    https://www.bbc.com/news/world-africa-13681341
--->
