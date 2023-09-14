@@ -16,6 +16,7 @@ of various courses:
 ::inline-flex
 | Course | Term | Instructor |
 | :--- | :--- | ---: |
+| [Artificial Intelligence][cs76] | 23 F | [Devin Balkcom][devin-balkcom] |
 | [Systems][cs50] |  23 F <br/> 22 S <br/> 22 W <br/> 21 F | [Charles Palmer][charles-palmer] <br/> [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
 | [Database Systems][cs61] | 23 X | [Adam Goldstein][adam-goldstein] |
 | [OOP][cs10] | 23 S <br/> 23 W | [Devin Balkcom][devin-balkcom] <br/> [Tim Pierson][timothy-pierson] |
@@ -32,4 +33,4 @@ of various courses:
 [cs50]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-50
 [cs10]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-10
 [cs61]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-61
-<!-- [cs76]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-76 -->
+[cs76]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-76
