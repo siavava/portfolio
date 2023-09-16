@@ -87,7 +87,7 @@
           href="/"
           fancy
         >
-          home
+          {{ "home" }}
         </ProseA>
       </div>
     </div>
@@ -172,16 +172,16 @@ export default {
 .category-title
   text-transform: uppercase
   width: 100%
-  height: 300px
-  margin-top: 200px
+  height: 200px
+  margin-top: 300px
   font-size: typography.font-size(s)
   font-weight: 600
   display: flex
   align-items: center
 
   @media screen and (max-width: 540px)
-    margin-top: 100px
-    height: 200px
+    margin-top: 200px
+    height: 100px
 
 .project
   @include mixins.split

@@ -54,10 +54,10 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-@use "~/styles/mixins"
-@use "~/styles/colors"
-@use "~/styles/typography"
-@use "~/styles/geometry"
+@use "@/styles/mixins"
+@use "@/styles/colors"
+@use "@/styles/typography"
+@use "@/styles/geometry"
 
 .profile-info
   width: 400px

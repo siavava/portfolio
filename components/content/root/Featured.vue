@@ -3,6 +3,12 @@
     <ProseH1 id="projects">
       Featured Projects
     </ProseH1>
+    <ProseA
+      href="/archive"
+      fancy
+    >
+      {{ "archive" }}
+    </ProseA>
     <div
       v-for="project, i in projects"
       :key="i"
@@ -80,7 +86,7 @@
         href="/archive"
         fancy
       >
-        archive
+        {{ "archive" }}
       </ProseA>
     </div>
   </section>
@@ -144,6 +150,9 @@ const projects = data.value || [];
 
 .project
   @include mixins.split
+
+  &:not(:first-of-type)
+    margin-top: 4em
 
 .project-title
   font-weight: 600

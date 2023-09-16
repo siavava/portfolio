@@ -119,16 +119,16 @@ export default defineNuxtConfig({
   ssr: true,
 
   css: [
-    "~/styles/colors.scss",
-    "~/styles/default.sass",
-    "~/styles/footer.sass",
-    "~/styles/geometry.scss",
-    "~/styles/mixins.sass",
-    "~/styles/palettes.sass",
-    "~/styles/raw-fonts.scss",
-    "~/styles/theme.sass",
-    "~/styles/transitions.sass",
-    "~/styles/typography.scss",
+    "@/styles/colors.scss",
+    "@/styles/default.sass",
+    "@/styles/footer.sass",
+    "@/styles/geometry.scss",
+    "@/styles/mixins.sass",
+    "@/styles/palettes.sass",
+    "@/styles/raw-fonts.scss",
+    "@/styles/theme.sass",
+    "@/styles/transitions.sass",
+    "@/styles/typography.scss",
   ],
   components: {
     dirs: [

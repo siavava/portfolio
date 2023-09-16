@@ -79,7 +79,9 @@ export default {
   @include mixins.split
   display: flex
   flex-direction: row
-  gap: 2em
   font-size: typography.font-size(m)
+
+  &:not(:first-of-type)
+    margin-top: 2em
 
 </style>

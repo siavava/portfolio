@@ -164,7 +164,7 @@ onUnmounted(() => {
   .footer-inner {
     @include mixins.flex-between;
     width: 100%;
-    max-width: 848px;
+    max-width: 640px;
 
     &.hide {
       display: none;

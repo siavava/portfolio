@@ -36,8 +36,8 @@ const generate = anchorLinks?.depth >= heading;
 
 <style lang="sass" scoped>
 
-@use "~/styles/colors"
-@use "~/styles/geometry"
+@use "@/styles/colors"
+@use "@/styles/geometry"
 
 .prose-title-wrapper
   margin-top: 1rem
