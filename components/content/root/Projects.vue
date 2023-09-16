@@ -3,6 +3,12 @@
     <ProseH1 id="projects">
       Projects Archive
     </ProseH1>
+    <ProseA
+      href="/"
+      fancy
+    >
+      {{ "home" }}
+    </ProseA>
     <div
       v-for="category, index in sortedCategories"
       :key="index"
