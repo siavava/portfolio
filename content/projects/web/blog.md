@@ -5,9 +5,9 @@ title: 'Blog'
 url: 'https://txt.amittai.studio'
 repo: 'https://github.com/siavava/amittai.studio'
 tech:
-  - design
-  - TypeScript
   - Nuxt
+  - TypeScript
+  - Sass
 featured: true
 navigation: false
 tag: design / web

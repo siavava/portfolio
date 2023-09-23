@@ -1,13 +1,13 @@
 ---
 # order: 10
 date: 2023-08-21
-title: 'Resume Website'
+title: Portfolio
 url: 'https://amittai.studio'
 repo: 'https://github.com/siavava/amittai.studio'
 tech:
-  - design
-  - TypeScript
   - Nuxt
+  - TypeScript
+  - SCSS
 featured: false
 navigation: false
 tag: design / web
