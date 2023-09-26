@@ -33,7 +33,7 @@
     "sass-loader": "^13.3.2"
   },
   "dependencies": {
-    "@nuxt/vite-builder": "^3.7.1",
+    "@nuxt/vite-builder": "^3.7.4",
     "@nuxtjs/robots": "^3.0.0",
     "@pinia/nuxt": "^0.4.11",
     "@vercel/analytics": "^1.0.2",
