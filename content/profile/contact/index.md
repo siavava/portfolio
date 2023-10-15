@@ -19,9 +19,9 @@ links:
     url: 'https://www.instagram.com/siavava'
     username: 'siavava'
 
-  - name: 'leetcode'
-    url: 'https://leetcode.com/siavava'
-    username: 'siavava'
+#  - name: 'leetcode'
+#   url: 'https://leetcode.com/siavava'
+#    username: 'siavava'
 
   - name: 'stackoverflow'
     url: 'https://stackoverflow.com/users/17770813/siavava'
