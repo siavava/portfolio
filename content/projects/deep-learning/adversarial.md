@@ -9,8 +9,7 @@ tech:
   - Python
   - PyTorch
   - Deep Learning
-category: 'featured-project'
-featured: false
+featured: true
 navigation: false
 tag: 'deep learning'
 ---
@@ -26,7 +25,11 @@ Techniques explored include:
 - [Dropout][dropout], which entails randomly blocking a subset of the neurons in the network
   from transmitting information during training. This helps huge models avoid overfitting,
   thus generalize better.
+- [Ensemble learning][ensemble], which entails training multiple models on the same dataset
+  and then averaging their predictions. This helps the model generalize better
+  by mitigating the effects of a single model overfitting.
 
 [augmentation]: https://www.datacamp.com/tutorial/complete-guide-data-augmentation
 [pertubation]:  https://www.sciencedirect.com/science/article/pii/S0167865521002440
 [dropout]:      https://paperswithcode.com/method/dropout
+[ensemble]:     https://www.sciencedirect.com/science/article/pii/S1319157823000228

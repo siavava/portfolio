@@ -7,7 +7,7 @@ repo: 'https://github.com/siavava/leetcode'
 tech:
   - algorithms
   - system design
-featured: true
+featured: false
 navigation: false
 tag: data structures and algorithms
 ---

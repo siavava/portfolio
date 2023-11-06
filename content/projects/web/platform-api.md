@@ -8,7 +8,7 @@ tech:
   - Express
   - Node
   - MongoDB
-featured: true
+featured: false
 navigation: false
 tag: design / web
 ---
