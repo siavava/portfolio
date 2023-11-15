@@ -3,7 +3,7 @@
 date: 2023-08-21
 title: 'Blog'
 url: 'https://txt.amittai.studio'
-repo: 'https://github.com/siavava/amittai.studio'
+repo: 'https://github.com/siavava/portfolio'
 tech:
   - Nuxt
   - TypeScript

@@ -2,7 +2,7 @@
 date: 2023-02-11
 title: Blog v1
 url: 'https://v1.amittai.studio'
-repo: 'https://github.com/siavava/blog'
+repo: 'https://github.com/centauri-1/blog.v1'
 tech:
   - design
   - TypeScript
