@@ -2,7 +2,7 @@
 date: 2023-11-14
 title: 'Discite Website'
 url: 'https://discite-website.vercel.app/docs/architecture'
-repo: 'https://github.com/siavava/discite-webste'
+repo: 'https://github.com/siavava/discite-website'
 tech:
   - Nuxt
   - TypeScript
