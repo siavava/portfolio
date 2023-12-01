@@ -37,7 +37,7 @@
     "@nuxtjs/robots": "^3.0.0",
     "@pinia/nuxt": "^0.4.11",
     "@vercel/analytics": "^1.0.2",
-    "ipx": "^1.2.0",
+    "ipx": "^2.0.2",
     "rehype-katex": "^7.0.0",
     "remark-math": "^6.0.0",
     "ufo": "^1.2.0",
