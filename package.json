@@ -34,7 +34,7 @@
     "@nuxt/image": "^1.1.0",
     "@nuxt/vite-builder": "^3.8.0",
     "@nuxtjs/robots": "^3.0.0",
-    "@pinia/nuxt": "^0.4.11",
+    "@pinia/nuxt": "^0.5.1",
     "@vercel/analytics": "^1.0.2",
     "ipx": "^2.0.2",
     "nuxi": "^3.10.0",
