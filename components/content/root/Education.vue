@@ -40,7 +40,9 @@
 </template>
 
 <script setup lang="ts">
-import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types";
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types"
 
 // read 'job-info' data from Markdown files
 const { data: jobsData } = await useAsyncData(
@@ -49,21 +51,21 @@ const { data: jobsData } = await useAsyncData(
     const _jobsData = await queryContent<MarkdownParsedContent>()
       .where({ category: "school-info" })
       .sort({ date: -1 })
-      .find();
-    return _jobsData;
+      .find()
+    return _jobsData
   },
-);
+)
 
 // parse job info and store in an array, sorted by date
 // const jobs = Array<ParsedJobInfo>();
-const jobs = jobsData.value || [];
+const jobs = jobsData.value || []
 
 </script>
 
 <script lang="ts">
 export default {
   name: "Education",
-};
+}
 </script>
 
 <style lang="sass">

@@ -17,7 +17,7 @@ defineProps({
     type: String,
     default: "left",
   },
-});
+})
 </script>
 <style lang="sass" scoped>
 .inline-flex-div

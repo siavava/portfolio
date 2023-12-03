@@ -21,17 +21,20 @@
     >
       <slot />
     </h3>
+    <br>
   </div>
-  <br>
 </template>
 
 <script setup lang="ts">
-import { useRuntimeConfig } from "#imports";
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { useRuntimeConfig } from "#imports"
 
-defineProps<{ id: string }>();
-const heading = 3;
-const { anchorLinks } = useRuntimeConfig().public.content;
-const generate = anchorLinks?.depth >= heading;
+defineProps<{ id: string }>()
+const heading = 3
+// @ts-ignore
+const { anchorLinks } = useRuntimeConfig().public.content
+const generate = anchorLinks?.depth >= heading
 </script>
 
 <style lang="sass" scoped>

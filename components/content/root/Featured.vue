@@ -98,33 +98,33 @@ export default {
   data() {
     return {
       size: 0,
-    };
+    }
   },
 
   mounted() {
-    this.size = window.innerWidth;
+    this.size = window.innerWidth
 
     window.addEventListener("resize", () => {
-      this.size = window.innerWidth;
-    });
+      this.size = window.innerWidth
+    })
   },
 
   beforeUnmount() {
     window.removeEventListener("resize", () => {
-      this.size = window.innerWidth;
-    });
+      this.size = window.innerWidth
+    })
   },
   methods: {
     isMobile() {
-      return this.size < 768;
+      return this.size < 768
     },
   },
-};
+}
 </script>
 
 <script lang="ts" setup>
 
-const hasCompany = (project: any) => typeof project.company !== "undefined";
+const hasCompany = (project: any) => typeof project.company !== "undefined"
 
 // read 'featured projects' data
 const { data } = await useAsyncData(
@@ -134,12 +134,12 @@ const { data } = await useAsyncData(
       .where({ _path: { $regex: "^/projects" } })
       .where({ featured: true })
       .sort({ date: -1 })
-      .find();
-    return _projectsData;
+      .find()
+    return _projectsData
   },
-);
+)
 
-const projects = data.value || [];
+const projects = data.value || []
 
 </script>
 

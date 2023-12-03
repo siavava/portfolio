@@ -5,7 +5,7 @@
     "dev": "nuxi dev",
     "generate": "nuxi generate",
     "preview": "nuxi preview",
-    "lint": "eslint ."
+    "lint": "eslint . --fix"
   },
   "lint-staged": {
     "*.{ts,vue}": [
@@ -14,11 +14,9 @@
   },
   "devDependencies": {
     "@nuxt/content": "^2.8.2",
-    "@nuxt/devtools": "^1.0.0",
+    "@nuxt/devtools": "^0.8.2",
     "@nuxt/eslint-config": "^0.2.0",
-    "@nuxt/image-edge": "^1.0.0-rc.1-28232102.b595fa0",
     "@nuxt/types": "^2.17.1",
-    "@nuxt/ui": "^2.10.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/style-resources": "^1.2.1",
     "@vueblocks/vue-use-core": "^0.2.11",
@@ -28,18 +26,20 @@
     "eslint": "^8.52.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-nuxt": "^4.0.0",
-    "nuxt": "^3.7.1",
+    "nuxt": "^3.8.2",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.2"
   },
   "dependencies": {
+    "@nuxt/image": "^1.1.0",
     "@nuxt/vite-builder": "^3.8.0",
     "@nuxtjs/robots": "^3.0.0",
     "@pinia/nuxt": "^0.4.11",
     "@vercel/analytics": "^1.0.2",
-    "ipx": "^1.2.0",
-    "rehype-katex": "^7.0.0",
-    "remark-math": "^6.0.0",
+    "ipx": "^2.0.2",
+    "nuxi": "^3.10.0",
+    "rehype-katex": "^6.0.3",
+    "remark-math": "^5.1.1",
     "ufo": "^1.2.0",
     "vite": "^4.4.8",
     "vue": "^3.3.2",

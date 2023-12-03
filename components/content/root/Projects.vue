@@ -39,7 +39,10 @@
             >
               {{ project.title }}
             </ProseA>
-            <ProseH2 v-else>
+            <ProseH2
+              v-else
+              :id="project.title"
+            >
               {{ project.title }}
             </ProseH2>
             <template v-if="hasCompany(project)">
@@ -101,10 +104,11 @@
 </template>
 
 <script lang="ts" setup>
-// @eslint-ignore-file
-import { ParsedContent } from "@nuxt/content/dist/runtime/types";
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { ParsedContent } from "@nuxt/content/dist/runtime/types"
 
-const hasCompany = (project: any) => typeof project.company !== "undefined";
+const hasCompany = (project: any) => typeof project.company !== "undefined"
 
 // read 'featured projects' data
 const { data } = await useAsyncData(
@@ -112,39 +116,54 @@ const { data } = await useAsyncData(
     const _projectsData = queryContent()
       .where({ _path: { $regex: "^/projects" } })
       .sort({ date: -1, order: 1 })
-      .find();
-    return _projectsData;
+      .find()
+    return _projectsData
   },
-);
+)
 
-const _projects = data.value || [];
-const categorized = new Map<string, ParsedContent[]>();
-for (const project of _projects) {
-  const subcategory = project.tag || "misc";
+const _projects = data.value || []
+const categorized = new Map<string, ParsedContent[]>()
+_projects.forEach((project) => {
+  const subcategory = project.tag || "misc"
   if (categorized.has(subcategory)) {
-    categorized.get(subcategory)?.push(project);
+    categorized.get(subcategory)?.push(project)
   } else {
-    categorized.set(subcategory, [project]);
+    categorized.set(subcategory, [project])
   }
-}
+})
+// for (const project of _projects) {
+//   const subcategory = project.tag || "misc"
+//   if (categorized.has(subcategory)) {
+//     categorized.get(subcategory)?.push(project)
+//   } else {
+//     categorized.set(subcategory, [project])
+//   }
+// }
 
 // sort by date
-for (const category of categorized.values()) {
-  category.sort((a, b) => {
-    const aDate = new Date(a.date);
-    const bDate = new Date(b.date);
-    return bDate.getTime() - aDate.getTime();
-  });
-}
+categorized.forEach((projects, _) => {
+  projects.sort((a, b) => {
+    const aDate = new Date(a.date)
+    const bDate = new Date(b.date)
+    return bDate.getTime() - aDate.getTime()
+  })
+})
+// for (const category of categorized.values()) {
+//   category.sort((a, b) => {
+//     const aDate = new Date(a.date)
+//     const bDate = new Date(b.date)
+//     return bDate.getTime() - aDate.getTime()
+//   })
+// }
 
 // sort categories by latest date
 const sortedCategories = Array.from(categorized.entries()).sort(
   (a, b) => {
-    const aDate = new Date(a[1][0].date);
-    const bDate = new Date(b[1][0].date);
-    return bDate.getTime() - aDate.getTime();
+    const aDate = new Date(a[1][0].date)
+    const bDate = new Date(b[1][0].date)
+    return bDate.getTime() - aDate.getTime()
   },
-);
+)
 
 </script>
 
@@ -154,9 +173,9 @@ export default {
   data() {
     return {
       size: 0,
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="sass" scoped>

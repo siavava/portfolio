@@ -14,7 +14,7 @@
 <script lang="ts">
 export default {
   name: "StyledImage",
-};
+}
 </script>
 
 <style lang="sass">

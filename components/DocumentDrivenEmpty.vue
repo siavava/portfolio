@@ -13,8 +13,8 @@
 
 <script lang="ts">
 export default {
-  name: "403",
-};
+  name: "403Page",
+}
 </script>
 
 <style lang="sass" scoped>

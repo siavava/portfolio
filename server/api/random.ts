@@ -1,3 +1,1 @@
-export default defineEventHandler((event) => {
-  return "Hello random";
-});
+export default defineEventHandler(() => "Hello random")

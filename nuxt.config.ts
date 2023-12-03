@@ -53,15 +53,10 @@ export default defineNuxtConfig({
   },
   modules: [
     "@nuxt/content",
-    "@nuxt/ui",
-    "@nuxt/image-edge",
+    // "@nuxt/ui",
+    "@nuxt/image",
     "@nuxt/devtools",
-    "@pinia/nuxt",
-    ["@nuxtjs/robots", {
-      UserAgent: "*",
-      Disallow: "",
-    }],
-
+    // "@pinia/nuxt",
     // "@nuxtjs/firebase",
     // ["@nuxtjs/redirect-module",
     //   {
@@ -70,6 +65,10 @@ export default defineNuxtConfig({
     //     statusCode: 301,
     //   },
     // ],
+    ["@nuxtjs/robots", {
+      UserAgent: "*",
+      Disallow: "",
+    }],
   ],
   router: { },
   devtools: {
@@ -153,4 +152,4 @@ export default defineNuxtConfig({
     ipx: {},
     dir: "static",
   },
-});
+})
