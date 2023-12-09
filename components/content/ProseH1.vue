@@ -44,6 +44,9 @@ const generate = anchorLinks?.depth >= heading
 @use "@/styles/typography"
 @use "@/styles/geometry"
 
+.prose-title-wrapper
+  line-height: 5em
+
 .prose-h1
   font-size: typography.font-size(m)
   font-weight: 600

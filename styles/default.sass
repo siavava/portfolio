@@ -117,7 +117,8 @@ section
     padding-bottom: 100px
 
 
-h1, h2, h3, h4, h5, h6 
+h1, h2, h3, h4, h5, h6
+  all: unset
   margin: 0 0 10px 0
   font-weight: 600
   color: colors.color("lightest-foreground")
@@ -159,3 +160,13 @@ input, textarea
     &::placeholder 
       opacity: 1
 
+:is(ol, ul)
+  list-style: none
+
+  li
+    list-style: none
+
+a
+  text-decoration: none
+
+  color: inherit

@@ -65,7 +65,7 @@ export default {
   width: 400px
   display: flex
   flex-direction: row
-  gap: 1em
+  gap: 2em
   align-items: center
 
   .profile-image
@@ -84,15 +84,20 @@ export default {
     height: auto
     display: flex
     flex-direction: column
+    // gap: 0
+    // gap: 20px
     //height: fit-content
 
     .title
       font-size: typography.font-size(l)
       font-weight: 600
+      // padding: 0
+      margin: 0
 
     .text
       font-size: typography.font-size(m)
       font-weight: 400
       margin: 0.5em 0
+      // background: red
 
 </style>

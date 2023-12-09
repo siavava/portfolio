@@ -90,14 +90,14 @@ export default defineNuxtConfig({
       trailingSlash: true,
     },
     markdown: {
-      remarkPlugins: [
-        "remark-math",
-      ],
-      rehypePlugins: {
-        "rehype-katex": {
-          output: "html",
-        },
-      },
+      // remarkPlugins: [
+      //   "remark-math",
+      // ],
+      // rehypePlugins: {
+      //   "rehype-katex": {
+      //     output: "html",
+      //   },
+      // },
     },
     highlight: {
       theme: "github-dark",

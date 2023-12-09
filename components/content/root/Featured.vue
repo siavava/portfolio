@@ -3,6 +3,7 @@
     <ProseH1 id="projects">
       Featured Projects
     </ProseH1>
+    <br>
     <ProseA
       href="/archive"
       fancy
