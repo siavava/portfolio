@@ -246,7 +246,7 @@ export default {
     .project-tech-item
       font-size: typography.font-size(xs)
       font-weight: 600
-      text-transform: lowercase
+      //text-transform: lowercase
       color: colors.color(dark-foreground)
 
       &:not(:last-child)::after

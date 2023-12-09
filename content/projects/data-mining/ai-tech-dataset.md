@@ -5,7 +5,7 @@ year: 2023
 date: 2023-11-04
 title: 'AI / Tech Dataset'
 url: 'https://huggingface.co/datasets/siavava/ai-tech-articles'
-repo: 'https://github.com/siavava/scrape.hs'
+repo: 'https://github.com/siavava/functional-scraper'
 tech:
   - Haskell
   - Python

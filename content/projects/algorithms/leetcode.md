@@ -3,10 +3,10 @@
 date: 2023-08-01
 title: 'Leetcode Challenges'
 url: 'https://leetcode.com/siavava'
-repo: 'https://github.com/siavava/leetcode'
+# repo: 'https://github.com/siavava/leetcode'
 tech:
-  - algorithms
-  - system design
+  - Algorithms
+  - System Design
 featured: false
 navigation: false
 tag: data structures and algorithms

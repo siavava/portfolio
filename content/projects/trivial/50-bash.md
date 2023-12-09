@@ -5,8 +5,8 @@ title: 'Bash Scripting'
 # cover: 
 repo: 'https://github.com/siavava/bash'
 tech:
-  - bash
-  - regex
+  - Bash
+  - Regex
 featured: false
 navigation: false
 tag: systems

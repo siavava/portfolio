@@ -6,7 +6,7 @@ title: 'Efficient Spatial Collision Detection'
 repo: 'https://github.com/siavava/java/tree/main/Problem%20Sets/PS-1'
 tech:
   - Java
-  - spatial search
+  - Spatial Search
 category: 'featured-project'
 featured: false
 navigation: false

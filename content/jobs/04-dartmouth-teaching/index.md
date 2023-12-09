@@ -16,8 +16,9 @@ of various courses:
 ::inline-flex
 | Course | Term | Instructor |
 | :--- | :--- | ---: |
+| [Deep Learning][cs-89.31] | 24 W | [Yaoqing Yang][yaoqing-yang] |
+| [Systems][cs50] |  24 W <br/> 23 F <br/> 22 S <br/> 22 W <br/> 21 F | [Charles Palmer][charles-palmer] <br> [Charles Palmer][charles-palmer] <br/> [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
 | [Artificial Intelligence][cs76] | 23 F | [Devin Balkcom][devin-balkcom] |
-| [Systems][cs50] |  23 F <br/> 22 S <br/> 22 W <br/> 21 F | [Charles Palmer][charles-palmer] <br/> [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
 | [Database Systems][cs61] | 23 X | [Adam Goldstein][adam-goldstein] |
 | [OOP][cs10] | 23 S <br/> 23 W | [Devin Balkcom][devin-balkcom] <br/> [Tim Pierson][timothy-pierson] |
 <!-- | [Artificial Intelligence][cs76] | Fall '23 | [Devin Balkcom][devin-balkcom] | -->
@@ -29,8 +30,10 @@ of various courses:
 [temi-prioleau]: https://faculty-directory.dartmouth.edu/temiloluwa-o-prioleau
 [timothy-pierson]: https://web.cs.dartmouth.edu/~tjp/
 [adam-goldstein]: https://faculty-directory.dartmouth.edu/adam-goldstein
+[yaoqing-yang]: https://sites.google.com/site/yangyaoqingcmu/
 
-[cs50]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-50
-[cs10]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-10
-[cs61]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-61
-[cs76]: https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-76
+[cs50]:     https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-50
+[cs10]:     https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-10
+[cs61]:     https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-61
+[cs76]:     https://dartmouth.smartcatalogiq.com/current/orc/Departments-Programs-Undergraduate/Computer-Science/COSC-Computer-Science-Undergraduate/COSC-76
+[cs-89.31]: https://dartmouth.smartcatalogiq.com/en/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-89-31/

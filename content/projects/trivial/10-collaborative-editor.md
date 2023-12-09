@@ -6,9 +6,9 @@ title: 'Collaborative Editor'
 repo: 'https://github.com/siavava/java/tree/main/Problem%20Sets/PS-6'
 tech:
   - Java
-  - threads
-  - mutexes
-  - web sockets
+  - Threads
+  - Mutexes
+  - Web Sockets
 featured: false
 navigation: false
 tag: systems

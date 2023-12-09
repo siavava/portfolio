@@ -7,7 +7,7 @@ tech:
   - Nuxt
   - TypeScript
   - Sass
-featured: true
+featured: false
 navigation: false
 tag: design / web
 ---
