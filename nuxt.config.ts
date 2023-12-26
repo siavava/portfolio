@@ -3,7 +3,7 @@
 export default defineNuxtConfig({
   experimental: {
     viewTransition: true,
-    payloadExtraction: true,
+    // payloadExtraction: true,
   },
   routeRules: {
     "/**": {
@@ -11,8 +11,8 @@ export default defineNuxtConfig({
     },
   },
   app: {
-    // pageTransition: { name: "page", mode: "out-in" },
-    // layoutTransition: { name: "layout", mode: "out-in" },
+    pageTransition: { name: "page", mode: "out-in" },
+    layoutTransition: { name: "layout", mode: "out-in" },
 
     head: {
       title: "whatever",
@@ -77,6 +77,9 @@ export default defineNuxtConfig({
     // VS Code Server options
     vscode: {},
     // ...other options
+    timeline: {
+      enabled: true,
+    },
   },
   content: {
     documentDriven: {

@@ -16,7 +16,7 @@ defineProps({
 </script>
 
 <template>
-  <div
+  <span
     :class="{'link-wrapper': true, 'fancy': fancy}"
   >
     <NuxtLink
@@ -48,7 +48,7 @@ defineProps({
         fill="#eee"
       />
     </svg>
-  </div>
+  </span>
 </template>
 
 <style lang="sass" scoped>
@@ -63,14 +63,14 @@ defineProps({
 
 .link
   color: colors.color(lightest-foreground)
-  border-bottom: 1px transparent
+  // color: colors.color(primary-highlight)
   margin: 0
   padding: 0
   line-height: 0.9em
-  display: inline
+  // display: inline
 
-  //a
-  border-bottom: 1px solid transparent
+  & > span
+    border-bottom: 1px solid transparent
 
   &:not(:last-child)
     margin-right: 3px
@@ -81,5 +81,5 @@ defineProps({
 .pointer
   height: 1em
   aspect-ratio: 1/1 !important
-  display: inline
+  // display: inline
 </style>

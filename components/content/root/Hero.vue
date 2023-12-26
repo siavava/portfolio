@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types"
+import type { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types"
 
 const { data: profile } = await useAsyncData(
   async () => {
@@ -62,10 +62,10 @@ export default {
 @use "@/styles/geometry"
 
 .profile-info
-  width: 400px
+  width: min(400px, 90svw)
   display: flex
   flex-direction: row
-  gap: 2em
+  gap: 1em
   align-items: center
 
   .profile-image

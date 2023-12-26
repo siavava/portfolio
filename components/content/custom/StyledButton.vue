@@ -1,10 +1,17 @@
 <template>
   <NuxtLink
+    v-if="href"
     class="styled-button"
     :to="href"
   >
     <slot />
   </NuxtLink>
+  <div
+    v-else
+    class="styled-button"
+  >
+    <slot />
+  </div>
 </template>
 
 <script lang="ts">
@@ -25,7 +32,7 @@ export default {
 @use "@/styles/typography"
 
 .styled-button
-  background: colors.color(light-background)
+  background: rgba(colors.color(light-background), 0.7)
   font-size: typography.font-size(s)
   //width: fit-content
   display: table

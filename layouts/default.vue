@@ -20,8 +20,9 @@
   flex-direction: column
 
 main
-  margin: auto
   width: min(100svw, 640px)
+  padding: 0 clamp(0.5em, 3vw, 3em)
+  margin: auto
   font-weight: 400
   line-height: 22px
 
