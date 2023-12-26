@@ -63,14 +63,14 @@ defineProps({
 
 .link
   color: colors.color(lightest-foreground)
-  border-bottom: 1px transparent
+  // color: colors.color(primary-highlight)
   margin: 0
   padding: 0
   line-height: 0.9em
   display: inline
 
-  //a
-  border-bottom: 1px solid transparent
+  & > span
+    border-bottom: 1px solid transparent
 
   &:not(:last-child)
     margin-right: 3px

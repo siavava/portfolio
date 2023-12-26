@@ -84,7 +84,13 @@
                 :key="techIndex"
                 class="project-tech-item"
               >
-                {{ tech }}
+                <!-- {{ tech }} -->
+                <StyledButton
+                  id="tech-link"
+                  href=""
+                >
+                  {{ tech }}
+                </StyledButton>
               </li>
             </ul>
           </div>
@@ -107,14 +113,14 @@
 <script lang="ts" setup>
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import { ParsedContent } from "@nuxt/content/dist/runtime/types"
+import type { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types"
 
 const hasCompany = (project: any) => typeof project.company !== "undefined"
 
 // read 'featured projects' data
 const { data } = await useAsyncData(
   async () => {
-    const _projectsData = queryContent()
+    const _projectsData = queryContent<MarkdownParsedContent>()
       .where({ _path: { $regex: "^/projects" } })
       .sort({ date: -1, order: 1 })
       .find()
@@ -123,7 +129,7 @@ const { data } = await useAsyncData(
 )
 
 const _projects = data.value || []
-const categorized = new Map<string, ParsedContent[]>()
+const categorized = new Map<string, MarkdownParsedContent[]>()
 _projects.forEach((project) => {
   const subcategory = project.tag || "misc"
   if (categorized.has(subcategory)) {
@@ -132,14 +138,6 @@ _projects.forEach((project) => {
     categorized.set(subcategory, [project])
   }
 })
-// for (const project of _projects) {
-//   const subcategory = project.tag || "misc"
-//   if (categorized.has(subcategory)) {
-//     categorized.get(subcategory)?.push(project)
-//   } else {
-//     categorized.set(subcategory, [project])
-//   }
-// }
 
 // sort by date
 categorized.forEach((projects, _) => {
@@ -149,13 +147,6 @@ categorized.forEach((projects, _) => {
     return bDate.getTime() - aDate.getTime()
   })
 })
-// for (const category of categorized.values()) {
-//   category.sort((a, b) => {
-//     const aDate = new Date(a.date)
-//     const bDate = new Date(b.date)
-//     return bDate.getTime() - aDate.getTime()
-//   })
-// }
 
 // sort categories by latest date
 const sortedCategories = Array.from(categorized.entries()).sort(
@@ -225,14 +216,12 @@ export default {
   align-items: center
 
   .project-links
-    height: 1em
-    //width: fit-content
+    height: 100%
     display: inline-flex
     justify-content: flex-start
 
     .link
-      height: 100%
-      //width: fit-content
+      height: 1.8em
       aspect-ratio: 1/1
 
       svg
@@ -242,15 +231,13 @@ export default {
 
   .project-tech-list
     display: inline-flex
+    gap: 0.5em
 
     .project-tech-item
       font-size: typography.font-size(xs)
-      font-weight: 600
-      //text-transform: lowercase
       color: colors.color(dark-foreground)
 
       &:not(:last-child)::after
-        content: "/"
         margin: 0 0.5em
 
 .archive-link

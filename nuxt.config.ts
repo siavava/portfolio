@@ -77,6 +77,9 @@ export default defineNuxtConfig({
     // VS Code Server options
     vscode: {},
     // ...other options
+    timeline: {
+      enabled: true,
+    },
   },
   content: {
     documentDriven: {
