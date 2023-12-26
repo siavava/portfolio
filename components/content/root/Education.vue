@@ -42,7 +42,7 @@
 <script setup lang="ts">
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types"
+import type { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types"
 
 // read 'job-info' data from Markdown files
 const { data: jobsData } = await useAsyncData(

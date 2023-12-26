@@ -38,7 +38,7 @@
 <script lang="ts" setup>
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types"
+import type { MarkdownParsedContent } from "@nuxt/content/dist/runtime/types"
 
 const { data: contact } = await useAsyncData(
   "personal-contact",

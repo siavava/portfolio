@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink
+  <ProseA
     v-if="generate && id"
     :to="`#${id}`"
     class="prose-title-wrapper"
@@ -10,7 +10,7 @@
     >
       <slot />
     </h1>
-  </NuxtLink>
+  </ProseA>
   <div
     v-else
     class="prose-title-wrapper"

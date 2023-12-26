@@ -15,20 +15,17 @@ navigation: false
 tag: 'data mining'
 ---
 
-Wrote a functional program in Haskell to scrape 3000+ articles from
+I wrote a high-performant web scraper
+in Haskell to scrape 17000+ articles from
 online technology websites such as
-- [TechCrunch][tech-crunch]
-- [MIT Tech Review][mit-tech-review]
-- [Singularity Hub][singuilarity-hub]
-- [DeepMind][deepmind],
-- [OpenAI][openai],
-- [Towards Data Science][towards-data-science]
-- [Analytics Vidhya][analytics-vidhya]
+[DeepMind][deepmind],
+[MIT Tech Review][mit-tech-review]
+[OpenAI][openai],
+[Singularity Hub][singuilarity-hub], and
+[TechCrunch][tech-crunch]
 
-The scraper uses [Haxl][haxl] and [Arrows][arrows], among other functional programming patterns
-to ensure concurrency and efficiency.
-The articles were used for a subsequent study on the changing attitudes of society toward technology.
-
+The scraper uses [Arrows][arrows] and other functional programming
+patterns to ensure concurrency and efficiency.
 The dataset is open-source and available on [HuggingFace][huggingface].
 
 Collaborative project with [Aimen Abdulaziz][aimen-abaziz] and [Angelic McPherson][angelic-mcpherson].

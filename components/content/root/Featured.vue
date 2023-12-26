@@ -33,7 +33,10 @@
           >
             {{ project.title }}
           </ProseA>
-          <ProseH2 v-else>
+          <ProseH2
+            v-else
+            :id="`featured-${project.title}`"
+          >
             {{ project.title }}
           </ProseH2>
           <template v-if="hasCompany(project)">
@@ -74,7 +77,13 @@
               :key="techIndex"
               class="project-tech-item"
             >
-              {{ tech }}
+              <StyledButton
+                id="tech-link"
+                href=""
+              >
+                {{ tech }}
+              </StyledButton>
+              <!-- {{ tech }} -->
             </li>
           </ul>
         </div>
@@ -167,15 +176,12 @@ const projects = data.value || []
   align-items: center
 
   .project-links
-    height: 1em
-    //width: fit-content
-
+    height: 100%
     display: inline-flex
     justify-content: flex-start
 
     .link
-      height: 100%
-      //width: fit-content
+      height: 1.8em
       aspect-ratio: 1/1
 
       svg
@@ -185,14 +191,12 @@ const projects = data.value || []
 
   .project-tech-list
     display: inline-flex
+    gap: 0.5em
 
     .project-tech-item
       font-size: typography.font-size(xs)
-      font-weight: 600
-      //text-transform: lowercase
 
       &:not(:last-child)::after
-        content: "/"
         margin: 0 0.5em
 
 .archive-link
