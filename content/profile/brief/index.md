@@ -21,12 +21,12 @@ I love spending time crafting things&mdash;
 - [Shooting photos][insta-art] sometimes.
 - Making [generative art (coming soon)][art] with [p5.js][p5js].
 
-[blog](https://txt.amittai.studio){fancy style="margin-right: 1rem;"}
+[blog](https://amittai.space){fancy style="margin-right: 1rem;"}
 [art](https://amittai.art){fancy style="margin-right: 1rem;"}
 [photography](https://www.instagram.com/amittai.art){fancy style="margin-right: 1rem;"}
 [presentations](https://slides.amittai.studio){fancy style="margin-right: 1rem;"}
 
-[blog]:                     https://txt.amittai.studio
+[blog]:                     https://amittai.space
 [category-theory]:          https://plato.stanford.edu/entries/category-theory/
 [art]:                      https://amittai.art
 [p5js]:                     https://p5js.org/

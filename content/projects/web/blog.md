@@ -2,8 +2,8 @@
 # order: 10
 date: 2023-08-21
 title: 'Blog'
-url: 'https://txt.amittai.studio'
-repo: 'https://github.com/siavava/portfolio'
+url: 'https://amittai.space'
+repo: 'https://github.com/lostflux/blog'
 tech:
   - Nuxt
   - TypeScript
