@@ -11,21 +11,63 @@ website: amittai.studio
 
 # About
 
-My primary interests are in [deep learning][dl], [category theory][category-theory] and [functional programming][functional-prg], and a _little bit_ of [design][design].
-However, I love to problem-solve across a wide range of domains.
+I am majoring in computer science and mathematics at [Dartmouth College][dartmouth],
+with particular interests in [deep learning][dl], [category theory][category-theory], [functional programming][functional-prg], and [design][design].
 
-I love spending time crafting things&mdash;
+I carry a keen sense of responsibility over my work,
+across the entire data stack:
 
-- [Designing and building things][archive]!
-- [Writing about experiences and things I find interesting][blog].
-- [Shooting photos][insta-art] sometimes.
-- Making [generative art (coming soon)][art] with [p5.js][p5js].
+- :u[**Ethical and responsible data collection and warehousing.**] :br :br
+  Knowing what to collect, how, why, and most-importantly
+  how to respect user privacy and copyright issues where applicable
+  is important. I have relevant experiences and coursework in
+  data-mining and ethics therein.  
+  Proper warehousing, be it in data-lakes, SQL/NoSQL databases, is also critical.
+  I have experiences working with both SQL and NoSQL databases,
+  and I am particularly working to better understand the underlying architectures
+  and implementations of SQL databases such as MySQL and PostgreSQL.  
+  I am also curious about vector databases and how the nuances they introduce
+  to the data stack. :br :br
+
+- :u[**Ethical analysis, interpretation and usage**.] :br :br
+  _We are in the age of AI_, indubitably.  
+  I am particularly interested in deep learning and the applications
+  of novel neural network architectures, especially transformers,
+  to real-world problems. I have experiences working with neural networks
+  (and other less interesting ML models!) in various application contexts,
+  including computer vision, language understanding, robotics,
+  and reinforcement learning. :br :br
+
+- :u[**Presentation and use in production.**] :br :br
+  Much of anything is useful once it can be presented to an end-user
+  in a system designed and customized for their needs.
+  I have experiences and interests in both building front-end, user-facing
+  applications and building back-ends to support them.
+  I am experienced with both [React][react] and [Vue][vue],
+  and their proxies (e.g. [Nuxt][nuxt], [Next][next], etc.) 
+  I also have experiences building systems with a focus on
+  efficiency and high-performance (C, C++, Rust)
+  and reliability (Rust, Haskell). :br :br
+
+I am currently working on some stuff I am excited about
+over at [entendr][entendr] and completing my final year of college.
+I also recently started learning [Racket][racket] because of
+its [langauge-oriented development][lang-dev] features.
+You can find quick links below this,
+and social links at the bottom of this page.
 
 [blog](https://amittai.space){fancy style="margin-right: 1rem;"}
 [art](https://amittai.art){fancy style="margin-right: 1rem;"}
 [photography](https://www.instagram.com/amittai.art){fancy style="margin-right: 1rem;"}
 [presentations](https://slides.amittai.studio){fancy style="margin-right: 1rem;"}
+[entendr](https://entendr.life){fancy style="margin-right: 1rem;"}
 
+[lang-dev]:                 https://beautifulracket.com/appendix/why-lop-why-racket
+[racket]:                   https://racket-lang.org
+[react]:                    https://react.dev
+[vue]:                      https://vuejs.org
+[nuxt]:                     https://nuxt.comg
+[next]:                     https://nextjs.org
 [blog]:                     https://amittai.space
 [category-theory]:          https://plato.stanford.edu/entries/category-theory/
 [art]:                      https://amittai.art
@@ -35,3 +77,5 @@ I love spending time crafting things&mdash;
 [functional-prg]:           https://spectrum.ieee.org/functional-programming
 [insta-art]:                https://www.instagram.com/amittai.art
 [archive]:                  /archive
+[dartmouth]:                https://home.dartmouth.edu/
+[entendr]:                  https://entendr.life

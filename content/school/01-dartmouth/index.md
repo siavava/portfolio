@@ -10,7 +10,7 @@ category: school-info
 navigation: false
 ---
 
-Majoring in [Mathematics][dartmouth-math-major] and
+Double Major in [Mathematics][dartmouth-math-major] and
 [Computer Science][dartmouth-cs-major].
 
 Relevant coursework in mathematics includes
@@ -34,6 +34,7 @@ Relevant coursework in computer science includes
 [artificial intelligence][artificial-intelligence],
 [deep learning][deep-learning],
 [computer vision][computer-vision],
+[data-mining][data-mining],
 and [physical computing][physical-computing].
 
 [vector-calculus]: https://en.wikipedia.org/wiki/Vector_calculus
@@ -58,6 +59,7 @@ and [physical computing][physical-computing].
 [deep-learning]: https://en.wikipedia.org/wiki/Deep_learning
 [computer-vision]: https://en.wikipedia.org/wiki/Computer_vision
 [physical-computing]: https://en.wikipedia.org/wiki/Physical_computing
+[data-mining]: https://en.wikipedia.org/wiki/Data_mining
 
 [dartmouth-math-major]: https://dartmouth.smartcatalogiq.com/en/current/orc/departments-programs-undergraduate/mathematics/
 [dartmouth-cs-major]: https://dartmouth.smartcatalogiq.com/en/current/orc/departments-programs-undergraduate/computer-science/
