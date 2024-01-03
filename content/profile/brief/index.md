@@ -62,7 +62,7 @@ and social links at the bottom of this page.
 [presentations](https://slides.amittai.studio){fancy style="margin-right: 1rem;"}
 [entendr](https://entendr.life){fancy style="margin-right: 1rem;"}
 
-[lang-dev]:                 https://beautifulracket.com/appendix/why-lop-why-racket
+[lang-dev]:                 https://beautifulracket.com/appendix/why-lop-why-racket.html
 [racket]:                   https://racket-lang.org
 [react]:                    https://react.dev
 [vue]:                      https://vuejs.org
