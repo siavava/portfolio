@@ -21,11 +21,11 @@ across the entire data stack:
   Knowing what to collect, how, why, and most importantly
   how to respect user privacy and copyright issues where applicable
   is important. I have relevant experience and coursework in
-  data mining and ethics therein. :br
+  data mining and ethics therein. :be :br
   Proper warehousing, be it in data lakes or SQL/NoSQL databases, is also critical.
   I have experience working with both SQL and NoSQL databases,
   and I am working to better understand the underlying architectures
-  and implementations of SQL databases such as MySQL and PostgreSQL. :br
+  and implementations of SQL databases such as MySQL and PostgreSQL. :be :br
   I am also curious about vector databases and how the nuances they introduce
   to the data stack. :br :br
 
@@ -44,7 +44,7 @@ across the entire data stack:
   I have experience and interests in both building front-end, user-facing
   applications and building back-ends to support them.
   I am experienced with both [React][react] and [Vue][vue],
-  and their proxies (e.g. [Nuxt][nuxt], [Next][next], etc.). :br
+  and their proxies (e.g. [Nuxt][nuxt], [Next][next], etc.). :be :br
   I also have experience building systems with a focus on
   efficiency and high performance (C, C++, Rust)
   and reliability (Rust, Haskell). :br :br
