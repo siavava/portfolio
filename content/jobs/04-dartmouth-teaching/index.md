@@ -1,5 +1,5 @@
 ---
-date: 2023-06-01
+date: 2024-02-01
 title: 'Teaching Assistant'
 company: 'Dartmouth'
 location: 'Hanover, NH'
