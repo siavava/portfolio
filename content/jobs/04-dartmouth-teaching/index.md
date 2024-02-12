@@ -16,7 +16,7 @@ of various courses:
 ::inline-flex
 | Course | Term | Instructor |
 | :--- | :--- | ---: |
-| [Fullstack Web Development][cs52] | 24S | [Tim Tregubov][tim] |
+| [Fullstack Web Dev][cs52] | 24S | [Tim Tregubov][tim] |
 | [Systems][cs50] |  24 W <br/> 23 F <br/> 22 S <br/> 22 W <br/> 21 F | [Charles Palmer][charles-palmer] <br> [Charles Palmer][charles-palmer] <br/> [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
 | [Artificial Intelligence][cs76] | 23 F | [Devin Balkcom][devin-balkcom] |
 | [Database Systems][cs61] | 23 X | [Adam Goldstein][adam-goldstein] |
