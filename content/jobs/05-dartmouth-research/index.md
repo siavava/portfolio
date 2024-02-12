@@ -4,7 +4,7 @@ title: Researcher
 company: D-RLab
 location: Hanover, NH
 start: 06/23
-end: Now
+end: 12/23
 url: https://rlab.cs.dartmouth.edu/home/
 category: jobs-info
 navigation: false
