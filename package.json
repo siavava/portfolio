@@ -38,7 +38,7 @@
     "@nuxt/vite-builder": "^3.7.1",
     "@nuxtjs/robots": "^3.0.0",
     "@vercel/analytics": "^1.1.1",
-    "ipx": "^2.0.2",
+    "ipx": "^3.0.1",
     "rehype-katex": "^6.0.3",
     "remark-math": "^5.1.1",
     "ufo": "^1.2.0",
