@@ -92,16 +92,7 @@ export default defineNuxtConfig({
       injectPage: true,
       trailingSlash: true,
     },
-    markdown: {
-      // remarkPlugins: [
-      //   "remark-math",
-      // ],
-      // rehypePlugins: {
-      //   "rehype-katex": {
-      //     output: "html",
-      //   },
-      // },
-    },
+    markdown: { },
     highlight: {
       theme: "github-dark",
       preload: [
