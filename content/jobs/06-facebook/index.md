@@ -1,6 +1,6 @@
 ---
 date: 2024-07-08
-title: Software Engineering Intern
+title: Software Engineer
 company: Instagram
 location: Menlo Park, CA
 start: 07/24

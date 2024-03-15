@@ -3,7 +3,7 @@ category: 'profile'
 navigation: false
 name:
   - Amittai.
-  - design
+  # - design
 callout: |
   Design, Architecture, <br> Engineering, & Mathematics
 title: 'Student'
@@ -16,11 +16,7 @@ lastemp: 2024-06-15
 
 # About
 
-Specialized in creating intuitive, innovative, and beautiful experiences that people love.
-I strive to solve complex problems by understanding users' needs, behaviors,
-and emotions to design elegant, simple solutions that delight people.
-
-I majored in computer science and mathematics at [Dartmouth College][dartmouth],
+Final-year student in computer science and mathematics at [Dartmouth College][dartmouth],
 with particular interests in [deep learning][dl], [category theory][category-theory],
 [functional programming][functional-prg], and [design][design].
 
@@ -75,18 +71,27 @@ across the entire data stack:
 
 ---
 
-I am currently working on some stuff I am excited about
-over at [entendr][entendr] and completing my final year of college.
-I also recently started learning [Racket][racket] because of
+I am also working on some stuff I am excited about
+over at [entendr][entendr] and
+recently started learning [Racket][racket] because of
 its [langauge-oriented development][lang-dev] features.
-You can find quick links below this,
-and social links at the bottom of this page.
+
+---
+::div
+---
+style: "color: white;"
+---
+
+_Are you excited about any of these things?  
+Do reach out!_
+
+::
 
 [lang-dev]:                 https://beautifulracket.com/appendix/why-lop-why-racket.html
 [racket]:                   https://racket-lang.org
 [react]:                    https://react.dev
 [vue]:                      https://vuejs.org
-[nuxt]:                     https://nuxt.comg
+[nuxt]:                     https://nuxt.com
 [next]:                     https://nextjs.org
 [category-theory]:          https://plato.stanford.edu/entries/category-theory/
 [dl]:                       https://www.simplilearn.com/tutorials/deep-learning-tutorial/what-is-deep-learning
