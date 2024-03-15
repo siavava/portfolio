@@ -48,9 +48,9 @@ const generate = anchorLinks?.depth >= heading
   line-height: 5em
 
 .prose-h1
-  font-size: typography.font-size(m)
-  font-weight: 600
-  color: colors.color(light-foreground)
+  font-size: typography.font-size(l)
+  font-weight: 700
+  color: colors.color(lightest-foreground)
   margin: 0.4em 0 0 0
   padding: 0
   line-height: 0.9em

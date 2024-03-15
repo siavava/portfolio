@@ -33,7 +33,7 @@
     "sass-loader": "^13.3.2"
   },
   "dependencies": {
-    "@nuxt/content": "^2.10.0",
+    "@nuxt/content": "^2.12.1",
     "@nuxt/image": "^1.0.0",
     "@nuxt/vite-builder": "^3.7.1",
     "@nuxtjs/robots": "^3.0.0",

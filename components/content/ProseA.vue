@@ -66,7 +66,7 @@ defineProps({
   // color: colors.color(primary-highlight)
   margin: 0
   padding: 0
-  line-height: 0.9em
+  // line-height: 0.9em
   // display: inline
 
   & > span

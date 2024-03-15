@@ -1,17 +1,20 @@
 <template>
   <section>
     <div class="profile-info">
-      <NuxtImg
+      <!-- <NuxtImg
         src="profile/head-shot.jpg"
         class="profile-image"
         alt="head shot"
         loading="lazy"
-      />
+      /> -->
       <div class="profile-text">
-        <h1 class="title">
-          {{ profile.name }}
-        </h1>
-        <div class="text">
+        <div class="name">
+          <h1 v-for="name in profile.name">
+            {{ name }}
+          </h1>
+        </div>
+        <p class="hero-callout" v-html="profile.callout" />
+        <!-- <div class="text">
           <span>
             {{ profile.title }} at
           </span>
@@ -21,13 +24,13 @@
           >
             {{ profile.company.name }}
           </ProseA>
-        </div>
-        <StyledButton
+        </div> -->
+        <!-- <StyledButton
           id="profile-link"
           :href="`https://${profile.website}`"
         >
           {{ profile.website }}
-        </StyledButton>
+        </StyledButton> -->
       </div>
     </div>
   </section>
@@ -42,7 +45,7 @@ const { data: profile } = await useAsyncData(
   async () => {
     const _contactData = await queryContent<MarkdownParsedContent>()
       .where({ category: "profile" })
-      .only(["name", "title", "company", "website"])
+      .only(["name", "callout", "title", "company", "website"])
       .findOne()
     return _contactData
   },
@@ -65,8 +68,10 @@ export default {
   width: min(400px, 90svw)
   display: flex
   flex-direction: row
-  gap: 1em
-  align-items: center
+  // gap: 1em
+  // align-items: center
+
+  align-content: center
 
   .profile-image
     width: 100px
@@ -84,15 +89,43 @@ export default {
     height: auto
     display: flex
     flex-direction: column
+    margin-top: 60px
+    gap: 140px
     // gap: 0
     // gap: 20px
     //height: fit-content
+    // gap: 220px
+    // font-family: "SF Pro Text" // typography.font("SF Pro Text")
 
-    .title
-      font-size: typography.font-size(l)
-      font-weight: 600
-      // padding: 0
-      margin: 0
+    .name
+      display: flex
+      flex-direction: column
+
+      // padding: 40px 0
+      // background: yellow
+
+      & > h1
+        font-size: typography.font-size(xxl)
+        font-weight: 700
+        // padding: 0
+        margin: 0
+        font-size: 30px
+        // font-size: 50px
+        // font-weight: 700
+      
+        &:first-of-type
+          padding-top: 20px
+
+    .hero-callout
+      font-weight: 700
+      margin: 0.5em 0
+      color: colors.color(lightest-foreground)
+      line-height: 1.5
+      // background: red
+      font-size: 22px
+
+      @media screen and (max-width: 600px)
+        font-size: 18px
 
     .text
       font-size: typography.font-size(m)

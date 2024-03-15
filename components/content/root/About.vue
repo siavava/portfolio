@@ -1,7 +1,7 @@
 <template>
   <section class="about">
     <ContentDoc
-      path="profile/brief"
+      path="/profile/brief"
       class="doc"
     />
   </section>

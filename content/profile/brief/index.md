@@ -1,23 +1,47 @@
 ---
 category: 'profile'
 navigation: false
-name: 'Amittai Siavava'
+name:
+  - Amittai.
+  - design
+callout: |
+  Design, Architecture, <br> Engineering, & Mathematics
 title: 'Student'
 company:
   name: 'Dartmouth College'
   url: 'https://home.dartmouth.edu/'
 website: amittai.studio
+lastemp: 2024-06-15
 ---
 
 # About
 
-I am majoring in computer science and mathematics at [Dartmouth College][dartmouth],
-with particular interests in [deep learning][dl], [category theory][category-theory], [functional programming][functional-prg], and [design][design].
+Specialized in creating intuitive, innovative, and beautiful experiences that people love.
+I strive to solve complex problems by understanding users' needs, behaviors,
+and emotions to design elegant, simple solutions that delight people.
+
+I majored in computer science and mathematics at [Dartmouth College][dartmouth],
+with particular interests in [deep learning][dl], [category theory][category-theory],
+[functional programming][functional-prg], and [design][design].
+
+As of July 2024, I will be joining [Meta][meta] as a software engineer,
+working with the [Instagram][instagram] team to create new experiences
+for its global user base.
+
+:br
+
+[blog](https://amittai.space){fancy style="margin-right: 1rem;"}
+[art](https://amittai.art){fancy style="margin-right: 1rem;"}
+[photography](https://www.instagram.com/amittai.art){fancy style="margin-right: 1rem;"}
+[presentations](https://slides.amittai.studio){fancy style="margin-right: 1rem;"}
+[entendr](https://entendr.life){fancy style="margin-right: 1rem;"}
+
+---
 
 I carry a keen sense of responsibility for my work,
 across the entire data stack:
 
-- :u[**Ethical and responsible data collection and warehousing.**] :br :br
+- [**Ethical and responsible data collection and warehousing.**]{style="color: white;"} :br :br
   Knowing what to collect, how, why, and most importantly
   how to respect user privacy and copyright issues where applicable
   is important. I have relevant experience and coursework in
@@ -29,7 +53,7 @@ across the entire data stack:
   I am also curious about vector databases and how the nuances they introduce
   to the data stack. :br :br
 
-- :u[**Ethical analysis, interpretation and usage**.] :br :br
+- [**Ethical analysis, interpretation and usage**.]{style="color: white;"} :br :br
   _We are in the age of AI_, indubitably.  
   I am interested in deep learning and the applications
   of novel neural network architectures, especially transformers,
@@ -38,7 +62,7 @@ across the entire data stack:
   including computer vision, language understanding, robotics,
   and reinforcement learning. :br :br
 
-- :u[**Presentation and use in production.**] :br :br
+- [**Presentation and use in production.**]{style="color: white;"} :br :br
   Much of anything is useful once it can be presented to an end user
   in a system designed and customized for their needs.
   I have experience and interests in both building front-end, user-facing
@@ -49,18 +73,14 @@ across the entire data stack:
   efficiency and high performance (C, C++, Rust)
   and reliability (Rust, Haskell). :br :br
 
+---
+
 I am currently working on some stuff I am excited about
 over at [entendr][entendr] and completing my final year of college.
 I also recently started learning [Racket][racket] because of
 its [langauge-oriented development][lang-dev] features.
 You can find quick links below this,
 and social links at the bottom of this page.
-
-[blog](https://amittai.space){fancy style="margin-right: 1rem;"}
-[art](https://amittai.art){fancy style="margin-right: 1rem;"}
-[photography](https://www.instagram.com/amittai.art){fancy style="margin-right: 1rem;"}
-[presentations](https://slides.amittai.studio){fancy style="margin-right: 1rem;"}
-[entendr](https://entendr.life){fancy style="margin-right: 1rem;"}
 
 [lang-dev]:                 https://beautifulracket.com/appendix/why-lop-why-racket.html
 [racket]:                   https://racket-lang.org
@@ -79,3 +99,6 @@ and social links at the bottom of this page.
 [archive]:                  /archive
 [dartmouth]:                https://home.dartmouth.edu/
 [entendr]:                  https://entendr.life
+
+[meta]:                     https://meta.com
+[instagram]:                https://about.meta.com/technologies/instagram/

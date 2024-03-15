@@ -1,1 +1,1 @@
-export default defineEventHandler(() => "Hello random")
+export default defineEventHandler(() => ({ message: "Hello random" }))
