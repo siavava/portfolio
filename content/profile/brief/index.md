@@ -88,15 +88,10 @@ and social links at the bottom of this page.
 [vue]:                      https://vuejs.org
 [nuxt]:                     https://nuxt.comg
 [next]:                     https://nextjs.org
-[blog]:                     https://amittai.space
 [category-theory]:          https://plato.stanford.edu/entries/category-theory/
-[art]:                      https://amittai.art
-[p5js]:                     https://p5js.org/
 [dl]:                       https://www.simplilearn.com/tutorials/deep-learning-tutorial/what-is-deep-learning
 [design]:                   https://www.designcouncil.org.uk/our-work/what-is-design/
 [functional-prg]:           https://spectrum.ieee.org/functional-programming
-[insta-art]:                https://www.instagram.com/amittai.art
-[archive]:                  /archive
 [dartmouth]:                https://home.dartmouth.edu/
 [entendr]:                  https://entendr.life
 
