@@ -1,12 +1,6 @@
 <template>
   <section>
     <div class="profile-info">
-      <!-- <NuxtImg
-        src="profile/head-shot.jpg"
-        class="profile-image"
-        alt="head shot"
-        loading="lazy"
-      /> -->
       <div class="profile-text">
         <div class="name">
           <h1 v-for="name in profile.name">
@@ -14,23 +8,6 @@
           </h1>
         </div>
         <p class="hero-callout" v-html="profile.callout" />
-        <!-- <div class="text">
-          <span>
-            {{ profile.title }} at
-          </span>
-          <ProseA
-            :href="profile.company.url"
-            fancy
-          >
-            {{ profile.company.name }}
-          </ProseA>
-        </div> -->
-        <!-- <StyledButton
-          id="profile-link"
-          :href="`https://${profile.website}`"
-        >
-          {{ profile.website }}
-        </StyledButton> -->
       </div>
     </div>
   </section>
@@ -68,9 +45,6 @@ export default {
   width: min(400px, 90svw)
   display: flex
   flex-direction: row
-  // gap: 1em
-  // align-items: center
-
   align-content: center
 
   .profile-image
@@ -82,19 +56,12 @@ export default {
     // maintain aspect ratio
     object-fit: cover
 
-    // grayscale
-    // filter: grayscale(100%) contrast(1)
-
   .profile-text
     height: auto
     display: flex
     flex-direction: column
     margin-top: 60px
     gap: 140px
-    // gap: 0
-    // gap: 20px
-    //height: fit-content
-    // gap: 220px
     // font-family: "SF Pro Text" // typography.font("SF Pro Text")
 
     .name
@@ -107,10 +74,8 @@ export default {
       & > h1
         font-size: typography.font-size(xxl)
         font-weight: 700
-        // padding: 0
         margin: 0
         font-size: 30px
-        // font-size: 50px
         // font-weight: 700
       
         &:first-of-type
@@ -121,8 +86,7 @@ export default {
       margin: 0.5em 0
       color: colors.color(lightest-foreground)
       line-height: 1.5
-      // background: red
-      font-size: 22px
+      font-size: 20px
 
       @media screen and (max-width: 600px)
         font-size: 18px
@@ -131,6 +95,5 @@ export default {
       font-size: typography.font-size(m)
       font-weight: 400
       margin: 0.5em 0
-      // background: red
 
 </style>
