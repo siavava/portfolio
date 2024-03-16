@@ -6,7 +6,10 @@
   >
     <h1
       :id="id"
-      class="prose-h2"
+      :class="{
+        'prose-h2': true,
+        'bold': bold,
+      }"
     >
       <slot />
     </h1>
@@ -30,7 +33,17 @@
 // eslint-disable-next-line import/no-unresolved
 import { useRuntimeConfig } from "#imports"
 
-defineProps<{ id: string }>()
+defineProps({
+  id: {
+    type: String,
+    default: "",
+  },
+  bold: {
+    type: Boolean,
+    default: false,
+  },
+})
+// defineProps<{ id: string }>()
 const heading = 1
 // @ts-ignore
 const { anchorLinks } = useRuntimeConfig().public.content
@@ -51,4 +64,8 @@ const generate = anchorLinks?.depth >= heading
   margin: 0.3em 0 -1.3em 0
   padding: 0
   line-height: 0.9em
+
+
+  &.bold
+    font-weight: 600
 </style>

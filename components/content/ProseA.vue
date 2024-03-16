@@ -12,6 +12,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  bold: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
@@ -21,7 +25,7 @@ defineProps({
   >
     <NuxtLink
       :href="href"
-      :class="{'link': true, 'arrow': fancy}"
+      :class="{'link': true, 'bold': bold, 'arrow': fancy}"
     >
       <span>
         <slot />
@@ -66,8 +70,9 @@ defineProps({
   // color: colors.color(primary-highlight)
   margin: 0
   padding: 0
-  // line-height: 0.9em
-  // display: inline
+
+  &.bold
+    font-weight: 600
 
   & > span
     border-bottom: 1px solid transparent

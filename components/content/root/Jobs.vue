@@ -19,6 +19,7 @@
             :href="job.url"
             class="link"
             fancy
+            bold
           >
             <span>
               {{ job.title }}

@@ -4,12 +4,15 @@
       Featured Projects
     </ProseH1>
     <br>
-    <ProseA
-      href="/archive"
-      fancy
-    >
-      {{ "archive" }}
-    </ProseA>
+
+    <div class="archive-link">
+      <ProseA
+        href="/archive"
+        fancy
+      >
+        {{ "archive" }}
+      </ProseA>
+    </div>
     <div
       v-for="project, i in projects"
       :key="i"
@@ -30,12 +33,14 @@
             v-if="project?.url"
             :href="project.url"
             fancy
+            bold
           >
             {{ project.title }}
           </ProseA>
           <ProseH2
             v-else
             :id="`featured-${project.title}`"
+            bold
           >
             {{ project.title }}
           </ProseH2>
@@ -89,9 +94,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="archive-link"
-    >
+    <div class="archive-link">
       <ProseA
         href="/archive"
         fancy
@@ -202,6 +205,7 @@ const projects = data.value || []
 .archive-link
   font-family: typography.font("sans-serif")
   font-size: typography.font-size("m")
-  margin-bottom: 4em 0 1em 0
+  margin: 80px 0
+  width: fit-content
 
 </style>

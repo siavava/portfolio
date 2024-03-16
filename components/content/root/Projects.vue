@@ -4,12 +4,14 @@
       Projects Archive
     </ProseH1>
     <br>
-    <ProseA
-      href="/"
-      fancy
-    >
-      {{ "home" }}
-    </ProseA>
+    <div class="archive-link">
+      <ProseA
+        href="/"
+        fancy
+      >
+        {{ "home" }}
+      </ProseA>
+    </div>
     <div
       v-for="category, index in sortedCategories"
       :key="index"
@@ -36,13 +38,14 @@
             <ProseA
               v-if="project?.url"
               :href="project.url"
-              fancy
+              fancy bold
             >
               {{ project.title }}
             </ProseA>
             <ProseH2
               v-else
               :id="project.title"
+              bold
             >
               {{ project.title }}
             </ProseH2>
@@ -96,9 +99,7 @@
           </div>
         </div>
       </div>
-      <div
-        class="archive-link"
-      >
+      <div class="archive-link">
         <ProseA
           href="/"
           fancy
@@ -243,5 +244,6 @@ export default {
 .archive-link
   font-family: typography.font("sans-serif")
   font-size: typography.font-size("m")
-  margin-bottom: 4em 0 1em 0
+  margin: 80px 0
+  width: fit-content
 </style>
