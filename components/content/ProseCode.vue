@@ -132,7 +132,7 @@ export default {
           display: none
 
         code
-          font-family: typography.font("monospace")
+          font-family: typography.font("monospace"), monospace
           font-size: typography.font-size("xs")
           line-height: 1.7em
           display: flex
@@ -199,7 +199,7 @@ export default {
   margin: 1em
   left: 1em
   top: 5px
-  font-family: typography.font("monospace")
+  font-family: typography.font("monospace"), monospace
   font-size: typography.font-size("xs")
 
 </style>

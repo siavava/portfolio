@@ -60,11 +60,11 @@ import markdownParser from "@nuxt/content/transformers/markdown"
 
 const parsedMarkdown = await markdownParser.parse(
   "footer-comment",
-  `I’m reciting that _quality affects all aspects of my pursuits._
-  I want to imbue quality in everything I do.
-  This skill develops while doing.
-  Not thinking, not imagining, _doing_.
-  It is acquired through learning and experimenting and consistency and pacing.`,
+  `I’m reciting that **quality affects all aspects of my pursuits**.
+  I want to **imbue quality** in **everything** I do.
+  **This skill develops while doing**.
+  Not thinking, not imagining, **_doing_**.
+  It is acquired through **learning** and **experimenting** and **consistency** and **pacing**.`
 )
 
 const shortMessageElement = ref<HTMLElement>(null)
@@ -184,7 +184,7 @@ onUnmounted(() => {
 
       .year {
         font-size: 1em;
-        font-family: typography.font(sans-serif);
+        font-family: typography.font(sans-serif), sans-serif;
         color: colors.color(dark-foreground);
         font-weight: 400
       }
@@ -269,9 +269,11 @@ onUnmounted(() => {
 
     .footer-paragraph {
       width: min(100%, 548px);
-      color: colors.color(light-foreground);
+      color: colors.color(foreground);
       margin: 0 auto;
       padding: 60px 0;
+      // font-weight: 500;
+
 
       * {
         font-size: 1em;

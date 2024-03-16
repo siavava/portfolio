@@ -169,7 +169,7 @@ const projects = data.value || []
 
 .project-title
   font-weight: 600
-  font-family: typography.font(fancy)
+  font-family: typography.font(sans-serif), sans-serif
   font-variation-settings: "cuts" 300
 
 .project-footer
@@ -203,7 +203,7 @@ const projects = data.value || []
         margin: 0 0.5em
 
 .archive-link
-  font-family: typography.font("sans-serif")
+  font-family: typography.font("sans-serif"), sans-serif
   font-size: typography.font-size("m")
   margin: 80px 0
   width: fit-content

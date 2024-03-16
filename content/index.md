@@ -1,5 +1,5 @@
 ---
-title: Amittai
+title: alt.
 description: Portfolio website showcasing work and projects.
 navigation:
   title: 'Home'

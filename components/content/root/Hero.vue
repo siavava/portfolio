@@ -62,27 +62,22 @@ export default {
     flex-direction: column
     margin-top: 60px
     gap: 140px
-    // font-family: "SF Pro Text" // typography.font("SF Pro Text")
 
     .name
       display: flex
       flex-direction: column
 
-      // padding: 40px 0
-      // background: yellow
-
       & > h1
-        font-size: typography.font-size(xxl)
-        font-weight: 700
+        font-weight: 600
+        letter-spacing: -1.2px
         margin: 0
         font-size: 30px
-        // font-weight: 700
       
         &:first-of-type
           padding-top: 20px
 
     .hero-callout
-      font-weight: 700
+      font-weight: 500
       margin: 0.5em 0
       color: colors.color(lightest-foreground)
       line-height: 1.5
@@ -90,10 +85,5 @@ export default {
 
       @media screen and (max-width: 600px)
         font-size: 18px
-
-    .text
-      font-size: typography.font-size(m)
-      font-weight: 400
-      margin: 0.5em 0
 
 </style>

@@ -69,7 +69,9 @@ $palette2: (
 );
 
 $palette3: (
+  
   "primary-highlight": #BD998F,
+  // "primary-highlight": #FA5900,
 
   "secondary-highlight": #BD998F,
 
@@ -97,7 +99,8 @@ $palette3: (
   "two": #3A594D,
   "three": #BD8FC0,
 
-  "background": #0C0C0C,
+  "background": #0A0A0A,
+  // background: #000000,
   "dark-background": #000000,
   "light-background": #2e2e2e,
   "lightest-background": #383838,
@@ -105,7 +108,9 @@ $palette3: (
   "shadow": rgba(#000000, 0.1),
 
   "dark-foreground": #888888,
-  "foreground": #bbbbbb,
+  // "foreground": #bbbbbb,
+  // "foreground": darken(#bbbbbb, 10%),
+  "foreground": #888888,
   "light-foreground": #dedede,
   "lightest-foreground": #ffffff,
 );

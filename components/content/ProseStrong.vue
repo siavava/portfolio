@@ -1,9 +1,6 @@
 <template>
-  <strong class="prose-strong">
+  <H>
     <slot />
-  </strong>
+  </H>
 </template>
-<style lang="sass" scoped>
-.prose-strong
-  font-weight: 600
-</style>
+

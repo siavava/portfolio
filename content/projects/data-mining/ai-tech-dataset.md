@@ -19,7 +19,7 @@ I wrote a high-performant web scraper
 in Haskell to scrape 17000+ articles from
 online technology websites such as
 [DeepMind][deepmind],
-[MIT Tech Review][mit-tech-review]
+[MIT Tech Review][mit-tech-review],
 [OpenAI][openai],
 [Singularity Hub][singuilarity-hub], and
 [TechCrunch][tech-crunch]
@@ -32,12 +32,9 @@ Collaborative project with [Aimen Abdulaziz][aimen-abaziz] and [Angelic McPherso
 
 [tech-crunch]:            https://techcrunch.com/
 [deepmind]:               https://deepmind.com/
-[analytics-vidhya]:       https://www.analyticsvidhya.com/
 [openai]:                 https://openai.com/
 [singuilarity-hub]:       https://singularityhub.com/
 [mit-tech-review]:        https://www.technologyreview.com/
-[towards-data-science]:   https://towardsdatascience.com/
-[haxl]:                   https://engineering.fb.com/2014/06/10/web/open-sourcing-haxl-a-library-for-haskell/
 [arrows]:                 https://www.cse.chalmers.se/~rjmh/afp-arrows.pdf
 [aimen-abaziz]:           https://www.linkedin.com/in/aimen-abdulaziz/
 [angelic-mcpherson]:      https://www.linkedin.com/in/angelic-mcpherson/

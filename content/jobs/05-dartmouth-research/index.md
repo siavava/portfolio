@@ -1,7 +1,7 @@
 ---
 date: 2023-06-02
 title: Researcher
-company: D-RLab
+company: Dartmouth Robotics Lab
 location: Hanover, NH
 start: 06/23
 end: 12/23

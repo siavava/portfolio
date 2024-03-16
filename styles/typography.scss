@@ -11,9 +11,15 @@
   @return $result;
 }
 
+// *, *::before, *::after {
+//   letter-spacing: -0.0px;
+// }
+
 $fonts-map: (
   // "sans-serif": "Graphik",
-  "sans-serif": "Geist",
+  // "sans-serif": "Geist",
+  // "sans-serif": "X",
+  "sans-serif": "Neue Montreal",
   // "sans-serif": "Inter Variable",
   // "monospace": "SF Mono",
 
@@ -42,9 +48,10 @@ $fonts-map: (
 
 $font-sizes: (
   "xxs": 11px,
-  "xs": 12px,
-  "s": 13px,
-  "m": 14px,
+  "xs": 13px,
+  "s": 14px,
+  // "m": 14px,
+  "m": 15px,
   "l": 17px,
   "xl": 19px,
   "xxl": 21px,

@@ -1,17 +1,10 @@
 ---
 category: 'profile'
-navigation: false
 name:
-  - Amittai.
-  # - design
+  # - Amittai.
+  - alt.
 callout: |
   Design, Architecture, <br> Engineering, & Mathematics
-title: 'Student'
-company:
-  name: 'Dartmouth College'
-  url: 'https://home.dartmouth.edu/'
-website: amittai.studio
-lastemp: 2024-06-15
 ---
 
 # About
@@ -20,7 +13,7 @@ Final-year student in computer science and mathematics at [Dartmouth College][da
 with particular interests in [deep learning][dl], [category theory][category-theory],
 [functional programming][functional-prg], and [design][design].
 
-As of July 2024, I will be joining [Meta][meta] as a software engineer,
+As of July 2024, I will be joining [Meta][meta] as a software engineer
 working with the [Instagram][instagram] team to create new experiences
 for its global user base.
 
@@ -28,64 +21,87 @@ for its global user base.
 
 [blog](https://amittai.space){fancy style="margin-right: 1rem;"}
 [art](https://amittai.art){fancy style="margin-right: 1rem;"}
-[photography](https://www.instagram.com/amittai.art){fancy style="margin-right: 1rem;"}
+[photography](https://www.instagram.com/amittai.art){fancy style="margin-right: 1rem;"}  
 [presentations](https://slides.amittai.studio){fancy style="margin-right: 1rem;"}
 [entendr](https://entendr.life){fancy style="margin-right: 1rem;"}
 
 ---
 
-I carry a keen sense of responsibility for my work,
-across the entire data stack:
+I carry a keen sense of responsibility for my work, including:
 
-- [**Ethical and responsible data collection and warehousing.**]{style="color: white;"} :br :br
-  Knowing what to collect, how, why, and most importantly
-  how to respect user privacy and copyright issues where applicable
+- **Ethical and responsible data collection and warehousing.**
+  :br :br
+  Knowing **what to collect**, **how**, **why**, and most importantly
+  **how to respect user privacy and copyright issues** where applicable
   is important. I have relevant experience and coursework in
-  data mining and ethics therein. :br :br
-  Proper warehousing, be it in data lakes or SQL/NoSQL databases, is also critical.
-  I have experience working with both SQL and NoSQL databases,
-  and I am working to better understand the underlying architectures
-  and implementations of SQL databases such as MySQL and PostgreSQL. :br :br
-  I am also curious about vector databases and how the nuances they introduce
-  to the data stack. :br :br
+  **data mining** and **ethics** therein.
+  :br
+  Proper [warehousing][data-warehouse], be it in
+  [data lakes][data-lake] or **SQL**/**NoSQL**
+  databases, is also critical.
+  I have experience working with SQL databases (**MySQL**, **PostgreSQL**),
+  NoSQL databases (**MongoDB**, **Firebase**), and
+  vector databases (**Pinecone**).
+  and I am working to better understand the **underlying architectures
+  and implementations of SQL databases**.
+  :br :br
 
-- [**Ethical analysis, interpretation and usage**.]{style="color: white;"} :br :br
-  _We are in the age of AI_, indubitably.  
-  I am interested in deep learning and the applications
-  of novel neural network architectures, especially transformers,
-  to real-world problems. I have experience working with neural networks
-  (and other less interesting ML models!) in various application contexts,
-  including computer vision, language understanding, robotics,
-  and reinforcement learning. :br :br
+- **Ethical analysis, interpretation and usage**.
+  :br
+  We are in an exciting period when the potential of
+  **deep learning** methods especially [transformers][attention-paper]
+  are being realized.
+  I am interested in the applications
+  of novel neural network architectures and ideas to real-world problems.
+  I have experience working with neural networks in
+  [computer vision][computer-vision], [natural language processing][nlp],
+  and [reinforcement learning][reinforcement-learning].  :br :br
+  **I am particularly excited to explore the interplay between these
+  cutting-edge fields and data ethics.**
+  :br :br
 
-- [**Presentation and use in production.**]{style="color: white;"} :br :br
-  Much of anything is useful once it can be presented to an end user
-  in a system designed and customized for their needs.
-  I have experience and interests in both building front-end, user-facing
-  applications and building back-ends to support them.
-  I am experienced with both [React][react] and [Vue][vue],
-  and their proxies (e.g. [Nuxt][nuxt], [Next][next], etc.). :br :br
-  I also have experience building systems with a focus on
-  efficiency and high performance (C, C++, Rust)
-  and reliability (Rust, Haskell). :br :br
+- **Presentation and use in production.**
+  :br
+  Research output is only useful once it can be turned into a product
+  and presented to an end user. For this, one needs to
+  **identify existing gaps**, **design**, and **implement**
+  innovative solutions that address existing needs.
+  I have experiences [designing][design] and building front-end, user-facing applications.
+  I am experienced with both [React][react], [Vue][vue],
+  and their proxies ([Nuxt][nuxt], [Next][next], [Astro][astro]).
+  :br :br
+  
+- **Teaching**
+  :br
+  **They say the best way to learn is to teach others.**  
+  At [Dartmouth][dartmouth], I got the exciting opportunity to work closely
+  with multiple professors in tinkering with and teaching their
+  courses, as well as holding office hours to help students debug
+  their code and understand the material better.
+  The courses included **Systems Engineering**,
+  **Artificial Intelligence**, **Database Systems**, **Data Structures**,
+  and **Fullstack Web Development**.
+  :br :br
+
+- I also have experience building systems with a focus on
+  **efficiency** and **high performance** using [C][c],
+  [C++][cpp], [Rust][rust], and [Haskell][haskell].
+  :br :br
 
 ---
 
 I am also working on some stuff I am excited about
 over at [entendr][entendr] and
 recently started learning [Racket][racket] because of
-its [langauge-oriented development][lang-dev] features.
+its [language-oriented development][lang-dev] features.
 
 ---
-::div
----
-style: "color: white;"
----
 
-_Are you excited about any of these things?  
-Do reach out!_
+**_Are you excited about any of these things?  
+Do reach out!_**
 
-::
+[data-warehouse]:           https://aws.amazon.com/what-is/data-warehouse/
+[data-lake]:                https://www.databricks.com/discover/data-lakes
 
 [lang-dev]:                 https://beautifulracket.com/appendix/why-lop-why-racket.html
 [racket]:                   https://racket-lang.org
@@ -99,6 +115,16 @@ Do reach out!_
 [functional-prg]:           https://spectrum.ieee.org/functional-programming
 [dartmouth]:                https://home.dartmouth.edu/
 [entendr]:                  https://entendr.life
+[attention-paper]:          https://arxiv.org/pdf/1706.03762.pdf
+[computer-vision]:          https://www.sas.com/en_us/insights/analytics/computer-vision.html
+[reinforcement-learning]:   https://www.techtarget.com/searchenterpriseai/definition/reinforcement-learning
+[nlp]:                      https://www.ibm.com/topics/natural-language-processing
+[astro]:                    https://astro.build
 
 [meta]:                     https://meta.com
 [instagram]:                https://about.meta.com/technologies/instagram/
+
+[c]:                        https://ieeexplore.ieee.org/document/6499601
+[cpp]:                      https://isocpp.org
+[rust]:                     https://www.rust-lang.org
+[haskell]:                  https://www.haskell.org
