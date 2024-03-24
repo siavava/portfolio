@@ -5,7 +5,7 @@
     </ProseH1>
     <br>
 
-    <div class="archive-link">
+    <div class="archive-link" v-if="archiveActive">
       <ProseA
         href="/archive"
         fancy
@@ -94,7 +94,7 @@
         </div>
       </div>
     </div>
-    <div class="archive-link">
+    <div class="archive-link" v-if="archiveActive">
       <ProseA
         href="/archive"
         fancy
@@ -108,34 +108,43 @@
 <script lang="ts">
 export default {
   name: "Featured",
-  data() {
-    return {
-      size: 0,
-    }
-  },
+  // data() {
+  //   return {
+  //     size: 0,
+  //   }
+  // },
 
-  mounted() {
-    this.size = window.innerWidth
+  // mounted() {
+  //   this.size = window.innerWidth
 
-    window.addEventListener("resize", () => {
-      this.size = window.innerWidth
-    })
-  },
+  //   window.addEventListener("resize", () => {
+  //     this.size = window.innerWidth
+  //   })
+  // },
 
-  beforeUnmount() {
-    window.removeEventListener("resize", () => {
-      this.size = window.innerWidth
-    })
-  },
-  methods: {
-    isMobile() {
-      return this.size < 768
-    },
-  },
+  // beforeUnmount() {
+  //   window.removeEventListener("resize", () => {
+  //     this.size = window.innerWidth
+  //   })
+  // },
+  // methods: {
+  //   isMobile() {
+  //     return this.size < 768
+  //   },
+  // },
 }
 </script>
 
 <script lang="ts" setup>
+
+const props = defineProps({
+  archive: {
+    type: String,
+    default: "",
+  }
+})
+
+const archiveActive = props.archive !== "false"
 
 const hasCompany = (project: any) => typeof project.company !== "undefined"
 

@@ -6,4 +6,6 @@ navigation:
 layout: default
 ---
 
+<!-- :featured{archive=false} -->
+
 :projects

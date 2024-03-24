@@ -1,10 +1,11 @@
 ---
 category: 'profile'
 name:
-  # - Amittai.
   - alt.
 callout: |
   Design, Architecture, <br> Engineering, & Mathematics
+
+navigation: false
 ---
 
 # About

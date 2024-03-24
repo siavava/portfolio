@@ -3,6 +3,7 @@
     v-if="generate && id"
     :to="`#${id}`"
     class="prose-title-wrapper"
+    :underline="false"
   >
     <h1
       :id="id"

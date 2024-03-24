@@ -12,6 +12,94 @@
         {{ "home" }}
       </ProseA>
     </div>
+
+    <!-- featured projects -->
+
+    <div class="category-title">
+        {{ "Featured" }}
+      </div>
+    <div
+      v-for="project, i in featuredProjects"
+      :key="i"
+      class="project"
+    >
+    <div class="range">
+          {{
+            new Date(project.date)
+              .toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "numeric",
+              })
+          }}
+        </div>
+        <div class="project-content">
+          <div>
+            <ProseA
+              v-if="project?.url"
+              :href="project.url"
+              fancy bold
+            >
+              {{ project.title }}
+            </ProseA>
+            <ProseH2
+              v-else
+              :id="project.title"
+              bold
+            >
+              {{ project.title }}
+            </ProseH2>
+            <template v-if="hasCompany(project)">
+              <span
+                v-if="hasCompany(project)"
+                class="project-company"
+              >
+                &nbsp;@&nbsp;
+              </span>
+              <NuxtLink
+                v-if="project.company.url"
+                :to="project.company.url"
+              >
+                {{ project.company.name }}
+              </NuxtLink>
+            </template>
+            <div class="project-description">
+              <ContentDoc :value="project" />
+            </div>
+          </div>
+          <div class="project-footer">
+            <div class="project-links">
+              <NuxtLink
+                v-if="project.repo"
+                :to="project.repo"
+                aria-label="GitHub Link"
+                class="link"
+              >
+                <Icon type="GitHub" />
+              </NuxtLink>
+            </div>
+            <ul
+              v-if="project.tech"
+              class="project-tech-list"
+            >
+              <li
+                v-for="(tech, techIndex) in project?.tech"
+                :key="techIndex"
+                class="project-tech-item"
+              >
+                <!-- {{ tech }} -->
+                <StyledButton
+                  id="tech-link"
+                  href=""
+                >
+                  {{ tech }}
+                </StyledButton>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
     <div
       v-for="category, index in sortedCategories"
       :key="index"
@@ -157,6 +245,21 @@ const sortedCategories = Array.from(categorized.entries()).sort(
     return bDate.getTime() - aDate.getTime()
   },
 )
+
+// get featured projects
+// read 'featured projects' data
+const { data: featuredData } = await useAsyncData(
+  async () => {
+    const _projectsData = queryContent()
+      .where({ _path: { $regex: "^/projects" } })
+      .where({ featured: true })
+      .sort({ date: -1 })
+      .find()
+    return _projectsData
+  },
+)
+
+const featuredProjects = featuredData.value || []
 
 </script>
 

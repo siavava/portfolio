@@ -16,6 +16,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  underline: {
+    type: Boolean,
+    default: true,
+  },
 })
 </script>
 
@@ -25,7 +29,12 @@ defineProps({
   >
     <NuxtLink
       :href="href"
-      :class="{'link': true, 'bold': bold, 'arrow': fancy}"
+      :class="{
+        'link': true,
+        'bold': bold,
+        'arrow': fancy,
+        'underline': underline,
+      }"
     >
       <span>
         <slot />
@@ -80,7 +89,7 @@ defineProps({
   &:not(:last-child)
     margin-right: 3px
 
-  &:hover > span
+  &.underline:hover > span
     border-bottom: 1px solid
 
 .pointer
