@@ -39,7 +39,7 @@
     "@nuxtjs/robots": "^3.0.0",
     "@vercel/analytics": "^1.1.1",
     "ipx": "^3.0.1",
-    "ufo": "^1.2.0",
+    "ufo": "^1.5.3",
     "vite": "^5.1.6",
     "vue": "^3.3.2",
     "vue-router": "^4.2.4"
