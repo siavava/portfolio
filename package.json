@@ -28,7 +28,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-nuxt": "^4.0.0",
     "husky": "^8.0.3",
-    "nuxt": "^3.10.3",
+    "nuxt": "^3.11.1",
     "sass": "^1.64.2",
     "sass-loader": "^13.3.2"
   },
