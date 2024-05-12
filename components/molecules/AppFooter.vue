@@ -79,6 +79,7 @@ const shortMessage = [
   "Sit with your ambient ambition.",
   "Endure and raise the bar.",
   "Pray at the altar of hard work.",
+  // "Circumstance is fate agnostic.",
 ]
 
 let index = -1
