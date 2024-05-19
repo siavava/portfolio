@@ -8,7 +8,11 @@
       identifier="in-page"
     />
   </div>
+  <SpeedInsights/>
 </template>
+<script lang="ts" setup>
+import { SpeedInsights } from "@vercel/speed-insights/nuxt"
+</script>
 
 <style lang="sass">
 @use "@/styles/colors"
