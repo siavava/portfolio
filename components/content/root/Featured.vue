@@ -29,6 +29,10 @@
       </div>
       <div class="project-content">
         <div>
+          <ProseH2
+            :id="`featured-${project.title}`"
+            bold
+          >
           <ProseA
             v-if="project?.url"
             :href="project.url"
@@ -37,12 +41,7 @@
           >
             {{ project.title }}
           </ProseA>
-          <ProseH2
-            v-else
-            :id="`featured-${project.title}`"
-            bold
-          >
-            {{ project.title }}
+            <span v-else> {{ project.title }}</span>
           </ProseH2>
           <template v-if="hasCompany(project)">
             <span

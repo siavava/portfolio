@@ -60,6 +60,7 @@ const { data: contact } = await useAsyncData(
   @include mixins.split
   margin-bottom: 0.5em !important
   text-transform: lowercase
+  font-family: typography.font("serif"), serif
 
 .link
   color: colors.color(lightest-foreground)

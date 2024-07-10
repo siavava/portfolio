@@ -34,20 +34,19 @@
         </div>
         <div class="project-content">
           <div>
-            <ProseA
-              v-if="project?.url"
-              :href="project.url"
-              fancy bold
-            >
-              {{ project.title }}
-            </ProseA>
-            <ProseH2
-              v-else
-              :id="project.title"
-              bold
-            >
-              {{ project.title }}
-            </ProseH2>
+          <ProseH2
+            :id="`featured-${project.title}`"
+            bold
+          >
+          <ProseA
+            v-if="project?.url"
+            :href="project.url"
+            fancy bold
+          >
+            {{ project.title }}
+          </ProseA>
+            <span v-else> {{ project.title }}</span>
+          </ProseH2>
             <template v-if="hasCompany(project)">
               <span
                 v-if="hasCompany(project)"
@@ -123,20 +122,19 @@
         </div>
         <div class="project-content">
           <div>
-            <ProseA
-              v-if="project?.url"
-              :href="project.url"
-              fancy bold
-            >
-              {{ project.title }}
-            </ProseA>
             <ProseH2
-              v-else
-              :id="project.title"
-              bold
-            >
-              {{ project.title }}
-            </ProseH2>
+            :id="`featured-${project.title}`"
+            bold
+          >
+          <ProseA
+            v-if="project?.url"
+            :href="project.url"
+            fancy bold
+          >
+            {{ project.title }}
+          </ProseA>
+            <span v-else> {{ project.title }}</span>
+          </ProseH2>
             <template v-if="hasCompany(project)">
               <span
                 v-if="hasCompany(project)"

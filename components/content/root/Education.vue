@@ -15,20 +15,22 @@
           <span class="date"> {{ job.end }} </span>
         </div>
         <div class="work-info">
-          <ProseA
-            :href="job.url"
-            class="link"
-            fancy
-            bold
-          >
-            <span>
-              {{ job.title }}
-              <span class="company">
-                at
-                {{ job.company }}
+          <ProseH2>
+            <ProseA
+              :href="job.url"
+              class="link"
+              fancy
+              bold
+            >
+              <span>
+                {{ job.title }}
+                <span class="company">
+                  at
+                  {{ job.company }}
+                </span>
               </span>
-            </span>
-          </ProseA>
+            </ProseA>
+          </ProseH2>
 
           <ContentDoc
             class="jobs-doc"

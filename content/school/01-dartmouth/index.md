@@ -21,7 +21,8 @@ Relevant coursework in mathematics includes
 [real analysis][real-analysis],
 [logic][mathematical-logic],
 [cryptography][cryptography],
-and [game theory][game-theory].
+[game theory][game-theory],
+and [computability theory][computability].
 
 Relevant coursework in computer science includes
 [data structures][data-structures] & [OOP][oop],
@@ -45,6 +46,7 @@ and [physical computing][physical-computing].
 [mathematical-logic]: https://en.wikipedia.org/wiki/Mathematical_logic
 [cryptography]: https://en.wikipedia.org/wiki/Cryptography
 [game-theory]: https://en.wikipedia.org/wiki/Game_theory
+[computability]: https://en.wikipedia.org/wiki/Computability_theory
 
 [data-structures]: https://en.wikipedia.org/wiki/Data_structure
 [oop]: https://en.wikipedia.org/wiki/Object-oriented_programming

@@ -8,7 +8,7 @@
 @use "@/styles/mixins"
 @use "@/styles/typography"
 .prose-ul
-  font-family: typography.font("sans-serif"), sans-serif
+  font-family: typography.font("serif"), sans-serif
   font-size: inherit
   line-height: 22px
   margin: 1em 0 1em 0.5em
@@ -32,5 +32,8 @@
       content: "\2013"
       position: absolute
       left: 0
+
+    & + .prose-li
+      margin-top: 0.7em
 
 </style>

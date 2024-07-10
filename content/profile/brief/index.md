@@ -1,22 +1,39 @@
 ---
 category: 'profile'
 name:
-  - alt.
+  - Amittai
 callout: |
-  Design, Architecture, <br> Engineering, & Mathematics
+  <span style="color: grey">is a</span>
+  software engineer<span style="color: grey">,</span><br>
+  researcher<span style="color: grey">, and</span> <br>
+  designer<span style="color: grey">.</span>
+
+# Design, Architecture, <br> Engineering, & Mathematics
 
 navigation: false
 ---
 
 # About
 
-Final-year student in computer science and mathematics at [Dartmouth College][dartmouth],
+I currently work at [Instagram][instagram], the social media platform
+for sane humans.
+I'm also building [entendr.][entendr] in my spare time.
+
+I seek to develop better _**interactive experiences**_ for people to cultivate
+and share ideas and meaningfully express what brings them joy.
+
+Toward this goal, I am a generalist and care deeply about **_systems_**, which form
+the fundamental building blocks of our applications;
+and **_interaction design_**, which governs how we use and live with
+computers all around us.
+
+<!-- Final-year student in computer science and mathematics at [Dartmouth College][dartmouth],
 with particular interests in [deep learning][dl], [category theory][category-theory],
 [functional programming][functional-prg], and [design][design].
 
 As of July 2024, I will be joining [Meta][meta] as a software engineer
 working with the [Instagram][instagram] team to create new experiences
-for its global user base.
+for its global user base. -->
 
 :br
 
@@ -28,7 +45,7 @@ for its global user base.
 
 ---
 
-I carry a keen sense of responsibility for my work, including:
+<!-- I carry a keen sense of responsibility for my work, including:
 
 - **Ethical and responsible data collection and warehousing.**
   :br :br
@@ -94,9 +111,9 @@ I carry a keen sense of responsibility for my work, including:
 I am also working on some stuff I am excited about
 over at [entendr][entendr] and
 recently started learning [Racket][racket] because of
-its [language-oriented development][lang-dev] features.
+its [language-oriented development][lang-dev] features. -->
 
----
+<!-- --- -->
 
 **_Are you excited about any of these things?  
 Do reach out!_**

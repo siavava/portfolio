@@ -15,13 +15,13 @@ of various courses:
 
 ::inline-flex
 
-| Course | Term | Instructor |
+| :prose-h2[Course] | :prose-h2[Term] | :prose-h2[Instructor] |
 | :--- | :--- | ---: |
-| [Fullstack Web Dev][cs52] | 24S | [Tim Tregubov][tim] |
-| [Systems][cs50] |  24 W <br/> 23 F <br/> 22 S <br/> 22 W <br/> 21 F | [Charles Palmer][charles-palmer] <br> [Charles Palmer][charles-palmer] <br/> [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
-| [Artificial Intelligence][cs76] | 23 F | [Devin Balkcom][devin-balkcom] |
-| [Database Systems][cs61] | 23 X | [Adam Goldstein][adam-goldstein] |
-| [OOP][cs10] | 23 S <br/> 23 W | [Devin Balkcom][devin-balkcom] <br/> [Tim Pierson][timothy-pierson] |
+| [Fullstack Web Dev][cs52] | SPR-24 | [Tim Tregubov][tim] |
+| [Systems][cs50] |  WI-24 <br/> FA-23 <br/> SPR-22 <br/> WI-22 <br/> FA-21 | [Charles Palmer][charles-palmer] <br> [Charles Palmer][charles-palmer] <br/> [Xia Zhou][xia-zhou] <br/> [Charles Palmer][charles-palmer] <br/> [Temi Prioleau][temi-prioleau] |
+| [Artificial Intelligence][cs76] | FA-23 | [Devin Balkcom][devin-balkcom] |
+| [Database Systems][cs61] | SU-23 | [Adam Goldstein][adam-goldstein] |
+| [OOP][cs10] | SPR-23 <br/> WI-23 | [Devin Balkcom][devin-balkcom] <br/> [Tim Pierson][timothy-pierson] |
 
 ::
 
