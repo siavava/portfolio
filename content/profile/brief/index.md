@@ -20,20 +20,13 @@ for sane humans.
 I'm also building [entendr.][entendr] in my spare time.
 
 I seek to develop better _**interactive experiences**_ for people to cultivate
-and share ideas and meaningfully express what brings them joy.
+and share ideas so they can meaningfully express what brings them joy.
 
-Toward this goal, I am a generalist and care deeply about **_systems_**, which form
+I am a generalist toward this goal and care deeply about **_systems_**, which form
 the fundamental building blocks of our applications;
-and **_interaction design_**, which governs how we use and live with
-computers all around us.
-
-<!-- Final-year student in computer science and mathematics at [Dartmouth College][dartmouth],
-with particular interests in [deep learning][dl], [category theory][category-theory],
-[functional programming][functional-prg], and [design][design].
-
-As of July 2024, I will be joining [Meta][meta] as a software engineer
-working with the [Instagram][instagram] team to create new experiences
-for its global user base. -->
+**_interaction design_**, which governs how we use and live with
+computers all around us, and **_[ambient intelligence][ambient-intelligence]_**, which
+enables us to interact with our environment in more natural ways.
 
 :br
 
@@ -146,3 +139,6 @@ Do reach out!_**
 [cpp]:                      https://isocpp.org
 [rust]:                     https://www.rust-lang.org
 [haskell]:                  https://www.haskell.org
+
+
+[ambient-intelligence]:     https://www.infosys.com/insights/ai-automation/ambient-intelligence.html#:~:text=%22The%20most%20profound%20technologies%20are,chief%20scientist%20at%20Xerox%20PARC.
