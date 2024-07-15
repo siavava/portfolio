@@ -20,6 +20,6 @@ svg
   fill: currentcolor
 
   &:hover
-    fill: colors.color("green")
+    fill: var(--green)
 
 </style>

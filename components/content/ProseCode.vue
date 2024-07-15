@@ -98,8 +98,8 @@ export default {
 @use "../styles/typography"
 
 .code-container
-  //background: colors.color("light-background")
-  background: rgba(colors.color(light-background), 0.7)
+  //background: var(--light-background)
+  background: rgba(var(--light-background), 0.7)
   position: relative
   margin: 1rem 0
   padding: 0.5rem
@@ -143,13 +143,13 @@ export default {
             min-width: 100%
 
             &.highlight
-              background-color: rgba(colors.color("lightest-background"), 0.5)
+              background-color: rgba(var(--lightest-background), 0.5)
               padding-right: 1em
 
               &::before
                 content: '+'
-                color: colors.color("critical-foreground")
-                // color: colors.color("primary-highlight")
+                color: var(--critical-foreground)
+                // color: var(--primary-highlight)
                 border-right: 1px solid
 
             &::before
@@ -159,17 +159,17 @@ export default {
               content: counter(line)
               margin-right: 1em
               padding-right: 0.5em
-              color: colors.color("foreground")
-              border-right: 1px solid colors.color("lightest-background")
+              color: var(--foreground)
+              border-right: 1px solid var(--lightest-background)
 
             &:hover
-              background-color: rgba(colors.color("lightest-background"), 0.7)
+              background-color: rgba(var(--lightest-background), 0.7)
 
               &::before
                 display: inline-block
                 content: counter(line)
                 padding-right: 0.5em
-                color: colors.color("lightest-foreground")
+                color: var(--lightest-foreground)
                 border-right: 1px solid
 
 .language
@@ -184,11 +184,11 @@ export default {
   display: flex
   justify-content: flex-end
   margin-bottom: 1rem
-  border-bottom: 1px solid colors.color("lightest-background")
+  border-bottom: 1px solid var(--lightest-background)
 
 .copy-button
   font: typography.font("monospace")
-  color: colors.color("primary-highlight")
+  color: var(--primary-highlight)
   padding: 1em
 
   & > svg

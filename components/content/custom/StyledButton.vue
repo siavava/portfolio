@@ -32,7 +32,7 @@ export default {
 @use "@/styles/typography"
 
 .styled-button
-  background: rgba(colors.color(light-background), 0.7)
+  background: rgba(var(--light-background), 0.7)
   font-size: typography.font-size(s)
   //width: fit-content
   display: table
@@ -42,5 +42,5 @@ export default {
 
   &:hover
     cursor: pointer
-    color: colors.color(light-foreground)
+    color: var(--light-foreground)
 </style>

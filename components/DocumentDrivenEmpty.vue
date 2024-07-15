@@ -34,15 +34,15 @@ section.not-found
     font-size: 24px
     font-weight: 600
     margin: auto
-    color: colors.color(dark-foreground)
+    color: var(--dark-foreground)
     height: 2em
     line-height: 2em
     padding-right: 20px
     margin-right: 20px
-    border-right: 1px solid colors.color(dark-foreground)
+    border-right: 1px solid var(--dark-foreground)
 
   .error-message
     //font-weight: 600
-    color: colors.color(foreground)
+    color: var(--foreground)
     line-height: 5rem
 </style>

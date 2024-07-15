@@ -1,27 +1,34 @@
 <template>
-  <NuxtLink
-    v-if="generate"
+  <ProseA
+    v-if="generate && id"
     :to="`#${id}`"
     class="prose-title-wrapper"
+    :underline="false"
   >
     <h3
       :id="id"
-      class="prose-h3"
+      :class="{
+        'prose-h3': true,
+        'bold': bold,
+      }"
     >
       <slot />
     </h3>
-  </NuxtLink>
+  </ProseA>
   <div
     v-else
     class="prose-title-wrapper"
   >
     <h3
       :id="id"
-      class="prose-h3"
+      :class="{
+        'prose-h3': true,
+        'bold': bold,
+      }"
     >
       <slot />
     </h3>
-    <br>
+    <!-- <br> -->
   </div>
 </template>
 
@@ -30,34 +37,39 @@
 // eslint-disable-next-line import/no-unresolved
 import { useRuntimeConfig } from "#imports"
 
-defineProps<{ id: string }>()
-const heading = 3
+defineProps({
+  id: {
+    type: String,
+    default: "",
+  },
+  bold: {
+    type: Boolean,
+    default: true,
+  },
+})
+// defineProps<{ id: string }>()
+const heading = 1
 // @ts-ignore
 const { anchorLinks } = useRuntimeConfig().public.content
 const generate = anchorLinks?.depth >= heading
 </script>
 
 <style lang="sass" scoped>
-
 @use "@/styles/colors"
+@use "@/styles/typography"
 @use "@/styles/geometry"
 
-.prose-title-wrapper
-  margin-top: 1rem
-  margin-bottom: 1rem
+.prose-h3
+  font-size: typography.font-size(xs)
+  color: var(--lightest-foreground)
+  margin: 0.3em 0 -1.3em 0
+  padding: 0
+  line-height: 0.9em
+  font-family: typography.font("sans-serif")
+  font-weight: 500
 
-  .prose-h3
-    font-weight: 500
-    font-size: 1rem
-    color: colors.color("primary-highlight")
-    display: inline
 
-    &::before
-      content: "###"
-      margin-right: 0.5rem
-      opacity: 0.5
-      transition: geometry.var("default-transition")
-
-    &:hover::before
-      opacity: 1
+  &.bold
+    font-weight: 600
+    // font-size: 1em
 </style>

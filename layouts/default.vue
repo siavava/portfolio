@@ -1,5 +1,8 @@
 <template>
   <div id="root">
+    <BackgroundCanvas class="default-canvas" />
+    <Menu />
+    <AppHeader />
     <main>
       <slot id="content" />
     </main>
@@ -12,6 +15,18 @@
 </template>
 <script lang="ts" setup>
 import { SpeedInsights } from "@vercel/speed-insights/nuxt"
+
+const menuOpen = ref(false);
+const toggleMenu = () => {
+  menuOpen.value = !menuOpen.value;
+
+  console.log(`TOGGLED to ${menuOpen.value}`);
+};
+
+provide("menu-options", {
+  menuOpen,
+  toggleMenu
+});
 </script>
 
 <style lang="sass">
@@ -29,5 +44,6 @@ main
   margin: auto
   font-weight: 400
   line-height: 22px
+  z-index: 0
 
 </style>

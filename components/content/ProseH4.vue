@@ -49,7 +49,7 @@ const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes
   .prose-h4
     font-weight: 500
     font-size: 1.1rem
-    color: colors.color("lightest-foreground")
+    color: var(--lightest-foreground)
     display: inline
 
     &::before

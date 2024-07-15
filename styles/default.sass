@@ -25,14 +25,17 @@ html
 //   opacity: 1 !important
 //   visibility: visible !important
 
+.dark-mode ::selection
+  background-color: var(--light-background)
+  color: var(--primary-highlight)
+
 ::selection
-  background-color: rgba(colors.color(light-background), 0.3)
-  color: colors.color(primary-highlight)
+  background: var(--primary-highlight)
 
 
 /* Provide basic, default focus styles.*/
 :focus
-  outline: 2px dashed colors.color("primary-highlight")
+  outline: 2px dashed var(--primary-highlight)
   outline-offset: 3px
 
 /*
@@ -47,29 +50,29 @@ html
   platform, provide enhanced focus styles for keyboard
   focus. */
 :focus-visible 
-  outline: 2px dashed colors.color("primary-highlight")
+  outline: 2px dashed var(--primary-highlight)
   outline-offset: 3px
 
 /* Scrollbar Styles */
 html 
   scrollbar-width: thin
-  scrollbar-color: colors.color(light-background) // colors.color(")
+  scrollbar-color: transparent // var(--border-color) // colors.color(")
 
 ::-webkit-scrollbar-track 
-  background: colors.color(background)
+  background: var(--background)
 
 ::-webkit-scrollbar-thumb 
-  background: colors.color(light-foreground)
-  border: 3px solid
-  border-radius: 10px
+  background: transparent // var(--light-foreground)
+  // border: 3px solid
+  border-radius: 0 // 10px
 
   &:hover
-    background: colors.color(primary-highlight)
+    background: var(--primary-highlight)
     border: 3px solid
 
 body
-  background-color: colors.color("background")
-  color: colors.color("foreground")
+  background-color: var(--background)
+  color: var(--foreground)
   line-height: 1.7
   font-family: typography.font("sans-serif"), sans-serif
   // -moz-osx-font-smoothing: grayscale
@@ -86,6 +89,20 @@ body
 //   min-height: 100svh
 //   min-width: 100vw
 
+:root
+  @each $name, $value in colors.$light-palette
+    // --#{$name}: #{$value}
+    // --#{$name}: rgba(red(#{$value}), green(#{$value}), blue(#{$value}))
+    --#{$name}: #{rgba(red($value), green($value), blue($value), alpha($value))}
+
+
+
+.dark-mode
+  @each $name, $value in colors.$dark-palette
+    --#{$name}: #{$value}
+
+    // set with sass name too
+
 section 
   margin: 0 auto
   padding-left: 30px
@@ -100,7 +117,7 @@ h1, h2, h3, h4, h5, h6
   all: unset
   margin: 0 0 10px 0
   font-weight: 600
-  color: colors.color("lightest-foreground")
+  color: var(--lightest-foreground)
   line-height: 1.1
 
 

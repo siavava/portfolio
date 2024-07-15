@@ -4,13 +4,19 @@
 
 <style lang="sass" scoped>
 @use "@/styles/colors"
+
+// clear all styles from hr
+// hr
+
 .prose-hr
-  width: 10%
+  // all: unset
+  // width: 10%
+  width: 50px
   height: 1px
   margin: 3em 0
-  // color: rgba(colors.color("lightest-background"), 0.3)
 
-  // make hr white
-  border-color: rgba(colors.color(lightest-foreground), 0.3)
-  border-top: 1px solid rgba(colors.color(lightest-foreground), 0.5)
+
+  background: var(--border-color)
+  border: none
+
 </style>

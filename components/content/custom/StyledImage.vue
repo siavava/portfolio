@@ -67,11 +67,11 @@ export default {
     &:before
       top: 0
       left: 0
-      background-color: colors.color("background")
+      background-color: var(--background)
       mix-blend-mode: screen
 
     &:after
-      border: 2px solid colors.color("primary-highlight")
+      border: 2px solid var(--primary-highlight)
       top: 20px
       left: 20px
       z-index: 1

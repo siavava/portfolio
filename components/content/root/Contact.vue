@@ -63,5 +63,5 @@ const { data: contact } = await useAsyncData(
   font-family: typography.font("serif"), serif
 
 .link
-  color: colors.color(lightest-foreground)
+  color: var(--lightest-foreground)
 </style>

@@ -1,9 +1,8 @@
 <template>
   <section class="about">
-    <!-- <ContentDoc
-      path="/profile/brief"
-      class="doc"
-    /> -->
+    <!-- <C
+    
+    -->
     <ContentDoc
       :value="profile"
       class="doc"

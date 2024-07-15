@@ -29,7 +29,7 @@
 
 
   th
-    color: colors.color("light-foreground")
+    color: var(--light-foreground)
     padding: 10px
     font-weight: 600
 
@@ -39,6 +39,6 @@
   // align text to top of cell
   td, th
     vertical-align: top
-    border: 0.5px dashed colors.color("dark-foreground")
+    border: 0.5px dashed var(--border-color)
 
 </style>

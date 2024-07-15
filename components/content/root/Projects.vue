@@ -15,7 +15,7 @@
 
     <!-- featured projects -->
 
-    <div class="category-title">
+    <div class="category-title" id="featured">
         {{ "Featured" }}
       </div>
     <div
@@ -103,7 +103,7 @@
       v-for="category, index in sortedCategories"
       :key="index"
     >
-      <div class="category-title">
+      <div class="category-title" :id="category[0].replace(' ', '-')">
         {{ category[0] }}
       </div>
       <div
@@ -286,7 +286,7 @@ export default {
   left: 0
   z-index: 1000
   overflow: scroll
-  background: colors.color(background)
+  background: var(--background)
 
 .category-title
   text-transform: uppercase
@@ -337,10 +337,17 @@ export default {
 
     .project-tech-item
       font-size: typography.font-size(xs)
-      color: colors.color(dark-foreground)
+      color: var(--dark-foreground)
 
       &:not(:last-child)::after
         margin: 0 0.5em
+
+      border-radius: 1em
+      border: 0.5px solid var(--border-color)
+
+      .dark-mode &
+        border: 0.5px transparent
+        background: var(--light-background)
 
 .archive-link
   font-family: typography.font("sans-serif"), sans-serif

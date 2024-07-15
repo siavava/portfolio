@@ -155,12 +155,12 @@ onUnmounted(() => {
   flex-direction: column;
   flex-direction: column;
   font-size: typography.font-size(m);
-  background: colors.color(background);
+  // background: var(--background);
 
   .footer-vertical {
     @include mixins.flex-center;
     width: 100%;
-    border-top: 1px solid colors.color(light-background);
+    border-top: 1px solid var(--border-color);
     padding: 1em;
   }
 
@@ -174,7 +174,7 @@ onUnmounted(() => {
     }
 
     .left-section {
-      color: colors.color(dark-foreground);
+      color: var(--dark-foreground);
       font-size: 1em;
       font-family: typography.font("serif"), serif;
     }
@@ -187,7 +187,7 @@ onUnmounted(() => {
       .year {
         font-size: 1em;
         font-family: typography.font(sans-serif), sans-serif;
-        color: colors.color(dark-foreground);
+        color: var(--dark-foreground);
         font-weight: 400
       }
       align-items: center;
@@ -199,20 +199,20 @@ onUnmounted(() => {
       right: 0;
       width: 120px;
       transform: translateY(-100%);
-      background: rgba(colors.color(background), 0.2);
-      color: colors.color(foreground);
+      background: rgba(var(--background), 0.2);
+      color: var(--foreground);
       font-weight: 300;
       font-size: 1em;
       padding: 0 1px;
       border-radius: 5px;
       display: inline-flex;
       justify-content: center;
-      border: 1px solid;
+      border: 1px solid var(--border-color);
       opacity: 0;
       transition: opacity 0.2s ease-in-out;
 
       & > span {
-        color: colors.color(light-foreground);
+        color: var(--light-foreground);
         font-weight: 500;
       }
     }
@@ -220,7 +220,7 @@ onUnmounted(() => {
     .clock {
       height: 1.2em;
       aspect-ratio: 1/1;
-      border: 1px solid colors.color(foreground);
+      border: 1px solid var(--border-color); // this
       border-radius: 50%;
       position: relative;
       padding: 0;
@@ -240,7 +240,7 @@ onUnmounted(() => {
 
         .hand {
           width: 50%;
-          background: colors.color(foreground);
+          background: var(--foreground);
           position: absolute;
           top: 50%;
           transform-origin: 100%;
@@ -271,7 +271,7 @@ onUnmounted(() => {
 
     .footer-paragraph {
       width: min(100%, 548px);
-      color: colors.color(foreground);
+      color: var(--foreground);
       margin: 0 auto;
       padding: 60px 0;
       // font-weight: 500;

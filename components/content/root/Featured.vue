@@ -107,30 +107,6 @@
 <script lang="ts">
 export default {
   name: "Featured",
-  // data() {
-  //   return {
-  //     size: 0,
-  //   }
-  // },
-
-  // mounted() {
-  //   this.size = window.innerWidth
-
-  //   window.addEventListener("resize", () => {
-  //     this.size = window.innerWidth
-  //   })
-  // },
-
-  // beforeUnmount() {
-  //   window.removeEventListener("resize", () => {
-  //     this.size = window.innerWidth
-  //   })
-  // },
-  // methods: {
-  //   isMobile() {
-  //     return this.size < 768
-  //   },
-  // },
 }
 </script>
 
@@ -206,6 +182,13 @@ const projects = data.value || []
 
     .project-tech-item
       font-size: typography.font-size(xs)
+
+      border-radius: 1em
+      border: 0.5px solid var(--border-color)
+
+      .dark-mode &
+        border: 0.5px transparent
+        background: var(--light-background)
 
       &:not(:last-child)::after
         margin: 0 0.5em

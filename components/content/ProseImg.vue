@@ -64,6 +64,6 @@ const refinedSrc = props.src // computed(() => withBase(props.src, useRoute().pa
   .prose-img-alt
     margin-top: 0.5rem
     font-size: typography.font-size("s")
-    color: colors.color("lightest-foreground")
+    color: var(--lightest-foreground)
     text-align: center
 </style>

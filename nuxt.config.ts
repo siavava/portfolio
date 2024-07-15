@@ -56,15 +56,7 @@ export default defineNuxtConfig({
     // "@nuxt/ui",
     "@nuxt/image",
     "@nuxt/devtools",
-    // "@pinia/nuxt",
-    // "@nuxtjs/firebase",
-    // ["@nuxtjs/redirect-module",
-    //   {
-    //     from: "^.*(?<!/)$",
-    //     to: (from, req) => (req.url.endsWith("/") ? req.url : `${req.url}/`),
-    //     statusCode: 301,
-    //   },
-    // ],
+    "@nuxtjs/color-mode",
     ["@nuxtjs/robots", {
       UserAgent: "*",
       Disallow: "",

@@ -19,5 +19,5 @@ defineProps<{ id: string }>()
   margin-bottom: 0.5em
   font-weight: 600
   font-size: 1rem
-  color: colors.color("lightest-foreground")
+  color: var(--lightest-foreground)
 </style>

@@ -3,10 +3,10 @@ category: 'profile'
 name:
   - Amittai
 callout: |
-  <span style="color: grey">is a</span>
-  software engineer<span style="color: grey">,</span><br>
-  researcher<span style="color: grey">, and</span> <br>
-  designer<span style="color: grey">.</span>
+  <span style="color: var(--border-color)">is a</span>
+  software engineer<span style="color: var(--border-color)">,</span><br>
+  researcher<span style="color: var(--border-color)">, and</span> <br>
+  designer<span style="color: var(--border-color)">.</span>
 
 # Design, Architecture, <br> Engineering, & Mathematics
 
@@ -25,7 +25,7 @@ and share ideas so they can meaningfully express what brings them joy.
 I am a generalist toward this goal and care deeply about **_systems_**, which form
 the fundamental building blocks of our applications;
 **_interaction design_**, which governs how we use and live with
-computers all around us, and **_[ambient intelligence][ambient-intelligence]_**, which
+computers all around us; and **_[ambient intelligence][ambient-intelligence]_**, which
 enables us to interact with our environment in more natural ways.
 
 :br

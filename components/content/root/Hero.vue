@@ -79,7 +79,7 @@ export default {
     .hero-callout
       font-weight: 500
       margin: 0.5em 0
-      color: colors.color(lightest-foreground)
+      color: var(--lightest-foreground)
       line-height: 1.5
       font-size: 20px
 

@@ -46,7 +46,6 @@ defineProps({
       width="12"
       height="12"
       viewBox="0 0 12 12"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -58,7 +57,7 @@ defineProps({
             9.35355L2.64645 8.64645ZM3.5 4H8.5V3H3.5V4ZM8
             3.5V8.5H9V3.5H8ZM8.14645 3.14645L2.64645
             8.64645L3.35355 9.35355L8.85355 3.85355L8.14645 3.14645Z"
-        fill="#eee"
+        fill="currentColor"
       />
     </svg>
   </span>
@@ -75,8 +74,8 @@ defineProps({
   display: inline
 
 .link
-  color: colors.color(lightest-foreground)
-  // color: colors.color(primary-highlight)
+  color: var(--lightest-foreground)
+  // color: var(--primary-highlight)
   margin: 0
   padding: 0
 
@@ -96,4 +95,5 @@ defineProps({
   height: 1em
   aspect-ratio: 1/1 !important
   // display: inline
+  color: var(--lightest-foreground)
 </style>
