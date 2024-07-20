@@ -56,18 +56,19 @@ html
 /* Scrollbar Styles */
 html 
   scrollbar-width: thin
-  scrollbar-color: var(--border-color) var(--dark-background)
+  scrollbar-color: var(--foreground) var(--border-color)
+  scrollbar-base-color: var(--border-color)
 
 ::-webkit-scrollbar-track 
-  background: var(--background)
+  background: var(--border-color)
 
 ::-webkit-scrollbar-thumb 
-  background: transparent // var(--light-foreground)
-  // border: 3px solid
+  background: var(--light-foreground)
+  border: 3px solid
   border-radius: 0 // 10px
 
   &:hover
-    background: var(--primary-highlight)
+    background: white //var(--primary-highlight)
     border: 3px solid
 
 body

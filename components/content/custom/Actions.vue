@@ -56,7 +56,7 @@ const { menuOpen, toggleMenu } = inject('menu-options')
   color: var(--lightest-foreground)
   background: transparent
 
-  border-radius: 5px
+  // border-radius: 5px
   padding: 0 0.25rem
 
   font-size: typography.font-size("xxs")
@@ -64,6 +64,11 @@ const { menuOpen, toggleMenu } = inject('menu-options')
   font-weight: 600
 
   transition: all 2s ease
+
+  border-left: 0.5px solid var(--border-color)
+  padding: 0 0 0 40px
+  margin: 0 20px 0 0
+
 
   &:hover
     cursor: pointer

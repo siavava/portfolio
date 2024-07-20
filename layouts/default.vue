@@ -75,6 +75,11 @@ provide("menu-options", {
       // background tint
       // backdrop-filter: blur(20px) brightness(0.9)
 
+      display: none
+
+      .dark-mode &
+        display: block
+
 main
   width: min(100svw, 640px)
   padding: 0 clamp(0.5em, 3vw, 3em)
