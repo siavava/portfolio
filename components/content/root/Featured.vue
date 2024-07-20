@@ -5,7 +5,7 @@
     </ProseH1>
     <br>
 
-    <div class="archive-link" v-if="archiveActive">
+    <div class="archive-link" v-if="archive">
       <ProseA
         href="/archive"
         fancy
@@ -29,19 +29,18 @@
       </div>
       <div class="project-content">
         <div>
-          <ProseH2
-            :id="`featured-${project.title}`"
-            bold
-          >
-          <ProseA
-            v-if="project?.url"
-            :href="project.url"
-            fancy
-            bold
-          >
-            {{ project.title }}
-          </ProseA>
-            <span v-else> {{ project.title }}</span>
+          <ProseH2 bold>
+            <ProseA
+              v-if="project?.url"
+              :href="project.url"
+              fancy
+              bold
+            >
+              {{ project.title }}
+            </ProseA>
+            <span v-else>
+              {{ project.title }}
+            </span>
           </ProseH2>
           <template v-if="hasCompany(project)">
             <span
@@ -93,7 +92,7 @@
         </div>
       </div>
     </div>
-    <div class="archive-link" v-if="archiveActive">
+    <div class="archive-link" v-if="archive">
       <ProseA
         href="/archive"
         fancy
@@ -114,12 +113,12 @@ export default {
 
 const props = defineProps({
   archive: {
-    type: String,
-    default: "",
+    type: Boolean,
+    default: false,
   }
 })
 
-const archiveActive = props.archive !== "false"
+// const archiveActive = false // props.archive !== "false"
 
 const hasCompany = (project: any) => typeof project.company !== "undefined"
 

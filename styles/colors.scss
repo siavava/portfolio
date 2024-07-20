@@ -185,8 +185,9 @@ $dark-palette: (
   // "two": #3A594D,
   // "three": #BD8FC0,
 
-  "background": #0A0A0A,
-  // background: #000000,
+  // "background": #0A0A0A,
+  "background": #111111,
+  // "background": #000000,
   "dark-background": #000000,
   "light-background": #232323,
   "lightest-background": #383838,
@@ -196,14 +197,16 @@ $dark-palette: (
   "dark-foreground": #888888,
   // "foreground": #bbbbbb,
   // "foreground": darken(#bbbbbb, 10%),
-  "foreground": #888888,
+  // "foreground": #888888,
+  "foreground": rgba(255, 255, 255, 0.5),
   // "foreground": #A0A0A0,
   "light-foreground": #dedede,
   "lightest-foreground": #ffffff,
 
 
 
-  "border-color": rgba(#707b90, 0.5)
+  // "border-color": rgba(#707b90, 0.5)
+  "border-color": rgba(255, 255, 255, 0.2)
 );
 
 $light-palette: (
@@ -229,7 +232,10 @@ $light-palette: (
   // "primary-highlight": #BD998F,
   // "primary-highlight": #E47E5C,
   // "primary-highlight": #972900,
-  "primary-highlight": #1EFFCD,
+  // "primary-highlight": #1EFFCD,
+  // "secondary-highlight": #fe6a6a,
+  "secondary-highlight": rgb(240, 191, 76),
+  "primary-highlight": rgba(240, 191, 76, 0.7),
 
   // "secondary-highlight": #BD998F,
 
@@ -260,7 +266,10 @@ $light-palette: (
   // "three": #BD8FC0,
 
   // "background": #FEF2EE,
-  "background": #F4E9ED,
+  // "background": #F4E9ED,
+  "background": rgba(155, 118, 53, 0.3),
+  // "background": rgba(189, 183, 148, 0.4),
+  // "background": #DCE2E2,
   // "background": #E0DFDC,
   // "background": #000000,
   "dark-background": #000000,
@@ -273,12 +282,14 @@ $light-palette: (
   // "foreground": #555555,
   // "foreground": #000000,
   // "foreground": #484F49,
-  "foreground": #3b6484,
+  // "foreground": #3b6484,
+  "foreground": rgba(0, 0, 0, 0.5),
   // "foreground": #335467,
   // "foreground": #8E2D2A,
   // "foreground": #524D49,
   "light-foreground": #0D0E10,
   "lightest-foreground": #0D0E10,
 
-  "border-color": rgba(#0D0E10, 0.3)
+  // "border-color": rgba(#0D0E10, 0.3)
+  "border-color": rgba(0, 0, 0, 0.2)
 );

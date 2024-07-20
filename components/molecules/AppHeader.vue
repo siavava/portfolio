@@ -1,28 +1,26 @@
 <template>
   <header class="app-header">
     <div class="header-item left">
-      <!-- <NuxtLink to="https://amittai.space">
-        <h2>My Blog</h2>
-      </NuxtLink>
-      <NuxtLink to="https://amittai.space">
-        <h2>Generative Art</h2>
-      </NuxtLink> -->
+      <div class="column">
+        <span class="column-item">Work </span>
+        <span class="column-item emphasized">by Amittai Siavava</span>
+      </div>
     </div>
 
-    
+    <div class="header-item left">
+      <div class="column">
+        <span class="column-item">Software Engineer </span>
+        <span class="column-item emphasized">Instagram</span>
+      </div>
+    </div>
 
-
+    <div class="header-item left">
+      <NuxtLink to="/"> Home</NuxtLink>
+      <NuxtLink to="/archive"> Archive</NuxtLink>
+      <NuxtLink to="https://amittai.space"> Blog</NuxtLink>
+    </div>
     <div class="header-item right">
-      <ColorModeSelector />
-      <!-- <NuxtLink v-if="route.path == '/'" to="/archive">
-        <h2>Archive</h2>
-      </NuxtLink>
-      <NuxtLink v-else to="/">
-        <h2>Home</h2>
-      </NuxtLink>
-      <NuxtLink to="/about">
-        <h2>About</h2>
-      </NuxtLink> -->
+      <Actions />
     </div>
   </header>
 </template>
@@ -33,12 +31,9 @@ const route = useRoute()
 
 <style lang="sass" scoped>
 .app-header
-  // background-color: #333
-  // color: white
   padding: 1.5em 0
   margin: 0 auto
   text-align: center
-  // border-bottom: 1px solid var(--light-background)
 
   display: flex
   justify-content: space-between
@@ -47,9 +42,16 @@ const route = useRoute()
   top: 0
   left: 0
   right: 0
-  z-index: 100
+  z-index: 1000
 
-  max-width: 840px
+  & > :not(.header-item.right)
+
+    @media screen and (max-width: 960px)
+        display: none
+
+  @media screen and (max-width: 960px)
+    justify-content: flex-end
+
 
   &::before
     content: ""
@@ -57,18 +59,12 @@ const route = useRoute()
     top: 0
     left: -5000px
     height: 100%
-    width: 10000px //calc(100% + 100px)
-    // background: var(--background)
-    backdrop-filter: blur(200px)
-    z-index: -1
+    width: 10000px
 
-
-    // border-bottom: 1px solid var(--light-background)
-    // border-bottom: 0.5px solid var(--lightest-foreground)
+    backdrop-filter: blur(3px)
+    z-index: 999
 
     border-bottom: 0.5px solid var(--border-color)
-
-    // opacity: 0.1
 
 
 
@@ -79,6 +75,19 @@ const route = useRoute()
     justify-content: flex-start
     flex-grow: 0
     flex-shrink: 1
-    margin: 0 1em
-    // background: yellow
+    margin: 0 1.5em
+    z-index: 1000
+
+  .column
+    display: flex
+    flex-direction: column
+    gap: 0
+    align-items: flex-start
+
+    .column-item
+      line-height: 1.3
+      // color: var(--border-color)
+
+      &.emphasized
+        color: var(--lightest-foreground)
 </style>

@@ -21,7 +21,10 @@
   >
     <h2
       :id="id"
-      class="prose-h2"
+      :class="{
+        'prose-h2': true,
+        'bold': bold,
+      }"
     >
       <slot />
     </h2>
@@ -55,6 +58,7 @@ const generate = anchorLinks?.depth >= heading
 @use "@/styles/colors"
 @use "@/styles/typography"
 @use "@/styles/geometry"
+@use "@/styles/mixins"
 
 .prose-h2
   font-size: typography.font-size(m)
@@ -65,8 +69,11 @@ const generate = anchorLinks?.depth >= heading
   font-family: typography.font("sans-serif")
   font-weight: 500
 
+  @include mixins.underline
+
 
   &.bold
     font-weight: 600
-    font-size: 1em
+    // font-size: 1em
+
 </style>

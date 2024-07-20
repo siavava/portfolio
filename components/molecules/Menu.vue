@@ -182,7 +182,7 @@ const toTitleCase = (str) => {
     display: flex
     flex-direction: column
     gap: 1em
-    padding: 1em
+    padding: 1.5em
 
     &:hover .router-link > *
       color: var(--border-color) !important

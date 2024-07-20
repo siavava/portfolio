@@ -19,14 +19,19 @@ I currently work at [Instagram][instagram], the social media platform
 for sane humans.
 I'm also building [entendr.][entendr] in my spare time.
 
-I seek to develop better _**interactive experiences**_ for people to cultivate
-and share ideas so they can meaningfully express what brings them joy.
+I seek to design better [_**interactive experiences**_][interactive-experiences]
+for people to discover, explore, and share ideas
+so they can meaningfully express what brings them joy.
 
-I am a generalist toward this goal and care deeply about **_systems_**, which form
-the fundamental building blocks of our applications;
-**_interaction design_**, which governs how we use and live with
-computers all around us; and **_[ambient intelligence][ambient-intelligence]_**, which
-enables us to interact with our environment in more natural ways.
+I am a generalist toward this goal. I care deeply about
+[**_systems_**][systems],
+which form the fundamental building blocks of our applications;
+[**_interaction design_**][interaction-design],
+which governs how we use and live with
+computers all around us; and
+**_[ambient intelligence][ambient-intelligence]_**,
+the quest to build smarter technology
+which enables us to interact with our environment in more natural ways.
 
 :br
 
@@ -142,3 +147,7 @@ Do reach out!_**
 
 
 [ambient-intelligence]:     https://www.infosys.com/insights/ai-automation/ambient-intelligence.html#:~:text=%22The%20most%20profound%20technologies%20are,chief%20scientist%20at%20Xerox%20PARC.
+
+[interactive-experiences]:  https://www.designcouncil.org.uk/our-resources/the-design-value-framework/
+[interaction-design]:       https://lawsofux.com/
+[systems]:                  https://horicky.blogspot.com/2010/10/scalable-system-design-patterns.html

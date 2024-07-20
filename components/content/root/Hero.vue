@@ -47,6 +47,9 @@ export default {
   flex-direction: row
   align-content: center
 
+
+  margin-top: 100px
+
   .profile-image
     width: 100px
     aspect-ratio: 1/1
@@ -69,7 +72,7 @@ export default {
 
       & > h1
         font-weight: 600
-        letter-spacing: -1.2px
+        letter-spacing: -2px
         margin: 0
         font-size: 30px
       
@@ -82,6 +85,8 @@ export default {
       color: var(--lightest-foreground)
       line-height: 1.5
       font-size: 20px
+
+      @include mixins.underline
 
       @media screen and (max-width: 600px)
         font-size: 18px

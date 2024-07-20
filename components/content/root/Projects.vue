@@ -4,16 +4,6 @@
       Projects Archive
     </ProseH1>
     <br>
-    <div class="archive-link">
-      <ProseA
-        href="/"
-        fancy
-      >
-        {{ "home" }}
-      </ProseA>
-    </div>
-
-    <!-- featured projects -->
 
     <div class="category-title" id="featured">
         {{ "Featured" }}
@@ -34,18 +24,17 @@
         </div>
         <div class="project-content">
           <div>
-          <ProseH2
-            :id="`featured-${project.title}`"
-            bold
-          >
-          <ProseA
-            v-if="project?.url"
-            :href="project.url"
-            fancy bold
-          >
-            {{ project.title }}
-          </ProseA>
-            <span v-else> {{ project.title }}</span>
+          <ProseH2 bold>
+            <ProseA
+              v-if="project?.url"
+              :href="project.url"
+              fancy bold
+            >
+              {{ project.title }}
+            </ProseA>
+            <span v-else>
+              {{ project.title }}
+            </span>
           </ProseH2>
             <template v-if="hasCompany(project)">
               <span
@@ -122,19 +111,18 @@
         </div>
         <div class="project-content">
           <div>
-            <ProseH2
-            :id="`featured-${project.title}`"
-            bold
-          >
-          <ProseA
-            v-if="project?.url"
-            :href="project.url"
-            fancy bold
-          >
-            {{ project.title }}
-          </ProseA>
-            <span v-else> {{ project.title }}</span>
-          </ProseH2>
+            <ProseH2 bold>
+              <ProseA
+                v-if="project?.url"
+                :href="project.url"
+                fancy bold
+              >
+                {{ project.title }}
+              </ProseA>
+              <span v-else>
+                {{ project.title }}
+              </span>
+            </ProseH2>
             <template v-if="hasCompany(project)">
               <span
                 v-if="hasCompany(project)"
@@ -173,10 +161,8 @@
                 :key="techIndex"
                 class="project-tech-item"
               >
-                <!-- {{ tech }} -->
                 <StyledButton
                   id="tech-link"
-                  href=""
                 >
                   {{ tech }}
                 </StyledButton>
@@ -184,14 +170,6 @@
             </ul>
           </div>
         </div>
-      </div>
-      <div class="archive-link">
-        <ProseA
-          href="/"
-          fancy
-        >
-          {{ "home" }}
-        </ProseA>
       </div>
     </div>
   </section>
@@ -261,22 +239,15 @@ const featuredProjects = featuredData.value || []
 
 </script>
 
-<script lang="ts">
-export default {
-  name: "Projects",
-  data() {
-    return {
-      size: 0,
-    }
-  },
-}
-</script>
-
 <style lang="sass" scoped>
 @use "@/styles/transitions"
 @use "@/styles/typography"
 @use "@/styles/mixins"
 @use "@/styles/colors"
+
+:root
+  // define counter for categories
+  counter-reset: section-count
 
 .projects-archive-container
   width: 100vw
@@ -288,19 +259,65 @@ export default {
   overflow: scroll
   background: var(--background)
 
+
+
 .category-title
   text-transform: uppercase
-  width: 100%
-  height: 200px
-  margin-top: 300px
+  // width: 100%
+  // height: 200px
+  // margin-top: 300px
+  padding: 300px 0 100px 0
   font-size: typography.font-size(s)
   font-weight: 600
-  display: flex
-  align-items: center
+  font-family: typography.font("monospace"), monospace
+  // display: flex
+  // align-items: center
+  counter-increment: section-count
+
+  color: colors.color("primary-highlight")
+  font-size: 30px
+  height: 1em !important
+  // position: absolute
+  // right: 0
+
+  // make it empty letters with otuline
+  text-stroke: 1px var(--border-color)
+  -webkit-text-stroke: 1px var(--lightest-foreground)
+  -webkit-text-fill-color: transparent
+
+  transition: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+
+  position: relative
+
+  // background: yellow
+    // background-image: linear-gradient(to top, yellow, var(--background))
+  // background-image: linear-gradient(to right, var(--secondary-highlight), var(--background))
+  // background-position: bottom left
+
+
+  &::before
+    content: counter(section-count) ". "
+    position: absolute
+    // bottom: 50px
+    right: 100%
+    top: calc(300px - 0.25em)
+    // bottom: 95px
+    padding: 0 0.5em
+    font-size: 20px
+    font-weight: 400
+    color: var(--foreground)
+    -webkit-text-fill-color: var(--lightest-foreground)
+    text-stroke: transparent
+    -webkit-text-stroke: transparent
+
+    line-height: 2
+
+    // background: yellow
 
   @media screen and (max-width: 540px)
-    margin-top: 200px
-    height: 100px
+    // margin-top: 200px
+    // height: 100px
+    margin: 200px 0 100px 0
 
 .project
   @include mixins.split
@@ -337,7 +354,6 @@ export default {
 
     .project-tech-item
       font-size: typography.font-size(xs)
-      color: var(--dark-foreground)
 
       &:not(:last-child)::after
         margin: 0 0.5em
