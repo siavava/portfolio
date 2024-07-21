@@ -3,6 +3,7 @@
     <button id="menu-button" @click.prevent="() => toggleMenu()" class="menu-button column-item emphasized">
      {{ "Menu" }}
     </button>
+    <span class="divider"/>
     <button @click="toggleColorMode" class="selector">
       <div class="icon">
         <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -51,25 +52,23 @@ const { menuOpen, toggleMenu } = inject('menu-options')
 
 .buttons-container
   display: flex
-  gap: 2em
+  // gap: 2em
   padding: 0
+
+.divider
+  background: var(--border-color)
+  width: 0.5px
+  height: 1.5em
+  margin: 0 30px
 
 .selector
   color: var(--lightest-foreground)
   background: transparent
-
-  // border-radius: 5px
-  padding: 0 0.25rem
-
   font-size: typography.font-size("xxs")
-
   font-weight: 600
-
   transition: all 2s ease
 
-  border-left: 0.5px solid var(--border-color)
-  padding: 0 0 0 40px
-  margin: 0 20px 0 0
+  margin: 0 20px 0 10px
 
 
   &:hover
@@ -82,8 +81,6 @@ const { menuOpen, toggleMenu } = inject('menu-options')
   display: flex
   align-items: center
   justify-content: center
-  gap: 0.5em
-  position: relative
   width: 20px
   height: 20px
 
