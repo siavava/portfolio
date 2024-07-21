@@ -47,7 +47,7 @@ const route = useRoute()
   & > :not(.header-item.right)
 
     @media screen and (max-width: 960px)
-        display: none
+      display: none
 
   @media screen and (max-width: 960px)
     justify-content: flex-end
@@ -60,11 +60,11 @@ const route = useRoute()
     left: -5000px
     height: 100%
     width: 10000px
-
-    backdrop-filter: blur(3px)
+    // background: var(--background)
+    backdrop-filter: blur(1px)
+    // opacity: 0.1
     z-index: 999
-
-    border-bottom: 0.5px solid var(--border-color)
+    mask: linear-gradient(black, black, transparent)
 
 
 

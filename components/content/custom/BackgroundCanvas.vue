@@ -30,8 +30,8 @@ onMounted(() => {
     gradientPosition += gradientSpeed;
 
     const gradient = ctx.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, `hsl(${Math.sin(gradientPosition) * 360}, 10%, 50%)`);
-    gradient.addColorStop(1, `hsl(${Math.cos(gradientPosition) * 360}, 10%, 50%)`);
+    gradient.addColorStop(0, `hsl(${Math.sin(gradientPosition) * 360}, 20%, 50%)`);
+    gradient.addColorStop(1, `hsl(${Math.cos(gradientPosition) * 360}, 20%, 50%)`);
 
     // rotate the gradient
 

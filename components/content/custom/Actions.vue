@@ -43,6 +43,8 @@ const { menuOpen, toggleMenu } = inject('menu-options')
   line-height: 1.3
   background: transparent
   color: var(--border-color)
+  font-family: typography.font("sans-serif")
+  font-size: 1em
 
   &.emphasized
     color: var(--lightest-foreground)
