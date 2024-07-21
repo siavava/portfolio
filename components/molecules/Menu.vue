@@ -184,8 +184,10 @@ const toTitleCase = (str) => {
     gap: 1em
     padding: 1.5em
 
-    &:hover .router-link > *
-      color: var(--border-color) !important
+    &:hover .router-link
+      
+      & > *
+        color: var(--border-color)
 
     .router-link > *
       transition: all 0.5s ease
@@ -199,6 +201,9 @@ const toTitleCase = (str) => {
   line-height: 0.5em
   margin: 0
   padding: 0
+
+  &:hover > *
+    color: var(--lightest-foreground) !important
 
 .title
   margin-bottom: 0.5em

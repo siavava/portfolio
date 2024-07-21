@@ -52,8 +52,7 @@ const { menuOpen, toggleMenu } = inject('menu-options')
 
 .buttons-container
   display: flex
-  // gap: 2em
-  padding: 0
+  align-items: center
 
 .divider
   background: var(--border-color)
