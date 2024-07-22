@@ -187,9 +187,10 @@ onUnmounted(() => {
       .year {
         font-size: 1em;
         font-family: typography.font(sans-serif), sans-serif;
-        color: var(--dark-foreground);
-        font-weight: 400
+        color: var(--border-color);
+        font-weight: 500
       }
+
       align-items: center;
     }
 
@@ -199,7 +200,9 @@ onUnmounted(() => {
       right: 0;
       width: 120px;
       transform: translateY(-100%);
-      background: rgba(var(--background), 0.2);
+      // background: rgba(var(--background), 0.2);
+
+      background: var(--border-color);
       color: var(--foreground);
       font-weight: 300;
       font-size: 1em;
