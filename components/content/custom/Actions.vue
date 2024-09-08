@@ -10,7 +10,7 @@
     <span class="divider" />
     <button
       id="color-mode-button"
-      class="selector"
+      class="color-mode-button selector"
       @click="toggleColorMode"
     >
       <div class="icon">

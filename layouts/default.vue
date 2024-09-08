@@ -1,18 +1,13 @@
 <template>
   <div id="root">
     <div class="root-background">
-    <BackgroundCanvas class="default-canvas" />
+    <!-- <BackgroundCanvas class="default-canvas" /> -->
     <Menu />
     <AppHeader />
-    <PopOut />
     <main>
-      <!-- <PopOut /> -->
       <slot id="content" />
     </main>
-    <AppFooter
-      class="default-footer"
-      identifier="in-page"
-    />
+    <AppFooter />
     </div>
     <SpeedInsights/>
   </div>
@@ -77,8 +72,8 @@ provide("menu-options", {
 
       display: none
 
-      .dark-mode &
-        display: block
+      // .dark-mode &
+      //   display: block
 
 main
   width: min(100svw, 640px)

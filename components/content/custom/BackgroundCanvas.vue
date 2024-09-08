@@ -82,24 +82,10 @@ canvas
 
   transition: opacity 0.3s ease
 
-  @media screen and (max-width: 960px)
-    opacity: 0
-
   // :is(.one-mode, .three-mode) &
   display: none
 
-
-  // display: none
-
-// define 'shader-pulse' animation
-// @keyframes shader-pulse
-//   0%
-//     opacity: 0.02
-//   50%
-//     opacity: 0.1
-//   100%
-//     opacity: 0.02
-
-  
+  @media screen and (max-width: 960px)
+    opacity: 0
   
 </style>

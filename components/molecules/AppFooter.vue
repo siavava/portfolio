@@ -85,6 +85,11 @@ const shortMessage = [
 let index = -1
 
 function updateBlurb() {
+
+  if (!shortMessageElement.value) {
+    return
+  }
+  
   index += 1
   index %= shortMessage.length
   shortMessageElement.value.innerText = shortMessage[index]
@@ -96,6 +101,11 @@ function toggleComment() {
 
 function tick() {
   const setTime = () => {
+
+    if (!secondHand.value || !minuteHand.value || !hourHand.value) {
+      return
+    }
+
     const now = new Date()
 
     const seconds = now.getSeconds()
@@ -183,6 +193,7 @@ onUnmounted(() => {
       display: inline-flex;
       gap: 1em;
       position: relative;
+      align-items: center;
 
       .year {
         font-size: 1em;
@@ -191,7 +202,6 @@ onUnmounted(() => {
         font-weight: 500
       }
 
-      align-items: center;
     }
 
     #clock-info {
@@ -200,7 +210,6 @@ onUnmounted(() => {
       right: 0;
       width: 120px;
       transform: translateY(-100%);
-      // background: rgba(var(--background), 0.2);
 
       background: var(--border-color);
       color: var(--foreground);

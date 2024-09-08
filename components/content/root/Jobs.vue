@@ -81,12 +81,13 @@ export default {
     font-size: typography.font-size(xs) !important
 
 .work-item
+  
   @include mixins.split
-  display: flex
-  flex-direction: row
-  font-size: typography.font-size(m)
 
-  // &:not(:first-of-type)
-  margin-top: 4em
+  &
+    display: flex
+    flex-direction: row
+    font-size: typography.font-size(m)
+    margin-top: 4em
 
 </style>

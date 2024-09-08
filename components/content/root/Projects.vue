@@ -257,7 +257,7 @@ const featuredProjects = featuredData.value || []
   position: fixed
   top: 0
   left: 0
-  z-index: 1000
+  // z-index: 1000
   overflow: scroll
   background: var(--background)
 
@@ -319,11 +319,12 @@ const featuredProjects = featuredData.value || []
     .project-tech-item
       font-size: typography.font-size(xs)
 
-      &:not(:last-child)::after
-        margin: 0 0.5em
 
       border-radius: 1em
       border: 0.5px solid var(--border-color)
+      
+      &:not(:last-child)::after
+        margin: 0 0.5em
 
       .dark-mode &
         border: 0.5px transparent
