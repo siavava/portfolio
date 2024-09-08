@@ -198,7 +198,7 @@ onUnmounted(() => {
       .year {
         font-size: 1em;
         font-family: typography.font(sans-serif), sans-serif;
-        color: var(--border-color);
+        color: var(--dark-foreground);
         font-weight: 500
       }
 
