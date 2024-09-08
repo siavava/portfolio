@@ -1,20 +1,46 @@
 <template>
   <div class="buttons-container">
-    <button id="menu-button" @click.prevent="() => toggleMenu()" class="menu-button column-item emphasized">
-     {{ "Menu" }}
+    <button
+      id="menu-button"
+      class="menu-button column-item emphasized"
+      @click.prevent="() => toggleMenu()"
+    >
+      {{ "Menu" }}
     </button>
-    <span class="divider"/>
-    <button @click="toggleColorMode" class="selector">
+    <span class="divider" />
+    <button
+      id="color-mode-button"
+      class="selector"
+      @click="toggleColorMode"
+    >
       <div class="icon">
-        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          viewBox="0 0 16 16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
-            <linearGradient id="a" x1="814.98" x2="881.02" y1="235.19" y2="235.19" gradientTransform="matrix(1.3745 0 0 1.3633 -317.33 -85.443)" gradientUnits="userSpaceOnUse">
-              <stop stop-color="var(--foreground)" offset="0"/>
-              <stop stop-color="var(--background)" offset="1"/>
+            <linearGradient
+              id="a"
+              x1="814.98"
+              x2="881.02"
+              y1="235.19"
+              y2="235.19"
+              gradientTransform="matrix(1.3745 0 0 1.3633 -317.33 -85.443)"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop
+                stop-color="var(--foreground)"
+                offset="0"
+              />
+              <stop
+                stop-color="var(--background)"
+                offset="1"
+              />
             </linearGradient>
           </defs>
           <path
-            d="M878.98 235.19c.012 17.094-13.851 30.957-30.957 30.957s-30.969-13.863-30.957-30.957c-.012-17.094 13.851-30.957 30.957-30.957s30.969 13.863 30.957 30.957z"
+            d="M878.98 235.19c.012 17.094-13.851 30.957-30.957 30.957s-30.969-13.863-30.957-30.957c-.012-17.094
+            13.851-30.957 30.957-30.957s30.969 13.863 30.957 30.957z"
             color="#000000"
             fill="url(#a)"
             stroke="var(--foreground)"
@@ -30,11 +56,33 @@
 <script setup>
 const colorMode = useColorMode()
 
+const colorModes = [
+  "one",
+  "two",
+  "three",
+  // , "four"
+  // , "five"
+  // , "six"
+]
+
 const toggleColorMode = () => {
-  colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'
+  const currentIndex = colorModes.indexOf(colorMode.preference)
+  const nextIndex = (currentIndex + 1) % colorModes.length
+  colorMode.preference = colorModes[nextIndex]
 }
 
-const { menuOpen, toggleMenu } = inject('menu-options')
+// const toggleColorMode = () => {
+//   if (colorMode.preference === "light") {
+//     colorMode.preference = "dark"
+//   } else if (colorMode.preference === "dark") {
+//     colorMode.preference = "sepia"
+//   } else if (colorMode.preference === "sepia") {
+//     colorMode.preference = "light"
+//   }
+//   // colorMode.preference = colorMode.preference === "dark" ? "light" : "dark"
+// }
+
+const { toggleMenu } = inject("menu-options")
 </script>
 
 <style lang="sass">
@@ -46,6 +94,9 @@ const { menuOpen, toggleMenu } = inject('menu-options')
   color: var(--border-color)
   font-family: typography.font("sans-serif")
   font-size: 1em
+
+  &:hover
+    cursor: pointer
 
   &.emphasized
     color: var(--lightest-foreground)
@@ -69,6 +120,11 @@ const { menuOpen, toggleMenu } = inject('menu-options')
 
   margin: 0 20px 0 10px
 
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 20px
+  height: 20px
 
   &:hover
     cursor: pointer
@@ -77,20 +133,13 @@ const { menuOpen, toggleMenu } = inject('menu-options')
   &:focus
     outline: none
 
-  display: flex
-  align-items: center
-  justify-content: center
-  width: 20px
-  height: 20px
-
 .icon
   // height: 100%
   height: 30px
   aspect-ratio: 1/1
 
-
   svg
-    width: 100% !important 
+    width: 100% !important
     height: 100% !important
 
 </style>

@@ -1,27 +1,29 @@
 <template>
-  <NuxtLink
-    v-if="generate"
-    :to="`#${id}`"
-    class="prose-title-wrapper"
-  >
-    <h4
-      :id="id"
-      class="prose-h4"
+  <div class="prose-h2-container">
+    <!-- <ProseHr /> -->
+    <NuxtLink
+      v-if="generate && id"
+      :to="`#${id}`"
+      class="prose-title-wrapper"
     >
-      <slot />
-    </h4>
-  </NuxtLink>
-  <div
-    v-else
-    class="prose-title-wrapper"
-  >
-    <h4
-      :id="id"
-      class="prose-h4"
+      <h2
+        :id="id"
+        class="prose-h2"
+      >
+        <slot />
+      </h2>
+    </NuxtLink>
+    <div
+      v-else
+      class="prose-title-wrapper"
     >
-      <slot />
-    </h4>
-    <br>
+      <h2
+        :id="id"
+        class="prose-h2"
+      >
+        <slot />
+      </h2>
+    </div>
   </div>
 </template>
 
@@ -30,34 +32,42 @@
 // eslint-disable-next-line import/no-unresolved
 import { useRuntimeConfig } from "#imports"
 
-defineProps<{ id: string }>()
-const heading = 4
-// @ts-ignore
+defineProps<{
+  id?: string
+}>()
+
+const heading = 1
 const { anchorLinks } = useRuntimeConfig().public.content
-const generate = anchorLinks?.depth >= heading && !anchorLinks?.exclude.includes(heading)
+const generate = anchorLinks?.depth >= heading
 </script>
 
 <style lang="sass" scoped>
-
 @use "@/styles/colors"
+@use "@/styles/typography"
 @use "@/styles/geometry"
 
-.prose-title-wrapper
-  margin-top: 0.5em
-  margin-bottom: 0.5em
+.prose-h2-container
+  margin: 2em 0
+  border-bottom: 0.5px solid var(--border-color)
 
-  .prose-h4
-    font-weight: 500
-    font-size: 1.1rem
-    color: var(--lightest-foreground)
-    display: inline
+.prose-h2
+  font-family: typography.font("sans-serif"), sans-serif
 
-    &::before
-      content: "####"
-      margin-right: 0.5rem
-      opacity: 0.5
-      transition: geometry.var("default-transition")
+  // margin: 3em 0 0 0 !important
+  // font-size: 0.9em
+  font-size: typography.font-size("xl")
+  // font-size: 1.3rem
 
-    &:hover::before
-      opacity: 1
+  font-weight: 500
+  // text-transform: uppercase
+
+  padding-bottom: 0.5em
+  line-height: 4
+
+  // text-transform: lowercase
+
+  @media screen and (max-width: 980px)
+    font-size: typography.font-size("l")
+    // font-size: 1.2rem
+
 </style>

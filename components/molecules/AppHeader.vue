@@ -30,6 +30,7 @@ const route = useRoute()
 </script>
 
 <style lang="sass" scoped>
+@use "@/styles/typography"
 .app-header
   padding: 1.5em 0
   margin: 0 auto
@@ -42,16 +43,17 @@ const route = useRoute()
   top: 0
   left: 0
   right: 0
-  z-index: 1000
+  z-index: 100
 
-  & > :not(.header-item.right)
+  font-size: typography.font-size("m")
+
+  & > :not(.header-item:first-of-type, .header-item.right)
 
     @media screen and (max-width: 960px)
       display: none
 
   @media screen and (max-width: 960px)
-    justify-content: flex-end
-
+    justify-content: space-between
 
   &::before
     content: ""
@@ -63,10 +65,8 @@ const route = useRoute()
     // background: var(--background)
     backdrop-filter: blur(1px)
     // opacity: 0.1
-    z-index: 999
-    mask: linear-gradient(black, black, transparent)
-
-
+    z-index: 99
+    mask: linear-gradient(black, rgba(black, 0.5), transparent)
 
   .header-item
     display: flex
@@ -75,14 +75,21 @@ const route = useRoute()
     justify-content: flex-start
     flex-grow: 0
     flex-shrink: 1
-    margin: 0 1.5em
-    z-index: 1000
+    margin: 0 1.5em 0 2em
+    z-index: 101
+
+    color: var(--foreground)
+
+    a
+      color: inherit
 
   .column
     display: flex
     flex-direction: column
     gap: 0
     align-items: flex-start
+
+    z-index: 101
 
     .column-item
       line-height: 1.3

@@ -26,3 +26,14 @@ At my time there:
 It was estimated that more than 80 per-cent of Copia’s
 two-million customers ordered via text message
 at least once a month.
+
+> _Unfortunately, after **11 years of operation** and
+> **120 million USD** raised in funding,
+> Copia entered administration
+> in mid 2024 with plans to fully shut down operation
+> by the end of the year after its latest funding round failed to
+> materialize._
+>
+> _[Here is more about it.][copia-story]_
+
+[copia-story]: https://www.businessdailyafrica.com/bd/corporate/technology/troubled-e-commerce-firm-copia-goes-into-administration-4634752

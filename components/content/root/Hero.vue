@@ -7,7 +7,10 @@
             {{ name }}
           </h1>
         </div>
-        <p class="hero-callout" v-html="profile.callout" />
+        <p
+          v-for="callout in profile.callout"
+          class="hero-callout"
+          v-html="callout" />
       </div>
     </div>
   </section>

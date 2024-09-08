@@ -174,7 +174,7 @@ onUnmounted(() => {
     }
 
     .left-section {
-      color: var(--dark-foreground);
+      color: var(--foreground);
       font-size: 1em;
       font-family: typography.font("serif"), serif;
     }

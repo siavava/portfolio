@@ -1,8 +1,8 @@
 <template>
   <section class="jobs">
-    <ProseH1 id="work">
+    <ProseH4 id="work">
       Work Experience
-    </ProseH1>
+    </ProseH4>
     <div class="jobs-list">
       <div
         v-for="job, i in jobs"
@@ -86,7 +86,7 @@ export default {
   flex-direction: row
   font-size: typography.font-size(m)
 
-  &:not(:first-of-type)
-    margin-top: 4em
+  // &:not(:first-of-type)
+  margin-top: 4em
 
 </style>

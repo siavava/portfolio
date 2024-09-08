@@ -116,18 +116,19 @@ const external = computed(() => props.blank || (props.to || props.href || "").st
   align-items: center
   gap: 7px
   display: inline
+  pointer-events: all
+
+  &:hover
+    cursor: pointer
 
 .link
   color: var(--lightest-foreground)
-  // color: var(--primary-highlight)
-  margin: 0
-  padding: 0
 
   &.bold
     font-weight: 600
 
   & > span
-    border-bottom: 1px solid transparent
+    border-bottom: 0.5px solid transparent
 
   &:not(:last-child)
     margin-right: 3px
@@ -135,16 +136,12 @@ const external = computed(() => props.blank || (props.to || props.href || "").st
   & > span
     transition: background 0.2s cubic-bezier(0.9, 0, 0.2, 0)
 
-  &.underline:hover > span
-    background: var(--secondary-highlight)
-
-    .dark-mode &
-      background: none
-
-  .dark-mode &:hover
+  :is(.three-mode, .four-mode, .five-mode, .six-mode) &:hover // > span
     background: none
-    border-bottom: 1px solid
+    border-bottom: 0.5px solid currentcolor
 
+  :is(.one-mode, .two-mode) &:hover > span
+    background: var(--primary-highlight)
 
   .pointer
     height: 1em

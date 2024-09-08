@@ -25,6 +25,7 @@ export default {
 
 section.not-found
   display: flex
+  min-height: calc(100vh - 55px)
 
 .container
   display: inline-flex

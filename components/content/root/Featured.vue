@@ -1,10 +1,9 @@
 <template>
   <section id="projects">
-    <ProseH1 id="projects">
+    <ProseH4 id="projects">
       Featured Projects
-    </ProseH1>
+    </ProseH4>
     <br>
-
     <div class="archive-link" v-if="archive">
       <ProseA
         href="/archive"

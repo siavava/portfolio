@@ -85,8 +85,8 @@ canvas
   @media screen and (max-width: 960px)
     opacity: 0
 
-  .dark-mode &
-    display: none
+  // :is(.one-mode, .three-mode) &
+  display: none
 
 
   // display: none

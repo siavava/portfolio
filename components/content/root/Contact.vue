@@ -1,8 +1,8 @@
 <template>
   <section>
-    <ProseH1 id="contact">
+    <ProseH4 id="contact">
       Contact
-    </ProseH1>
+    </ProseH4>
     <div class="contacts-list">
       <div
         v-for="link, i in contact.links"
@@ -56,6 +56,9 @@ const { data: contact } = await useAsyncData(
 @use "@/styles/typography"
 @use "@/styles/colors"
 
+.contacts-list
+  margin-top: 4em
+  
 .contact-item
   @include mixins.split
   margin-bottom: 0.5em !important

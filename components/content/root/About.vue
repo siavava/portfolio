@@ -1,8 +1,9 @@
 <template>
   <section class="about">
-    <!-- <C
-    
-    -->
+    <ProseH4 id="about">
+      About
+    </ProseH4>
+
     <ContentDoc
       :value="profile"
       class="doc"
@@ -23,3 +24,8 @@ const { data: profile } = await useAsyncData(
   },
 )
 </script>
+
+<style lang="sass">
+.doc
+  margin-top: 4em
+</style>

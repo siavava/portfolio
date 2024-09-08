@@ -1,128 +1,8 @@
 @use "sass:map";
 
-$palette: (
-  "teal": #00ffd9,
-  "purple": #a374ff,
-  "khaki": #ffd074,
-  "white": #ecf7fa,
-  "black": #050505,
-  "ochre": #ff4e20,
-  "pastel": #fdfd96,
+$color-modes: ("one", "two", "three");
 
 
-  "primary-highlight": #BD998F,
-  // "primary-highlight": #1D52F3,
-
-  "one": #EE765C,
-  "two": #3A594D,
-  "three": #BD8FC0,
-
-  "secondary-highlight": #1D52F3,
-  "background": #222222,
-  "dark-background": #000000,
-  "light-background": #333333,
-  "lightest-background": #1e1e1e,
-  "fancy-background": lighten(#0a192f, 40%),
-  "shadow": rgba(#000000, 0.1),
-
-
-  // "dark-foreground": #434343,
-  "dark-foreground": #888888,
-  "foreground": #bbbbbb,
-  "light-foreground": #dedede,
-  "lightest-foreground": #ffffff,
-
-);
-
-$palette2: (
-  "teal": #00ffd9,
-  "purple": #a374ff,
-  "khaki": #ffd074,
-  "white": #ecf7fa,
-  "black": #050505,
-  "ochre": #ff4e20,
-  "pastel": #fdfd96,
-
-
-  "primary-highlight": #BD998F,
-  // "primary-highlight": #1D52F3,
-
-  "one": #EE765C,
-  "two": #3A594D,
-  "three": #BD8FC0,
-
-  "secondary-highlight": #1D52F3,
-  "background": #000000,
-  "dark-background": #000000,
-  "light-background": #333333,
-  "lightest-background": #1e1e1e,
-  "fancy-background": lighten(#0a192f, 40%),
-  "shadow": rgba(#000000, 0.1),
-
-
-  // "dark-foreground": #434343,
-  "dark-foreground": #888888,
-  "foreground": #bbbbbb,
-  "light-foreground": #dedede,
-  "lightest-foreground": #ffffff,
-
-);
-
-$palette3: (
-  
-  // "primary-highlight": #BD998F,
-  // "primary-highlight": color(display-p3 0.98 0.8 0.54),
-  // "primary-highlight": #E47E5C,
-  // "primary-highlight": #FA5900,
-  "primary-highlight": #972900,
-
-  "secondary-highlight": #BD998F,
-
-  "info-background": rgba(5, 95, 249, 0.1),
-  "info-foreground": #7aade0,
-  "success-background": rgba(6, 251, 128, 0.1),
-  "success-foreground": #CFF09E,
-  "error-background": rgba(96, 32, 32, 0.1),
-  "error-foreground": #fcb9b9,
-  "warning-background": rgba(137, 33, 30, 0.15),
-  "warning-foreground": #fd7c7c,
-  "critical-background": rgba(238, 12, 12, 0.15),
-  "critical-foreground": #f42e4f,
-
-
-  "teal": #00ffd9,
-  "purple": #a374ff,
-  "khaki": #ffd074,
-  "white": #ecf7fa,
-  "black": #050505,
-  "ochre": #ff4e20,
-  "pastel": #fdfd96,
-
-  "one": #EE765C,
-  "two": #3A594D,
-  "three": #BD8FC0,
-
-  "background": #0A0A0A,
-  // background: #000000,
-  "dark-background": #000000,
-  "light-background": #2e2e2e,
-  "lightest-background": #383838,
-  "fancy-background": lighten(#0a192f, 40%),
-  "shadow": rgba(#000000, 0.1),
-
-  "dark-foreground": #888888,
-  // "foreground": #bbbbbb,
-  // "foreground": darken(#bbbbbb, 10%),
-  "foreground": #888888,
-  "light-foreground": #dedede,
-  "lightest-foreground": #ffffff,
-);
-
-
-@function color($color-name) {
-  $result: map.get($palette3, $color-name);
-  @return $result;
-}
 
 @function highlight-color($n) {
   @if $n == '1' {
@@ -135,31 +15,51 @@ $palette3: (
 }
 
 
+$two-palette: (
 
-$dark-palette: (
+  "secondary-highlight": rgb(240, 191, 76),
+  // "primary-highlight": rgba(240, 191, 76, 0.7),
+  "primary-highlight": rgba(255, 246, 192, 0.7),
 
-  // "primary-highlight": color(display-p3 0.98 0.8 0.54),
-  // "primary-highlight": #972900,
+  "info-background": rgb(247, 252, 255),
+  "info-foreground": rgba(red(#2d4f72), green(#2d4f72), blue(#2d4f72), 1),
 
-  "yellow": color(display-p3 0.98 0.8 0.14),
-  "orange": color(display-p3 0.99 0.4 0.02),
-  "red": color(display-p3 0.98 0.15 0.23),
-  "green": color(display-p3 0.16 0.81 0.49),
-  "blue": color(display-p3 0.07 0.48 1),
-  "purple": color(display-p3 0.71 0.52 1),
+  "success-background": rgb(245, 254, 250),
+  "success-foreground": rgb(6, 78, 59),
 
-  // "primary-highlight": color(display-p3 0.98 0.8 0.14),  // orange
-  // "primary-highlight": color(display-p3 0.71 0.52 1),  // purple
-
-  // "primary-highlight": color(display-p3 0.99 0.4 0.02),
-  // "primary-highlight": color(display-p3 0.98 0.15 0.23),
-  // "primary-highlight": color(display-p3 0.16 0.81 0.49),
-  // "primary-highlight": color(display-p3 0.07 0.48 1),
+  "error-background": rgb(255, 253, 245),
+  "error-foreground": rgb(120, 53, 15),
   
-  // "primary-highlight": #BD998F,
-  "primary-highlight": #E47E5C,
+  "warning-background": rgb(253, 247, 247),
+  "warning-foreground": rgb(253, 50, 50),
+  
+  "critical-background": rgb(253, 247, 247),
+  "critical-foreground": rgb(255, 10, 10),
 
-  // "secondary-highlight": #BD998F,
+  "text-highlight": #FFF6C0,
+
+  "background": #FFFFFF,
+
+  "dark-background": #000000,
+  "light-background": #2e2e2e,
+  "lightest-background": #383838,
+  "fancy-background": lighten(#0a192f, 40%),
+  "shadow": rgba(#000000, 0.1),
+
+  "dark-foreground": rgba(0, 0, 0, 0.2),
+
+  "foreground": rgba(0, 0, 0, 0.5),
+
+  "light-foreground": #0D0E10,
+  "lightest-foreground": #0D0E10,
+
+  "border-color": rgba(0, 0, 0, 0.1)
+);
+
+$three-palette: (
+
+  "primary-highlight": #E47E5C,
+  // "primary-highlight": rgb(218, 241, 158),
 
   "info-background": rgba(5, 95, 249, 0.1),
   "info-foreground": #7aade0,
@@ -172,128 +72,81 @@ $dark-palette: (
   "critical-background": rgba(238, 12, 12, 0.15),
   "critical-foreground": #f42e4f,
 
+  // "background": #111111,
+  // "background": rgb(13, 13, 13, 1),
+  "background": rgba(0, 0, 0, 1),
+  // "background": rgb(19, 20, 25),
 
-  // "teal": #00ffd9,
-  // "purple": #a374ff,
-  // "khaki": #ffd074,
-  // "white": #ecf7fa,
-  // "black": #050505,
-  // "ochre": #ff4e20,
-  // "pastel": #fdfd96,
-
-  // "one": #EE765C,
-  // "two": #3A594D,
-  // "three": #BD8FC0,
-
-  // "background": #0A0A0A,
-  "background": #111111,
-  // "background": #000000,
   "dark-background": #000000,
   "light-background": #232323,
   "lightest-background": #383838,
   "fancy-background": lighten(#0a192f, 40%),
   "shadow": rgba(#000000, 0.1),
 
-  "dark-foreground": #888888,
-  // "foreground": #bbbbbb,
-  // "foreground": darken(#bbbbbb, 10%),
-  // "foreground": #888888,
-  "foreground": rgba(255, 255, 255, 0.5),
+  "dark-foreground": rgba(255, 255, 255, 0.2),
+
+
+  // "foreground": rgba(232, 228, 229, 0.5),
+  "foreground": rgb(139, 139, 144),
   // "foreground": #A0A0A0,
-  "light-foreground": #dedede,
-  "lightest-foreground": #ffffff,
+  "light-foreground": rgba(217, 216, 225, 1),
+  "lightest-foreground": rgba(217, 216, 225, 1),
 
-
-
-  // "border-color": rgba(#707b90, 0.5)
-  "border-color": rgba(255, 255, 255, 0.2)
+  "border-color": rgba(255, 255, 255, 0.1)
 );
 
-$light-palette: (
+$one-palette: (
 
-  // "primary-highlight": color(display-p3 0.98 0.8 0.54),
-  // "primary-highlight": #972900,
-
-  // "yellow": color(display-p3 0.98 0.8 0.14),
-  // "orange": color(display-p3 0.99 0.4 0.02),
-  // "red": color(display-p3 0.98 0.15 0.23),
-  // "green": color(display-p3 0.16 0.81 0.49),
-  // "blue": color(display-p3 0.07 0.48 1),
-  // "purple": color(display-p3 0.71 0.52 1),
-
-  // "primary-highlight": color(display-p3 0.98 0.8 0.14),  // orange
-  // "primary-highlight": color(display-p3 0.71 0.52 1),  // purple
-
-  // "primary-highlight": color(display-p3 0.99 0.4 0.02),
-  // "primary-highlight": color(display-p3 0.98 0.15 0.23),
-  // "primary-highlight": color(display-p3 0.16 0.81 0.49),
-  // "primary-highlight": color(display-p3 0.07 0.48 1),
-  
-  // "primary-highlight": #BD998F,
-  // "primary-highlight": #E47E5C,
-  // "primary-highlight": #972900,
-  // "primary-highlight": #1EFFCD,
-  // "secondary-highlight": #fe6a6a,
   "secondary-highlight": rgb(240, 191, 76),
   "primary-highlight": rgba(240, 191, 76, 0.7),
 
-  // "secondary-highlight": #BD998F,
-
-  "info-background": rgba(5, 95, 249, 0.5),
+  "info-background": rgb(247, 252, 255),
   "info-foreground": rgba(red(#2d4f72), green(#2d4f72), blue(#2d4f72), 1),
-  "success-background": rgba(6, 251, 128, 0.1),
-  "success-foreground": #CFF09E,
-  "error-background": rgba(96, 32, 32, 0.1),
-  "error-foreground": #fcb9b9,
-  "warning-background": rgba(137, 33, 30, 0.15),
-  "warning-foreground": #fd7c7c,
-  "critical-background": rgba(238, 12, 12, 0.15),
-  "critical-foreground": #f42e4f,
 
+  "success-background": rgb(245, 254, 250),
+  "success-foreground": rgb(6, 78, 59),
+
+  "error-background": rgb(255, 253, 245),
+  "error-foreground": rgb(120, 53, 15),
+  
+  "warning-background": rgb(253, 247, 247),
+  "warning-foreground": rgb(253, 50, 50),
+  
+  "critical-background": rgb(253, 247, 247),
+  "critical-foreground": rgb(255, 10, 10),
+  
   "text-highlight": #FFF6C0,
 
 
-  // "teal": #00ffd9,
-  // "purple": #a374ff,
-  // "khaki": #ffd074,
-  // "white": #ecf7fa,
-  // "black": #050505,
-  // "ochre": #ff4e20,
-  // "pastel": #fdfd96,
+  "background": rgb(240, 244, 248),
 
-  // "one": #EE765C,
-  // "two": #3A594D,
-  // "three": #BD8FC0,
-
-  // "background": #FEF2EE,
-
-  // "background": #F4E9ED,
-  "background": #FFFFFF,
-  // "background": #F2F2F2,
-
-  // "background": rgba(155, 118, 53, 0.3),
-  // "background": #E0DEFF,
-  // "background": rgba(189, 183, 148, 0.4),
-  // "background": #DCE2E2,
-  // "background": #E0DFDC,
   "dark-background": #000000,
   "light-background": #2e2e2e,
   "lightest-background": #383838,
   "fancy-background": lighten(#0a192f, 40%),
   "shadow": rgba(#000000, 0.1),
 
-  "dark-foreground": #000000,
-  // "foreground": #555555,
-  // "foreground": #000000,
-  // "foreground": #484F49,
-  // "foreground": #3b6484,
-  "foreground": rgba(0, 0, 0, 0.5),
-  // "foreground": #335467,
-  // "foreground": #8E2D2A,
-  // "foreground": #524D49,
-  "light-foreground": #0D0E10,
-  "lightest-foreground": #0D0E10,
+  "dark-foreground": rgba(0, 114, 149, 0.3),
+  "foreground": rgba(0, 114, 149, 1),
+  "light-foreground": rgba(0, 114, 149, 1),
+  "lightest-foreground": rgba(2, 49, 92, 1),
 
-  // "border-color": rgba(#0D0E10, 0.3)
-  "border-color": rgba(0, 0, 0, 0.2)
+  "border-color": rgba(0, 114, 149, 0.1)
 );
+
+
+
+
+@function color($color-name, $mode: "three") {
+  @if $mode == "one" {
+    @return map.get($one-palette, $color-name);
+  } @else if $mode == "two" {
+    @return map.get($two-palette, $color-name);
+  } @else if $mode == "three" {
+    @return map.get($three-palette, $color-name);
+  } @else if $mode == "four" {
+    @return map.get($four-palette, $color-name);
+  } @else {
+    @return map.get($five-palette, $color-name);
+  }
+}

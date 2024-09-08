@@ -82,7 +82,8 @@ provide("menu-options", {
 
 main
   width: min(100svw, 640px)
-  padding: 0 clamp(0.5em, 3vw, 3em)
+  // padding: 0 clamp(0.5em, 3vw, 0.5em)
+  padding: 0
   margin: auto
   font-weight: 400
   line-height: 22px

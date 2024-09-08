@@ -25,7 +25,7 @@ html
 //   opacity: 1 !important
 //   visibility: visible !important
 
-.dark-mode ::selection
+.three-mode ::selection
   background-color: var(--light-background)
   color: var(--primary-highlight)
 
@@ -91,25 +91,43 @@ body
 //   min-height: 100svh
 //   min-width: 100vw
 
+// :root
+//   @each $name, $value in colors.$light-palette
+//     // --#{$name}: #{$value}
+//     // --#{$name}: rgba(red(#{$value}), green(#{$value}), blue(#{$value}))
+//     --#{$name}: #{rgba(red($value), green($value), blue($value), alpha($value))}
+
+
+
+// .dark-mode
+//   @each $name, $value in colors.$dark-palette
+//     --#{$name}: #{$value}
+
+//     // set with sass name too
+
 :root
-  @each $name, $value in colors.$light-palette
-    // --#{$name}: #{$value}
-    // --#{$name}: rgba(red(#{$value}), green(#{$value}), blue(#{$value}))
+  @each $name, $value in colors.$one-palette
     --#{$name}: #{rgba(red($value), green($value), blue($value), alpha($value))}
 
 
 
-.dark-mode
-  @each $name, $value in colors.$dark-palette
+.two-mode
+  @each $name, $value in colors.$two-palette
     --#{$name}: #{$value}
 
-    // set with sass name too
+.three-mode
+  @each $name, $value in colors.$three-palette
+    --#{$name}: #{$value}
+
+
 
 section 
   margin: 0 auto
-  padding-left: 30px
-  padding-right: 30px
-  padding-top: 100px
+  // padding-left: 30px
+  // padding-right: 30px
+  // padding-top: 100px
+
+  padding: 100px 1.5em 0 // 10px
 
   &:last-child
     padding-bottom: 100px
@@ -117,7 +135,7 @@ section
 
 h1, h2, h3, h4, h5, h6
   all: unset
-  margin: 0 0 10px 0
+  // margin: 0 0 10px 0
   font-weight: 600
   color: var(--lightest-foreground)
   line-height: 1.1
@@ -135,8 +153,6 @@ img, svg, .image-wrapper
   -moz-user-drag: none !important
   -webkit-user-drag: none !important
   user-drag: none !important
-
-
 
 
 

@@ -3,98 +3,104 @@
     <ProseH1 id="projects">
       Projects Archive
     </ProseH1>
-    <br>
-
-    <div class="category-title" id="featured">
-        {{ "Featured" }}
-      </div>
+    <!-- <br> -->
+    
+    <div class="project-category">
+      <ProseH4 class="category-title" id="featured">
+        Featured
+      </ProseH4>
     <div
       v-for="project, i in featuredProjects"
       :key="i"
       class="project"
     >
     <div class="range">
-          {{
-            new Date(project.date)
-              .toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "numeric",
-              })
-          }}
-        </div>
-        <div class="project-content">
-          <div>
-          <ProseH2 bold>
-            <ProseA
-              v-if="project?.url"
-              :href="project.url"
-              fancy bold
+      {{
+        new Date(project.date)
+          .toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "numeric",
+          })
+      }}
+    </div>
+      <div class="project-content">
+        <div>
+        <ProseH2 bold>
+          <ProseA
+            v-if="project?.url"
+            :href="project.url"
+            fancy bold
+          >
+            {{ project.title }}
+          </ProseA>
+          <span v-else>
+            {{ project.title }}
+          </span>
+        </ProseH2>
+          <template v-if="hasCompany(project)">
+            <span
+              v-if="hasCompany(project)"
+              class="project-company"
             >
-              {{ project.title }}
-            </ProseA>
-            <span v-else>
-              {{ project.title }}
+              &nbsp;@&nbsp;
             </span>
-          </ProseH2>
-            <template v-if="hasCompany(project)">
-              <span
-                v-if="hasCompany(project)"
-                class="project-company"
-              >
-                &nbsp;@&nbsp;
-              </span>
-              <NuxtLink
-                v-if="project.company.url"
-                :to="project.company.url"
-              >
-                {{ project.company.name }}
-              </NuxtLink>
-            </template>
-            <div class="project-description">
-              <ContentDoc :value="project" />
-            </div>
-          </div>
-          <div class="project-footer">
-            <div class="project-links">
-              <NuxtLink
-                v-if="project.repo"
-                :to="project.repo"
-                aria-label="GitHub Link"
-                class="link"
-              >
-                <Icon type="GitHub" />
-              </NuxtLink>
-            </div>
-            <ul
-              v-if="project.tech"
-              class="project-tech-list"
+            <NuxtLink
+              v-if="project.company.url"
+              :to="project.company.url"
             >
-              <li
-                v-for="(tech, techIndex) in project?.tech"
-                :key="techIndex"
-                class="project-tech-item"
-              >
-                <!-- {{ tech }} -->
-                <StyledButton
-                  id="tech-link"
-                  href=""
-                >
-                  {{ tech }}
-                </StyledButton>
-              </li>
-            </ul>
+              {{ project.company.name }}
+            </NuxtLink>
+          </template>
+          <div class="project-description">
+            <ContentDoc :value="project" />
           </div>
+        </div>
+        <div class="project-footer">
+          <div class="project-links">
+            <NuxtLink
+              v-if="project.repo"
+              :to="project.repo"
+              aria-label="GitHub Link"
+              class="link"
+            >
+              <Icon type="GitHub" />
+            </NuxtLink>
+          </div>
+          <ul
+            v-if="project.tech"
+            class="project-tech-list"
+          >
+            <li
+              v-for="(tech, techIndex) in project?.tech"
+              :key="techIndex"
+              class="project-tech-item"
+            >
+              <!-- {{ tech }} -->
+              <StyledButton
+                id="tech-link"
+                href=""
+              >
+                {{ tech }}
+              </StyledButton>
+            </li>
+          </ul>
         </div>
       </div>
+    </div>
+    </div>
 
 
     <div
       v-for="category, index in sortedCategories"
       :key="index"
+      class="project-category"
     >
-      <div class="category-title" :id="category[0].replace(' ', '-')">
+      <!-- <div class="category-title" :id="category[0].replace(' ', '-')">
         {{ category[0] }}
-      </div>
+      </div> -->
+      <ProseH4 class="category-title" :id="category[0].replace(' ', '-')">
+        {{ category[0] }}
+      </ProseH4>
       <div
         v-for="project, i in category[1]"
         :key="i"
@@ -245,10 +251,6 @@ const featuredProjects = featuredData.value || []
 @use "@/styles/mixins"
 @use "@/styles/colors"
 
-:root
-  // define counter for categories
-  counter-reset: section-count
-
 .projects-archive-container
   width: 100vw
   height: 100vh
@@ -259,65 +261,27 @@ const featuredProjects = featuredData.value || []
   overflow: scroll
   background: var(--background)
 
+.project-category
+
+  padding-top: 200px
+
+  
+  &:is(:last-of-type)
+    margin-bottom: 200px
+
+  @media screen and (max-width: 768px)
+    padding-top: 100px
+
+    &:is(:last-of-type)
+      margin-bottom: 100px
+
 
 
 .category-title
-  text-transform: uppercase
-  // width: 100%
-  // height: 200px
-  // margin-top: 300px
-  padding: 300px 0 100px 0
-  font-size: typography.font-size(s)
-  font-weight: 600
-  font-family: typography.font("monospace"), monospace
-  // display: flex
-  // align-items: center
-  counter-increment: section-count
+  text-transform: capitalize
+  // padding: 5px 0 100px 0
+  // height: 7em !important
 
-  color: colors.color("primary-highlight")
-  font-size: 30px
-  height: 1em !important
-  // position: absolute
-  // right: 0
-
-  // make it empty letters with otuline
-  text-stroke: 1px var(--border-color)
-  -webkit-text-stroke: 1px var(--lightest-foreground)
-  -webkit-text-fill-color: transparent
-
-  transition: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-
-  position: relative
-
-  // background: yellow
-    // background-image: linear-gradient(to top, yellow, var(--background))
-  // background-image: linear-gradient(to right, var(--secondary-highlight), var(--background))
-  // background-position: bottom left
-
-
-  &::before
-    content: counter(section-count) ". "
-    position: absolute
-    // bottom: 50px
-    right: 100%
-    top: calc(300px - 0.25em)
-    // bottom: 95px
-    padding: 0 0.5em
-    font-size: 20px
-    font-weight: 400
-    color: var(--foreground)
-    -webkit-text-fill-color: var(--lightest-foreground)
-    text-stroke: transparent
-    -webkit-text-stroke: transparent
-
-    line-height: 2
-
-    // background: yellow
-
-  @media screen and (max-width: 540px)
-    // margin-top: 200px
-    // height: 100px
-    margin: 200px 0 100px 0
 
 .project
   @include mixins.split

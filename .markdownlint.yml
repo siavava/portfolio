@@ -18,4 +18,9 @@ MD032: false
 MD033: false
 # Allow bare urls
 MD034: false
+
+# disable single-step headings
+MD041: false
+
+# Disable 'no duplicate header' rule
 MD046: false

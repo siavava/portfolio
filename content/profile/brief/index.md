@@ -2,18 +2,21 @@
 category: 'profile'
 name:
   - Amittai
-callout: |
-  <span style="color: var(--border-color)">is a</span>
-  software engineer<span style="color: var(--border-color)">,</span><br>
-  researcher<span style="color: var(--border-color)">, and</span> <br>
-  designer<span style="color: var(--border-color)">.</span>
+callout:
+  - |
+    <span style="color: var(--dark-foreground)">is a</span>
+    software engineer<span style="color: var(--dark-foreground)">,</span><br>
+    researcher<span style="color: var(--dark-foreground)">, and</span> <br>
+    designer<span style="color: var(--dark-foreground)">.</span>
 
-# Design, Architecture, <br> Engineering, & Mathematics
+  # - |
+  #   <span style="color: var(--border-color)">loves to</span>
+  #   design <br>
+  #   and build interfaces<br>
+  #   for the web<span style="color: var(--border-color)">.</span>
 
 navigation: false
 ---
-
-# About
 
 I currently work at [Instagram][instagram], the social media platform
 for sane humans.

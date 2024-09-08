@@ -6,9 +6,9 @@
       'active': menuOpen
     }">
     <div class="menu-item top">
-      <ProseH3 class="title">
+      <ProseH4 class="title">
         Links
-      </ProseH3>
+      </ProseH4>
 
       <NuxtLink class="router-link" v-if="route.path == '/'" to="/archive">
         <h2>Archive</h2>
@@ -64,9 +64,9 @@
 
 
     <div class="menu-item bottom">
-      <ProseH3 class="title">
+      <ProseH4 class="title">
         Current Page
-      </ProseH3>
+      </ProseH4>
       <template v-if="route.path == '/'">
         <NuxtLink class="router-link"to="/">
           <h2>About</h2>
@@ -116,12 +116,14 @@ const { menuOpen, toggleMenu } = inject('menu-options')
 
 onMounted(() => {
   const menuButton = document.getElementById("menu-button")
+  const colorModeButton = document.getElementById("color-mode-button")
+
   onClickOutside(menu, () => {
     if (menuOpen.value) {
       toggleMenu()
     }
   }, {
-    ignore: [menuButton]
+    ignore: [menuButton, colorModeButton],
   })
 })
 
@@ -156,6 +158,8 @@ const toTitleCase = (str) => {
 </script>
 
 <style lang="sass" scoped>
+@use "@/styles/typography"
+
 .app-menu
   position: fixed
   top: 0
@@ -164,7 +168,7 @@ const toTitleCase = (str) => {
   height: 100vh
   backdrop-filter: blur(10px)
 
-  z-index: 200
+  z-index: 99
   border-right: 0.5px solid var(--border-color)
 
   display: flex
@@ -175,6 +179,8 @@ const toTitleCase = (str) => {
 
   transition: left 0.3s ease
 
+  background: var(--border-color)
+
   &.active
     left: 0
 
@@ -182,10 +188,13 @@ const toTitleCase = (str) => {
     display: flex
     flex-direction: column
     gap: 1em
-    padding: 1.5em
+    padding: 1.5em 1.9em
+
+    &.bottom
+      text-align: right
 
     &:hover .router-link
-      
+
       & > *
         color: var(--border-color)
 
@@ -201,6 +210,12 @@ const toTitleCase = (str) => {
   line-height: 0.5em
   margin: 0
   padding: 0
+
+  & > *
+    font-weight: 300
+
+  // .bottom & > *
+  //   font-weight: 300
 
   &:hover > *
     color: var(--lightest-foreground) !important
