@@ -62,6 +62,11 @@ export default defineNuxtConfig({
       Disallow: "",
     }],
   ],
+  colorMode: {
+    preference: "one", // default value of $colorMode.preference
+    fallback: "one", // fallback value if not system preference found
+  },
+  
   router: { },
   devtools: {
     // Enable devtools (default: true)
