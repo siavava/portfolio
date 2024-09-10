@@ -85,8 +85,8 @@ export default {
   @include mixins.split
 
   &
-    display: flex
-    flex-direction: row
+    // display: flex
+    // flex-direction: row
     font-size: typography.font-size(m)
     margin-top: 4em
 

@@ -48,15 +48,28 @@ $fonts-map: (
   "anek-latin": "Anek Latin",
 );
 
+// $font-sizes: (
+//   "xxs": 11px,
+//   "xs": 13px,
+//   "s": 14px,
+//   // "m": 14px,
+//   "m": 15px,
+//   "l": 17px,
+//   "xl": 19px,
+//   "xxl": 21px,
+//   "heading": clamp(21px, 5vw, 35px),
+//   "big-heading": 80px
+// );
+
 $font-sizes: (
-  "xxs": 11px,
-  "xs": 13px,
-  "s": 14px,
+  "xxs": 13px,
+  "xs": 15px,
+  "s": 16px,
   // "m": 14px,
-  "m": 15px,
-  "l": 17px,
-  "xl": 19px,
-  "xxl": 21px,
+  "m": 17px,
+  "l": 19px,
+  "xl": 21px,
+  "xxl": 23px,
   "heading": clamp(21px, 5vw, 35px),
   "big-heading": 80px
 );

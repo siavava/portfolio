@@ -13,6 +13,7 @@
           {{ link.name }}
         </div>
         <div class="work-info">
+          <hr class="separator" />
           <ProseA
             v-if="link.url"
             :href="link.url"
@@ -70,4 +71,25 @@ const { data: contact } = await useAsyncData(
 
 .link
   color: var(--lightest-foreground)
+
+.work-info
+  display: flex
+  justify-content: flex-end
+  gap: 1em
+
+  @media screen and (max-width: 540px)
+    justify-content: flex-start
+
+  .separator
+    flex-grow: 1
+    align-self: stretch
+    border: none
+    border-top: 1px dashed var(--dark-foreground)
+    height: 0.01em
+    margin: auto
+
+    @media screen and (max-width: 540px)
+      display: none
+
+
 </style>
