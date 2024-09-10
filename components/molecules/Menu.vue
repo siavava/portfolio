@@ -181,6 +181,8 @@ const toTitleCase = (str) => {
 
   background: var(--border-color)
 
+  font-size: typography.font-size(xs)
+
   &.active
     left: 0
 

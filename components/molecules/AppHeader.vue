@@ -32,6 +32,7 @@ const route = useRoute()
 <style lang="sass" scoped>
 @use "@/styles/typography"
 .app-header
+  font-size: typography.font-size("xs")
   padding: 1.5em 0
   margin: 0 auto
   text-align: center
@@ -45,7 +46,6 @@ const route = useRoute()
   right: 0
   z-index: 100
 
-  font-size: typography.font-size("m")
 
   & > :not(.header-item:first-of-type, .header-item.right)
 
@@ -75,7 +75,7 @@ const route = useRoute()
     justify-content: flex-start
     flex-grow: 0
     flex-shrink: 1
-    margin: 0 1.5em 0 2em
+    margin: 0 1em 0 1.7em
     z-index: 101
 
     color: var(--foreground)
