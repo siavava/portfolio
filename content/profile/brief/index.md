@@ -18,6 +18,7 @@ callout:
 navigation: false
 ---
 
+<!-- My name is _Amittai_, and I love to design and build interfaces and systems. -->
 I currently work at [Instagram][instagram], the social media platform
 for sane humans.
 I'm also building [entendr.][entendr] in my spare time.

@@ -75,7 +75,7 @@ const route = useRoute()
     justify-content: flex-start
     flex-grow: 0
     flex-shrink: 1
-    margin: 0 1em 0 1.7em
+    margin: 0 1.7em
     z-index: 101
 
     color: var(--foreground)
