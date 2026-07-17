@@ -1,0 +1,42 @@
+name: Amittai Siavava
+email: amittaijoel@outlook.com
+location: Menlo Park, CA.
+site: amittai.studio
+version: v3.0.1
+versions:
+  - label: v1
+    url: https://v1.amittai.studio
+  - label: v2
+    url: https://v2.amittai.studio
+  - label: v3
+    url: https://v3.amittai.studio
+  - label: v4
+    url: https://v4.amittai.studio
+blurb: >-
+  Looking to trade notes on systems, mathematics, and the craft of
+  building software that lasts.
+socials:
+  - label: LinkedIn
+    icon: simple-icons:linkedin
+    url: https://linkedin.com/in/siavava
+    color: "#0A66C2"
+  - label: GitHub
+    icon: simple-icons:github
+    url: https://github.com/siavava
+    color: "#181717"
+  - label: HuggingFace
+    icon: simple-icons:huggingface
+    url: https://huggingface.co/siavava
+    color: "#FFD21E"
+  - label: Twitter
+    icon: simple-icons:x
+    url: https://x.com/proofofalt
+    color: "#000000"
+  - label: Substack
+    icon: simple-icons:substack
+    url: https://substack.com/@siavava
+    color: "#FF6719"
+  - label: Literal
+    icon: simple-icons:literal
+    url: https://literal.club/ctrl
+    color: "#000000"
