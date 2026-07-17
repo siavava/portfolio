@@ -1,0 +1,24 @@
+node_modules
+
+# Logs
+*.log*
+
+# Temp dirs
+.nuxt
+.nitro
+.cache
+.output
+.data
+
+# Env
+.env
+
+# Build
+dist
+
+# Misc
+.eslintcache
+*.tsbuildinfo
+.claude
+.agents
+.vscode

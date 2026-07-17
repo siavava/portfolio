@@ -1,0 +1,56 @@
+{
+  "private": true,
+  "packageManager": "bun@1.0.0",
+  "scripts": {
+    "build": "nuxi build",
+    "dev": "nuxi dev",
+    "generate": "nuxi generate",
+    "preview": "nuxi preview",
+    "lint": "eslint . --fix",
+    "lint:md": "markdownlint-cli2 \"content/**/*.md\" \"*.md\"",
+    "typecheck": "nuxi typecheck",
+    "start": "node .output/server/index.mjs"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "@nuxt/content": "3.12.0",
+    "@nuxt/fonts": "^0.14.0",
+    "@nuxt/icon": "^2.2.1",
+    "@nuxt/image": "^2.0.0",
+    "@nuxtjs/color-mode": "^4.0.0",
+    "@pinia/nuxt": "^0.11.3",
+    "@takumi-rs/core": "^2.0.0-rc.16",
+    "@vueuse/core": "^14.2.1",
+    "better-sqlite3": "^12.6.2",
+    "d3-force": "^3.0.0",
+    "motion-v": "^2.3.0",
+    "nuxt": "^4.3.1",
+    "nuxt-og-image": "^6.7.2",
+    "pinia": "^3.0.0",
+    "playwright-core": "^1.61.1",
+    "vue": "^3.5.29",
+    "vue-router": "^5.0.3"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.0",
+    "@iconify-json/simple-icons": "^1.2.0",
+    "@nuxt/eslint": "1.3.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@stylistic/eslint-plugin": "5.4.0",
+    "@types/d3-force": "^3.0.10",
+    "@typescript-eslint/parser": "^8.56.1",
+    "@vue/language-plugin-pug": "3.3.1",
+    "eslint-plugin-vue": "10.8.0",
+    "eslint-plugin-vue-pug": "1.0.0-alpha.5",
+    "markdownlint-cli2": "^0.18.0",
+    "pug": "^3.0.3",
+    "sass": "^1.97.3",
+    "satori": "^0.28.0",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.1.8"
+  }
+}

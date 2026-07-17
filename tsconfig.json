@@ -1,0 +1,12 @@
+{
+  // https://nuxt.com/docs/guide/concepts/typescript
+  // Per-project compiler options (incl. the Pug language plugin) are
+  // injected into the generated configs via nuxt.config.ts `typescript`.
+  "files": [],
+  "references": [
+    { "path": "./.nuxt/tsconfig.app.json" },
+    { "path": "./.nuxt/tsconfig.server.json" },
+    { "path": "./.nuxt/tsconfig.shared.json" },
+    { "path": "./.nuxt/tsconfig.node.json" }
+  ]
+}
