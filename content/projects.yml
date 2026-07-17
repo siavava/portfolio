@@ -1,0 +1,592 @@
+items:
+  - title: "Astronomy Simulations"
+    blurb: >-
+      A Physics-accurate simulation of mass bodies (stars, planets, etc.) in a
+      2D space. The program uses the PyQt5 library to display graphics and
+      allows the user to arbitrarily add more bodies to the simulation by
+      clicking, adding bigger bodies by holding for longer, etc.
+    repo: "https://github.com/siavava/python/tree/main/CS1/LAB/LAB%202/xc"
+    tag: "visual computing"
+    year: 2020
+    featured: false
+  - title: "City Demographics"
+    blurb: >-
+      An interactive program that processes provided raw data about world city
+      populations and other important metrics and renders the cities on a map
+      highlighting standout locations or other interesting data-points.
+    repo: "https://github.com/siavava/python/tree/main/CS1/LAB/LAB%203/XC"
+    tag: "data insights"
+    year: 2020
+    featured: false
+  - title: "Pathfinder"
+    blurb: >-
+      An interactive program that renders locations on a campus map and
+      highlights the shortest path between any two points the user clicks on. We
+      use breadth-first search to find the shortest path.
+    repo: "https://github.com/siavava/python/tree/main/CS1/LAB/LAB%204/XC"
+    tag: "data structures and algorithms"
+    year: 2020
+    featured: false
+  - title: "Pong Game"
+    blurb: >-
+      An interactive GUI game of pong that uses the PyQt5 library to display
+      graphics and handles user inputs, detects collisions (for the game), and
+      tracks scores as well as the high score in the current streak of games.
+    repo: "https://github.com/siavava/python/tree/main/CS1/LAB/LAB%201"
+    tag: "visual computing"
+    year: 2020
+    featured: false
+  - title: "Actor Network Semantics"
+    blurb: >-
+      The infamous Kevin Bacon game; given any two actors, find the shortest
+      social connection path between them. We use breadth-first search the
+      strategy to find the shortest path in the graph of connections.
+    repo: "https://github.com/siavava/java/tree/main/Problem%20Sets/PS-4"
+    tag: "data structures and algorithms"
+    year: 2021
+    featured: false
+  - title: "Bash Scripting"
+    blurb: >-
+      Hacking our way out of various scenarios with bash scripting.
+    repo: "https://github.com/siavava/bash"
+    tag: "systems"
+    year: 2021
+    featured: false
+  - title: "Cam Paint"
+    blurb: >-
+      Interactive program that allows the user to draw on a canvas using their
+      webcam. The program detects the color of the paintbrush and draws the path
+      of the brush on the canvas.
+    repo: "https://github.com/siavava/java/tree/main/Problem%20Sets/PS-1"
+    tag: "data structures and algorithms"
+    year: 2021
+    featured: false
+  - title: "Collaborative Editor"
+    blurb: >-
+      A collaborative editor on shared canvas. Multiple users can connect, and
+      each sees changes in real-time as they are made. We use mutexes and locks
+      to enable concurrent access whilst avoiding data races and deadlock
+      pitfalls such as mutual exclusion, hold-and-wait, circular wait, and no
+      preemption.
+    repo: "https://github.com/siavava/java/tree/main/Problem%20Sets/PS-6"
+    tag: "systems"
+    year: 2021
+    featured: false
+  - title: "Command-Line Utilities"
+    blurb: >-
+      Three different command-line utilities written in C: - chill calculates
+      the chill factor of a given temperature and wind speed. - words
+      efficiently prints out the words in a file. - histo prints a histogram for
+      a stream of numbers.
+    repo: "https://github.com/siavava/CS50.2"
+    tag: "systems"
+    year: 2021
+    featured: false
+  - title: "Constraint Satisfaction"
+    blurb: >-
+      Using backtracking and forward-checking to solve constraint satisfaction
+      problems such as map coloring and circuit placement. We use heuristics
+      such as least-constraining value, most-constraining variable and minimum
+      remaining values to intelligently narrow the search space.
+    repo: "https://github.com/siavava/ai/tree/main/04-ConstraintSatisfaction"
+    tag: "artificial intelligence"
+    year: 2021
+    featured: false
+  - title: "Data Structures"
+    blurb: >-
+      Efficient implementations of various data structures in C.
+    repo: "https://github.com/siavava/CS50.3"
+    tag: "data structures and algorithms"
+    year: 2021
+    featured: false
+  - title: "Efficient Spatial Collision Detection"
+    blurb: >-
+      Program to efficiently detect collisions between blobs in 2D space by
+      using quad-trees to partition the space into smaller regions and index
+      which blobs are in which region.
+    repo: "https://github.com/siavava/java/tree/main/Problem%20Sets/PS-1"
+    tag: "data structures and algorithms"
+    year: 2021
+    featured: false
+  - title: "Huffman Coding"
+    blurb: >-
+      A program that encodes text using a lossless compression algorithm. A
+      frequency tree is built from the text. Thereafter, binary codes are
+      assigned to each character having the most frequent characters get
+      shortest codes.
+    repo: "https://github.com/siavava/tau"
+    tag: "information theory"
+    year: 2021
+    featured: false
+  - title: "Informed Search"
+    blurb: >-
+      Using informed search techniques such as A search and Greedy search and
+      heuristics such as manhattan distance and euclidean distance to navigate a
+      robot through a maze with obstacles to a goal location.
+    repo: "https://github.com/siavava/ai/tree/main/02-Mazeworld"
+    tag: "artificial intelligence"
+    year: 2021
+    featured: false
+  - title: "Intelligent Chess bot"
+    blurb: >-
+      A chess bot that uses various strategies including minimax, alpha-beta
+      pruning, iterative deepening, transposition tables, move ordering, null-
+      move pruning, aspiration windows, and quiescence search to maximize
+      outcome against an opponent in chess.
+    repo: "https://github.com/siavava/ai/tree/main/03-ChessAI"
+    tag: "artificial intelligence"
+    year: 2021
+    featured: true
+  - title: "Logic Algorithms"
+    blurb: >-
+      Boolean satisfiability is NP-complete, meaning any algorithm that solves
+      it takes exponential time &mdash; in fact, any polynomial solution would
+      prove P=NP.
+    repo: "https://github.com/siavava/ai/tree/main/05-Logic"
+    tag: "artificial intelligence"
+    year: 2021
+    featured: false
+  - title: "Logisim Processor"
+    blurb: >-
+      A fully functional 16-bit CPU implemented in Logisim. All CPU components
+      including the ALU, registers, control unit, program counter, RAM, micro-
+      sequencer, finite-state machine, and IO are implemented from basic gates.
+    repo: "https://github.com/siavava/assembly/tree/main/cs51/practice/hw8"
+    tag: "systems"
+    year: 2021
+    featured: true
+  - title: "Neural Networks"
+    blurb: >-
+      As part of a publication exploring the emergence of and the state of the
+      art in machine learning, I implemented neural networks to demonstrate how
+      predictions work in the context of simple classification and regression
+      problems.
+    repo: "https://github.com/siavava/neural"
+    tag: "deep learning"
+    year: 2021
+    featured: false
+  - title: "Nuggets Game"
+    blurb: >-
+      A multiplayer command-line game of nuggets. Players join over web sockets.
+      The maze is gradually revealed to each player as they view different
+      sectors of it. The game ends when all the nuggets are collected, and the
+      player with the most nuggets wins.
+    repo: "https://github.com/siavava/tse"
+    tag: "systems"
+    year: 2021
+    featured: false
+  - title: "Parts-Of-Speech Tagging"
+    blurb: >-
+      A bot that uses hidden markov models to tag parts of speech in a sentence.
+      We use the viterbi algorithm to generate a sequence of tags for the
+      sentence keeping in mind the tag probabilities for each word and the
+      transition probabilities between tags.
+    repo: "https://github.com/siavava/java/tree/main/Problem%20Sets/PS-5"
+    tag: "artificial intelligence"
+    year: 2021
+    featured: false
+  - title: "Robot Colocation"
+    blurb: >-
+      A common problem in robotics is localizing a robot in a novel environment
+      given sensor readings. This project uses hidden markov models and the
+      forward-backward algorithm and the viterbi algorithm to decipher where a
+      robot's situation probabilities in a maze, given a sequence of sensor
+      readings from the robot.
+    repo: "https://github.com/siavava/ai/tree/main/06-HiddenMarkovModels"
+    tag: "artificial intelligence"
+    year: 2021
+    featured: false
+  - title: "Tiny Search Engine"
+    blurb: >-
+      A hyper-efficient search engine that crawls webpages (whose domain can be
+      restricted to a given subset) and indexes them, then handles user queries
+      on the contents of the collection of pages, with results ranked by
+      frequency. It also supports query modifiers such as AND, OR, and NOT.
+    repo: "https://github.com/siavava/tse"
+    tag: "systems"
+    year: 2021
+    featured: true
+  - title: "Uninformed Search"
+    blurb: >-
+      Using uninformed search algorithms such as breadth-first search and depth-
+      first search to search the solution space for elementary problems such as
+      the :chicken: and :dog: problem (we wish to get x chicken and y foxes
+      across a crossway with limited carriage capacity without leaving any
+      chicken unattended with the foxes\u2026
+    repo: "https://github.com/siavava/ai/tree/main/01-SearchProblems"
+    tag: "artificial intelligence"
+    year: 2021
+    featured: false
+  - title: "Gradient Descent"
+    blurb: >-
+      Using regression models to classify provided data. The models are not pre-
+      trained, se we use gradient descent to find the optimal parameters for the
+      model.
+    repo: "https://github.com/siavava/ml/blob/main/HW1/HW1_cosc74.ipynb"
+    tag: "machine learning"
+    year: 2022
+    featured: false
+  - title: "Hair Strand Simulation"
+    blurb: >-
+      Using Physics-based simulation to animate a hair strand using connection
+      and bending constraints. The simulation is implemented in C++ using the
+      OpenGL framework.
+    repo: "https://github.com/siavava/PhysX/tree/main/proj/a1_mass_spring"
+    tag: "visual computing"
+    year: 2022
+    featured: false
+  - title: "Linear Regression Classifiers"
+    blurb: >-
+      Using ridge regression and lasso regression models to find an optimal
+      learning strategy for a given set of data.
+    repo: "https://github.com/siavava/ml/blob/main/HW2/HW2.ipynb"
+    tag: "machine learning"
+    year: 2022
+    featured: false
+  - title: "NoSQL App"
+    blurb: >-
+      A blog server built with a Python frontend and a MongoDB backend. It
+      supports registered users posting updates and comments, querying for posts
+      and comments, and deleting posts and comments.
+    repo: "https://github.com/siavava/nosql"
+    tag: "systems"
+    year: 2022
+    featured: false
+  - title: "Particle Simulation"
+    blurb: >-
+      Using Physics-based simulation to simulate fluid and particle systems. We
+      use the SPH method to simulate the Navier Stokes equations for fluids. For
+      particles, we use positional indexing to efficiently detect collisions and
+      propagate forces between particles.
+    repo: "https://github.com/siavava/PhysX/tree/main/proj/a1_mass_spring"
+    tag: "visual computing"
+    year: 2022
+    featured: false
+  - title: "Position-Based Dynamics"
+    blurb: >-
+      Using a position-based system with constraints (instead of the more common
+      mass-spring model) to simulate bodies. The method, as described in this
+      paper, offers several advantages over the mass-spring model including
+      being more generalizable to other scenarios and requiring less computation
+      to simulate a body.
+    repo: "https://github.com/siavava/PhysX/tree/cleaned-up-proj/proj/a1_mass_spring"
+    tag: "visual computing"
+    year: 2022
+    featured: false
+  - title: "Relational Database App"
+    blurb: >-
+      A relational database with a Python frontend and a MySQL backend,
+      including various triggers and SQL automations.
+    repo: "https://github.com/siavava/relational"
+    tag: "systems"
+    year: 2022
+    featured: true
+  - title: "Rigid Body Simulation"
+    blurb: >-
+      We use rotational dynamics to simulate a rigid-body helicopter, using
+      rotor blades to generate lift and thrust. We use the Euler method to
+      numerically integrate the equations of motion.
+    repo: "https://github.com/siavava/PhysX/blob/main/proj/a4_multi_copter"
+    tag: "visual computing"
+    year: 2022
+    featured: false
+  - title: "Smoke Simulation"
+    blurb: >-
+      Using Physics-based simulation to simulate a fluid-flow system. We use the
+      SPH method to simulate the Navier Stokes equations for smoke. We also
+      apply the Vorticity confinement) method to simulate the vorticity) of the
+      fluid. To reduce the computational space,we use a grid to store the fluid
+      particles.
+    repo: "https://github.com/siavava/PhysX/blob/main/proj/a3_grid_fluid"
+    tag: "visual computing"
+    year: 2022
+    featured: false
+  - title: "Wordle, Grep"
+    blurb: >-
+      Wordle and Grep replicas implemented in Haskell, a pure functional
+      programming language.
+    repo: "https://github.com/siavava/tau"
+    tag: "functional programming"
+    year: 2022
+    featured: false
+  - title: "AI / Tech Dataset"
+    blurb: >-
+      I wrote a high-performant web scraper in Haskell to scrape 17000+ articles
+      from online technology websites such as DeepMind, MIT Tech Review, OpenAI,
+      Singularity Hub, and TechCrunch
+    repo: "https://github.com/siavava/functional-scraper"
+    tag: "data mining"
+    year: 2023
+    featured: true
+  - title: "Adversarial Training for Neural Networks"
+    blurb: >-
+      Experimentation with various adversarial training techniques for neural
+      networks. Adversarial training is useful to improve the robustness of
+      neural networks to adversarial attacks &mdash; which often happen as noise
+      in the input data.
+    repo: "https://github.com/siavava/deep-learning/tree/main/homeworks/02"
+    tag: "deep learning"
+    year: 2023
+    featured: true
+  - title: "Blog"
+    blurb: >-
+      New blog website design and, along with it, a new domain! Built with
+      Nuxt/Vue and SCSS. Deployed on Netlify.
+    repo: "https://github.com/lostflux/blog"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Blog v1"
+    blurb: >-
+      The first iteration of my personal blog/portfolio. Built with Nuxt/Vue and
+      SCSS. Deployed on Netlify.
+    repo: "https://github.com/centauri-1/blog.v1"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "BuzzQuiz"
+    blurb: >-
+      BuzzFeed-style quiz for movie recs!
+    repo: "https://github.com/siavava/buzzquiz"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Dartmouth Robotics Club Website"
+    blurb: >-
+      New website design for the Dartmouth Robotics Club. Built with Next/React
+      and SCSS. Deployed on Vercel.
+    repo: "https://github.com/siavava/robotics-website"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Dev Slides"
+    blurb: >-
+      Designed my presentation platform website for my dev work and related
+      stuff. Built with Vue and deployed on Vercel.
+    repo: "https://github.com/siavava/slides"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Discite"
+    blurb: >-
+      Discite turns idle screen time into learning \u2014 a short-form video app
+      that teaches computer science fundamentals through bite-sized, swipeable
+      clips. Discite optimizes learning for the modern attention span.
+    repo: "https://github.com/lostflux/discite-frontend"
+    tag: "design / web"
+    year: 2023
+    featured: true
+  - title: "Discite Website"
+    blurb: >-
+      Built a landing-page and documentation website for my Computer Science
+      senior design challenge project.
+    repo: "https://github.com/siavava/discite-website"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Generative Pre-trained Transformer"
+    blurb: >-
+      For fun, I implemented the Generative Pre-trained Transformer (GPT)
+      architecture in PyTorch. GPT is a language model that uses a transformer
+      architecture to generate text. I trained the model on the tiny Shakespeare
+      dataset and used it to generate text in the style of Shakespeare.
+    repo: "https://github.com/siavava/transfusion"
+    tag: "deep learning"
+    year: 2023
+    featured: true
+  - title: "Hyperparameter Tuning for Neural Networks"
+    blurb: >-
+      Experimentation with how variations in specific hyperparameters affect the
+      performance of neural networks. Hyperparameters are parameters that are
+      not learned by the model, but are instead set by the user. Usually, such
+      hyperparameters control the learning process of the model.
+    repo: "https://github.com/siavava/deep-learning/tree/main/homeworks/01"
+    tag: "deep learning"
+    year: 2023
+    featured: false
+  - title: "Jekyll Blog"
+    blurb: >-
+      A minimal blog demo using Jekyll.
+    repo: "https://github.com/siavava/jekyll-blog"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Kahoots API"
+    blurb: >-
+      An API endpoint that supports the standard game of Kahoots.
+    repo: "https://github.com/siavava/kahoots-api"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Leetcode Challenges"
+    blurb: >-
+      To keep my coding skills sharp, I solve a few Leetcode challenges every
+      week. I also make a point to write up the solutions and explanations so a
+      future, forgetful me can review them.
+    repo: ""
+    tag: "data structures and algorithms"
+    year: 2023
+    featured: false
+  - title: "Minimal Youtube Player"
+    blurb: >-
+      A minimal Youtube player that lets you watch videos without distractions.
+      Built with React, TypeScript, Sass, and the Youtube Data API.
+    repo: "https://github.com/siavava/mnml-yt"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Networking Platform"
+    blurb: >-
+      Networking and job applications management platform for college students.
+    repo: "https://github.com/siavava/networking-platform"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Notes Platform"
+    blurb: >-
+      Interactive notepad for organizing your thoughts.
+    repo: "https://github.com/siavava/notes-platform"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Portfolio"
+    blurb: >-
+      New website design and, along with it, a new domain! Built with Nuxt/Vue
+      and SCSS. Deployed on Netlify.
+    repo: "https://github.com/siavava/amittai.studio"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Posts Platform"
+    blurb: >-
+      Post-it-note style platform for organizing your thoughts and ideas.
+    repo: "https://github.com/siavava/posts-platform"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Posts Platform API"
+    blurb: >-
+      An API endpoint that supports the standard game of Kahoots.
+    repo: "https://github.com/siavava/platform-api"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Rust API"
+    blurb: >-
+      It is straightforward to build a REST API in TypeScript using Express. As
+      a proof-of-concept for an upcoming project, I tried out building a REST
+      API in Rust using Rocket. Rust is advantageous since it offers C-like
+      performance without the associated memory safety issues. The API has a
+      database backend using MongoDB.
+    repo: "https://github.com/entends/flux-end"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "Societal Attitudes Toward AI"
+    blurb: >-
+      Artificial Intelligence (AI) is a hot topic, especially in light of recent
+      improvements in its capabilities. This research project studies the
+      societal attitudes toward AI, both present and how they have evolved over
+      the years, as a way to understand how different events have shaped the
+      public's perception of AI.
+    repo: "https://github.com/siavava/data-mining-project"
+    tag: "data mining"
+    year: 2023
+    featured: true
+  - title: "TicToc"
+    blurb: >-
+      Apple-inspired timer that shows quotes from Foundation, my favorite TV
+      show.
+    repo: "https://github.com/siavava/tictoc"
+    tag: "design / web"
+    year: 2023
+    featured: false
+  - title: "3D Reconstruction"
+    blurb: >-
+      Experimentation with different techniques for 3D reconstruction of a scene
+      using multiple images taken at slightly different angles.
+    repo: "https://github.com/lostflux/computer-vision/tree/main/psets/02"
+    tag: "computer vision"
+    year: 2024
+    featured: false
+  - title: "Attention-Based Machine Translation"
+    blurb: >-
+      Implemented a transformer architecture that uses attention mechanism to
+      translate from English to Pig Latin.
+    repo: "https://github.com/lostflux/linguistics/tree/main/P5"
+    tag: "Natural Language Processing"
+    year: 2024
+    featured: false
+  - title: "Augmented Reality with Planar Homographies"
+    blurb: >-
+      Experimentation with using planar homographies to overlay images on top of
+      other images. The goal is to create an augmented reality effect by
+      transforming the perspective of the overlay image to match the perspective
+      of the background image.
+    repo: "https://github.com/lostflux/computer-vision/tree/main/psets/02"
+    tag: "computer vision"
+    year: 2024
+    featured: true
+  - title: "Emotion Detection in Audio"
+    blurb: >-
+      Exxperimented with using transformers to classify emotions in audio data,
+      using Wav2Vec2 and MFCC (Mel-Frequency Cepstral Coefficients) features to
+      train a model to classify emotions in audio data.
+    repo: "https://github.com/lostflux/linguistics-project"
+    tag: "Natural Language Processing"
+    year: 2024
+    featured: false
+  - title: "Image Filtering with Hough Transforms"
+    blurb: >-
+      Experimentation with using convolutions and hough transforms to detect
+      lines and corners in images.
+    repo: "https://github.com/lostflux/computer-vision/tree/main/psets/01"
+    tag: "computer vision"
+    year: 2024
+    featured: false
+  - title: "Logistic Regression"
+    blurb: >-
+      Implemented text classifiers using logistic regression from scratch, to
+      learn word probabilities in a corpus and classify text documents based on
+      those probabilities.
+    repo: "https://github.com/lostflux/linguistics/tree/main/P3"
+    tag: "Natural Language Processing"
+    year: 2024
+    featured: false
+  - title: "Naive Bayes & N-Grams"
+    blurb: >-
+      Implemented text classifiers using naive bayes and n-grams, both
+      implemented from scratch, to learn word probabilities in a corpus and
+      classify text documents based on those probabilities.
+    repo: "https://github.com/lostflux/linguistics/tree/main/P2"
+    tag: "Natural Language Processing"
+    year: 2024
+    featured: false
+  - title: "Neural Networks & Word Embeddings"
+    blurb: >-
+      Implemented neural networks (using PyTorch) to learn multi-class
+      classification. Also experimented with similarities in word embeddings
+      using cosine similarity and t-SNE.
+    repo: "https://github.com/lostflux/linguistics/tree/main/P4"
+    tag: "Natural Language Processing"
+    year: 2024
+    featured: false
+  - title: "Optical Flow"
+    blurb: >-
+      Experimentation with different techniques for tracking optical flow in a
+      video sequence. Optical flow is the apparent motion of objects, either due
+      to the motion of the objects themselves or the motion of the camera.
+    repo: "https://github.com/lostflux/computer-vision/tree/main/psets/04"
+    tag: "computer vision"
+    year: 2024
+    featured: true
+  - title: "Swahili Chatbot with RegEx"
+    blurb: >-
+      Implemented a simple chatbot in Swahili using regular expressions to match
+      patterns in the input text and generate appropriate responses. The chatbot
+      is able to respond to greetings, questions, and farewells, as well as
+      dismissing insults and handling unknown input.
+    repo: "https://github.com/lostflux/linguistics/tree/main/P1"
+    tag: "Natural Language Processing"
+    year: 2024
+    featured: false
