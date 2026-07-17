@@ -32,7 +32,10 @@
     )
       TooltipShell(v-if="lastHovered", anchor, compact, :animate="false") {{ lastHovered.title }} · {{ lastHovered.year }}
     ScrollFades(:left="canScrollLeft", :right="canScrollRight", always, color="var(--shelf-panel)")
-  p.bookshelf-panel__caption Shelf: {{ projects.length }} Projects
+  p.bookshelf-panel__caption
+    | Shelf: {{ projects.length }} Projects ·
+    |
+    NuxtLink.bookshelf-panel__browse(to="/projects") browse all →
 </template>
 
 <script lang="ts" setup>
@@ -115,14 +118,6 @@ const centerSelected = (behavior: ScrollBehavior) => {
 }
 
 watch(selected, (_, previous) => centerSelected(previous ? "smooth" : "instant"))
-
-const MINOR_WORDS = new Set(["and", "or", "of", "the", "a", "an", "to", "for", "with", "in", "on"])
-
-const titleCase = (text: string) =>
-  text.split(" ").map((word, index) =>
-    index > 0 && MINOR_WORDS.has(word)
-      ? word
-      : word.charAt(0).toUpperCase() + word.slice(1)).join(" ")
 
 /** Stable pseudo-random spine geometry, seeded by the title. */
 const hash = (text: string) => {
@@ -285,4 +280,11 @@ $shelf-blue-tint: #dbeafe
   font-size: typography.font-size("meta")
   letter-spacing: 0.02em
   color: var(--foreground)
+
+.bookshelf-panel__browse
+  color: var(--accent)
+  text-decoration: none
+
+  &:hover
+    text-decoration: underline
 </style>
