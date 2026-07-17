@@ -1,0 +1,83 @@
+branches:
+  - label: Design
+    color: "#EC4899"
+    children:
+      - label: Minimalism
+      - label: Personal Websites
+      - label: Typography
+      - label: UI Design
+      - label: Editorial
+  - label: Physics
+    color: "#F97316"
+    children:
+      - label: Classical Mechanics
+        children:
+          - label: Simulations
+          - label: Astronomy
+      - label: Electromagnetism
+  - label: Mathematics
+    color: "#EF4444"
+    children:
+      - label: Linear Algebra
+        children:
+          - label: Abstract Algebra
+            children:
+              - label: Category Theory
+      - label: Calculus
+        children:
+          - label: Real Analysis
+      - label: Number Theory
+        children:
+          - label: Cryptography
+      - label: Logic
+      - label: Game Theory
+  - label: Theoretical CS
+    color: "#06B6D4"
+    children:
+      - label: Discrete Math
+        children:
+          - label: Theory of Computation
+            children:
+              - label: Automata Theory
+              - label: Computability Theory
+              - label: Complexity Theory
+      - label: Algorithms
+        children:
+          - label: Data Structures
+      - label: Information Theory
+  - label: AI
+    color: "#3B82F6"
+    children:
+      - label: Deep Learning
+      - label: Computer Vision
+      - label: NLP
+      - label: Reinforcement Learning
+  - label: Systems
+    color: "#8B5CF6"
+    children:
+      - label: Computer Architecture
+      - label: Operating Systems
+      - label: Databases
+      - label: Compilers
+  - label: Robotics
+    color: "#F59E0B"
+    children:
+      - label: Marine Robotics
+      - label: Localization
+      - label: Physical Computing
+  - label: Culture
+    color: "#14B8A6"
+    children:
+      - label: Sci-Fi
+        children:
+          - label: Foundation
+      - label: Shakespeare
+      - label: Chess
+      - label: Movies
+  - label: Leisure
+    color: "#10B981"
+    children:
+      - label: Photography
+      - label: Specialty Coffee
+      - label: Hiking
+      - label: Music
