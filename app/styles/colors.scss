@@ -1,0 +1,43 @@
+// Site palettes, emitted as CSS custom properties in default.sass.
+
+$light-palette: (
+  "background": #f5f5f5,
+  "foreground": rgba(0, 0, 0, 0.5),
+  "foreground-strong": rgba(0, 0, 0, 0.88),
+  "accent": #ff4800,
+  "bubble": #e5e5ea,
+  "panel": #e9e9e9,
+  "panel-hover": #e0e0e0,
+  "bar-background": #000000,
+  "bar-foreground": #ffffff,
+  "bar-muted": rgba(255, 255, 255, 0.6),
+  "ring": rgba(0, 0, 0, 0.07),
+  "divider": rgba(128, 128, 128, 0.4),
+  "note": rgba(0, 0, 0, 0.3),
+  "selection": rgba(0, 0, 0, 0.1),
+  "cue-highlight": #ffdb99,
+  "cue-line": #ffdb99,
+  "check-done": #00c853,
+  "check-pending": #cccccc,
+);
+
+$dark-palette: (
+  "background": #111110,
+  "foreground": rgba(255, 255, 255, 0.55),
+  "foreground-strong": rgba(255, 255, 255, 0.92),
+  "accent": #ff5510,
+  "bubble": #2c2c2e,
+  "panel": #1e1e1e,
+  "panel-hover": #262626,
+  "bar-background": #000000,
+  "bar-foreground": #ffffff,
+  "bar-muted": rgba(255, 255, 255, 0.6),
+  "ring": rgba(255, 255, 255, 0.09),
+  "divider": rgba(128, 128, 128, 0.4),
+  "note": rgba(255, 255, 255, 0.3),
+  "selection": rgba(255, 255, 255, 0.16),
+  "cue-highlight": #6b4423,
+  "cue-line": #6b4423,
+  "check-done": #00c853,
+  "check-pending": #4d4d4d,
+);

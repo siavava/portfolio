@@ -1,0 +1,33 @@
+@use "sass:map";
+
+// Font families and the size scale, consumed via font() and font-size().
+
+$fonts-map: (
+  "sans-serif": "Proxima Soft",
+);
+
+$font-sizes: (
+  "meta": 10px,
+  "xxs": 11px,
+  "xs": 13px,
+  "s": 14px,
+  "m": 15px,
+  "l": 17px,
+  "xl": 19px,
+);
+
+@function font($name) {
+  @if not map.has-key($fonts-map, $name) {
+    @error "Unknown font '#{$name}'";
+  }
+
+  @return map.get($fonts-map, $name);
+}
+
+@function font-size($size) {
+  @if not map.has-key($font-sizes, $size) {
+    @error "Unknown font size '#{$size}'";
+  }
+
+  @return map.get($font-sizes, $size);
+}

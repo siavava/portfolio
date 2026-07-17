@@ -1,0 +1,43 @@
+@use "colors"
+@use "typography"
+
+:root
+  @each $name, $value in colors.$light-palette
+    --#{$name}: #{$value}
+
+.dark-mode
+  @each $name, $value in colors.$dark-palette
+    --#{$name}: #{$value}
+
+*, *::before, *::after
+  box-sizing: border-box
+  margin: 0
+  padding: 0
+
+html
+  scroll-behavior: smooth
+
+body
+  background-color: var(--background)
+  color: var(--foreground)
+  font-family: typography.font("sans-serif"), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif
+  font-size: typography.font-size("m")
+  line-height: 1.6
+  -webkit-font-smoothing: antialiased
+  text-rendering: optimizeLegibility
+
+a
+  color: var(--accent)
+  text-decoration: none
+
+  &:hover
+    text-decoration: underline
+    text-decoration-thickness: 1px
+    text-underline-offset: 2px
+
+button, input
+  font-family: inherit
+  font-size: inherit
+
+::selection
+  background: var(--selection)
