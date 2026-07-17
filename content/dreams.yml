@@ -1,0 +1,43 @@
+items:
+  - label: Build a GPT from scratch
+    done: true
+  - label: Teach ten terms of CS
+    done: true
+  - label: Double major in math & CS
+    done: true
+  - label: Design a 16-bit CPU
+    done: true
+  - label: Ship to a billion users
+    done: true
+  - label: Scrape the web in Haskell
+    done: true
+  - label: Publish a paper
+    done: true
+  - label: Take a product 0→1
+    done: true
+  - label: Ship 20 features in a year
+    done: true
+  - label: Backfill 2.4 billion objects
+    done: true
+  - label: Write a book
+    done: false
+  - label: Design a font
+    done: false
+  - label: Build an operating system
+    done: false
+  - label: Build a robot
+    done: false
+  - label: Speak at a conference
+    done: false
+  - label: Run a marathon
+    done: false
+  - label: Learn to fly
+    done: false
+  - label: Visit all seven continents
+    done: false
+  - label: Grow a company
+    done: false
+  - label: Close all tabs
+    done: false
+  - label: Meet you
+    done: false
