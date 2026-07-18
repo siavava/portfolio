@@ -2,6 +2,7 @@
 span.cue-root(
   ref="el",
   :class="{ active: isActive }",
+  :data-note-trigger="note",
   @mouseenter="enter",
   @mouseleave="leave",
   @click="toggle",

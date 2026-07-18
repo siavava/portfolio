@@ -1,5 +1,5 @@
 <template lang="pug">
-span.figma-select(ref="el", @mouseenter="measure", @mouseleave="leave", @click="toggle")
+span.figma-select(ref="el", :data-note-trigger="note", @mouseenter="measure", @mouseleave="leave", @click="toggle")
   slot
   span.figma-select-corners(aria-hidden="true")
     span.figma-select-border
