@@ -51,7 +51,7 @@ the [Dartmouth Reality & Robotics Lab](https://rlab.cs.dartmouth.edu/home/).
 I was also the AI lead at the Dartmouth Robotics Club.
 
 Builds from :cue-root[first principles]{to="algorithms,comp-arch,compilers,search-engines,simulations"}:
-a [GPT from scratch](https://github.com/siavava/transfusion),
-a [search engine in C](https://github.com/siavava),
+a [GPT from scratch](/projects/deep-learning/transfusion),
+a [search engine in C](/projects/systems/50-tse),
 a :bio-target[16-bit CPU]{node="Computer Architecture"},
 and :bio-target[physics simulations]{node="Simulations"}.
