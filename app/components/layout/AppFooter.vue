@@ -2,6 +2,12 @@
 footer.app-footer
   span.app-footer__location {{ profile.location }}
   span.app-footer__meta
+    button.app-footer__theme(
+      type="button",
+      :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'",
+      @click="toggleColor",
+    ) {{ isDark ? "light" : "dark" }}
+    span.app-footer__divider |
     span.app-footer__version(
       @mouseenter="openVersions",
       @mouseleave="closeVersions",
@@ -26,6 +32,14 @@ footer.app-footer
 defineProps<{
   profile: ProfileData
 }>()
+
+// Light/dark toggle — flip the color-mode preference; @nuxtjs/color-mode
+// persists it and stamps the class before first paint (no flash).
+const colorMode = useColorMode()
+const isDark = computed(() => colorMode.value === "dark")
+const toggleColor = () => {
+  colorMode.preference = colorMode.value === "dark" ? "light" : "dark"
+}
 
 const showVersions = ref(false)
 
@@ -107,4 +121,18 @@ onUnmounted(() => clearTimeout(closeTimer))
   &:hover
     color: var(--foreground-strong)
     text-decoration: none
+
+.app-footer__theme
+  background: none
+  border: none
+  padding: 0
+  font: inherit
+  line-height: inherit
+  vertical-align: baseline
+  color: var(--foreground)
+  cursor: pointer
+  transition: color 0.15s ease
+
+  &:hover
+    color: var(--foreground-strong)
 </style>

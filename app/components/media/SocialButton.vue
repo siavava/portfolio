@@ -42,6 +42,10 @@ defineProps<{
   font-size: 14px
   transition: color 0.2s ease
 
-.dark-mode .social-button--github:hover .social-button__icon
+// Near-black brands (GitHub, X, Literal) would hover to solid black on
+// the dark panel; light them to white instead.
+.dark-mode .social-button--github:hover .social-button__icon,
+.dark-mode .social-button--twitter:hover .social-button__icon,
+.dark-mode .social-button--literal:hover .social-button__icon
   color: var(--foreground-strong)
 </style>

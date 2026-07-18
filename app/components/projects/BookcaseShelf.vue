@@ -181,6 +181,10 @@ onUnmounted(() => clearTimeout(hideTimer))
     background: #dbeafe
     border: 1.5px solid #3b82f6
 
+    .dark-mode &
+      background: color-mix(in srgb, var(--primary-highlight), transparent 78%)
+      border-color: var(--primary-highlight)
+
 .shelf-section__tooltip
   position: fixed
   width: 0

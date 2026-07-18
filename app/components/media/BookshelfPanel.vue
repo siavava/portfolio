@@ -233,6 +233,10 @@ $shelf-blue-tint: #dbeafe
     background: $shelf-blue-tint
     border: 1.5px solid $shelf-blue
 
+    .dark-mode &
+      background: color-mix(in srgb, var(--primary-highlight), transparent 78%)
+      border-color: var(--primary-highlight)
+
 .bookshelf-panel__tooltip
   position: absolute
   width: 0

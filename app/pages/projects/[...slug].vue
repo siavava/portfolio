@@ -98,6 +98,12 @@ main.projects-screen
         span.rt-title {{ selected.title }}
       .rt-actions
         span.rt-count(v-if="selectedIndex >= 0") {{ selectedIndex + 1 }} / {{ ordered.length }}
+        button.rt-icon.rt-theme(
+          type="button",
+          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'",
+          @click="toggleColor",
+        )
+          Icon(:name="isDark ? 'lucide:sun' : 'lucide:moon'")
     Transition(name="desk-swap", mode="out-in")
       article.reading-desk__card(v-if="selected", :key="selected.path")
         header.reading-desk__masthead
@@ -303,6 +309,15 @@ const stuck = ref(false)
 useEventListener("scroll", () => {
   stuck.value = window.scrollY > 4
 }, { passive: true })
+
+// Light/dark toggle, the study's exact mechanism — flip the color-mode
+// preference; @nuxtjs/color-mode persists it and sets the class before
+// first paint, so there is no flash.
+const colorMode = useColorMode()
+const isDark = computed(() => colorMode.value === "dark")
+const toggleColor = () => {
+  colorMode.preference = colorMode.value === "dark" ? "light" : "dark"
+}
 
 useEventListener("keydown", (event: KeyboardEvent) => {
   if (event.key === "Escape" && drawer.value) {
@@ -642,6 +657,9 @@ defineOgImage("Portrait", {
   letter-spacing: 0.04em
   color: var(--dark-foreground)
 
+.rt-theme
+  font-size: 1.05rem
+
 .pd-drawer-backdrop
   position: fixed
   inset: 0
@@ -840,12 +858,12 @@ defineOgImage("Portrait", {
 // the bar starts next to the paper and only pins to the viewport top
 // once the page scrolls. On wide screens the stage narrows before it
 // would ever slide under the fixed rail.
+// A plain block, like the study's reading column — NOT a flex column.
+// Flex items can't margin-collapse, so a flex desk would turn the
+// card's 120px bottom margin into real empty space below the page;
+// as a block it collapses away exactly as the study's does.
 .reading-desk
-  display: flex
-  flex-direction: column
   min-width: 0
-  min-height: 100vh
-  min-height: 100svh
   max-width: 1024px
   margin-inline: auto
   padding: 2.25rem 0 0
@@ -861,9 +879,12 @@ defineOgImage("Portrait", {
   --desk-foreground: #16160f
   --desk-strong: #000000
   --desk-highlight: #1342ff
-  // The study article's margins, verbatim: top-anchored under the bar,
-  // centered, 120px of tail.
-  margin: 0 auto 120px
+  // The study's article carries a 120px bottom margin that collapses to
+  // nothing at the page's end (its reader renders zero gap below the
+  // sheet). Flex/BFC quirks keep that margin from collapsing here, so we
+  // match the study's RENDERED result — no tail below the sheet; the
+  // card's own 80px bottom padding is the breathing room under END.
+  margin: 0 auto
   max-width: 1024px
   width: 100%
   padding: 80px 64px
