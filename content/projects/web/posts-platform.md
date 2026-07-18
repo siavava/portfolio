@@ -21,7 +21,7 @@ Built with [React][reactjs],
 [Sass][sass-lang], bundled with [Vite][vitejs],
 with global state in [Redux][redux].
 
-**A client over an API.** The front-end owns no database. Every action in
+The front-end is a client over an API, owning no database of its own. Every action in
 `actions/index.js` is a thunk over [axios][axios-http] against
 the [Posts Platform API][platform-api]: `fetchPosts`
 and `fetchPost` read, `createPost`, `updatePost`, and `deletePost` write,
@@ -31,7 +31,7 @@ to the affected post, so the store follows the server rather than guessing
 ahead of it. [MongoDB][mongodb] persists everything behind
 that service, so the board is the same on the next visit.
 
-**State and routing.** A single `PostsReducer`, written with
+State and routing stay cleanly separated. A single `PostsReducer`, written with
 [Immer][immer], holds `posts` and the
 `currentPost`, and `combineReducers` mounts it under `posts`.
 [react-router-dom][reactrouter] lays out the pages: `/` for the

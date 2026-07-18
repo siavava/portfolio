@@ -35,11 +35,10 @@ $$
 
 :mass-spring-viz
 
-**Structural springs.** Adjacent masses are linked by springs that
-resist stretching. Each exerts a [Hooke's-law][hookes-law]
-force pulling the pair back toward the rest length $L_{ij}$, plus a
-damping term along the same direction $\hat{\mathbf{x}}_{ij}$ that bleeds
-off oscillation:
+Adjacent masses are linked by springs that resist stretching. Each exerts a
+[Hooke's-law][hookes-law] force pulling the pair back toward the rest
+length $L_{ij}$, plus a damping term along the same direction
+$\hat{\mathbf{x}}_{ij}$ that bleeds off oscillation:
 
 $$
 \mathbf{f}_{ij}
@@ -58,14 +57,13 @@ stretching oscillation without fighting the strand's overall motion. The
 pair force is applied equal and opposite to the two masses, so momentum
 is conserved.
 
-**Bending constraints.** Structural springs alone let the strand fold
-flat. A second set of stiffer springs spans every other mass, resisting
-curvature so the strand keeps a smooth bend and springs back toward
-straight when disturbed.
+Structural springs alone would let the strand fold flat, so a second set of
+stiffer springs spans every other mass, resisting curvature so the strand
+keeps a smooth bend and springs back toward straight when disturbed.
 
-**Integration.** Summing forces on each mass gives its acceleration, and
-the state advances by semi-implicit (symplectic) Euler — velocity first,
-then position from the _updated_ velocity:
+Summing forces on each mass gives its acceleration, and the state advances
+by semi-implicit (symplectic) Euler, which updates velocity first and then
+position from the _updated_ velocity:
 
 $$
 \mathbf{v}_i \gets \mathbf{v}_i + \Delta t\,\frac{\mathbf{f}_i}{m_i},
@@ -73,14 +71,14 @@ $$
 \mathbf{x}_i \gets \mathbf{x}_i + \Delta t\,\mathbf{v}_i.
 $$
 
-**Why the order matters.** Explicit Euler updates position from the _old_
-velocity, so on a spring — where the force always opposes displacement —
-each step lags the true trajectory and adds a little energy. Over many
-steps that error compounds: the oscillation grows instead of decaying,
-and the strand shakes itself apart. Semi-implicit Euler steps the
-velocity first, then advances position with the new velocity, which
-folds a half-step of implicitness into the position update and keeps the
-per-step energy bounded rather than growing. Stability still has a limit
+The order matters because explicit Euler updates position from the _old_
+velocity. On a spring, where the force always opposes displacement, each
+such step lags the true trajectory and adds a little energy, and over many
+steps that error compounds: the oscillation grows instead of decaying, and
+the strand shakes itself apart. Semi-implicit Euler steps the velocity
+first, then advances position with the new velocity, which folds a
+half-step of implicitness into the position update and keeps the per-step
+energy bounded rather than growing. Stability still has a limit
 set by the stiffest spring: the step must satisfy roughly
 $\Delta t \lesssim \sqrt{m/k_s}$, so raising $k_s$ to make the strand
 firmer forces a smaller $\Delta t$. The bending springs are the stiffest

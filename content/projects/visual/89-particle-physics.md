@@ -20,9 +20,9 @@ discretized with [smoothed-particle hydrodynamics][smoothed-particle]
 (SPH); a uniform spatial hash keeps neighbor search and collision detection
 near-linear as particle counts grow.
 
-**Fields from particles.** SPH represents a fluid as particles that each carry
-mass and sample the field around them. Any field quantity $A$ at a point is a
-kernel-weighted sum over nearby particles,
+SPH represents a fluid as particles that each carry mass and sample the
+field around them. Any field quantity $A$ at a point is a kernel-weighted
+sum over nearby particles,
 
 $$
 A(\mathbf r) = \sum_j m_j\,\frac{A_j}{\rho_j}\,W(\mathbf r - \mathbf r_j, h),
@@ -33,8 +33,7 @@ at particle $j$. Density is the same sum applied to mass,
 $\rho_i = \sum_j m_j\,W(\mathbf r_i - \mathbf r_j, h)$; pressure and viscosity
 forces come from the gradient and Laplacian of $W$.
 
-**The equations of motion.** Each particle obeys the momentum form of
-Navier-Stokes,
+Each particle obeys the momentum form of Navier-Stokes,
 
 $$
 \rho\,\frac{D\mathbf v}{Dt} = -\nabla p + \mu\,\nabla^2 \mathbf v + \rho\,\mathbf g,
@@ -44,11 +43,11 @@ a balance of pressure, viscosity, and gravity. Pressure follows an equation of
 state from density, $p = k(\rho - \rho_0)$, which resists compression and keeps
 the fluid roughly incompressible.
 
-**Neighbor search dominates.** Every kernel sum ranges only over particles
-within $h$, but finding them naively is $O(n^2)$. Positional indexing hashes
-each particle into a grid of cell size $h$; then only the particle's own cell
-and the cells bordering it can hold interactions, so each query touches a
-constant number of cells:
+Every kernel sum ranges only over particles within $h$, but finding them
+naively is $O(n^2)$, and that search dominates the cost. Positional indexing
+hashes each particle into a grid of cell size $h$; then only the particle's
+own cell and the cells bordering it can hold interactions, so each query
+touches a constant number of cells:
 
 $$
 % caption: A query particle (center) interacts only with particles inside its support

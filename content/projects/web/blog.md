@@ -12,16 +12,16 @@ tech:
 summary: "A ground-up redesign of my personal blog — statically generated with Nuxt and SCSS, deployed on Netlify at amittai.space, over a live layer of comments, inline highlights, a Spotify-fed dynamic island, and view counts served by a Rust WebSocket API."
 ---
 
-A ground-up redesign of my personal blog, and a new domain to go with it,
-[amittai.space][amittai]. Built with [Nuxt][nuxt] 4
-(Vue) and [Sass][sass-lang] on [Bun][bun], statically
-generated and deployed on [Netlify][netlify].
+A ground-up redesign of my personal blog, with a new domain to go with it
+at [amittai.space][amittai]. It is built with [Nuxt][nuxt] 4 (Vue) and
+[Sass][sass-lang] on [Bun][bun], statically generated and deployed on
+[Netlify][netlify].
 
-**The content is a compiled pipeline, not a folder of HTML.** Posts are
-Markdown in a [Nuxt Content][content] collection; build-time
-hooks rewrite each file before parsing (display-math `tikzpicture` blocks
-become fenced `tikz`, Markdown quotes become typographic ones), then every
-TikZ block is rendered to SVG with
+The content compiles through a build pipeline rather than sitting as a
+folder of HTML. Posts are Markdown in a [Nuxt Content][content] collection;
+build-time hooks rewrite each file before parsing (display-math
+`tikzpicture` blocks become fenced `tikz`, Markdown quotes become
+typographic ones), then every TikZ block is rendered to SVG with
 [node-tikzjax][node-tikzjax], math runs through
 `rehype-katex` against a custom macro layer, and code is highlighted by
 [Shiki][shiki]. Parsed pages land in a
@@ -30,12 +30,12 @@ post-transform `rawbody`; `nuxi generate` then crawls the link graph and
 freezes the site to static files, prerendering RSS, Atom, and JSON feeds, a
 sitemap, an `llms.txt`, and a `/raw/*.md` route off the same store.
 
-**A live layer sits on the static pages.** The browser opens one WebSocket,
-once, via a `useSocket` singleton to a companion Rust service
-([Actix-Web][actix] + [MongoDB][mongodb]) at
-`api.amittai.studio/connect`. Every frame is tagged with a `scope`, and each
-store subscribes only to the scopes it cares about; the connection queues
-messages while offline and reconnects on its own. Four features ride it.
+A live layer sits on top of the otherwise static pages. The browser opens
+one WebSocket, once, via a `useSocket` singleton to a companion Rust service
+([Actix-Web][actix] + [MongoDB][mongodb]) at `api.amittai.studio/connect`.
+Every frame is tagged with a `scope`, and each store subscribes only to the
+scopes it cares about; the connection queues messages while offline and
+reconnects on its own. Four features ride it.
 
 ## Comments
 
@@ -145,12 +145,12 @@ reader count. A REST-plus-SSE `/views/` route, backed by a MongoDB change
 stream with a heartbeat, mirrors the same data for consumers that are not on
 the socket.
 
-**One design system, two moods.** The visual language follows
-[minimalism][minimalism]: a restrained type scale, generous
-whitespace, few colors. Type, color, and spacing rules live in shared Sass
-partials rather than per-component scopes, so a single change propagates
-everywhere; a light and dark color mode and a stricter "Rams mode" toggle
-(applied before first paint to avoid a flash) sit on top. The move to
+The visual language follows [minimalism][minimalism]: a restrained type
+scale, generous whitespace, few colors. Type, color, and spacing rules live
+in shared Sass partials rather than per-component scopes, so a single change
+propagates everywhere, and a light and dark color mode plus a stricter "Rams
+mode" toggle (applied before first paint to avoid a flash) sit on top. The
+move to
 `amittai.space` was the occasion to retire the old design entirely rather
 than patch it, so nothing carried over except the writing.
 

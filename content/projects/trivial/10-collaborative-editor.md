@@ -15,8 +15,8 @@ summary: "A shared drawing canvas in Java where multiple clients edit in real ti
 A collaborative drawing editor over a shared canvas. Multiple clients
 connect at once, and each sees the others' edits in real time.
 
-**Server as the source of truth.** `SketchServer` listens on port 4242
-and holds the authoritative `Sketch`, a `TreeMap<Integer, Shape>` keyed
+The server is the single source of truth. `SketchServer` listens on port
+4242 and holds the authoritative `Sketch`, a `TreeMap<Integer, Shape>` keyed
 by shape id. A client's `Editor` never mutates shared state directly: it
 sends a one-line message — `draw <type> x1 y1 x2 y2 color`,
 `move id dx dy`, `recolor id color`, or `delete id` — over its
@@ -49,7 +49,7 @@ $$
 \end{tikzpicture}
 $$
 
-**Concurrency without corruption.** The server dedicates one
+Concurrency stays safe because the server dedicates one
 `SketchServerCommunicator` thread to each client, so edits can arrive at
 the same instant. The methods that touch shared state — `addCommunicator`,
 `removeCommunicator`, and `broadcast` — are `synchronized`, so one thread

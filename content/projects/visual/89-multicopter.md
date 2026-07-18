@@ -20,8 +20,8 @@ state — position, orientation, and their velocities — advances by numericall
 integrating the [Newton-Euler equations][newton-euler]
 of motion with the [Euler method][euler-method].
 
-**A rigid body is not a point mass.** It has orientation, and it spins. The
-state carries a position $\mathbf x$ and linear velocity $\mathbf v$ for the
+Unlike a point mass, a rigid body has orientation and spins, so its state
+carries a position $\mathbf x$ and linear velocity $\mathbf v$ for the
 center of mass, plus an orientation (a rotation $R$) and an angular velocity
 $\boldsymbol\omega$. Linear motion follows Newton's second law; rotation follows
 Euler's equation, coupling angular acceleration to torque through the inertia
@@ -35,9 +35,9 @@ $$
 The $\boldsymbol\omega \times (I\boldsymbol\omega)$ term is the gyroscopic
 coupling; without it a tumbling body would not precess.
 
-**Rotors make lift and torque.** A rotor spinning at angular speed $\Omega_k$
-generates a thrust along its axis roughly proportional to the square of its
-speed, $\mathbf f_k \approx \kappa\,\Omega_k^2\,\hat{\mathbf n}_k$. Summed, the
+A rotor spinning at angular speed $\Omega_k$ generates a thrust along its
+axis roughly proportional to the square of its speed,
+$\mathbf f_k \approx \kappa\,\Omega_k^2\,\hat{\mathbf n}_k$. Summed, the
 thrusts lift the craft; differences between them produce a net torque
 $\boldsymbol\tau = \sum_k \mathbf r_k \times \mathbf f_k$ about the center of
 mass, which is what tilts and yaws it. Both feed the equations above.
@@ -61,8 +61,9 @@ $$
 \end{tikzpicture}
 $$
 
-**Differential thrust steers.** With the rotors laid out around the body, the
-three attitude moments come from spinning them unequally. Speeding up the
+Steering comes from differential thrust. With the rotors laid out around
+the body, the three attitude moments come from spinning them unequally.
+Speeding up the
 rotors on one side and slowing the other tilts the thrust asymmetry into a
 **roll** about the forward axis; doing the same front-to-back produces
 **pitch**. **Yaw** is subtler: each rotor also drags against the air with a
@@ -88,9 +89,9 @@ until the window closes
 
 :multicopter-viz
 
-**Integrating the motion.** The coupled nonlinear system has no closed form, so
-the simulator steps it forward with semi-implicit Euler at a fixed timestep $h$
-— velocities first, then positions from the new velocities:
+The coupled nonlinear system has no closed form, so the simulator steps it
+forward with semi-implicit Euler at a fixed timestep $h$, taking velocities
+first and then positions from the new velocities:
 
 ```algorithm
 caption: $\textsc{Step}(h)$ — one semi-implicit Euler update of the rigid body
@@ -106,8 +107,8 @@ The orientation update comes from $\dot R = [\boldsymbol\omega]_\times R$, where
 $[\boldsymbol\omega]_\times$ is the skew-symmetric cross-product matrix; a Euler
 step drifts $R$ off the rotation group, so it is re-orthonormalized each frame.
 Updating velocity before position, rather than after, keeps the integrator
-stable at the timesteps a real-time simulation can afford — explicit Euler
-gains energy and diverges.
+stable at the timesteps a real-time simulation can afford, whereas explicit
+Euler gains energy and diverges.
 
 [rigid-body]:   https://en.wikipedia.org/wiki/Rigid_body
 [multirotor]:   https://en.wikipedia.org/wiki/Multirotor

@@ -44,24 +44,24 @@ $$
 \end{tikzpicture}
 $$
 
-**CRUD over one resource.** The service knows a single Mongoose model,
+The service does CRUD over one resource, a single Mongoose model,
 `Post` (`models/post_model.ts`): a `title`, a `tags` array of strings,
 `content`, and a `coverUrl`. The router in `router.ts`, mounted at `/api`,
 maps HTTP verbs onto it: `POST /posts` creates, `GET /posts` lists, `GET
 /posts/:id` fetches one, `PUT /posts/:id` edits, and `DELETE /posts/:id`
-removes. Each route is thin. It reads the body or the `:id`, calls the
+removes. Each route stays thin, reading the body or the `:id`, calling the
 matching function in `post_controller.ts` (`createPost`, `getPosts`,
-`getPost`, `updatePost`, `deletePost`), and returns JSON.
+`getPost`, `updatePost`, `deletePost`), and returning JSON.
 
-**Types across the boundary.** The `PostType` interface declares a post's
-shape once and reuses it for the controller signatures and the request and
-response bodies, so a renamed field surfaces as a compile error rather than
-a runtime surprise. One wrinkle rides on it: a post stores `tags` as an
+A single `PostType` interface carries the types across the boundary,
+declaring a post's shape once and reusing it for the controller signatures
+and the request and response bodies, so a renamed field surfaces as a
+compile error rather than a runtime surprise. One wrinkle rides on it: a post stores `tags` as an
 array, and `reformatPostTags` in `utils` joins them into a comma string on
 the way out, so list and single-post responses both hand the front-end the
 form it expects.
 
-**Standalone by design.** `server.ts` wires up `cors`, `morgan` request
+The API stands alone by design. `server.ts` wires up `cors`, `morgan` request
 logging, and JSON body parsing, then connects to `MONGODB_URI` and mounts
 the router; `api/index.ts` re-exports the app for Vercel's serverless
 runtime. Keeping the API separate lets the

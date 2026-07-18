@@ -22,9 +22,9 @@ typesetting, and finally placement in a published issue. The invariants
 that keep that pipeline honest live in [SQL][sql]
 triggers and stored routines, not in the client.
 
-**The schema.** `Manuscript` is the hub. Each manuscript carries a
-research-interest code (`RICodes`), an assigned `Editor`, and — once
-placed — an `Issue`. Two junction tables record the many-to-many facts:
+`Manuscript` is the hub of the schema. Each manuscript carries a
+research-interest code (`RICodes`), an assigned `Editor`, and, once
+placed, an `Issue`. Two junction tables record the many-to-many facts:
 `Manuscript_Author` links a manuscript to its authors and keeps an
 `author_ordinal` so the lead author is just ordinal 1, and
 `Reviewer_has_Manuscript` holds each reviewer's five scores
@@ -64,8 +64,8 @@ $$
 \end{tikzpicture}
 $$
 
-**Logic in the database.** Triggers move the workflow rules out of the
-client and into the engine, where they fire for every writer.
+Triggers move the workflow rules out of the client and into the engine,
+where they fire for every writer.
 `AutoRejectManuscriptOnNoReviewers` runs before a manuscript is inserted:
 if no reviewer holds its research-interest code, the row is stamped
 `rejected` on arrival rather than entering a queue that can never clear.
@@ -74,28 +74,28 @@ assignments and code links, and `ResetManuscriptStatusonReviewerResign`
 inspects each manuscript they leave behind: if it now has no reviewer but
 another qualified one exists, the manuscript is reset to `Submitted` and
 a `SIGNAL` message is raised; otherwise it is set to `Rejected`.
-`AutoAcceptManuscript` collapses a step — a status set to `Accepted`
+`AutoAcceptManuscript` collapses a step: a status set to `Accepted`
 immediately becomes `Typesetting`. And `IndexAuthor`, `IndexReviewer`,
 and `IndexEditor` each fire after an insert to create the matching
 `credentials` row, so every new person is a valid login without a second
 statement from the client.
 
-**Stored routines and views.** The `MakeDecision` procedure averages a
-manuscript's reviewer scores and returns `Accepted` when the total
-reaches 40, `Rejected` below it. Read-side rollups are packaged as
-views: `ReviewQueue` gathers every under-review manuscript with its
+Decision logic and read-side rollups round out the database side. The
+`MakeDecision` procedure averages a manuscript's reviewer scores and
+returns `Accepted` when the total reaches 40, `Rejected` below it. The
+rollups are packaged as views: `ReviewQueue` gathers every under-review
+manuscript with its
 reviewers concatenated into one row, `PublishedIssues` lists the
 contents of each completed issue in page order, and
 `LeadAuthorManuscripts` filters `Manuscript_Author` down to
 `author_ordinal = 1`.
 
-**The Python side is thin.** `main.py` opens the connection and reads a
+The Python side stays thin. `main.py` opens the connection and reads a
 user ID; role modules (`author.py`, `editor.py`, `reviewer.py`) issue
 parameterized statements through `dbutils.py`. A `/rebuild` flag
 reconstructs the tables and a `/populate` flag seeds sample data;
-otherwise only the two admin accounts exist. The interesting
-work — the constraints, the automation, the consistency guarantees — sits
-in the schema.
+otherwise only the two admin accounts exist. The interesting work sits in
+the schema: the constraints, the automation, the consistency guarantees.
 
 Lookups by key resolve through the engine's indexes — balanced
 B-trees — rather than a full table scan.

@@ -44,11 +44,10 @@ $$
 \end{tikzpicture}
 $$
 
-**Backtracking search.** Assign variables one at a time; after each assignment,
-check the constraints touching it; on a dead end, undo the last assignment and
-try the next value. This walks the same tree as naive generate-and-test but
-prunes a branch the moment it turns inconsistent, rather than only at a complete
-assignment.
+Backtracking assigns variables one at a time, checks the constraints touching
+each new assignment, and on a dead end undoes the last assignment to try the next
+value. It walks the same tree as naive generate-and-test but prunes a branch the
+moment it turns inconsistent, rather than only at a complete assignment.
 
 ```algorithm
 caption: $\textsc{Backtrack}(A, csp)$ — depth-first search over partial assignments
@@ -65,7 +64,7 @@ for each value $v$ of $X$, ordered by LCV, do
 return failure
 ```
 
-**Ordering heuristics.** Three choices decide which branch to try first:
+Three ordering heuristics decide which branch to try first:
 
 - **Minimum remaining values (MRV)** picks the variable with the fewest legal
   values left, failing fast on the tightest variable.

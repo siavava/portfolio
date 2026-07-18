@@ -47,12 +47,12 @@ $$
 \end{tikzpicture}
 $$
 
-**Crawling is graph traversal.** The web is a directed graph — pages are
-vertices, links are edges — and the crawler runs breadth-first search
-over it from a seed URL, bounded by a maximum depth and restricted to a
-configurable domain, so the crawl stays inside its assigned subset of
-the web. The frontier is a `bag_t` of pages still to visit and the
-seen-set a `hashtable_t` of URLs already queued:
+Crawling the web is graph traversal: the web is a directed graph whose
+vertices are pages and whose edges are links, and the crawler runs
+breadth-first search over it from a seed URL, bounded by a maximum depth
+and restricted to a configurable domain, so the crawl stays inside its
+assigned subset of the web. The frontier is a `bag_t` of pages still to
+visit and the seen-set a `hashtable_t` of URLs already queued:
 
 ```algorithm
 caption: $\textsc{Crawl}(s, k)$ — BFS over the web graph
@@ -74,7 +74,7 @@ line, crawl depth on the second, raw HTML below) inside a directory
 `pagedir_init` stamps with a `.crawler` sentinel so the later stages can
 confirm they were handed a real crawl.
 
-**The index is an inverted map.** The indexer walks that directory and,
+The indexer inverts those pages into a map. It walks that directory and,
 for each word `normalizeWord` lowercases out of a page, updates an
 `index_t`, a `hashtable_t` mapping each word to a `counters_t` that
 tallies $(\mathit{docID} \to \mathit{count})$. `index_print` serializes it
@@ -83,7 +83,7 @@ pairs; `index_load` reconstructs the same structure, so the querier reads
 back exactly what the indexer wrote. Looking up a query term is $O(1)$ per
 word rather than a scan over every document.
 
-**Ranked boolean queries.** The querier parses queries with implicit
+The querier answers ranked boolean queries. It parses them with implicit
 `and` conjunctions and explicit `or` disjunctions, honoring precedence
 (`and` binds tighter). Scores follow the operators: a conjunction takes
 the minimum over its terms, a disjunction the sum,

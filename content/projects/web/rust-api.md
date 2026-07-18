@@ -18,12 +18,12 @@ on [Express][expressjs] is routine; this was a proof-of-concept for a
 larger project, testing whether Rust's guarantees carry into everyday web
 plumbing.
 
-**Why Rust for a web service.** Rust offers C-like performance without a garbage
+I reached for Rust here because it offers C-like performance without a garbage
 collector, and its borrow checker rules out use-after-free and data races at
 compile time rather than at runtime. For an API expected to stay up under
 concurrent load, that moves a class of failures from production to the build.
 
-**One model, four routes.** The service is a small events API. A single `Event`
+The service is a small events API built on one model and four routes. A single `Event`
 struct in `events.rs` carries a `name`, `description`, a BSON `time`, a
 `location`, and a `Vec<String>` of `participants`, plus an optional `_id` that
 serde skips when it is absent — so a client can `PUT` an event without inventing
@@ -32,7 +32,7 @@ handlers: `GET /` (a health check), `GET /events` and `GET /events/<id>` to read
 all events or one by id, and `PUT /events` to insert one. It is create-and-read,
 not full CRUD.
 
-**Rocket handles the request lifecycle.** Routes are ordinary async functions
+Rocket owns the request lifecycle. Routes are ordinary async functions
 annotated with a method and path. Rocket parses the path and the JSON body into
 typed arguments before the handler runs, so a `PUT` whose body does not
 deserialize into an `Event` is rejected before any logic executes. The Mongo
@@ -60,8 +60,8 @@ $$
 \end{tikzpicture}
 $$
 
-**Serde bridges three type systems.** A document crosses three representations —
-JSON on the wire, BSON in the database, and a Rust struct in the handler — and
+Serde bridges the three type systems in play. A document crosses three representations,
+JSON on the wire, BSON in the database, and a Rust struct in the handler, and
 serde derives the serialization and deserialization between them straight from
 the struct definition. The friction is front-loaded: getting the types and
 lifetimes to line up across async handlers is the work, after which the compiler

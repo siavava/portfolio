@@ -21,12 +21,11 @@ projects those positions onto a set of constraints. The scheme is stabler than
 mass-spring at large timesteps, generalizes to many constraint types, and costs
 less per step.
 
-**Predict, then project.** A step first moves each particle by its external
-forces alone, producing a predicted position $\mathbf p_i$. The predictions
-ignore internal interactions and generally violate the constraints — a
-stretched edge, an overlapping pair — so the solver corrects them. Each
-constraint $C(\mathbf p) = 0$ is enforced by a position correction along its
-gradient,
+Each step first moves every particle by its external forces alone,
+producing a predicted position $\mathbf p_i$. The predictions ignore
+internal interactions and generally violate the constraints (a stretched
+edge, an overlapping pair), so the solver corrects them. Each constraint
+$C(\mathbf p) = 0$ is enforced by a position correction along its gradient,
 
 $$
 \Delta \mathbf p_i = -\,s\,w_i\,\nabla_{\mathbf p_i} C, \qquad
@@ -58,11 +57,11 @@ surface, so the correction moves each particle along that normal; the
 factor $s$ sets how far, chosen so a single step reaches $C = 0$ when the
 constraint is locally linear and is re-solved when it is not.
 
-**A Gauss-Seidel sweep.** Constraints are projected one after another, each
-seeing the corrections of the ones before it, and the whole set is swept a few
-times per step. More iterations stiffen the material toward rigid. Once the
-projections settle, velocities are read back from how far each particle
-actually moved:
+Constraints are projected one after another in a Gauss-Seidel sweep, each
+seeing the corrections of the ones before it, and the whole set is swept a
+few times per step, with more iterations stiffening the material toward
+rigid. Once the projections settle, velocities are read back from how far
+each particle actually moved:
 
 ```algorithm
 caption: $\textsc{Step}(h)$ — one position-based dynamics update

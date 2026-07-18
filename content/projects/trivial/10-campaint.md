@@ -15,8 +15,8 @@ colored object, click to sample its color, and the program tracks that
 object frame to frame, trailing a painted stroke across a persistent
 canvas.
 
-**Growing regions by color.** `CamPaint` stores the clicked pixel as its
-`targetColor`, and each frame hands the image to a `RegionFinder`. That
+`CamPaint` stores the clicked pixel as its `targetColor` and each frame
+hands the image to a `RegionFinder`, which grows regions by color. That
 finder [flood fills][flood-fill] outward
 from every matching seed, queuing a pixel's neighbors when its red,
 green, and blue channels each fall within `maxColorDiff` (45) of the
@@ -24,10 +24,10 @@ target; a scratch image marks visited pixels, and any region smaller
 than `minRegion` (20) points is dropped as noise. `largestRegion()`
 returns the biggest surviving region as the brush.
 
-**A canvas that persists.** Rather than track a single centroid, the
-program stamps every pixel of that largest region — in blue — into a
-separate `painting` layer, an ARGB `BufferedImage` that accumulates
-across frames. The live camera feed refreshes underneath, so the drawing
+Rather than track a single centroid, the program stamps every pixel of
+that largest region, in blue, into a separate `painting` layer, an ARGB
+`BufferedImage` that accumulates across frames. The live camera feed
+refreshes underneath, so the drawing
 stays put as the hand moves, and a keypress switches the display among
 the raw webcam, the regions recolored at random, and the painting alone.
 

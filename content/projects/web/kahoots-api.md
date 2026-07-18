@@ -19,7 +19,7 @@ everyone answers the same timed multiple-choice questions. Built with
 [Express][expressjs], and [Node][nodejs], with
 quizzes and game state persisted in [MongoDB][mongodb].
 
-**Resources over HTTP.** The API is organized around three resources.
+The API is organized around three resources exposed over HTTP.
 A **quiz** is an ordered list of questions, each with its choices and the
 index of the correct one. A **game** is a session created from a quiz,
 identified by a join code. A **player** belongs to a game and accumulates
@@ -27,8 +27,8 @@ a running score. Express routers expose create, read, update, and delete
 over each, and Mongo stores them as documents so a session survives
 between requests rather than living in process memory.
 
-**Time-weighted scoring.** A correct answer earns points scaled by how
-quickly it arrives inside the question's time limit; a wrong answer earns
+Scoring is time-weighted: a correct answer earns points scaled by how
+quickly it arrives inside the question's time limit, and a wrong answer earns
 nothing. With response time $t$ and question limit $T$, the standard rule
 awards
 
@@ -41,8 +41,8 @@ full $P_{\max}$ and one at the buzzer is worth half. The server times each
 question from when it is served, which keeps scoring authoritative on the
 backend rather than trusting a client-reported clock.
 
-**Game flow.** A session moves through a lobby while players join, then
-one question phase per question, then a results phase that reveals the
+The game flow runs as a small state machine: a session moves through a lobby
+while players join, then one question phase per question, then a results phase that reveals the
 answer and the updated standings. The server holds the current phase and
 advances it, so every client reads the same state from one source.
 

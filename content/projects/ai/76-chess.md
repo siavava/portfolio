@@ -23,9 +23,9 @@ transposition tables, move ordering, null-move pruning, aspiration
 windows, and quiescence search — that make the textbook algorithm
 play well under a real clock.
 
-**Searching the game tree.** Chess is a zero-sum game, so one number
-scores every position: the engine (MAX) picks the child of highest
-value, assuming the opponent (MIN) always answers with the lowest.
+Chess is a zero-sum game, so one number scores every position: the
+engine (MAX) picks the child of highest value, assuming the opponent
+(MIN) always answers with the lowest.
 Minimax computes that value by recursing to the leaves,
 
 $$
@@ -101,8 +101,8 @@ With perfect move ordering, alpha-beta examines only $O(b^{m/2})$ nodes
 — the same horizon for half the exponent, which in practice doubles the
 reachable search depth.
 
-**Making depth affordable.** Each refinement strengthens the pruning
-or the evaluation:
+Each refinement past alpha-beta strengthens either the pruning or the
+evaluation:
 
 - [Iterative deepening][iterative-deepening]
   searches depth $1, 2, 3, \ldots$ until time runs out — and each pass's

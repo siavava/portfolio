@@ -20,7 +20,7 @@ Dartmouth Undergraduate Journal of Science,
 to show how a network makes predictions on simple classification and
 regression problems.
 
-**A network is composed of layers.** The code is a small `Neural` module
+The network is a stack of layers, and the code is a small `Neural` module
 whose `Network` is a mutable struct of four arrays — activations `a`, weights
 `W`, biases `b` (the source calls them error corrections), and a scalar step
 size `ϵ` — plus the last `result`. `setup(input_size, hidden_sizes,
@@ -60,7 +60,7 @@ $$
 \end{tikzpicture}
 $$
 
-**Backpropagation is the chain rule, layer by layer.** Write the
+Backpropagation is the chain rule applied layer by layer. Write the
 pre-activation of layer $l$ as $z^{(l)} = W^{(l)} a^{(l-1)} + b^{(l)}$, so
 $a^{(l)} = \sigma(z^{(l)})$. The loss reaches $W^{(l)}$ only through
 $z^{(l)}$, so define the local sensitivity $\delta^{(l)} = \partial L / \partial z^{(l)}$.
@@ -101,11 +101,9 @@ tasks — an exponential curve, a noisy sequence — and on a two-dimensional
 decision boundary where points are labeled by which quadrant they fall in,
 plotting predictions and the learned boundary with Gadfly.
 
-**Why hand-roll it in Julia.** A framework hides $\delta^{(l)}$ behind
-autodiff. Writing the network in Julia without one meant deriving and
-coding each $\sigma'$, each transpose $W^{(l+1)\top}$, and each outer
-product by hand, so nothing about the gradient stayed implicit. Keeping the
-moving parts visible rather than behind an abstraction was the point of the
-demonstration.
+A framework hides $\delta^{(l)}$ behind autodiff. Writing the network in
+Julia without one meant deriving and coding each $\sigma'$, each transpose
+$W^{(l+1)\top}$, and each outer product by hand, so nothing about the
+gradient stayed implicit, which was the point of the demonstration.
 
 [10ppl-bl]: https://drive.google.com/file/d/10pPL-bl--rfk-sIrPgorz_zRhDCEhmXi

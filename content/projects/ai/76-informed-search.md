@@ -21,7 +21,7 @@ obstacles to a target cell, comparing
 [A\* search][a-search] against
 [greedy best-first search][greedy-algorithm].
 
-**Evaluation function.** Each frontier state $n$ is scored by
+Each frontier state $n$ is scored by
 
 $$
 f(n) = g(n) + h(n),
@@ -56,8 +56,8 @@ $$
 \end{tikzpicture}
 $$
 
-**Heuristics.** On a grid the estimate is a distance to the goal cell. For
-four-connected movement,
+On a grid the estimate is a distance to the goal cell. For four-connected
+movement,
 [Manhattan distance][taxicab-geometry]
 
 $$
@@ -70,8 +70,7 @@ $\sqrt{(x_n - x_g)^2 + (y_n - y_g)^2}$ fits the true geometry. Both are
 admissible — never overestimating the real remaining cost — which is exactly the
 condition under which A-star returns an optimal path.
 
-**Admissibility and consistency.** Two properties of a heuristic control what A\*
-guarantees:
+Two properties of a heuristic control what A\* guarantees:
 
 - **Admissible.** $h(n) \le h^\ast(n)$ at every node, where $h^\ast(n)$ is the
   true remaining cost. The estimate never overshoots.
@@ -93,7 +92,7 @@ A\* expands the smaller $f$ first, so it reaches $n$ — and eventually the true
 $h^\ast$ can inflate a good node's $f$ past a bad goal's and let the bad goal out
 first.
 
-**Dominance.** Among admissible heuristics, larger is better. If $h_2(n) \ge h_1(n)$
+Among admissible heuristics, larger is better. If $h_2(n) \ge h_1(n)$
 everywhere, $h_2$ **dominates** $h_1$, and A\* with $h_2$ expands no more nodes than
 with $h_1$: every node A\* can safely skip under $h_1$ it also skips under $h_2$.
 The pointwise maximum of two admissible heuristics is itself admissible and
@@ -115,8 +114,8 @@ while frontier is not empty do
 return failure
 ```
 
-**Greedy against A-star.** Greedy search often expands fewer states, since it
-heads straight at the goal, but it gives up optimality: a heuristic that points
+Greedy search often expands fewer states, since it heads straight at the goal,
+but it gives up optimality: a heuristic that points
 toward a dead end walks the robot into it. A-star pays for more expansions with a
 guarantee — under an admissible heuristic the first goal it removes from the
 frontier sits on a shortest path. Setting $h = 0$ collapses A-star to uniform-cost

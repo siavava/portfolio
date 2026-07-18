@@ -15,20 +15,19 @@ A set of shell scripts that wrangle a US COVID-19 vaccine dataset,
 stream of comma-separated lines and composes standard Unix filters
 through pipes.
 
-**`top10.sh`** builds a Markdown table of the ten states with the most
-doses administered. It keeps the `All`-vaccine-type rows, projects the
+`top10.sh` builds a Markdown table of the ten states with the most doses
+administered. It keeps the `All`-vaccine-type rows, projects the
 `Province_State` and `Doses_admin` columns with `cut -d ,`, sorts them
-numerically in descending order, and takes the first ten —
-`sed -n '/All/p' | cut -d , -f2,10 | sort -t ',' -k 2 -nr | head -n 10` —
+numerically in descending order, and takes the first ten
+(`sed -n '/All/p' | cut -d , -f2,10 | sort -t ',' -k 2 -nr | head -n 10`),
 then wraps each field in pipe characters to form the table rows.
 
-**`summarize.sh`** is a small documentation tool. Given `.sh`, `.c`, or
-`.h` files, it emits each one inside a fenced Markdown code block, using
-[`sed`][sed] to strip the shebang and the
-leading header comment, and selecting the language by a
-[regular expression][regular-expression]
-match on the file extension. Between them the scripts cover involved
-reporting tasks without a single hand-written loop over the data.
+`summarize.sh` is a small documentation tool that emits each `.sh`, `.c`,
+or `.h` file it is given inside a fenced Markdown code block. It uses
+[`sed`][sed] to strip the shebang and the leading header comment, and
+selects the language by a [regular expression][regular-expression] match on
+the file extension. Between them the two scripts cover involved reporting
+tasks without a single hand-written loop over the data.
 
 [sed]:                https://en.wikipedia.org/wiki/Sed
 [regular-expression]: https://en.wikipedia.org/wiki/Regular_expression

@@ -23,9 +23,8 @@ writing (the
 dataset, filtered to that year), building its vocabulary from the sorted set
 of characters in the text, and generates one character at a time.
 
-**Attention is a soft lookup.** Each token emits a query, a key, and a
-value; a token attends to the others by how well its query matches their
-keys:
+Attention works as a soft lookup: each token emits a query, a key, and a
+value, and attends to the others by how well its query matches their keys:
 
 $$
 \operatorname{Attention}(Q, K, V)
@@ -65,7 +64,7 @@ $$
 \end{tikzpicture}
 $$
 
-**The block, repeated.** A `Block` is pre-norm: `x = x + sa(ln1(x))` then
+A `Block` is pre-norm: `x = x + sa(ln1(x))` then
 `x = x + ffwd(ln2(x))`, where `FeedFoward` widens to four times the model
 dimension through a `ReLU` and back. `GPTLanguageModel` stacks six of these
 in an `nn.Sequential`, fronted by a token embedding table and a learned

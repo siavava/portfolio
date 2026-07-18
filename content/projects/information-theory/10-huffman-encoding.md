@@ -19,8 +19,8 @@ Frequent characters get short binary codes and rare ones long codes, and
 no code is a prefix of another, so the compressed stream decodes back to
 the original with no ambiguity.
 
-**Greedy construction.** The codes come from a binary tree built bottom
-up. Start with one leaf per character, keyed by its frequency, and
+The codes come from a binary tree built bottom up. Start with one leaf per
+character, keyed by its frequency, and
 repeatedly merge the two lowest-frequency nodes under a new parent whose
 frequency is their sum, until a single tree remains. Reading the tree
 root-to-leaf — 0 for a left branch, 1 for a right — gives each character
@@ -64,14 +64,15 @@ $$
 \end{tikzpicture}
 $$
 
-**Prefix-free decoding.** Because every symbol lands on a leaf, no codeword is a
-prefix of another, and the compressed stream needs no separators between symbols.
+Because every symbol lands on a leaf, no codeword is a prefix of another, and
+the compressed stream needs no separators between symbols.
 Decoding walks the tree from the root, branching left on a 0 and right on a 1;
 the moment it reaches a leaf it emits that symbol and jumps back to the root. Each
 input bit is read once, so decoding is linear in the length of the stream.
 
-**Why the greedy choice is optimal.** A prefix code is exactly a labeling
-where every character is a leaf, so no code sits on the path to another.
+The greedy choice turns out to be optimal, and the reason is structural. A
+prefix code is exactly a labeling where every character is a leaf, so no code
+sits on the path to another.
 The cost of a tree is the expected code length
 
 $$
@@ -83,7 +84,7 @@ first is safe because they can always be pushed to the deepest level of
 some optimal tree without raising $\bar{L}$; induction on the merges then
 gives a globally optimal code. No prefix code beats it.
 
-How close is that to the theoretical floor? Shannon's source coding theorem
+The theoretical floor sits just below that. Shannon's source coding theorem
 sets the entropy
 
 $$

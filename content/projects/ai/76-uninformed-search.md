@@ -21,8 +21,8 @@ graph of states without ever building it in full. This project applies
 [depth-first search][depth-first] to the
 chickens-and-foxes river crossing.
 
-**The state space.** A state records how many chickens and foxes sit on each
-bank and which side the boat is on. A move ferries one or two animals across,
+A state records how many chickens and foxes sit on each bank and which side the
+boat is on. A move ferries one or two animals across,
 and a state is legal only when foxes never outnumber chickens on a bank that
 still has chickens. The start has everyone on one side; the goal has everyone on
 the other. Nothing enumerates the graph ahead of time — successors are generated
@@ -53,8 +53,8 @@ return failure
 A queue for the frontier gives BFS, a stack gives DFS — the rest of the
 procedure is identical.
 
-**What each guarantees.** Let $b$ be the branching factor, $d$ the depth of the
-shallowest goal, and $m$ the depth of the deepest state. BFS is **complete** (with
+The two diverge in what they guarantee. Let $b$ be the branching factor, $d$ the
+depth of the shallowest goal, and $m$ the depth of the deepest state. BFS is **complete** (with
 finite $b$ it always finds a goal when one exists) and **optimal** when every move
 costs the same, since it reaches goals in order of depth. Its price is memory: it
 holds an entire frontier level at once, so time and space are both $O(b^d)$, and

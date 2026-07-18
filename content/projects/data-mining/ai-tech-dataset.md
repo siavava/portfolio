@@ -23,7 +23,7 @@ technology publishers — [DeepMind][deepmind],
 [TechCrunch][techcrunch] — into an open dataset published on
 [HuggingFace][hf-ai].
 
-**Extraction as an arrow pipeline.** The parser (`MyData.Parser`) is built
+Extraction runs as an arrow pipeline. The parser (`MyData.Parser`) is built
 on [HXT][hxt], whose
 [arrows][afp-arrows] generalize a
 plain function $b \to c$ into a composable stage over an XML tree.
@@ -62,16 +62,16 @@ $$
 \end{tikzpicture}
 $$
 
-**Configuration, not code.** A `Config` record loaded from `config.yml`
-with `Data.Yaml` drives the run: `domains` are the seed URLs, `targets`
+A `Config` record loaded from `config.yml` with `Data.Yaml` drives the run,
+keeping the tuning in configuration rather than code: `domains` are the seed URLs, `targets`
 are the keywords a page is scored against, `limit` caps the work queue,
 and `wordcount` sets how many keyword hits a page needs to be kept.
 Retargeting the scraper at a new publisher is a line in `config.yml`, not
 a change to the parser.
 
-**Crawling by breadth-first search.** `Main.iter` walks each publisher's
-page graph outward from the seed URLs, holding the frontier as a queue and
-the visited URLs as a `Data.Set`; set difference (`\\`) drops links already
+`Main.iter` walks each publisher's page graph outward from the seed URLs by
+breadth-first search, holding the frontier as a queue and the visited URLs as
+a `Data.Set`; set difference (`\\`) drops links already
 seen, and `isAllowed` keeps the crawl inside the seed domains. Each fetched
 page's body is folded into a `Trie` of words, and `hasKeyWords` accepts the
 page only when at least `wordcount` targets are present — the filter that

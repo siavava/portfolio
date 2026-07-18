@@ -19,7 +19,7 @@ writing the ordered results to separate files.
 
 The extra-credit visualizer reads back the population-sorted file and
 animates the 50 most-populous cities over a world map drawn with
-`cs1lib`. It reveals one city every 30 frames, converting each
+`cs1lib`. It adds one city every 30 frames, converting each
 longitude/latitude into pixel coordinates (`scaled_x = 2*lon + 360`,
 `scaled_y = (90 - lat) * height/180`), dropping a marker with the city's
 rank and population and leaving the earlier markers behind as it works

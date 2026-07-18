@@ -20,9 +20,10 @@ data. Both add a penalty on the coefficient magnitudes to the
 least-squares objective; the difference in the penalty's shape changes
 what the fitted model looks like.
 
-**Same fit term, different penalty.** Ordinary least squares minimizes
-squared error alone, which overfits when features are many or
-correlated. Ridge and lasso add a norm penalty scaled by $\lambda$:
+Both share the same fit term and differ only in the penalty. Ordinary
+least squares minimizes squared error alone, which overfits when features
+are many or correlated. Ridge and lasso add a norm penalty scaled by
+$\lambda$:
 
 $$
 J_{\text{ridge}}(\mathbf{w}) = \lVert X\mathbf{w} - y \rVert_2^2 + \lambda \lVert \mathbf{w} \rVert_2^2,
@@ -35,8 +36,9 @@ the sum of absolute values ($L_1$). In both, $\lambda$ trades fit against
 model complexity: $\lambda = 0$ recovers plain least squares, and larger
 $\lambda$ shrinks the coefficients further toward zero.
 
-**Why lasso zeros coefficients and ridge does not.** Each penalized
-objective has an equivalent constrained form: minimize the squared error
+Whether a penalty zeros coefficients comes down to the geometry of its
+constraint region. Each penalized objective has an equivalent constrained
+form: minimize the squared error
 subject to $\lVert \mathbf{w} \rVert \le t$, with $t$ set by $\lambda$.
 The squared-error term draws elliptical contours around the
 unconstrained least-squares solution, and the fit is the point where the
@@ -85,8 +87,7 @@ coefficient without setting any to zero. Ridge keeps all features with
 small weights; lasso performs feature selection, producing a sparse model
 that names the few features that matter.
 
-**Solving each.** Ridge is differentiable everywhere, so setting its
-gradient to zero,
+Ridge is differentiable everywhere, so setting its gradient to zero,
 
 $$
 2 X^\top (X\mathbf{w} - y) + 2\lambda \mathbf{w} = 0
@@ -100,8 +101,8 @@ $\lVert \mathbf{w} \rVert_1$ is not differentiable at zero — the very
 kink that produces the sparse corner — so it is solved iteratively with
 coordinate descent or a subgradient method.
 
-**Choosing $\lambda$.** The penalty strength is a hyperparameter, tuned
-by cross-validation: fit at a grid of $\lambda$ values, score each on
+The penalty strength $\lambda$ is a hyperparameter, tuned by
+cross-validation: fit at a grid of $\lambda$ values, score each on
 held-out folds, and keep the one that generalizes best.
 
 [tikhonov-regularization]: https://en.wikipedia.org/wiki/Tikhonov_regularization

@@ -21,21 +21,21 @@ send keystrokes, and receive the slice of the map their character can
 currently see. The game ends when the last pile is collected, and the
 player with the most gold wins.
 
-**Client and server.** The server is authoritative. It owns the grid,
-the set of gold piles and their values, and each connected player's
-location and purse. A client is a thin terminal: it captures movement
-keystrokes, ships them to the server as short messages over a socket,
-and redraws whatever display string the server sends back. The two
-speak a small line-based protocol — a join message and per-keystroke
-moves upstream, a grid string and a status banner downstream. Every
-state change — a move, a pickup, a join — happens on the server and
-fans out to the clients, so no two clients can disagree about where the
-gold is or who holds it. The client keeps no authoritative state of its
-own; if its socket drops, the server can drop that player without the
-rest of the game noticing.
+The server is authoritative: it owns the grid, the set of gold piles and
+their values, and each connected player's location and purse. A client is
+a thin terminal that captures movement keystrokes, ships them to the
+server as short messages over a socket, and redraws whatever display
+string the server sends back. The two speak a small line-based protocol:
+a join message and per-keystroke moves upstream, a grid string and a
+status banner downstream. Every state change, whether a move, a pickup,
+or a join, happens on the server and fans out to the clients, so no two
+clients can disagree about where the gold is or who holds it. The client
+keeps no authoritative state of its own; if its socket drops, the server
+can drop that player without the rest of the game noticing.
 
-**Visibility is a line-of-sight test.** Each player sees only what their
-position reveals, and the maze uncovers gradually as they walk; a wall,
+Visibility comes down to a line-of-sight test. Each player sees only what
+their position reveals, and the maze uncovers gradually as they walk; a
+wall,
 once seen, stays drawn, but gold and other players show only while in
 view. A cell $p$ is visible from the player at $q$ when the straight
 segment $qp$ is not interrupted by a wall. Walking the segment column by
@@ -88,7 +88,7 @@ that player has already discovered. Because the visible set is a
 function of position, it is recomputed the moment a player moves: the
 old vantage's sightlines no longer hold, gold that was occluded may come
 into view, and cells that were open may fall behind a corner. Recomputing
-per move — rather than caching a fixed field of view — is what lets the
+per move, rather than caching a fixed field of view, is what lets the
 map unfold as the player explores and keeps every client's picture of
 the world honest.
 

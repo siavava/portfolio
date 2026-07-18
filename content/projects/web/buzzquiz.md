@@ -13,13 +13,11 @@ tech:
 summary: "A BuzzFeed-style quiz that maps your answers to one of six dystopian sci-fi worlds, built in vanilla HTML, CSS, and JavaScript with jQuery."
 ---
 
-A [BuzzFeed][buzzfeed]-style personality quiz that ends by
-picking one of six dystopian sci-fi worlds: Foundation, Krypton, The
-Mandalorian, Rings of Power, The Expanse, or Westworld. Built with vanilla
-[HTML][html],
-[CSS][css], and
-[JavaScript][javascript], with a good deal of
-[jQuery][jquery] for the DOM work.
+A [BuzzFeed][buzzfeed]-style personality quiz that ends by picking one of
+six dystopian sci-fi worlds: Foundation, Krypton, The Mandalorian, Rings of
+Power, The Expanse, or Westworld. It is built with vanilla [HTML][html],
+[CSS][css], and [JavaScript][javascript], leaning on [jQuery][jquery] for
+the DOM work.
 
 Everything runs in the browser, no backend. A `State` object loads
 `questions.json` (each question a `prompt`, a `weight`, and six `answers`

@@ -13,9 +13,8 @@ summary: "The first iteration of my personal blog and portfolio, built with Nuxt
 ---
 
 The first iteration of my personal blog and portfolio, kept online at
-[v1.amittai.studio][v1]. Built with
-[Nuxt][nuxt] 3 (Vue) and [SCSS][sass-lang], deployed
-on [Netlify][netlify].
+[v1.amittai.studio][v1]. It was built with [Nuxt][nuxt] 3 (Vue) and
+[SCSS][sass-lang], and deployed on [Netlify][netlify].
 
 The content is Markdown under [Nuxt Content][content],
 running in document-driven mode so the folder tree _is_ the route tree —

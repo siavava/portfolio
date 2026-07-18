@@ -24,7 +24,7 @@ algorithm decides it in polynomial time; a polynomial solution would settle
 sidesteps the worst case with local search, trading completeness for speed, and
 uses it to solve [Sudoku][sudoku] puzzles.
 
-**Formulas in CNF.** SAT solvers take conjunctive normal form,
+SAT solvers take conjunctive normal form,
 
 $$
 \Phi = \bigwedge_{i} \Bigl( \bigvee_{j} \ell_{ij} \Bigr),
@@ -41,9 +41,9 @@ forcing it to appear, and every given cell contributes a unit clause. Smaller
 staged files (`one_cell`, `rows`, `rows_and_cols`, `rules`) build the encoding
 up piece by piece for testing. A completed board is a satisfying assignment.
 
-**Local search.** The `SAT` solver is generic: it reads any CNF file, maps
-each variable to an index with a two-way dictionary, and starts from a random
-full assignment, flipping one variable at a time.
+The `SAT` solver is generic: it reads any CNF file, maps each variable to an
+index with a two-way dictionary, and starts from a random full assignment,
+flipping one variable at a time.
 [GSAT][gsat] and
 [WalkSAT][walksat] share a noise parameter
 (`threshold` $= 0.3$) and a flip budget (`max_iterations` $= 100{,}000$). On

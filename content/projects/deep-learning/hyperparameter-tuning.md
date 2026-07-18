@@ -20,7 +20,8 @@ learning rate is the canonical example, but the knob this project actually
 varied was **capacity**, and it scored the effect with more than the
 held-out error.
 
-**The learning rate sets the scale.** Gradient descent updates the weights by
+The learning rate sets the scale of every step. Gradient descent updates the
+weights by
 
 $$
 \theta \gets \theta - \eta\,\nabla_\theta L(\theta),
@@ -47,16 +48,16 @@ $$
 \end{tikzpicture}
 $$
 
-**The experiment: capacity, held constant otherwise.** The network is a
-two-layer fully connected classifier on CIFAR-10 —
+The experiment holds everything constant but capacity. The network is a
+two-layer fully connected classifier on CIFAR-10,
 `Linear(3072 → H) → ReLU → Linear(H → 10) → Softmax`, trained with SGD
 (learning rate `0.001`, momentum `0.9`, batch size `64`) for 25 epochs. Only
 the hidden width $H$ changes: a wide model with $H = 1024$ (3.16M parameters)
 and a narrow one with $H = 256$ (0.79M). Wider means more freedom to fit the
 training set; the question is what that freedom costs on held-out data.
 
-**Scoring more than the error.** Training loss almost always improves with
-capacity — it measures fit, not generalization — so the code reads several
+Training loss almost always improves with capacity, since it measures fit
+rather than generalization, so the code reads several
 other quantities off the trained weights: their Frobenius and spectral norms,
 their distance from initialization, an $L_{1,\infty}$ norm, and the
 5th-percentile output **margin** (the correct-class logit minus the best
@@ -64,9 +65,10 @@ competitor). These feed classical generalization bounds — a VC-dimension
 bound, a spectral–margin bound, and a Frobenius–margin bound — that estimate
 the train/test gap from the weights alone.
 
-**What the two capacities showed.** The wide network reached a final training
-error of 0.47 against a validation error of 0.51; the narrow one, 0.48 against
-0.52. Nearly the same error — but every generalization bound shrank by roughly
+The two capacities separated on the bounds, not the error. The wide network
+reached a final training error of 0.47 against a validation error of 0.51; the
+narrow one, 0.48 against 0.52. The error is nearly identical, yet every
+generalization bound shrank by roughly
 four to five times when capacity dropped from 3.16M to 0.79M parameters (the
 VC bound from $9.2\times10^{9}$ to $2.0\times10^{9}$, the Frobenius–margin
 bound from $1.9\times10^{10}$ to $4.9\times10^{9}$). The bounds are

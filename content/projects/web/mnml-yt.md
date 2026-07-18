@@ -20,7 +20,7 @@ feed. Built with [React][reactjs] and
 [Vite][vitejs], styled in [Sass][sass-lang], over
 the [YouTube Data API][v3].
 
-**Search and playback are separate concerns.** `youtubeSearch` calls the
+Search and playback stay separate concerns. `youtubeSearch` calls the
 Data API's `search` endpoint with `part=snippet` and `type=video`,
 returning a list of `Video` objects, each an `id.videoId` plus the
 snippet title, description, and thumbnail. The app renders those as a
@@ -29,8 +29,8 @@ plain list; selecting one drops its `videoId` into a
 watch_, the embed supplies _how to watch it_, and `VideoDetail` wires the
 two together.
 
-**Where state lives.** `App` holds two pieces of `useState` — the result
-array and the selected `Video` — and passes them down to `SearchBar`,
+All the state lives in one place. `App` holds two pieces of `useState`, the result
+array and the selected `Video`, and passes them down to `SearchBar`,
 `VideoList`, and `VideoDetail`. Typing runs through a hand-written
 `debounce` (500ms) so a call fires only once the keystrokes pause, sparing
 the API quota; the mount seeds one query so the first paint is not blank.

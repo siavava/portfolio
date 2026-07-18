@@ -19,7 +19,7 @@ the input can flip a confident prediction. This project trains a
 classifier on CIFAR-10 to resist that noise, then measures the cost of doing
 so.
 
-**The signed-gradient step.** An adversary wants the smallest input change
+An adversary wants the smallest input change
 that most increases the loss. Bound the change in max norm,
 $\lVert \delta \rVert_\infty \le \epsilon$, and take a first-order
 expansion of the loss around the input $x$:
@@ -59,8 +59,8 @@ $$
 \end{tikzpicture}
 $$
 
-**The attack that was implemented.** A single step is easy to defend
-against; the code uses the stronger iterated version, `LinfPGDAttack`. It
+A single step is easy to defend against, so the code uses the stronger
+iterated version, `LinfPGDAttack`. It
 takes $k = 7$ smaller steps of size $\alpha = 0.00784$, and after each one
 projects the result back into the $\epsilon = 0.0314$ box around the clean
 image and clamps it to valid pixel range $[0, 1]$:
@@ -73,9 +73,8 @@ $$
 Projected gradient descent is iterated signed-gradient ascent — the single
 step above, run seven times, staying inside the allowed perturbation.
 
-**Adversarial training with mixup.** Each training batch is scored twice:
-once on clean images and once on freshly perturbed ones, with the total loss
-the mean of the two. Both passes go through `mixup` first — inputs and their
+Adversarial training scores each batch twice, once on clean images and once
+on freshly perturbed ones, with the total loss the mean of the two. Both passes go through `mixup` first — inputs and their
 labels are blended in a random ratio $\lambda \sim \operatorname{Beta}(1, 1)$,
 and the loss is the matching convex combination of the two label targets.
 The perturbation is regenerated every step from the current weights, so the
@@ -87,8 +86,7 @@ Over those epochs the logged runs show robust accuracy — accuracy on the PGD
 examples — climbing from about **23%** to **41%**, while clean accuracy rises
 to about **82%**. The persistent gap between the two is the point.
 
-**A separate augmentation sweep.** A second experiment fine-tunes a
-pretrained ResNet-18 (its head swapped for a `512 → 64 → 20` classifier with
+A separate experiment fine-tunes a pretrained ResNet-18 (its head swapped for a `512 → 64 → 20` classifier with
 dropout $p = 0.5$) on a 20-class flowers dataset under four augmentation
 pipelines of increasing strength — resized crop; plus horizontal flip; plus
 30-degree rotation; plus color jitter — at 10, 30, and 50 epochs.
@@ -97,7 +95,7 @@ widens the training distribution, but heavier pipelines converge slower: at
 50 epochs the crop-and-flip pipeline reaches the best test accuracy (~0.76),
 while the rotation and color-jitter variants still trail.
 
-**What can go wrong.** A defense can look robust for the wrong reason.
+A defense can look robust for the wrong reason.
 Many early methods only degrade the gradient the attacker relies on —
 shattered, stochastic, or vanishing gradients — so a
 [gradient-based attack][adversarial-machine]
@@ -109,9 +107,10 @@ averages the randomness away. Apparent robustness therefore has to be checked
 against adaptive attacks tuned to the defense, not against FGSM or one fixed
 PGD budget alone.
 
-**The robustness–accuracy trade-off.** These defenses are not free. Training
-against worst-case perturbations optimizes a harder objective than clean
-classification, and the two disagree: capacity spent flattening the loss
+Robustness and clean accuracy pull against each other, so these defenses are
+not free. Training against worst-case perturbations optimizes a harder
+objective than clean classification, and the two disagree: capacity spent
+flattening the loss
 around each training point blunts the sharp boundaries that fit clean data
 best. The 82%-versus-41% split is that tension made numeric — the right
 $\epsilon$ is the one whose robustness is worth the clean accuracy it costs

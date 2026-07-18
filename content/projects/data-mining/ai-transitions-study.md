@@ -16,31 +16,28 @@ references:
   - https://notes.amittai.studio/linear-algebra
 ---
 
-How has public sentiment toward AI shifted over time, and what events
-moved it? This project mines the
-[technology-article dataset][hf-ai]
-— 17,092 articles and 28 million words spanning 2000 to 2023, drawn from
-news outlets and AI labs — for that story. Three Jupyter notebooks carry
-the work: one profiles the dataset, one scores sentiment, and one runs the
-Procrustes comparison.
+Public sentiment toward AI has shifted over the past two decades, and this
+project mines the [technology-article dataset][hf-ai]
+for how, and for the events that moved it. The corpus runs to 17,092 articles
+and 28 million words spanning 2000 to 2023, drawn from news outlets and AI
+labs. Three Jupyter notebooks carry the work: one profiles the dataset, one
+scores sentiment, and one runs the Procrustes comparison.
 
-**Topic modeling surfaces the themes.** After Porter stemming and English
-stopword removal, a gensim `LdaModel` fit over a `corpora.Dictionary` of
-the articles extracts ten latent topics, each a distribution over words
+After Porter stemming and English stopword removal, a gensim `LdaModel` fit
+over a `corpora.Dictionary` of the articles extracts ten latent topics, each a distribution over words
 and each article a mixture over topics. The top topics name the recurring
 threads of the discourse: chatbots and privacy, deep learning and
 DeepMind, autonomy and security, the metaverse.
 
-**Sentiment tracks the tone.** nltk's `SentimentIntensityAnalyzer` scores
-each article on four axes (positive, negative, neutral, and a compound
-aggregate), averaged by year. The positive, negative, and neutral bands
+nltk's `SentimentIntensityAnalyzer` scores each article on four axes
+(positive, negative, neutral, and a compound aggregate), averaged by year. The positive, negative, and neutral bands
 stay fairly flat; the compound score is what jumps, and reading it per
 topic rather than over the whole corpus exposes swings the global average
 smooths away.
 
-**Procrustes analysis compares the years.** Each year's articles produce
-an LDA topic-distribution matrix, and two years are not directly
-comparable, since a distribution is defined only up to rotation and scale.
+Comparing two years directly is the hard part. Each year's articles produce
+an LDA topic-distribution matrix, and a distribution is defined only up to
+rotation and scale, so two years cannot be lined up as they stand.
 `scipy.spatial.procrustes` standardizes both matrices and finds the
 orthogonal $R$ that best overlays one on the other,
 

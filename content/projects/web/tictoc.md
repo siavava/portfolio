@@ -18,7 +18,7 @@ it: a clock counts _upward_ second by second while a progress ring sweeps six
 degrees a tick — a full turn each minute — and the numerals counter-rotate
 against it. It lives at [tictoc.amittai.studio][tictoc].
 
-**The quotes are the point.** Every ten seconds a shuffled deck of lines fades
+The quotes are the real point. Every ten seconds a shuffled deck of lines fades
 one out and the next in, mostly from
 [Foundation][foundation-tv], my favorite
 show — Salvor Hardin, Gaal Dornick, Brother Day, Demerzel — with a few from
@@ -26,7 +26,7 @@ elsewhere. When the deck runs out it reshuffles, so the order never repeats.
 Clicking anywhere pauses both the clock and the rotation and puts up a _Paused_
 card until you click again.
 
-**One small script.** A soft blob trails the cursor, easing toward each new
+It all runs on one small script. A soft blob trails the cursor, easing toward each new
 pointer position over three seconds so it always lags a little behind. There is
 no build framework — a single `Counter` class in
 [TypeScript][typescriptlang],

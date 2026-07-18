@@ -20,7 +20,7 @@ have produced the sentence, and the
 [Viterbi algorithm][viterbi-algorithm] finds it
 exactly in time linear in the sentence length.
 
-**The model.** Two distributions, both estimated by counting over a tagged
+The model rests on two distributions, both estimated by counting over a tagged
 corpus: transition probabilities $P(t_i \mid t_{i-1})$ between adjacent tags,
 and emission probabilities $P(w_i \mid t_i)$ of a word given its tag. The `HMM`
 class keeps them as two nested maps, `states` (tag to word to probability) and
@@ -38,8 +38,9 @@ and tagging asks for the tag sequence that maximizes it. Enumerating all
 $|T|^{n}$ sequences is exponential, so the search is folded into a dynamic
 program.
 
-**Decoding.** Let $v_i(t)$ be the probability of the best tag sequence ending in
-tag $t$ at position $i$. It depends only on the previous column,
+The decoder works from a single recurrence. Let $v_i(t)$ be the probability of
+the best tag sequence ending in tag $t$ at position $i$; it depends only on the
+previous column,
 
 $$
 v_i(t) = P(w_i \mid t)\, \max_{s}\; v_{i-1}(s)\, P(t \mid s),
@@ -102,11 +103,11 @@ for $i \gets 2$ to $n$ do
 return the sequence traced back from $\operatorname{arg\,max}_{t} v_n(t)$
 ```
 
-**Unknown words.** A word never seen in training has zero emission probability
-under every tag, which would zero out any path through it. To address this,
-`HMM.viterbi` charges a fixed `unseenPenalty` of $-100$ in log space for an
-unseen word, letting the transition structure pick a plausible tag from context
-alone. Run over held-out data, `testFile` tags `brown-test-sentences.txt` and
+A word never seen in training has zero emission probability under every tag,
+which would zero out any path through it. To keep such a word from killing an
+otherwise good sequence, `HMM.viterbi` charges a fixed `unseenPenalty` of $-100$
+in log space for an unseen word, letting the transition structure pick a
+plausible tag from context alone. Run over held-out data, `testFile` tags `brown-test-sentences.txt` and
 scores its output against `brown-test-tags.txt`, counting correct against
 incorrect tags.
 

@@ -15,9 +15,9 @@ summary: "Discite turns idle screen time into learning — a short-form video ap
 ---
 
 **Discite** turns idle screen time into learning: a short-form video app that
-teaches computer science fundamentals through bite-sized, swipeable clips.
-_Discite optimizes learning for the modern attention span._ Built as my
-Dartmouth [CS98 senior capstone][article], it is a five-part platform — a
+teaches computer science fundamentals through bite-sized, swipeable clips, built
+for the way people actually spend an idle minute. I built it as my Dartmouth
+[CS98 senior capstone][article], and it grew into a five-part platform: a
 SwiftUI [iOS client][frontend], a TypeScript / Express [API][backend] on
 MongoDB, a Python [ML service][ml] that cuts long lectures into clips, a
 [recommendation engine][recs] over a vector index, and an AWS streaming tier.
@@ -49,7 +49,7 @@ $$
 \end{tikzpicture}
 $$
 
-**The iOS client.** [The app][frontend] is SwiftUI, organized MVVM with a
+[The app][frontend] is SwiftUI, organized MVVM with a
 `Views` / `ViewModels` / `Models` / `Service` split per feature.
 `Authentication` obtains a JWT and stores it in the Keychain (`KeychainItem`),
 with a Google sign-in path alongside email. `Watch` is the core surface: an
@@ -60,7 +60,7 @@ over a `CustomVideoPlayer`. `Explore` drives topics, playlists, and search;
 `Account` holds profiles and a `Friends` graph. The client keeps no business
 logic; it is a consumer of the REST API.
 
-**The API and data model.** [The backend][backend] follows Express's
+[The backend][backend] follows Express's
 model–controller–router layout in TypeScript, with Passport guarding routes by
 JWT (`requireAuth`, `requireSignin`, `requireAdmin`). Mongoose maps a small set
 of collections:
@@ -84,8 +84,8 @@ which nudges the caller's affinity), and recommendations. Around fifty Cypress
 specs exercise it end to end (`affinity`, `recommendation`, `vectorized-rec`,
 `watch-history`, `search`, `user`, `video`).
 
-**Turning lectures into clips.** [The ML service][ml] is a Dockerized FastAPI
-app. Its `/split` route runs `process_video`, pulling a YouTube video's frames
+Turning lectures into clips is the job of [the ML service][ml], a Dockerized
+FastAPI app. Its `/split` route runs `process_video`, pulling a YouTube video's frames
 and transcript, then labels both against a topic set: **CLIP**
 (`clip-vit-base-patch32`) scores each frame and **BART** (`bart-large-mnli`)
 does zero-shot classification on the transcript around each second. That yields
@@ -96,7 +96,7 @@ window's topic mixture against a running mean or median; when the gap crosses a
 threshold it marks a clip boundary. Raw segments go to S3 and their metadata is
 `PUT` to the API.
 
-**Choosing what to play.** [The engine][recs] is a separate FastAPI service over
+Choosing what to play falls to [the engine][recs], a separate FastAPI service over
 a Pinecone cosine index (namespace `video-transcripts`) and an Algolia search
 index. Candidate generation queries Pinecone for videos near a seed clip;
 ranking then reorders them by taste, as `VideoRanker` adds each viewer's
@@ -106,7 +106,7 @@ affinity model, interest and difficulty, together with vector-space topic
 similarity, decide the next clip, and every like, dislike, `toohard`, or
 `tooeasy` event feeds back into the scores so the sequence adapts as you learn.
 
-**Streaming and infrastructure.** Clips never stream from the database. Bytes
+Clips never stream from the database. Bytes
 live on Amazon S3 and reach the app over HLS through CloudFront. When the client
 wants a clip it asks the API for a signed `.m3u8`; a Lambda fetches and caches
 the CloudFront private key, checks that the request is authorized, and signs the

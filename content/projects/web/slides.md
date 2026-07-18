@@ -16,13 +16,13 @@ A personal presentation platform for my dev work, built on
 [Slidev][sli] — the [Vue][vuejs]-based deck tool. It
 lives at [slides.amittai.studio][slides].
 
-**Decks are Markdown.** Each deck is a single `slides.md` where `---` separates
+Every deck is Markdown: a single `slides.md` where `---` separates
 slides and per-slide frontmatter picks the layout and theme; the decks draw on
 Slidev's `default`, `apple-basic`, and `seriph` themes. Because Slidev compiles
 Markdown to Vue, a slide can hold more than text — Shiki-highlighted code and
 live components like a `Counter.vue` dropped straight onto the page.
 
-**One index, many sub-decks.** The root `slides.md` is an index that links out to
+One root index fans out to many sub-decks. The root `slides.md` links out to
 standalone decks — Dartmouth Robotics and a quadcopter project — each its own
 Slidev deck under `children/` and each deployed to its own subdomain
 (`robotics.slides.amittai.studio`, `copter.slides.amittai.studio`). `slidev

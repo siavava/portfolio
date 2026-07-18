@@ -48,7 +48,7 @@ $$
 \end{tikzpicture}
 $$
 
-**One store, five slices.** The Redux root in `store/reducers` combines
+One store holds five slices. The Redux root in `store/reducers` combines
 five reducers: `user`, `company`, `person`, `task`, and `note`. Each holds
 the authoritative client copy of one entity, written through
 [Immer][immer] so a handler mutates a draft and
@@ -56,8 +56,8 @@ Redux hands back fresh state. A company, the people at it, and the tasks
 and notes attached to either are read from whichever view needs them, a
 profile page, a list, or a modal, without threading data through props.
 
-**Thunked calls with a bearer token.** Every action in `store/actions` is
-an async thunk over [axios][axios-http]. Sign-in posts to
+Every action in `store/actions` is an async thunk over [axios][axios-http],
+each carrying a bearer token. Sign-in posts to
 `/api/signin`; the token that comes back is kept in `localStorage` and
 attached as the `authorization` header on every later request, and
 `user_reducer` flips `authenticated` once the profile returns. The entity
@@ -66,12 +66,12 @@ thunks map onto the API directly: `/api/companies`, `/api/people`,
 delete, and a `find?q=` search. Tasks and notes are also fetched by
 association, so a company profile can pull every note tied to it.
 
-**Contacts carry their own email history.** The person and company views
+Contacts carry their own email history. The person and company views
 call `/api/emails?person=` and `?company=`, and the API reads Gmail through
 the Google APIs client, so a contact's recent correspondence sits beside
 the call notes on them.
 
-**Interface.** [react-md-editor][react-md]
+On the interface itself, [react-md-editor][react-md]
 handles note bodies, `react-select` and `react-datepicker` sit in the
 create-task and create-person modals, and `react-window` keeps long people
 and company lists cheap to render, all styled with Bootstrap and Sass.

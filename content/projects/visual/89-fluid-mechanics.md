@@ -18,10 +18,9 @@ vorticity, and smoke density stored per grid node, advanced by the
 [Navier–Stokes equations][navier-stokes]
 and rendered as drifting smoke.
 
-**The governing equations.** Smoke behaves as an incompressible fluid,
-so its velocity field $\mathbf{u}$ obeys momentum balance under pressure,
-viscosity, and external forces, together with a divergence-free
-constraint:
+Smoke behaves as an incompressible fluid, so its velocity field
+$\mathbf{u}$ obeys momentum balance under pressure, viscosity, and external
+forces, together with a divergence-free constraint:
 
 $$
 \frac{\partial \mathbf{u}}{\partial t}
@@ -33,9 +32,9 @@ $$
 \nabla \cdot \mathbf{u} = 0.
 $$
 
-**Four steps per frame.** Each timestep runs the same sequence: inject
-smoke and velocity at the sources, advect the fields, apply vorticity
-confinement, and project the velocity back to a divergence-free state.
+Each timestep runs the same four-step sequence: inject smoke and velocity
+at the sources, advect the fields, apply vorticity confinement, and project
+the velocity back to a divergence-free state.
 
 $$
 % caption: Each timestep runs the same cycle: inflow sources seed velocity, semi-
@@ -69,26 +68,24 @@ $u \gets u - \nabla p$ (project back to divergence-free)
 
 :smoke-viz
 
-**Sources and advection.** A handful of inflow emitters seed the motion:
-grid nodes within a small radius of an emitter take its velocity, with
-radial, tangential, and mixed emitters set around the domain. The fields
-then move by
-[semi-Lagrangian][semi-lagrangian]
-advection: to update a node, trace the velocity field backward (a
-midpoint half-step, then a full step) and bilinearly interpolate the old
-field at the departure point. Tracing backward and interpolating is
-unconditionally stable, which is what lets the smoke take large steps
-without blowing up.
+A handful of inflow emitters seed the motion: grid nodes within a small
+radius of an emitter take its velocity, with radial, tangential, and mixed
+emitters set around the domain. The fields then move by
+[semi-Lagrangian][semi-lagrangian] advection, which updates a node by
+tracing the velocity field backward (a midpoint half-step, then a full
+step) and bilinearly interpolating the old field at the departure point.
+Tracing backward and interpolating this way is unconditionally stable,
+which is what lets the smoke take large steps without blowing up.
 
-**Enforcing incompressibility.** Advection leaves the velocity field
-with nonzero divergence, so a projection step restores
-$\nabla \cdot \mathbf{u} = 0$. The solver takes the divergence by central
-differences, solves the Poisson equation $-\nabla^2 p = \nabla \cdot \mathbf{u}$
-with forty [Gauss–Seidel][gauss-seidel]
-sweeps, and subtracts the pressure gradient from the velocity.
+Advection leaves the velocity field with nonzero divergence, so a
+projection step restores $\nabla \cdot \mathbf{u} = 0$. The solver takes the
+divergence by central differences, solves the Poisson equation
+$-\nabla^2 p = \nabla \cdot \mathbf{u}$ with forty
+[Gauss–Seidel][gauss-seidel] sweeps, and subtracts the pressure gradient
+from the velocity.
 
-**Keeping the smoke lively.** Discretizing the fluid numerically damps
-small-scale rotation, so the smoke loses its curl and goes limp.
+Discretizing the fluid numerically damps small-scale rotation, so the smoke
+loses its curl and goes limp.
 [Vorticity confinement][vorticity-fluid]
 measures the local vorticity $\boldsymbol{\omega} = \nabla \times \mathbf{u}$,
 builds unit vectors $N$ pointing up the gradient of $\lVert \boldsymbol{\omega} \rVert$

@@ -22,7 +22,7 @@ resize it, and stack it over the others. Built with
 with the [Firebase][firebase] Realtime Database holding
 the notes.
 
-**Firebase carries the backend.** There is no server to run. A single
+Firebase carries the backend, so there is no server to run. A single
 service, `services/datastore.ts`, wraps one Realtime Database reference,
 `notes`. `onNotesValueChange` subscribes with `.on('value')` and fires a
 callback on every snapshot; `addNote` pushes a new record, `updateNote`
@@ -31,7 +31,7 @@ calls `.child(id).update`, and `deleteNote` calls `.child(id).remove`. The
 re-renders whenever Firebase pushes a change, so a note moved in one tab
 lands in another without a reload.
 
-**Notes are spatial.** A `NoteType` is `title` and `text` plus geometry:
+Every note carries its own geometry. A `NoteType` is `title` and `text` plus
 `x`, `y`, `width`, `height`, and a `z` index. Dragging and resizing write
 those coordinates back, and focusing a note lifts its `z` above the rest so
 it comes to the front. Bodies render as Markdown through

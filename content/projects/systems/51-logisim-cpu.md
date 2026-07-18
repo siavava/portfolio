@@ -78,20 +78,20 @@ $$
 \end{tikzpicture}
 $$
 
-**Everything reduces to gates.** The ALU's adder is a chain of full
-adders; subtraction is addition of the two's complement; comparisons
+Every part of the machine reduces to gates. The ALU's adder is a chain of
+full adders; subtraction is addition of the two's complement; comparisons
 fall out of the subtractor's sign and zero flags. Multiplexers built
 from AND/OR trees steer every bus, and each register is a rank of
 D flip-flops behind a write-enable. With $n$ select lines a multiplexer
 chooses among $2^n$ inputs; the machine is built by applying that
 identity at every scale.
 
-**The control unit is a finite-state machine.** Each instruction takes
-several clock cycles: fetch the word at the PC, decode its opcode,
-execute its micro-operations. The micro-sequencer walks a ROM of control
-words — one per state — asserting the right write-enables, bus selects,
-and ALU function bits, then jumps back to fetch. Adding an instruction
-means adding rows to that ROM, not rewiring the machine.
+The control unit is a finite-state machine that sequences each
+instruction over several clock cycles: fetch the word at the PC, decode
+its opcode, execute its micro-operations. The micro-sequencer walks a ROM
+of control words, one per state, asserting the right write-enables, bus
+selects, and ALU function bits, then jumps back to fetch. Adding an
+instruction means adding rows to that ROM, not rewiring the machine.
 
 [central-processing]: https://en.wikipedia.org/wiki/Central_processing_unit
 [logisim]:            https://en.wikipedia.org/wiki/Logisim

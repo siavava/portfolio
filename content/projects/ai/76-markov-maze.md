@@ -165,8 +165,8 @@ $$
 \end{tikzpicture}
 $$
 
-**Two models.** The HMM factors the problem into a transition model and a sensor
-model, and the map fixes both:
+The HMM factors the problem into a transition model and a sensor model, and the
+map fixes both:
 
 - **Transition model** $P(s \mid s')$. From cell $s'$ the robot steps to an
   adjacent cell; walls and the grid boundary zero out the illegal moves, and the
@@ -177,10 +177,10 @@ model, and the map fixes both:
   $\epsilon$, reports one of the other colors. Applied to a belief, this model
   _sharpens_ it — mass is pulled toward cells whose color matches the reading.
 
-**Filtering.** Track a belief $\alpha_t(s)$, the probability the robot sits in
-cell $s$ at time $t$ given the readings $e_{1:t}$. It updates in two steps —
+Filtering tracks a belief $\alpha_t(s)$, the probability the robot sits in
+cell $s$ at time $t$ given the readings $e_{1:t}$. It updates in two steps:
 predict through the motion model, then weight by the new reading's emission
-probability:
+probability,
 
 $$
 \alpha_t(s) = P(e_t \mid s) \sum_{s'} P(s \mid s')\, \alpha_{t-1}(s'),
@@ -206,7 +206,7 @@ for $t \gets 1$ to $T$ do
 return $\alpha_1 \ldots \alpha_T$
 ```
 
-**Smoothing and decoding.** Filtering conditions only on past readings. The
+Filtering conditions only on past readings. The
 [forward-backward algorithm][forward-backward]
 adds a backward pass $\beta_t(s)$ carrying the influence of future readings, then
 multiplies the two, $\gamma_t(s) \propto \alpha_t(s)\,\beta_t(s)$, to refine every

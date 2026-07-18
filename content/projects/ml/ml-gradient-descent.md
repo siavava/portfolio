@@ -20,7 +20,7 @@ them toward the values that minimize the loss. The point of the exercise
 is the optimizer itself — deriving the gradient of the loss and stepping
 against it.
 
-**Descend the loss surface.** For parameters $\mathbf{w}$ and a loss
+For parameters $\mathbf{w}$ and a loss
 $J(\mathbf{w})$ averaged over the training set, gradient descent
 repeatedly steps opposite the gradient:
 
@@ -33,7 +33,7 @@ uphill, so its negation is the direction of steepest local decrease. For
 a convex loss the iteration reaches the global minimum; otherwise it
 settles into a local one.
 
-**A concrete gradient.** Take squared-error loss over $m$ examples, and
+Take squared-error loss over $m$ examples, and
 write the per-example residual $r_i = \mathbf{w} \cdot \mathbf{x}_i - y_i$:
 
 $$
@@ -52,13 +52,14 @@ $$
 It is the average of each example's error scaled by its features, so the
 step pushes weights toward reducing the largest residuals first.
 
-**Conditioning sets the pace.** The loss here is a quadratic bowl, and
-its contours are ellipses whose axes are the eigenvectors of the Hessian
-$\tfrac{1}{m} X^\top X$. When the features are on similar scales the bowl
-is round and descent heads almost straight for the minimum. When one
-direction is much steeper than another the bowl is a narrow valley, and
-the gradient — perpendicular to each contour — points mostly across the
-valley rather than down it, so the path zigzags.
+How quickly descent converges depends on the shape of that bowl. The
+loss here is a quadratic bowl, and its contours are ellipses whose axes
+are the eigenvectors of the Hessian $\tfrac{1}{m} X^\top X$. When the
+features are on similar scales the bowl is round and descent heads almost
+straight for the minimum. When one direction is much steeper than
+another the bowl is a narrow valley, and the gradient, perpendicular to
+each contour, points mostly across the valley rather than down it, so the
+path zigzags.
 
 $$
 % caption: Elliptical loss contours with the minimum at the center. On
@@ -102,7 +103,7 @@ until $J(\mathbf{w})$ stops decreasing
 return $\mathbf{w}$
 ```
 
-**Practical knobs.** Standardizing the features first shrinks $\kappa$
+Standardizing the features first shrinks $\kappa$
 toward $1$, so no single dimension dominates the step and one learning
 rate suits them all. Stochastic and minibatch variants estimate the
 gradient from a subset each step, trading a noisier direction for far more
