@@ -14,61 +14,58 @@ references:
   - https://notes.amittai.studio/linear-algebra
 ---
 
-A real-time 3-D solar system that runs in the browser,
-[astra][astra]. The sun, the eight planets, and
-their major moons are textured [glTF][gltf]
-models orbiting under [Three.js][threejs] over WebGL, built
-with [Nuxt][nuxt]. None of the geometry is hard-coded: every
-body's orbital and physical data lives in a
-[Nuxt Content][content] `bodies.yml` file the scene reads
-at load, so the system is described as data and assembled at runtime.
+[astra][astra] is a real-time solar system that runs in the browser: the
+sun, the eight planets, and their major moons as textured [glTF][gltf]
+models drawn with [Three.js][threejs] over WebGL and served from
+[Nuxt][nuxt]. Every body's orbit and physical dimensions come from a
+[Nuxt Content][content] `bodies.yml` file instead of the source, so
+correcting a radius or adding a moon is an edit to the data rather than to
+the geometry.
 
-**Every body is a node in a transform tree.** The sun is a `Group` at the
-origin. Each planet is a `THREE.Object3D` pivot added to the sun, with the
-planet's model offset along $z$ by its orbital radius — so spinning the
-pivot about $y$ walks the planet around a circle. Moons nest one level
-deeper: a moon's pivot is added to its planet's mesh, so the planet's own
-orbital motion carries the moon along and the moon orbits the planet on
-top of it, all from composed parent transforms. A translucent
-[torus][docs] at each
-pivot's radius draws the orbit path.
+The planets move at such different rates because of gravity. The sun pulls
+each one inward with a force that grows as it draws nearer, and for a
+nearly circular orbit that pull is exactly the centripetal force needed to
+bend the planet's motion into a loop instead of letting it fly off in a
+straight line. Balancing the two leaves an orbital speed of
+$v = \sqrt{GM/r}$, so a planet close to the sun is held tightly, sweeps a
+short path, and finishes its year quickly, while a distant one drifts.
+Mercury laps the sun every eighty-eight days at almost 48 km/s; Neptune
+takes a hundred and sixty-four years at barely a tenth of that.
 
 $$
-% caption: The scene graph. Each planet hangs off the sun as a pivot whose
-% caption: y-rotation is its position along the orbit; the planet mesh is
-% caption: offset out to its orbital radius and spins on its own tilted axis.
-% caption: A moon repeats the pattern one level down, so nested transforms
-% caption: give a moon that orbits a planet that orbits the sun.
-\begin{tikzpicture}[>=stealth, font=\footnotesize,
-  nd/.style={rectangle, draw=acc, fill=acc!8, minimum width=2.3cm, minimum height=0.62cm, inner sep=2pt, font=\scriptsize\ttfamily}]
+% caption: Gravity sets the pace. The sun pulls every planet inward, and harder
+% caption: the closer it sits ($F$); that pull is exactly what bends the planet's
+% caption: motion ($v$) into an orbit instead of a straight line. Setting the pull
+% caption: equal to the centripetal demand gives $v = \sqrt{GM/r}$, so the inner
+% caption: planet races around while the outer one, held far more weakly, drifts.
+\begin{tikzpicture}[>=stealth, font=\footnotesize]
   \definecolor{acc}{HTML}{2348F2}
-  \node[nd] (scene) at (0, 3.2) {scene};
-  \node[nd] (sun)   at (0, 2.2) {sun (Group)};
-  \node[nd] (piv)   at (0.6, 1.2) {planet pivot};
-  \node[nd] (mesh)  at (1.2, 0.2) {planet mesh};
-  \node[nd] (tor)   at (6.6, 1.2) {orbit torus};
-  \node[nd] (mpiv)  at (1.8, -0.8) {moon pivot};
-  \node[nd] (mmesh) at (2.4, -1.8) {moon mesh};
-  \draw[black!45] (scene) -- (sun);
-  \draw[black!45] (sun.south) |- (piv.west);
-  \draw[black!45] (piv.south) |- (mesh.west);
-  \draw[black!45] (piv.east) -- node[above, midway, font=\scriptsize\ttfamily, text=acc] {spin y = orbit angle} (tor.west);
-  \draw[black!45] (mesh.south) |- (mpiv.west);
-  \draw[black!45] (mpiv.south) |- (mmesh.west);
-  \node[font=\scriptsize\ttfamily, text=acc, anchor=west] at (2.6, 0.2) {of\/fset z, spin on axis};
-  \node[font=\scriptsize\ttfamily, text=acc, anchor=west] at (3.4, -0.8) {orbits the planet};
+  \definecolor{sun}{HTML}{C79200}
+  \draw[black!40, dashed] (0,0) circle (1.5);
+  \draw[black!40, dashed] (0,0) circle (2.9);
+  \fill[sun] (0,0) circle (0.22);
+  \node[text=black!55, anchor=north, font=\scriptsize\ttfamily] at (0,-0.34) {sun};
+  \fill[acc] (0.75,1.30) circle (0.12);
+  \fill[acc] (2.63,1.23) circle (0.13);
+  \draw[->, black!55, thick, shorten <=4pt] (0.75,1.30) -- (0.285,0.494);
+  \draw[->, black!55, shorten <=4pt] (2.63,1.23) -- (1.84,0.86);
+  \draw[->, acc, thick, shorten <=4pt] (0.75,1.30) -- (-0.12,1.80);
+  \draw[->, acc, shorten <=4pt] (2.63,1.23) -- (2.38,1.78);
+  \node[text=black!55, anchor=west, font=\scriptsize] at (0.6,0.98) {$F$};
+  \node[text=acc, anchor=south, font=\scriptsize] at (-0.1,1.9) {$v$};
 \end{tikzpicture}
 $$
 
-**Orbits from real numbers.** Each entry in `bodies.yml` carries the
-body's real orbital velocity, orbital radius, rotation period, axial tilt,
-orbital inclination, physical radius, temperature range, and moon count.
-The per-frame `tick` advances a body's `currentDistance` along its orbit
-by $v\,\Delta t \cdot \text{speed}$, wraps it at the orbital circumference,
-and converts it to the pivot's $y$-rotation; a second term spins the body
-on its axis by its rotation velocity, tilted by its axial tilt. Every
-planet is seeded at a random orbital phase, so the system never lines up
-in a row on load.
+Rather than recompute that force every frame, astra reads each body's
+measured orbital speed and radius and moves the planet along its circle
+directly. On each frame `tick` advances the body's `currentDistance` by
+$v\,\Delta t$, wraps it at the orbital circumference, and turns it into an
+angle around the sun; a second rotation spins the body on its own axis at
+its real rotation rate, tilted to match its axial tilt. A moon rides its
+planet's motion and lays its own orbit on top of it, and every planet
+starts at a random phase, so they never fall into a straight line on load.
+
+Those speeds come straight from the measured orbits:
 
 | Planet | Orbital speed | Year | Moons |
 | --- | --- | --- | --- |
@@ -78,51 +75,45 @@ in a row on load.
 | Saturn | 9.7 km/s | 29.5 years | 82 |
 | Neptune | 5.4 km/s | 164 years | 14 |
 
-The speed column is the whole story of a circular orbit: closer to the
-sun means a stronger pull, a shorter path, and a faster lap. The
-visualizer below runs the same idea — a top-down system where each planet
-sweeps its orbit at a rate set by its distance.
+The visualizer below strips the same relationship down to two dimensions, a
+top-down system where each planet sweeps its ring at a rate set only by its
+distance from the center.
 
 :orbit-viz
 
-**Time you can stretch.** A speed control runs the clock at real time
-($1\times$), a day per second ($86{,}400\times$), or a month per second
-($\approx 2.4\text{M}\times$), and a date read-out tracks the simulated
-calendar as it advances. An _idealized_ mode ignores the clock entirely
-and drives every orbit at a legible, exaggerated pace — the default, so
-the whole system is visibly turning the moment it loads rather than
-crawling at true scale.
+The clock stretches to taste: a speed control runs it from real time
+through a day a second up to roughly a month a second
+($\approx 2.4\text{M}\times$), with a date read-out following the simulated
+calendar. An _idealized_ mode ignores true scale entirely and drives every
+orbit at a legible, exaggerated pace, so the whole system is turning
+visibly the moment it loads instead of appearing frozen.
 
-**Point, hover, focus.** [Orbit controls][docs-2]
-rotate and zoom the camera, damped, with panning disabled so the sun stays
-centered. A raycaster picks the body under the cursor and lights it — an
-emissive glow on the model, and its orbit ring brightening from a faint
-15% to full opacity. Click a planet and a card slides in with its facts
-(day length, year, moon count, temperature, size relative to Earth); the
-camera retargets to follow that body and reframes its near and far zoom to
-the body's own diameter, so a click drops you into a close orbit around
-it. Clicking the sun pulls back out to the whole-system view.
+The camera orbits and zooms under damped [controls][docs-2] with panning
+switched off so the sun stays centered. A raycaster picks out whatever body
+sits under the cursor and lights it, glowing the model and brightening its
+orbit ring from a faint fifteen percent to full. Clicking that body slides
+in a card of its facts (day length, year, moon count, temperature, size
+against Earth) and retargets the camera to follow it, reframing the zoom to
+the body's own diameter so the click drops you into a close orbit around
+it; clicking the sun pulls back out to the whole system.
 
-**The stage.** A cube-mapped starfield sits behind everything on its own
-render layer, drawn first each frame so the planets composite over it. The
-sun carries a [lens flare][docs-3]
-on a warm point light, backed by ambient, rectangular-area, and
-directional lights placed around the origin so the far sides of the models
-still catch enough light to read.
+Behind the planets, a cube-mapped starfield renders first on its own layer
+so everything composites cleanly over it, and the sun throws a
+[lens flare][docs-3] from a warm point light. Ambient, area, and
+directional lights around the origin fill in the rest, enough that the
+planets' far sides still catch light and read against the dark.
 
-This is a ground-up rebuild of an
-[earlier solar-system simulation][elementary-python]
-I wrote in my first term — a 2-D `cs1lib` sketch that summed Newton's
-pairwise pulls each frame. Astra keeps the spirit and trades the physics
-integrator for real orbital data, textured 3-D models, and a camera you
-can fly.
+astra grew out of a [solar-system sketch][elementary-python] I wrote in my
+first term, a 2-D `cs1lib` program that summed Newton's pairwise pulls on
+every body each frame. This rebuild trades that live gravity integrator for
+measured orbital data, textured 3-D models, and a camera you can fly
+through the system.
 
 [astra]:             https://astra.amittai.studio
 [gltf]:              https://en.wikipedia.org/wiki/GlTF
 [threejs]:           https://threejs.org
 [nuxt]:              https://nuxt.com
 [content]:           https://content.nuxt.com
-[docs]:              https://threejs.org/docs/#api/en/geometries/TorusGeometry
 [docs-2]:            https://threejs.org/docs/#examples/en/controls/OrbitControls
 [docs-3]:            https://threejs.org/docs/#examples/en/objects/Lensflare
 [elementary-python]: https://github.com/lostflux/elementary-python/tree/main/CS1/LAB/LAB%202/xc
