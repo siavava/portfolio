@@ -6,17 +6,17 @@ section.shelf-section
   .shelf-section__viewport(ref="viewport")
     .shelf-section__shelf(ref="shelf", role="listbox", :aria-label="label", @scroll="hovered = null")
       button.shelf-section__book(
-      v-for="book in books",
-      :key="book.path",
-      type="button",
-      role="option",
-      :aria-selected="book.path === selectedPath",
-      :aria-label="`${book.title} (${formatMonthYear(book.date)})`",
-      :class="{ selected: book.path === selectedPath }",
-      :style="spineStyle(book.title)",
-      @click="emit('select', book.path)",
-      @mouseenter="hover(book, $event)",
-      @mouseleave="unhover",
+        v-for="book in books",
+        :key="book.path",
+        type="button",
+        role="option",
+        :aria-selected="book.path === selectedPath",
+        :aria-label="`${book.title} (${formatMonthYear(book.date)})`",
+        :class="{ selected: book.path === selectedPath }",
+        :style="spineStyle(book.title)",
+        @click="emit('select', book.path)",
+        @mouseenter="hover(book, $event)",
+        @mouseleave="unhover",
       )
     .shelf-section__tooltip(
       :class="{ visible: hovered, snap: tooltipSnap }",
@@ -51,7 +51,6 @@ const { canScrollLeft, canScrollRight } = useScrollEdges(shelf)
 const hasSelection = computed(() =>
   props.books.some(book => book.path === props.selectedPath))
 
-// Keep the selected spine centered when the shelf overflows.
 const centerBook = (behavior: ScrollBehavior) => {
   nextTick(() => {
     const el = shelf.value
@@ -66,11 +65,6 @@ const centerBook = (behavior: ScrollBehavior) => {
 onMounted(() => centerBook("instant"))
 watch(() => props.selectedPath, () => centerBook("smooth"))
 
-// One persistent tooltip glides between spines; a short grace period
-// bridges the gaps, and only a fresh appearance snaps into place. It is
-// fixed-positioned so it can overhang the rail's scroll clip, and only
-// shifts when it would run off the window itself — the arrow stays on
-// the spine either way.
 const viewport = ref<HTMLElement | null>(null)
 const hovered = shallowRef<ShelfBook | null>(null)
 const lastHovered = shallowRef<ShelfBook | null>(null)
@@ -82,19 +76,24 @@ const hover = (book: ShelfBook, event: MouseEvent) => {
   const spine = event.currentTarget as HTMLElement
   clearTimeout(hideTimer)
   tooltipSnap.value = !hovered.value
+
   const spineRect = spine.getBoundingClientRect()
-  const cx = spineRect.left + spineRect.width / 2
-  tooltipStyle.value = { ...tooltipStyle.value, left: `${cx}px`, top: `${spineRect.top}px` }
+  const spineCenterX = spineRect.left + spineRect.width / 2
+  tooltipStyle.value = { ...tooltipStyle.value, left: `${spineCenterX}px`, top: `${spineRect.top}px` }
+
   hovered.value = book
   lastHovered.value = book
+
   nextTick(() => {
     const bubble = viewport.value?.querySelector<HTMLElement>(".shelf-section__tooltip .tooltip-shell")
     if (!bubble) return
-    const half = bubble.offsetWidth / 2
-    const pad = 8
-    const overLeft = half - cx + pad
-    const overRight = cx + half - (window.innerWidth - pad)
-    const shift = overLeft > 0 ? overLeft : overRight > 0 ? -overRight : 0
+
+    const halfWidth = bubble.offsetWidth / 2
+    const edgePad = 8
+    const overflowLeft = halfWidth - spineCenterX + edgePad
+    const overflowRight = spineCenterX + halfWidth - (window.innerWidth - edgePad)
+    const shift = overflowLeft > 0 ? overflowLeft : overflowRight > 0 ? -overflowRight : 0
+
     tooltipStyle.value = {
       ...tooltipStyle.value,
       "--shelf-tt-x": `calc(-50% + ${shift}px)`,
@@ -110,8 +109,6 @@ const unhover = () => {
   }, 120)
 }
 
-// Fixed positioning goes stale the moment anything scrolls — the rail,
-// the page, or a glide — so any scroll simply dismisses the tooltip.
 useEventListener(window, "scroll", () => {
   hovered.value = null
 }, { capture: true, passive: true })
@@ -149,8 +146,6 @@ onUnmounted(() => clearTimeout(hideTimer))
   align-items: flex-end
   gap: 1px
   height: 64px
-  // Wide enough gutters that a tilted edge spine (up to 7deg over a
-  // 55px book, ~7px of overhang) never clips against the scroll box.
   padding: 0 8px
   border-bottom: 1px solid var(--panel-hover)
   overflow-x: auto
@@ -200,8 +195,6 @@ onUnmounted(() => clearTimeout(hideTimer))
   &.snap
     transition: opacity 0.15s ease
 
-  // The zero-size wrapper gives an absolutely-positioned child no width
-  // to wrap against, so the anchor sizes to its own content, capped.
   :deep(.tooltip-anchor)
     --tt-x: var(--shelf-tt-x, -50%)
     --tt-arrow: var(--shelf-tt-arrow, 50%)
@@ -210,8 +203,6 @@ onUnmounted(() => clearTimeout(hideTimer))
     width: max-content
     max-width: 260px
 
-  // Long titles wrap instead of running forever; the shell's default is
-  // a single nowrap line.
   :deep(.tooltip-shell)
     white-space: normal
     text-align: center

@@ -33,13 +33,7 @@ defineProps<{
   profile: ProfileData
 }>()
 
-// Light/dark toggle — flip the color-mode preference; @nuxtjs/color-mode
-// persists it and stamps the class before first paint (no flash).
-const colorMode = useColorMode()
-const isDark = computed(() => colorMode.value === "dark")
-const toggleColor = () => {
-  colorMode.preference = colorMode.value === "dark" ? "light" : "dark"
-}
+const { isDark, toggle: toggleColor } = useColorToggle()
 
 const showVersions = ref(false)
 
