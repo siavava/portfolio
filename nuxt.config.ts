@@ -109,6 +109,19 @@ export default defineNuxtConfig({
         { name: "theme-color", content: "#f5f5f5" },
       ],
       link: [
+        { rel: "icon", type: "image/svg", href: "/favicon.svg" },
+        {
+          rel: "mask-icon",
+          type: "image/svg",
+          href: "/favicon.svg",
+          color: "#111110",
+        },
+        {
+          rel: "apple-touch-icon",
+          type: "image/svg",
+          href: "/favicon.svg",
+          color: "#111110",
+        },
         {
           rel: "preconnect",
           href: "https://cdn.jsdelivr.net",
