@@ -13,8 +13,8 @@ summary: "A personal presentation platform built on Slidev — decks authored in
 ---
 
 A personal presentation platform for my dev work, built on
-[Slidev](https://sli.dev) — the [Vue](https://vuejs.org)-based deck tool. It
-lives at [slides.amittai.studio](https://slides.amittai.studio).
+[Slidev][sli] — the [Vue][vuejs]-based deck tool. It
+lives at [slides.amittai.studio][slides].
 
 **Decks are Markdown.** Each deck is a single `slides.md` where `---` separates
 slides and per-slide frontmatter picks the layout and theme; the decks draw on
@@ -26,6 +26,11 @@ live components like a `Counter.vue` dropped straight onto the page.
 standalone decks — Dartmouth Robotics and a quadcopter project — each its own
 Slidev deck under `children/` and each deployed to its own subdomain
 (`robotics.slides.amittai.studio`, `copter.slides.amittai.studio`). `slidev
-build` emits a static bundle to `dist/`, which [Vercel](https://vercel.com)
+build` emits a static bundle to `dist/`, which [Vercel][vercel]
 serves from its edge with a catch-all rewrite to `index.html`, so there is no
 backend to run or scale.
+
+[sli]:    https://sli.dev
+[vuejs]:  https://vuejs.org
+[slides]: https://slides.amittai.studio
+[vercel]: https://vercel.com

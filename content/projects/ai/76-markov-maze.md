@@ -16,7 +16,7 @@ references:
 ---
 
 Localization asks where a robot is, given only a stream of noisy sensor readings
-and a map. A [hidden Markov model](https://en.wikipedia.org/wiki/Hidden_Markov_model)
+and a map. A [hidden Markov model][hidden-markov]
 fits the setting: the hidden state is the robot's cell in the maze, transitions
 encode how it moves between adjacent cells, and each cell emits a sensor reading
 — a color, here — corrupted by a known error rate. From a sequence of readings
@@ -207,10 +207,14 @@ return $\alpha_1 \ldots \alpha_T$
 ```
 
 **Smoothing and decoding.** Filtering conditions only on past readings. The
-[forward-backward algorithm](https://en.wikipedia.org/wiki/Forward%E2%80%93backward_algorithm)
+[forward-backward algorithm][forward-backward]
 adds a backward pass $\beta_t(s)$ carrying the influence of future readings, then
 multiplies the two, $\gamma_t(s) \propto \alpha_t(s)\,\beta_t(s)$, to refine every
 past estimate with the full sequence. When the goal is the single most likely
 trajectory rather than per-step marginals, the
-[Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm) replaces the
+[Viterbi algorithm][viterbi-algorithm] replaces the
 sums with maxima and reads the best path off back-pointers.
+
+[hidden-markov]:     https://en.wikipedia.org/wiki/Hidden_Markov_model
+[forward-backward]:  https://en.wikipedia.org/wiki/Forward%E2%80%93backward_algorithm
+[viterbi-algorithm]: https://en.wikipedia.org/wiki/Viterbi_algorithm

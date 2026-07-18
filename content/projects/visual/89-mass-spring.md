@@ -14,7 +14,7 @@ references:
 ---
 
 A single hair strand animated as a mass-spring system in C++, drawn with
-[OpenGL](https://www.opengl.org/). The strand is discretized into a chain
+[OpenGL][opengl]. The strand is discretized into a chain
 of point masses, and springs between them supply the forces that move it.
 
 $$
@@ -36,7 +36,7 @@ $$
 :mass-spring-viz
 
 **Structural springs.** Adjacent masses are linked by springs that
-resist stretching. Each exerts a [Hooke's-law](https://en.wikipedia.org/wiki/Hooke%27s_law)
+resist stretching. Each exerts a [Hooke's-law][hookes-law]
 force pulling the pair back toward the rest length $L_{ij}$, plus a
 damping term along the same direction $\hat{\mathbf{x}}_{ij}$ that bleeds
 off oscillation:
@@ -89,3 +89,6 @@ mass-spring strand is delicate to tune.
 
 The stability limit and the tangent-following error are properties of
 the numerical ODE integration, not of the hair model.
+
+[opengl]:     https://www.opengl.org/
+[hookes-law]: https://en.wikipedia.org/wiki/Hooke%27s_law

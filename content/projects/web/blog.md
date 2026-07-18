@@ -13,39 +13,39 @@ summary: "A ground-up redesign of my personal blog — statically generated with
 ---
 
 A ground-up redesign of my personal blog, and a new domain to go with it,
-[amittai.space](https://amittai.space). Built with [Nuxt](https://nuxt.com) 4
-(Vue) and [Sass](https://sass-lang.com) on [Bun](https://bun.sh), statically
-generated and deployed on [Netlify](https://netlify.com).
+[amittai.space][amittai]. Built with [Nuxt][nuxt] 4
+(Vue) and [Sass][sass-lang] on [Bun][bun], statically
+generated and deployed on [Netlify][netlify].
 
 **The content is a compiled pipeline, not a folder of HTML.** Posts are
-Markdown in a [Nuxt Content](https://content.nuxt.com) collection; build-time
+Markdown in a [Nuxt Content][content] collection; build-time
 hooks rewrite each file before parsing (display-math `tikzpicture` blocks
 become fenced `tikz`, Markdown quotes become typographic ones), then every
 TikZ block is rendered to SVG with
-[node-tikzjax](https://github.com/prinsss/node-tikzjax), math runs through
+[node-tikzjax][node-tikzjax], math runs through
 `rehype-katex` against a custom macro layer, and code is highlighted by
-[Shiki](https://shiki.style). Parsed pages land in a
-[SQLite](https://www.sqlite.org) store (`better-sqlite3`), each keeping its
+[Shiki][shiki]. Parsed pages land in a
+[SQLite][sqlite] store (`better-sqlite3`), each keeping its
 post-transform `rawbody`; `nuxi generate` then crawls the link graph and
 freezes the site to static files, prerendering RSS, Atom, and JSON feeds, a
 sitemap, an `llms.txt`, and a `/raw/*.md` route off the same store.
 
 **A live layer sits on the static pages.** The browser opens one WebSocket,
 once, via a `useSocket` singleton to a companion Rust service
-([Actix-Web](https://actix.rs) + [MongoDB](https://www.mongodb.com)) at
+([Actix-Web][actix] + [MongoDB][mongodb]) at
 `api.amittai.studio/connect`. Every frame is tagged with a `scope`, and each
 store subscribes only to the scopes it cares about; the connection queues
 messages while offline and reconnects on its own. Four features ride it.
 
 ## Comments
 
-Comments are written in a [TipTap](https://tiptap.dev) editor that emits two
+Comments are written in a [TipTap][tiptap] editor that emits two
 fields, `text` (plain) and `markup` (pre-rendered HTML). A new comment goes up
 as a `comments`-scope `create` frame. The service parses the scope, writes a
 `BlogComment` into MongoDB's `comments` collection — stamping `created_time`,
 zeroing `likes`, and, for a reply, pushing the new id into the parent's
 `replies` array — then publishes a `CommentEvent` on a
-[Tokio](https://tokio.rs) broadcast channel. The socket forwards that event to
+[Tokio][tokio] broadcast channel. The socket forwards that event to
 a peer only when the peer's _active path_ matches the comment's page; that path
 is set by a separate `watch` frame and is the same filter that gates live view
 counts. Replies are stored flat (each document keeps a `reply_to` pointer and a
@@ -146,10 +146,25 @@ stream with a heartbeat, mirrors the same data for consumers that are not on
 the socket.
 
 **One design system, two moods.** The visual language follows
-[minimalism](https://minimalism.com): a restrained type scale, generous
+[minimalism][minimalism]: a restrained type scale, generous
 whitespace, few colors. Type, color, and spacing rules live in shared Sass
 partials rather than per-component scopes, so a single change propagates
 everywhere; a light and dark color mode and a stricter "Rams mode" toggle
 (applied before first paint to avoid a flash) sit on top. The move to
 `amittai.space` was the occasion to retire the old design entirely rather
 than patch it, so nothing carried over except the writing.
+
+[amittai]:      https://amittai.space
+[nuxt]:         https://nuxt.com
+[sass-lang]:    https://sass-lang.com
+[bun]:          https://bun.sh
+[netlify]:      https://netlify.com
+[content]:      https://content.nuxt.com
+[node-tikzjax]: https://github.com/prinsss/node-tikzjax
+[shiki]:        https://shiki.style
+[sqlite]:       https://www.sqlite.org
+[actix]:        https://actix.rs
+[mongodb]:      https://www.mongodb.com
+[tiptap]:       https://tiptap.dev
+[tokio]:        https://tokio.rs
+[minimalism]:   https://minimalism.com

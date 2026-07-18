@@ -19,9 +19,9 @@ A constraint satisfaction problem (CSP) is a triple: variables, a domain of
 values for each, and constraints that forbid certain combinations. Map coloring
 and circuit-board layout both take this form — assign a color to each region, or
 a position to each component, so that no constraint is violated. This project
-solves them with [backtracking](https://en.wikipedia.org/wiki/Backtracking)
+solves them with [backtracking][backtracking]
 search, sharpened by
-[forward checking](https://en.wikipedia.org/wiki/Forward_checking) and variable-
+[forward checking][forward-checking] and variable-
 and value-ordering heuristics.
 
 $$
@@ -108,3 +108,6 @@ $$
   \node[font=\scriptsize\ttfamily, text=acc, anchor=west] at (7.25,0.1) {f\/orward check prunes};
 \end{tikzpicture}
 $$
+
+[backtracking]:     https://en.wikipedia.org/wiki/Backtracking
+[forward-checking]: https://en.wikipedia.org/wiki/Forward_checking

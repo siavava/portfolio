@@ -14,8 +14,8 @@ references:
 ---
 
 Linear regression with regularization, comparing
-[ridge](https://en.wikipedia.org/wiki/Tikhonov_regularization) and
-[lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) on the same
+[ridge][tikhonov-regularization] and
+[lasso][lasso-statistics] on the same
 data. Both add a penalty on the coefficient magnitudes to the
 least-squares objective; the difference in the penalty's shape changes
 what the fitted model looks like.
@@ -103,3 +103,6 @@ coordinate descent or a subgradient method.
 **Choosing $\lambda$.** The penalty strength is a hyperparameter, tuned
 by cross-validation: fit at a grid of $\lambda$ values, score each on
 held-out folds, and keep the one that generalizes best.
+
+[tikhonov-regularization]: https://en.wikipedia.org/wiki/Tikhonov_regularization
+[lasso-statistics]:        https://en.wikipedia.org/wiki/Lasso_(statistics)

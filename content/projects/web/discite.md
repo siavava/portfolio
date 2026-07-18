@@ -117,9 +117,9 @@ app.
 Read more in the [Medium write-up][article] and the project's
 [architecture docs][docs].
 
-[article]: https://medium.com/dartmouth-cs98/upgrade-your-screen-time-learn-cs-fundamentals-with-discite-14c3337cb074
-[docs]: https://discite-website.vercel.app/docs/architecture
+[article]:  https://medium.com/dartmouth-cs98/upgrade-your-screen-time-learn-cs-fundamentals-with-discite-14c3337cb074
+[docs]:     https://discite-website.vercel.app/docs/architecture
 [frontend]: https://github.com/lostflux/discite-frontend
-[backend]: https://github.com/lostflux/discite-backend
-[ml]: https://github.com/lostflux/discite-ml
-[recs]: https://github.com/lostflux/discite-recs
+[backend]:  https://github.com/lostflux/discite-backend
+[ml]:       https://github.com/lostflux/discite-ml
+[recs]:     https://github.com/lostflux/discite-recs

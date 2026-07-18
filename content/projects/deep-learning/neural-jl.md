@@ -15,7 +15,7 @@ references:
 ---
 
 Neural networks implemented from scratch in Julia, for
-[_Data-Driven Behaviour Change_](https://drive.google.com/file/d/10pPL-bl--rfk-sIrPgorz_zRhDCEhmXi), a publication in the
+[_Data-Driven Behaviour Change_][10ppl-bl], a publication in the
 Dartmouth Undergraduate Journal of Science,
 to show how a network makes predictions on simple classification and
 regression problems.
@@ -107,3 +107,5 @@ coding each $\sigma'$, each transpose $W^{(l+1)\top}$, and each outer
 product by hand, so nothing about the gradient stayed implicit. Keeping the
 moving parts visible rather than behind an abstraction was the point of the
 demonstration.
+
+[10ppl-bl]: https://drive.google.com/file/d/10pPL-bl--rfk-sIrPgorz_zRhDCEhmXi

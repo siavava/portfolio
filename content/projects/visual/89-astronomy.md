@@ -15,12 +15,12 @@ references:
 ---
 
 A real-time 3-D solar system that runs in the browser,
-[astra](https://astra.amittai.studio). The sun, the eight planets, and
-their major moons are textured [glTF](https://en.wikipedia.org/wiki/GlTF)
-models orbiting under [Three.js](https://threejs.org) over WebGL, built
-with [Nuxt](https://nuxt.com). None of the geometry is hard-coded: every
+[astra][astra]. The sun, the eight planets, and
+their major moons are textured [glTF][gltf]
+models orbiting under [Three.js][threejs] over WebGL, built
+with [Nuxt][nuxt]. None of the geometry is hard-coded: every
 body's orbital and physical data lives in a
-[Nuxt Content](https://content.nuxt.com) `bodies.yml` file the scene reads
+[Nuxt Content][content] `bodies.yml` file the scene reads
 at load, so the system is described as data and assembled at runtime.
 
 **Every body is a node in a transform tree.** The sun is a `Group` at the
@@ -30,7 +30,7 @@ pivot about $y$ walks the planet around a circle. Moons nest one level
 deeper: a moon's pivot is added to its planet's mesh, so the planet's own
 orbital motion carries the moon along and the moon orbits the planet on
 top of it, all from composed parent transforms. A translucent
-[torus](https://threejs.org/docs/#api/en/geometries/TorusGeometry) at each
+[torus][docs] at each
 pivot's radius draws the orbit path.
 
 $$
@@ -93,7 +93,7 @@ and drives every orbit at a legible, exaggerated pace — the default, so
 the whole system is visibly turning the moment it loads rather than
 crawling at true scale.
 
-**Point, hover, focus.** [Orbit controls](https://threejs.org/docs/#examples/en/controls/OrbitControls)
+**Point, hover, focus.** [Orbit controls][docs-2]
 rotate and zoom the camera, damped, with panning disabled so the sun stays
 centered. A raycaster picks the body under the cursor and lights it — an
 emissive glow on the model, and its orbit ring brightening from a faint
@@ -105,14 +105,24 @@ it. Clicking the sun pulls back out to the whole-system view.
 
 **The stage.** A cube-mapped starfield sits behind everything on its own
 render layer, drawn first each frame so the planets composite over it. The
-sun carries a [lens flare](https://threejs.org/docs/#examples/en/objects/Lensflare)
+sun carries a [lens flare][docs-3]
 on a warm point light, backed by ambient, rectangular-area, and
 directional lights placed around the origin so the far sides of the models
 still catch enough light to read.
 
 This is a ground-up rebuild of an
-[earlier solar-system simulation](https://github.com/lostflux/elementary-python/tree/main/CS1/LAB/LAB%202/xc)
+[earlier solar-system simulation][elementary-python]
 I wrote in my first term — a 2-D `cs1lib` sketch that summed Newton's
 pairwise pulls each frame. Astra keeps the spirit and trades the physics
 integrator for real orbital data, textured 3-D models, and a camera you
 can fly.
+
+[astra]:             https://astra.amittai.studio
+[gltf]:              https://en.wikipedia.org/wiki/GlTF
+[threejs]:           https://threejs.org
+[nuxt]:              https://nuxt.com
+[content]:           https://content.nuxt.com
+[docs]:              https://threejs.org/docs/#api/en/geometries/TorusGeometry
+[docs-2]:            https://threejs.org/docs/#examples/en/controls/OrbitControls
+[docs-3]:            https://threejs.org/docs/#examples/en/objects/Lensflare
+[elementary-python]: https://github.com/lostflux/elementary-python/tree/main/CS1/LAB/LAB%202/xc

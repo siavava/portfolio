@@ -14,15 +14,15 @@ references:
   - https://notes.amittai.studio/computer-architecture/digital-logic/memory-elements-latches-flip-flops-and-clocking
 ---
 
-A fully functional 16-bit [CPU](https://en.wikipedia.org/wiki/Central_processing_unit)
-implemented in [Logisim](https://en.wikipedia.org/wiki/Logisim), built
+A fully functional 16-bit [CPU][central-processing]
+implemented in [Logisim][logisim], built
 up from bare gates: the
-[ALU](https://en.wikipedia.org/wiki/Arithmetic_logic_unit), the register
-file, the [control unit](https://en.wikipedia.org/wiki/Control_unit),
-the [program counter](https://en.wikipedia.org/wiki/Program_counter),
-RAM, a [micro-sequencer](https://en.wikipedia.org/wiki/Microsequencer)
-driven by a [finite-state machine](https://en.wikipedia.org/wiki/Finite-state_machine),
-and memory-mapped [IO](https://en.wikipedia.org/wiki/Input/output). It
+[ALU][arithmetic-logic], the register
+file, the [control unit][control-unit],
+the [program counter][program-counter],
+RAM, a [micro-sequencer][microsequencer]
+driven by a [finite-state machine][finite-state],
+and memory-mapped [IO][output]. It
 runs real programs, hand-assembled into its own 16-bit instruction
 encoding.
 
@@ -92,3 +92,12 @@ execute its micro-operations. The micro-sequencer walks a ROM of control
 words — one per state — asserting the right write-enables, bus selects,
 and ALU function bits, then jumps back to fetch. Adding an instruction
 means adding rows to that ROM, not rewiring the machine.
+
+[central-processing]: https://en.wikipedia.org/wiki/Central_processing_unit
+[logisim]:            https://en.wikipedia.org/wiki/Logisim
+[arithmetic-logic]:   https://en.wikipedia.org/wiki/Arithmetic_logic_unit
+[control-unit]:       https://en.wikipedia.org/wiki/Control_unit
+[program-counter]:    https://en.wikipedia.org/wiki/Program_counter
+[microsequencer]:     https://en.wikipedia.org/wiki/Microsequencer
+[finite-state]:       https://en.wikipedia.org/wiki/Finite-state_machine
+[output]:             https://en.wikipedia.org/wiki/Input/output

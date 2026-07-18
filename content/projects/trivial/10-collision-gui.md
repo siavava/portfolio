@@ -13,7 +13,7 @@ references:
 ---
 
 Detecting collisions among many moving blobs in 2D. Checking every pair
-each frame is $O(n^2)$; a [quad-tree](https://en.wikipedia.org/wiki/Quadtree)
+each frame is $O(n^2)$; a [quad-tree][quadtree]
 brings that down by only comparing blobs that share a region of space.
 
 **Partitioning the plane.** On every tick, `CollisionGUI` rebuilds a
@@ -32,3 +32,5 @@ collision, and the handler colors the culprits red, destroys them, or
 freezes them in place. Each query touches roughly $O(\log n)$ cells, so a
 frame costs about $O(n \log n)$ instead of $O(n^2)$, and rebuilding the
 tree keeps it accurate as the blobs move.
+
+[quadtree]: https://en.wikipedia.org/wiki/Quadtree

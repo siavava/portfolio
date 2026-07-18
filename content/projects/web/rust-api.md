@@ -11,10 +11,10 @@ tech:
 summary: "A proof-of-concept REST API in Rust with the Rocket framework and a MongoDB backend, trading Express familiarity for compile-time memory safety."
 ---
 
-A REST API written in [Rust](https://www.rust-lang.org) with the
-[Rocket](https://rocket.rs) framework and a [MongoDB](https://www.mongodb.com)
-backend. Building the same service in [TypeScript](https://www.typescriptlang.org)
-on [Express](https://expressjs.com) is routine; this was a proof-of-concept for a
+A REST API written in [Rust][rust-lang] with the
+[Rocket][rocket] framework and a [MongoDB][mongodb]
+backend. Building the same service in [TypeScript][typescriptlang]
+on [Express][expressjs] is routine; this was a proof-of-concept for a
 larger project, testing whether Rust's guarantees carry into everyday web
 plumbing.
 
@@ -70,6 +70,14 @@ unwraps the connection at launch, and `event!` constructs an `Event` from its
 fields.
 
 This service backs the live comment features on
-[my blog](https://amittai.space) and
-[my reference notes](https://notes.amittai.studio) — open any article
+[my blog][amittai] and
+[my reference notes][notes] — open any article
 and leave a note to see it at work.
+
+[rust-lang]:      https://www.rust-lang.org
+[rocket]:         https://rocket.rs
+[mongodb]:        https://www.mongodb.com
+[typescriptlang]: https://www.typescriptlang.org
+[expressjs]:      https://expressjs.com
+[amittai]:        https://amittai.space
+[notes]:          https://notes.amittai.studio

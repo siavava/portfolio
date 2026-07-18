@@ -21,10 +21,12 @@ position, its neighbors, and a `backpointer`; `mouse_press` sets the start
 node and `mouse_move` tracks the goal under the cursor.
 
 The map is a graph, so
-[breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search)
+[breadth-first search][breadth-first]
 finds the fewest-edge route. `bfs` walks a `deque` frontier out from the
 start in rings of increasing distance, stamping a `backpointer` on each
 newly reached vertex; the first time it pops the goal, that path is
 minimal in edges. Following backpointers from the goal back to the start
 recovers `path_used`, and `draw_connections` paints those edges red (with
 the live frontier in yellow) over the map.
+
+[breadth-first]: https://en.wikipedia.org/wiki/Breadth-first_search

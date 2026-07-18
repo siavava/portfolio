@@ -13,10 +13,10 @@ summary: "A redesigned personal site on a new domain — content-driven Nuxt, st
 ---
 
 A redesigned personal site, and with it a new domain. Built on
-[Nuxt](https://nuxt.com) and [Vue](https://vuejs.org), styled in
-[SCSS](https://sass-lang.com), and deployed on
-[Netlify](https://netlify.com). The design follows
-[the ideals of minimalism](https://minimalism.com): keep the surface
+[Nuxt][nuxt] and [Vue][vuejs], styled in
+[SCSS][sass-lang], and deployed on
+[Netlify][netlify]. The design follows
+[the ideals of minimalism][minimalism]: keep the surface
 quiet and let the work carry the page.
 
 **Content as files.** Projects like this one are Markdown documents with
@@ -38,3 +38,9 @@ project card, the tag chip, the article shell — are defined once and
 reused. The minimalist direction shows up in the constraints: a tight
 type scale, generous whitespace, and few colors, chosen so the reading
 view stays out of the way of the content.
+
+[nuxt]:       https://nuxt.com
+[vuejs]:      https://vuejs.org
+[sass-lang]:  https://sass-lang.com
+[netlify]:    https://netlify.com
+[minimalism]: https://minimalism.com

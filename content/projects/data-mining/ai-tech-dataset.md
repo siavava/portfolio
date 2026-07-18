@@ -16,16 +16,16 @@ references:
 ---
 
 A web scraper written in Haskell that collected 17,000+ articles from
-technology publishers — [DeepMind](https://deepmind.com/),
-[MIT Technology Review](https://www.technologyreview.com/),
-[OpenAI](https://openai.com/),
-[Singularity Hub](https://singularityhub.com/), and
-[TechCrunch](https://techcrunch.com/) — into an open dataset published on
-[HuggingFace](https://huggingface.co/datasets/siavava/ai-tech-articles).
+technology publishers — [DeepMind][deepmind],
+[MIT Technology Review][technologyreview],
+[OpenAI][openai],
+[Singularity Hub][singularityhub], and
+[TechCrunch][techcrunch] — into an open dataset published on
+[HuggingFace][hf-ai].
 
 **Extraction as an arrow pipeline.** The parser (`MyData.Parser`) is built
-on [HXT](https://wiki.haskell.org/HXT), whose
-[arrows](https://www.cse.chalmers.se/~rjmh/afp-arrows.pdf) generalize a
+on [HXT][hxt], whose
+[arrows][afp-arrows] generalize a
 plain function $b \to c$ into a composable stage over an XML tree.
 `loadPage` fetches the page with `simpleHttp`, hands the bytes to
 `readString [withParseHTML yes, withWarnings no]`, and runs arrows over
@@ -79,5 +79,16 @@ kept the collection on-topic across a run of 17,000-plus articles.
 
 The result is cleaned, titled, dated article text, released open-source
 for downstream mining. Collaborative project with
-[Aimen Abdulaziz](https://www.linkedin.com/in/aimen-abdulaziz/) and
-[Angelic McPherson](https://www.linkedin.com/in/angelic-mcpherson/).
+[Aimen Abdulaziz][aimen-abdulaziz] and
+[Angelic McPherson][angelic-mcpherson].
+
+[deepmind]:          https://deepmind.com/
+[technologyreview]:  https://www.technologyreview.com/
+[openai]:            https://openai.com/
+[singularityhub]:    https://singularityhub.com/
+[techcrunch]:        https://techcrunch.com/
+[hf-ai]:             https://huggingface.co/datasets/siavava/ai-tech-articles
+[hxt]:               https://wiki.haskell.org/HXT
+[afp-arrows]:        https://www.cse.chalmers.se/~rjmh/afp-arrows.pdf
+[aimen-abdulaziz]:   https://www.linkedin.com/in/aimen-abdulaziz/
+[angelic-mcpherson]: https://www.linkedin.com/in/angelic-mcpherson/

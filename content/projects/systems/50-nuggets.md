@@ -14,9 +14,9 @@ references:
   - https://notes.amittai.studio/algorithms/computational-geometry/geometric-primitives
 ---
 
-A multiplayer command-line game of [nuggets](https://en.wikipedia.org/wiki/Nuggets_(game)).
+A multiplayer command-line game of [nuggets][nuggets-game].
 A single server holds the maze, the gold piles, and every player's
-position; clients connect over [sockets](https://en.wikipedia.org/wiki/WebSocket),
+position; clients connect over [sockets][websocket],
 send keystrokes, and receive the slice of the map their character can
 currently see. The game ends when the last pile is collected, and the
 player with the most gold wins.
@@ -96,5 +96,10 @@ The sightline reduces to a segment-versus-grid intersection — a
 geometric primitive doing the work of a game mechanic.
 
 Collaborative project with
-[Alphonso Bradham](https://www.linkedin.com/in/alphonso-bradham)
-and [Zimehr Abbasi](https://in.linkedin.com/in/zimehr-abbasi-aa8865154).
+[Alphonso Bradham][alphonso-bradham]
+and [Zimehr Abbasi][zimehr-abbasi].
+
+[nuggets-game]:     https://en.wikipedia.org/wiki/Nuggets_(game)
+[websocket]:        https://en.wikipedia.org/wiki/WebSocket
+[alphonso-bradham]: https://www.linkedin.com/in/alphonso-bradham
+[zimehr-abbasi]:    https://in.linkedin.com/in/zimehr-abbasi-aa8865154

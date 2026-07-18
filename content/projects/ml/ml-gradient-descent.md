@@ -15,7 +15,7 @@ references:
 
 Regression models fit to a labeled dataset with no closed-form solver in
 play: the parameters start arbitrary and
-[gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) moves
+[gradient descent][gradient-descent] moves
 them toward the values that minimize the loss. The point of the exercise
 is the optimizer itself — deriving the gradient of the loss and stepping
 against it.
@@ -107,3 +107,5 @@ toward $1$, so no single dimension dominates the step and one learning
 rate suits them all. Stochastic and minibatch variants estimate the
 gradient from a subset each step, trading a noisier direction for far more
 updates per pass over the data. Training stops when the loss flattens.
+
+[gradient-descent]: https://en.wikipedia.org/wiki/Gradient_descent

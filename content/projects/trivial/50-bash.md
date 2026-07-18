@@ -24,8 +24,11 @@ then wraps each field in pipe characters to form the table rows.
 
 **`summarize.sh`** is a small documentation tool. Given `.sh`, `.c`, or
 `.h` files, it emits each one inside a fenced Markdown code block, using
-[`sed`](https://en.wikipedia.org/wiki/Sed) to strip the shebang and the
+[`sed`][sed] to strip the shebang and the
 leading header comment, and selecting the language by a
-[regular expression](https://en.wikipedia.org/wiki/Regular_expression)
+[regular expression][regular-expression]
 match on the file extension. Between them the scripts cover involved
 reporting tasks without a single hand-written loop over the data.
+
+[sed]:                https://en.wikipedia.org/wiki/Sed
+[regular-expression]: https://en.wikipedia.org/wiki/Regular_expression

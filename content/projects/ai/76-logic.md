@@ -15,14 +15,14 @@ references:
   - https://notes.amittai.studio/algorithms/intractability/np-completeness
 ---
 
-[Boolean satisfiability](https://en.wikipedia.org/wiki/Boolean_satisfiability_problem)
+[Boolean satisfiability][boolean-satisfiability]
 (SAT) asks whether a propositional formula can be made true by some assignment
 of its variables. It is
-[NP-complete](https://en.wikipedia.org/wiki/NP-completeness), so no known
+[NP-complete][np-completeness], so no known
 algorithm decides it in polynomial time; a polynomial solution would settle
-[P versus NP](https://en.wikipedia.org/wiki/P_versus_NP_problem). This project
+[P versus NP][p-versus]. This project
 sidesteps the worst case with local search, trading completeness for speed, and
-uses it to solve [Sudoku](https://en.wikipedia.org/wiki/Sudoku) puzzles.
+uses it to solve [Sudoku][sudoku] puzzles.
 
 **Formulas in CNF.** SAT solvers take conjunctive normal form,
 
@@ -44,8 +44,8 @@ up piece by piece for testing. A completed board is a satisfying assignment.
 **Local search.** The `SAT` solver is generic: it reads any CNF file, maps
 each variable to an index with a two-way dictionary, and starts from a random
 full assignment, flipping one variable at a time.
-[GSAT](https://en.wikipedia.org/wiki/GSAT) and
-[WalkSAT](https://en.wikipedia.org/wiki/WalkSAT) share a noise parameter
+[GSAT][gsat] and
+[WalkSAT][walksat] share a noise parameter
 (`threshold` $= 0.3$) and a flip budget (`max_iterations` $= 100{,}000$). On
 each step GSAT, with probability $p$, flips a random variable, and otherwise
 scans _all_ variables and flips the one whose flip leaves the most clauses
@@ -76,3 +76,10 @@ Neither algorithm is complete: on an unsatisfiable formula they simply exhaust
 the flip budget without reporting that no assignment exists. On satisfiable
 instances like a valid Sudoku they find an assignment quickly, which is the
 regime this project targets.
+
+[boolean-satisfiability]: https://en.wikipedia.org/wiki/Boolean_satisfiability_problem
+[np-completeness]:        https://en.wikipedia.org/wiki/NP-completeness
+[p-versus]:               https://en.wikipedia.org/wiki/P_versus_NP_problem
+[sudoku]:                 https://en.wikipedia.org/wiki/Sudoku
+[gsat]:                   https://en.wikipedia.org/wiki/GSAT
+[walksat]:                https://en.wikipedia.org/wiki/WalkSAT

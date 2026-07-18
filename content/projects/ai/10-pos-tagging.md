@@ -13,11 +13,11 @@ references:
   - https://notes.amittai.studio/artificial-intelligence/uncertainty/reasoning-over-time
 ---
 
-A [hidden Markov model](https://en.wikipedia.org/wiki/Hidden_Markov_model)
+A [hidden Markov model][hidden-markov]
 treats a sentence as a sequence of hidden states — the part-of-speech tags —
 that emit the observed words. Tagging recovers the tag sequence most likely to
 have produced the sentence, and the
-[Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm) finds it
+[Viterbi algorithm][viterbi-algorithm] finds it
 exactly in time linear in the sentence length.
 
 **The model.** Two distributions, both estimated by counting over a tagged
@@ -109,3 +109,6 @@ unseen word, letting the transition structure pick a plausible tag from context
 alone. Run over held-out data, `testFile` tags `brown-test-sentences.txt` and
 scores its output against `brown-test-tags.txt`, counting correct against
 incorrect tags.
+
+[hidden-markov]:     https://en.wikipedia.org/wiki/Hidden_Markov_model
+[viterbi-algorithm]: https://en.wikipedia.org/wiki/Viterbi_algorithm

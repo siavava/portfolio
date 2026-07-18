@@ -16,8 +16,8 @@ references:
 ---
 
 A chess engine built on classical adversarial search:
-[minimax](https://en.wikipedia.org/wiki/Minimax) with
-[alpha-beta pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
+[minimax][minimax] with
+[alpha-beta pruning][alpha-beta]
 at its base, then a stack of refinements — iterative deepening,
 transposition tables, move ordering, null-move pruning, aspiration
 windows, and quiescence search — that make the textbook algorithm
@@ -104,22 +104,22 @@ reachable search depth.
 **Making depth affordable.** Each refinement strengthens the pruning
 or the evaluation:
 
-- [Iterative deepening](https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search)
+- [Iterative deepening][iterative-deepening]
   searches depth $1, 2, 3, \ldots$ until time runs out — and each pass's
   best line seeds the next pass's move ordering.
-- [Transposition tables](https://en.wikipedia.org/wiki/Transposition_table)
+- [Transposition tables][transposition-table]
   memoize positions reached by different move orders, so a position is
   searched once, not once per path.
-- [Move ordering](https://en.wikipedia.org/wiki/Move_ordering) tries
+- [Move ordering][move-ordering] tries
   captures and killer moves first, pushing real play toward that
   $O(b^{m/2})$ best case.
-- [Null-move pruning](https://en.wikipedia.org/wiki/Null-move_heuristic)
+- [Null-move pruning][null-move]
   gives the opponent a free move; if the position is still winning, the
   subtree is cut without a full search.
-- [Aspiration windows](https://en.wikipedia.org/wiki/Aspiration_window)
+- [Aspiration windows][aspiration-window]
   start each iteration with a narrow $[\alpha, \beta]$ guessed from the
   last one, re-searching only when the score lands outside it.
-- [Quiescence search](https://en.wikipedia.org/wiki/Quiescence_search)
+- [Quiescence search][quiescence-search]
   extends the search at the horizon until the position is quiet, so the
   evaluation never scores a board mid-capture.
 
@@ -143,3 +143,12 @@ $$
   \node[font=\scriptsize\ttfamily, text=acc, anchor=west] at (5.9,0.75) {quiescence f\/inds: -8};
 \end{tikzpicture}
 $$
+
+[minimax]:             https://en.wikipedia.org/wiki/Minimax
+[alpha-beta]:          https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
+[iterative-deepening]: https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search
+[transposition-table]: https://en.wikipedia.org/wiki/Transposition_table
+[move-ordering]:       https://en.wikipedia.org/wiki/Move_ordering
+[null-move]:           https://en.wikipedia.org/wiki/Null-move_heuristic
+[aspiration-window]:   https://en.wikipedia.org/wiki/Aspiration_window
+[quiescence-search]:   https://en.wikipedia.org/wiki/Quiescence_search

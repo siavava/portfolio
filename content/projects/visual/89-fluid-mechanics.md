@@ -12,10 +12,10 @@ summary: "A grid-based smoke simulation in C++ that solves the incompressible Na
 ---
 
 A physics-based smoke simulation in C++. The fluid lives on a fixed 2D
-[Eulerian grid](https://en.wikipedia.org/wiki/Regular_grid) (the solver
+[Eulerian grid][regular-grid] (the solver
 runs on a $128 \times 64$ lattice of cells) with velocity, pressure,
 vorticity, and smoke density stored per grid node, advanced by the
-[Navier–Stokes equations](https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations)
+[Navier–Stokes equations][navier-stokes]
 and rendered as drifting smoke.
 
 **The governing equations.** Smoke behaves as an incompressible fluid,
@@ -73,7 +73,7 @@ $u \gets u - \nabla p$ (project back to divergence-free)
 grid nodes within a small radius of an emitter take its velocity, with
 radial, tangential, and mixed emitters set around the domain. The fields
 then move by
-[semi-Lagrangian](https://en.wikipedia.org/wiki/Semi-Lagrangian_scheme)
+[semi-Lagrangian][semi-lagrangian]
 advection: to update a node, trace the velocity field backward (a
 midpoint half-step, then a full step) and bilinearly interpolate the old
 field at the departure point. Tracing backward and interpolating is
@@ -84,15 +84,21 @@ without blowing up.
 with nonzero divergence, so a projection step restores
 $\nabla \cdot \mathbf{u} = 0$. The solver takes the divergence by central
 differences, solves the Poisson equation $-\nabla^2 p = \nabla \cdot \mathbf{u}$
-with forty [Gauss–Seidel](https://en.wikipedia.org/wiki/Gauss%E2%80%93Seidel_method)
+with forty [Gauss–Seidel][gauss-seidel]
 sweeps, and subtracts the pressure gradient from the velocity.
 
 **Keeping the smoke lively.** Discretizing the fluid numerically damps
 small-scale rotation, so the smoke loses its curl and goes limp.
-[Vorticity confinement](https://en.wikipedia.org/wiki/Vorticity_(fluid_dynamics))
+[Vorticity confinement][vorticity-fluid]
 measures the local vorticity $\boldsymbol{\omega} = \nabla \times \mathbf{u}$,
 builds unit vectors $N$ pointing up the gradient of $\lVert \boldsymbol{\omega} \rVert$
 toward its concentrations, and adds the force
 $\varepsilon\,\Delta x\,(N \times \boldsymbol{\omega})$ — with confinement
 strength $\varepsilon = 4$ in the code — back into the velocity,
 restoring the swirling detail that makes rising smoke read as smoke.
+
+[regular-grid]:    https://en.wikipedia.org/wiki/Regular_grid
+[navier-stokes]:   https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations
+[semi-lagrangian]: https://en.wikipedia.org/wiki/Semi-Lagrangian_scheme
+[gauss-seidel]:    https://en.wikipedia.org/wiki/Gauss%E2%80%93Seidel_method
+[vorticity-fluid]: https://en.wikipedia.org/wiki/Vorticity_(fluid_dynamics)

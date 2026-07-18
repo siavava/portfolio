@@ -15,7 +15,7 @@ references:
 
 Neural networks are brittle: a small, deliberately chosen perturbation of
 the input can flip a confident prediction. This project trains a
-[ResNet-18](https://en.wikipedia.org/wiki/Residual_neural_network) image
+[ResNet-18][residual-neural] image
 classifier on CIFAR-10 to resist that noise, then measures the cost of doing
 so.
 
@@ -92,7 +92,7 @@ pretrained ResNet-18 (its head swapped for a `512 → 64 → 20` classifier with
 dropout $p = 0.5$) on a 20-class flowers dataset under four augmentation
 pipelines of increasing strength — resized crop; plus horizontal flip; plus
 30-degree rotation; plus color jitter — at 10, 30, and 50 epochs.
-[Augmentation](https://www.datacamp.com/tutorial/complete-guide-data-augmentation)
+[Augmentation][complete-guide]
 widens the training distribution, but heavier pipelines converge slower: at
 50 epochs the crop-and-flip pipeline reaches the best test accuracy (~0.76),
 while the rotation and color-jitter variants still trail.
@@ -100,7 +100,7 @@ while the rotation and color-jitter variants still trail.
 **What can go wrong.** A defense can look robust for the wrong reason.
 Many early methods only degrade the gradient the attacker relies on —
 shattered, stochastic, or vanishing gradients — so a
-[gradient-based attack](https://en.wikipedia.org/wiki/Adversarial_machine_learning)
+[gradient-based attack][adversarial-machine]
 stalls while the model stays just as fragile underneath. This obfuscated- or
 masked-gradient failure hides until an adaptive attack routes around it:
 backward pass differentiable approximation (BPDA) substitutes a usable
@@ -116,3 +116,7 @@ around each training point blunts the sharp boundaries that fit clean data
 best. The 82%-versus-41% split is that tension made numeric — the right
 $\epsilon$ is the one whose robustness is worth the clean accuracy it costs
 for the threat you actually expect.
+
+[residual-neural]:     https://en.wikipedia.org/wiki/Residual_neural_network
+[complete-guide]:      https://www.datacamp.com/tutorial/complete-guide-data-augmentation
+[adversarial-machine]: https://en.wikipedia.org/wiki/Adversarial_machine_learning

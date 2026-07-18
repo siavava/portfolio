@@ -13,12 +13,12 @@ references:
   - https://notes.amittai.studio/linear-algebra
 ---
 
-A [rigid-body](https://en.wikipedia.org/wiki/Rigid_body)
-[helicopter](https://en.wikipedia.org/wiki/Multirotor) simulated in C++ from
+A [rigid-body][rigid-body]
+[helicopter][multirotor] simulated in C++ from
 its rotational dynamics. Rotor blades generate lift and thrust; the body's
 state — position, orientation, and their velocities — advances by numerically
-integrating the [Newton-Euler equations](https://en.wikipedia.org/wiki/Newton%E2%80%93Euler_equations)
-of motion with the [Euler method](https://en.wikipedia.org/wiki/Euler_method).
+integrating the [Newton-Euler equations][newton-euler]
+of motion with the [Euler method][euler-method].
 
 **A rigid body is not a point mass.** It has orientation, and it spins. The
 state carries a position $\mathbf x$ and linear velocity $\mathbf v$ for the
@@ -108,3 +108,8 @@ step drifts $R$ off the rotation group, so it is re-orthonormalized each frame.
 Updating velocity before position, rather than after, keeps the integrator
 stable at the timesteps a real-time simulation can afford — explicit Euler
 gains energy and diverges.
+
+[rigid-body]:   https://en.wikipedia.org/wiki/Rigid_body
+[multirotor]:   https://en.wikipedia.org/wiki/Multirotor
+[newton-euler]: https://en.wikipedia.org/wiki/Newton%E2%80%93Euler_equations
+[euler-method]: https://en.wikipedia.org/wiki/Euler_method

@@ -17,11 +17,11 @@ summary: "goloco, a networking tool that keeps companies, contacts, tasks, and c
 you are targeting, the people you know at each, the tasks that chase them
 down, and the notes from every call in one workspace, instead of scattered
 across spreadsheets and shared folders. Built with
-[React](https://reactjs.org),
-[TypeScript](https://www.typescriptlang.org), and
-[Redux](https://redux.js.org), bundled with [Vite](https://vitejs.dev),
+[React][reactjs],
+[TypeScript][typescriptlang], and
+[Redux][redux], bundled with [Vite][vitejs],
 talking to a separate Express/Mongoose API backed by
-[MongoDB](https://www.mongodb.com) Atlas.
+[MongoDB][mongodb] Atlas.
 
 $$
 % caption: Inside the goloco client, five Redux slices feed thunked axios
@@ -51,13 +51,13 @@ $$
 **One store, five slices.** The Redux root in `store/reducers` combines
 five reducers: `user`, `company`, `person`, `task`, and `note`. Each holds
 the authoritative client copy of one entity, written through
-[Immer](https://immerjs.github.io/immer/) so a handler mutates a draft and
+[Immer][immer] so a handler mutates a draft and
 Redux hands back fresh state. A company, the people at it, and the tasks
 and notes attached to either are read from whichever view needs them, a
 profile page, a list, or a modal, without threading data through props.
 
 **Thunked calls with a bearer token.** Every action in `store/actions` is
-an async thunk over [axios](https://axios-http.com). Sign-in posts to
+an async thunk over [axios][axios-http]. Sign-in posts to
 `/api/signin`; the token that comes back is kept in `localStorage` and
 attached as the `authorization` header on every later request, and
 `user_reducer` flips `authenticated` once the profile returns. The entity
@@ -71,13 +71,26 @@ call `/api/emails?person=` and `?company=`, and the API reads Gmail through
 the Google APIs client, so a contact's recent correspondence sits beside
 the call notes on them.
 
-**Interface.** [react-md-editor](https://uiwjs.github.io/react-md-editor/)
+**Interface.** [react-md-editor][react-md]
 handles note bodies, `react-select` and `react-datepicker` sit in the
 create-task and create-person modals, and `react-window` keeps long people
 and company lists cheap to render, all styled with Bootstrap and Sass.
 
 Built as a collaborative project with
-[Bansharee Ireen](https://www.linkedin.com/in/bansharee-ireen-184712274/),
-[Yizhen Zhen](https://www.linkedin.com/in/yizhen-zhen/),
-[Cindy Li Wang](https://www.linkedin.com/in/cindylwang/), and
-[Johan Cruz Hernandez](https://www.linkedin.com/in/johan-cruz-hernandez-2204b9183/).
+[Bansharee Ireen][bansharee-ireen],
+[Yizhen Zhen][yizhen-zhen],
+[Cindy Li Wang][cindylwang], and
+[Johan Cruz Hernandez][johan-cruz].
+
+[reactjs]:         https://reactjs.org
+[typescriptlang]:  https://www.typescriptlang.org
+[redux]:           https://redux.js.org
+[vitejs]:          https://vitejs.dev
+[mongodb]:         https://www.mongodb.com
+[immer]:           https://immerjs.github.io/immer/
+[axios-http]:      https://axios-http.com
+[react-md]:        https://uiwjs.github.io/react-md-editor/
+[bansharee-ireen]: https://www.linkedin.com/in/bansharee-ireen-184712274/
+[yizhen-zhen]:     https://www.linkedin.com/in/yizhen-zhen/
+[cindylwang]:      https://www.linkedin.com/in/cindylwang/
+[johan-cruz]:      https://www.linkedin.com/in/johan-cruz-hernandez-2204b9183/

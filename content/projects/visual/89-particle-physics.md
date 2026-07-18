@@ -15,8 +15,8 @@ references:
 ---
 
 A C++ simulator for fluids and particle systems. Fluids follow the
-[Navier-Stokes equations](https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations),
-discretized with [smoothed-particle hydrodynamics](https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics)
+[Navier-Stokes equations][navier-stokes],
+discretized with [smoothed-particle hydrodynamics][smoothed-particle]
 (SPH); a uniform spatial hash keeps neighbor search and collision detection
 near-linear as particle counts grow.
 
@@ -97,3 +97,6 @@ for each particle $i$ do
       if $v_n < 0$ then
         apply impulse $-(1 + e)\,v_n / 2$ along $\pm\mathbf n$ to $i$ and $j$
 ```
+
+[navier-stokes]:     https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations
+[smoothed-particle]: https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics

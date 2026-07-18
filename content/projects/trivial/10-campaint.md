@@ -17,7 +17,7 @@ canvas.
 
 **Growing regions by color.** `CamPaint` stores the clicked pixel as its
 `targetColor`, and each frame hands the image to a `RegionFinder`. That
-finder [flood fills](https://en.wikipedia.org/wiki/Flood_fill) outward
+finder [flood fills][flood-fill] outward
 from every matching seed, queuing a pixel's neighbors when its red,
 green, and blue channels each fall within `maxColorDiff` (45) of the
 target; a scratch image marks visited pixels, and any region smaller
@@ -30,3 +30,5 @@ separate `painting` layer, an ARGB `BufferedImage` that accumulates
 across frames. The live camera feed refreshes underneath, so the drawing
 stays put as the hand moves, and a keypress switches the display among
 the raw webcam, the regions recolored at random, and the painting alone.
+
+[flood-fill]: https://en.wikipedia.org/wiki/Flood_fill

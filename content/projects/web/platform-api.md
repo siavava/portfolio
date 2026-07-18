@@ -13,12 +13,12 @@ tech:
 summary: "The REST backend for the Posts Platform — a single-resource CRUD service over posts, built on TypeScript, Express, and Mongoose, deployed on Vercel."
 ---
 
-The backend that serves the [Posts Platform](https://posts-platform.amittai.studio):
+The backend that serves the [Posts Platform][posts-platform]:
 a small REST service that stores posts and hands them back to the
-front-end. Built with [TypeScript](https://www.typescriptlang.org),
-[Express](https://expressjs.com), and [Node](https://nodejs.org), with
-posts persisted in [MongoDB](https://www.mongodb.com) through
-[Mongoose](https://mongoosejs.com), and deployed on Vercel.
+front-end. Built with [TypeScript][typescriptlang],
+[Express][expressjs], and [Node][nodejs], with
+posts persisted in [MongoDB][mongodb] through
+[Mongoose][mongoosejs], and deployed on Vercel.
 
 $$
 % caption: Every request follows one path: the router mounted at /api
@@ -65,6 +65,13 @@ form it expects.
 logging, and JSON body parsing, then connects to `MONGODB_URI` and mounts
 the router; `api/index.ts` re-exports the app for Vercel's serverless
 runtime. Keeping the API separate lets the
-[Posts Platform](https://posts-platform.amittai.studio) front-end stay a
+[Posts Platform][posts-platform] front-end stay a
 pure client while storage and validation live behind a stable set of
 routes.
+
+[posts-platform]: https://posts-platform.amittai.studio
+[typescriptlang]: https://www.typescriptlang.org
+[expressjs]:      https://expressjs.com
+[nodejs]:         https://nodejs.org
+[mongodb]:        https://www.mongodb.com
+[mongoosejs]:     https://mongoosejs.com

@@ -14,7 +14,7 @@ summary: "Three small command-line utilities in C: a wind-chill calculator, a wo
 Three small command-line utilities written in C, each reading input and
 writing to standard output in the Unix filter style.
 
-**`chill`** computes the [wind chill](https://en.wikipedia.org/wiki/Wind_chill)
+**`chill`** computes the [wind chill][wind-chill]
 from an air temperature $T$ (°F) and a wind speed $v$ (mph), using the
 US National Weather Service formula:
 
@@ -33,3 +33,5 @@ reading from a named file or from standard input. **`histo`** reads a
 stream of integers from standard input into sixteen fixed bins; when a
 value overflows the current range the bin width doubles and the existing
 counts are merged, so the histogram rescales itself to fit the data.
+
+[wind-chill]: https://en.wikipedia.org/wiki/Wind_chill

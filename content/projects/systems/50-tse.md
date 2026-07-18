@@ -15,7 +15,7 @@ references:
   - https://notes.amittai.studio/algorithms/data-structures/hash-tables
 ---
 
-A [search engine](https://en.wikipedia.org/wiki/Web_search_engine)
+A [search engine][web-search]
 written in plain C: three small programs — a crawler, an indexer, and a
 querier — connected by nothing but files on disk. Each one does a single
 job, validates its inputs defensively, and writes an artifact the next
@@ -102,3 +102,5 @@ sorts the surviving documents by score before printing. Everything is
 valgrind-clean C, checked against the `memcheck` and `indextest` harnesses
 in each module, with every container hand-rolled on the shared `libcs50`
 primitives.
+
+[web-search]: https://en.wikipedia.org/wiki/Web_search_engine

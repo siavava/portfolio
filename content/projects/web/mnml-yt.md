@@ -15,10 +15,10 @@ summary: "A distraction-free YouTube player — search and playback over the Dat
 
 A minimal YouTube player: search for a video, watch it, and nothing else.
 No recommended-video rail, no comments, no autoplay into an unrelated
-feed. Built with [React](https://reactjs.org) and
-[TypeScript](https://www.typescriptlang.org) on
-[Vite](https://vitejs.dev), styled in [Sass](https://sass-lang.com), over
-the [YouTube Data API](https://developers.google.com/youtube/v3).
+feed. Built with [React][reactjs] and
+[TypeScript][typescriptlang] on
+[Vite][vitejs], styled in [Sass][sass-lang], over
+the [YouTube Data API][v3].
 
 **Search and playback are separate concerns.** `youtubeSearch` calls the
 Data API's `search` endpoint with `part=snippet` and `type=video`,
@@ -41,3 +41,9 @@ rather than committed.
 The design goal drove every cut: the interface is a search field and a
 single player, styled in Sass to stay out of the way. Removing YouTube's
 surrounding surface is the whole feature.
+
+[reactjs]:        https://reactjs.org
+[typescriptlang]: https://www.typescriptlang.org
+[vitejs]:         https://vitejs.dev
+[sass-lang]:      https://sass-lang.com
+[v3]:             https://developers.google.com/youtube/v3

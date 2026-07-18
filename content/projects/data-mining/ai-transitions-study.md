@@ -18,7 +18,7 @@ references:
 
 How has public sentiment toward AI shifted over time, and what events
 moved it? This project mines the
-[technology-article dataset](https://huggingface.co/datasets/siavava/ai-tech-articles)
+[technology-article dataset][hf-ai]
 — 17,092 articles and 28 million words spanning 2000 to 2023, drawn from
 news outlets and AI labs — for that story. Three Jupyter notebooks carry
 the work: one profiles the dataset, one scores sentiment, and one runs the
@@ -56,7 +56,12 @@ disparities spike around the dot-com bust of 2000–2002, again through
 2013–2016, and then climb sharply from 2018 onward, peaking across
 2021–2023 as large language models entered the discourse.
 
-The [full report](https://github.com/siavava/data-mining-project/blob/main/report.pdf)
+The [full report][data-mining]
 has the results. Collaborative project with
-[Aimen Abdulaziz](https://www.linkedin.com/in/aimen-abdulaziz/) and
-[Angelic McPherson](https://www.linkedin.com/in/angelic-mcpherson/).
+[Aimen Abdulaziz][aimen-abdulaziz] and
+[Angelic McPherson][angelic-mcpherson].
+
+[hf-ai]:             https://huggingface.co/datasets/siavava/ai-tech-articles
+[data-mining]:       https://github.com/siavava/data-mining-project/blob/main/report.pdf
+[aimen-abdulaziz]:   https://www.linkedin.com/in/aimen-abdulaziz/
+[angelic-mcpherson]: https://www.linkedin.com/in/angelic-mcpherson/

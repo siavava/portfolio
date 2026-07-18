@@ -14,7 +14,7 @@ references:
 ---
 
 A C++ body simulator built on position-based dynamics (PBD), following
-[Müller et al.](https://matthias-research.github.io/pages/publications/posBasedDyn.pdf)
+[Müller et al.][posbaseddyn]
 Instead of accumulating spring forces and integrating them into velocities, PBD
 works directly on positions: it predicts where particles will move, then
 projects those positions onto a set of constraints. The scheme is stabler than
@@ -91,3 +91,5 @@ same solver handles distance, volume, and collision constraints without
 retuning: each is just another $C(\mathbf p) = 0$ to project onto.
 
 :pbd-cloth-viz
+
+[posbaseddyn]: https://matthias-research.github.io/pages/publications/posBasedDyn.pdf

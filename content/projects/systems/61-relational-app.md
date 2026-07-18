@@ -13,13 +13,13 @@ references:
   - https://notes.amittai.studio/algorithms/data-structures/b-trees
 ---
 
-A [MySQL](https://www.mysql.com/) editorial-management system for an
-academic journal, driven from a [Python](https://www.python.org/)
+A [MySQL][mysql] editorial-management system for an
+academic journal, driven from a [Python][python]
 command-line client. People sign in as an `Admin`, `Author`, `Reviewer`,
 or `Editor`, and the schema carries a manuscript through its whole life:
 submission, assignment to reviewers, scoring, an accept/reject decision,
 typesetting, and finally placement in a published issue. The invariants
-that keep that pipeline honest live in [SQL](https://en.wikipedia.org/wiki/SQL)
+that keep that pipeline honest live in [SQL][sql]
 triggers and stored routines, not in the client.
 
 **The schema.** `Manuscript` is the hub. Each manuscript carries a
@@ -101,4 +101,9 @@ Lookups by key resolve through the engine's indexes — balanced
 B-trees — rather than a full table scan.
 
 Collaborative project with
-[Ke Lou](https://www.linkedin.com/in/ke-lou-898301133).
+[Ke Lou][ke-lou].
+
+[mysql]:  https://www.mysql.com/
+[python]: https://www.python.org/
+[sql]:    https://en.wikipedia.org/wiki/SQL
+[ke-lou]: https://www.linkedin.com/in/ke-lou-898301133

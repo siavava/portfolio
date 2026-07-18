@@ -35,11 +35,11 @@ fleshing out requirements, and shipping end to end:
 Ten terms as a teaching assistant &mdash; developing and grading
 assignments, and holding office hours:
 
-- [Object-Oriented Programming](https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-10) (&times;2)
-- [Systems Engineering](https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-50) (&times;5)
-- [Fullstack Web Development](https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-52)
-- [Database Systems](https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-61)
-- [Artificial Intelligence](https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-76)
+- [Object-Oriented Programming][cosc-10] (&times;2)
+- [Systems Engineering][cosc-50] (&times;5)
+- [Fullstack Web Development][cosc-52]
+- [Database Systems][cosc-61]
+- [Artificial Intelligence][cosc-76]
 ::
 
 Previously, I studied :bio-target[math]{node="Mathematics"},
@@ -47,7 +47,7 @@ Previously, I studied :bio-target[math]{node="Mathematics"},
 :chip{label="Dartmouth" icon="lucide:tree-pine" href="https://home.dartmouth.edu"},
 where :cue-root[I helped teach five courses]{to="course-notes,essays" note="teaching"} and
 did research in  :bio-target[applying reinforcement learning and computer vision methods in robotics]{node="Marine Robotics,Computer Vision,Reinforcement Learning"} at
-the [Dartmouth Reality & Robotics Lab](https://rlab.cs.dartmouth.edu/home/).
+the [Dartmouth Reality & Robotics Lab][home].
 I was also the AI lead at the Dartmouth Robotics Club.
 
 Builds from :cue-root[first principles]{to="algorithms,comp-arch,compilers,search-engines,simulations"}:
@@ -55,3 +55,10 @@ a [GPT from scratch](/projects/deep-learning/transfusion),
 a [search engine in C](/projects/systems/50-tse),
 a :bio-target[16-bit CPU]{node="Computer Architecture"},
 and :bio-target[physics simulations]{node="Simulations"}.
+
+[cosc-10]: https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-10
+[cosc-50]: https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-50
+[cosc-52]: https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-52
+[cosc-61]: https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-61
+[cosc-76]: https://dartmouth.smartcatalogiq.com/current/orc/departments-programs-undergraduate/computer-science/cosc-computer-science-undergraduate/cosc-76
+[home]:    https://rlab.cs.dartmouth.edu/home/

@@ -15,11 +15,11 @@ references:
 ---
 
 A character-level
-[GPT](https://en.wikipedia.org/wiki/Generative_pre-trained_transformer)
+[GPT][generative-pre]
 implemented from scratch in PyTorch — every module written out by hand, no
 `nn.Transformer` shortcuts. It trains on a corpus of 2023 AI and technology
 writing (the
-[`siavava/ai-tech-articles`](https://huggingface.co/datasets/siavava/ai-tech-articles)
+[`siavava/ai-tech-articles`][hf-ai]
 dataset, filtered to that year), building its vocabulary from the sorted set
 of characters in the text, and generates one character at a time.
 
@@ -92,3 +92,6 @@ tokens, softmax the final logits, draw one character with
 `torch.multinomial`, append it, and repeat. A FastAPI layer (`main.py`) loads
 a saved checkpoint and exposes `GET /api/{query}`, returning 150 generated
 characters as JSON.
+
+[generative-pre]: https://en.wikipedia.org/wiki/Generative_pre-trained_transformer
+[hf-ai]:          https://huggingface.co/datasets/siavava/ai-tech-articles

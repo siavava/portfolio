@@ -16,10 +16,10 @@ summary: "NotePad, a board of draggable, resizable sticky notes backed by the Fi
 
 **NotePad** is a board of sticky notes: create a note, drag it anywhere,
 resize it, and stack it over the others. Built with
-[React](https://reactjs.org),
-[TypeScript](https://www.typescriptlang.org), and
-[Sass](https://sass-lang.com), bundled with [Vite](https://vitejs.dev),
-with the [Firebase](https://firebase.google.com) Realtime Database holding
+[React][reactjs],
+[TypeScript][typescriptlang], and
+[Sass][sass-lang], bundled with [Vite][vitejs],
+with the [Firebase][firebase] Realtime Database holding
 the notes.
 
 **Firebase carries the backend.** There is no server to run. A single
@@ -35,8 +35,15 @@ lands in another without a reload.
 `x`, `y`, `width`, `height`, and a `z` index. Dragging and resizing write
 those coordinates back, and focusing a note lifts its `z` above the rest so
 it comes to the front. Bodies render as Markdown through
-[react-markdown](https://github.com/remarkjs/react-markdown), and a search
+[react-markdown][react-markdown], and a search
 box filters the board by substring across each note's title and text,
 highlighting the matches in place. Because persistence and sync are
 delegated to Firebase, the code that remains is mostly the note-editing
 surface itself.
+
+[reactjs]:        https://reactjs.org
+[typescriptlang]: https://www.typescriptlang.org
+[sass-lang]:      https://sass-lang.com
+[vitejs]:         https://vitejs.dev
+[firebase]:       https://firebase.google.com
+[react-markdown]: https://github.com/remarkjs/react-markdown

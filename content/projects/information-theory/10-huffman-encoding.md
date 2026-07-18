@@ -14,7 +14,7 @@ references:
 ---
 
 Lossless text compression by [Huffman
-coding](https://en.wikipedia.org/wiki/Huffman_coding#Compression).
+coding][huffman-coding].
 Frequent characters get short binary codes and rare ones long codes, and
 no code is a prefix of another, so the compressed stream decodes back to
 the original with no ambiguity.
@@ -101,3 +101,5 @@ the slack being the cost of using a whole number of bits per symbol when the
 ideal length $-\log_2 p[c]$ is usually fractional. The gap shrinks to nothing when
 the probabilities are exact powers of $\tfrac{1}{2}$, and it is amortized away in
 practice by coding blocks of symbols at once.
+
+[huffman-coding]: https://en.wikipedia.org/wiki/Huffman_coding#Compression

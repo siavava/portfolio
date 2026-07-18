@@ -57,5 +57,7 @@ finishes applying an edit and broadcasting it before the next begins.
 Serializing writes this way prevents the _data races_ that concurrent
 updates to a single sketch would otherwise cause, and routing every
 change through the one server sidesteps the
-[deadlock](https://en.wikipedia.org/wiki/Deadlock) that competing locks
+[deadlock][deadlock] that competing locks
 on shared state could invite.
+
+[deadlock]: https://en.wikipedia.org/wiki/Deadlock

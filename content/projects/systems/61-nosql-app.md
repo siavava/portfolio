@@ -14,8 +14,8 @@ references:
   - https://notes.amittai.studio/algorithms/data-structures/b-trees
 ---
 
-A blog server backed by [MongoDB](https://www.mongodb.com/) and driven
-by a [Python](https://www.python.org/) client. One class,
+A blog server backed by [MongoDB][mongodb] and driven
+by a [Python][python] client. One class,
 `MongoBlogServer`, maps four text commands — `post`, `show`, `comment`,
 and `delete` — onto operations against a single collection.
 
@@ -47,4 +47,8 @@ The index behind those keyed lookups is a B-tree — the same balanced tree
 relational engines reach for.
 
 Collaborative project with
-[Ke Lou](https://www.linkedin.com/in/ke-lou-898301133).
+[Ke Lou][ke-lou].
+
+[mongodb]: https://www.mongodb.com/
+[python]:  https://www.python.org/
+[ke-lou]:  https://www.linkedin.com/in/ke-lou-898301133

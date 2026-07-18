@@ -18,8 +18,8 @@ Informed search uses a heuristic estimate of the cost remaining to the goal to
 decide which state to expand next, reaching the goal after touching far fewer
 states than blind search. This project drives a robot across a grid maze of
 obstacles to a target cell, comparing
-[A* search](https://en.wikipedia.org/wiki/A*_search_algorithm) against
-[greedy best-first search](https://en.wikipedia.org/wiki/Greedy_algorithm).
+[A\* search][a-search] against
+[greedy best-first search][greedy-algorithm].
 
 **Evaluation function.** Each frontier state $n$ is scored by
 
@@ -28,7 +28,7 @@ f(n) = g(n) + h(n),
 $$
 
 where $g(n)$ is the cost already paid to reach $n$ and $h(n)$ estimates the cost
-from $n$ to the goal. A* always expands the state of lowest $f$. Greedy search
+from $n$ to the goal. A-star always expands the state of lowest $f$. Greedy search
 drops the $g$ term and expands by $h$ alone — quicker to commit, but with no
 account of the path so far it can settle for an expensive route.
 
@@ -58,17 +58,17 @@ $$
 
 **Heuristics.** On a grid the estimate is a distance to the goal cell. For
 four-connected movement,
-[Manhattan distance](https://en.wikipedia.org/wiki/Taxicab_geometry)
+[Manhattan distance][taxicab-geometry]
 
 $$
 h(n) = |x_n - x_g| + |y_n - y_g|
 $$
 
 counts axis-aligned steps; when diagonal moves are allowed,
-[Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance)
+[Euclidean distance][euclidean-distance]
 $\sqrt{(x_n - x_g)^2 + (y_n - y_g)^2}$ fits the true geometry. Both are
 admissible — never overestimating the real remaining cost — which is exactly the
-condition under which A* returns an optimal path.
+condition under which A-star returns an optimal path.
 
 **Admissibility and consistency.** Two properties of a heuristic control what A\*
 guarantees:
@@ -117,10 +117,15 @@ return failure
 
 **Greedy against A-star.** Greedy search often expands fewer states, since it
 heads straight at the goal, but it gives up optimality: a heuristic that points
-toward a dead end walks the robot into it. A* pays for more expansions with a
+toward a dead end walks the robot into it. A-star pays for more expansions with a
 guarantee — under an admissible heuristic the first goal it removes from the
-frontier sits on a shortest path. Setting $h = 0$ collapses A* to uniform-cost
+frontier sits on a shortest path. Setting $h = 0$ collapses A-star to uniform-cost
 search, and a sharper $h$ narrows the search toward the goal without breaking
 that guarantee.
 
 :a-star-viz
+
+[a-search]:           https://en.wikipedia.org/wiki/A*_search_algorithm
+[greedy-algorithm]:   https://en.wikipedia.org/wiki/Greedy_algorithm
+[taxicab-geometry]:   https://en.wikipedia.org/wiki/Taxicab_geometry
+[euclidean-distance]: https://en.wikipedia.org/wiki/Euclidean_distance

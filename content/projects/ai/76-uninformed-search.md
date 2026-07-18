@@ -17,8 +17,8 @@ references:
 Many puzzles are search problems in disguise: a set of states, a start, a goal,
 and moves between states. Solving one means finding a path through the implicit
 graph of states without ever building it in full. This project applies
-[breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search) and
-[depth-first search](https://en.wikipedia.org/wiki/Depth-first_search) to the
+[breadth-first search][breadth-first] and
+[depth-first search][depth-first] to the
 chickens-and-foxes river crossing.
 
 **The state space.** A state records how many chickens and foxes sit on each
@@ -69,3 +69,6 @@ inherits DFS's $O(bd)$ memory and BFS's completeness and optimality. Re-searchin
 the shallow levels sounds wasteful, but the bottom level of a branching tree
 dwarfs everything above it, so the repeated work is a constant factor and the total
 stays $O(b^d)$ — BFS's guarantees at DFS's footprint.
+
+[breadth-first]: https://en.wikipedia.org/wiki/Breadth-first_search
+[depth-first]:   https://en.wikipedia.org/wiki/Depth-first_search

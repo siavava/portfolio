@@ -14,10 +14,10 @@ references:
   - https://notes.amittai.studio/algorithms/sequences/kmp-and-z-function
 ---
 
-Two staples rebuilt in Haskell, a [pure](https://en.wikipedia.org/wiki/Pure_function)
-[functional](https://en.wikipedia.org/wiki/Functional_programming)
-language: [Wordle](https://www.nytimes.com/games/wordle/index.html), the
-five-letter guessing game, and [grep](https://www.gnu.org/software/grep/manual/grep.html),
+Two staples rebuilt in Haskell, a [pure][pure-function]
+[functional][functional-programming]
+language: [Wordle][index], the
+five-letter guessing game, and [grep][grep],
 the stream matcher.
 
 **Wordle** picks a random five-letter word from a corpus and scores each
@@ -27,10 +27,16 @@ mark the exact matches first, then match the remaining guess letters
 against the pool of still-unmatched target letters, so a repeated letter
 is never credited twice. The round is won when the word is guessed,
 usually within five tries; an infinite mode keeps dealing new words. The
-original game was made by [Josh Wardle](https://youtu.be/X_e2IEaR4aA?si=6UD8xPwH4fsJJzO2&t=1016).
+original game was made by [Josh Wardle][x-e2iear4aa].
 
 **Grep** matches a pattern against a text stream line by line and prints
 the lines that hit — search over local file contents. In Haskell the
 matcher is a pure function over a lazy list of lines, so a file is
 consumed as a stream and only as far as needed, rather than read into
 memory whole.
+
+[pure-function]:          https://en.wikipedia.org/wiki/Pure_function
+[functional-programming]: https://en.wikipedia.org/wiki/Functional_programming
+[index]:                  https://www.nytimes.com/games/wordle/index.html
+[grep]:                   https://www.gnu.org/software/grep/manual/grep.html
+[x-e2iear4aa]:            https://youtu.be/X_e2IEaR4aA?si=6UD8xPwH4fsJJzO2&t=1016
