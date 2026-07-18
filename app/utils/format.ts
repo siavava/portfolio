@@ -6,3 +6,9 @@ export const titleCase = (text: string) =>
     index > 0 && MINOR_WORDS.has(word)
       ? word
       : word.charAt(0).toUpperCase() + word.slice(1)).join(" ")
+
+/** Render an ISO-ish date string as MM/YYYY. */
+export const formatMonthYear = (date: unknown) => {
+  const [year, month] = String(date).split("-")
+  return `${month}/${year}`
+}

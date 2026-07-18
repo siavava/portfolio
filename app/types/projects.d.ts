@@ -1,15 +1,15 @@
-/** Archive entries rendered as spines on the bookshelf panel. */
+/** Archive entry shape shared by the bookshelf and the projects page. */
 
 interface ProjectItem {
+  path: string
   title: string
-  blurb: string
-  repo: string
+  /** Hand-length one-sentence summary from frontmatter. */
+  summary: string
   tag: string
   year: number
-  /** Part of the default rotation the shelf highlights on load. */
+  date: string
+  repo?: string
+  url?: string
   featured?: boolean
-}
-
-interface ProjectsData {
-  items: ProjectItem[]
+  tech?: string[]
 }

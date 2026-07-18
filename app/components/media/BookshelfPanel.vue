@@ -4,18 +4,13 @@
     template(v-if="selected")
       p.bookshelf-panel__meta {{ titleCase(selected.tag) }} · {{ selected.year }}
       p.bookshelf-panel__title {{ selected.title }}
-      p.bookshelf-panel__blurb {{ selected.blurb }}
-      a.bookshelf-panel__link(
-        v-if="selected.repo",
-        :href="selected.repo",
-        target="_blank",
-        rel="noopener",
-      ) view the code →
+      p.bookshelf-panel__blurb {{ selected.summary }}
+      NuxtLink.bookshelf-panel__link(:to="selected.path") view more →
   .bookshelf-panel__viewport(ref="viewport")
     .bookshelf-panel__shelf(ref="shelf", role="listbox", aria-label="Project archive", @scroll="hovered = null")
       button.bookshelf-panel__book(
         v-for="project in projects",
-        :key="project.title",
+        :key="project.path",
         type="button",
         role="option",
         :aria-selected="isSelected(project)",
@@ -39,12 +34,23 @@
 </template>
 
 <script lang="ts" setup>
-const { data } = await useAsyncData("projects", () =>
-  queryCollection("projects").first())
+const { data } = await useAsyncData("projects-shelf", () =>
+  queryCollection("projects")
+    .select("path", "title", "summary", "tag", "date", "repo", "featured")
+    .all())
 
 // Featured builds shelve first, then the rest — both runs newest first.
 const projects = computed<ProjectItem[]>(() => {
-  const items = data.value?.items ?? []
+  const items = (data.value ?? []).map(doc => ({
+    path: doc.path,
+    title: doc.title,
+    summary: doc.summary,
+    tag: doc.tag,
+    year: Number(String(doc.date).slice(0, 4)),
+    date: String(doc.date),
+    repo: doc.repo,
+    featured: doc.featured,
+  }))
   const byYear = (a: ProjectItem, b: ProjectItem) =>
     b.year - a.year || a.title.localeCompare(b.title)
   return [
@@ -119,38 +125,7 @@ const centerSelected = (behavior: ScrollBehavior) => {
 
 watch(selected, (_, previous) => centerSelected(previous ? "smooth" : "instant"))
 
-/** Stable pseudo-random spine geometry, seeded by the title. */
-const hash = (text: string) => {
-  let h = 0
-  for (const char of text) h = h * 31 + char.charCodeAt(0) | 0
-  return Math.abs(h)
-}
-
-// Widths draw from three tiers — thin, medium, thick — like a real
-// shelf of paperbacks, references, and the odd hardcover.
-const spineWidth = (seed: number) => {
-  const roll = seed % 20
-  if (roll < 8) return 7 + seed % 3
-  if (roll < 17) return 10 + (seed >> 3) % 5
-  return 16 + (seed >> 5) % 6
-}
-
-const spine = (project: ProjectItem) => {
-  const seed = hash(project.title)
-  const tilted = seed % 13 === 0
-  const lean = 4 + (seed >> 4) % 4
-  const width = spineWidth(seed)
-  // The edge arc scales with thickness — a fat hardcover bows more than
-  // a slim paperback, and a fixed arc turns thin spines into capsules.
-  const arc = Math.max(1.5, Math.round(width * 0.18 * 10) / 10)
-  return {
-    width: `${width}px`,
-    height: `${50 + (seed >> 2) % 36}%`,
-    marginLeft: `${(seed >> 6) % 2}px`,
-    borderRadius: `50% / ${arc}px`,
-    transform: tilted ? `rotate(${(seed >> 5) % 2 ? lean : -lean}deg)` : undefined,
-  }
-}
+const spine = (project: ProjectItem) => spineStyle(project.title)
 </script>
 
 <style lang="sass" scoped>
@@ -227,7 +202,9 @@ $shelf-blue-tint: #dbeafe
   align-items: flex-end
   gap: 1px
   height: 100%
-  padding: 0 6px
+  // Wide enough gutters that a tilted edge spine (up to 7deg of lean,
+  // ~7px of overhang) never clips against the scroll box.
+  padding: 0 8px
   overflow-x: auto
   overflow-y: hidden
   scrollbar-width: none
@@ -276,7 +253,7 @@ $shelf-blue-tint: #dbeafe
 
 .bookshelf-panel__caption
   margin: 10px 0 0
-  font-family: ui-monospace, "SF Mono", Menlo, monospace
+  font-family: typography.font("monospace"), ui-monospace, monospace
   font-size: typography.font-size("meta")
   letter-spacing: 0.02em
   color: var(--foreground)

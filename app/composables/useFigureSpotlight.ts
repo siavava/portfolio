@@ -1,0 +1,76 @@
+/**
+ * ## useFigureSpotlight
+ *
+ * Click-to-spotlight for article figures. Clicking a
+ * (non-algorithm, non-visualizer) figure opens it large
+ * on a card over the blurred page; the EXIT button, a
+ * backdrop click, or Escape close it. Page scroll locks
+ * while open. The click and key listeners attach on mount
+ * and tear down on unmount.
+ *
+ * ### Returns
+ *
+ * | Name | Type | Description |
+ * | --- | --- | --- |
+ * | `spotlight` | `Ref<FigSpotlightState \| null>` | The open figure, or `null` |
+ * | `close` | `() => void` | Dismiss the spotlight |
+ */
+import type { Ref } from "vue"
+
+export function useFigureSpotlight(contentEl: Ref<HTMLElement | null>) {
+  const spotlight = ref<FigSpotlightState | null>(null)
+
+  function open(fig: HTMLElement) {
+    const figs = [...contentEl.value?.querySelectorAll("figure") ?? []]
+    const clone = fig.cloneNode(true) as HTMLElement
+    clone
+      .querySelectorAll(".fig-cap, .tikz-cap, figcaption")
+      .forEach(c => c.remove())
+    spotlight.value = {
+      html: clone.outerHTML,
+      caption: fig.querySelector(
+        ".fig-cap, .tikz-cap, figcaption",
+      )?.innerHTML ?? "",
+      n: figs.indexOf(fig) + 1,
+      capWidth: Math.round(
+        Math.min(560, Math.max(260, fig.getBoundingClientRect().width)),
+      ),
+    }
+    document.documentElement.style.overflow = "hidden"
+  }
+
+  function close() {
+    spotlight.value = null
+    document.documentElement.style.overflow = ""
+  }
+
+  function onClick(e: MouseEvent) {
+    const t = e.target as HTMLElement
+    if (t.closest(
+      "a, button, input, select, textarea,"
+      + " [class*=visualiser], [class*=visualizer]",
+    )) return
+    const fig = t.closest("figure:not(.algorithm)") as HTMLElement | null
+    if (
+      fig
+      && contentEl.value?.contains(fig)
+      && fig.querySelector("svg, img, picture")
+    ) open(fig)
+  }
+
+  function onKey(e: KeyboardEvent) {
+    if (e.key === "Escape" && spotlight.value) close()
+  }
+
+  onMounted(() => {
+    contentEl.value?.addEventListener("click", onClick)
+    window.addEventListener("keydown", onKey)
+  })
+  onBeforeUnmount(() => {
+    contentEl.value?.removeEventListener("click", onClick)
+    window.removeEventListener("keydown", onKey)
+    document.documentElement.style.overflow = ""
+  })
+
+  return { spotlight, close }
+}
