@@ -11,13 +11,10 @@ MD007: false
 
 MD022: false
 
-# Max line length; MDC inline-component tokens (incl. attribute text)
-# are unbreakable and run up to ~155 characters, so the ceiling sits
-# well above prose width.
-MD013:
-  line_length: 160
-  code_blocks: false
-  tables: false
+# Disable max line length: MDC inline-component tokens, TikZ figure
+# captions, and long reference URLs are all unbreakable, matching the
+# blog's own decision to leave this off.
+MD013: false
 
 # Allow duplicated heading for different sections
 MD024: false

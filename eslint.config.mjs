@@ -50,9 +50,20 @@ export default withNuxt({
   })
   .append({
     rules: {
+      "@typescript-eslint/no-empty-object-type": "off",
+    },
+  })
+  .append({
+    rules: {
       // vue rules
       "vue/multi-word-component-names": "off",
       "vue/no-v-html": "off",
+    },
+  })
+  .append({
+    rules: {
+      // nuxt
+      "nuxt/prefer-import-meta": "error",
     },
   })
   .append(vuePug.configs["flat/recommended"])
