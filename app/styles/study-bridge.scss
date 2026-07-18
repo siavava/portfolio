@@ -1,61 +1,12 @@
-// Bridge variables + figure styling for the components and TikZ pipeline
-// ported from the study repo — the study's names, mapped onto this site.
-
-:root {
-  --primary-highlight: #1342ff;
-  --lightest-foreground: #000000;
-  --study-surface: #ffffff;
-  --blue-highlight: rgba(198, 231, 255, 1);
-  --blue-underline: rgba(76, 116, 185, 1);
-  --dark-foreground: rgba(0, 0, 0, 0.5);
-  --border-color: rgba(0, 0, 0, 0.14);
-  --hl-yellow-bg: rgba(255, 253, 212, 1);
-  --study-surface-sunken: #f5f5f3;
-  --orange-highlight: rgba(255, 225, 220, 1);
-  --orange-underline: rgba(255, 97, 76, 1);
-  --yellow-highlight: rgba(255, 253, 212, 1);
-  --yellow-underline: rgba(255, 226, 76, 1);
-  --green-highlight: rgba(193, 251, 202, 1);
-  --green-underline: rgba(0, 190, 99, 1);
-  --warn-underline: #d2402f;
-}
-
-.dark-mode {
-  --primary-highlight: #5b7cff;
-  --lightest-foreground: #f6f8fc;
-  --study-surface: #1d1d1f;
-  --blue-highlight: rgba(40, 70, 110, 1);
-  --blue-underline: rgba(120, 160, 220, 1);
-  --dark-foreground: #6f7689;
-  --border-color: rgba(150, 170, 220, 0.16);
-  --study-surface-sunken: #141416;
-  --warn-underline: #ff6f63;
-}
-
-// The study's ink, scoped to every ported reading surface — this is
-// what the algorithm blocks, tikz SVGs, and peek cards read through
-// their var(--foreground) references.
 .reading-desk__card,
 .fig-spot-overlay,
 .ref-peek,
 .fig-peek,
 .desk-topbar,
 .drawer-toc {
-  --foreground: #16160f;
+  --foreground: var(--study-ink);
 }
 
-.dark-mode .reading-desk__card,
-.dark-mode .fig-spot-overlay,
-.dark-mode .ref-peek,
-.dark-mode .fig-peek,
-.dark-mode .desk-topbar,
-.dark-mode .drawer-toc {
-  --foreground: rgba(222, 226, 236, 0.92);
-}
-
-// The study renders its serif with subpixel antialiasing; the portfolio
-// default is `antialiased`, which thins Arizona Text noticeably. The
-// peeks and the spotlight teleport to <body>, so they need it too.
 .reading-desk__card,
 .fig-peek,
 .ref-peek,
@@ -65,8 +16,6 @@
   -moz-font-smoothing: subpixel-antialiased;
   font-smooth: always;
 }
-
-// ─── Build-rendered TikZ figures (see transformers/tikz) ───
 
 .tikz-diagram-rendered {
   display: block;
@@ -83,7 +32,6 @@
     fill: currentColor;
     transition: color 0.3s ease-out;
 
-    // Theme palette consumed by figure colours (see transformers/tikz/render.ts themeColors).
     --tk-accent: #2348f2;
     --tk-good: #1f9d4d;
     --tk-warn: #d2402f;
@@ -121,17 +69,12 @@
   --tk-soft-neutral: rgba(222, 226, 236, 0.1);
 }
 
-// Figures wear the study reader's exact chrome: captions stay hidden
-// inline and surface as the floating yellow "fig n." peek on hover
-// (see FigPeek.vue); the figure itself gains its hairline container
-// only while hovered.
 .tikz-cap {
   display: none;
 }
 
 figure.tikz-figure {
   border: 1px solid transparent;
-  // The study's global reset squares every corner; match that look.
   border-radius: 0;
   padding: 0.75rem;
   cursor: pointer;
@@ -143,7 +86,6 @@ figure.tikz-figure {
   }
 }
 
-// Client-fallback (```tikz fence) figure chrome.
 .tikz-figure .tikz-loading {
   display: inline-flex;
   align-items: center;
@@ -162,8 +104,6 @@ figure.tikz-figure {
   }
 }
 
-// KaTeX's \textsc expands to \htmlClass{textsc}{...} (see configs/latex);
-// this class is what actually renders the small caps.
 .textsc {
   font-variant: small-caps;
   font-variant-caps: small-caps;
