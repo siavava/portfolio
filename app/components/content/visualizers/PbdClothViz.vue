@@ -151,26 +151,10 @@ function reset() {
       })
     }
   }
-  // Relax into the hanging equilibrium before showing anything: the
-  // grid starts square, but a corner-hung sheet rests as a diagonal
-  // pennant, and the drop between the two would read as a glitch.
-  for (let k = 0; k < 2000; k++) {
-    for (const q of particles) {
-      if (q.pinned) continue
-      q.vy += DT * GRAVITY
-      q.vx *= 0.94
-      q.vy *= 0.94
-      q.x += DT * q.vx
-      q.y += DT * q.vy
-    }
-    for (let n = 0; n < 4; n++) project()
-    for (let n = 0; n < SHEAR_ITERS; n++) projectLimits()
-    projectContacts()
-  }
-  for (const q of particles) {
-    q.vx = 0
-    q.vy = 0
-  }
+  // The curtain hangs from a full top rail, so the flat grid already
+  // sits at its equilibrium (a few px of sag the live loop settles on
+  // its own). No relaxation pass here — it was a corner-pin holdover
+  // and its O(n^2) contact sweep blocked hydration for seconds.
   gustLeft = 0
   peakStretch.value = 0
   note.value = noteText()
