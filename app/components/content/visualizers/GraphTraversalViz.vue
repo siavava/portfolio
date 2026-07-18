@@ -1,21 +1,19 @@
 <template lang="pug">
-figure.viz.visualizer.graph-traversal-viz
-  figcaption.tikz-cap
+VizFrame(variant="graph-traversal-viz", title="Graph traversal")
+  template(#caption)
     | BFS, DFS, and uniform-cost search animated over one graph from
     | node A. BFS and DFS share a frontier collection and differ only
     | in which end they take from — queue or stack — which is the whole
     | difference between level-order and plunge-first exploration.
     | Uniform-cost relaxes weighted edges and labels each node with its
     | tentative distance. The order line records each visit as it lands.
-  .viz-head
-    span.viz-title Graph traversal
-    .viz-controls
-      select.viz-select(v-model="algo")
-        option(value="bfs") BFS
-        option(value="dfs") DFS
-        option(value="ucs") uniform-cost
-      button.viz-btn.primary(type="button", @click="run") run from A
-      button.viz-btn(type="button", @click="reset") reset
+  template(#controls)
+    select.viz-select(v-model="algo")
+      option(value="bfs") BFS
+      option(value="dfs") DFS
+      option(value="ucs") uniform-cost
+    button.viz-btn.primary(type="button", @click="run") run from A
+    button.viz-btn(type="button", @click="reset") reset
   svg.viz-canvas(:viewBox="`0 0 ${W} ${H}`")
     g
       g(v-for="e in edgeViews", :key="e.id")
@@ -35,32 +33,22 @@ figure.viz.visualizer.graph-traversal-viz
     )
       circle(r="15")
       text {{ n.id }}{{ distLabel(n.id) }}
-  .viz-foot
-    span.viz-note order: {{ order.join(" → ") || "—" }}
-  .viz-legend
-    span
-      i(style="background: var(--orange-underline)")
-      | active
-    span
-      i(style="background: var(--yellow-underline)")
-      | frontier
-    span
-      i(style="background: var(--green-underline)")
-      | visited
+  template(#note) order: {{ order.join(" → ") || "—" }}
+  template(#legend)
+    .viz-legend
+      span
+        i(style="background: var(--orange-underline)")
+        | active
+      span
+        i(style="background: var(--yellow-underline)")
+        | frontier
+      span
+        i(style="background: var(--green-underline)")
+        | visited
 </template>
 
 <script lang="ts" setup>
-/**
- * ## GraphTraversalViz
- *
- * The study's traversal animator, in this site's figure idiom: BFS,
- * DFS, and uniform-cost search over a fixed weighted graph from node
- * A. BFS and DFS share one frontier collection (shift vs. pop);
- * uniform-cost relaxes edges and labels nodes with their tentative
- * distance. Runs itself on mount and re-runs on a timer so the page
- * is alive without a click; a run token cancels stale timers when
- * the user restarts mid-flight or the component unmounts.
- */
+/** ## GraphTraversalViz — BFS, DFS, and uniform-cost search animated over one weighted graph. */
 const W = 640
 const H = 300
 const INF = Infinity
@@ -126,8 +114,6 @@ const distLabel = (id: string) => {
   return d != null && d < INF ? `:${d}` : ""
 }
 
-// A run token instead of raw setTimeout chains: bumping it (restart,
-// algo change, unmount) strands any sleeping run mid-await.
 let token = 0
 let alive = false
 const delay = (ms = 420) => new Promise(r => setTimeout(r, ms))
@@ -173,7 +159,6 @@ async function run() {
     }
     frontier.value = []
   }
-  // idle, then run again so the figure stays alive
   await delay(3600)
   if (!stale()) run()
 }

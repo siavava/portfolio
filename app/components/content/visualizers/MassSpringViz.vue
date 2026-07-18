@@ -1,6 +1,6 @@
 <template lang="pug">
-figure.viz.visualizer.mass-spring-viz
-  figcaption.tikz-cap
+VizFrame(variant="mass-spring-viz", title="Mass-spring strand", :note="note")
+  template(#caption)
     | A strand of eight masses hangs from a single anchor, joined by
     | structural springs between neighbors and dashed bending springs
     | across every other pair; springs tint orange as they strain. The
@@ -8,14 +8,12 @@ figure.viz.visualizer.mass-spring-viz
     | however hard you perturb the strand, while explicit Euler pumps
     | energy into every oscillation until the strand flies out of frame
     | and the sim resets itself.
-  .viz-head
-    span.viz-title Mass-spring strand
-    .viz-controls
-      select.viz-select(v-model="integrator")
-        option(value="semi") semi-implicit Euler
-        option(value="explicit") explicit Euler
-      button.viz-btn.primary(type="button", @click="perturb") perturb
-      button.viz-btn(type="button", @click="reset") reset
+  template(#controls)
+    select.viz-select(v-model="integrator")
+      option(value="semi") semi-implicit Euler
+      option(value="explicit") explicit Euler
+    button.viz-btn.primary(type="button", @click="perturb") perturb
+    button.viz-btn(type="button", @click="reset") reset
   svg.viz-canvas(:viewBox="`0 0 ${W} ${H}`")
     line.ms-spring(
       v-for="(s, i) in segments",
@@ -32,25 +30,12 @@ figure.viz.visualizer.mass-spring-viz
       :transform="`translate(${m.x},${m.y})`",
     )
       circle(:r="i === 0 ? 3.5 : 3")
-  .viz-foot
-    span.viz-note {{ note }}
 </template>
 
 <script lang="ts" setup>
-/**
- * ## MassSpringViz
- *
- * A hanging mass-spring strand: eight masses under gravity from a
- * single anchor, structural springs between neighbors and bending
- * springs across every other pair, integrated in real time. The
- * strand starts at its stretched hanging equilibrium, so its whole
- * range of motion — settling sways and full pendulum swings alike —
- * stays inside the frame. The integrator select is the point:
- * semi-implicit Euler stays bounded, explicit Euler pumps energy
- * until the strand leaves the frame and the sim resets. The blow-up
- * guard trips at the canvas edge, so divergence is watched, not
- * implied.
- */
+import { useRafFn } from "@vueuse/core"
+
+/** ## MassSpringViz — a hanging mass-spring strand comparing semi-implicit vs explicit Euler. */
 const W = 640
 const H = 320
 
@@ -74,12 +59,6 @@ const springs: { a: number, b: number, rest: number, k: number, bend: boolean }[
 for (let i = 0; i < N - 1; i++) springs.push({ a: i, b: i + 1, rest: REST, k: KS, bend: false })
 for (let i = 0; i < N - 2; i++) springs.push({ a: i, b: i + 2, rest: 2 * REST, k: KB, bend: true })
 
-// Endpoint coordinates flattened for the template — Pug expressions
-// can't carry the index assertions the strict lookups would need.
-// Structural springs tint from cobalt toward orange by how far they sit
-// from their own hanging-equilibrium length — not from rest length,
-// which the strand's upper springs statically exceed just by carrying
-// weight. At rest everything reads cobalt; only motion brings orange.
 const eqLen: number[] = []
 const segments = computed(() => springs.flatMap((s, si) => {
   const a = masses[s.a]
@@ -97,12 +76,6 @@ const segments = computed(() => springs.flatMap((s, si) => {
   }]
 }))
 
-// The strand starts hanging at its true equilibrium: an analytic guess
-// (each structural spring stretched by the weight below it), then a
-// damped relaxation that also lets the bending springs settle — the
-// guess alone leaves the strand creeping for seconds. Velocities are
-// zeroed afterwards and each spring's equilibrium length recorded for
-// the strain tint.
 function reset() {
   masses.length = 0
   masses.push({ x: ANCHOR_X, y: ANCHOR_Y, vx: 0, vy: 0 })
@@ -134,8 +107,6 @@ function reset() {
   note.value = "hanging at equilibrium — perturb it and compare integrators"
 }
 
-// Alternating flick at the free end, with a little randomness so no
-// two perturbations look alike.
 let dir = 1
 function perturb() {
   const tail = masses[N - 1]
@@ -184,8 +155,6 @@ function step() {
       m.vy += DT * f[i]!.fy
     }
   }
-  // The guard trips as soon as any mass leaves the frame, so the
-  // divergence never plays out off-screen.
   for (let i = 1; i < N; i++) {
     const m = masses[i]!
     if (!Number.isFinite(m.x) || m.x < -30 || m.x > W + 30 || m.y < -30 || m.y > H + 30) {
@@ -200,25 +169,17 @@ function step() {
   }
 }
 
-// Explicit Euler at a fixed point would sit still forever; kicking the
-// strand on the switch makes the divergence start immediately.
 watch(integrator, (mode) => {
   if (mode === "explicit") perturb()
 })
 
-let raf = 0
-function loop() {
+const { resume } = useRafFn(() => {
   for (let k = 0; k < 3; k++) step()
-  raf = requestAnimationFrame(loop)
-}
+}, { immediate: false })
 
 reset()
 
-onMounted(() => {
-  raf = requestAnimationFrame(loop)
-})
-
-onBeforeUnmount(() => cancelAnimationFrame(raf))
+onMounted(resume)
 </script>
 
 <style lang="sass" scoped>

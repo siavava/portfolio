@@ -1,6 +1,6 @@
 <template lang="pug">
-figure.viz.visualizer.multicopter-viz
-  figcaption.tikz-cap
+VizFrame(variant="multicopter-viz", title="Multicopter (side view)", :note="note")
+  template(#caption)
     | A planar multicopter under a cascaded PD controller. Click anywhere
     | in the frame to set a waypoint: the controller cannot push sideways
     | directly, so it banks — the differential between the two orange
@@ -8,11 +8,9 @@ figure.viz.visualizer.multicopter-viz
     | across, and the same arrows level it out and brake at the target.
     | Nudge kicks the craft to show the recovery; the faded line is the
     | flight path.
-  .viz-head
-    span.viz-title Multicopter (side view)
-    .viz-controls
-      button.viz-btn.primary(type="button", @click="nudge") nudge
-      button.viz-btn(type="button", @click="reset") reset
+  template(#controls)
+    button.viz-btn.primary(type="button", @click="nudge") nudge
+    button.viz-btn(type="button", @click="reset") reset
   svg.viz-canvas.mc-stage(:viewBox="`0 0 ${W} ${H}`", @click="flyTo")
     line.ground(:x1="0", :y1="groundPx", :x2="W", :y2="groundPx")
     polyline.trail(:points="trailPoints")
@@ -36,59 +34,42 @@ figure.viz.visualizer.multicopter-viz
     line.gravity(:x1="comX", :y1="comY + 8", :x2="comX", :y2="comY + 34 - HEAD")
     polygon.gravity-head(:points="gHead")
     text.svg-label.gravity-label(:x="comX + 6", :y="comY + 32", text-anchor="start") mg
-  .viz-foot
-    span.viz-note {{ note }}
-  .viz-legend
-    span
-      i.swatch-thrust
-      | rotor thrust (commanded)
-    span
-      i.swatch-gravity
-      | gravity
-    span
-      i.swatch-trail
-      | flight path
-    span
-      i.swatch-waypoint
-      | waypoint (click to move)
+  template(#legend)
+    .viz-legend
+      span
+        i.swatch-thrust
+        | rotor thrust (commanded)
+      span
+        i.swatch-gravity
+        | gravity
+      span
+        i.swatch-trail
+        | flight path
+      span
+        i.swatch-waypoint
+        | waypoint (click to move)
 </template>
 
 <script lang="ts" setup>
-/**
- * ## MulticopterViz
- *
- * A 2-D side-view rigid craft: a bar with two rotors, gravity pulling
- * at the center of mass, and per-rotor thrust whose differential is a
- * torque. Clicking the stage sets a waypoint; a cascaded PD controller
- * turns the horizontal error into a desired tilt (the craft cannot
- * push sideways — it must bank), the attitude loop turns tilt error
- * into differential thrust, and the altitude loop scales total thrust,
- * tilt-corrected. Semi-implicit Euler integrates the rigid body; the
- * thrust arrows track the actual commanded forces and a fading trail
- * records the flight path.
- */
+import { useRafFn } from "@vueuse/core"
+
+/** ## MulticopterViz — a planar two-rotor craft flown to click waypoints by a cascaded PD controller. */
 const W = 640
 const H = 320
 
-// world units → pixels
 const SCALE = 28
 const ORIGIN_X = W / 2
 const ORIGIN_Y = H * 0.88
 
-const L = 1.15 // half-span (world)
+const L = 1.15
 const M = 1
 const G = 9.81
-// A deliberately large moment of inertia: the differential thrust the
-// controller needs becomes a visible arrow-length gap, and the bank
-// into a waypoint is a watchable maneuver instead of an instant snap.
 const I = 0.5
 const DT = 1 / 120
 const FMAX = 18
 const TRAIL = 150
 const HOME = { x: 0, y: 2.6 }
 const armPx = L * SCALE
-// arrowhead length: shafts stop at the head's base so the line never
-// pokes through the triangle
 const HEAD = 7
 
 type State = { x: number, y: number, vx: number, vy: number, th: number, om: number }
@@ -123,12 +104,8 @@ const gHead = computed(() => {
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
 
-/** Click → world coordinates → new waypoint. */
 function flyTo(e: MouseEvent) {
   const svg = e.currentTarget as SVGSVGElement
-  // The screen CTM accounts for the letterboxing preserveAspectRatio
-  // adds when the element is wider than the 2:1 viewBox — a plain
-  // width-ratio mapping lands clicks off by the letterbox margin.
   const ctm = svg.getScreenCTM()
   if (!ctm) return
   const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse())
@@ -138,26 +115,18 @@ function flyTo(e: MouseEvent) {
 }
 
 function control() {
-  // position PD → desired lateral acceleration → desired tilt: the
-  // only way to accelerate sideways is to lean the thrust vector. The
-  // outer loop must run well below the attitude loop's bandwidth or
-  // the cascade limit-cycles around the waypoint instead of settling.
   const axDes = clamp(1.6 * (target.x - s.x) - 2.0 * s.vx, -6, 6)
   const thDes = clamp(-axDes / G, -0.5, 0.5)
-  // altitude PD → total thrust, corrected for tilt
   const ayDes = 5.0 * (target.y - s.y) - 3.4 * s.vy
   const c = Math.cos(s.th)
   let T = M * (G + ayDes) / (Math.abs(c) < 0.3 ? 0.3 : c)
   T = Math.max(0, Math.min(2 * FMAX, T))
-  // attitude PD tracks the desired tilt, split into a differential —
-  // near-critically damped, ~4x faster than the position loop.
   const tauDes = -20 * (s.th - thDes) - 6.3 * s.om
   const delta = I * tauDes / L
   f1.value = Math.max(0, Math.min(FMAX, T / 2 - delta / 2))
   f2.value = Math.max(0, Math.min(FMAX, T / 2 + delta / 2))
 }
 
-/** One semi-implicit Euler step of the rigid body. */
 function stepOnce() {
   control()
   const sum = f1.value + f2.value
@@ -170,7 +139,6 @@ function stepOnce() {
   s.x += DT * s.vx
   s.y += DT * s.vy
   s.th += DT * s.om
-  // keep the craft on stage
   if (s.x < -10.8) { s.x = -10.8; s.vx = 0 }
   if (s.x > 10.8) { s.x = 10.8; s.vx = 0 }
   if (s.y < 0.2) { s.y = 0.2; s.vy = 0 }
@@ -204,8 +172,6 @@ function reset() {
   note.value = "click anywhere to set a waypoint"
 }
 
-// Alternating kick so the craft does not always lurch the same way;
-// the position controller flies it back to the waypoint afterwards.
 let ndir = 1
 function nudge() {
   s.vy -= 2.6
@@ -216,11 +182,10 @@ function nudge() {
   note.value = "disturbance applied — watch the thrust arrows split"
 }
 
-let raf = 0
 let acc = 0
 let last = 0
 let frame = 0
-function loop(t: number) {
+const { resume } = useRafFn(({ timestamp: t }) => {
   if (!last) last = t
   acc += Math.min(0.05, (t - last) / 1000)
   last = t
@@ -235,11 +200,9 @@ function loop(t: number) {
     if (trail.length > TRAIL) trail.shift()
   }
   describe()
-  raf = requestAnimationFrame(loop)
-}
+}, { immediate: false })
 
-onMounted(() => { raf = requestAnimationFrame(loop) })
-onBeforeUnmount(() => cancelAnimationFrame(raf))
+onMounted(resume)
 </script>
 
 <style lang="sass" scoped>

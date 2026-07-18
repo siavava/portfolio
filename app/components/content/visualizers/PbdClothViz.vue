@@ -1,6 +1,6 @@
 <template lang="pug">
-figure.viz.visualizer.pbd-cloth-viz
-  figcaption.tikz-cap
+VizFrame(variant="pbd-cloth-viz", title="Position-based cloth", :note="note")
+  template(#caption)
     | The same solver in 2-D: a cloth patch hung from a rail of pins
     | across its whole top edge — distance constraints along warp and
     | weft (drawn),
@@ -11,15 +11,13 @@ figure.viz.visualizer.pbd-cloth-viz
     | Links tint orange as the weave stretches — with one iteration a
     | gust billows the cloth into visible sag, with twelve it recovers
     | a stiff drape.
-  .viz-head
-    span.viz-title Position-based cloth
-    .viz-controls
-      select.viz-select(v-model.number="iterations")
-        option(:value="1") 1 iteration
-        option(:value="4") 4 iterations
-        option(:value="12") 12 iterations
-      button.viz-btn.primary(type="button", @click="gust") gust
-      button.viz-btn(type="button", @click="reset") reset
+  template(#controls)
+    select.viz-select(v-model.number="iterations")
+      option(:value="1") 1 iteration
+      option(:value="4") 4 iterations
+      option(:value="12") 12 iterations
+    button.viz-btn.primary(type="button", @click="gust") gust
+    button.viz-btn(type="button", @click="reset") reset
   svg.viz-canvas(:viewBox="`0 0 ${W} ${H}`")
     line.cloth-link(
       v-for="(s, i) in segments",
@@ -35,24 +33,12 @@ figure.viz.visualizer.pbd-cloth-viz
       :transform="`translate(${p.x},${p.y})`",
     )
       circle(:r="p.pinned ? 2 : 1.4")
-  .viz-foot
-    span.viz-note {{ note }}
 </template>
 
 <script lang="ts" setup>
-/**
- * ## PbdClothViz
- *
- * A position-based cloth patch: a grid of particles hung from a few
- * top-row pins, distance constraints on every horizontal and vertical
- * neighbor pair plus shear diagonals across each quad (simulated but
- * not drawn — they stop a folded section from wedging on itself),
- * integrated exactly like the 1-D chain — predict from gravity and
- * wind, project the constraints, read velocities back.
- * The gust button drives a decaying sinusoidal wind through the patch;
- * links recolor toward orange with stretch, so the iteration count's
- * effect on stiffness reads directly off the weave.
- */
+import { useRafFn } from "@vueuse/core"
+
+/** ## PbdClothViz — a position-based cloth patch under gravity, breeze, and an on-demand gust. */
 const W = 640
 const H = 420
 
@@ -61,18 +47,8 @@ const CY = 8
 const REST = 20
 const SHEAR_REST = REST * Math.SQRT2
 const DIAG_FLOOR = 0.45
-// No two particles anywhere in the patch may come closer than this —
-// a spatial-hash contact pass enforces it, so nodes can never visually
-// stick together, neighbors or not.
 const MIN_SEP = 13
-// Structural links also carry a hard compression floor: neighbors may
-// never close inside 75% of rest length, so a crumpling gust cannot
-// stick nodes together.
 const COMP_FLOOR = 0.75
-// The slack sits far beyond any visible billow (a quad shears past
-// 100% of its diagonal before the limit exists), so the guard only
-// ever catches genuine folds — it must never read as an invisible
-// wall arresting the cloth mid-flight.
 const SHEAR_ITERS = 2
 const ORIGIN_X = (W - (CX - 1) * REST) / 2
 const ORIGIN_Y = 150
@@ -85,13 +61,6 @@ const GUST_TIME = 2.2
 type Particle = { x: number, y: number, vx: number, vy: number, w: number, pinned: boolean }
 
 const particles = reactive<Particle[]>([])
-// Structural constraints along warp and weft are what the weave draws.
-// The diagonals are simulated but not drawn, and they carry a
-// COMPRESSION-ONLY floor: a global lean of the sheet stretches one
-// diagonal of every quad — clamping stretch is what used to cap the
-// swing angle — while a genuine fold crushes a diagonal toward zero.
-// Guarding only compression leaves the swing unbounded and still
-// pushes folded sections back out.
 const constraints: { a: number, b: number, rest: number }[] = []
 const shears: { a: number, b: number, rest: number }[] = []
 const at = (i: number, j: number) => j * CX + i
@@ -106,9 +75,6 @@ for (let j = 0; j < CY; j++) {
   }
 }
 
-// Endpoint coordinates flattened for the template — Pug expressions
-// can't carry the index assertions the strict lookups would need.
-// Each link's stroke tints from cobalt toward orange with its stretch.
 const segments = computed(() => constraints.flatMap((c) => {
   const a = particles[c.a]
   const b = particles[c.b]
@@ -151,10 +117,7 @@ function reset() {
       })
     }
   }
-  // The curtain hangs from a full top rail, so the flat grid already
-  // sits at its equilibrium (a few px of sag the live loop settles on
-  // its own). No relaxation pass here — it was a corner-pin holdover
-  // and its O(n^2) contact sweep blocked hydration for seconds.
+  // No relaxation pass: its O(n^2) contact sweep blocked hydration for seconds.
   gustLeft = 0
   peakStretch.value = 0
   note.value = noteText()
@@ -202,9 +165,6 @@ function projectLimits() {
   }
 }
 
-// The all-pairs separation floor, broad-phased through a small spatial
-// hash exactly like the particle sim: any two particles closer than
-// MIN_SEP get pushed apart, whatever their relationship in the weave.
 function projectContacts() {
   const size = MIN_SEP * 2
   const table = new Map<number, number[]>()
@@ -237,8 +197,6 @@ function step() {
   const prevX = particles.map(p => p.x)
   const prevY = particles.map(p => p.y)
 
-  // A decaying sinusoidal wind, stronger toward the free hem so the
-  // patch billows instead of translating.
   const blowing = gustLeft > 0
   const envelope = blowing ? gustLeft / GUST_TIME : 0
   time += DT
@@ -256,8 +214,6 @@ function step() {
       p.vx += DT * gustDir * envelope * depth * (1800 + 900 * wave)
       p.vy -= DT * envelope * depth * (220 + 130 * wave)
     }
-    // an ambient breeze, always on: the cloth sways and ripples gently
-    // instead of freezing into a grid between gusts
     const breeze = Math.sin(time * 0.9 + depth * 2.1) * 20
       + Math.sin(time * 1.7 + (p.x - ORIGIN_X) * 0.02) * 13
     p.vx += DT * breeze * depth
@@ -295,33 +251,23 @@ function step() {
   if (maxStretch > peakStretch.value) peakStretch.value = maxStretch
 }
 
-// Changing the solver depth re-blows the gust so the stiffness
-// difference is on screen the moment the option changes.
 watch(iterations, () => {
   peakStretch.value = 0
   gustLeft = GUST_TIME
 })
 
-let raf = 0
-function loop() {
+const { resume } = useRafFn(() => {
   for (let s = 0; s < SUBSTEPS; s++) step()
   note.value = noteText()
-  raf = requestAnimationFrame(loop)
-}
+}, { immediate: false })
 
 reset()
 
-onMounted(() => {
-  raf = requestAnimationFrame(loop)
-})
-
-onBeforeUnmount(() => cancelAnimationFrame(raf))
+onMounted(resume)
 </script>
 
 <style lang="sass" scoped>
 .pbd-cloth-viz
-  // taller stage than the shell default: a gust can throw the whole
-  // patch above its pins, and the upswing should stay in frame
   .viz-canvas
     height: 420px
 

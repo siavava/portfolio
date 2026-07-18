@@ -1,6 +1,6 @@
 <template lang="pug">
-figure.viz.visualizer.particle-hash-viz
-  figcaption.tikz-cap
+VizFrame(variant="particle-hash-viz", title="Spatial-hash neighbor query", :note="note")
+  template(#caption)
     | The spatial-hash neighbor query, live over a real collision sim:
     | particles bounce off each other through contacts found by the
     | same hash — overlapping pairs separate and exchange an impulse
@@ -9,14 +9,12 @@ figure.viz.visualizer.particle-hash-viz
     | neighbors inside the radius, yellow ones were scanned and
     | rejected. The cell-size select shows the trade in how many
     | candidates each query touches.
-  .viz-head
-    span.viz-title Spatial-hash neighbor query
-    .viz-controls
-      select.viz-select(v-model="cellMode")
-        option(value="radius") cell = radius
-        option(value="half") cell = radius / 2
-        option(value="double") cell = radius × 2
-      button.viz-btn.primary(type="button", @click="newQuery") new query particle
+  template(#controls)
+    select.viz-select(v-model="cellMode")
+      option(value="radius") cell = radius
+      option(value="half") cell = radius / 2
+      option(value="double") cell = radius × 2
+    button.viz-btn.primary(type="button", @click="newQuery") new query particle
   svg.viz-canvas(:viewBox="`0 0 ${W} ${H}`")
     g
       rect.cell(
@@ -38,38 +36,26 @@ figure.viz.visualizer.particle-hash-viz
       :transform="`translate(${p.x},${p.y})`",
     )
       circle(:r="i === queryIndex ? 5.5 : 4")
-  .viz-foot
-    span.viz-note {{ note }}
-  .viz-legend
-    span
-      i(style="background: var(--orange-underline)")
-      | query
-    span
-      i(style="background: var(--green-underline)")
-      | true neighbor
-    span
-      i(style="background: var(--yellow-underline)")
-      | candidate
-    span
-      i(style="background: var(--warn-underline)")
-      | colliding
+  template(#legend)
+    .viz-legend
+      span
+        i(style="background: var(--orange-underline)")
+        | query
+      span
+        i(style="background: var(--green-underline)")
+        | true neighbor
+      span
+        i(style="background: var(--yellow-underline)")
+        | candidate
+      span
+        i(style="background: var(--warn-underline)")
+        | colliding
 </template>
 
 <script lang="ts" setup>
-/**
- * ## ParticleHashViz
- *
- * The spatial-hash neighbor query, running live over a real collision
- * sim. Sixty particles bounce inside a box overlaid with a uniform
- * grid; every frame the same hash that answers the neighbor query
- * broad-phases the contacts — overlapping pairs are separated and
- * exchange an impulse along the contact normal, so particles collide
- * instead of drifting through one another. One particle is the query:
- * its 3×3 cell block is shaded, its kernel radius drawn, and the
- * particles those cells hold are colored — true neighbors inside the
- * radius, candidates scanned but too far. The cell-size select shows
- * the trade: smaller cells scan fewer candidates, larger ones more.
- */
+import { useRafFn } from "@vueuse/core"
+
+/** ## ParticleHashViz — spatial-hash neighbor query over a live particle collision sim. */
 const W = 640
 const H = 320
 const OX = 14
@@ -78,15 +64,12 @@ const BW = W - 2 * OX
 const BH = H - 2 * OY
 const COUNT = 60
 const RADIUS = 46
-// collision radius: matches the drawn dot, so contacts read as touches
 const PR = 4
 const REST_E = 0.9
 
 type Particle = { x: number, y: number, vx: number, vy: number }
 
 const particles = reactive<Particle[]>([])
-// Collision flash: contacts mark both particles red for a beat, long
-// enough to read at 60fps.
 const hitFlags = reactive<boolean[]>([])
 const lastHit: number[] = []
 const HIT_LINGER = 260
@@ -120,7 +103,6 @@ function newQuery() {
   queryIndex.value = Math.floor(Math.random() * COUNT)
 }
 
-/** Grid line segments spanning the box at the current cell size. */
 const gridLines = computed(() => {
   const size = cellSize.value
   const lines: { x1: number, y1: number, x2: number, y2: number }[] = []
@@ -143,7 +125,6 @@ const queryCell = computed(() => {
   }
 })
 
-/** The 3×3 block of cells the query visits, clipped to the box. */
 const visitedCells = computed(() => {
   const size = cellSize.value
   const cols = Math.ceil(BW / size)
@@ -163,7 +144,6 @@ const visitedCells = computed(() => {
   return cells
 })
 
-/** Per-particle classification: query, neighbor, candidate, or drifting. */
 const kinds = computed(() => {
   const size = cellSize.value
   const { col, row } = queryCell.value
@@ -180,10 +160,6 @@ const kinds = computed(() => {
 
 const kindOf = (i: number) => kinds.value[i] ?? "drift"
 
-// Contact resolution through the same hash the query demonstrates:
-// rebuild the table, then for each particle scan only its 3×3 block.
-// Overlapping pairs are pushed apart and, if approaching, exchange an
-// impulse along the contact normal (equal masses, restitution REST_E).
 let contacts = 0
 function collide() {
   const size = cellSize.value
@@ -251,9 +227,8 @@ function step(dt: number) {
   collide()
 }
 
-let raf = 0
 let last = 0
-function loop(t: number) {
+const { resume } = useRafFn(({ timestamp: t }) => {
   const dt = last ? Math.min((t - last) / 1000, 0.05) : 0
   last = t
   step(dt)
@@ -264,16 +239,11 @@ function loop(t: number) {
   const candidates = kinds.value.filter(k => k === "candidate" || k === "neighbor").length
   const neighbors = kinds.value.filter(k => k === "neighbor").length
   note.value = `cell = ${cellSize.value.toFixed(0)}px · candidates scanned ${candidates} · true neighbors ${neighbors} · contacts ${contacts}`
-  raf = requestAnimationFrame(loop)
-}
+}, { immediate: false })
 
 seed(Math.random)
 
-onMounted(() => {
-  raf = requestAnimationFrame(loop)
-})
-
-onBeforeUnmount(() => cancelAnimationFrame(raf))
+onMounted(resume)
 </script>
 
 <style lang="sass" scoped>

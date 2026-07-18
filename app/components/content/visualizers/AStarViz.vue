@@ -1,21 +1,19 @@
 <template lang="pug">
-figure.viz.visualizer.a-star-viz
-  figcaption.tikz-cap
+VizFrame(variant="a-star-viz", title="A-star search", :note="note")
+  template(#caption)
     | A-star and greedy best-first, live on a random grid maze. Cells
     | light up as the search visits them (green) and holds them on the
     | frontier (yellow); the found route is traced in orange. A-star
     | expands by g + h and always returns a shortest path; greedy chases
     | h alone — watch it touch fewer cells but sometimes hand back a
     | longer route. The note keeps score against the true shortest path.
-  .viz-head
-    span.viz-title A-star search
-    .viz-controls
-      select.viz-select(v-model="mode")
-        option(value="manhattan") A* (Manhattan)
-        option(value="euclid") A* (Euclidean)
-        option(value="greedy") greedy best-first
-      button.viz-btn.primary(type="button", @click="newMaze") new maze
-      button.viz-btn(type="button", @click="slow = !slow") {{ slow ? "speed: slow" : "speed: fast" }}
+  template(#controls)
+    select.viz-select(v-model="mode")
+      option(value="manhattan") A* (Manhattan)
+      option(value="euclid") A* (Euclidean)
+      option(value="greedy") greedy best-first
+    button.viz-btn.primary(type="button", @click="newMaze") new maze
+    button.viz-btn(type="button", @click="slow = !slow") {{ slow ? "speed: slow" : "speed: fast" }}
   svg.viz-canvas(:viewBox="`0 0 ${W} ${H}`")
     g
       rect.cell(
@@ -29,38 +27,26 @@ figure.viz.visualizer.a-star-viz
     polyline.route(v-if="pathPoints", :points="pathPoints")
     rect.mark.start(:x="sx(start) - 4", :y="sy(start) - 4", width="8", height="8")
     circle.mark.goal(:cx="sx(goal)", :cy="sy(goal)", r="4.5")
-  .viz-foot
-    span.viz-note {{ note }}
-  .viz-legend
-    span
-      i(style="background: var(--yellow-highlight)")
-      | frontier
-    span
-      i(style="background: var(--green-highlight)")
-      | visited
-    span
-      i(style="background: var(--orange-underline)")
-      | path
-    span
-      i(style="background: var(--dark-foreground)")
-      | wall
+  template(#legend)
+    .viz-legend
+      span
+        i(style="background: var(--yellow-highlight)")
+        | frontier
+      span
+        i(style="background: var(--green-highlight)")
+        | visited
+      span
+        i(style="background: var(--orange-underline)")
+        | path
+      span
+        i(style="background: var(--dark-foreground)")
+        | wall
 </template>
 
 <script lang="ts" setup>
-/**
- * ## AStarViz
- *
- * Informed search running live: a random grid maze, a start and a
- * goal, and a priority queue animated a few expansions per frame.
- * The select swaps the evaluation — A-star under Manhattan or
- * Euclidean distance, or greedy best-first on the heuristic alone —
- * and restarts the run on the same maze so the searches compare.
- * The note scores each run's expansions and path length against the
- * true shortest path (computed by BFS), which is what exposes
- * greedy's trade: fewer expansions, no optimality guarantee. The
- * first maze is generated with a fixed-seed LCG so server and client
- * render the same board; fresh mazes draw from Math.random.
- */
+import { useRafFn } from "@vueuse/core"
+
+/** ## AStarViz — A-star vs. greedy best-first animated live on a random grid maze. */
 const W = 640
 const H = 320
 const GW = 22
@@ -80,8 +66,6 @@ const note = ref("")
 
 const walls = reactive<boolean[]>([])
 const cells = reactive<string[]>([])
-// start low-left, goal high-right: the diagonal run keeps the
-// heuristics honest in both axes
 const start = 7 * GW
 const goal = 3 * GW - 1
 let optimal = 0
@@ -90,8 +74,7 @@ const pathPoints = ref<string | null>(null)
 const sx = (i: number) => OX + i % GW * CS + CS / 2
 const sy = (i: number) => OY + Math.floor(i / GW) * CS + CS / 2
 
-// Deterministic PRNG for the first maze: setup runs on both server and
-// client, and a Math.random maze would never hydrate cleanly.
+// Deterministic PRNG for the first maze so SSR and client hydrate identically.
 let lcg = 0x2545f49
 const seeded = () => {
   lcg = lcg * 1103515245 + 12345 & 0x7fffffff
@@ -109,7 +92,6 @@ const neighbors = (i: number): number[] => {
   return out.filter(n => !walls[n])
 }
 
-/** BFS distance start→goal; -1 when unreachable. */
 function shortest(): number {
   const dist = new Array(GW * GH).fill(-1)
   dist[start] = 0
@@ -127,7 +109,6 @@ function shortest(): number {
   return -1
 }
 
-/** Greedy best-first path length on the current maze; -1 unreachable. */
 function greedyLen(): number {
   const gx = goal % GW
   const gy = Math.floor(goal / GW)
@@ -155,15 +136,6 @@ function greedyLen(): number {
   return -1
 }
 
-/**
- * Mazes are drafted, scored, and the most devious draft wins: two
- * vertical barriers whose gaps sit at opposite edges force the path
- * to zigzag, a pocket on the direct line baits greedy into a dead
- * end, and random scatter fills in the rest. A draft scores by how
- * far its shortest path exceeds the Manhattan distance (real detours)
- * and by how much longer greedy's route comes back (a visible A-star
- * advantage); drafting stops early once both are clearly met.
- */
 function draftMaze(rng: () => number) {
   walls.length = 0
   for (let i = 0; i < GW * GH; i++) walls.push(false)
@@ -171,7 +143,6 @@ function draftMaze(rng: () => number) {
     const i = y * GW + x
     if (i !== start && i !== goal) walls[i] = true
   }
-  // barriers with gaps at opposite extremes
   const bx1 = 6 + Math.floor(rng() * 2)
   const bx2 = 13 + Math.floor(rng() * 2)
   const gap1 = rng() < 0.5 ? 0 : 1
@@ -180,7 +151,6 @@ function draftMaze(rng: () => number) {
     if (y !== gap1) set(bx1, y)
     if (y !== gap2) set(bx2, y)
   }
-  // a pocket between them, mouth open toward the start
   const tx = bx1 + 2
   const ty = 3
   for (let x = tx; x <= tx + 3 && x < bx2; x++) {
@@ -189,7 +159,6 @@ function draftMaze(rng: () => number) {
   }
   set(Math.min(tx + 3, bx2 - 1), ty + 1)
   set(Math.min(tx + 3, bx2 - 1), ty + 2)
-  // scatter, sparing the barrier columns
   for (let y = 0; y < GH; y++) {
     for (let x = 0; x < GW; x++) {
       if (x !== bx1 && x !== bx2 && rng() < WALL_P && !walls[y * GW + x]) {
@@ -225,7 +194,6 @@ function buildMaze(rng: () => number) {
   }
 }
 
-// ── the animated search ──
 let open: { i: number, g: number, f: number }[] = []
 let gScore: number[] = []
 let cameFrom: number[] = []
@@ -311,14 +279,12 @@ function stepSearch() {
 
 watch(mode, restart)
 
-let raf = 0
 let frame = 0
-function loop() {
+const { resume } = useRafFn(() => {
   frame++
   if (done) {
     if (--restLeft <= 0) newMaze()
   } else if (slow.value) {
-    // one expansion at a time, paced so each queue pop is legible
     if (frame % SLOW_EVERY === 0) {
       stepSearch()
       paint()
@@ -327,17 +293,12 @@ function loop() {
     for (let k = 0; k < STEPS_PER_FRAME && !done; k++) stepSearch()
     paint()
   }
-  raf = requestAnimationFrame(loop)
-}
+}, { immediate: false })
 
 buildMaze(seeded)
 restart()
 
-onMounted(() => {
-  raf = requestAnimationFrame(loop)
-})
-
-onBeforeUnmount(() => cancelAnimationFrame(raf))
+onMounted(resume)
 </script>
 
 <style lang="sass" scoped>

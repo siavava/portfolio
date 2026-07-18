@@ -1,21 +1,19 @@
 <template lang="pug">
-figure.viz.visualizer.pbd-viz
-  figcaption.tikz-cap
+VizFrame(variant="pbd-viz", title="Position-based chain", :note="note")
+  template(#caption)
     | A hanging chain under position-based dynamics. Each frame predicts
     | positions from gravity, then projects the pairwise distance
     | constraints the selected number of times; links tint orange as they
     | stretch past rest length. One iteration leaves the chain visibly
     | elastic under a whip, twelve pull it taut — changing the count
     | re-kicks the swing so the difference shows immediately.
-  .viz-head
-    span.viz-title Position-based chain
-    .viz-controls
-      select.viz-select(v-model.number="iterations")
-        option(:value="1") 1 iteration
-        option(:value="4") 4 iterations
-        option(:value="12") 12 iterations
-      button.viz-btn.primary(type="button", @click="swing") swing
-      button.viz-btn(type="button", @click="reset") reset
+  template(#controls)
+    select.viz-select(v-model.number="iterations")
+      option(:value="1") 1 iteration
+      option(:value="4") 4 iterations
+      option(:value="12") 12 iterations
+    button.viz-btn.primary(type="button", @click="swing") swing
+    button.viz-btn(type="button", @click="reset") reset
   svg.viz-canvas(:viewBox="`0 0 ${W} ${H}`")
     line.pbd-link(
       v-for="(s, i) in segments",
@@ -31,22 +29,12 @@ figure.viz.visualizer.pbd-viz
       :transform="`translate(${p.x},${p.y})`",
     )
       circle(:r="p.pinned ? 3.5 : 3")
-  .viz-foot
-    span.viz-note {{ note }}
 </template>
 
 <script lang="ts" setup>
-/**
- * ## PbdViz
- *
- * A hanging chain solved with position-based dynamics: each frame
- * predicts positions from gravity, then projects the distance
- * constraints between neighbors a fixed number of times before
- * reading velocities back from the motion. The solver-iterations
- * select is the point — one Gauss-Seidel sweep leaves the chain
- * visibly stretched, twelve pull it rigid — so links recolor toward
- * orange with stretch and changing the count re-kicks the swing.
- */
+import { useRafFn } from "@vueuse/core"
+
+/** ## PbdViz — a hanging chain solved with position-based dynamics, exposing solver-iteration stiffness. */
 const W = 640
 const H = 320
 
@@ -65,9 +53,6 @@ const particles = reactive<Particle[]>([])
 const constraints: { a: number, b: number, rest: number }[] = []
 for (let i = 0; i < N - 1; i++) constraints.push({ a: i, b: i + 1, rest: REST })
 
-// Endpoint coordinates flattened for the template — Pug expressions
-// can't carry the index assertions the strict lookups would need.
-// Each link's stroke tints from cobalt toward orange with its stretch.
 const segments = computed(() => constraints.flatMap((c) => {
   const a = particles[c.a]
   const b = particles[c.b]
@@ -110,17 +95,11 @@ function reset() {
   note.value = noteText()
 }
 
-// A depth-weighted impulse — the free end takes most of it, so the
-// chain cracks like a whip instead of translating sideways. Alternates
-// direction with a small upward flick each press.
 let dir = 1
 function swing() {
   for (const [i, p] of particles.entries()) {
     if (p.pinned) continue
     const t = i / (N - 1)
-    // A sinusoidal profile over depth plus a small random factor: the
-    // chain snakes differently on every press instead of repeating one
-    // canned arc.
     const snake = 1 + 0.3 * Math.sin(3 * Math.PI * t)
     const jitter = 0.85 + 0.3 * Math.random()
     p.vx += dir * (150 + 520 * t * t) * snake * jitter
@@ -185,27 +164,19 @@ function step() {
   if (maxStretch > peakStretch.value) peakStretch.value = maxStretch
 }
 
-// Changing the solver depth re-kicks the chain so the elastic-vs-rigid
-// difference is on screen the moment the option changes.
 watch(iterations, () => {
   peakStretch.value = 0
   swing()
 })
 
-let raf = 0
-function loop() {
+const { resume } = useRafFn(() => {
   for (let s = 0; s < SUBSTEPS; s++) step()
   note.value = noteText()
-  raf = requestAnimationFrame(loop)
-}
+}, { immediate: false })
 
 reset()
 
-onMounted(() => {
-  raf = requestAnimationFrame(loop)
-})
-
-onBeforeUnmount(() => cancelAnimationFrame(raf))
+onMounted(resume)
 </script>
 
 <style lang="sass" scoped>

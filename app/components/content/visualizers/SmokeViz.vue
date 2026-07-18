@@ -1,6 +1,6 @@
 <template lang="pug">
-figure.viz.visualizer.smoke-viz
-  figcaption.tikz-cap
+VizFrame(variant="smoke-viz", title="Grid smoke solver", :note="note")
+  template(#caption)
     | A miniature Eulerian smoke solver on a 72-by-36 grid: a bottom
     | emitter, semi-Lagrangian advection, Gauss-Seidel pressure
     | projection. The toggle adds the vorticity-confinement force,
@@ -8,29 +8,18 @@ figure.viz.visualizer.smoke-viz
     | on, the plume holds its small-scale swirls as it rises; off,
     | the coarse grid's numerical diffusion irons it into a smooth
     | laminar column.
-  .viz-head
-    span.viz-title Grid smoke solver
-    .viz-controls
-      select.viz-select(v-model="confine")
-        option(:value="true") vorticity on
-        option(:value="false") vorticity off
-      button.viz-btn(type="button", @click="reset") reset
+  template(#controls)
+    select.viz-select(v-model="confine")
+      option(:value="true") vorticity on
+      option(:value="false") vorticity off
+    button.viz-btn(type="button", @click="reset") reset
   canvas.viz-canvas(ref="canvasEl")
-  .viz-foot
-    span.viz-note {{ note }}
 </template>
 
 <script lang="ts" setup>
-/**
- * ## SmokeViz
- *
- * A miniature Eulerian smoke solver on a coarse 72×36 grid. A bottom-center
- * emitter seeds density and upward velocity; each frame runs semi-Lagrangian
- * advection of velocity and density, a handful of Gauss-Seidel pressure
- * sweeps for the divergence-free projection, and optional vorticity
- * confinement. The confinement toggle is the point — turn it off and the
- * small-scale swirl damps out into a limp laminar plume.
- */
+import { useRafFn } from "@vueuse/core"
+
+/** ## SmokeViz — a miniature Eulerian smoke solver with toggleable vorticity confinement. */
 const NX = 72
 const NY = 36
 const N = NX * NY
@@ -47,11 +36,6 @@ const p = new Float32Array(N)
 const div = new Float32Array(N)
 const curl = new Float32Array(N)
 
-// Velocities live in cells-per-frame, so the confinement gain must be
-// small: it adds EPS·ω per frame, every frame. Values near 3 swamp the
-// projection and shred the plume into noise; 0.12 reinforces the swirl
-// the grid is losing without inventing new turbulence. FMAX caps the
-// per-cell kick so a curl spike cannot spray the field.
 const EPS = 0.12
 const FMAX = 0.45
 const BUOY = 0.9
@@ -95,7 +79,6 @@ function setBnd(b: number, x: Float32Array) {
   x[IX(NX - 1, NY - 1)] = 0.5 * (x[IX(NX - 2, NY - 1)]! + x[IX(NX - 1, NY - 2)]!)
 }
 
-/** Semi-Lagrangian advection: backtrace along the velocity field and interpolate. */
 function advect(b: number, d: Float32Array, d0: Float32Array, uu: Float32Array, vv: Float32Array) {
   for (let j = 1; j < NY - 1; j++) {
     for (let i = 1; i < NX - 1; i++) {
@@ -117,7 +100,6 @@ function advect(b: number, d: Float32Array, d0: Float32Array, uu: Float32Array, 
   setBnd(b, d)
 }
 
-/** Gauss-Seidel pressure projection back to a divergence-free field. */
 function project() {
   for (let j = 1; j < NY - 1; j++) {
     for (let i = 1; i < NX - 1; i++) {
@@ -143,7 +125,6 @@ function project() {
   setBnd(1, u); setBnd(2, v)
 }
 
-/** Fedkiw vorticity confinement: push velocity back up the curl gradient. */
 function vorticity() {
   for (let j = 1; j < NY - 1; j++) {
     for (let i = 1; i < NX - 1; i++) {
@@ -178,7 +159,6 @@ function inject() {
 
 function step() {
   inject()
-  // buoyancy: warm smoke rises (canvas up is -v)
   for (let k = 0; k < N; k++) v[k]! -= BUOY * dens[k]! * 0.05
   if (confine.value) vorticity()
   project()
@@ -234,12 +214,10 @@ function reset() {
 
 watch(confine, reset)
 
-let raf = 0
-function loop() {
+const { resume } = useRafFn(() => {
   step()
   render()
-  raf = requestAnimationFrame(loop)
-}
+}, { immediate: false })
 
 onMounted(() => {
   const el = canvasEl.value
@@ -256,10 +234,8 @@ onMounted(() => {
   gridCtx = grid.getContext("2d")
   img = gridCtx ? gridCtx.createImageData(NX, NY) : null
   reset()
-  raf = requestAnimationFrame(loop)
+  resume()
 })
-
-onBeforeUnmount(() => cancelAnimationFrame(raf))
 </script>
 
 <style lang="sass" scoped>
