@@ -1,3 +1,6 @@
+import { applyTransforms } from "./transformers"
+import { latex } from "./configs"
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-04-17",
@@ -24,6 +27,8 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       { name: "Proxima Soft", provider: "local", weights: [500], global: true },
+      { name: "Departure Mono", provider: "local", weights: [400], global: true },
+      { name: "Arizona Text", provider: "local", weights: [400, 700], styles: ["normal", "italic"], global: true },
     ],
   },
 
@@ -37,6 +42,8 @@ export default defineNuxtConfig({
     "@/styles/colors.scss",
     "@/styles/default.sass",
     "@/styles/typography.scss",
+    "@/styles/study-bridge.scss",
+    "@/styles/visualizer.scss",
   ],
 
   components: [
@@ -52,9 +59,38 @@ export default defineNuxtConfig({
     ],
   },
 
+  hooks: {
+    // The study's build-time pipeline: TikZ blocks render to themed SVG
+    // before @nuxt/content ever parses the markdown.
+    async "content:file:beforeParse"(ctx) {
+      const { file } = ctx
+      if (!file.id.endsWith(".md")) return
+      ctx.file = { ...file, body: await applyTransforms(file.body) }
+    },
+  },
+
   content: {
     experimental: {
       nativeSqlite: false,
+    },
+    build: {
+      markdown: {
+        remarkPlugins: {
+          "remark-math": {},
+        },
+        rehypePlugins: {
+          "rehype-katex": {
+            errorColor: "#BD998F",
+            globalGroup: true,
+            options: {
+              output: "html",
+              macros: latex(),
+              trust: true,
+              strict: false,
+            },
+          },
+        },
+      },
     },
   },
 
@@ -71,6 +107,18 @@ export default defineNuxtConfig({
     head: {
       meta: [
         { name: "theme-color", content: "#f5f5f5" },
+      ],
+      link: [
+        {
+          rel: "preconnect",
+          href: "https://cdn.jsdelivr.net",
+          crossorigin: "anonymous",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://cdn.jsdelivr.net/npm/katex@0.16.42/dist/katex.min.css",
+          crossorigin: "anonymous",
+        },
       ],
     },
   },
@@ -100,6 +148,11 @@ export default defineNuxtConfig({
 
 function tsConfig() {
   return {
+    include: [
+      "../configs/**/*",
+      "../transformers/**/*",
+      "../app/types/*.d.ts",
+    ],
     compilerOptions: {
       composite: true,
       noEmit: false,

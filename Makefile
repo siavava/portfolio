@@ -1,4 +1,4 @@
-all: build
+all: generate
 
 build:
 	@bun run build
