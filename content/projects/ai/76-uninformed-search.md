@@ -35,34 +35,7 @@ path with the fewest crossings; DFS dives down one branch before backtracking,
 using less memory but returning whatever path it reaches first. A visited set
 keeps both from re-expanding a state and looping on the graph's cycles.
 
-$$
-% caption: The same tree searched two ways. BFS (left) expands the frontier level
-% by level, so the shaded shallow nodes are all visited before anything deeper;
-% DFS (right) follows one root-to-leaf path down before it backtracks.
-\begin{tikzpicture}[>=stealth, font=\footnotesize,
-  hi/.style={circle, draw=acc, fill=acc!8, minimum size=5mm, inner sep=1pt},
-  pl/.style={circle, draw=black!45, minimum size=5mm, inner sep=1pt}]
-  \definecolor{acc}{HTML}{2348F2}
-  \node[hi] (lr) at (2,3) {};
-  \node[hi] (la) at (1,2) {};
-  \node[hi] (lb) at (3,2) {};
-  \node[pl] (la1) at (0.5,1) {};
-  \node[pl] (la2) at (1.5,1) {};
-  \node[pl] (lb1) at (2.5,1) {};
-  \node[pl] (lb2) at (3.5,1) {};
-  \draw[black!45] (lr)--(la) (lr)--(lb) (la)--(la1) (la)--(la2) (lb)--(lb1) (lb)--(lb2);
-  \node[font=\scriptsize\ttfamily, text=acc] at (2,0.3) {BFS};
-  \node[hi] (rr) at (7,3) {};
-  \node[pl] (ra) at (6,2) {};
-  \node[hi] (rb) at (8,2) {};
-  \node[pl] (ra1) at (5.5,1) {};
-  \node[pl] (ra2) at (6.5,1) {};
-  \node[pl] (rb1) at (7.5,1) {};
-  \node[hi] (rb2) at (8.5,1) {};
-  \draw[black!45] (rr)--(ra) (rr)--(rb) (rb)--(rb1) (rb)--(rb2) (ra)--(ra1) (ra)--(ra2);
-  \node[font=\scriptsize\ttfamily, text=acc] at (7,0.3) {DFS};
-\end{tikzpicture}
-$$
+:graph-traversal-viz
 
 ```algorithm
 caption: $\textsc{Search}(start, goal)$ — graph search parameterized by the frontier

@@ -122,3 +122,5 @@ guarantee — under an admissible heuristic the first goal it removes from the
 frontier sits on a shortest path. Setting $h = 0$ collapses A* to uniform-cost
 search, and a sharper $h$ narrows the search toward the goal without breaking
 that guarantee.
+
+:a-star-viz
