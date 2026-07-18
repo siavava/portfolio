@@ -241,9 +241,10 @@ const { resume } = useRafFn(({ timestamp: t }) => {
   note.value = `cell = ${cellSize.value.toFixed(0)}px · candidates scanned ${candidates} · true neighbors ${neighbors} · contacts ${contacts}`
 }, { immediate: false })
 
-seed(Math.random)
-
-onMounted(resume)
+useAfterPaint(() => {
+  seed(Math.random)
+  resume()
+})
 </script>
 
 <style lang="sass" scoped>

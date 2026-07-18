@@ -295,10 +295,11 @@ const { resume } = useRafFn(() => {
   }
 }, { immediate: false })
 
-buildMaze(seeded)
-restart()
-
-onMounted(resume)
+useAfterPaint(() => {
+  buildMaze(seeded)
+  restart()
+  resume()
+})
 </script>
 
 <style lang="sass" scoped>

@@ -99,9 +99,10 @@ const { resume } = useRafFn(({ timestamp: t }) => {
   }
 }, { immediate: false })
 
-reset()
-
-onMounted(resume)
+useAfterPaint(() => {
+  reset()
+  resume()
+})
 </script>
 
 <style lang="sass" scoped>

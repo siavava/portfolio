@@ -219,7 +219,7 @@ const { resume } = useRafFn(() => {
   render()
 }, { immediate: false })
 
-onMounted(() => {
+useAfterPaint(() => {
   const el = canvasEl.value
   if (!el) return
   const style = getComputedStyle(el)

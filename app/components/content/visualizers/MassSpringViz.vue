@@ -177,9 +177,10 @@ const { resume } = useRafFn(() => {
   for (let k = 0; k < 3; k++) step()
 }, { immediate: false })
 
-reset()
-
-onMounted(resume)
+useAfterPaint(() => {
+  reset()
+  resume()
+})
 </script>
 
 <style lang="sass" scoped>

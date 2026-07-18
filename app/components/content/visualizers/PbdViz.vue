@@ -174,9 +174,10 @@ const { resume } = useRafFn(() => {
   note.value = noteText()
 }, { immediate: false })
 
-reset()
-
-onMounted(resume)
+useAfterPaint(() => {
+  reset()
+  resume()
+})
 </script>
 
 <style lang="sass" scoped>

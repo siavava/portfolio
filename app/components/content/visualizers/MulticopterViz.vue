@@ -202,7 +202,7 @@ const { resume } = useRafFn(({ timestamp: t }) => {
   describe()
 }, { immediate: false })
 
-onMounted(resume)
+useAfterPaint(resume)
 </script>
 
 <style lang="sass" scoped>
