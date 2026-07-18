@@ -60,17 +60,18 @@ export default defineContentConfig({
       }),
     }),
     projects: defineCollection({
-      type: "data",
-      source: { include: "projects.yml" },
+      type: "page",
+      source: { include: "projects/**" },
       schema: z.object({
-        items: z.array(z.object({
-          title: z.string(),
-          blurb: z.string(),
-          repo: z.string(),
-          tag: z.string(),
-          year: z.number(),
-          featured: z.boolean().default(false),
-        })),
+        title: z.string(),
+        date: z.string(),
+        tag: z.string(),
+        summary: z.string(),
+        repo: z.string().optional(),
+        url: z.string().optional(),
+        featured: z.boolean().default(false),
+        tech: z.array(z.string()).optional(),
+        references: z.array(z.string()).optional(),
       }),
     }),
     profile: defineCollection({
