@@ -17,21 +17,21 @@ let stack = 10
  *
  * ### Returns
  *
- * `{ offset, dragging, z, handlers }` — the accumulated translation,
+ * `{ offset, dragging, zIndex, handlers }` — the accumulated translation,
  * drag state, z-index, and the pointer handlers to `v-on` onto the
  * element.
  */
 export const useDraggableBubble = (el: Ref<HTMLElement | null>) => {
   const offset = reactive({ x: 0, y: 0 })
   const dragging = ref(false)
-  const z = ref(0)
+  const zIndex = ref(0)
 
   let pointerStart = { x: 0, y: 0 }
   let offsetStart = { x: 0, y: 0 }
 
   const onPointerdown = (event: PointerEvent) => {
     dragging.value = true
-    z.value = ++stack
+    zIndex.value = ++stack
     pointerStart = { x: event.clientX, y: event.clientY }
     offsetStart = { x: offset.x, y: offset.y }
     el.value?.setPointerCapture(event.pointerId)
@@ -50,7 +50,7 @@ export const useDraggableBubble = (el: Ref<HTMLElement | null>) => {
   return {
     offset,
     dragging,
-    z,
+    zIndex,
     handlers: {
       pointerdown: onPointerdown,
       pointermove: onPointermove,

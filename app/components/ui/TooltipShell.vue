@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-/** Ported from the blog's TooltipShell, keeping its shell gray. */
 const props = withDefaults(defineProps<{
   anchor?: boolean
   align?: "left" | "middle" | "right"
@@ -54,7 +53,6 @@ const anchorStyle = computed(() => {
 @use "@/styles/typography"
 
 .tooltip-shell
-  // The blog's light-theme foreground — its tooltip surface color.
   background: #474747
   color: var(--bar-foreground)
   border-radius: 8px
@@ -94,10 +92,6 @@ const anchorStyle = computed(() => {
     background: rgba(255, 255, 255, 0.2)
     flex-shrink: 0
 
-// ─── Tooltip anchor & arrow ───
-// Wrap a TooltipShell + .tooltip-arrow in a .tooltip-anchor
-// for positioned tooltips with alignment support.
-
 .tooltip-anchor
   --tt-x: -50%
   --tt-arrow: 50%
@@ -125,7 +119,6 @@ const anchorStyle = computed(() => {
     left: auto
     right: 0
 
-// Show tooltip on parent hover (opt-in via .animate class)
 :hover > .tooltip-anchor.animate
   animation: tooltip-show-hide var(--tt-duration, 2.5s) ease forwards
   animation-delay: var(--tt-delay, 0.3s)
@@ -140,9 +133,6 @@ const anchorStyle = computed(() => {
   border-top-color: #474747
   pointer-events: none
 
-// ─── Compact variant ───
-// For small inline tooltips (spine labels, etc.)
-
 .tooltip-shell.tooltip-compact
   border-radius: 4px
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)
@@ -151,8 +141,6 @@ const anchorStyle = computed(() => {
 
   .tooltip-body
     padding: 3px 10px
-
-// ─── Show-hide animation ───
 
 @keyframes tooltip-show-hide
   0%

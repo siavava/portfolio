@@ -32,23 +32,23 @@ export function useCaptionTypewriter(
           const frag = document.createDocumentFragment()
           const spans: HTMLElement[] = []
           for (const ch of (child as Text).data) {
-            const s = document.createElement("span")
-            s.textContent = ch
-            s.style.visibility = "hidden"
-            frag.appendChild(s)
-            spans.push(s)
+            const span = document.createElement("span")
+            span.textContent = ch
+            span.style.visibility = "hidden"
+            frag.appendChild(span)
+            spans.push(span)
           }
           node.replaceChild(frag, child)
-          for (const s of spans) reveal.push(() => { s.style.visibility = "" })
+          for (const span of spans) reveal.push(() => { span.style.visibility = "" })
         } else if (child.nodeType === Node.ELEMENT_NODE) {
-          const e = child as HTMLElement
+          const element = child as HTMLElement
           if (
-            e.classList.contains("katex")
-            || e.classList.contains("katex-display")
+            element.classList.contains("katex")
+            || element.classList.contains("katex-display")
           ) {
-            e.style.visibility = "hidden"
-            reveal.push(() => { e.style.visibility = "" })
-          } else { wrap(e) }
+            element.style.visibility = "hidden"
+            reveal.push(() => { element.style.visibility = "" })
+          } else { wrap(element) }
         }
       }
     }
@@ -57,7 +57,7 @@ export function useCaptionTypewriter(
     const reducedMotion = import.meta.client
       && window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (reducedMotion) {
-      reveal.forEach(s => s())
+      reveal.forEach(revealFn => revealFn())
       return
     }
     const tick = 16

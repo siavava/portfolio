@@ -66,7 +66,6 @@ onUnmounted(() => {
 
 const dotRadius = computed(() => props.node.level === 1 ? 3 : 2.5)
 
-/** Two-line wrap for long multi-word labels, mirroring the reference. */
 const lines = computed(() => {
   const words = props.node.label.split(" ")
   if (words.length < 2 || props.node.label.length <= 11) {
@@ -81,7 +80,6 @@ const labelY = computed(() => {
   return lines.value.length > 1 ? -19 : -8
 })
 
-/** Covers the dot and its label, like the reference's grab target. */
 const hitBox = computed(() => {
   const tall = lines.value.length > 1
   if (props.node.labelSide === "below") {

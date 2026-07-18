@@ -15,15 +15,7 @@ Teleport(to="body")
 </template>
 
 <script lang="ts" setup>
-/**
- * ## FigureSpotlight
- *
- * The full-screen "spotlight" for a clicked figure: a
- * blurred page backdrop, the figure enlarged on a card,
- * an EXIT button, and the `fig. N` caption beneath.
- * Teleported to `<body>`; state and open/close are owned
- * by `useFigureSpotlight`.
- */
+/** ## FigureSpotlight — full-screen spotlight for a clicked figure, teleported to `<body>`. */
 const props = defineProps<{ spot: FigSpotlightState | null }>()
 defineEmits<{ close: [] }>()
 
@@ -54,11 +46,11 @@ function fitFigure() {
     aspect = (media.naturalWidth || media.width) / (media.naturalHeight || media.height || 1)
   }
   if (!aspect || !isFinite(aspect)) return
-  let w = maxW
-  let h = maxW / aspect
-  if (h > maxH) { h = maxH; w = maxH * aspect }
-  media.style.width = `${Math.round(w)}px`
-  media.style.height = `${Math.round(h)}px`
+  let width = maxW
+  let height = maxW / aspect
+  if (height > maxH) { height = maxH; width = maxH * aspect }
+  media.style.width = `${Math.round(width)}px`
+  media.style.height = `${Math.round(height)}px`
   media.style.maxWidth = "none"
   media.style.maxHeight = "none"
 }
@@ -136,7 +128,6 @@ onBeforeUnmount(() => window.removeEventListener("resize", fitFigure))
     display: flex
     margin: 0
     padding: 0
-    // The in-page hover chrome has no business inside the spotlight.
     border: none
     background: none
     cursor: default

@@ -13,7 +13,6 @@ const BAND_BASES = [258, 314, 364]
 const BAND_STEPS = [28, 26, 22]
 const OUTER_CAP = 408
 
-/** Bias level-1 nodes toward the horizon so edge branches sit low. */
 const EDGE_BIAS = 0.12
 
 const toRadians = (degrees: number) => degrees * Math.PI / 180
@@ -27,29 +26,7 @@ const childRadius = (
   return band === 2 ? Math.min(radius, OUTER_CAP) : radius
 }
 
-/**
- * ## useInterestLayout
- *
- * Computes the polar layout for the interest map on a 928×792 canvas:
- * four orbital rings, one exclusive angular slice per branch across the
- * upper semicircle, children rotating through three radius bands (each
- * same-band sibling stepping further out so labels never share an arc),
- * and grandchildren pushed radially past their parent. The center sits
- * 460 units down so the outermost ring clears the canvas top, and the
- * outer ring's diameter (912 unscaled) matches the name bar's width.
- *
- * ### Parameters
- *
- * | Param | Type | Description |
- * | --- | --- | --- |
- * | `branches` | `InterestBranch[]` | Branch tree from `interests.yml` |
- * | `scale` | `number` | Uniform scale factor (`containerWidth / 912`) |
- *
- * ### Returns
- *
- * A `MapLayout` with canvas dimensions, center point, ring radii, and
- * positioned nodes and links.
- */
+/** ## useInterestLayout — polar layout for the interest map on a 928×792 canvas. */
 export const useInterestLayout = (
   branches: InterestBranch[],
   scale = 1,
@@ -154,8 +131,6 @@ export const useInterestLayout = (
 
         grandchild.children?.forEach((leafChild, l) => {
           const leafDrift = drift + (childAngle >= angle ? 1 : -1) * (l + 1) * 5
-          // Shorter than a full band step: a fourth tier at +168 would
-          // push labels past the canvas top in the near-vertical slices.
           const tip = place(childR + 132, childAngle + leafDrift)
 
           nodes.push({
@@ -182,8 +157,6 @@ export const useInterestLayout = (
     })
   })
 
-  // Prerequisite edges join the tree once every node is placed — they
-  // may point across branches, so they resolve against final positions.
   const positionOf = new Map(nodes.map(node => [node.id, node]))
   const addPrereqs = (node: { label: string, requires?: string[] }) => {
     for (const required of node.requires ?? []) {
@@ -194,8 +167,6 @@ export const useInterestLayout = (
         id: `req:${required}:${node.label}`,
         source: required,
         target: node.label,
-        // Same-subject dependencies read as ordinary structure; only
-        // cross-subject edges render as weak dashed links.
         prereq: from.branch !== to.branch,
         branch: to.branch,
         color: to.color,

@@ -22,8 +22,6 @@ defineProps<{
   font-size: typography.font-size("m")
   padding: 12px 24px
 
-  // Light mode paints a black bar on the light page; dark mode inverts
-  // it to a light bar on the dark page so it still stands out.
   .dark-mode &
     background: #f4f4f2
     color: #111110

@@ -90,10 +90,8 @@ const layout = computed(() => {
 
 const fadeRadius = computed(() => 150 * scale.value)
 
-/** Below this scale the child labels turn to noise — keep branch labels only. */
 const compact = computed(() => scale.value < 0.62)
 
-/** Entry order: every level-1 node first, then level-2, then level-3. */
 const appearanceOrder = computed(() =>
   [...layout.value?.nodes ?? []].sort((a, b) => a.level - b.level))
 
@@ -107,10 +105,6 @@ const parentOf = (id: string) =>
 
 let entryTimer: ReturnType<typeof setInterval> | undefined
 
-// Nodes enter one by one, level by level: each spawns at its parent's
-// current position (the root for level-1) and rides the home force out
-// to its own spot, shouldering neighbors aside on the way. The link to
-// its parent stretches with it.
 const beginEntry = () => {
   clearInterval(entryTimer)
   entryTimer = setInterval(() => {
@@ -162,8 +156,6 @@ const syncPositions = () => {
 watch([layout, appearanceOrder], ([value, order]) => {
   if (!value) return
   simulation?.stop()
-  // Sim nodes follow the appearance order so the active slice always
-  // matches the nodes that have entered so far.
   simNodes = order.map(node => ({
     id: node.id,
     x: node.x,
@@ -241,7 +233,6 @@ const parentsMap = computed(() => {
   return map
 })
 
-/** The node and every ancestor chain — prerequisites included. */
 const lineage = (id: string): string[] => {
   const seen = new Set<string>()
   const queue = [id]
@@ -262,8 +253,6 @@ const glowSet = computed(() =>
 const connections = useConnections()
 const { activeNames } = storeToRefs(connections)
 
-// A directly-lit node brings its whole subtree plus its ancestor
-// chain — but not the ancestors' other children.
 const litNodes = computed(() =>
   new Set(activeNames.value.flatMap(name => [...subtree(name), ...lineage(name)])))
 
@@ -271,10 +260,6 @@ const litLink = (link: MapLink) =>
   litNodes.value.has(link.target)
   && (link.source === null || litNodes.value.has(link.source))
 
-// The wrapper springs open from zero height — fast, with an overshoot
-// bounce — then hands off to the node-by-node entry once the box has
-// settled. Later target changes ride the same spring, including the
-// collapse back to zero when the layout goes single-column.
 const targetHeight = computed(() => layout.value ? layout.value.cy + 4 : 0)
 
 const singleColumn = useMediaQuery("(max-width: 900px)")
@@ -283,8 +268,6 @@ const height = ref(0)
 
 const entryStarted = ref(false)
 
-// Collapsing rewinds the entry so the next opening replays the
-// node-by-node animation from scratch.
 const resetEntry = () => {
   clearInterval(entryTimer)
   entryStarted.value = false
@@ -302,8 +285,6 @@ const open = () => {
     type: "spring",
     visualDuration: 0.35,
     bounce: 0.35,
-    // Kick off the node entry the first time the box fills — waiting for
-    // onComplete would stall through the whole bounce-settling tail.
     onUpdate: (latest) => {
       height.value = Math.max(0, latest)
       if (target > 0 && !entryStarted.value && latest >= target * 0.98) {

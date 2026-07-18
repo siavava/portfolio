@@ -1,12 +1,10 @@
 /** Stable pseudo-random hash for seeding spine geometry by title. */
 export const hashLabel = (text: string) => {
-  let h = 0
-  for (const char of text) h = h * 31 + char.charCodeAt(0) | 0
-  return Math.abs(h)
+  let hash = 0
+  for (const char of text) hash = hash * 31 + char.charCodeAt(0) | 0
+  return Math.abs(hash)
 }
 
-// Widths draw from three tiers — thin, medium, thick — like a real
-// shelf of paperbacks, references, and the odd hardcover.
 const spineWidth = (seed: number) => {
   const roll = seed % 20
   if (roll < 8) return 7 + seed % 3
@@ -20,8 +18,6 @@ export const spineStyle = (title: string) => {
   const tilted = seed % 13 === 0
   const lean = 4 + (seed >> 4) % 4
   const width = spineWidth(seed)
-  // The edge arc scales with thickness — a fat hardcover bows more than
-  // a slim paperback, and a fixed arc turns thin spines into capsules.
   const arc = Math.max(1.5, Math.round(width * 0.18 * 10) / 10)
   return {
     width: `${width}px`,

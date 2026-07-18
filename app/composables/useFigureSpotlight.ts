@@ -25,7 +25,7 @@ export function useFigureSpotlight(contentEl: Ref<HTMLElement | null>) {
     const clone = fig.cloneNode(true) as HTMLElement
     clone
       .querySelectorAll(".fig-cap, .tikz-cap, figcaption")
-      .forEach(c => c.remove())
+      .forEach(node => node.remove())
     spotlight.value = {
       html: clone.outerHTML,
       caption: fig.querySelector(
@@ -44,13 +44,13 @@ export function useFigureSpotlight(contentEl: Ref<HTMLElement | null>) {
     document.documentElement.style.overflow = ""
   }
 
-  function onClick(e: MouseEvent) {
-    const t = e.target as HTMLElement
-    if (t.closest(
+  function onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement
+    if (target.closest(
       "a, button, input, select, textarea,"
       + " [class*=visualiser], [class*=visualizer]",
     )) return
-    const fig = t.closest("figure:not(.algorithm)") as HTMLElement | null
+    const fig = target.closest("figure:not(.algorithm)") as HTMLElement | null
     if (
       fig
       && contentEl.value?.contains(fig)
@@ -58,8 +58,8 @@ export function useFigureSpotlight(contentEl: Ref<HTMLElement | null>) {
     ) open(fig)
   }
 
-  function onKey(e: KeyboardEvent) {
-    if (e.key === "Escape" && spotlight.value) close()
+  function onKey(event: KeyboardEvent) {
+    if (event.key === "Escape" && spotlight.value) close()
   }
 
   onMounted(() => {

@@ -43,11 +43,11 @@ const ensureTikzjax = async () => {
   }
   if (!document.querySelector(`script[src="${TIKZJAX_JS}"]`)) {
     await new Promise<void>((resolve, reject) => {
-      const s = document.createElement("script")
-      s.src = TIKZJAX_JS
-      s.onload = () => resolve()
-      s.onerror = () => reject(new Error("failed to load tikzjax"))
-      document.head.appendChild(s)
+      const script = document.createElement("script")
+      script.src = TIKZJAX_JS
+      script.onload = () => resolve()
+      script.onerror = () => reject(new Error("failed to load tikzjax"))
+      document.head.appendChild(script)
     })
   }
   scriptLoaded = true
@@ -59,12 +59,12 @@ const luminance = (r: number, g: number, b: number) =>
 const makeResponsive = (root: HTMLElement) => {
   const svg = root.querySelector("svg")
   if (!svg) return
-  const w = svg.getAttribute("width")
-  if (!w) return
+  const widthAttr = svg.getAttribute("width")
+  if (!widthAttr) return
   svg.removeAttribute("width")
   svg.removeAttribute("height")
   svg.style.width = "100%"
-  svg.style.maxWidth = /[a-z%]/i.test(w) ? w : `${w}px`
+  svg.style.maxWidth = /[a-z%]/i.test(widthAttr) ? widthAttr : `${widthAttr}px`
   svg.style.height = "auto"
 }
 
@@ -77,9 +77,9 @@ const tagLightFills = (root: HTMLElement) => {
   shapes.forEach((sh) => {
     const fill = getComputedStyle(sh).fill
     if (!fill || fill === "none") return
-    const m = fill.match(/rgba?\(([^)]+)\)/)
-    if (!m) return
-    const [r, g, b, a = 1] = m[1]!.split(",").map(s => parseFloat(s))
+    const match = fill.match(/rgba?\(([^)]+)\)/)
+    if (!match) return
+    const [r, g, b, a = 1] = match[1]!.split(",").map(s => parseFloat(s))
     if (a === 0 || r === undefined || g === undefined || b === undefined) return
     if (luminance(r, g, b) > 0.62) sh.classList.add("tikz-fill-light")
   })
@@ -92,14 +92,14 @@ const render = async () => {
   try {
     await ensureTikzjax()
     el.innerHTML = ""
-    const s = document.createElement("script")
-    s.type = "text/tikz"
-    s.setAttribute(
+    const script = document.createElement("script")
+    script.type = "text/tikz"
+    script.setAttribute(
       "data-tikz-libraries",
       "automata,positioning,arrows.meta,calc,cd",
     )
-    s.textContent = code
-    el.appendChild(s)
+    script.textContent = code
+    el.appendChild(script)
     await new Promise<void>((resolve, reject) => {
       const t = setTimeout(() => {
         cleanup()

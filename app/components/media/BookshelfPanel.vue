@@ -39,7 +39,6 @@ const { data } = await useAsyncData("projects-shelf", () =>
     .select("path", "title", "summary", "tag", "date", "repo", "featured")
     .all())
 
-// Featured builds shelve first, then the rest — both runs newest first.
 const projects = computed<ProjectItem[]>(() => {
   const items = (data.value ?? []).map(doc => ({
     path: doc.path,
@@ -67,8 +66,7 @@ const selected = shallowRef<ProjectItem | null>(null)
 const isSelected = (project: ProjectItem) =>
   project.title === selected.value?.title
 
-// The default highlight rotates through the featured set, picked
-// client-side so SSR output stays deterministic.
+// Picked client-side so SSR output stays deterministic.
 onMounted(() => {
   const featured = projects.value.filter(project => project.featured)
   const pool = featured.length ? featured : projects.value
@@ -82,11 +80,6 @@ const tooltipSnap = ref(false)
 const tooltipStyle = ref<{ left: string, top: string }>({ left: "0px", top: "0px" })
 let hideTimer: ReturnType<typeof setTimeout> | undefined
 
-// One persistent tooltip glides between spines: position and content
-// update on hover, a short grace period bridges the gaps between books,
-// and only a fresh appearance (from hidden) snaps into place. The shelf
-// clips its own overflow, so it anchors to a zero-size point in the
-// viewport layer, above the hovered spine.
 const hover = (project: ProjectItem, event: MouseEvent) => {
   const book = event.currentTarget as HTMLElement
   if (!viewport.value) return
@@ -131,18 +124,14 @@ const spine = (project: ProjectItem) => spineStyle(project.title)
 <style lang="sass" scoped>
 @use "@/styles/typography"
 
-// The reference illustration's highlight blues (Tailwind blue-500/100).
 $shelf-blue: #3b82f6
 $shelf-blue-tint: #dbeafe
 
 .bookshelf-panel
-  // Lighter than the standard panel so the spines stand off the surface.
   --shelf-panel: #f7f7f8
   display: flex
   flex-direction: column
   aspect-ratio: 16 / 9
-  // Keep the shelf's intrinsic width from blowing out the grid column:
-  // overflow scrolling hides content but doesn't shrink min-content.
   min-width: 0
   padding: 16px 18px 12px
   background: var(--shelf-panel)
@@ -191,8 +180,6 @@ $shelf-blue-tint: #dbeafe
 
 .bookshelf-panel__viewport
   position: relative
-  // Fixed height: a percentage flex-basis against the aspect-ratio-derived
-  // panel height resolves inconsistently across engines.
   flex: 0 0 auto
   height: 100px
   margin-top: 14px
@@ -202,8 +189,6 @@ $shelf-blue-tint: #dbeafe
   align-items: flex-end
   gap: 1px
   height: 100%
-  // Wide enough gutters that a tilted edge spine (up to 7deg of lean,
-  // ~7px of overhang) never clips against the scroll box.
   padding: 0 8px
   overflow-x: auto
   overflow-y: hidden

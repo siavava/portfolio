@@ -14,10 +14,10 @@ figure.algorithm(:style="{ '--algo-digits': maxDigits }")
       span.algo-num {{ i + 1 }}
       .algo-main
         span.algo-guide(
-          v-for="g in ln.level",
-          :key="g",
-          :class="{ foot: ln.feet.includes(g - 1) }",
-          :style="footDepthStyle(ln, g)"
+          v-for="depth in ln.level",
+          :key="depth",
+          :class="{ foot: ln.feet.includes(depth - 1) }",
+          :style="footDepthStyle(ln, depth)"
         )
         span.algo-code(v-html="ln.html")
       span.algo-comment(v-if="ln.comment", v-html="ln.comment")
@@ -55,10 +55,10 @@ const renderSeg = (text: string, isComment = false): string =>
       if (seg.startsWith("$") && seg.endsWith("$") && seg.length > 1) {
         return renderTex(seg.slice(1, -1))
       }
-      let s = escapeHtml(seg)
+      let escaped = escapeHtml(seg)
         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      if (!isComment) s = s.replace(KEYWORDS, m => `<b class="kw">${m}</b>`)
-      return s
+      if (!isComment) escaped = escaped.replace(KEYWORDS, match => `<b class="kw">${match}</b>`)
+      return escaped
     })
     .join("")
 
@@ -70,9 +70,9 @@ type Line = {
   footPush: number
 }
 
-const footDepthStyle = (ln: Line, g: number) =>
-  ln.feet.includes(g - 1)
-    ? { "--foot-depth": Math.max(...ln.feet) - (g - 1) }
+const footDepthStyle = (ln: Line, depth: number) =>
+  ln.feet.includes(depth - 1)
+    ? { "--foot-depth": Math.max(...ln.feet) - (depth - 1) }
     : null
 
 const parsed = computed(() => {
@@ -114,22 +114,22 @@ const parsed = computed(() => {
   const numMatch = meta.match(/number=(\d+)/)
   if (numMatch) number = numMatch[1]!
 
-  const lines: Line[] = rows.map((r, i) => {
+  const lines: Line[] = rows.map((row, i) => {
     const feet: number[] = []
     const next = rows[i + 1]
-    for (let g = 0; g < r.level; g++) {
-      if (!next || next.level <= g) feet.push(g)
+    for (let depth = 0; depth < row.level; depth++) {
+      if (!next || next.level <= depth) feet.push(depth)
     }
-    const html = CONTROL.test(r.content)
-      ? `<i class="ctrl">${r.content.toLowerCase()}</i>`
-      : renderSeg(r.content)
+    const html = CONTROL.test(row.content)
+      ? `<i class="ctrl">${row.content.toLowerCase()}</i>`
+      : renderSeg(row.content)
     const footPush = feet.length
       ? 0.1 + (Math.max(...feet) - Math.min(...feet)) * 0.46
       : 0
     return {
-      level: r.level,
+      level: row.level,
       html,
-      comment: renderSeg(r.comment, true),
+      comment: renderSeg(row.comment, true),
       feet,
       footPush,
     }

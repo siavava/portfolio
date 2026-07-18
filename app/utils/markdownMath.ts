@@ -31,8 +31,8 @@ function configure() {
         level: "block",
         start(src: string) { return src.indexOf("$$") },
         tokenizer(src: string) {
-          const m = /^\$\$([\s\S]+?)\$\$/.exec(src)
-          if (m) return { type: "blockMath", raw: m[0], text: m[1]!.trim() }
+          const match = /^\$\$([\s\S]+?)\$\$/.exec(src)
+          if (match) return { type: "blockMath", raw: match[0], text: match[1]!.trim() }
         },
         renderer(token) {
           const text = (token as unknown as { text: string }).text
@@ -48,8 +48,8 @@ function configure() {
         level: "inline",
         start(src: string) { return src.indexOf("$") },
         tokenizer(src: string) {
-          const m = /^\$([^$\n]+?)\$/.exec(src)
-          if (m) return { type: "inlineMath", raw: m[0], text: m[1]!.trim() }
+          const match = /^\$([^$\n]+?)\$/.exec(src)
+          if (match) return { type: "inlineMath", raw: match[0], text: match[1]!.trim() }
         },
         renderer(token) {
           const text = (token as unknown as { text: string }).text

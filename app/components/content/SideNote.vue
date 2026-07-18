@@ -31,7 +31,6 @@ onUnmounted(() => {
   if (props.name) unregister(props.name)
 })
 
-// Any note showing or hiding can shift the whole stack.
 watch(() => [sideNotes.hovered, sideNotes.pinned.size], reflow)
 
 useEventListener("resize", reflow, { passive: true })

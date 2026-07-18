@@ -2,22 +2,7 @@ const notes = new Map<string, HTMLElement>()
 
 const GAP = 16
 
-/**
- * ## useSideNoteLayout
- *
- * Places margin notes beside the words that trigger them. Each named
- * note aligns its top with its trigger (`[data-note-trigger]`); when
- * several notes are visible at once they stack instead — a note slides
- * down just far enough to clear the one above it, so nothing overlaps.
- *
- * ### Returns
- *
- * | Member | Type | Description |
- * | --- | --- | --- |
- * | `register` | `function` | Track a mounted note element by name |
- * | `unregister` | `function` | Drop a note on unmount |
- * | `relayout` | `function` | Recompute every note's `top` |
- */
+/** ## useSideNoteLayout — places margin notes beside the words that trigger them. */
 export const useSideNoteLayout = () => {
   const register = (name: string, el: HTMLElement) => {
     notes.set(name, el)
@@ -39,8 +24,6 @@ export const useSideNoteLayout = () => {
       groups.set(parent, [...groups.get(parent) ?? [], { name, el, desired, height: el.offsetHeight }])
     }
 
-    // Stack per positioned ancestor: hidden notes sit at their trigger
-    // line (ready to fade in aligned), visible ones push each other down.
     for (const group of groups.values()) {
       group.sort((a, b) => a.desired - b.desired)
       let floor = Number.NEGATIVE_INFINITY

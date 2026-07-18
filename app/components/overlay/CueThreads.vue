@@ -1,15 +1,13 @@
 <template lang="pug">
 div(v-if="paths.length")
   svg.cue-threads-overlay(aria-hidden="true")
-    path(v-for="(d, index) in paths", :key="index", :d="d")
-  //- Same ropes again, unblended and clipped to the portrait: the blended
-  //- layer vanishes over content darker than the thread color.
+    path(v-for="(pathData, index) in paths", :key="index", :d="pathData")
   svg.cue-threads-overlay.cue-threads-overlay--over-image(
     v-if="imageClip",
     :style="{ clipPath: imageClip }",
     aria-hidden="true",
   )
-    path(v-for="(d, index) in paths", :key="index", :d="d")
+    path(v-for="(pathData, index) in paths", :key="index", :d="pathData")
 </template>
 
 <script lang="ts" setup>
@@ -121,21 +119,21 @@ const step = (dt: number) => {
 
     for (let pass = 0; pass < SETTINGS.iterations; pass += 1) {
       for (let i = 0; i < rope.points.length - 1; i += 1) {
-        const a = rope.points[i]!
-        const b = rope.points[i + 1]!
-        const dx = b.x - a.x
-        const dy = b.y - a.y
+        const curr = rope.points[i]!
+        const next = rope.points[i + 1]!
+        const dx = next.x - curr.x
+        const dy = next.y - curr.y
         const length = Math.hypot(dx, dy) || 0.0001
         const difference = (length - rope.linkLength) / length
         const ax = dx * difference * 0.5
         const ay = dy * difference * 0.5
-        if (!a.pinned) {
-          a.x += b.pinned ? dx * difference : ax
-          a.y += b.pinned ? dy * difference : ay
+        if (!curr.pinned) {
+          curr.x += next.pinned ? dx * difference : ax
+          curr.y += next.pinned ? dy * difference : ay
         }
-        if (!b.pinned) {
-          b.x -= a.pinned ? dx * difference : ax
-          b.y -= a.pinned ? dy * difference : ay
+        if (!next.pinned) {
+          next.x -= curr.pinned ? dx * difference : ax
+          next.y -= curr.pinned ? dy * difference : ay
         }
       }
     }
@@ -145,7 +143,7 @@ const step = (dt: number) => {
 /** Catmull-Rom spline through the rope points, as in the reference. */
 const splinePath = (points: RopePoint[]) => {
   if (points.length < 2) return ""
-  let d = `M ${points[0]!.x} ${points[0]!.y}`
+  let pathData = `M ${points[0]!.x} ${points[0]!.y}`
   for (let i = 0; i < points.length - 1; i += 1) {
     const p0 = points[Math.max(0, i - 1)]!
     const p1 = points[i]!
@@ -155,9 +153,9 @@ const splinePath = (points: RopePoint[]) => {
     const cp1y = p1.y + (p2.y - p0.y) / 6
     const cp2x = p2.x - (p3.x - p1.x) / 6
     const cp2y = p2.y - (p3.y - p1.y) / 6
-    d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`
+    pathData += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`
   }
-  return d
+  return pathData
 }
 
 const tick = (timestamp: number) => {
@@ -177,8 +175,6 @@ const tick = (timestamp: number) => {
   frame = requestAnimationFrame(tick)
 }
 
-// Ropes live per root so groups can come and go independently: a group
-// joining or leaving never rebuilds (and re-drops) the ones standing.
 if (import.meta.client) {
   const ropesByRoot = new Map<Element, Rope[]>()
   watch(() => cues.groups, (groups) => {
@@ -222,9 +218,6 @@ onUnmounted(() => cancelAnimationFrame(frame))
   height: 100vh
   pointer-events: none
   z-index: 2
-  // Darken lets overlapped text read through the ropes; the clipped
-  // --over-image copy handles the portrait, where blending would erase
-  // them instead.
   mix-blend-mode: darken
 
   .dark-mode &
