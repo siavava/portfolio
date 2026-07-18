@@ -1031,14 +1031,13 @@ defineOgImage("Portrait", {
     font-weight: 700
     color: var(--desk-strong)
 
-  // Code keeps the pixel mono: chips inline, quiet bordered blocks.
+  // Inline code exactly as the study renders it: the sunken surface,
+  // its padding, no border, ink inherited from the prose.
   :deep(code)
     font-family: typography.font("monospace"), ui-monospace, monospace
-    font-size: 0.75em
-    color: var(--desk-foreground)
-    background: var(--panel)
-    border: 0.5px solid var(--divider)
-    padding: 0 0.25em 0.05em
+    font-size: 0.88em
+    background: var(--study-surface-sunken)
+    padding: 0.1em 0.35em
 
   :deep(pre)
     margin: 0 0 1.1em
