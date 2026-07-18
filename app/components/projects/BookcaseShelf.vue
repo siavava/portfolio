@@ -22,7 +22,7 @@ section.shelf-section
       :class="{ visible: hovered, snap: tooltipSnap }",
       :style="tooltipStyle",
     )
-      TooltipShell(v-if="lastHovered", anchor, compact, :animate="false") {{ lastHovered.title }} · {{ formatMonthYear(lastHovered.date) }}
+      TooltipShell(v-if="lastHovered", anchor, compact, :animate="false") {{ lastHovered.title }}
     ScrollFades(:left="canScrollLeft", :right="canScrollRight", always)
 </template>
 

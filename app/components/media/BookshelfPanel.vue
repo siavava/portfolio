@@ -25,7 +25,7 @@
       :class="{ visible: hovered, snap: tooltipSnap }",
       :style="tooltipStyle",
     )
-      TooltipShell(v-if="lastHovered", anchor, compact, :animate="false") {{ lastHovered.title }} · {{ lastHovered.year }}
+      TooltipShell(v-if="lastHovered", anchor, compact, :animate="false") {{ lastHovered.title }}
     ScrollFades(:left="canScrollLeft", :right="canScrollRight", always, color="var(--shelf-panel)")
   p.bookshelf-panel__caption
     | Shelf: {{ projects.length }} Projects ·
