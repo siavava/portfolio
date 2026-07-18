@@ -24,21 +24,144 @@ the model recovers a probability distribution over the robot's position, a
 _belief_ that spreads across the grid and then tightens as evidence arrives.
 
 $$
-% caption: The filter spreads its belief over a 4x4 maze. Dark cells are walls the
-% robot cannot occupy; the circle marks its true (hidden) cell. Probability
-% mass, shaded by opacity, concentrates on the cells still consistent with
-% the readings.
+% caption: Localizing by motion alone — no sensor at all. The belief is the
+% caption: SET of cells the robot could occupy (shaded uniformly, since every
+% caption: candidate is equally likely; darker as the set shrinks). A move is
+% caption: deterministic: a candidate blocked by a wall or the grid edge stays
+% caption: put, the rest step, and two candidates landing on the same cell
+% caption: merge into one — so a cell empties on a move only when nothing
+% caption: steps into it and its own candidate steps out. The arrow in each
+% caption: panel is the robot's actual step. Seven moves through the maze's
+% caption: walls funnel twelve candidates down to a single cell, pinning the
+% caption: robot's location without ever reading a sensor. The circle is its
+% caption: true (unknown) cell, always among the candidates.
 \begin{tikzpicture}[>=stealth, font=\footnotesize]
   \definecolor{acc}{HTML}{2348F2}
-  \fill[acc!25] (3,3) rectangle (4,4);
-  \fill[acc!12] (2,3) rectangle (3,4);
-  \fill[acc!5]  (3,2) rectangle (4,3);
-  \fill[black!55] (1,2) rectangle (2,3);
-  \fill[black!55] (2,1) rectangle (3,2);
-  \draw[black!45] (0,0) grid (4,4);
-  \draw[acc, thick, fill=acc!8] (3.5,3.5) circle (0.26);
-  \node[font=\scriptsize\ttfamily, text=acc, anchor=south] at (2.5,4.2) {belief};
-  \draw[acc, ->] (2.5,4.15) -- (2.5,4.02);
+  \begin{scope}[xshift=0.0cm, yshift=0cm, scale=0.42]
+    \fill[acc!13] (1,2) rectangle (2,3);
+    \fill[acc!13] (2,1) rectangle (3,2);
+    \fill[acc!13] (3,1) rectangle (4,2);
+    \fill[acc!13] (1,1) rectangle (2,2);
+    \fill[acc!13] (0,3) rectangle (1,4);
+    \fill[acc!13] (2,0) rectangle (3,1);
+    \fill[acc!13] (3,0) rectangle (4,1);
+    \fill[acc!13] (2,3) rectangle (3,4);
+    \fill[acc!13] (0,2) rectangle (1,3);
+    \fill[acc!13] (3,3) rectangle (4,4);
+    \fill[acc!13] (2,2) rectangle (3,3);
+    \fill[acc!13] (1,0) rectangle (2,1);
+    \fill[black!55] (0,0) rectangle (1,1);
+    \fill[black!55] (0,1) rectangle (1,2);
+    \fill[black!55] (1,3) rectangle (2,4);
+    \fill[black!55] (3,2) rectangle (4,3);
+    \draw[black!45] (0,0) grid (4,4);
+    \draw[acc, thick] (1.5,1.5) circle (0.30);
+    \node[font=\scriptsize\ttfamily, text=acc, anchor=north] at (2,-0.5) {t=0: uniform};
+  \end{scope}
+  \begin{scope}[xshift=2.35cm, yshift=0cm, scale=0.42]
+    \fill[acc!16] (2,1) rectangle (3,2);
+    \fill[acc!16] (1,1) rectangle (2,2);
+    \fill[acc!16] (2,0) rectangle (3,1);
+    \fill[acc!16] (3,0) rectangle (4,1);
+    \fill[acc!16] (0,2) rectangle (1,3);
+    \fill[acc!16] (3,3) rectangle (4,4);
+    \fill[acc!16] (2,2) rectangle (3,3);
+    \fill[acc!16] (1,0) rectangle (2,1);
+    \fill[black!55] (0,0) rectangle (1,1);
+    \fill[black!55] (0,1) rectangle (1,2);
+    \fill[black!55] (1,3) rectangle (2,4);
+    \fill[black!55] (3,2) rectangle (4,3);
+    \draw[black!45] (0,0) grid (4,4);
+    \draw[acc, thick] (1.5,0.5) circle (0.30);
+    \draw[->, acc, line width=1pt] (1.50,1.85) -- (1.50,0.92);
+    \node[font=\scriptsize\ttfamily, text=acc, anchor=north] at (2,-0.5) {move S};
+  \end{scope}
+  \begin{scope}[xshift=4.7cm, yshift=0cm, scale=0.42]
+    \fill[acc!17] (1,2) rectangle (2,3);
+    \fill[acc!17] (3,3) rectangle (4,4);
+    \fill[acc!17] (2,1) rectangle (3,2);
+    \fill[acc!17] (2,2) rectangle (3,3);
+    \fill[acc!17] (3,1) rectangle (4,2);
+    \fill[acc!17] (2,0) rectangle (3,1);
+    \fill[acc!17] (3,0) rectangle (4,1);
+    \fill[black!55] (0,0) rectangle (1,1);
+    \fill[black!55] (0,1) rectangle (1,2);
+    \fill[black!55] (1,3) rectangle (2,4);
+    \fill[black!55] (3,2) rectangle (4,3);
+    \draw[black!45] (0,0) grid (4,4);
+    \draw[acc, thick] (2.5,0.5) circle (0.30);
+    \draw[->, acc, line width=1pt] (1.15,0.50) -- (2.08,0.50);
+    \node[font=\scriptsize\ttfamily, text=acc, anchor=north] at (2,-0.5) {move E};
+  \end{scope}
+  \begin{scope}[xshift=7.050000000000001cm, yshift=0cm, scale=0.42]
+    \fill[acc!26] (3,1) rectangle (4,2);
+    \fill[acc!26] (3,3) rectangle (4,4);
+    \fill[acc!26] (3,0) rectangle (4,1);
+    \fill[acc!26] (2,2) rectangle (3,3);
+    \fill[black!55] (0,0) rectangle (1,1);
+    \fill[black!55] (0,1) rectangle (1,2);
+    \fill[black!55] (1,3) rectangle (2,4);
+    \fill[black!55] (3,2) rectangle (4,3);
+    \draw[black!45] (0,0) grid (4,4);
+    \draw[acc, thick] (3.5,0.5) circle (0.30);
+    \draw[->, acc, line width=1pt] (2.15,0.50) -- (3.08,0.50);
+    \node[font=\scriptsize\ttfamily, text=acc, anchor=north] at (2,-0.5) {move E};
+  \end{scope}
+  \begin{scope}[xshift=7.050000000000001cm, yshift=-3.5cm, scale=0.42]
+    \fill[acc!33] (3,1) rectangle (4,2);
+    \fill[acc!33] (3,3) rectangle (4,4);
+    \fill[acc!33] (2,3) rectangle (3,4);
+    \fill[black!55] (0,0) rectangle (1,1);
+    \fill[black!55] (0,1) rectangle (1,2);
+    \fill[black!55] (1,3) rectangle (2,4);
+    \fill[black!55] (3,2) rectangle (4,3);
+    \draw[black!45] (0,0) grid (4,4);
+    \draw[acc, thick] (3.5,1.5) circle (0.30);
+    \draw[->, acc, line width=1pt] (3.50,0.15) -- (3.50,1.08);
+    \node[font=\scriptsize\ttfamily, text=acc, anchor=north] at (2,-0.5) {move W};
+  \end{scope}
+  \begin{scope}[xshift=4.7cm, yshift=-3.5cm, scale=0.42]
+    \fill[acc!46] (2,3) rectangle (3,4);
+    \fill[acc!46] (2,1) rectangle (3,2);
+    \fill[black!55] (0,0) rectangle (1,1);
+    \fill[black!55] (0,1) rectangle (1,2);
+    \fill[black!55] (1,3) rectangle (2,4);
+    \fill[black!55] (3,2) rectangle (4,3);
+    \draw[black!45] (0,0) grid (4,4);
+    \draw[acc, thick] (2.5,1.5) circle (0.30);
+    \draw[->, acc, line width=1pt] (3.85,1.50) -- (2.92,1.50);
+    \node[font=\scriptsize\ttfamily, text=acc, anchor=north] at (2,-0.5) {move N};
+  \end{scope}
+  \begin{scope}[xshift=2.35cm, yshift=-3.5cm, scale=0.42]
+    \fill[acc!46] (2,3) rectangle (3,4);
+    \fill[acc!46] (2,2) rectangle (3,3);
+    \fill[black!55] (0,0) rectangle (1,1);
+    \fill[black!55] (0,1) rectangle (1,2);
+    \fill[black!55] (1,3) rectangle (2,4);
+    \fill[black!55] (3,2) rectangle (4,3);
+    \draw[black!45] (0,0) grid (4,4);
+    \draw[acc, thick] (2.5,2.5) circle (0.30);
+    \draw[->, acc, line width=1pt] (2.50,1.15) -- (2.50,2.08);
+    \node[font=\scriptsize\ttfamily, text=acc, anchor=north] at (2,-0.5) {move N};
+  \end{scope}
+  \begin{scope}[xshift=0.0cm, yshift=-3.5cm, scale=0.42]
+    \fill[acc] (2,3) rectangle (3,4);
+    \fill[black!55] (0,0) rectangle (1,1);
+    \fill[black!55] (0,1) rectangle (1,2);
+    \fill[black!55] (1,3) rectangle (2,4);
+    \fill[black!55] (3,2) rectangle (4,3);
+    \draw[black!45] (0,0) grid (4,4);
+    \draw[acc, thick] (2.5,3.5) circle (0.30);
+    \draw[->, acc, line width=1pt] (2.50,2.15) -- (2.50,3.08);
+    \node[font=\scriptsize\ttfamily, text=acc, anchor=north] at (2,-0.5) {move N: certain};
+  \end{scope}
+  \draw[->, black!45] (1.78,0.85) -- (2.25,0.85);
+  \draw[->, black!45] (4.13,0.85) -- (4.60,0.85);
+  \draw[->, black!45] (6.48,0.85) -- (6.95,0.85);
+  \draw[->, black!45] (7.89,-0.95) -- (7.89,-1.70);
+  \draw[->, black!45] (6.95,-2.65) -- (6.48,-2.65);
+  \draw[->, black!45] (4.60,-2.65) -- (4.13,-2.65);
+  \draw[->, black!45] (2.25,-2.65) -- (1.78,-2.65);
 \end{tikzpicture}
 $$
 

@@ -122,3 +122,24 @@ or the evaluation:
 - [Quiescence search](https://en.wikipedia.org/wiki/Quiescence_search)
   extends the search at the horizon until the position is quiet, so the
   evaluation never scores a board mid-capture.
+
+$$
+% caption: The horizon effect, and why leaves are only scored when quiet. A
+% caption: fixed-depth search ends one ply after the queen takes a pawn and
+% caption: scores the position a pawn up. Quiescence search keeps following
+% caption: captures past the horizon, finds the recapture that loses the
+% caption: queen, and returns the true score instead.
+\begin{tikzpicture}[>=stealth, font=\footnotesize,
+  ps/.style={rectangle, draw=acc, fill=acc!8, minimum width=1.5cm, minimum height=0.62cm, inner sep=2pt, font=\scriptsize\ttfamily}]
+  \definecolor{acc}{HTML}{2348F2}
+  \node[ps] (a) at (2.2,3.0) {position};
+  \node[ps] (b) at (3.6,1.95) {QxP};
+  \node[ps] (c) at (5.0,0.75) {RxQ};
+  \draw[black!45] (a) -- (b);
+  \draw[black!45, dashed] (b) -- (c);
+  \draw[black!35, dashed] (0.6,1.4) -- (8.4,1.4);
+  \node[font=\scriptsize\ttfamily, text=black!55, anchor=south east] at (8.4,1.47) {search horizon};
+  \node[font=\scriptsize\ttfamily, text=acc, anchor=west] at (4.5,1.95) {static eval: +1};
+  \node[font=\scriptsize\ttfamily, text=acc, anchor=west] at (5.9,0.75) {quiescence f\/inds: -8};
+\end{tikzpicture}
+$$

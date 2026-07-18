@@ -78,3 +78,33 @@ return failure
 deleting values it has just made illegal; when a domain empties, the current
 path is abandoned before it is extended further. This catches conflicts one step
 earlier than testing constraints only at assignment time.
+
+$$
+% caption: A slice of the backtracking tree with the heuristics at work. MRV
+% caption: expands the tightest variable next; LCV tries the value that keeps
+% caption: the most options open first, and that branch runs on toward a
+% caption: solution. The other value assigns Q=b, and forward checking empties
+% caption: SA's domain on the spot — the whole subtree is pruned without ever
+% caption: being searched.
+\begin{tikzpicture}[>=stealth, font=\footnotesize,
+  as/.style={rectangle, draw=acc, fill=acc!8, minimum width=1.1cm, minimum height=0.6cm, inner sep=2pt, font=\scriptsize\ttfamily},
+  dead/.style={rectangle, draw=black!45, dashed, minimum width=1.5cm, minimum height=0.6cm, inner sep=2pt, font=\scriptsize\ttfamily, text=black!55}]
+  \definecolor{acc}{HTML}{2348F2}
+  \node[as] (r)  at (4.6,3.2) {WA=r};
+  \node[as] (nt) at (4.6,2.2) {NT=g};
+  \node[as] (qr) at (2.9,1.1) {Q=r};
+  \node[as] (qb) at (6.3,1.1) {Q=b};
+  \node[as] (sa) at (2.9,0.1) {SA=b};
+  \node[font=\scriptsize\ttfamily, text=black!55] (more) at (2.9,-0.8) {...};
+  \node[dead] (x) at (6.3,0.1) {SA empty};
+  \draw[black!45] (r) -- (nt);
+  \draw[black!45] (nt) -- (qr);
+  \draw[black!45] (nt) -- (qb);
+  \draw[black!45] (qr) -- (sa);
+  \draw[black!45] (sa) -- (more);
+  \draw[black!45, dashed] (qb) -- (x);
+  \node[font=\scriptsize\ttfamily, text=acc, anchor=west] at (5.35,2.75) {MRV: tightest variable next};
+  \node[font=\scriptsize\ttfamily, text=acc, anchor=east] at (2.2,1.6) {LCV: r bef\/ore b};
+  \node[font=\scriptsize\ttfamily, text=acc, anchor=west] at (7.25,0.1) {f\/orward check prunes};
+\end{tikzpicture}
+$$
