@@ -126,11 +126,14 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
 /** Click → world coordinates → new waypoint. */
 function flyTo(e: MouseEvent) {
   const svg = e.currentTarget as SVGSVGElement
-  const rect = svg.getBoundingClientRect()
-  const px = (e.clientX - rect.left) * W / rect.width
-  const py = (e.clientY - rect.top) * H / rect.height
-  target.x = clamp((px - ORIGIN_X) / SCALE, -10.3, 10.3)
-  target.y = clamp((ORIGIN_Y - py) / SCALE, 0.6, 9.2)
+  // The screen CTM accounts for the letterboxing preserveAspectRatio
+  // adds when the element is wider than the 2:1 viewBox — a plain
+  // width-ratio mapping lands clicks off by the letterbox margin.
+  const ctm = svg.getScreenCTM()
+  if (!ctm) return
+  const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse())
+  target.x = clamp((pt.x - ORIGIN_X) / SCALE, -10.3, 10.3)
+  target.y = clamp((ORIGIN_Y - pt.y) / SCALE, 0.6, 9.2)
   note.value = "waypoint set — banking toward it"
 }
 

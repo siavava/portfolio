@@ -1,12 +1,13 @@
 <template lang="pug">
 figure.viz.visualizer.mass-spring-viz
   figcaption.tikz-cap
-    | Eight masses under gravity, joined by structural springs between
-    | neighbors and dashed bending springs across every other pair,
-    | integrated live; springs tint orange as they stretch. The select
-    | is the experiment: semi-implicit Euler stays bounded however hard
-    | you perturb it; explicit Euler pumps energy into the oscillation
-    | until the strand flies apart and the sim resets itself.
+    | A strand of eight masses hangs from a single anchor, joined by
+    | structural springs between neighbors and dashed bending springs
+    | across every other pair; springs tint orange as they strain. The
+    | select is the experiment: semi-implicit Euler swings and settles
+    | however hard you perturb the strand, while explicit Euler pumps
+    | energy into every oscillation until the strand flies out of frame
+    | and the sim resets itself.
   .viz-head
     span.viz-title Mass-spring strand
     .viz-controls
@@ -39,21 +40,25 @@ figure.viz.visualizer.mass-spring-viz
 /**
  * ## MassSpringViz
  *
- * A live mass-spring strand: eight masses under gravity, structural
- * springs between neighbors and bending springs across every other
- * pair, integrated in real time. The integrator select is the point —
- * semi-implicit Euler stays bounded, explicit Euler pumps energy until
- * the strand leaves the frame and the sim resets. The blow-up guard
- * trips at the canvas edge, so the divergence is watched, not implied.
+ * A hanging mass-spring strand: eight masses under gravity from a
+ * single anchor, structural springs between neighbors and bending
+ * springs across every other pair, integrated in real time. The
+ * strand starts at its stretched hanging equilibrium, so its whole
+ * range of motion — settling sways and full pendulum swings alike —
+ * stays inside the frame. The integrator select is the point:
+ * semi-implicit Euler stays bounded, explicit Euler pumps energy
+ * until the strand leaves the frame and the sim resets. The blow-up
+ * guard trips at the canvas edge, so divergence is watched, not
+ * implied.
  */
 const W = 640
 const H = 320
 
 const N = 8
-const REST = 54
-const ANCHOR_X = 128
-const ANCHOR_Y = 84
-const KS = 140
+const REST = 28
+const ANCHOR_X = W / 2
+const ANCHOR_Y = 50
+const KS = 200
 const KD = 1.6
 const KB = 60
 const GRAVITY = 220
@@ -63,7 +68,7 @@ type Mass = { x: number, y: number, vx: number, vy: number }
 
 const masses = reactive<Mass[]>([])
 const integrator = ref<"semi" | "explicit">("semi")
-const note = ref("drag-free sim — perturb it and compare integrators")
+const note = ref("hanging at equilibrium — perturb it and compare integrators")
 
 const springs: { a: number, b: number, rest: number, k: number, bend: boolean }[] = []
 for (let i = 0; i < N - 1; i++) springs.push({ a: i, b: i + 1, rest: REST, k: KS, bend: false })
@@ -71,13 +76,17 @@ for (let i = 0; i < N - 2; i++) springs.push({ a: i, b: i + 2, rest: 2 * REST, k
 
 // Endpoint coordinates flattened for the template — Pug expressions
 // can't carry the index assertions the strict lookups would need.
-// Structural springs tint from cobalt toward orange with strain.
-const segments = computed(() => springs.flatMap((s) => {
+// Structural springs tint from cobalt toward orange by how far they sit
+// from their own hanging-equilibrium length — not from rest length,
+// which the strand's upper springs statically exceed just by carrying
+// weight. At rest everything reads cobalt; only motion brings orange.
+const eqLen: number[] = []
+const segments = computed(() => springs.flatMap((s, si) => {
   const a = masses[s.a]
   const b = masses[s.b]
   if (!a || !b) return []
   const len = Math.hypot(b.x - a.x, b.y - a.y)
-  const tint = Math.round(Math.min(1, Math.abs(len - s.rest) / s.rest / 0.25) * 100)
+  const tint = Math.round(Math.min(1, Math.abs(len - (eqLen[si] ?? s.rest)) / s.rest / 0.25) * 100)
   return [{
     ax: a.x,
     ay: a.y,
@@ -88,12 +97,41 @@ const segments = computed(() => springs.flatMap((s) => {
   }]
 }))
 
+// The strand starts hanging at its true equilibrium: an analytic guess
+// (each structural spring stretched by the weight below it), then a
+// damped relaxation that also lets the bending springs settle — the
+// guess alone leaves the strand creeping for seconds. Velocities are
+// zeroed afterwards and each spring's equilibrium length recorded for
+// the strain tint.
 function reset() {
   masses.length = 0
-  for (let i = 0; i < N; i++) {
-    masses.push({ x: ANCHOR_X + i * REST, y: ANCHOR_Y, vx: 0, vy: 0 })
+  masses.push({ x: ANCHOR_X, y: ANCHOR_Y, vx: 0, vy: 0 })
+  let y = ANCHOR_Y
+  for (let i = 1; i < N; i++) {
+    y += REST + (N - i) * GRAVITY / KS
+    masses.push({ x: ANCHOR_X, y, vx: 0, vy: 0 })
   }
-  note.value = "drag-free sim — perturb it and compare integrators"
+  for (let k = 0; k < 2400; k++) {
+    const f = forces()
+    for (let i = 1; i < N; i++) {
+      const m = masses[i]!
+      m.vx = (m.vx + DT * f[i]!.fx) * 0.94
+      m.vy = (m.vy + DT * f[i]!.fy) * 0.94
+      m.x += DT * m.vx
+      m.y += DT * m.vy
+    }
+  }
+  for (const m of masses) {
+    m.vx = 0
+    m.vy = 0
+  }
+  eqLen.length = 0
+  for (const s of springs) {
+    const a = masses[s.a]!
+    const b = masses[s.b]!
+    eqLen.push(Math.hypot(b.x - a.x, b.y - a.y))
+  }
+  note.value = "hanging at equilibrium — perturb it and compare integrators"
 }
 
 // Alternating flick at the free end, with a little randomness so no
@@ -103,7 +141,7 @@ function perturb() {
   const tail = masses[N - 1]
   if (tail) {
     const jitter = 0.8 + 0.4 * Math.random()
-    tail.vx += dir * 130 * jitter
+    tail.vx += dir * 150 * jitter
     tail.vy -= 250 * jitter
     dir = -dir
   }
@@ -161,6 +199,12 @@ function step() {
     note.value = "explicit Euler: watch the oscillation grow instead of settling"
   }
 }
+
+// Explicit Euler at a fixed point would sit still forever; kicking the
+// strand on the switch makes the divergence start immediately.
+watch(integrator, (mode) => {
+  if (mode === "explicit") perturb()
+})
 
 let raf = 0
 function loop() {
