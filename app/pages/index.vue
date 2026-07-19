@@ -11,19 +11,13 @@ main
 </template>
 
 <script lang="ts" setup>
-const { data: profile } = await useAsyncData("profile", () =>
-  queryCollection("profile").first())
-
-defineOgImage("Portrait", {
-  title: "Amittai Siavava",
-  description: "Product engineer. Most recently at Meta, building messaging APIs for Instagram, Messenger, and WhatsApp.",
-}, {
-  width: 1200,
-  height: 630,
-})
+const { data: profile } = await useProfile()
 </script>
 
 <style lang="sass" scoped>
 main
-  padding-top: 32px
+  padding-top: 47px
+
+  @media (max-width: 900px)
+    padding-top: 0
 </style>

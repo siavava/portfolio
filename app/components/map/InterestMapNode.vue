@@ -14,8 +14,17 @@ g.node-group(
     :style="{ animationDelay: `${(ripple - 1) * 0.4}s` }",
   )
   circle.node-dot(cx="0", cy="0", :r="dotRadius", :fill="node.color")
+  rect.node-label-bg(
+    v-if="showLabel && labelBox",
+    :x="labelBox.x",
+    :y="labelBox.y",
+    :width="labelBox.width",
+    :height="labelBox.height",
+    rx="3",
+  )
   text.node-label(
-    v-if="!compact || node.level === 1",
+    v-if="showLabel",
+    ref="labelEl",
     text-anchor="middle",
     :y="labelY",
   )
@@ -56,15 +65,9 @@ const emit = defineEmits<{
 
 const connections = useConnections()
 
-onMounted(() => {
-  connections.registerNode(props.node.label)
-})
-
-onUnmounted(() => {
-  connections.unregisterNode(props.node.label)
-})
-
 const dotRadius = computed(() => props.node.level === 1 ? 3 : 2.5)
+
+const showLabel = computed(() => !props.compact || props.node.level === 1)
 
 const lines = computed(() => {
   const words = props.node.label.split(" ")
@@ -74,6 +77,39 @@ const lines = computed(() => {
   const middle = Math.ceil(words.length / 2)
   return [words.slice(0, middle).join(" "), words.slice(middle).join(" ")]
 })
+
+const labelEl = ref<SVGTextElement | null>(null)
+const labelBox = ref<{ x: number, y: number, width: number, height: number } | null>(null)
+
+const measureLabel = () => {
+  const el = labelEl.value
+  if (!el) {
+    labelBox.value = null
+    return
+  }
+  const box = el.getBBox()
+  const padX = 5
+  const padY = 2
+  labelBox.value = {
+    x: box.x - padX,
+    y: box.y - padY,
+    width: box.width + padX * 2,
+    height: box.height + padY * 2,
+  }
+}
+
+onMounted(async () => {
+  connections.registerNode(props.node.label)
+  await nextTick()
+  measureLabel()
+  document.fonts?.ready.then(measureLabel)
+})
+
+onUnmounted(() => {
+  connections.unregisterNode(props.node.label)
+})
+
+watch([lines, showLabel], () => nextTick(measureLabel))
 
 const labelY = computed(() => {
   if (props.node.labelSide === "below") return 16
@@ -138,6 +174,15 @@ const onPointerup = () => {
 
 .node-dot
   pointer-events: none
+
+.node-label-bg
+  fill: var(--background)
+  opacity: 0
+  pointer-events: none
+  transition: opacity 0.5s ease 0.15s
+
+  .shown &
+    opacity: 0.28
 
 .node-label
   fill: var(--foreground)

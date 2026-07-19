@@ -27,8 +27,16 @@ defineProps<{
     color: #111110
 
   @media (min-width: 901px)
-    width: calc(100% + 48px)
-    margin-left: -24px
+    width: calc(100% + 24px)
+    margin-left: -12px
+
+  @media (max-width: 900px)
+    width: calc(100% + 40px)
+    margin-left: -20px
+    align-items: flex-end
+    height: 155px
+    padding: 0 20px 12px
+    font-size: typography.font-size("s")
 
 .name-bar__location
   color: var(--bar-muted)

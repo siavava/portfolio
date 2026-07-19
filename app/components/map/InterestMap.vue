@@ -92,8 +92,19 @@ const fadeRadius = computed(() => 150 * scale.value)
 
 const compact = computed(() => scale.value < 0.62)
 
+const entryEntropy = ref(Math.random())
+
+const shuffleKey = (id: string, seed: number) => {
+  let h = Math.floor(seed * 1e9) >>> 0
+  for (const ch of id) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0
+  return h >>> 0
+}
+
 const appearanceOrder = computed(() =>
-  [...layout.value?.nodes ?? []].sort((a, b) => a.level - b.level))
+  [...layout.value?.nodes ?? []]
+    .map(node => ({ node, key: shuffleKey(node.id, entryEntropy.value) }))
+    .sort((a, b) => a.node.level - b.node.level || a.key - b.key)
+    .map(entry => entry.node))
 
 const appearedCount = ref(0)
 
@@ -310,8 +321,8 @@ const wrapperStyle = computed(() => ({
   overflow: hidden
 
   @media (min-width: 901px)
-    width: calc(100% + 48px)
-    margin-left: -24px
+    width: calc(100% + 24px)
+    margin-left: -12px
 
 .interest-map
   position: absolute
