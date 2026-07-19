@@ -11,6 +11,11 @@ export const useSideNotes = defineStore("side-notes", () => {
     hovered.value = null
   }
 
+  const reset = () => {
+    hovered.value = null
+    pinned.clear()
+  }
+
   const togglePin = (name: string) => {
     if (pinned.has(name)) {
       pinned.delete(name)
@@ -22,5 +27,5 @@ export const useSideNotes = defineStore("side-notes", () => {
   const isVisible = (name: string) =>
     hovered.value === name || pinned.has(name)
 
-  return { hovered, pinned, isVisible, activate, deactivate, togglePin }
+  return { hovered, pinned, isVisible, activate, deactivate, reset, togglePin }
 })

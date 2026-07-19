@@ -23,6 +23,11 @@ export const useCues = defineStore("cues", () => {
     hovered.value = null
   }
 
+  const reset = () => {
+    hovered.value = null
+    pinned.clear()
+  }
+
   const togglePin = (root: Element, targets: string[]) => {
     if (pinned.has(root)) {
       pinned.delete(root)
@@ -58,6 +63,7 @@ export const useCues = defineStore("cues", () => {
     unregisterMark,
     activate,
     deactivate,
+    reset,
     togglePin,
   }
 })
