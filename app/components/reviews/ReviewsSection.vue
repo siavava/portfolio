@@ -38,6 +38,12 @@ const { canScrollLeft, canScrollRight } = useScrollEdges(canvas)
   padding: 20px 0
 
 @media (max-width: 900px)
+  .reviews-section
+    margin-top: 48px
+
+  .reviews-viewport
+    margin-top: 0
+
   .reviews-canvas
     grid-template-columns: repeat(3, 272px)
     gap: 32px 28px
