@@ -2,9 +2,10 @@
   "private": true,
   "packageManager": "bun@1.0.0",
   "scripts": {
-    "build": "nuxi build",
+    "notes-meta": "bun scripts/build-notes-meta.ts",
+    "build": "bun run notes-meta && nuxi build",
     "dev": "nuxi dev",
-    "generate": "nuxi generate",
+    "generate": "bun run notes-meta && nuxi generate",
     "preview": "nuxi preview",
     "lint": "eslint . --fix",
     "lint:md": "markdownlint-cli2 \"content/**/*.md\" \"*.md\"",
