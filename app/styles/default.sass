@@ -4,10 +4,12 @@
 :root
   @each $name, $value in colors.$light-palette
     --#{$name}: #{$value}
+  --wipe-tint: rgba(0, 0, 0, 0.3)
 
 .dark-mode
   @each $name, $value in colors.$dark-palette
     --#{$name}: #{$value}
+  --wipe-tint: rgba(255, 255, 255, 0.24)
 
 *, *::before, *::after
   box-sizing: border-box
@@ -46,3 +48,39 @@ code, pre, kbd, samp
 
 ::selection
   background: var(--selection)
+
+// Index<->projects wipe; gating and direction live in the wipe.global middleware.
+::view-transition-old(root),
+::view-transition-new(root)
+  mix-blend-mode: normal
+
+::view-transition-old(root)
+  animation: none
+
+::view-transition-new(root)
+  mask-image: linear-gradient(90deg, black 0%, black 33%, transparent 66%)
+  mask-size: 300% 100%
+  mask-repeat: no-repeat
+  filter: drop-shadow(0 0 16px var(--wipe-tint))
+  animation: wipe-in 0.5s cubic-bezier(0.27, 0, 0.51, 1) both
+
+html[data-wipe-direction="rtl"]::view-transition-new(root)
+  mask-image: linear-gradient(90deg, transparent 34%, black 67%, black 100%)
+  animation-name: wipe-in-rtl
+
+@keyframes wipe-in
+  from
+    mask-position: 100% 0
+  to
+    mask-position: 0% 0
+
+@keyframes wipe-in-rtl
+  from
+    mask-position: 0% 0
+  to
+    mask-position: 100% 0
+
+@media (prefers-reduced-motion: reduce)
+  ::view-transition-old(root),
+  ::view-transition-new(root)
+    animation: none

@@ -7,6 +7,10 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
+  experimental: {
+    viewTransition: true,
+  },
+
   modules: ["@nuxt/content", "@nuxt/image", "@pinia/nuxt", "@nuxtjs/color-mode", "@nuxt/eslint", "@nuxt/icon", "@nuxt/fonts", "nuxt-og-image"],
 
   site: {
