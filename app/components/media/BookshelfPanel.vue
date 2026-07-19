@@ -6,27 +6,13 @@
       p.bookshelf-panel__title {{ selected.title }}
       p.bookshelf-panel__blurb {{ selected.summary }}
       NuxtLink.bookshelf-panel__link(:to="selected.path") view more →
-  .bookshelf-panel__viewport(ref="viewport")
-    .bookshelf-panel__shelf(ref="shelf", role="listbox", aria-label="Project archive", @scroll="hovered = null")
-      button.bookshelf-panel__book(
-        v-for="project in projects",
-        :key="project.path",
-        type="button",
-        role="option",
-        :aria-selected="isSelected(project)",
-        :aria-label="`${project.title} (${project.year})`",
-        :class="{ selected: isSelected(project) }",
-        :style="spine(project)",
-        @click="selected = project",
-        @mouseenter="hover(project, $event)",
-        @mouseleave="unhover",
-      )
-    .bookshelf-panel__tooltip(
-      :class="{ visible: hovered, snap: tooltipSnap }",
-      :style="tooltipStyle",
-    )
-      TooltipShell(v-if="lastHovered", anchor, compact, :animate="false") {{ lastHovered.title }}
-    ScrollFades(:left="canScrollLeft", :right="canScrollRight", always, color="var(--shelf-panel)")
+  ProjectShelf.bookshelf-panel__shelf(
+    :books="projects",
+    :selected-path="selected?.path",
+    aria-label="Project archive",
+    fade-color="var(--shelf-panel)",
+    @select="onSelect",
+  )
   p.bookshelf-panel__caption
     | Shelf: {{ projects.length }} Projects ·
     |
@@ -58,73 +44,21 @@ const projects = computed<ProjectItem[]>(() => {
   ]
 })
 
-const shelf = ref<HTMLElement | null>(null)
-const { canScrollLeft, canScrollRight } = useScrollEdges(shelf)
-
 const selected = shallowRef<ProjectItem | null>(null)
 
-const isSelected = (project: ProjectItem) =>
-  project.title === selected.value?.title
+const onSelect = (path: string) => {
+  selected.value = projects.value.find(project => project.path === path) ?? null
+}
 
 onMounted(() => {
   const featured = projects.value.filter(project => project.featured)
   const pool = featured.length ? featured : projects.value
   selected.value = pool[Math.floor(Math.random() * pool.length)] ?? null
 })
-
-const viewport = ref<HTMLElement | null>(null)
-const hovered = shallowRef<ProjectItem | null>(null)
-const lastHovered = shallowRef<ProjectItem | null>(null)
-const tooltipSnap = ref(false)
-const tooltipStyle = ref<{ left: string, top: string }>({ left: "0px", top: "0px" })
-let hideTimer: ReturnType<typeof setTimeout> | undefined
-
-const hover = (project: ProjectItem, event: MouseEvent) => {
-  const book = event.currentTarget as HTMLElement
-  if (!viewport.value) return
-  clearTimeout(hideTimer)
-  tooltipSnap.value = !hovered.value
-  const bookRect = book.getBoundingClientRect()
-  const viewportRect = viewport.value.getBoundingClientRect()
-  tooltipStyle.value = {
-    left: `${bookRect.left - viewportRect.left + bookRect.width / 2}px`,
-    top: `${bookRect.top - viewportRect.top}px`,
-  }
-  hovered.value = project
-  lastHovered.value = project
-}
-
-const unhover = () => {
-  clearTimeout(hideTimer)
-  hideTimer = setTimeout(() => {
-    hovered.value = null
-  }, 120)
-}
-
-onUnmounted(() => clearTimeout(hideTimer))
-
-const centerSelected = (behavior: ScrollBehavior) => {
-  nextTick(() => {
-    const book = shelf.value?.querySelector<HTMLElement>(".selected")
-    if (book && shelf.value) {
-      shelf.value.scrollTo({
-        left: book.offsetLeft - shelf.value.clientWidth / 2 + book.offsetWidth / 2,
-        behavior,
-      })
-    }
-  })
-}
-
-watch(selected, (_, previous) => centerSelected(previous ? "smooth" : "instant"))
-
-const spine = (project: ProjectItem) => spineStyle(project.title)
 </script>
 
 <style lang="sass" scoped>
 @use "@/styles/typography"
-
-$shelf-blue: #3b82f6
-$shelf-blue-tint: #dbeafe
 
 .bookshelf-panel
   --shelf-panel: #f7f7f8
@@ -138,6 +72,9 @@ $shelf-blue-tint: #dbeafe
 
   .dark-mode &
     --shelf-panel: var(--panel)
+
+  @media (max-width: 900px)
+    aspect-ratio: auto
 
 .bookshelf-panel__card
   flex: 1 1 auto
@@ -177,67 +114,15 @@ $shelf-blue-tint: #dbeafe
   &:hover
     text-decoration: underline
 
-.bookshelf-panel__viewport
-  position: relative
-  flex: 0 0 auto
-  height: 100px
-  margin-top: 14px
-
 .bookshelf-panel__shelf
-  display: flex
-  align-items: flex-end
-  gap: 1px
-  height: 100%
-  padding: 0 8px
-  overflow-x: auto
-  overflow-y: hidden
-  scrollbar-width: none
-
-  &::-webkit-scrollbar
-    display: none
-
-.bookshelf-panel__book
-  position: relative
   flex: 0 0 auto
-  border: 0.5px solid #d9d9e0
-  background: #e9e9ee
-  padding: 0
-  cursor: pointer
-  transform-origin: bottom center
-  transition: background 0.15s ease, border-color 0.15s ease
-
-  .dark-mode &
-    border-color: rgba(255, 255, 255, 0.12)
-    background: var(--panel-hover)
-
-  &:hover
-    background: #dfdfe7
-
-  &.selected
-    background: $shelf-blue-tint
-    border: 1.5px solid $shelf-blue
-
-    .dark-mode &
-      background: color-mix(in srgb, var(--primary-highlight), transparent 78%)
-      border-color: var(--primary-highlight)
-
-.bookshelf-panel__tooltip
-  position: absolute
-  width: 0
-  height: 0
-  opacity: 0
-  transition: left 0.18s ease, top 0.18s ease, opacity 0.15s ease
-  pointer-events: none
-
-  &.visible
-    opacity: 1
-
-  &.snap
-    transition: opacity 0.15s ease
-
-  :deep(.tooltip-anchor)
-    opacity: 1
-    transform: translateX(var(--tt-x))
+  margin-top: 14px
+  --shelf-height: 100px
+  --shelf-book-bg: #e9e9ee
+  --shelf-book-border: #d9d9e0
+  --shelf-book-hover: #dfdfe7
+  --shelf-book-dark-border: rgba(255, 255, 255, 0.12)
+  --shelf-line: none
 
 .bookshelf-panel__caption
   margin: 10px 0 0
