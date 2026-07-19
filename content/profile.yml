@@ -12,9 +12,15 @@ versions:
     url: https://v3.amittai.studio
   - label: v4
     url: https://v4.amittai.studio
-blurb: >-
+blurb: |-
   Looking to trade notes on systems, mathematics, and the craft of
   building software that lasts.
+og:
+  kicker: Product Engineer
+  description: |-
+    Crafting experiences.
+    I build software from first principles — compilers, search engines,
+    simulations — and write about the systems and mathematics beneath it.
 socials:
   - label: LinkedIn
     icon: simple-icons:linkedin

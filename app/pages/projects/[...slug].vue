@@ -47,7 +47,7 @@ main.projects-screen
 <script lang="ts" setup>
 import { useEventListener } from "@vueuse/core"
 
-definePageMeta({ path: "/projects/:slug(.*)*", key: "projects", scrollToTop: false })
+definePageMeta({ path: "/projects/:slug(.*)*", key: "projects", scrollToTop: false, layout: false })
 
 const { data } = await useAsyncData("projects-all", () =>
   queryCollection("projects").order("date", "DESC").all())
@@ -182,9 +182,9 @@ const pageDescription = "Four years of projects, preserved — compilers, chess 
 const seoTitle = computed(() => routePath.value && selected.value
   ? `${selected.value.title} · Projects · Amittai Siavava`
   : "Projects · Amittai Siavava")
-const seoDescription = computed(() => routePath.value && selected.value
+const seoDescription = computed(() => (routePath.value && selected.value
   ? selected.value.summary
-  : pageDescription)
+  : pageDescription).replace(/\s+/g, " ").trim())
 const canonical = computed(() => `https://amittai.studio${routePath.value ?? "/projects"}`)
 const shareUrl = computed(() => `https://amittai.studio${selected.value?.path ?? "/projects"}`)
 
@@ -200,9 +200,26 @@ useHead({
   link: [{ rel: "canonical", href: () => canonical.value }],
 })
 
-defineOgImage("Portrait", {
-  title: "Projects",
-  description: pageDescription,
+const onProject = computed(() => Boolean(routePath.value && selected.value))
+
+const ogKicker = computed(() =>
+  onProject.value
+    ? `${titleCase(selected.value!.tag)} · ${String(selected.value!.date).slice(0, 4)}`
+    : "Portfolio · Dartmouth")
+const ogTitle = computed(() =>
+  onProject.value ? selected.value!.title : "Projects")
+const ogDescription = computed(() =>
+  onProject.value ? selected.value!.summary : pageDescription)
+const ogIndex = computed(() =>
+  onProject.value ? ordered.value.findIndex(doc => doc.path === selected.value!.path) : -1)
+
+defineOgImage("Shelf", {
+  kicker: () => ogKicker.value,
+  title: () => ogTitle.value,
+  description: () => ogDescription.value,
+  footer: () => `${docs.value.length} Projects`,
+  index: () => ogIndex.value,
+  total: () => docs.value.length,
 }, {
   width: 1200,
   height: 630,
@@ -214,8 +231,7 @@ defineOgImage("Portrait", {
 
 .projects-screen
   display: block
-  width: 100vw
-  margin-left: calc(50% - 50vw)
+  width: 100%
   --background: var(--study-page)
   background: var(--background)
 

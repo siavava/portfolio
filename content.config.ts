@@ -88,6 +88,10 @@ export default defineContentConfig({
           url: z.string(),
         })),
         blurb: z.string(),
+        og: z.object({
+          kicker: z.string(),
+          description: z.string(),
+        }),
         socials: z.array(z.object({
           label: z.string(),
           icon: z.string(),

@@ -14,6 +14,12 @@ export default defineNuxtConfig({
     name: "amittai.studio",
   },
 
+  ogImage: {
+    security: {
+      renderTimeout: 60000,
+    },
+  },
+
   /**
    * Proxima Soft Medium — the single face the reference ships; every weight
    * resolves to it. Commercial font (Mark Simonson Studio): license via
@@ -152,6 +158,9 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    prerender: {
+      autoSubfolderIndex: false,
+    },
     typescript: {
       // customize tsconfig.server.json
       tsConfig: tsConfig(),
