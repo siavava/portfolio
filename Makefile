@@ -4,7 +4,7 @@ build:
 	@bun run build
 
 dev:
-	@bun dev --bun
+	@bun run dev
 
 generate:
 	@bun run generate
