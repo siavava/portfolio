@@ -8,7 +8,10 @@ tech:
   - "Python"
   - "Graph Search"
   - "AI"
-summary: "Backtracking search with forward checking and the MRV, degree, and least-constraining-value heuristics, applied to map coloring and circuit layout."
+summary: |-
+  Backtracking search with forward checking and the MRV, degree, and
+  least-constraining-value heuristics, applied to map coloring and circuit
+  layout.
 references:
   - https://notes.amittai.studio/artificial-intelligence/search/constraint-satisfaction
   - https://notes.amittai.studio/artificial-intelligence/search/csp-search-and-structure

@@ -8,7 +8,10 @@ tech:
   - "Python"
   - "adversarial search"
   - "AI"
-summary: "A chess engine built on adversarial search — minimax with alpha-beta pruning, sharpened by iterative deepening, transposition tables, move ordering, and quiescence search."
+summary: |-
+  A chess engine built on adversarial search — minimax with alpha-beta
+  pruning, sharpened by iterative deepening, transposition tables, move
+  ordering, and quiescence search.
 references:
   - https://notes.amittai.studio/artificial-intelligence/search/adversarial-search
   - https://notes.amittai.studio/artificial-intelligence/search/games-of-chance-and-imperfect-information

@@ -7,7 +7,10 @@ featured: false
 tech:
   - "Python"
   - "Machine Learning"
-summary: "Fitting regression classifiers by gradient descent — deriving the update from the loss gradient, then stepping the parameters downhill and watching conditioning set the pace."
+summary: |-
+  Fitting regression classifiers by gradient descent — deriving the update
+  from the loss gradient, then stepping the parameters downhill and watching
+  conditioning set the pace.
 references:
   - https://notes.amittai.studio/algorithms/mathematical-algorithms/gradient-descent
   - https://notes.amittai.studio/artificial-intelligence/learning/learning-from-examples

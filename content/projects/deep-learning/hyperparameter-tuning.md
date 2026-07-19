@@ -8,7 +8,10 @@ tech:
   - "Python"
   - "PyTorch"
   - "Deep Learning"
-summary: "How capacity trades against generalization on a two-layer CIFAR-10 classifier — comparing a 1024- and a 256-unit network by their train/validation gap and by norm-based generalization bounds."
+summary: |-
+  How capacity trades against generalization on a two-layer CIFAR-10
+  classifier — comparing a 1024- and a 256-unit network by their
+  train/validation gap and by norm-based generalization bounds.
 references:
   - https://notes.amittai.studio/deep-learning
   - https://notes.amittai.studio/algorithms/mathematical-algorithms/gradient-descent

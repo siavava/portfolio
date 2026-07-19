@@ -8,7 +8,9 @@ tech:
   - "Haskell"
   - "Cabal"
   - "Functional Programming"
-summary: "Wordle and grep rebuilt in Haskell, a pure functional language — a guessing game and a stream matcher, both as pure functions over lazy lists."
+summary: |-
+  Wordle and grep rebuilt in Haskell, a pure functional language — a guessing
+  game and a stream matcher, both as pure functions over lazy lists.
 references:
   - https://notes.amittai.studio/algorithms/sequences/string-matching
   - https://notes.amittai.studio/algorithms/sequences/kmp-and-z-function

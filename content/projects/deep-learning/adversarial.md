@@ -8,7 +8,10 @@ tech:
   - "Python"
   - "PyTorch"
   - "Deep Learning"
-summary: "Hardening a CIFAR-10 ResNet-18 against worst-case input noise: an iterated projected-gradient attack, adversarial training mixed with mixup, and a separate data-augmentation sweep."
+summary: |-
+  Hardening a CIFAR-10 ResNet-18 against worst-case input noise: an iterated
+  projected-gradient attack, adversarial training mixed with mixup, and a
+  separate data-augmentation sweep.
 references:
   - https://notes.amittai.studio/deep-learning
 ---

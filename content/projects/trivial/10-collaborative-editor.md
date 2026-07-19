@@ -9,7 +9,9 @@ tech:
   - "Threads"
   - "Mutexes"
   - "Web Sockets"
-summary: "A shared drawing canvas in Java where multiple clients edit in real time, kept consistent by a server that serializes every change."
+summary: |-
+  A shared drawing canvas in Java where multiple clients edit in real time,
+  kept consistent by a server that serializes every change.
 ---
 
 A collaborative drawing editor over a shared canvas. Multiple clients

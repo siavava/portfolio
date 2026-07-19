@@ -7,7 +7,10 @@ featured: false
 tech:
   - "Python"
   - "Machine Learning"
-summary: "Regularized linear regression — ridge (L2) and lasso (L1) — comparing how each penalty shrinks coefficients and why the L1 corner drives some to exactly zero."
+summary: |-
+  Regularized linear regression — ridge (L2) and lasso (L1) — comparing how
+  each penalty shrinks coefficients and why the L1 corner drives some to
+  exactly zero.
 references:
   - https://notes.amittai.studio/algorithms/mathematical-algorithms/gradient-descent
   - https://notes.amittai.studio/artificial-intelligence/learning/learning-from-examples

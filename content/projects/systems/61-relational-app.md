@@ -8,7 +8,10 @@ tech:
   - "Python"
   - "MySQL"
   - "Database Systems"
-summary: "A MySQL editorial-management system for an academic journal, driven from a Python CLI, with the manuscript lifecycle enforced by foreign keys, triggers, and stored routines on the database side."
+summary: |-
+  A MySQL editorial-management system for an academic journal, driven from a
+  Python CLI, with the manuscript lifecycle enforced by foreign keys,
+  triggers, and stored routines on the database side.
 references:
   - https://notes.amittai.studio/algorithms/data-structures/b-trees
 ---

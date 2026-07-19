@@ -8,7 +8,9 @@ tech:
   - "Python"
   - "First Order Logic"
   - "AI"
-summary: "Solving Boolean satisfiability with the GSAT and WalkSAT local-search algorithms, applied to Sudoku puzzles encoded as propositional clauses."
+summary: |-
+  Solving Boolean satisfiability with the GSAT and WalkSAT local-search
+  algorithms, applied to Sudoku puzzles encoded as propositional clauses.
 references:
   - https://notes.amittai.studio/artificial-intelligence/logic-and-planning/propositional-logic
   - https://notes.amittai.studio/artificial-intelligence/logic-and-planning/propositional-inference

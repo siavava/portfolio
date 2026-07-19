@@ -8,7 +8,9 @@ tech:
   - "Java"
   - "Graph Algorithms"
   - "Social Graphs"
-summary: "The Kevin Bacon game in Java: build a graph of actors linked by shared films and find the shortest connection between any two."
+summary: |-
+  The Kevin Bacon game in Java: build a graph of actors linked by shared films
+  and find the shortest connection between any two.
 references:
   - https://notes.amittai.studio/algorithms/graphs/representations-and-traversal
 ---

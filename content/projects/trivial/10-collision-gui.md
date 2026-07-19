@@ -7,7 +7,9 @@ featured: false
 tech:
   - "Java"
   - "Spatial Search"
-summary: "Collision detection among moving 2D blobs, made cheap by indexing them in a quad-tree instead of checking every pair."
+summary: |-
+  Collision detection among moving 2D blobs, made cheap by indexing them in a
+  quad-tree instead of checking every pair.
 references:
   - https://notes.amittai.studio/algorithms/data-structures/spatial-data-structures
 ---

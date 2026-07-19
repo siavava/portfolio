@@ -9,7 +9,11 @@ tech:
   - "Nuxt"
   - "Three.js"
   - "WebGL"
-summary: "A real-time 3-D solar system in the browser — Three.js renders textured planet models orbiting the sun on a hierarchy of pivots, driven from real orbital data, with click-to-focus planet cards and time that stretches from real-time to a month a second."
+summary: |-
+  A real-time 3-D solar system in the browser — Three.js renders textured
+  planet models orbiting the sun on a hierarchy of pivots, driven from real
+  orbital data, with click-to-focus planet cards and time that stretches from
+  real-time to a month a second.
 references:
   - https://notes.amittai.studio/linear-algebra
 ---

@@ -9,7 +9,9 @@ tech:
   - "Nuxt"
   - "TypeScript"
   - "SCSS"
-summary: "A redesigned personal site on a new domain — content-driven Nuxt, statically generated, and deployed on Netlify."
+summary: |-
+  A redesigned personal site on a new domain — content-driven Nuxt, statically
+  generated, and deployed on Netlify.
 ---
 
 A redesigned personal site, and with it a new domain. Built on

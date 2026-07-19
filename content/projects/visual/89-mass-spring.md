@@ -8,7 +8,9 @@ tech:
   - "C++"
   - "Visual Computing"
   - "Physical Simulation"
-summary: "A hair strand animated in C++/OpenGL as a mass-spring chain, held in shape by structural and bending constraints."
+summary: |-
+  A hair strand animated in C++/OpenGL as a mass-spring chain, held in shape
+  by structural and bending constraints.
 references:
   - https://notes.amittai.studio/differential-equations/numerical/euler-and-runge-kutta
 ---

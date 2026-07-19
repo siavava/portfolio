@@ -8,7 +8,9 @@ tech:
   - "Bash"
   - "C"
   - "Linux"
-summary: "Three small command-line utilities in C: a wind-chill calculator, a word printer, and a self-resizing histogram builder for streamed numbers."
+summary: |-
+  Three small command-line utilities in C: a wind-chill calculator, a word
+  printer, and a self-resizing histogram builder for streamed numbers.
 ---
 
 Three small command-line utilities written in C, each reading input and

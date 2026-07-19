@@ -9,7 +9,9 @@ tech:
   - "TypeScript"
   - "Express"
   - "Node"
-summary: "An HTTP API for Kahoot-style quiz games — quizzes, live sessions, and time-weighted scoring, built on TypeScript, Express, and MongoDB."
+summary: |-
+  An HTTP API for Kahoot-style quiz games — quizzes, live sessions, and
+  time-weighted scoring, built on TypeScript, Express, and MongoDB.
 ---
 
 An HTTP API for running [Kahoot][kahoot]-style quiz games: a

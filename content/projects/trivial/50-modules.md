@@ -9,7 +9,10 @@ tech:
   - "C"
   - "Linux"
   - "Data Structures"
-summary: "Four reusable C modules — a bag, a counter set, a set, and a hashtable — where the hashtable is an array of sets that chains collisions for expected constant-time lookup."
+summary: |-
+  Four reusable C modules — a bag, a counter set, a set, and a hashtable —
+  where the hashtable is an array of sets that chains collisions for expected
+  constant-time lookup.
 references:
   - https://notes.amittai.studio/algorithms/data-structures/hash-tables
 ---

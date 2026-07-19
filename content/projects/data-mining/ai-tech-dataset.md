@@ -9,7 +9,9 @@ tech:
   - "Haskell"
   - "Python"
   - "Data Mining"
-summary: "A concurrent web scraper in Haskell that collected 17,000+ technology articles into an open dataset, built from composable arrow pipelines."
+summary: |-
+  A concurrent web scraper in Haskell that collected 17,000+ technology
+  articles into an open dataset, built from composable arrow pipelines.
 references:
   - https://notes.amittai.studio/algorithms/graphs/representations-and-traversal
   - https://notes.amittai.studio/algorithms/data-structures/hash-tables

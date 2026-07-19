@@ -8,7 +8,9 @@ tech:
   - "C++"
   - "Visual Computing"
   - "Physical Simulation"
-summary: "A C++ simulator built on position-based dynamics: rather than mass-spring forces, it projects predicted positions directly onto geometric constraints."
+summary: |-
+  A C++ simulator built on position-based dynamics: rather than mass-spring
+  forces, it projects predicted positions directly onto geometric constraints.
 references:
   - https://notes.amittai.studio/linear-algebra
 ---

@@ -9,7 +9,9 @@ tech:
   - "Bash"
   - "Make"
   - "Web Sockets"
-summary: "A multiplayer terminal game in C: one server owns the maze and the gold, and streams each player only the sectors their line of sight reveals."
+summary: |-
+  A multiplayer terminal game in C: one server owns the maze and the gold, and
+  streams each player only the sectors their line of sight reveals.
 references:
   - https://notes.amittai.studio/algorithms/computational-geometry/geometric-primitives
 ---

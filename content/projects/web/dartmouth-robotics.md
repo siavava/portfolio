@@ -9,7 +9,9 @@ tech:
   - "design"
   - "TypeScript"
   - "Next"
-summary: "A redesigned website for the Dartmouth Robotics Club, built with Next.js and SCSS and deployed on Vercel."
+summary: |-
+  A redesigned website for the Dartmouth Robotics Club, built with Next.js and
+  SCSS and deployed on Vercel.
 ---
 
 A redesign of the [Dartmouth Robotics Club][dartmouthrobotics] website,

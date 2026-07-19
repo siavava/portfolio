@@ -9,7 +9,9 @@ tech:
   - "Python"
   - "LaTeX"
   - "NLP"
-summary: "Mining a corpus of technology articles for how public sentiment and vocabulary around AI have shifted across time."
+summary: |-
+  Mining a corpus of technology articles for how public sentiment and
+  vocabulary around AI have shifted across time.
 references:
   - https://notes.amittai.studio/natural-language-processing/semantics/vector-semantics-and-embeddings
   - https://notes.amittai.studio/natural-language-processing/classification/sentiment-and-affect-lexicons

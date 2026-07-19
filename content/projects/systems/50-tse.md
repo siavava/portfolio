@@ -9,7 +9,9 @@ tech:
   - "Bash"
   - "Make"
   - "Web Crawling"
-summary: "A search engine in plain C — a crawler, an indexer, and a querier connected by files on disk, with ranked results and boolean query operators."
+summary: |-
+  A search engine in plain C — a crawler, an indexer, and a querier connected
+  by files on disk, with ranked results and boolean query operators.
 references:
   - https://notes.amittai.studio/algorithms/graphs/representations-and-traversal
   - https://notes.amittai.studio/algorithms/data-structures/hash-tables

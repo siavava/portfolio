@@ -9,7 +9,9 @@ tech:
   - "MDP"
   - "Robotics"
   - "AI"
-summary: "Localizing a robot in a grid from noisy sensor readings with a hidden Markov model — filtering, forward-backward smoothing, and Viterbi decoding."
+summary: |-
+  Localizing a robot in a grid from noisy sensor readings with a hidden Markov
+  model — filtering, forward-backward smoothing, and Viterbi decoding.
 references:
   - https://notes.amittai.studio/artificial-intelligence/uncertainty/reasoning-over-time
   - https://notes.amittai.studio/artificial-intelligence/uncertainty/tracking-and-data-association

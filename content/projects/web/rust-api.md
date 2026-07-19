@@ -8,7 +8,9 @@ tech:
   - "Rust"
   - "Rocket"
   - "MongoDB"
-summary: "A proof-of-concept REST API in Rust with the Rocket framework and a MongoDB backend, trading Express familiarity for compile-time memory safety."
+summary: |-
+  A proof-of-concept REST API in Rust with the Rocket framework and a MongoDB
+  backend, trading Express familiarity for compile-time memory safety.
 ---
 
 A REST API written in [Rust][rust-lang] with the

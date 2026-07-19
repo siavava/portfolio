@@ -9,7 +9,9 @@ tech:
   - "design"
   - "TypeScript"
   - "Nuxt"
-summary: "The first iteration of my personal blog and portfolio, built with Nuxt and SCSS, preserved at v1.amittai.studio."
+summary: |-
+  The first iteration of my personal blog and portfolio, built with Nuxt and
+  SCSS, preserved at v1.amittai.studio.
 ---
 
 The first iteration of my personal blog and portfolio, kept online at

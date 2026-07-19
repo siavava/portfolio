@@ -10,7 +10,10 @@ tech:
   - "Redux"
   - "MongoDB"
   - "Sass"
-summary: "goloco, a networking tool that keeps companies, contacts, tasks, and call notes in one workspace, with a five-slice Redux store over a token-authenticated Express/Mongoose API and Gmail integration."
+summary: |-
+  goloco, a networking tool that keeps companies, contacts, tasks, and call
+  notes in one workspace, with a five-slice Redux store over a
+  token-authenticated Express/Mongoose API and Gmail integration.
 ---
 
 **goloco** is a networking tool for the job hunt. It keeps the companies

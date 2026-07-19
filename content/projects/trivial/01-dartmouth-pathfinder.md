@@ -7,7 +7,10 @@ featured: false
 tech:
   - "Python"
   - "Graph Algorithms"
-summary: "A cs1lib app over a Dartmouth campus map that runs breadth-first search between two clicked Vertex nodes and draws the shortest path via backpointers."
+summary: |-
+  A cs1lib app over a Dartmouth campus map that runs breadth-first search
+  between two clicked Vertex nodes and draws the shortest path via
+  backpointers.
 references:
   - https://notes.amittai.studio/algorithms/graphs/representations-and-traversal
 ---

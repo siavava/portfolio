@@ -9,7 +9,9 @@ tech:
   - "design"
   - "TypeScript"
   - "Vue"
-summary: "A personal presentation platform built on Slidev — decks authored in Markdown, rendered as Vue, and served as static sites on Vercel."
+summary: |-
+  A personal presentation platform built on Slidev — decks authored in
+  Markdown, rendered as Vue, and served as static sites on Vercel.
 ---
 
 A personal presentation platform for my dev work, built on

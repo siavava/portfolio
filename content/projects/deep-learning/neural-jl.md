@@ -8,7 +8,10 @@ featured: false
 tech:
   - "Julia"
   - "Deep Learning"
-summary: "Neural networks implemented from scratch in Julia — forward pass, hand-derived backpropagation, and gradient descent — for a publication on machine learning."
+summary: |-
+  Neural networks implemented from scratch in Julia — forward pass,
+  hand-derived backpropagation, and gradient descent — for a publication on
+  machine learning.
 references:
   - https://notes.amittai.studio/algorithms/mathematical-algorithms/gradient-descent
   - https://notes.amittai.studio/deep-learning

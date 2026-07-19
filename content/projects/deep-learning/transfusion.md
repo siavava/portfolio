@@ -8,7 +8,11 @@ tech:
   - "Python"
   - "PyTorch"
   - "Deep Learning"
-summary: "A GPT built from scratch in PyTorch — causal self-attention, learned positional embeddings, and six pre-norm transformer blocks — trained character by character on a corpus of 2023 AI articles and served behind a FastAPI endpoint."
+summary: |-
+  A GPT built from scratch in PyTorch — causal self-attention, learned
+  positional embeddings, and six pre-norm transformer blocks — trained
+  character by character on a corpus of 2023 AI articles and served behind a
+  FastAPI endpoint.
 references:
   - https://notes.amittai.studio/deep-learning
   - https://notes.amittai.studio/linear-algebra

@@ -7,7 +7,9 @@ featured: false
 tech:
   - "Java"
   - "Image Recognition"
-summary: "A webcam painting program in Java that tracks a colored object frame to frame and trails a brushstroke across a canvas."
+summary: |-
+  A webcam painting program in Java that tracks a colored object frame to
+  frame and trails a brushstroke across a canvas.
 ---
 
 An interactive webcam painting program in Java. Point the camera at a

@@ -7,7 +7,9 @@ featured: false
 tech:
   - "Python"
   - "Graphics Simulation"
-summary: "A two-paddle pong game on Dartmouth's cs1lib — keyboard input, velocity-flip collisions, and a high score that carries across rounds."
+summary: |-
+  A two-paddle pong game on Dartmouth's cs1lib — keyboard input, velocity-flip
+  collisions, and a high score that carries across rounds.
 ---
 
 A pong game drawn with `cs1lib`, the Dartmouth CS1 graphics library. Two

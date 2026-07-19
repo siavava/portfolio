@@ -9,7 +9,9 @@ tech:
   - "design"
   - "TypeScript"
   - "Sass"
-summary: "An Apple-inspired page: a clock that ticks upward, a blob that trails your cursor, and rotating quotes from Foundation and a few other favorites."
+summary: |-
+  An Apple-inspired page: a clock that ticks upward, a blob that trails your
+  cursor, and rotating quotes from Foundation and a few other favorites.
 ---
 
 An [Apple][apple]-inspired page that turns the passing of time into

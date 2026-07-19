@@ -8,7 +8,10 @@ tech:
   - "C++"
   - "Visual Computing"
   - "Physical Simulation"
-summary: "A fluid and particle simulator in C++: smoothed-particle hydrodynamics for the Navier-Stokes equations, with a spatial hash for neighbor search and collisions."
+summary: |-
+  A fluid and particle simulator in C++: smoothed-particle hydrodynamics for
+  the Navier-Stokes equations, with a spatial hash for neighbor search and
+  collisions.
 references:
   - https://notes.amittai.studio/algorithms/data-structures/spatial-data-structures
   - https://notes.amittai.studio/algorithms/data-structures/hash-tables

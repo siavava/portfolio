@@ -7,7 +7,9 @@ featured: false
 tech:
   - "Java"
   - "Information Theory"
-summary: "Lossless text compression by Huffman coding — a greedy frequency tree that gives frequent characters the shortest prefix-free codes."
+summary: |-
+  Lossless text compression by Huffman coding — a greedy frequency tree that
+  gives frequent characters the shortest prefix-free codes.
 references:
   - https://notes.amittai.studio/algorithms/greedy/huffman-codes
   - https://notes.amittai.studio/algorithms/greedy/the-greedy-method

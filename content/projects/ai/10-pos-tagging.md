@@ -7,7 +7,9 @@ featured: false
 tech:
   - "Java"
   - "Markov Decision Processes"
-summary: "Part-of-speech tagging as a hidden Markov model, decoded with the Viterbi algorithm over tag-transition and word-emission probabilities."
+summary: |-
+  Part-of-speech tagging as a hidden Markov model, decoded with the Viterbi
+  algorithm over tag-transition and word-emission probabilities.
 references:
   - https://notes.amittai.studio/natural-language-processing/sequences/sequence-labeling
   - https://notes.amittai.studio/artificial-intelligence/uncertainty/reasoning-over-time

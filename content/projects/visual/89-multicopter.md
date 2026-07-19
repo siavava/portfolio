@@ -8,7 +8,9 @@ tech:
   - "C++"
   - "Visual Computing"
   - "Physical Simulation"
-summary: "A rigid-body helicopter simulated from Newton-Euler dynamics, its rotors generating lift and torque, integrated forward with the Euler method."
+summary: |-
+  A rigid-body helicopter simulated from Newton-Euler dynamics, its rotors
+  generating lift and torque, integrated forward with the Euler method.
 references:
   - https://notes.amittai.studio/linear-algebra
 ---

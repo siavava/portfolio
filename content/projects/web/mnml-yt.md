@@ -10,7 +10,9 @@ tech:
   - "React"
   - "TypeScript"
   - "Sass"
-summary: "A distraction-free YouTube player — search and playback over the Data API, with none of the recommendations, comments, or sidebars."
+summary: |-
+  A distraction-free YouTube player — search and playback over the Data API,
+  with none of the recommendations, comments, or sidebars.
 ---
 
 A minimal YouTube player: search for a video, watch it, and nothing else.

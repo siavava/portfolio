@@ -8,7 +8,9 @@ tech:
   - "Python"
   - "Graph Search"
   - "AI"
-summary: "Breadth-first and depth-first search over a state graph, applied to the chickens-and-foxes river-crossing puzzle."
+summary: |-
+  Breadth-first and depth-first search over a state graph, applied to the
+  chickens-and-foxes river-crossing puzzle.
 references:
   - https://notes.amittai.studio/artificial-intelligence/search/uninformed-search
   - https://notes.amittai.studio/algorithms/graphs/representations-and-traversal

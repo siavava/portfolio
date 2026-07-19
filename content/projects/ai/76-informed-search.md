@@ -8,7 +8,9 @@ tech:
   - "Python"
   - "Graph Search"
   - "AI"
-summary: "Navigating a robot through a grid maze with A-star and greedy best-first search, using Manhattan and Euclidean distance as admissible heuristics."
+summary: |-
+  Navigating a robot through a grid maze with A-star and greedy best-first
+  search, using Manhattan and Euclidean distance as admissible heuristics.
 references:
   - https://notes.amittai.studio/artificial-intelligence/search/informed-search
   - https://notes.amittai.studio/artificial-intelligence/search/heuristic-functions

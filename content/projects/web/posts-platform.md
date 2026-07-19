@@ -11,7 +11,9 @@ tech:
   - "JavaScript"
   - "Sass"
   - "MongoDB"
-summary: "A small blog-style posts front-end: React and Redux over the Posts Platform API, with routed pages for reading, writing, and editing Markdown posts."
+summary: |-
+  A small blog-style posts front-end: React and Redux over the Posts Platform
+  API, with routed pages for reading, writing, and editing Markdown posts.
 ---
 
 A small blog-style front-end for writing and reading posts: a list of

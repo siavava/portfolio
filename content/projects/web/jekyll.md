@@ -10,7 +10,9 @@ tech:
   - "Jekyll"
   - "Ruby"
   - "Sass"
-summary: "A minimal blog built on Jekyll — Markdown posts and Liquid templates compiled to static HTML, with a hand-written Sass theme."
+summary: |-
+  A minimal blog built on Jekyll — Markdown posts and Liquid templates
+  compiled to static HTML, with a hand-written Sass theme.
 ---
 
 A small demo blog built on [Jekyll][jekyllrb], the

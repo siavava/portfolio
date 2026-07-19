@@ -10,7 +10,9 @@ tech:
   - "Express"
   - "Node"
   - "MongoDB"
-summary: "The REST backend for the Posts Platform — a single-resource CRUD service over posts, built on TypeScript, Express, and Mongoose, deployed on Vercel."
+summary: |-
+  The REST backend for the Posts Platform — a single-resource CRUD service
+  over posts, built on TypeScript, Express, and Mongoose, deployed on Vercel.
 ---
 
 The backend that serves the [Posts Platform][posts-platform]:

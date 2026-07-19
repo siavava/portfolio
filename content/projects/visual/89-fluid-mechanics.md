@@ -8,7 +8,11 @@ tech:
   - "C++"
   - "Visual Computing"
   - "Physical Simulation"
-summary: "A grid-based smoke simulation in C++ that solves the incompressible Navier–Stokes equations on a Eulerian grid — semi-Lagrangian advection, a Gauss–Seidel pressure projection, and vorticity confinement to keep the swirl alive."
+summary: |-
+  A grid-based smoke simulation in C++ that solves the incompressible
+  Navier–Stokes equations on a Eulerian grid — semi-Lagrangian advection, a
+  Gauss–Seidel pressure projection, and vorticity confinement to keep the
+  swirl alive.
 ---
 
 A physics-based smoke simulation in C++. The fluid lives on a fixed 2D

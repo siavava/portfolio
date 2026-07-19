@@ -7,7 +7,10 @@ featured: false
 tech:
   - "Python"
   - "Data Processing"
-summary: "A program that parses a world-cities file into City objects, quicksorts them by name, population, and latitude, and animates the 50 most-populous over a world map."
+summary: |-
+  A program that parses a world-cities file into City objects, quicksorts them
+  by name, population, and latitude, and animates the 50 most-populous over a
+  world map.
 ---
 
 A small pipeline over `world_cities.txt`, a comma-separated table of

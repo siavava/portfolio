@@ -7,7 +7,10 @@ featured: false
 tech:
   - "Bash"
   - "Regex"
-summary: "Shell scripts over a US COVID-19 vaccine dataset: a Markdown report of the states with the most doses, and a source-file summarizer, built from Unix filter pipelines."
+summary: |-
+  Shell scripts over a US COVID-19 vaccine dataset: a Markdown report of the
+  states with the most doses, and a source-file summarizer, built from Unix
+  filter pipelines.
 ---
 
 A set of shell scripts that wrangle a US COVID-19 vaccine dataset,

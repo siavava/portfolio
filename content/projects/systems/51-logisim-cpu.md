@@ -7,7 +7,10 @@ featured: true
 tech:
   - "Assembly"
   - "Computer Architecture"
-summary: "A fully functional 16-bit CPU built in Logisim from bare gates — ALU, register file, micro-sequenced control, and memory-mapped IO, running real programs."
+summary: |-
+  A fully functional 16-bit CPU built in Logisim from bare gates — ALU,
+  register file, micro-sequenced control, and memory-mapped IO, running real
+  programs.
 references:
   - https://notes.amittai.studio/computer-architecture/processor-design/the-fetch-decode-execute-cycle
   - https://notes.amittai.studio/computer-architecture/digital-logic/multiplexers-decoders-and-the-alu

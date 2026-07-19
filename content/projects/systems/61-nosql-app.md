@@ -9,7 +9,9 @@ tech:
   - "MongoDB"
   - "NoSQL"
   - "Database Systems"
-summary: "A blog server on a MongoDB document store, driven by a Python client that posts, shows, comments on, and deletes threads in a single collection."
+summary: |-
+  A blog server on a MongoDB document store, driven by a Python client that
+  posts, shows, comments on, and deletes threads in a single collection.
 references:
   - https://notes.amittai.studio/algorithms/data-structures/b-trees
 ---

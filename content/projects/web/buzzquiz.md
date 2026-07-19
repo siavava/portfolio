@@ -10,7 +10,9 @@ tech:
   - "HTML"
   - "CSS"
   - "JavaScript"
-summary: "A BuzzFeed-style quiz that maps your answers to one of six dystopian sci-fi worlds, built in vanilla HTML, CSS, and JavaScript with jQuery."
+summary: |-
+  A BuzzFeed-style quiz that maps your answers to one of six dystopian sci-fi
+  worlds, built in vanilla HTML, CSS, and JavaScript with jQuery.
 ---
 
 A [BuzzFeed][buzzfeed]-style personality quiz that ends by picking one of

@@ -11,7 +11,11 @@ tech:
   - "Node"
   - "MongoDB"
   - "Python"
-summary: "Discite turns idle screen time into learning — a short-form video app that teaches computer science fundamentals through bite-sized, swipeable clips, spanning a SwiftUI client, an Express API, an ML clipping pipeline, and a vector recommendation engine."
+summary: |-
+  Discite turns idle screen time into learning — a short-form video app that
+  teaches computer science fundamentals through bite-sized, swipeable clips,
+  spanning a SwiftUI client, an Express API, an ML clipping pipeline, and a
+  vector recommendation engine.
 ---
 
 **Discite** turns idle screen time into learning: a short-form video app that

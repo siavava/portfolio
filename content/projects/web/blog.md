@@ -9,7 +9,11 @@ tech:
   - "Nuxt"
   - "TypeScript"
   - "Sass"
-summary: "A ground-up redesign of my personal blog — statically generated with Nuxt and SCSS, deployed on Netlify at amittai.space, over a live layer of comments, inline highlights, a Spotify-fed dynamic island, and view counts served by a Rust WebSocket API."
+summary: |-
+  A ground-up redesign of my personal blog — statically generated with Nuxt
+  and SCSS, deployed on Netlify at amittai.space, over a live layer of
+  comments, inline highlights, a Spotify-fed dynamic island, and view counts
+  served by a Rust WebSocket API.
 ---
 
 A ground-up redesign of my personal blog, with a new domain to go with it

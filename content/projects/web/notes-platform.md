@@ -11,7 +11,9 @@ tech:
   - "JavaScript"
   - "Sass"
   - "Firebase"
-summary: "NotePad, a board of draggable, resizable sticky notes backed by the Firebase Realtime Database, with live sync and client-side search."
+summary: |-
+  NotePad, a board of draggable, resizable sticky notes backed by the Firebase
+  Realtime Database, with live sync and client-side search.
 ---
 
 **NotePad** is a board of sticky notes: create a note, drag it anywhere,
