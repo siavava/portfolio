@@ -27,7 +27,7 @@ defineProps<{
     color: #111110
 
   @media (min-width: 901px)
-    width: calc(100% + 24px)
+    width: calc(100% + 48px)
     margin-left: -24px
 
 .name-bar__location

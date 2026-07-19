@@ -307,11 +307,10 @@ const wrapperStyle = computed(() => ({
 .interest-map-wrapper
   position: relative
   width: 100%
-  margin-top: 32px
   overflow: hidden
 
   @media (min-width: 901px)
-    width: calc(100% + 24px)
+    width: calc(100% + 48px)
     margin-left: -24px
 
 .interest-map

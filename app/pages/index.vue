@@ -22,3 +22,8 @@ defineOgImage("Portrait", {
   height: 630,
 })
 </script>
+
+<style lang="sass" scoped>
+main
+  padding-top: 32px
+</style>
