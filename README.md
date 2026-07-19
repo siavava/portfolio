@@ -2,9 +2,9 @@
 
 > And so it begins.
 
-Personal portfolio — a single page in the style of [vilinskyy.com](https://www.vilinskyy.com/):
-a radial interests map, a black name bar, who/now columns, draggable review
-bubbles, and a dream tracker. Built with Nuxt 4, Nuxt Content, Pinia, and VueUse.
+Personal portfolio — a single page: a radial interests map, a black name bar,
+who/now columns, draggable review bubbles, and a dream tracker. Built with
+Nuxt 4, Nuxt Content, Pinia, and VueUse.
 
 ## Setup
 
