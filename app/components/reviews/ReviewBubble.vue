@@ -52,6 +52,10 @@ const style = computed(() => ({
   &.dragging
     cursor: grabbing
 
+  @media (max-width: 900px)
+    cursor: default
+    touch-action: auto
+
 .review-content
   transition: transform 0.14s cubic-bezier(0.4, 0.68, 0.29, 1.66), filter 0.14s
 

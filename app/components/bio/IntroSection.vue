@@ -11,7 +11,7 @@ section.intro-grid
 <style lang="sass" scoped>
 .intro-grid
   display: grid
-  grid-template-columns: 361px 455px
+  grid-template-columns: minmax(0, 361px) minmax(0, 455px)
   gap: 72px
   margin-top: 24px
 
