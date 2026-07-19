@@ -11,7 +11,7 @@
         :selected-path="selectedPath",
         @select="path => emit('select', path, group.key)",
       )
-  nav.drawer-toc(aria-label="Project index")
+  nav.drawer-toc(ref="toc", aria-label="Project index")
     span.drawer-toc__logo Projects
     ol.drawer-toc__list
       li.drawer-toc__module(v-for="(group, gi) in groups", :key="group.key")
@@ -43,7 +43,7 @@ interface Shelf {
   items: ShelfBook[]
 }
 
-defineProps<{
+const props = defineProps<{
   groups: Shelf[]
   selectedPath?: string
   open: boolean
@@ -54,21 +54,45 @@ const emit = defineEmits<{
 }>()
 
 const rail = ref<HTMLElement | null>(null)
+const toc = ref<HTMLElement | null>(null)
 
 const { arrivedState } = useScroll(rail, { offset: { top: 2, bottom: 2 } })
 const canScrollUp = computed(() => !arrivedState.top)
 const canScrollDown = computed(() => !arrivedState.bottom)
 
+const scrollCentered = (
+  container: HTMLElement,
+  target: HTMLElement,
+  behavior: ScrollBehavior,
+) => {
+  const top = container.scrollTop
+    + (target.getBoundingClientRect().top - container.getBoundingClientRect().top)
+    - (container.clientHeight - target.offsetHeight) / 2
+  if (behavior === "smooth") glideScroll(container, { top })
+  else container.scrollTo({ top, behavior })
+}
+
+const centerActiveInToc = (behavior: ScrollBehavior) => {
+  const el = toc.value
+  if (!el?.clientHeight) return
+  const active = el.querySelector<HTMLElement>(".drawer-toc__item.active")
+  if (active) scrollCentered(el, active, behavior)
+}
+
 const center = (groupKey: string, behavior: ScrollBehavior) => {
   nextTick(() => {
     const el = rail.value
-    const section = el?.querySelector<HTMLElement>(`[data-group="${CSS.escape(groupKey)}"]`)
-    if (!el || !section) return
-    const top = section.offsetTop - el.offsetTop - (el.clientHeight - section.offsetHeight) / 2
-    if (behavior === "smooth") glideScroll(el, { top })
-    else el.scrollTo({ top, behavior })
+    if (el?.clientHeight) {
+      const section = el.querySelector<HTMLElement>(`[data-group="${CSS.escape(groupKey)}"]`)
+      if (section) scrollCentered(el, section, behavior)
+    }
+    centerActiveInToc(behavior)
   })
 }
+
+watch(() => props.open, (open) => {
+  if (open) nextTick(() => centerActiveInToc("instant"))
+})
 
 defineExpose({ center })
 </script>
