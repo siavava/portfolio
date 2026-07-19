@@ -1,5 +1,4 @@
 $light-palette: (
-  // Site chrome
   "background": #f5f5f5,
   "foreground": rgba(0, 0, 0, 0.5),
   "foreground-strong": rgba(0, 0, 0, 0.88),
@@ -19,7 +18,6 @@ $light-palette: (
   "check-done": #00c853,
   "check-pending": #cccccc,
 
-  // Study reading surface
   "primary-highlight": #1342ff,
   "lightest-foreground": #000000,
   "study-ink": #16160f,
@@ -43,7 +41,6 @@ $light-palette: (
 );
 
 $dark-palette: (
-  // Site chrome
   "background": #111110,
   "foreground": rgba(255, 255, 255, 0.55),
   "foreground-strong": rgba(255, 255, 255, 0.92),
@@ -63,7 +60,6 @@ $dark-palette: (
   "check-done": #00c853,
   "check-pending": #4d4d4d,
 
-  // Study reading surface
   "primary-highlight": #5b7cff,
   "lightest-foreground": #f6f8fc,
   "study-ink": rgba(222, 226, 236, 0.92),

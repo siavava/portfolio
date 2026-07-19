@@ -99,7 +99,6 @@ defineProps<{
   letter-spacing: 0.1em
   color: var(--dark-foreground)
 
-// Prose in a centered 576px column; figures break out to full width.
 .reading-desk__body
   display: grid
   grid-template-columns: minmax(0, 1fr) min(576px, 100%) minmax(0, 1fr)
@@ -134,7 +133,6 @@ defineProps<{
   :deep(.katex-display)
     max-width: 100%
     overflow-x: auto
-    // overflow-x:auto forces overflow-y non-visible; padding + clip-margin keep the clip off superscripts.
     overflow-y: clip
     overflow-clip-margin: 0.4em
     padding-block: 0.35em

@@ -74,7 +74,6 @@ const pathPoints = ref<string | null>(null)
 const sx = (i: number) => OX + i % GW * CS + CS / 2
 const sy = (i: number) => OY + Math.floor(i / GW) * CS + CS / 2
 
-// Deterministic PRNG for the first maze so SSR and client hydrate identically.
 let lcg = 0x2545f49
 const seeded = () => {
   lcg = lcg * 1103515245 + 12345 & 0x7fffffff

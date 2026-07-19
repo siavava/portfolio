@@ -68,7 +68,6 @@ const mode = ref<"ideal" | "true">("ideal")
 const hovered = ref<string | null>(null)
 const note = ref("")
 
-// Deterministic phases so SSR and client agree.
 const phaseFor = (i: number) => i * 2.399963 % (Math.PI * 2)
 
 function reset() {

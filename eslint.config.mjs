@@ -51,6 +51,7 @@ export default withNuxt({
   .append({
     rules: {
       "@typescript-eslint/no-empty-object-type": "off",
+      "no-empty": ["error", { allowEmptyCatch: true }],
     },
   })
   .append({

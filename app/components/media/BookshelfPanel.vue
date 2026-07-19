@@ -66,7 +66,6 @@ const selected = shallowRef<ProjectItem | null>(null)
 const isSelected = (project: ProjectItem) =>
   project.title === selected.value?.title
 
-// Picked client-side so SSR output stays deterministic.
 onMounted(() => {
   const featured = projects.value.filter(project => project.featured)
   const pool = featured.length ? featured : projects.value

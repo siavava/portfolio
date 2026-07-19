@@ -96,7 +96,6 @@ const onPointerdown = (event: PointerEvent) => {
   try {
     (event.target as Element).setPointerCapture(event.pointerId)
   } catch {
-    // noop: synthetic pointers cannot be captured
   }
 }
 

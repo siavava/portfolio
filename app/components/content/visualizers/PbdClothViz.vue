@@ -117,7 +117,6 @@ function reset() {
       })
     }
   }
-  // No relaxation pass: its O(n^2) contact sweep blocked hydration for seconds.
   gustLeft = 0
   peakStretch.value = 0
   note.value = noteText()

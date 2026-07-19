@@ -212,7 +212,6 @@ defineOgImage("Portrait", {
 <style lang="sass" scoped>
 @use "@/styles/typography"
 
-// No transform here — the shelf tooltips are position: fixed, and a transformed ancestor would hijack their containing block.
 .projects-screen
   display: block
   width: 100vw
@@ -236,7 +235,6 @@ defineOgImage("Portrait", {
 .pd-drawer-fade-enter-from, .pd-drawer-fade-leave-to
   opacity: 0
 
-// Block, not flex: flex items can't margin-collapse, so a flex desk would leave the card's bottom margin as real space below the page.
 .reading-desk
   min-width: 0
   max-width: 1024px
