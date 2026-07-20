@@ -9,6 +9,7 @@ export const titleCase = (text: string) =>
 
 /** Render an ISO-ish date string as MM/YYYY. */
 export const formatMonthYear = (date: unknown) => {
-  const [year, month] = String(date).split("-")
-  return `${month}/${year}`
+  const [year, month] = String(date ?? "").split("-")
+  if (!year) return ""
+  return month ? `${month}/${year}` : year
 }

@@ -70,10 +70,10 @@ const seedFor = (i: number) => {
 const spine = (i: number) => {
   const s = seedFor(i)
   const roll = s % 100
-  const width = roll < 26 ? 6 + s % 4 : roll < 68 ? 11 + (s >> 3) % 8 : 19 + (s >> 6) % 9
+  const width = roll < 26 ? 6 + s % 4 : roll < 68 ? 11 + (s >>> 3) % 8 : 19 + (s >>> 6) % 9
   const heightPct = 42 + seedFor(i * 3 + 1) % 50
   const gap = 1 + seedFor(i * 7 + 5) % 4
-  const tilt = s % 9 === 0 ? ((s >> 5) % 2 ? 1 : -1) * (3 + (s >> 4) % 4) : 0
+  const tilt = s % 9 === 0 ? ((s >>> 5) % 2 ? 1 : -1) * (3 + (s >>> 4) % 4) : 0
   const arc = Math.max(1.5, Math.round(width * 0.18 * 10) / 10)
   return { width, heightPct, gap, tilt, arc }
 }

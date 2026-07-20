@@ -67,7 +67,8 @@ export function useProjectReferences(selected: Ref<ReferencedDoc | null>) {
   const references = computed<Reference[]>(() => {
     const refs = selected.value?.references ?? []
     const notes = refs.map((href) => {
-      const path = new URL(href).pathname.replace(/\/+$/, "")
+      let path: string
+      try { path = new URL(href).pathname.replace(/\/+$/, "") } catch { path = href.replace(/\/+$/, "") }
       const meta = (notesMeta as Record<string, NotesMeta>)[path]
       if (meta) return { href, title: meta.title, notes: true }
       return { href, title: SUBJECT_LABELS[path] ?? path, notes: true }

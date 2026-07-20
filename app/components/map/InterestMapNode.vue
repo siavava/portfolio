@@ -24,11 +24,11 @@ g.node-group(
   )
   text.node-label(
     v-if="showLabel",
-    ref="labelEl",
+    ref="label",
     text-anchor="middle",
     :y="labelY",
   )
-    tspan(v-for="(line, lineIndex) in lines", :key="line", x="0", :dy="lineIndex === 0 ? 0 : 11") {{ line }}
+    tspan(v-for="(line, lineIndex) in lines", :key="lineIndex", x="0", :dy="lineIndex === 0 ? 0 : 11") {{ line }}
   rect.hit-zone(
     v-if="shown",
     :x="hitBox.x",
@@ -78,11 +78,11 @@ const lines = computed(() => {
   return [words.slice(0, middle).join(" "), words.slice(middle).join(" ")]
 })
 
-const labelEl = ref<SVGTextElement | null>(null)
+const label = useTemplateRef<SVGTextElement>("label")
 const labelBox = ref<{ x: number, y: number, width: number, height: number } | null>(null)
 
 const measureLabel = () => {
-  const el = labelEl.value
+  const el = label.value
   if (!el) {
     labelBox.value = null
     return

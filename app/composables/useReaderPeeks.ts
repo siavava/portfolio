@@ -20,7 +20,7 @@ const REF_DELAY = 1000
  *
  * | Name | Type | Description |
  * | --- | --- | --- |
- * | `deskEl` | `Ref<HTMLElement \| null>` | The reading surface to watch |
+ * | `desk` | `Ref<HTMLElement \| null>` | The reading surface to watch |
  *
  * ### Returns
  *
@@ -32,14 +32,14 @@ const REF_DELAY = 1000
  * | `bindRefCard` | `(c: unknown) => void` | Template ref for the card element |
  * | `clearPeeks` | `() => void` | Dismiss both overlays |
  */
-export function useReaderPeeks(deskEl: Ref<HTMLElement | null>) {
+export function useReaderPeeks(desk: Ref<HTMLElement | null>) {
   const figPeek = ref<FigPeekState | null>(null)
   const refPeek = ref<RefPeekState | null>(null)
   const refVisible = ref(false)
-  const refCardEl = ref<HTMLElement | null>(null)
+  const refCard = ref<HTMLElement | null>(null)
 
   const bindRefCard = (c: unknown) => {
-    refCardEl.value = (c as { root?: HTMLElement | null } | null)?.root ?? null
+    refCard.value = (c as { root?: HTMLElement | null } | null)?.root ?? null
   }
 
   let refTimer: ReturnType<typeof setTimeout> | null = null
@@ -59,7 +59,7 @@ export function useReaderPeeks(deskEl: Ref<HTMLElement | null>) {
       figPeek.value = null
       return
     }
-    const figs = [...deskEl.value?.querySelectorAll("figure") ?? []]
+    const figs = [...desk.value?.querySelectorAll("figure:not(.algorithm)") ?? []]
     const rect = fig.getBoundingClientRect()
     figPeek.value = {
       html: cap.innerHTML,
@@ -95,7 +95,7 @@ export function useReaderPeeks(deskEl: Ref<HTMLElement | null>) {
       Math.max(12, refMouseX - REF_W / 2),
       window.innerWidth - REF_W - 12,
     )
-    const height = refCardEl.value?.offsetHeight ?? 0
+    const height = refCard.value?.offsetHeight ?? 0
     const style: Record<string, string> = {
       left: `${Math.round(left)}px`,
       width: `${REF_W}px`,
@@ -135,7 +135,7 @@ export function useReaderPeeks(deskEl: Ref<HTMLElement | null>) {
     clearRef()
   }
 
-  useEventListener(deskEl, "mouseover", (event: MouseEvent) => {
+  useEventListener(desk, "mouseover", (event: MouseEvent) => {
     refMouseX = event.clientX
     const link = (event.target as HTMLElement).closest?.("a")
     if (link && metaFor(link.getAttribute("href") ?? "")) {
@@ -149,19 +149,19 @@ export function useReaderPeeks(deskEl: Ref<HTMLElement | null>) {
     }
     if (refLink) clearRef()
     const fig = (event.target as HTMLElement).closest?.("figure")
-    if (fig && !fig.classList.contains("algorithm") && deskEl.value?.contains(fig)) {
+    if (fig && !fig.classList.contains("algorithm") && desk.value?.contains(fig)) {
       showFigPeek(fig as HTMLElement)
     } else {
       figPeek.value = null
     }
   })
 
-  useEventListener(deskEl, "mousemove", (event: MouseEvent) => {
+  useEventListener(desk, "mousemove", (event: MouseEvent) => {
     refMouseX = event.clientX
     if (refVisible.value && refPeek.value) positionRef()
   })
 
-  useEventListener(deskEl, "mouseleave", clearPeeks)
+  useEventListener(desk, "mouseleave", clearPeeks)
 
   useEventListener("scroll", clearPeeks, { capture: true, passive: true })
 

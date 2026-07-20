@@ -17,11 +17,11 @@
  */
 import type { Ref } from "vue"
 
-export function useFigureSpotlight(contentEl: Ref<HTMLElement | null>) {
+export function useFigureSpotlight(content: Ref<HTMLElement | null>) {
   const spotlight = ref<FigSpotlightState | null>(null)
 
   function open(fig: HTMLElement) {
-    const figs = [...contentEl.value?.querySelectorAll("figure") ?? []]
+    const figs = [...content.value?.querySelectorAll("figure:not(.algorithm)") ?? []]
     const clone = fig.cloneNode(true) as HTMLElement
     clone
       .querySelectorAll(".fig-cap, .tikz-cap, figcaption")
@@ -53,7 +53,7 @@ export function useFigureSpotlight(contentEl: Ref<HTMLElement | null>) {
     const fig = target.closest("figure:not(.algorithm)") as HTMLElement | null
     if (
       fig
-      && contentEl.value?.contains(fig)
+      && content.value?.contains(fig)
       && fig.querySelector("svg, img, picture")
     ) open(fig)
   }
@@ -63,11 +63,11 @@ export function useFigureSpotlight(contentEl: Ref<HTMLElement | null>) {
   }
 
   onMounted(() => {
-    contentEl.value?.addEventListener("click", onClick)
+    content.value?.addEventListener("click", onClick)
     window.addEventListener("keydown", onKey)
   })
   onBeforeUnmount(() => {
-    contentEl.value?.removeEventListener("click", onClick)
+    content.value?.removeEventListener("click", onClick)
     window.removeEventListener("keydown", onKey)
     document.documentElement.style.overflow = ""
   })

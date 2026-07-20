@@ -22,4 +22,8 @@ interface ProfileData {
   versions: SiteVersion[]
   blurb: string
   socials: SocialLink[]
+  og: {
+    kicker: string
+    description: string
+  }
 }

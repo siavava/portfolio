@@ -71,7 +71,7 @@ interface SimNode extends SimulationNodeDatum {
 
 const ORIGIN = { x: 0, y: 0 }
 
-const wrapper = ref<HTMLElement | null>(null)
+const wrapper = useTemplateRef<HTMLElement>("wrapper")
 const { width: containerWidth } = useElementSize(wrapper)
 
 const { data: interests } = await useAsyncData("interests", () =>
@@ -115,6 +115,7 @@ const parentOf = (id: string) =>
   layout.value?.links.find(l => l.target === id && !l.prereq)?.source ?? null
 
 let entryTimer: ReturnType<typeof setInterval> | undefined
+let heightControls: { stop: () => void } | null = null
 
 const beginEntry = () => {
   clearInterval(entryTimer)
@@ -186,7 +187,11 @@ watch([layout, appearanceOrder], ([value, order]) => {
   syncPositions()
 }, { immediate: true })
 
-onUnmounted(() => simulation?.stop())
+onUnmounted(() => {
+  clearInterval(entryTimer)
+  heightControls?.stop()
+  simulation?.stop()
+})
 
 const svgPoint = (event: PointerEvent) => {
   const rect = wrapper.value!.querySelector("svg")!.getBoundingClientRect()
@@ -232,8 +237,16 @@ const childrenMap = computed(() => {
   return map
 })
 
-const subtree = (id: string): string[] =>
-  [id, ...(childrenMap.value.get(id) ?? []).flatMap(subtree)]
+const subtree = (id: string): string[] => {
+  const seen = new Set<string>()
+  const walk = (node: string) => {
+    if (seen.has(node)) return
+    seen.add(node)
+    for (const child of childrenMap.value.get(node) ?? []) walk(child)
+  }
+  walk(id)
+  return [...seen]
+}
 
 const parentsMap = computed(() => {
   const map = new Map<string, string[]>()
@@ -292,7 +305,8 @@ const open = () => {
   if (!layout.value) return
   const target = singleColumn.value ? 0 : targetHeight.value
   if (target === 0) resetEntry()
-  animate(height.value, target, {
+  heightControls?.stop()
+  heightControls = animate(height.value, target, {
     type: "spring",
     visualDuration: 0.35,
     bounce: 0.35,

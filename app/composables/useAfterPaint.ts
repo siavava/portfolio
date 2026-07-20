@@ -8,7 +8,11 @@
  * the illustration.
  */
 export function useAfterPaint(fn: () => void) {
+  let handle = 0
   onMounted(() => {
-    requestAnimationFrame(fn)
+    handle = requestAnimationFrame(fn)
+  })
+  onBeforeUnmount(() => {
+    if (handle) cancelAnimationFrame(handle)
   })
 }

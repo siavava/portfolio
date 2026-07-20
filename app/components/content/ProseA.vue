@@ -23,6 +23,6 @@ const { href = "", to = "" } = defineProps<{
 const target = computed(() => to || href)
 
 const external = computed(() =>
-  ["http", "//", "mailto:", "/raw", "/pre"].some(prefix =>
+  ["http", "//", "mailto:"].some(prefix =>
     target.value.startsWith(prefix)))
 </script>

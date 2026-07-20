@@ -1,5 +1,5 @@
 <template lang="pug">
-.ref-peek(:style="peek.style", :class="{ 'is-shown': visible }")
+.ref-peek(ref="root", :style="peek.style", :class="{ 'is-shown': visible }")
   .ref-peek-mod(v-if="peek.module") {{ peek.module }}
   .ref-peek-title {{ peek.title }}
   p.ref-peek-sum(v-html="peek.summaryHtml")
@@ -18,7 +18,7 @@
  */
 defineProps<{ peek: RefPeekState, visible: boolean }>()
 
-const root = ref<HTMLElement | null>(null)
+const root = useTemplateRef<HTMLElement>("root")
 defineExpose({ root })
 </script>
 

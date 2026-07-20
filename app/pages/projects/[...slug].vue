@@ -1,7 +1,7 @@
 <template lang="pug">
 main.projects-screen
   BookcaseRail(
-    ref="railRef",
+    ref="rail",
     :groups,
     :selected-path="selected?.path",
     :open="drawer",
@@ -20,7 +20,7 @@ main.projects-screen
         :visible="refVisible",
       )
   FigureSpotlight(:spot="spotlight", @close="closeSpotlight")
-  .reading-desk(ref="deskEl")
+  .reading-desk(ref="desk")
     ReaderTopbar(
       :tag="selected?.tag",
       :title="selected?.title",
@@ -105,22 +105,24 @@ const showDek = computed(() => {
 
 const { references } = useProjectReferences(selected)
 
-const railRef = ref<{ center: (key: string, behavior: ScrollBehavior) => void } | null>(null)
+const rail = useTemplateRef<{ center: (key: string, behavior: ScrollBehavior) => void }>("rail")
 const drawer = ref(false)
 
 let centerGroup: string | undefined
 
 const select = (path: string, groupKey?: string) => {
-  centerGroup = groupKey
   drawer.value = false
-  if (path !== route.path) router.replace(path)
+  if (path !== route.path) {
+    centerGroup = groupKey
+    router.replace(path)
+  }
 }
 
 watch(routePath, (path) => {
   const doc = (path ? docs.value.find(d => d.path === path) : null) ?? fallback()
   if (doc && doc.path !== selected.value?.path) {
     selected.value = doc
-    railRef.value?.center(centerGroup ?? doc.tag, "smooth")
+    rail.value?.center(centerGroup ?? doc.tag, "smooth")
     if (window.matchMedia("(max-width: 1440px)").matches) {
       window.scrollTo({ top: 0, behavior: "smooth" })
     }
@@ -130,7 +132,7 @@ watch(routePath, (path) => {
 
 onMounted(() => {
   if (selected.value) {
-    railRef.value?.center(selected.value.featured ? "featured" : selected.value.tag, "instant")
+    rail.value?.center(selected.value.featured ? "featured" : selected.value.tag, "instant")
   }
 })
 
@@ -167,15 +169,18 @@ useEventListener("keydown", (event: KeyboardEvent) => {
   step(event.key === "ArrowRight" ? 1 : -1)
 })
 
-const deskEl = ref<HTMLElement | null>(null)
-const { figPeek, refPeek, refVisible, bindRefCard, clearPeeks } = useReaderPeeks(deskEl)
+const desk = useTemplateRef<HTMLElement>("desk")
+const { figPeek, refPeek, refVisible, bindRefCard, clearPeeks } = useReaderPeeks(desk)
 
-const { spotlight, close: closeSpotlight } = useFigureSpotlight(deskEl)
+const { spotlight, close: closeSpotlight } = useFigureSpotlight(desk)
 watch(spotlight, (open) => {
   if (open) clearPeeks()
 })
 
-watch(routePath, clearPeeks)
+watch(routePath, () => {
+  clearPeeks()
+  closeSpotlight()
+})
 
 const pageDescription = "Four years of projects, preserved — compilers, chess bots, search engines, simulations, and everything else built at Dartmouth."
 

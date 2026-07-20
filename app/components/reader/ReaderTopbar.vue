@@ -64,7 +64,7 @@ const { share, isSupported: canShare } = useShare()
 const { copy, copied } = useClipboard({ copiedDuring: 1600 })
 
 const onShare = () => {
-  if (canShare.value) share({ title: props.title, url: props.shareUrl }).catch(() => copy(props.shareUrl))
+  if (canShare.value) share({ title: props.title, url: props.shareUrl }).catch((error: unknown) => { if ((error as Error)?.name !== "AbortError") copy(props.shareUrl) })
   else copy(props.shareUrl)
 }
 
