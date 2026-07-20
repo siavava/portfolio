@@ -13,6 +13,7 @@ g.node-group(
     :fill="node.color",
     :style="{ animationDelay: `${(ripple - 1) * 0.4}s` }",
   )
+  circle.node-pulse(ref="pulseRing", cx="0", cy="0", :r="dotRadius", :fill="node.color")
   circle.node-dot(cx="0", cy="0", :r="dotRadius", :fill="node.color")
   rect.node-label-bg(
     v-if="showLabel && labelBox",
@@ -54,6 +55,7 @@ const props = defineProps<{
   glowing: boolean
   dimmed: boolean
   compact: boolean
+  pulseTick: number
 }>()
 
 const emit = defineEmits<{
@@ -66,6 +68,21 @@ const emit = defineEmits<{
 const connections = useConnections()
 
 const dotRadius = computed(() => props.node.level === 1 ? 3 : 2.5)
+
+const pulseRing = useTemplateRef<SVGCircleElement>("pulseRing")
+
+watch(() => props.pulseTick, (tick) => {
+  const el = pulseRing.value
+  if (!tick || !el) return
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+  const r = dotRadius.value
+  window.setTimeout(() => {
+    el.animate(
+      [{ r: `${r}px`, opacity: 1 }, { r: `${r * 2}px`, opacity: 0 }],
+      { duration: 300, easing: "ease-in-out" },
+    )
+  }, (props.node.level - 1) * 100)
+})
 
 const showLabel = computed(() => !props.compact || props.node.level === 1)
 
@@ -171,6 +188,10 @@ const onPointerup = () => {
   opacity: 0
   pointer-events: none
   animation: node-ripple 1.2s ease-out infinite
+
+.node-pulse
+  opacity: 0
+  pointer-events: none
 
 .node-dot
   pointer-events: none

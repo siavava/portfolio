@@ -43,6 +43,7 @@
           :glowing="glowSet.has(node.id) || litNodes.has(node.id)",
           :dimmed="litNodes.size > 0 && !litNodes.has(node.id)",
           :compact,
+          :pulse-tick="pulseTick",
           @hover="hovered = $event",
           @dragstart="onDragStart",
           @dragmove="onDragMove",
@@ -117,6 +118,52 @@ const parentOf = (id: string) =>
 let entryTimer: ReturnType<typeof setInterval> | undefined
 let heightControls: { stop: () => void } | null = null
 
+const pulseTick = ref(0)
+let pulseTimer: ReturnType<typeof setTimeout> | undefined
+let pulseInterval: ReturnType<typeof setInterval> | undefined
+
+const pulseRings = () => {
+  const svg = wrapper.value?.querySelector("svg")
+  if (!svg) return
+  const dark = document.documentElement.classList.contains("dark-mode")
+  const idle = dark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)"
+  const peak = dark ? "rgba(255, 255, 255, 0.16)" : "rgba(0, 0, 0, 0.16)"
+  const rings = [...svg.querySelectorAll<SVGCircleElement>(".orbital-ring")]
+    .sort((a, b) => Number(a.getAttribute("r")) - Number(b.getAttribute("r")))
+  rings.forEach((ring, index) => {
+    window.setTimeout(() => {
+      ring.animate(
+        [
+          { stroke: idle, strokeWidth: "1px" },
+          { stroke: peak, strokeWidth: "2px", offset: 0.5 },
+          { stroke: idle, strokeWidth: "1px" },
+        ],
+        { duration: 300, easing: "ease-in-out" },
+      )
+    }, index * 100)
+  })
+}
+
+const runPulse = () => {
+  pulseTick.value += 1
+  pulseRings()
+}
+
+const startPulse = () => {
+  clearTimeout(pulseTimer)
+  clearInterval(pulseInterval)
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+  pulseTimer = setTimeout(() => {
+    runPulse()
+    pulseInterval = setInterval(runPulse, 5000)
+  }, 1000)
+}
+
+const stopPulse = () => {
+  clearTimeout(pulseTimer)
+  clearInterval(pulseInterval)
+}
+
 const beginEntry = () => {
   clearInterval(entryTimer)
   entryTimer = setInterval(() => {
@@ -125,6 +172,7 @@ const beginEntry = () => {
     if (appearedCount.value >= order.length) {
       clearInterval(entryTimer)
       simulation?.alphaTarget(0)
+      startPulse()
       return
     }
     const node = order[appearedCount.value]!
@@ -189,6 +237,7 @@ watch([layout, appearanceOrder], ([value, order]) => {
 
 onUnmounted(() => {
   clearInterval(entryTimer)
+  stopPulse()
   heightControls?.stop()
   simulation?.stop()
 })
@@ -294,6 +343,7 @@ const entryStarted = ref(false)
 
 const resetEntry = () => {
   clearInterval(entryTimer)
+  stopPulse()
   entryStarted.value = false
   appearedCount.value = 0
   activeSimCount = 0
