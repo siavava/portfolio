@@ -5,13 +5,14 @@ Teleport(to="body")
     button.fig-spot-exit(@click="$emit('close')") Exit
     .fig-spot-stage(@click.self="$emit('close')")
       .fig-spot-card
-        .fig-spot-figure(ref="figureEl", v-html="spot.html")
+        .fig-spot-figure(ref="figure", v-html="spot.html")
       p.fig-spot-cap(
         v-if="spot.caption",
+        ref="cap",
         :style="{ width: `${spot.capWidth}px` }"
       )
         span.fig-spot-num fig {{ spot.n }}.&nbsp;
-        span.fig-spot-body(ref="capBody", v-html="spot.caption")
+        span.fig-spot-body(v-html="spot.caption")
 </template>
 
 <script lang="ts" setup>
@@ -24,11 +25,11 @@ const mode = computed(
   () => colorMode.value === "dark" ? "dark-mode" : "light-mode",
 )
 
-const capBody = ref<HTMLElement | null>(null)
-const figureEl = ref<HTMLElement | null>(null)
+const cap = useTemplateRef<HTMLElement>("cap")
+const figure = useTemplateRef<HTMLElement>("figure")
 
 function fitFigure() {
-  const fig = figureEl.value
+  const fig = figure.value
   if (!fig || !import.meta.client) return
   const media = fig.querySelector<SVGSVGElement | HTMLImageElement>("svg, img")
   if (!media) return
@@ -55,7 +56,7 @@ function fitFigure() {
   media.style.maxHeight = "none"
 }
 
-useCaptionTypewriter(capBody, () => props.spot, fitFigure)
+useCaptionTypewriter(cap, () => props.spot, fitFigure)
 
 onMounted(() => window.addEventListener("resize", fitFigure))
 onBeforeUnmount(() => window.removeEventListener("resize", fitFigure))
