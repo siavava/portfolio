@@ -18,7 +18,7 @@ const props = defineProps<{
   note?: string
 }>()
 
-const el = ref<HTMLElement | null>(null)
+const el = useTemplateRef<HTMLElement>("el")
 const cues = useCues()
 const sideNotes = useSideNotes()
 

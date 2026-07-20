@@ -11,7 +11,7 @@ const props = defineProps<{
   name?: string
 }>()
 
-const el = ref<HTMLElement | null>(null)
+const el = useTemplateRef<HTMLElement>("el")
 const sideNotes = useSideNotes()
 const { register, unregister, relayout } = useSideNoteLayout()
 

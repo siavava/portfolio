@@ -18,7 +18,7 @@ const items = computed(() => dreams.value?.items ?? [])
 
 const rows = computed(() => Math.max(1, Math.ceil(items.value.length / 3)))
 
-const grid = ref<HTMLElement | null>(null)
+const grid = useTemplateRef<HTMLElement>("grid")
 const { canScrollLeft, canScrollRight } = useScrollEdges(grid)
 </script>
 

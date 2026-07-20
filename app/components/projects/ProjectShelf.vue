@@ -47,8 +47,8 @@ const emit = defineEmits<{
   select: [path: string]
 }>()
 
-const viewport = ref<HTMLElement | null>(null)
-const shelf = ref<HTMLElement | null>(null)
+const viewport = useTemplateRef<HTMLElement>("viewport")
+const shelf = useTemplateRef<HTMLElement>("shelf")
 const { canScrollLeft, canScrollRight } = useScrollEdges(shelf)
 
 const centerBook = (behavior: ScrollBehavior) => {

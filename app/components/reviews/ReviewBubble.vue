@@ -19,7 +19,7 @@ const props = defineProps<{
   index: number
 }>()
 
-const item = ref<HTMLElement | null>(null)
+const item = useTemplateRef<HTMLElement>("item")
 const { offset, dragging, zIndex, handlers } = useDraggableBubble(item)
 
 /** Deterministic per-bubble tilt in the ±3° band, like the reference. */

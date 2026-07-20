@@ -13,13 +13,13 @@ section.note-target.reviews-section(ref="section")
 </template>
 
 <script lang="ts" setup>
-const section = ref<HTMLElement | null>(null)
+const section = useTemplateRef<HTMLElement>("section")
 const { revealed } = useScrollReveal(section)
 
 const { data: reviews } = await useAsyncData("reviews", () =>
   queryCollection("reviews").order("stem", "ASC").all())
 
-const canvas = ref<HTMLElement | null>(null)
+const canvas = useTemplateRef<HTMLElement>("canvas")
 const { canScrollLeft, canScrollRight } = useScrollEdges(canvas)
 </script>
 

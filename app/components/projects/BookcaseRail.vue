@@ -53,8 +53,8 @@ const emit = defineEmits<{
   select: [path: string, groupKey: string]
 }>()
 
-const rail = ref<HTMLElement | null>(null)
-const toc = ref<HTMLElement | null>(null)
+const rail = useTemplateRef<HTMLElement>("rail")
+const toc = useTemplateRef<HTMLElement>("toc")
 
 const { arrivedState } = useScroll(rail, { offset: { top: 2, bottom: 2 } })
 const canScrollUp = computed(() => !arrivedState.top)

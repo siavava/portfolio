@@ -13,7 +13,7 @@ VizFrame(variant="smoke-viz", title="Grid smoke solver", :note="note")
       option(:value="true") vorticity on
       option(:value="false") vorticity off
     button.viz-btn(type="button", @click="reset") reset
-  canvas.viz-canvas(ref="canvasEl")
+  canvas.viz-canvas(ref="canvas")
 </template>
 
 <script lang="ts" setup>
@@ -45,7 +45,7 @@ const PROJ_SWEEPS = 6
 const confine = ref(true)
 const note = ref("bottom-center emitter feeding a rising plume")
 
-const canvasEl = ref<HTMLCanvasElement | null>(null)
+const canvas = useTemplateRef<HTMLCanvasElement>("canvas")
 let ctx: CanvasRenderingContext2D | null = null
 let grid: HTMLCanvasElement | null = null
 let gridCtx: CanvasRenderingContext2D | null = null
@@ -186,7 +186,7 @@ function ramp(t: number): [number, number, number] {
 }
 
 function render() {
-  if (!ctx || !gridCtx || !img || !grid || !canvasEl.value) return
+  if (!ctx || !gridCtx || !img || !grid || !canvas.value) return
   const data = img.data
   for (let j = 0; j < NY; j++) {
     for (let i = 0; i < NX; i++) {
@@ -197,7 +197,7 @@ function render() {
   }
   gridCtx.putImageData(img, 0, 0)
   ctx.imageSmoothingEnabled = true
-  ctx.drawImage(grid, 0, 0, canvasEl.value.width, canvasEl.value.height)
+  ctx.drawImage(grid, 0, 0, canvas.value.width, canvas.value.height)
 }
 
 function hardReset() {
@@ -220,7 +220,7 @@ const { resume } = useRafFn(() => {
 }, { immediate: false })
 
 useAfterPaint(() => {
-  const el = canvasEl.value
+  const el = canvas.value
   if (!el) return
   const style = getComputedStyle(el)
   bg = parseColor(style.getPropertyValue("--study-surface-sunken").trim(), bg)
