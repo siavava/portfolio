@@ -17,7 +17,7 @@ const section = useTemplateRef<HTMLElement>("section")
 const { revealed } = useScrollReveal(section)
 
 const { data: reviews } = await useAsyncData("reviews", () =>
-  queryCollection("reviews").order("stem", "ASC").all())
+  queryCollection("reviews").where("draft", "=", false).order("stem", "ASC").all())
 
 const canvas = useTemplateRef<HTMLElement>("canvas")
 const { canScrollLeft, canScrollRight } = useScrollEdges(canvas)

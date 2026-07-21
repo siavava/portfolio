@@ -25,6 +25,7 @@ export default defineContentConfig({
       schema: z.object({
         author: z.string(),
         role: z.string(),
+        draft: z.boolean().default(false),
       }),
     }),
     dreams: defineCollection({
