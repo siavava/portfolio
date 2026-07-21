@@ -1,6 +1,6 @@
-const BASE_WIDTH = 928
+const BASE_WIDTH = 936
 const BASE_HEIGHT = 792
-const RING_RADII = [114, 228, 342, 456]
+const RING_RADII = [117, 234, 351, 468]
 
 const BRANCH_RADII = [168, 150, 205, 130, 100, 175, 190, 162]
 
@@ -35,7 +35,7 @@ export const useInterestLayout = (
   const links: MapLink[] = []
 
   const cx = BASE_WIDTH * scale / 2
-  const cy = 460 * scale
+  const cy = 472 * scale
 
   const place = (radius: number, angle: number) => ({
     x: radius * scale * Math.cos(toRadians(angle)),

@@ -27,8 +27,8 @@ defineProps<{
     color: #111110
 
   @media (min-width: 901px)
-    width: calc(100% + 24px)
-    margin-left: -12px
+    width: calc(100% + 48px)
+    margin-left: -24px
 
   @media (max-width: 900px)
     width: calc(100% + 40px)

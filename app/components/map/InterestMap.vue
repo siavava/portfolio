@@ -80,7 +80,7 @@ const { data: interests } = await useAsyncData("interests", () =>
 
 const scale = computed(() => {
   if (!containerWidth.value) return 1
-  return Math.min(1, containerWidth.value / 912)
+  return Math.min(1, containerWidth.value / 936)
 })
 
 const layout = computed(() => {
@@ -385,8 +385,8 @@ const wrapperStyle = computed(() => ({
   overflow: hidden
 
   @media (min-width: 901px)
-    width: calc(100% + 24px)
-    margin-left: -12px
+    width: calc(100% + 48px)
+    margin-left: -24px
 
 .interest-map
   position: absolute
