@@ -2,11 +2,12 @@ branches:
   - label: Design
     color: "#EC4899"
     children:
+      - label: Digital Design
+        children: 
+          - label: Typography
+          - label: UX
       - label: Minimalism
-      - label: Personal Websites
-      - label: Typography
-      - label: UI Design
-      - label: Editorial
+      - label: Brutalism
   - label: Physics
     color: "#F97316"
     children:
@@ -31,21 +32,22 @@ branches:
           - label: Cryptography
       - label: Logic
       - label: Game Theory
-  - label: Theoretical CS
+  - label: Discrete Structures # Theoretical CS
     color: "#06B6D4"
+    # children:
+    #   - label: Discrete Math
     children:
-      - label: Discrete Math
+      - label: Theory of Computation
         children:
-          - label: Theory of Computation
-            children:
-              - label: Automata Theory
-              - label: Computability Theory
-              - label: Complexity Theory
+          - label: Automata Theory
+          - label: Computability Theory
+          - label: Complexity Theory
       - label: Algorithms
         children:
-          - label: Data Structures
+          - label: Streaming Algorithms
+          - label: Approximation Algorithms
       - label: Information Theory
-  - label: AI
+  - label: Intelligence
     color: "#3B82F6"
     children:
       - label: Deep Learning
@@ -65,19 +67,36 @@ branches:
       - label: Marine Robotics
       - label: Localization
       - label: Physical Computing
+  - label: Philosophy
+    color: "#D946EF"
+    children:
+      - label: Humanism
+      - label: Existentialism
+      - label: Stoicism
   - label: Culture
     color: "#14B8A6"
     children:
-      - label: Sci-Fi
-        children:
-          - label: Foundation
-      - label: Shakespeare
-      - label: Chess
       - label: Movies
-  - label: Leisure
-    color: "#10B981"
-    children:
-      - label: Photography
-      - label: Specialty Coffee
-      - label: Hiking
-      - label: Music
+        children:
+          - label: Legal
+            children:
+              - label: Suits
+              - label: The Good Wife
+              # - label: The Lincoln Lawyer
+          - label: Sci-Fi
+            children:
+              - label: Foundation
+              - label: Westworld
+              # - label: Rings of Power
+              # - label: MCU
+          - label: Quant
+            children:
+              - label: Billions
+              - label: Industry
+      # - label: Poetry
+      - label: Chess
+  # - label: Leisure
+  #   color: "#10B981"
+  #   children:
+  #     - label: Photography
+  #     - label: Music
