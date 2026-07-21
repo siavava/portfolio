@@ -2,7 +2,11 @@
 .now-item
   span.now-item__lead
     Icon.now-item__icon(:name="item.icon")
-    a.now-item__title(:href="item.url", target="_blank", rel="noopener") {{ item.title }}
+    NuxtLink.now-item__title(
+      :to="item.url",
+      :target="external ? '_blank' : undefined",
+      :rel="external ? 'noopener noreferrer' : undefined",
+    ) {{ item.title }}
     span.now-item__dash &nbsp;—&nbsp;
   ContentRenderer.now-item__body(:value="item")
 </template>
@@ -10,9 +14,12 @@
 <script lang="ts" setup>
 import type { NowCollectionItem } from "@nuxt/content"
 
-defineProps<{
+const { item } = defineProps<{
   item: NowCollectionItem
 }>()
+
+const external = computed(() =>
+  ["http", "//", "mailto:"].some(prefix => item.url.startsWith(prefix)))
 </script>
 
 <style lang="sass" scoped>
