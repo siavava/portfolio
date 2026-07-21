@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxt/fonts",
     "@vercel/analytics",
+    "@vercel/speed-insights",
     "nuxt-og-image",
   ],
 
