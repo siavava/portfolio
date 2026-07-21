@@ -11,7 +11,17 @@ export default defineNuxtConfig({
     viewTransition: true,
   },
 
-  modules: ["@nuxt/content", "@nuxt/image", "@pinia/nuxt", "@nuxtjs/color-mode", "@nuxt/eslint", "@nuxt/icon", "@nuxt/fonts", "nuxt-og-image"],
+  modules: [
+    "@nuxt/content",
+    "@nuxt/image",
+    "@pinia/nuxt",
+    "@nuxtjs/color-mode",
+    "@nuxt/eslint",
+    "@nuxt/icon",
+    "@nuxt/fonts",
+    "@vercel/analytics",
+    "nuxt-og-image",
+  ],
 
   site: {
     url: "https://amittai.studio",
