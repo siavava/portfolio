@@ -9,7 +9,7 @@ building observability where it matters,
 and supporting user adoption.
 ::
 
-I'm a :figma-select[product engineer]{note="role"}[^product], most recently at
+I'm a :figma-select[product engineer]{note="role"}, most recently at
 :chip{label="Meta" icon="simple-icons:meta" href="https://about.meta.com"},
 building :cue-root[messaging experiences]{to="apis,realtime,agents,scale,observability,adoption" note="meta-work"} for
 :chip{label="Instagram" icon="simple-icons:instagram" href="https://www.meta.com/instagram/"},
