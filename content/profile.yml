@@ -2,7 +2,7 @@ name: Amittai Siavava
 email: amittaijoel@outlook.com
 location: Menlo Park, CA.
 site: amittai.studio
-version: v3.0.1
+version: v5.0.1
 versions:
   - label: v1
     url: https://v1.amittai.studio
@@ -12,6 +12,8 @@ versions:
     url: https://v3.amittai.studio
   - label: v4
     url: https://v4.amittai.studio
+  - label: v5
+    url: https://amittai.studio
 blurb: |-
   Looking to trade notes on systems, mathematics, and the craft of
   building software that lasts.
