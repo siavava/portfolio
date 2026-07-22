@@ -156,8 +156,8 @@ const pulseRings = () => {
   const svg = wrapper.value?.querySelector("svg")
   if (!svg) return
   const dark = document.documentElement.classList.contains("dark-mode")
-  const idle = dark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)"
-  const peak = dark ? "rgba(255, 255, 255, 0.10)" : "rgba(0, 0, 0, 0.10)"
+  const idle = dark ? "rgba(255, 255, 255, 0.16)" : "rgba(0, 0, 0, 0.2)"
+  const peak = dark ? "rgba(255, 255, 255, 0.19)" : "rgba(0, 0, 0, 0.23)"
   const rings = [...svg.querySelectorAll<SVGCircleElement>(".orbital-ring")]
     .sort((a, b) => Number(a.getAttribute("r")) - Number(b.getAttribute("r")))
   rings.forEach((ring, index) => {
@@ -172,7 +172,7 @@ const pulseRings = () => {
       )
     }, index * 100)
   })
-  const glint = dark ? "rgba(255, 255, 255, 0.14)" : "rgba(0, 0, 0, 0.13)"
+  const glint = dark ? "rgba(255, 255, 255, 0.07)" : "rgba(0, 0, 0, 0.1)"
   svg.querySelectorAll<SVGLineElement>(".orbital-spoke-pulse").forEach((line) => {
     const length = Math.hypot(
       Number(line.getAttribute("x2")), Number(line.getAttribute("y2")))
@@ -501,13 +501,13 @@ const wrapperStyle = computed(() => ({
 
 .orbital-ring
   fill: none
-  stroke: var(--ring)
+  stroke: var(--grid)
   stroke-width: 1
   stroke-dasharray: 1 4
   stroke-linecap: round
 
 .orbital-spoke
-  stroke: var(--ring)
+  stroke: var(--grid)
   stroke-width: 1
   stroke-dasharray: 1 4
   stroke-linecap: round

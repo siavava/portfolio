@@ -132,13 +132,13 @@ useHead({
 
 .error-ring
   fill: none
-  stroke: var(--ring)
+  stroke: var(--grid)
   stroke-width: 1
   stroke-dasharray: 1 4
   stroke-linecap: round
 
 .error-spoke
-  stroke: var(--ring)
+  stroke: var(--grid)
   stroke-width: 1
   stroke-dasharray: 1 4
   stroke-linecap: round
