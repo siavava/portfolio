@@ -5,7 +5,9 @@
       p.bookshelf-panel__meta {{ titleCase(selected.tag) }} · {{ selected.year }}
       p.bookshelf-panel__title {{ selected.title }}
       p.bookshelf-panel__blurb {{ selected.summary }}
-      NuxtLink.bookshelf-panel__link(:to="selected.path") view more →
+      NuxtLink.bookshelf-panel__link(:to="selected.path")
+        | view more
+        span.bookshelf-panel__arrow →
   ProjectShelf.bookshelf-panel__shelf(
     :books="projects",
     :selected-path="selected?.path",
@@ -16,7 +18,9 @@
   p.bookshelf-panel__caption
     | Shelf: {{ projects.length }} Projects ·
     |
-    NuxtLink.bookshelf-panel__browse(to="/projects") browse all →
+    NuxtLink.bookshelf-panel__browse(to="/projects")
+      | browse all
+      span.bookshelf-panel__arrow →
 </template>
 
 <script lang="ts" setup>
@@ -111,9 +115,6 @@ onMounted(() => {
   color: var(--accent)
   text-decoration: none
 
-  &:hover
-    text-decoration: underline
-
 .bookshelf-panel__shelf
   flex: 0 0 auto
   margin-top: 14px
@@ -135,6 +136,15 @@ onMounted(() => {
   color: var(--accent)
   text-decoration: none
 
-  &:hover
-    text-decoration: underline
+.bookshelf-panel__arrow
+  display: inline-block
+  margin-left: 0.3em
+  transition: transform 0.18s cubic-bezier(0.22, 0.61, 0.36, 1)
+
+  @media (prefers-reduced-motion: reduce)
+    transition: none
+
+.bookshelf-panel__link:hover .bookshelf-panel__arrow,
+.bookshelf-panel__browse:hover .bookshelf-panel__arrow
+  transform: translateX(4px)
 </style>
