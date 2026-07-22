@@ -158,6 +158,11 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
+    // Explicit rule so the pre-rendered output keeps the XML content-type.
+    "/sitemap.xml": {
+      prerender: true,
+      headers: { "Content-Type": "application/xml; charset=utf-8" },
+    },
     "/**": { prerender: true },
   },
 
