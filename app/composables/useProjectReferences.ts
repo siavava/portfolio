@@ -60,7 +60,10 @@ export function useProjectReferences(selected: Ref<ReferencedDoc | null>) {
     const repo = selected.value?.repo
     const url = selected.value?.url
     if (repo) out.push({ href: repo, title: "Project repository" })
-    if (url) out.push({ href: url, title: urlTitle(url) })
+    if (url) {
+      const href = url.endsWith(".pdf") ? `${url}#view=FitV&zoom=page-fit` : url
+      out.push({ href, title: urlTitle(url) })
+    }
     return out
   })
 
