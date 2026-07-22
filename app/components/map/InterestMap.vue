@@ -152,10 +152,12 @@ const pulseTick = ref(0)
 let pulseTimer: ReturnType<typeof setTimeout> | undefined
 let pulseInterval: ReturnType<typeof setInterval> | undefined
 
+const colorMode = useColorMode()
+
 const pulseRings = () => {
   const svg = wrapper.value?.querySelector("svg")
   if (!svg) return
-  const dark = document.documentElement.classList.contains("dark-mode")
+  const dark = colorMode.value === "dark"
   const idle = dark ? "rgba(255, 255, 255, 0.16)" : "rgba(0, 0, 0, 0.2)"
   const peak = dark ? "rgba(255, 255, 255, 0.19)" : "rgba(0, 0, 0, 0.23)"
   const rings = [...svg.querySelectorAll<SVGCircleElement>(".orbital-ring")]
