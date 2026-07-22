@@ -14,11 +14,11 @@
     g.main-group(:transform="`translate(${layout.cx}, ${layout.cy})`")
       g.orbital-rings
         circle.orbital-ring(
-          v-for="radius in layout.rings",
+          v-for="(radius, index) in layout.rings",
           :key="radius",
           cx="0",
           cy="0",
-          :r="radius",
+          :r="ringsSettled ? radius : (ringRadii[index] ?? 0)",
         )
       g.links
         line(
@@ -238,8 +238,10 @@ watch([layout, appearanceOrder], ([value, order]) => {
 onUnmounted(() => {
   clearInterval(entryTimer)
   stopPulse()
+  resetRings()
   heightControls?.stop()
   simulation?.stop()
+  reveal.settle()
 })
 
 const svgPoint = (event: PointerEvent) => {
@@ -344,6 +346,7 @@ const entryStarted = ref(false)
 const resetEntry = () => {
   clearInterval(entryTimer)
   stopPulse()
+  resetRings()
   entryStarted.value = false
   appearedCount.value = 0
   activeSimCount = 0
@@ -351,10 +354,56 @@ const resetEntry = () => {
   simulation?.alphaTarget(0)
 }
 
+const reveal = useMapReveal()
+
+const ringRadii = ref<number[]>([])
+const ringsSettled = ref(false)
+let ringControls: { stop: () => void }[] = []
+let ringTimers: ReturnType<typeof setTimeout>[] = []
+
+const resetRings = () => {
+  ringControls.forEach(control => control.stop())
+  ringTimers.forEach(timer => clearTimeout(timer))
+  ringControls = []
+  ringTimers = []
+  ringsSettled.value = false
+  ringRadii.value = []
+}
+
+const waveRings = (done: () => void) => {
+  resetRings()
+  const rings = layout.value?.rings ?? []
+  if (!rings.length) {
+    done()
+    return
+  }
+  rings.forEach((target, index) => {
+    ringTimers.push(setTimeout(() => {
+      ringControls.push(animate(0, target, {
+        type: "spring",
+        visualDuration: 0.4,
+        bounce: 0.3,
+        onUpdate: (latest) => {
+          ringRadii.value[index] = Math.max(0, latest)
+        },
+        onComplete: () => {
+          if (index === rings.length - 1) {
+            ringsSettled.value = true
+            done()
+          }
+        },
+      }))
+    }, index * 110))
+  })
+}
+
 const open = () => {
   if (!layout.value) return
   const target = singleColumn.value ? 0 : targetHeight.value
-  if (target === 0) resetEntry()
+  if (target === 0) {
+    resetEntry()
+    reveal.settle()
+  }
   heightControls?.stop()
   heightControls = animate(height.value, target, {
     type: "spring",
@@ -362,9 +411,17 @@ const open = () => {
     bounce: 0.35,
     onUpdate: (latest) => {
       height.value = Math.max(0, latest)
-      if (target > 0 && !entryStarted.value && latest >= target * 0.98) {
-        entryStarted.value = true
-        beginEntry()
+      if (target > 0) reveal.drive(latest - target)
+    },
+    onComplete: () => {
+      if (target > 0) {
+        reveal.settle()
+        if (!entryStarted.value) {
+          waveRings(() => {
+            entryStarted.value = true
+            beginEntry()
+          })
+        }
       }
     },
   })
@@ -383,10 +440,6 @@ const wrapperStyle = computed(() => ({
   position: relative
   width: 100%
   overflow: hidden
-
-  @media (min-width: 901px)
-    width: calc(100% + 48px)
-    margin-left: -24px
 
 .interest-map
   position: absolute
