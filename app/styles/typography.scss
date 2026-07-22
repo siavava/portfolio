@@ -1,10 +1,10 @@
 @use "sass:map";
 
 $fonts-map: (
-  "sans-serif": "Proxima Soft",
-  "monospace": "Departure Mono",
-  "serif": "Arizona Text",
-  "headings": "Departure Mono",
+  "sans-serif": ("Proxima Soft", "Arial", sans-serif),
+  "monospace": ("Departure Mono", "Courier New", monospace),
+  "serif": ("Arizona Text", "Georgia", serif),
+  "headings": ("Departure Mono", "Courier New", monospace),
 );
 
 $font-sizes: (
