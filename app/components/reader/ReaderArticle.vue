@@ -212,10 +212,14 @@ defineProps<{
 
 .reading-desk__refs
   margin-top: 2.4rem
+  margin-bottom: 20px
   font-family: typography.font("monospace"), ui-monospace, monospace
   font-size: 0.72rem
   line-height: 1.55
   color: var(--dark-foreground)
+
+  *
+    line-height: 2
 
   .reading-desk__refs-title
     margin: 0 0 0.6rem
@@ -232,6 +236,7 @@ defineProps<{
 
     & > li
       margin: 0.25em 0
+      font-size: 0.8em
 
     a
       color: var(--primary-highlight)
