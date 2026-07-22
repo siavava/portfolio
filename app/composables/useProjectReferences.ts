@@ -26,7 +26,8 @@ const SUBJECT_LABELS: Record<string, string> = {
 function urlTitle(url: string): string {
   if (url.includes("huggingface.co")) return "Dataset"
   if (url.includes("leetcode.com")) return "LeetCode profile"
-  if (url.endsWith(".pdf")) return "Project report"
+  if (url.includes("/papers/dujs/")) return "Published paper"
+  if (url.endsWith(".pdf")) return "Final paper"
   if (url.includes("drive.google.com")) return "Publication"
   if (url.includes("/docs")) return "Documentation"
   if (/amittai\.space\/./.test(url)) return "Article"

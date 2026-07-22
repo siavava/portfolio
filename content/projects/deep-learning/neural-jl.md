@@ -3,7 +3,7 @@ title: "Data-Driven Behavior Change"
 date: 2021-03-15
 tag: "deep learning"
 repo: "https://github.com/lostflux/neural-demo"
-url: "/papers/data-driven-behavior-change.pdf"
+url: "/papers/dujs/data-driven-behavior-change.pdf"
 featured: true
 tech:
   - "Julia"
