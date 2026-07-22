@@ -33,13 +33,13 @@ main
 // Reserves the graph's final footprint in the server-rendered HTML so the
 // client-only mount and the height spring animate inside a fixed slot
 // instead of pushing everything below (the page's main CLS source). The
-// aspect-ratio mirrors the map geometry: height = 476 x min(1, width / 936).
+// aspect-ratio mirrors the map geometry: height = 524 x min(1, width / 936).
 .map-slot
   @media (min-width: 901px)
     width: calc(100% + 48px)
     margin-left: -24px
-    aspect-ratio: 936 / 476
-    max-height: 476px
+    aspect-ratio: 936 / 524
+    max-height: 524px
     overflow: hidden
 
 // Pre-hydration the content sits pulled up over the empty slot — the same
@@ -48,7 +48,7 @@ main
 // calc mirrors the slot height: min(476px, slot width x 476 / 936).
 .below-map
   @media (min-width: 901px)
-    transform: translateY(calc(-1 * min(476px, (100vw + 8px) * 0.5085)))
+    transform: translateY(calc(-1 * min(524px, (100vw + 8px) * 0.5598)))
 
     &.revealed
       transform: none

@@ -20,6 +20,22 @@
           cy="0",
           :r="ringsSettled ? radius : (ringRadii[index] ?? 0)",
         )
+        line.orbital-spoke(
+          v-for="spoke in spokes",
+          :key="spoke.deg",
+          x1="0",
+          y1="0",
+          :x2="spoke.ux * spoke.len * spokeProgress",
+          :y2="-spoke.uy * spoke.len * spokeProgress",
+        )
+        line.orbital-spoke-pulse(
+          v-for="spoke in spokes",
+          :key="`pulse-${spoke.deg}`",
+          x1="0",
+          y1="0",
+          :x2="spoke.ux * spoke.len * spokeProgress",
+          :y2="-spoke.uy * spoke.len * spokeProgress",
+        )
       g.links
         line(
           v-for="link in shownLinks",
@@ -91,6 +107,20 @@ const layout = computed(() => {
 
 const fadeRadius = computed(() => 150 * scale.value)
 
+const SPOKE_ANGLES = [22.5, 45, 67.5, 90, 112.5, 135, 157.5]
+
+const spokes = computed(() => SPOKE_ANGLES.map((deg) => {
+  const rad = deg * Math.PI / 180
+  const ux = Math.cos(rad)
+  const uy = Math.sin(rad)
+  return {
+    deg,
+    ux,
+    uy,
+    len: Math.min(516, 468 / Math.abs(ux)) * scale.value,
+  }
+}))
+
 const compact = computed(() => scale.value < 0.62)
 
 const entryEntropy = ref(Math.random())
@@ -141,6 +171,21 @@ const pulseRings = () => {
         { duration: 300, easing: "ease-in-out" },
       )
     }, index * 100)
+  })
+  const glint = dark ? "rgba(255, 255, 255, 0.14)" : "rgba(0, 0, 0, 0.13)"
+  svg.querySelectorAll<SVGLineElement>(".orbital-spoke-pulse").forEach((line) => {
+    const length = Math.hypot(
+      Number(line.getAttribute("x2")), Number(line.getAttribute("y2")))
+    if (!length) return
+    const segment = 46
+    line.style.strokeDasharray = `${segment} ${length + segment}`
+    line.animate(
+      [
+        { strokeDashoffset: `${segment}`, stroke: glint, opacity: 1 },
+        { strokeDashoffset: `${-length}`, stroke: glint, opacity: 1 },
+      ],
+      { duration: 600, easing: "ease-in-out" },
+    )
   })
 }
 
@@ -358,6 +403,13 @@ const reveal = useMapReveal()
 
 const ringRadii = ref<number[]>([])
 const ringsSettled = ref(false)
+
+const spokeProgress = computed(() => {
+  const target = layout.value?.rings[3]
+  if (!target) return 0
+  if (ringsSettled.value) return 1
+  return (ringRadii.value[3] ?? 0) / target
+})
 let ringControls: { stop: () => void }[] = []
 let ringTimers: ReturnType<typeof setTimeout>[] = []
 
@@ -451,6 +503,21 @@ const wrapperStyle = computed(() => ({
   fill: none
   stroke: var(--ring)
   stroke-width: 1
+  stroke-dasharray: 1 4
+  stroke-linecap: round
+
+.orbital-spoke
+  stroke: var(--ring)
+  stroke-width: 1
+  stroke-dasharray: 1 4
+  stroke-linecap: round
+
+.orbital-spoke-pulse
+  stroke: transparent
+  stroke-width: 1
+  stroke-linecap: round
+  opacity: 0
+  pointer-events: none
 
 .links line
   stroke-width: 1

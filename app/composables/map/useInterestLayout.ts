@@ -35,7 +35,7 @@ export const useInterestLayout = (
   const links: MapLink[] = []
 
   const cx = BASE_WIDTH * scale / 2
-  const cy = 472 * scale
+  const cy = 520 * scale
 
   const place = (radius: number, angle: number) => ({
     x: radius * scale * Math.cos(toRadians(angle)),
