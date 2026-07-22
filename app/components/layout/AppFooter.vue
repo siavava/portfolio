@@ -25,6 +25,8 @@ footer.app-footer
             span.app-footer__versions-label {{ past.label }}
             span.app-footer__versions-url {{ past.url.replace("https://", "") }}
     span.app-footer__divider |
+    a(href="/sitemap.xml", target="_blank", rel="noopener") sitemap
+    span.app-footer__divider |
     a(:href="`https://${profile.site}`", target="_blank", rel="noopener") {{ profile.site }}
 </template>
 
