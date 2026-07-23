@@ -4,9 +4,9 @@ footer.app-footer
   span.app-footer__meta
     button.app-footer__theme(
       type="button",
-      :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'",
+      :aria-label="mounted && isDark ? 'Switch to light mode' : 'Switch to dark mode'",
       @click="toggleColor",
-    ) {{ isDark ? "light" : "dark" }}
+    ) {{ mounted && isDark ? "light" : "dark" }}
     span.app-footer__divider |
     span.app-footer__version(
       @mouseenter="openVersions",
@@ -25,6 +25,8 @@ footer.app-footer
             span.app-footer__versions-label {{ past.label }}
             span.app-footer__versions-url {{ past.url.replace("https://", "") }}
     span.app-footer__divider |
+    NuxtLink(to="/metrics") metrics
+    span.app-footer__divider |
     a(href="/sitemap.xml", target="_blank", rel="noopener") sitemap
     span.app-footer__divider |
     a(:href="`https://${profile.site}`", target="_blank", rel="noopener") {{ profile.site }}
@@ -36,6 +38,11 @@ defineProps<{
 }>()
 
 const { isDark, toggle: toggleColor } = useColorToggle()
+
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
+})
 
 const showVersions = ref(false)
 
