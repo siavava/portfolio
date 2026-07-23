@@ -29,7 +29,7 @@ footer.app-footer
     span.app-footer__divider |
     a(href="/sitemap.xml", target="_blank", rel="noopener") sitemap
     span.app-footer__divider |
-    a(:href="`https://${profile.site}`", target="_blank", rel="noopener") {{ profile.site }}
+    NuxtLink(to="/") {{ profile.site }}
 </template>
 
 <script lang="ts" setup>
