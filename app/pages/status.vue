@@ -573,7 +573,7 @@ onBeforeUnmount(() => {
   padding-top: 47px
 
   @media (max-width: 900px)
-    padding-top: 24px
+    padding-top: 0
 
 .metrics__head
   display: flex
@@ -668,6 +668,9 @@ onBeforeUnmount(() => {
   @media (max-width: 1000px)
     grid-template-columns: 1fr
     align-items: start
+
+  > *
+    min-width: 0
 
 .metrics__counters
   display: grid
@@ -767,12 +770,15 @@ onBeforeUnmount(() => {
 .metrics__heatmap-cells
   display: flex
   gap: 3px
+  flex: 1
+  min-width: 0
 
 %metrics-tip
   position: relative
 
   &::after
     content: attr(data-tip)
+    display: none
     position: absolute
     bottom: calc(100% + 6px)
     left: 50%
@@ -783,19 +789,19 @@ onBeforeUnmount(() => {
     font-family: typography.font("monospace"), ui-monospace, monospace
     font-size: typography.font-size("meta")
     white-space: nowrap
-    opacity: 0
     pointer-events: none
-    transition: opacity 0.15s ease
 
   &:hover
     z-index: 4
 
     &::after
-      opacity: 1
+      display: block
 
 .metrics__heatmap-cell
   @extend %metrics-tip
-  width: 9px
+  flex: 1 1 0
+  max-width: 9px
+  min-width: 0
   height: 9px
   background: #f0f0f1
 
