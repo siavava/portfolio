@@ -32,9 +32,12 @@ export default defineContentConfig({
       type: "data",
       source: { include: "dreams.yml" },
       schema: z.object({
-        items: z.array(z.object({
-          label: z.string(),
-          done: z.boolean().default(false),
+        groups: z.array(z.object({
+          title: z.string(),
+          items: z.array(z.object({
+            label: z.string(),
+            done: z.boolean().default(false),
+          })),
         })),
       }),
     }),

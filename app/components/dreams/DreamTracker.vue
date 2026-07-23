@@ -2,11 +2,9 @@
 section.note-target.dreams-section
   MarginNote(label="Dream Tracker")
   .dreams-viewport
-    .dreams-grid(
-      ref="grid",
-      :style="{ gridTemplateRows: `repeat(${rows}, auto)` }",
-    )
-      DreamItem(v-for="dream in items", :key="dream.label", :dream)
+    .dreams-grid(ref="grid")
+      .dreams-col(v-for="group in groups", :key="group.title")
+        DreamItem(v-for="dream in group.items", :key="dream.label", :dream)
     ScrollFades(:left="canScrollLeft", :right="canScrollRight")
 </template>
 
@@ -14,9 +12,7 @@ section.note-target.dreams-section
 const { data: dreams } = await useAsyncData("dreams", () =>
   queryCollection("dreams").first())
 
-const items = computed(() => dreams.value?.items ?? [])
-
-const rows = computed(() => Math.max(1, Math.ceil(items.value.length / 3)))
+const groups = computed(() => dreams.value?.groups ?? [])
 
 const grid = useTemplateRef<HTMLElement>("grid")
 const { canScrollLeft, canScrollRight } = useScrollEdges(grid)
@@ -34,8 +30,11 @@ const { canScrollLeft, canScrollRight } = useScrollEdges(grid)
 .dreams-grid
   display: grid
   grid-template-columns: repeat(3, 1fr)
-  grid-auto-flow: column
   gap: 0 24px
+
+.dreams-col
+  display: flex
+  flex-direction: column
 
 @media (max-width: 900px)
   .dreams-grid

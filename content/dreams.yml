@@ -1,43 +1,54 @@
-items:
-  - label: Build a GPT from scratch
-    done: true
-  - label: Teach ten terms of CS
-    done: true
-  - label: Double major in math & CS
-    done: true
-  - label: Design a 16-bit CPU
-    done: true
-  - label: Ship to a billion users
-    done: true
-  - label: Scrape the web in Haskell
-    done: true
-  - label: Publish a paper
-    done: true
-  - label: Take a product 0→1
-    done: true
-  - label: Ship 20 features in a year
-    done: true
-  - label: Backfill 2.4 billion objects
-    done: true
-  - label: Write a book
-    done: false
-  - label: Design a font
-    done: false
-  - label: Build an operating system
-    done: false
-  - label: Build a robot
-    done: false
-  - label: Speak at a conference
-    done: false
-  - label: Run a marathon
-    done: false
-  - label: Learn to fly
-    done: false
-  - label: Visit all seven continents
-    done: false
-  - label: Grow a company
-    done: false
-  - label: Close all tabs
-    done: false
-  - label: Meet you
-    done: false
+groups:
+  - title: technical things i want to do — building
+    items:
+      - label: Design & build a transformer
+        done: true
+      - label: Design & build a processor
+        done: true
+      - label: Design & build an operating system
+        done: true
+      - label: Design & build a search engine
+        done: true
+      - label: Design & build a recommendation engine
+        done: true
+      - label: Design & build a live messaging server
+        done: true
+      - label: Design & build a GPU
+        done: false
+      - label: Design & build a font
+        done: false
+      - label: Design & build a robot
+        done: false
+  - title: career things i want to do
+    items:
+      - label: Ship a product to a billion users
+        done: true
+      - label: Publish a paper
+        done: true
+      - label: Teach a course
+        done: true
+      - label: Write a book
+        done: false
+      - label: Speak at a conference
+        done: false
+      - label: Grow a billion-dollar company
+        done: false
+      - label: Join [IAS](https://www.ias.edu/)
+        done: false
+      - label: Solve the [Riemann Hypothesis](https://www.claymath.org/millennium/riemann-hypothesis/)
+        done: false
+      - label: Prove [P ≠ NP](https://www.claymath.org/millennium/p-vs-np/)
+        done: false
+  - title: life things i want to do
+    items:
+      - label: Move to a different continent
+        done: true
+      - label: Visit the [Ramesseum](https://egymonuments.gov.eg/en/monuments/the-ramesseum-the-temple-of-ramses-ii)
+        done: false
+      - label: Drive across every continent
+        done: false
+      - label: Go to space
+        done: false
+      - label: Build & drive a Formula 1 car
+        done: false
+      
