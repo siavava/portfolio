@@ -1,5 +1,6 @@
 <template lang="pug">
 main.metrics
+  NameBar(v-if="profile", :profile)
   header.metrics__head
     h1.metrics__title Metrics
     p.metrics__status
@@ -580,6 +581,7 @@ onBeforeUnmount(() => {
   justify-content: space-between
   gap: 16px
   flex-wrap: wrap
+  margin-top: 24px
 
 .metrics__title
   margin: 0
