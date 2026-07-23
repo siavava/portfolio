@@ -10,8 +10,6 @@ main.metrics
       template(v-if="metrics.health")
         span.metrics__sep |
         | up {{ uptime }}
-        span.metrics__sep |
-        | db {{ metrics.health.dbConnected ? "ok" : "down" }}
 
   .metrics__ekg(aria-hidden="true")
     svg(viewBox="0 0 700 36", preserveAspectRatio="none")
