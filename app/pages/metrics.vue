@@ -1012,7 +1012,10 @@ onBeforeUnmount(() => {
   font-size: typography.font-size("xs")
   color: var(--accent)
   text-decoration: none
-  overflow-wrap: anywhere
+  min-width: 0
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
 
   &:hover
     color: var(--foreground-strong)
@@ -1020,7 +1023,10 @@ onBeforeUnmount(() => {
 .metrics__row-label
   font-size: typography.font-size("xs")
   color: var(--foreground)
-  overflow-wrap: anywhere
+  min-width: 0
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
 
 .metrics__row-count
   margin-left: auto
