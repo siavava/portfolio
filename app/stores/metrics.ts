@@ -93,10 +93,12 @@ export const useMetrics = defineStore("metrics", () => {
   const onViewsUpdate = (data: WsData) => {
     const route = data.route as string
     if (!inNamespace(route)) return
-    views[withoutNamespace(route)] = data.count as number
+    const path = withoutNamespace(route)
+    views[path] = data.count as number
+    if (path === METRICS_DASHBOARD_PATH) return
     const hour = Math.floor(Date.now() / 3600000)
     activity[hour] = (activity[hour] ?? 0) + 1
-    pushEvent("view", withoutNamespace(route))
+    pushEvent("view", path)
     stamp()
   }
 
@@ -170,11 +172,14 @@ export const useMetrics = defineStore("metrics", () => {
       { params: { ns: METRICS_NAMESPACE_ID, limit: 50 } },
     ).catch(() => null)
     if (!logged) return
-    events.value = logged.map(event => ({
-      kind: event.kind,
-      label: event.label,
-      at: event.ts_ms,
-    }))
+    events.value = logged
+      .filter(event =>
+        !(event.kind === "view" && event.label === METRICS_DASHBOARD_PATH))
+      .map(event => ({
+        kind: event.kind,
+        label: event.label,
+        at: event.ts_ms,
+      }))
   }
 
   const fetchActivity = async () => {

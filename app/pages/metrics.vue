@@ -191,11 +191,15 @@ main.metrics
               :x="label.x", :y="label.y",
             ) {{ label.text }}
           p.metrics__clock-caption activity by hour of day
+
+  AppFooter.metrics__footer(v-if="profile", :profile)
 </template>
 
 <script lang="ts" setup>
 /** ## metrics — live analytics over the shared backend: pulse, pages, places, feed. */
 const metrics = useMetrics()
+
+const { data: profile } = await useProfile()
 
 useSeoMeta({
   title: "Metrics · Amittai Siavava",
@@ -354,8 +358,12 @@ const clockLabels = [
   { text: "18", x: 11, y: 113 },
 ]
 
+const shownViews = computed(() =>
+  Object.entries(metrics.views)
+    .filter(([path]) => path !== METRICS_DASHBOARD_PATH))
+
 const pages = computed(() => {
-  const entries = Object.entries(metrics.views)
+  const entries = shownViews.value
     .map(([path, count]) => ({ path, count }))
     .sort((a, b) => b.count - a.count)
   const max = entries[0]?.count || 1
@@ -366,11 +374,11 @@ const pages = computed(() => {
 })
 
 const totalViews = computed(() =>
-  Object.values(metrics.views).reduce((sum, count) => sum + count, 0))
+  shownViews.value.reduce((sum, [, count]) => sum + count, 0))
 
 const areas = computed(() => {
   const totals: Record<string, number> = {}
-  for (const [path, count] of Object.entries(metrics.views)) {
+  for (const [path, count] of shownViews.value) {
     const segments = path.split("/").filter(Boolean)
     const area = segments.length === 0
       ? "home"
@@ -500,7 +508,7 @@ onBeforeUnmount(() => {
 @use "@/styles/typography"
 
 .metrics
-  padding: 47px 0 64px
+  padding-top: 47px
 
   @media (max-width: 900px)
     padding-top: 24px
@@ -584,6 +592,9 @@ onBeforeUnmount(() => {
 .metrics__section
   position: relative
   margin-top: 52px
+
+.metrics__footer
+  margin-top: 64px
 
 .metrics__pulse
   display: grid
@@ -928,6 +939,7 @@ onBeforeUnmount(() => {
 
 .metrics__feed-kind
   flex: none
+  width: 6ch
   font-family: typography.font("monospace"), ui-monospace, monospace
   font-size: typography.font-size("meta")
   text-transform: uppercase

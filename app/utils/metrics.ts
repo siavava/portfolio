@@ -24,3 +24,9 @@ export const withoutNamespace = (route: string) =>
 /** Whether a backend route belongs to the portfolio namespace. */
 export const inNamespace = (route: string) =>
   route.startsWith(METRICS_NAMESPACE)
+
+/**
+ * The dashboard's own route — excluded from displayed stats so the
+ * dashboard never counts its observers.
+ */
+export const METRICS_DASHBOARD_PATH = "/metrics"
