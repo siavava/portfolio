@@ -90,14 +90,18 @@ main.metrics
           span.metrics__areas-swatch(:style="{ opacity: segOpacity(index) }")
           | {{ area.label }}
           span.metrics__areas-count {{ area.count }}
-    ul.metrics__rows(v-if="pages.length", :class="{ scrollable: allPages }")
-      li.metrics__row(v-for="(page, index) in visiblePages", :key="page.path")
-        .metrics__row-line
-          span.metrics__rank {{ String(index + 1).padStart(2, "0") }}
-          NuxtLink.metrics__row-link(:to="page.path") {{ page.path }}
-          span.metrics__row-count {{ page.count }}
-        .metrics__bar
-          .metrics__bar-fill(:style="{ width: `${page.share}%` }")
+    .metrics__scroll(v-if="pages.length", ref="pagesBox")
+      ul.metrics__rows(:class="{ scrollable: allPages }")
+        li.metrics__row(v-for="(page, index) in visiblePages", :key="page.path")
+          .metrics__row-line
+            span.metrics__rank {{ String(index + 1).padStart(2, "0") }}
+            NuxtLink.metrics__row-link(v-if="page.linkable", :to="page.path") {{ page.path }}
+            span.metrics__row-label(v-else) {{ page.path }}
+            span.metrics__row-count {{ page.count }}
+          .metrics__bar
+            .metrics__bar-fill(:style="{ width: `${page.share}%` }")
+      .metrics__scroll-fade.top(:class="{ visible: allPages && pagesFades.up.value }")
+      .metrics__scroll-fade.bottom(:class="{ visible: allPages && pagesFades.down.value }")
     button.metrics__more(
       v-if="pages.length > 10",
       type="button",
@@ -113,14 +117,17 @@ main.metrics
       .metrics__panel
         h2.metrics__panel-title top locations
         p.metrics__empty(v-if="!topLocations.length") no visitors logged yet
-        ul.metrics__rows(v-else, :class="{ scrollable: allLocations }")
-          li.metrics__row(v-for="(entry, index) in visibleLocations", :key="`${entry.city}|${entry.state}`")
-            .metrics__row-line
-              span.metrics__rank {{ String(index + 1).padStart(2, "0") }}
-              span.metrics__row-label {{ entry.city }}, {{ entry.state }}
-              span.metrics__row-count {{ entry.count }}
-            .metrics__bar
-              .metrics__bar-fill(:style="{ width: `${entry.share}%` }")
+        .metrics__scroll(v-else, ref="locationsBox")
+          ul.metrics__rows(:class="{ scrollable: allLocations }")
+            li.metrics__row(v-for="(entry, index) in visibleLocations", :key="`${entry.city}|${entry.state}`")
+              .metrics__row-line
+                span.metrics__rank {{ String(index + 1).padStart(2, "0") }}
+                span.metrics__row-label {{ entry.city }}, {{ entry.state }}
+                span.metrics__row-count {{ entry.count }}
+              .metrics__bar
+                .metrics__bar-fill(:style="{ width: `${entry.share}%` }")
+          .metrics__scroll-fade.top(:class="{ visible: allLocations && locationsFades.up.value }")
+          .metrics__scroll-fade.bottom(:class="{ visible: allLocations && locationsFades.down.value }")
         button.metrics__more(
           v-if="topLocations.length > 10",
           type="button",
@@ -145,13 +152,27 @@ main.metrics
       .metrics__panel
         h2.metrics__panel-title event feed
         p.metrics__empty(v-if="!metrics.events.length") waiting for events
-        TransitionGroup.metrics__rows(v-else, tag="ul", name="feed")
-          li.metrics__row(v-for="event in feed", :key="event.at + event.label")
-            .metrics__row-line.leader
-              span.metrics__feed-kind(:class="event.kind") {{ event.kind }}
-              span.metrics__row-label {{ event.label }}
-              span.metrics__leader
-              span.metrics__row-count {{ feedAge(event.at) }}
+        .metrics__scroll(v-else, ref="feedBox")
+          TransitionGroup.metrics__rows(
+            tag="ul",
+            name="feed",
+            :class="{ scrollable: allEvents }",
+          )
+            li.metrics__row(v-for="event in feed", :key="event.at + event.label")
+              .metrics__row-line.leader
+                span.metrics__feed-kind(:class="event.kind") {{ event.kind }}
+                span.metrics__row-label {{ event.label }}
+                span.metrics__leader
+                span.metrics__row-count {{ feedAge(event.at) }}
+          .metrics__scroll-fade.top(:class="{ visible: allEvents && feedFades.up.value }")
+          .metrics__scroll-fade.bottom(:class="{ visible: allEvents && feedFades.down.value }")
+        button.metrics__more(
+          v-if="metrics.events.length > 10",
+          type="button",
+          @click="allEvents = !allEvents",
+        )
+          | {{ allEvents ? "collapse" : `see all (${metrics.events.length})` }}
+          span.metrics__more-arrow {{ allEvents ? "↑" : "↓" }}
 
       .metrics__panel
         h2.metrics__panel-title now
@@ -196,6 +217,8 @@ main.metrics
 </template>
 
 <script lang="ts" setup>
+import { useScroll } from "@vueuse/core"
+
 /** ## metrics — live analytics over the shared backend: pulse, pages, places, feed. */
 const metrics = useMetrics()
 
@@ -362,6 +385,16 @@ const shownViews = computed(() =>
   Object.entries(metrics.views)
     .filter(([path]) => path !== METRICS_DASHBOARD_PATH))
 
+const routePatterns = useRouter().getRoutes().map((record) => {
+  const pattern = record.path
+    .replace(/\/:[^/]+\(\.\*\)\*$/, "(?:/.*)?")
+    .replace(/:[^/]+/g, "[^/]+")
+  return new RegExp(`^${pattern}/?$`)
+})
+
+const isRealRoute = (path: string) =>
+  routePatterns.some(pattern => pattern.test(path))
+
 const pages = computed(() => {
   const entries = shownViews.value
     .map(([path, count]) => ({ path, count }))
@@ -370,6 +403,7 @@ const pages = computed(() => {
   return entries.map(entry => ({
     ...entry,
     share: Math.max(4, Math.round(entry.count / max * 100)),
+    linkable: isRealRoute(entry.path),
   }))
 })
 
@@ -437,7 +471,35 @@ const recentVisitors = computed(() =>
     .sort((a, b) => b.last_visit_ms - a.last_visit_ms)
     .slice(0, 10))
 
-const feed = computed(() => metrics.events.slice(0, 10))
+const allEvents = ref(false)
+
+const feed = computed(() =>
+  allEvents.value ? metrics.events : metrics.events.slice(0, 10))
+
+const pagesBox = useTemplateRef<HTMLElement>("pagesBox")
+const locationsBox = useTemplateRef<HTMLElement>("locationsBox")
+const feedBox = useTemplateRef<HTMLElement>("feedBox")
+
+const edgeFades = (box: { value: HTMLElement | null }) => {
+  const list = computed(() => box.value?.querySelector("ul") ?? null)
+  const { arrivedState } = useScroll(list, { offset: { top: 2, bottom: 2 } })
+  return {
+    up: computed(() => !arrivedState.top),
+    down: computed(() => !arrivedState.bottom),
+    measure: () => list.value?.dispatchEvent(new Event("scroll")),
+  }
+}
+
+const pagesFades = edgeFades(pagesBox)
+const locationsFades = edgeFades(locationsBox)
+const feedFades = edgeFades(feedBox)
+
+watch([allPages, () => visiblePages.value.length], () =>
+  nextTick(pagesFades.measure))
+watch([allLocations, () => visibleLocations.value.length], () =>
+  nextTick(locationsFades.measure))
+watch([allEvents, () => feed.value.length], () =>
+  nextTick(feedFades.measure))
 
 const uptime = computed(() => {
   const elapsed = metrics.healthAt
@@ -886,6 +948,29 @@ onBeforeUnmount(() => {
   font-size: typography.font-size("xxs")
   color: var(--note)
 
+.metrics__scroll
+  position: relative
+
+.metrics__scroll-fade
+  position: absolute
+  left: 0
+  right: 0
+  height: 40px
+  pointer-events: none
+  opacity: 0
+  transition: opacity 0.25s ease
+
+  &.visible
+    opacity: 1
+
+  &.top
+    top: 0
+    background: linear-gradient(to bottom, var(--background), transparent)
+
+  &.bottom
+    bottom: 0
+    background: linear-gradient(to top, var(--background), transparent)
+
 .metrics__rows
   margin: 0
   padding: 0
@@ -1001,7 +1086,4 @@ onBeforeUnmount(() => {
 .feed-enter-from
   opacity: 0
   transform: translateY(-6px)
-
-.feed-leave-active
-  display: none
 </style>

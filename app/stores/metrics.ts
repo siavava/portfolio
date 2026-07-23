@@ -87,7 +87,7 @@ export const useMetrics = defineStore("metrics", () => {
 
   const pushEvent = (kind: LiveEvent["kind"], label: string) => {
     events.value = [{ kind, label, at: Date.now() }, ...events.value]
-      .slice(0, 50)
+      .slice(0, 100)
   }
 
   const onViewsUpdate = (data: WsData) => {
@@ -169,7 +169,7 @@ export const useMetrics = defineStore("metrics", () => {
   const fetchEvents = async () => {
     const logged = await $fetch<RawSiteEvent[]>(
       `${useApiRoute()}/events/`,
-      { params: { ns: METRICS_NAMESPACE_ID, limit: 50 } },
+      { params: { ns: METRICS_NAMESPACE_ID, limit: 100 } },
     ).catch(() => null)
     if (!logged) return
     events.value = logged
