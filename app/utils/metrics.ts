@@ -29,4 +29,4 @@ export const inNamespace = (route: string) =>
  * The dashboard's own route — excluded from displayed stats so the
  * dashboard never counts its observers.
  */
-export const METRICS_DASHBOARD_PATH = "/metrics"
+export const METRICS_DASHBOARD_PATH = "/status"

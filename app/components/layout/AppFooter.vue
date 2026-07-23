@@ -25,7 +25,7 @@ footer.app-footer
             span.app-footer__versions-label {{ past.label }}
             span.app-footer__versions-url {{ past.url.replace("https://", "") }}
     span.app-footer__divider |
-    NuxtLink(to="/metrics") metrics
+    NuxtLink(to="/status") status
     span.app-footer__divider |
     a(href="/sitemap.xml", target="_blank", rel="noopener") sitemap
     span.app-footer__divider |

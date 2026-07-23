@@ -2,7 +2,7 @@
 main.metrics
   NameBar(v-if="profile", :profile)
   header.metrics__head
-    h1.metrics__title Metrics
+    h1.metrics__title Status
     p.metrics__status
       span.metrics__dot(:class="{ live: mounted && metrics.connected }")
       | {{ mounted && metrics.connected ? "live" : "connecting" }}
@@ -225,7 +225,7 @@ const metrics = useMetrics()
 const { data: profile } = await useProfile()
 
 useSeoMeta({
-  title: "Metrics · Amittai Siavava",
+  title: "Status · Amittai Siavava",
   robots: "noindex, nofollow",
 })
 
