@@ -6,13 +6,20 @@
       :key="index",
       :cx="dot[0]", :cy="dot[1]", r="0.55",
     )
-    g.world__site(v-for="marker in markers", :key="`${marker.city}|${marker.state}`")
+    g.world__site(
+      v-for="marker in markers",
+      :key="`${marker.city}|${marker.state}`",
+      @mouseenter="hovered = marker",
+      @mouseleave="hovered = null",
+    )
       circle.world__ping(
         v-if="marker.latest",
         :cx="marker.x", :cy="marker.y", :r="marker.r + 1",
       )
       circle.world__marker(:cx="marker.x", :cy="marker.y", :r="marker.r")
-      title {{ marker.city }}, {{ marker.state }} · {{ marker.count }} {{ marker.count === 1 ? "visit" : "visits" }}
+      circle.world__hit(:cx="marker.x", :cy="marker.y", :r="marker.r + 3")
+  .world__tip(v-if="hovered", :style="tipStyle")
+    | {{ hovered.city }}, {{ hovered.state }} · {{ hovered.count }} {{ hovered.count === 1 ? "visit" : "visits" }}
 </template>
 
 <script lang="ts" setup>
@@ -29,7 +36,27 @@ import { WORLD_DOTS } from "~/utils/worldDots"
  */
 const metrics = useMetrics()
 
-const markers = computed(() => {
+interface CityMarker {
+  city: string
+  state: string
+  count: number
+  x: number
+  y: number
+  r: number
+  latest: boolean
+}
+
+const hovered = ref<CityMarker | null>(null)
+
+const tipStyle = computed(() => {
+  if (!hovered.value) return undefined
+  return {
+    left: `${hovered.value.x / 360 * 100}%`,
+    top: `${(hovered.value.y - 14) / 132 * 100}%`,
+  }
+})
+
+const markers = computed<CityMarker[]>(() => {
   const located = metrics.locationHistory.filter(
     entry => entry.lat != null && entry.lon != null,
   )
@@ -48,9 +75,29 @@ const markers = computed(() => {
 </script>
 
 <style lang="sass" scoped>
+@use "@/styles/typography"
+
+.world
+  position: relative
+
 .world svg
   display: block
   width: 100%
+
+.world__hit
+  fill: transparent
+
+.world__tip
+  position: absolute
+  transform: translate(-50%, calc(-100% - 8px))
+  padding: 3px 7px
+  background: var(--foreground-strong)
+  color: var(--background)
+  font-family: typography.font("monospace"), ui-monospace, monospace
+  font-size: typography.font-size("meta")
+  white-space: nowrap
+  pointer-events: none
+  z-index: 4
 
 .world__dot
   fill: var(--note)

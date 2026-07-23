@@ -38,7 +38,7 @@ main.metrics
           .metrics__chart-col(
             v-for="bar in hourBars",
             :key="bar.hour",
-            :title="`${bar.label}: ${bar.count}`",
+            :data-tip="`${bar.label} · ${bar.count} ${bar.count === 1 ? 'view' : 'views'}`",
           )
             .metrics__chart-fill(
               :class="{ current: bar.current }",
@@ -80,9 +80,10 @@ main.metrics
         .metrics__areas-seg(
           v-for="(area, index) in areas",
           :key="area.label",
-          :style="{ width: `${area.share}%`, opacity: segOpacity(index) }",
-          :title="`${area.label}: ${area.count}`",
+          :style="{ width: `${area.share}%` }",
+          :data-tip="`${area.label} · ${area.count} ${area.count === 1 ? 'view' : 'views'}`",
         )
+          .metrics__areas-fill(:style="{ opacity: segOpacity(index) }")
       ul.metrics__areas-legend
         li(v-for="(area, index) in areas", :key="area.label")
           span.metrics__areas-swatch(:style="{ opacity: segOpacity(index) }")
@@ -707,6 +708,7 @@ onBeforeUnmount(() => {
   border-bottom: 1px dotted var(--grid)
 
 .metrics__chart-col
+  @extend %metrics-tip
   flex: 1
   display: flex
   align-items: flex-end
@@ -764,14 +766,8 @@ onBeforeUnmount(() => {
   display: flex
   gap: 3px
 
-.metrics__heatmap-cell
+%metrics-tip
   position: relative
-  width: 9px
-  height: 9px
-  background: #f0f0f1
-
-  .dark-mode &
-    background: var(--panel)
 
   &::after
     content: attr(data-tip)
@@ -794,7 +790,15 @@ onBeforeUnmount(() => {
 
     &::after
       opacity: 1
-      transition: opacity 0.15s ease 2s
+
+.metrics__heatmap-cell
+  @extend %metrics-tip
+  width: 9px
+  height: 9px
+  background: #f0f0f1
+
+  .dark-mode &
+    background: var(--panel)
 
 .metrics__heatmap-fill
   position: absolute
@@ -895,9 +899,13 @@ onBeforeUnmount(() => {
   background-image: repeating-linear-gradient(90deg, var(--grid) 0 2px, transparent 2px 6px)
 
 .metrics__areas-seg
+  @extend %metrics-tip
+  height: 100%
+  transition: width 0.4s ease
+
+.metrics__areas-fill
   height: 100%
   background: var(--accent)
-  transition: width 0.4s ease
 
 .metrics__areas-legend
   margin: 8px 0 0
