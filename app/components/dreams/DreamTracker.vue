@@ -38,10 +38,13 @@ const { canScrollLeft, canScrollRight } = useScrollEdges(grid)
 
 @media (max-width: 900px)
   .dreams-grid
-    grid-template-columns: repeat(3, 248px)
+    grid-template-columns: repeat(3, max-content)
     overflow-x: auto
     scrollbar-width: none
 
     &::-webkit-scrollbar
       display: none
+
+  .dreams-col :deep(.dream-item__label)
+    white-space: nowrap
 </style>
