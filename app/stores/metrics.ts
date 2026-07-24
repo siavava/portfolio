@@ -1,5 +1,6 @@
 import { Scope, useSocket } from "~/composables/metrics/useSocket"
 import type { LocationData } from "~/composables/metrics/useViewerLocation"
+import type { SiteId } from "~/utils/metrics"
 import type { WsData } from "~/composables/metrics/useSocket"
 
 interface RawPageViews {
@@ -22,6 +23,8 @@ interface ActivityBucket {
 }
 
 export interface LiveEvent {
+  id: number
+  ns: SiteId
   kind: "view" | "visit"
   label: string
   at: number
@@ -46,23 +49,24 @@ interface HealthStatus {
  * Connects the portfolio to the shared metrics backend over the same
  * WebSocket protocol the blog uses. Watching a path registers it as the
  * client's active path, which the server counts as a view under the
- * portfolio's `<p>:` namespace; the store also mirrors view counts, the
- * live client count, server health, and the visitor location log.
+ * portfolio's `<p>:` namespace. The status dashboard is the backend's
+ * global monitor, so this store mirrors data for every tracked site —
+ * portfolio, blog, and notes — keyed by namespace.
  *
  * ### Returns
  *
  * | Member | Type | Description |
  * | --- | --- | --- |
- * | `views` | `Record<string, number>` | View counts keyed by de-namespaced path |
+ * | `views` | `Record<string, number>` | View counts keyed by namespaced route |
  * | `activeCount` | `Ref<number>` | Live connected-client count across sites |
  * | `health` | `Ref<HealthStatus \| null>` | Last health snapshot |
  * | `lastVisitor` | `Ref<LocationData \| null>` | Previous visitor's location |
- * | `locationHistory` | `Ref<LocationHistoryEntry[]>` | Visitor log, most-visited first |
+ * | `locationHistory` | `Record<SiteId, LocationHistoryEntry[]>` | Visitor logs per site |
+ * | `activity` | `Record<SiteId, Record<number, number>>` | Hourly view buckets per site |
+ * | `events` | `Ref<LiveEvent[]>` | Recent events across sites |
  * | `connected` | `ComputedRef<boolean>` | Socket status |
  * | `watchPath` | `function` | Set the active path (counts a view) |
- * | `listViews` | `function` | Request all view counts |
- * | `requestHealth` | `function` | Request a health snapshot |
- * | `fetchLocationHistory` | `function` | Refresh the visitor log |
+ * | `seedDashboard` | `function` | Fetch every site's data for the dashboard |
  * | `recordVisit` | `function` | Geolocate and record this visit |
  */
 export const useMetrics = defineStore("metrics", () => {
@@ -72,11 +76,20 @@ export const useMetrics = defineStore("metrics", () => {
   const activeCount = ref(0)
   const health = ref<HealthStatus | null>(null)
   const lastVisitor = ref<LocationData | null>(null)
-  const locationHistory = ref<LocationHistoryEntry[]>([])
   const lastEventAt = ref(0)
   const healthAt = ref(0)
   const dashboardActive = ref(false)
-  const activity = reactive<Record<number, number>>({})
+
+  const locationHistory = reactive<Record<SiteId, LocationHistoryEntry[]>>({
+    "<p>": [],
+    "<b>": [],
+    "<n>": [],
+  })
+  const activity = reactive<Record<SiteId, Record<number, number>>>({
+    "<p>": {},
+    "<b>": {},
+    "<n>": {},
+  })
   const events = ref<LiveEvent[]>([])
 
   const currentPath = ref("/")
@@ -85,28 +98,35 @@ export const useMetrics = defineStore("metrics", () => {
     lastEventAt.value = Date.now()
   }
 
-  const pushEvent = (kind: LiveEvent["kind"], label: string) => {
-    events.value = [{ kind, label, at: Date.now() }, ...events.value]
-      .slice(0, 100)
+  let eventSeq = 0
+
+  const pushEvent = (ns: SiteId, kind: LiveEvent["kind"], label: string) => {
+    const rest = events.value.filter(event => event.ns === ns).slice(0, 99)
+    const others = events.value.filter(event => event.ns !== ns)
+    events.value = [
+      { id: ++eventSeq, ns, kind, label, at: Date.now() },
+      ...rest,
+      ...others,
+    ]
   }
 
   const onViewsUpdate = (data: WsData) => {
     const route = data.route as string
-    if (!inNamespace(route)) return
-    const path = withoutNamespace(route)
-    views[path] = data.count as number
-    if (path === METRICS_DASHBOARD_PATH) return
+    const ns = siteOf(route)
+    if (!ns) return
+    views[route] = data.count as number
+    if (route === withSite(ns, METRICS_DASHBOARD_PATH) && ns === "<p>") return
     const hour = Math.floor(Date.now() / 3600000)
-    activity[hour] = (activity[hour] ?? 0) + 1
-    pushEvent("view", path)
+    activity[ns][hour] = (activity[ns][hour] ?? 0) + 1
+    pushEvent(ns, "view", stripSite(route))
     stamp()
   }
 
   const onViewsList = (data: WsData) => {
     const all = data.views as RawPageViews[]
     for (const view of all) {
-      if (!inNamespace(view.route)) continue
-      views[withoutNamespace(view.route)] = view.count
+      if (!siteOf(view.route)) continue
+      views[view.route] = view.count
     }
     stamp()
   }
@@ -135,6 +155,8 @@ export const useMetrics = defineStore("metrics", () => {
 
   onScope(Scope.Location, (data) => {
     if (data.type !== "visit") return
+    const ns = data.ns as SiteId | undefined
+    if (!ns || !SITE_IDS.includes(ns)) return
     const entry: LocationHistoryEntry = {
       city: data.city as string,
       state: data.state as string,
@@ -143,13 +165,12 @@ export const useMetrics = defineStore("metrics", () => {
       lat: data.lat as number | undefined,
       lon: data.lon as number | undefined,
     }
-    const rest = locationHistory.value.filter(
+    const rest = locationHistory[ns].filter(
       existing =>
         existing.city !== entry.city || existing.state !== entry.state,
     )
-    locationHistory.value = [...rest, entry]
-      .sort((a, b) => b.count - a.count)
-    pushEvent("visit", `${entry.city}, ${entry.state}`)
+    locationHistory[ns] = [...rest, entry].sort((a, b) => b.count - a.count)
+    pushEvent(ns, "visit", `${entry.city}, ${entry.state}`)
     stamp()
   })
 
@@ -161,36 +182,45 @@ export const useMetrics = defineStore("metrics", () => {
   const seedDashboard = () => {
     listViews()
     requestHealth()
-    void fetchLocationHistory()
-    void fetchActivity()
-    void fetchEvents()
+    for (const ns of SITE_IDS) {
+      void fetchLocationHistory(ns)
+      void fetchActivity(ns)
+      void fetchEvents(ns)
+    }
   }
 
-  const fetchEvents = async () => {
+  const fetchActivity = async (ns: SiteId) => {
+    const buckets = await $fetch<ActivityBucket[]>(
+      `${useApiRoute()}/views/activity/`,
+      { params: { ns, hours: 168 } },
+    ).catch(() => null)
+    if (!buckets) return
+    for (const bucket of buckets) {
+      activity[ns][bucket.hour_ts] = bucket.count
+    }
+  }
+
+  const fetchEvents = async (ns: SiteId) => {
     const logged = await $fetch<RawSiteEvent[]>(
       `${useApiRoute()}/events/`,
-      { params: { ns: METRICS_NAMESPACE_ID, limit: 100 } },
+      { params: { ns, limit: 100 } },
     ).catch(() => null)
     if (!logged) return
-    events.value = logged
+    const seeded = logged
       .filter(event =>
-        !(event.kind === "view" && event.label === METRICS_DASHBOARD_PATH))
+        !(ns === "<p>" && event.kind === "view"
+          && event.label === METRICS_DASHBOARD_PATH))
       .map(event => ({
+        id: ++eventSeq,
+        ns,
         kind: event.kind,
         label: event.label,
         at: event.ts_ms,
       }))
-  }
-
-  const fetchActivity = async () => {
-    const buckets = await $fetch<ActivityBucket[]>(
-      `${useApiRoute()}/views/activity/`,
-      { params: { ns: METRICS_NAMESPACE_ID, hours: 168 } },
-    ).catch(() => null)
-    if (!buckets) return
-    for (const bucket of buckets) {
-      activity[bucket.hour_ts] = bucket.count
-    }
+    events.value = [
+      ...events.value.filter(event => event.ns !== ns),
+      ...seeded,
+    ]
   }
 
   const watchPath = (path: string) => {
@@ -201,17 +231,16 @@ export const useMetrics = defineStore("metrics", () => {
   const listViews = () => send({
     scope: Scope.Views,
     action: "list",
-    namespace: METRICS_NAMESPACE_ID,
   })
 
   const requestHealth = () => send({ scope: Scope.Health })
 
-  const fetchLocationHistory = async () => {
+  const fetchLocationHistory = async (ns: SiteId) => {
     const entries = await $fetch<LocationHistoryEntry[]>(
       `${useApiRoute()}/location/history/`,
-      { params: { ns: METRICS_NAMESPACE_ID } },
+      { params: { ns } },
     ).catch(() => null)
-    if (entries) locationHistory.value = entries
+    if (entries) locationHistory[ns] = entries
   }
 
   const recordVisit = async () => {

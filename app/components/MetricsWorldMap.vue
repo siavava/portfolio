@@ -28,13 +28,22 @@ import { WORLD_DOTS } from "~/utils/worldDots"
 /**
  * ## MetricsWorldMap
  *
- * Dot-matrix world map plotting visitor locations from the metrics
- * store. Landmass renders as a muted dot grid (equirectangular, 360x180
- * map space); each visitor city with recorded coordinates becomes an
+ * Dot-matrix world map plotting the given visitor-location entries.
+ * Landmass renders as a muted dot grid (equirectangular, 360x180 map
+ * space); each visitor city with recorded coordinates becomes an
  * accent marker sized by visit count, and the most recent visitor's
  * marker carries an outward ping.
  */
-const metrics = useMetrics()
+const props = defineProps<{
+  entries: {
+    city: string
+    state: string
+    count: number
+    last_visit_ms: number
+    lat?: number
+    lon?: number
+  }[]
+}>()
 
 interface CityMarker {
   city: string
@@ -57,7 +66,7 @@ const tipStyle = computed(() => {
 })
 
 const markers = computed<CityMarker[]>(() => {
-  const located = metrics.locationHistory.filter(
+  const located = props.entries.filter(
     entry => entry.lat != null && entry.lon != null,
   )
   const latestAt = Math.max(0, ...located.map(entry => entry.last_visit_ms))

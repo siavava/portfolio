@@ -12,6 +12,15 @@ main.metrics
         span.metrics__sep |
         | up {{ uptime }}
 
+  .metrics__sites
+    button.metrics__site(
+      v-for="option in siteOptions",
+      :key="option.id",
+      type="button",
+      :class="{ active: site === option.id }",
+      @click="site = option.id",
+    ) {{ option.label }}
+
   .metrics__ekg(aria-hidden="true")
     svg(viewBox="0 0 700 36", preserveAspectRatio="none")
       line.metrics__ekg-base(x1="0", y1="30", x2="700", y2="30")
@@ -92,10 +101,17 @@ main.metrics
           span.metrics__areas-count {{ area.count }}
     .metrics__scroll(v-if="pages.length", ref="pagesBox")
       ul.metrics__rows(:class="{ scrollable: allPages }")
-        li.metrics__row(v-for="(page, index) in visiblePages", :key="page.path")
+        li.metrics__row(v-for="(page, index) in visiblePages", :key="page.ns + page.path")
           .metrics__row-line
             span.metrics__rank {{ String(index + 1).padStart(2, "0") }}
+            span.metrics__site-tag(v-if="site === 'all'") {{ page.tag }}
             NuxtLink.metrics__row-link(v-if="page.linkable", :to="page.path") {{ page.path }}
+            a.metrics__row-link(
+              v-else-if="page.href",
+              :href="page.href",
+              target="_blank",
+              rel="noopener",
+            ) {{ page.path }}
             span.metrics__row-label(v-else) {{ page.path }}
             span.metrics__row-count {{ page.count }}
           .metrics__bar
@@ -112,7 +128,7 @@ main.metrics
 
   section.note-target.metrics__section
     MarginNote(label="Places")
-    MetricsWorldMap.metrics__map
+    MetricsWorldMap.metrics__map(:entries="mergedLocations")
     .metrics__grid
       .metrics__panel
         h2.metrics__panel-title top locations
@@ -158,9 +174,10 @@ main.metrics
             name="feed",
             :class="{ scrollable: allEvents }",
           )
-            li.metrics__row(v-for="event in feed", :key="event.at + event.label")
+            li.metrics__row(v-for="event in feed", :key="event.id")
               .metrics__row-line.leader
                 span.metrics__feed-kind(:class="event.kind") {{ event.kind }}
+                span.metrics__site-tag(v-if="site === 'all'") {{ event.tag }}
                 span.metrics__row-label {{ event.label }}
                 span.metrics__leader
                 span.metrics__row-count {{ feedAge(event.at) }}
@@ -217,9 +234,10 @@ main.metrics
 </template>
 
 <script lang="ts" setup>
+import type { LocationHistoryEntry } from "~/stores/metrics"
 import { useScroll } from "@vueuse/core"
 
-/** ## metrics — live analytics over the shared backend: pulse, pages, places, feed. */
+/** ## status — live analytics for every tracked site: pulse, pages, places, feed. */
 const metrics = useMetrics()
 
 const { data: profile } = await useProfile()
@@ -231,6 +249,51 @@ useSeoMeta({
 
 const clock = ref(Date.now())
 const mounted = ref(false)
+
+const site = ref<SiteId | "all">("<p>")
+
+const siteOptions: { id: SiteId | "all", label: string }[] = [
+  ...SITE_IDS.map(id => ({ id, label: SITE_META[id].label })),
+  { id: "all" as const, label: "all" },
+]
+
+const selectedSites = computed<SiteId[]>(() =>
+  site.value === "all" ? SITE_IDS : [site.value])
+
+const mergedActivity = computed<Record<number, number>>(() => {
+  const merged: Record<number, number> = {}
+  for (const ns of selectedSites.value) {
+    for (const [hour, count] of Object.entries(metrics.activity[ns])) {
+      merged[Number(hour)] = (merged[Number(hour)] ?? 0) + count
+    }
+  }
+  return merged
+})
+
+const selectedEvents = computed(() =>
+  [...metrics.events]
+    .filter(event => selectedSites.value.includes(event.ns))
+    .sort((a, b) => b.at - a.at))
+
+const mergedLocations = computed<LocationHistoryEntry[]>(() => {
+  const merged = new Map<string, LocationHistoryEntry>()
+  for (const ns of selectedSites.value) {
+    for (const entry of metrics.locationHistory[ns]) {
+      const key = `${entry.city}|${entry.state}`
+      const existing = merged.get(key)
+      if (!existing) {
+        merged.set(key, { ...entry })
+        continue
+      }
+      existing.count += entry.count
+      existing.last_visit_ms
+        = Math.max(existing.last_visit_ms, entry.last_visit_ms)
+      existing.lat = existing.lat ?? entry.lat
+      existing.lon = existing.lon ?? entry.lon
+    }
+  }
+  return [...merged.values()].sort((a, b) => b.count - a.count)
+})
 
 const ekg = ref<number[]>(Array.from({ length: 140 }, () => 0))
 
@@ -250,7 +313,7 @@ watch(() => metrics.lastEventAt, (at) => {
 })
 
 const eventsWithin = (ms: number) =>
-  metrics.events.filter(event => clock.value - event.at < ms).length
+  selectedEvents.value.filter(event => clock.value - event.at < ms).length
 
 const eventsLastHour = computed(() => eventsWithin(3600000))
 const eventsLastFive = computed(() => eventsWithin(300000))
@@ -258,13 +321,14 @@ const eventsLastFive = computed(() => eventsWithin(300000))
 const hourBars = computed(() => {
   const current = Math.floor(clock.value / 3600000)
   const hours = Array.from({ length: 24 }, (_, i) => current - 23 + i)
-  const max = Math.max(1, ...hours.map(h => metrics.activity[h] ?? 0))
+  const activity = mergedActivity.value
+  const max = Math.max(1, ...hours.map(h => activity[h] ?? 0))
   return hours.map(hour => ({
     hour,
-    count: metrics.activity[hour] ?? 0,
-    height: (metrics.activity[hour] ?? 0) === 0
+    count: activity[hour] ?? 0,
+    height: (activity[hour] ?? 0) === 0
       ? 0
-      : Math.max(6, Math.round((metrics.activity[hour] ?? 0) / max * 100)),
+      : Math.max(6, Math.round((activity[hour] ?? 0) / max * 100)),
     label: new Date(hour * 3600000).toLocaleTimeString([], { hour: "numeric" }),
     current: hour === current,
   }))
@@ -275,13 +339,14 @@ const hourTicks = computed(() =>
 
 const heatmap = computed(() => {
   const currentHour = Math.floor(clock.value / 3600000)
-  const max = Math.max(1, ...Object.values(metrics.activity))
+  const activity = mergedActivity.value
+  const max = Math.max(1, ...Object.values(activity))
   const days = Array.from({ length: 7 }, (_, i) => 6 - i)
   return days.map((back) => {
     const dayStart = currentHour - currentHour % 24 - back * 24
     const date = new Date(dayStart * 3600000)
     const cells = Array.from({ length: 24 }, (_, hour) => {
-      const count = metrics.activity[dayStart + hour] ?? 0
+      const count = activity[dayStart + hour] ?? 0
       return {
         hour,
         count,
@@ -299,7 +364,7 @@ const heatmap = computed(() => {
 })
 
 const pulseCaption = computed(() => {
-  const buckets = Object.entries(metrics.activity)
+  const buckets = Object.entries(mergedActivity.value)
     .map(([hour, count]) => ({ hour: Number(hour), count }))
     .filter(bucket => bucket.count > 0)
   if (!buckets.length) return ""
@@ -316,10 +381,11 @@ const pulseCaption = computed(() => {
 const weekLine = computed(() => {
   const current = Math.floor(clock.value / 3600000)
   const hours = Array.from({ length: 168 }, (_, i) => current - 167 + i)
-  const max = Math.max(1, ...hours.map(hour => metrics.activity[hour] ?? 0))
+  const activity = mergedActivity.value
+  const max = Math.max(1, ...hours.map(hour => activity[hour] ?? 0))
   const points = hours.map((hour, i) => {
     const x = i / 167 * 700
-    const y = 76 - (metrics.activity[hour] ?? 0) / max * 68
+    const y = 76 - (activity[hour] ?? 0) / max * 68
     return `${x.toFixed(1)},${y.toFixed(1)}`
   })
   return {
@@ -338,7 +404,7 @@ const weekDays = computed(() => {
 
 const clockBars = computed(() => {
   const byHour = Array.from({ length: 24 }, () => 0)
-  for (const [hourTs, count] of Object.entries(metrics.activity)) {
+  for (const [hourTs, count] of Object.entries(mergedActivity.value)) {
     const hour = new Date(Number(hourTs) * 3600000).getHours()
     byHour[hour] = (byHour[hour] ?? 0) + count
   }
@@ -383,7 +449,11 @@ const clockLabels = [
 
 const shownViews = computed(() =>
   Object.entries(metrics.views)
-    .filter(([path]) => path !== METRICS_DASHBOARD_PATH))
+    .map(([route, count]) => ({ route, count, ns: siteOf(route) }))
+    .filter((entry): entry is { route: string, count: number, ns: SiteId } =>
+      entry.ns !== null
+      && selectedSites.value.includes(entry.ns)
+      && entry.route !== withSite("<p>", METRICS_DASHBOARD_PATH)))
 
 const routePatterns = useRouter().getRoutes().map((record) => {
   const pattern = record.path
@@ -397,23 +467,28 @@ const isRealRoute = (path: string) =>
 
 const pages = computed(() => {
   const entries = shownViews.value
-    .map(([path, count]) => ({ path, count }))
+    .map(({ route, count, ns }) => ({ ns, path: stripSite(route), count }))
     .sort((a, b) => b.count - a.count)
   const max = entries[0]?.count || 1
-  return entries.map(entry => ({
-    ...entry,
-    share: Math.max(4, Math.round(entry.count / max * 100)),
-    linkable: isRealRoute(entry.path),
-  }))
+  return entries.map((entry) => {
+    const origin = SITE_META[entry.ns].origin
+    return {
+      ...entry,
+      tag: SITE_META[entry.ns].tag,
+      share: Math.max(4, Math.round(entry.count / max * 100)),
+      linkable: origin === null && isRealRoute(entry.path),
+      href: origin ? `${origin}${entry.path}` : null,
+    }
+  })
 })
 
 const totalViews = computed(() =>
-  shownViews.value.reduce((sum, [, count]) => sum + count, 0))
+  shownViews.value.reduce((sum, { count }) => sum + count, 0))
 
 const areas = computed(() => {
   const totals: Record<string, number> = {}
-  for (const [path, count] of shownViews.value) {
-    const segments = path.split("/").filter(Boolean)
+  for (const { route, count } of shownViews.value) {
+    const segments = stripSite(route).split("/").filter(Boolean)
     const area = segments.length === 0
       ? "home"
       : segments[0] === "projects" && segments.length > 1
@@ -434,7 +509,7 @@ const areas = computed(() => {
 const segOpacity = (index: number) => Math.max(0.18, 1 - index * 0.16)
 
 const totalVisits = computed(() =>
-  metrics.locationHistory.reduce((sum, entry) => sum + entry.count, 0))
+  mergedLocations.value.reduce((sum, entry) => sum + entry.count, 0))
 
 const bumpViews = ref(false)
 const bumpVisits = ref(false)
@@ -450,8 +525,8 @@ watch(totalViews, (_, previous) => previous > 0 && flash(bumpViews))
 watch(totalVisits, (_, previous) => previous > 0 && flash(bumpVisits))
 
 const topLocations = computed(() => {
-  const max = metrics.locationHistory[0]?.count || 1
-  return metrics.locationHistory.map(entry => ({
+  const max = mergedLocations.value[0]?.count || 1
+  return mergedLocations.value.map(entry => ({
     ...entry,
     share: Math.max(4, Math.round(entry.count / max * 100)),
   }))
@@ -467,14 +542,19 @@ const visibleLocations = computed(() =>
   allLocations.value ? topLocations.value : topLocations.value.slice(0, 10))
 
 const recentVisitors = computed(() =>
-  [...metrics.locationHistory]
+  [...mergedLocations.value]
     .sort((a, b) => b.last_visit_ms - a.last_visit_ms)
     .slice(0, 10))
 
 const allEvents = ref(false)
 
-const feed = computed(() =>
-  allEvents.value ? metrics.events : metrics.events.slice(0, 10))
+const feed = computed(() => {
+  const rows = selectedEvents.value.map(event => ({
+    ...event,
+    tag: SITE_META[event.ns].tag,
+  }))
+  return allEvents.value ? rows.slice(0, 300) : rows.slice(0, 10)
+})
 
 const pagesBox = useTemplateRef<HTMLElement>("pagesBox")
 const locationsBox = useTemplateRef<HTMLElement>("locationsBox")
@@ -630,6 +710,35 @@ onBeforeUnmount(() => {
 
 .metrics__sep
   margin: 0 0.6em
+  color: var(--note)
+
+.metrics__sites
+  display: flex
+  gap: 18px
+  margin-top: 12px
+
+.metrics__site
+  padding: 0
+  background: none
+  border: none
+  font-family: typography.font("monospace"), ui-monospace, monospace
+  font-size: typography.font-size("meta")
+  letter-spacing: 0.04em
+  color: var(--note)
+  cursor: pointer
+  transition: color 0.15s ease
+
+  &:hover
+    color: var(--foreground-strong)
+
+  &.active
+    color: var(--accent)
+
+.metrics__site-tag
+  flex: none
+  width: 1ch
+  font-family: typography.font("monospace"), ui-monospace, monospace
+  font-size: typography.font-size("meta")
   color: var(--note)
 
 .metrics__ekg
