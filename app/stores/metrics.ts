@@ -192,7 +192,7 @@ export const useMetrics = defineStore("metrics", () => {
   const fetchActivity = async (ns: SiteId) => {
     const buckets = await $fetch<ActivityBucket[]>(
       `${useApiRoute()}/views/activity/`,
-      { params: { ns, hours: 168 } },
+      { params: { ns, hours: 336 } },
     ).catch(() => null)
     if (!buckets) return
     for (const bucket of buckets) {
