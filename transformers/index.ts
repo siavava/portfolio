@@ -8,8 +8,8 @@
  * modules; they are deliberately NOT auto-imported into the client
  * bundle.
  */
-import * as fences from "./fences"
-import * as tikz from "./tikz"
+import * as fences from "@siavava/tikz/fences"
+import * as tikz from "@siavava/tikz"
 
 /** Run the content pipeline over a raw markdown body. */
 export async function applyTransforms(body: string): Promise<string> {

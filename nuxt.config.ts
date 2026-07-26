@@ -1,5 +1,5 @@
 import { applyTransforms } from "./transformers"
-import { latex } from "./configs"
+import latex from "@siavava/katex-macros"
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
