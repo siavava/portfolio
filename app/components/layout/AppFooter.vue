@@ -6,7 +6,7 @@ footer.app-footer
       type="button",
       :aria-label="mounted && isDark ? 'Switch to light mode' : 'Switch to dark mode'",
       @click="toggleColor",
-    ) {{ mounted && isDark ? "light" : "dark" }}
+    ) {{ mounted && isDark ? "lights on" : "lights off" }}
     span.app-footer__divider |
     span.app-footer__version(
       @mouseenter="openVersions",
