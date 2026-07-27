@@ -68,6 +68,9 @@ main.metrics(:class="`skin-${skin}`")
             p.metrics__reach-value {{ totalVisits }}
             p.metrics__reach-label visits
           .metrics__reach-item
+            p.metrics__reach-value {{ placedViews }}
+            p.metrics__reach-label placed views
+          .metrics__reach-item
             p.metrics__reach-value {{ reach.latest }}
             p.metrics__reach-label last visit
         MetricsWorldMap.metrics__map(:entries="mergedLocations")
@@ -82,6 +85,9 @@ main.metrics(:class="`skin-${skin}`")
                 span.metrics__feed-kind(:class="event.kind") {{ event.kind }}
                 span.metrics__site-tag(v-if="site === 'all'") {{ event.tag }}
                 span.metrics__row-label {{ event.label }}
+                span.metrics__row-place(
+                  v-if="event.place && event.kind !== 'visit'",
+                ) {{ event.place }}
                 span.metrics__leader
                 span.metrics__row-count {{ feedAge(event.at) }}
           .metrics__scroll-fade.top(:class="{ visible: feedFades.up.value }")
@@ -346,7 +352,6 @@ main.metrics(:class="`skin-${skin}`")
 </template>
 
 <script lang="ts" setup>
-import type { LocationHistoryEntry } from "~/stores/metrics"
 import { useScroll } from "@vueuse/core"
 
 /** ## status — live analytics for every tracked site: pulse, pages, places, feed. */
@@ -399,23 +404,41 @@ const selectedEvents = computed(() =>
 
 const mergedLocations = computed<LocationHistoryEntry[]>(() => {
   const merged = new Map<string, LocationHistoryEntry>()
+  const fold = (entry: LocationHistoryEntry) => {
+    const key = `${entry.city}|${entry.state}`
+    const existing = merged.get(key)
+    if (!existing) {
+      merged.set(key, { ...entry })
+      return
+    }
+    existing.count += entry.count
+    existing.last_visit_ms
+      = Math.max(existing.last_visit_ms, entry.last_visit_ms)
+    existing.lat = existing.lat ?? entry.lat
+    existing.lon = existing.lon ?? entry.lon
+  }
   for (const ns of selectedSites.value) {
-    for (const entry of metrics.locationHistory[ns]) {
-      const key = `${entry.city}|${entry.state}`
-      const existing = merged.get(key)
-      if (!existing) {
-        merged.set(key, { ...entry })
-        continue
-      }
-      existing.count += entry.count
-      existing.last_visit_ms
-        = Math.max(existing.last_visit_ms, entry.last_visit_ms)
-      existing.lat = existing.lat ?? entry.lat
-      existing.lon = existing.lon ?? entry.lon
+    for (const entry of metrics.locationHistory[ns]) fold(entry)
+    // Attributed views weigh into the same map/reach pool as visits.
+    for (const entry of metrics.viewLocations[ns]) {
+      fold({
+        city: entry.city,
+        state: entry.state,
+        count: entry.count,
+        last_visit_ms: entry.last_view_ms,
+        lat: entry.lat,
+        lon: entry.lon,
+      })
     }
   }
   return [...merged.values()].sort((a, b) => b.count - a.count)
 })
+
+const placedViews = computed(() =>
+  selectedSites.value.reduce((sum, ns) =>
+    sum + metrics.viewLocations[ns].reduce(
+      (siteSum, entry) => siteSum + entry.count, 0,
+    ), 0))
 
 const ekg = ref<number[]>(Array.from({ length: 140 }, () => 0))
 
@@ -1828,6 +1851,13 @@ onBeforeUnmount(() => {
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
+
+.metrics__row-place
+  flex-shrink: 0
+  font-family: typography.font("monospace"), ui-monospace, monospace
+  font-size: typography.font-size("meta")
+  color: var(--dash-faint)
+  white-space: nowrap
 
 .metrics__row-count
   margin-left: auto
