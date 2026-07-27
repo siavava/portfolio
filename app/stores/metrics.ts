@@ -1,20 +1,6 @@
-import { Scope, useSocket } from "~/composables/metrics/useSocket"
-import type { LocationData } from "~/composables/metrics/useViewerLocation"
-import type { SiteId } from "~/utils/metrics"
-import type { WsData } from "~/composables/metrics/useSocket"
-
 interface RawPageViews {
   route: string
   count: number
-}
-
-export interface LocationHistoryEntry {
-  city: string
-  state: string
-  count: number
-  last_visit_ms: number
-  lat?: number
-  lon?: number
 }
 
 interface ActivityBucket {
@@ -28,12 +14,16 @@ export interface LiveEvent {
   kind: "view" | "visit"
   label: string
   at: number
+  /** "City, State" the event was attributed to, when known. */
+  place?: string
 }
 
 interface RawSiteEvent {
   kind: LiveEvent["kind"]
   label: string
   ts_ms: number
+  city?: string
+  state?: string
 }
 
 interface HealthStatus {
@@ -85,6 +75,11 @@ export const useMetrics = defineStore("metrics", () => {
     "<b>": [],
     "<n>": [],
   })
+  const viewLocations = reactive<Record<SiteId, ViewLocationEntry[]>>({
+    "<p>": [],
+    "<b>": [],
+    "<n>": [],
+  })
   const activity = reactive<Record<SiteId, Record<number, number>>>({
     "<p>": {},
     "<b>": {},
@@ -100,15 +95,23 @@ export const useMetrics = defineStore("metrics", () => {
 
   let eventSeq = 0
 
-  const pushEvent = (ns: SiteId, kind: LiveEvent["kind"], label: string) => {
+  const pushEvent = (
+    ns: SiteId,
+    kind: LiveEvent["kind"],
+    label: string,
+    place?: string,
+  ) => {
     const rest = events.value.filter(event => event.ns === ns).slice(0, 99)
     const others = events.value.filter(event => event.ns !== ns)
     events.value = [
-      { id: ++eventSeq, ns, kind, label, at: Date.now() },
+      { id: ++eventSeq, ns, kind, label, at: Date.now(), place },
       ...rest,
       ...others,
     ]
   }
+
+  const placeOf = (city?: string, state?: string) =>
+    city ? [city, state].filter(Boolean).join(", ") : undefined
 
   const onViewsUpdate = (data: WsData) => {
     const route = data.route as string
@@ -118,7 +121,12 @@ export const useMetrics = defineStore("metrics", () => {
     if (route === withSite(ns, METRICS_DASHBOARD_PATH) && ns === "<p>") return
     const hour = Math.floor(Date.now() / 3600000)
     activity[ns][hour] = (activity[ns][hour] ?? 0) + 1
-    pushEvent(ns, "view", stripSite(route))
+    const location = data.location as
+      { city?: string, state?: string } | undefined
+    pushEvent(
+      ns, "view", stripSite(route),
+      placeOf(location?.city, location?.state),
+    )
     stamp()
   }
 
@@ -175,7 +183,7 @@ export const useMetrics = defineStore("metrics", () => {
   })
 
   onConnect(() => {
-    send({ scope: Scope.Watch, path: withNamespace(currentPath.value) })
+    watchPath(currentPath.value)
     if (dashboardActive.value) seedDashboard()
   })
 
@@ -184,6 +192,7 @@ export const useMetrics = defineStore("metrics", () => {
     requestHealth()
     for (const ns of SITE_IDS) {
       void fetchLocationHistory(ns)
+      void fetchViewLocations(ns)
       void fetchActivity(ns)
       void fetchEvents(ns)
     }
@@ -216,6 +225,7 @@ export const useMetrics = defineStore("metrics", () => {
         kind: event.kind,
         label: event.label,
         at: event.ts_ms,
+        place: placeOf(event.city, event.state),
       }))
     events.value = [
       ...events.value.filter(event => event.ns !== ns),
@@ -223,9 +233,18 @@ export const useMetrics = defineStore("metrics", () => {
     ]
   }
 
+  // Seeded synchronously so a returning visitor's first view is attributed.
+  const viewerGeo = ref<ViewerGeo | null>(
+    import.meta.client ? useViewerGeo().readCachedGeo() : null,
+  )
+
   const watchPath = (path: string) => {
     currentPath.value = path
-    send({ scope: Scope.Watch, path: withNamespace(path) })
+    send({
+      scope: Scope.Watch,
+      path: withNamespace(path),
+      ...viewerGeo.value ?? {},
+    })
   }
 
   const listViews = () => send({
@@ -234,6 +253,14 @@ export const useMetrics = defineStore("metrics", () => {
   })
 
   const requestHealth = () => send({ scope: Scope.Health })
+
+  const fetchViewLocations = async (ns: SiteId) => {
+    const entries = await $fetch<ViewLocationEntry[]>(
+      `${useApiRoute()}/views/locations/`,
+      { params: { ns } },
+    ).catch(() => null)
+    if (entries) viewLocations[ns] = entries
+  }
 
   const fetchLocationHistory = async (ns: SiteId) => {
     const entries = await $fetch<LocationHistoryEntry[]>(
@@ -244,6 +271,13 @@ export const useMetrics = defineStore("metrics", () => {
   }
 
   const recordVisit = async () => {
+    // The same-path re-watch attaches geo without recounting the view.
+    const { resolveViewerGeo } = useViewerGeo()
+    const geo = await resolveViewerGeo()
+    if (geo) {
+      viewerGeo.value = geo
+      if (currentPath.value) watchPath(currentPath.value)
+    }
     const { getLocation } = useViewerLocation()
     lastVisitor.value = await getLocation()
   }
@@ -254,6 +288,7 @@ export const useMetrics = defineStore("metrics", () => {
     health,
     lastVisitor,
     locationHistory,
+    viewLocations,
     lastEventAt,
     healthAt,
     dashboardActive,
@@ -264,6 +299,7 @@ export const useMetrics = defineStore("metrics", () => {
     listViews,
     requestHealth,
     fetchLocationHistory,
+    fetchViewLocations,
     fetchActivity,
     fetchEvents,
     recordVisit,

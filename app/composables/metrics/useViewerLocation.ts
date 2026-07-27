@@ -1,16 +1,3 @@
-interface RawLocationData {
-  city?: string
-  region_code?: string
-  country_code?: string
-  latitude?: number
-  longitude?: number
-}
-
-export interface LocationData {
-  city: string
-  state: string
-}
-
 /**
  * ## useViewerLocation
  *
@@ -38,28 +25,14 @@ export const useViewerLocation = () => ({ getLocation })
 
 async function getLocation(): Promise<LocationData | null> {
   const BASE_ROUTE = useApiRoute()
-  const LOCATION_SERVICE_ROUTE = "https://ipapi.co/json/"
 
   const readOnly = () =>
     $fetch<LocationData>(`${BASE_ROUTE}/location/`).catch(() => null)
 
   try {
-    let current: LocationData & { lat?: number, lon?: number }
-    if (import.meta.dev) {
-      current = { city: "Frankfurt", state: "DE", lat: 50.11, lon: 8.68 }
-    } else {
-      const raw = await $fetch<RawLocationData>(LOCATION_SERVICE_ROUTE)
-        .catch(() => null)
-      const state = raw?.region_code || raw?.country_code
-      if (!raw?.city || !state) {
-        return await readOnly()
-      }
-      current = { city: raw.city, state }
-      if (typeof raw.latitude === "number" && typeof raw.longitude === "number") {
-        current.lat = raw.latitude
-        current.lon = raw.longitude
-      }
-    }
+    const { resolveViewerGeo } = useViewerGeo()
+    const current = await resolveViewerGeo()
+    if (!current) return await readOnly()
 
     return await $fetch<LocationData>(`${BASE_ROUTE}/location/`, {
       params: { ...current, ns: METRICS_NAMESPACE_ID },
