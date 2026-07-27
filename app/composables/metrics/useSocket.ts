@@ -6,14 +6,11 @@ import { useWebSocket } from "@vueuse/core"
  * WebSocket message scopes on the shared backend's unified `/connect`
  * endpoint. Incoming messages carry a `scope` field that routes them to
  * the matching handler; outgoing messages declare the subsystem they
- * address. The portfolio uses the views, watch, health, and location
- * scopes.
+ * address. The portfolio only sends the watch scope;
+ * the standalone status app consumes the rest.
  */
 export enum Scope {
-  Views = "views",
   Watch = "watch",
-  Health = "health",
-  Location = "location",
 }
 
 type ScopeHandler = (data: WsData) => void
