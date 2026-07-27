@@ -23,7 +23,6 @@
 </template>
 
 <script lang="ts" setup>
-import { WORLD_DOTS } from "~/utils/worldDots"
 
 /**
  * ## MetricsWorldMap

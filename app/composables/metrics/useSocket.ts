@@ -16,7 +16,6 @@ export enum Scope {
   Location = "location",
 }
 
-export type WsData = Record<string, unknown>
 type ScopeHandler = (data: WsData) => void
 type ConnectHandler = () => void
 

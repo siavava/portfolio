@@ -33,7 +33,6 @@ export const inNamespace = (route: string) =>
 export const METRICS_DASHBOARD_PATH = "/status"
 
 /** Namespace identifier of one tracked site. */
-export type SiteId = "<p>" | "<b>" | "<n>"
 
 /** Every tracked site, in display order. */
 export const SITE_IDS: SiteId[] = ["<p>", "<b>", "<n>"]
