@@ -1,5 +1,5 @@
 <template lang="pug">
-footer.app-footer
+footer.app-footer.no-select
   span.app-footer__location {{ profile.location }}
   span.app-footer__meta
     button.app-footer__theme(

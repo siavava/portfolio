@@ -1,5 +1,5 @@
 <template lang="pug">
-header.desk-topbar(:class="{ stuck }")
+header.desk-topbar.no-select(:class="{ stuck }")
   .rt-lead
     button.rt-icon.rt-drawer-btn(
       type="button",

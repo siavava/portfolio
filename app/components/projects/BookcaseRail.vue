@@ -1,5 +1,5 @@
 <template lang="pug">
-.bookcase-rail(:class="{ 'is-drawer-open': open }")
+.bookcase-rail.no-select(:class="{ 'is-drawer-open': open }")
   .bookcase(ref="rail", aria-label="Project shelves")
     .bookcase__shelves
       BookcaseShelf(

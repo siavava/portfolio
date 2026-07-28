@@ -1,5 +1,5 @@
 <template lang="pug">
-.project-shelf(ref="viewport")
+.project-shelf.no-select(ref="viewport")
   .project-shelf__row(
     ref="shelf",
     role="listbox",

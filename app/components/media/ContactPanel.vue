@@ -1,5 +1,5 @@
 <template lang="pug">
-.contact-panel
+.contact-panel.no-select
   a.contact-panel__reveal(
     :href="`mailto:${profile.email}`",
     @mouseenter="hovering = true",

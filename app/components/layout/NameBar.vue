@@ -1,5 +1,5 @@
 <template lang="pug">
-.name-bar
+.name-bar.no-select
   span.name-bar__name {{ profile.name }}
   span.name-bar__location {{ profile.location }}
 </template>

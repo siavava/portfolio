@@ -1,5 +1,5 @@
 <template lang="pug">
-.margin-note
+.margin-note.no-select
   span.margin-note__label {{ label }}
 </template>
 

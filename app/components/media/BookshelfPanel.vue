@@ -5,7 +5,7 @@
       p.bookshelf-panel__meta {{ titleCase(selected.tag) }} · {{ selected.year }}
       p.bookshelf-panel__title {{ selected.title }}
       p.bookshelf-panel__blurb {{ selected.summary }}
-      NuxtLink.bookshelf-panel__link(:to="selected.path")
+      NuxtLink.bookshelf-panel__link.no-select(:to="selected.path")
         | view more
         span.bookshelf-panel__arrow →
   ProjectShelf.bookshelf-panel__shelf(
@@ -15,7 +15,7 @@
     fade-color="var(--shelf-panel)",
     @select="onSelect",
   )
-  p.bookshelf-panel__caption
+  p.bookshelf-panel__caption.no-select
     | Shelf: {{ projects.length }} Projects ·
     |
     NuxtLink.bookshelf-panel__browse(to="/projects")

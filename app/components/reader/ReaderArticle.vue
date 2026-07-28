@@ -1,13 +1,13 @@
 <template lang="pug">
 article.reading-desk__card
   header.reading-desk__masthead
-    p.reading-desk__meta
+    p.reading-desk__meta.no-select
       | {{ formatMonthYear(doc.date) }}
       span.reading-desk__meta-sep
       | {{ titleCase(doc.tag) }}
     h1.reading-desk__title {{ doc.title }}
     p.reading-desk__dek(v-if="showDek") {{ doc.summary }}
-    p.reading-desk__rule ╌╌╌╌
+    p.reading-desk__rule.no-select ╌╌╌╌
   .reading-desk__body
     ContentRenderer(:value="doc")
     section.reading-desk__refs(v-if="references.length")
@@ -16,7 +16,7 @@ article.reading-desk__card
         li(v-for="ref in references", :key="ref.href")
           span(v-if="ref.notes") Reference notes:{{ " " }}
           a(:href="ref.href", target="_blank", rel="noopener") {{ ref.title }}
-  p.reading-desk__end ╌╌ END ╌╌
+  p.reading-desk__end.no-select ╌╌ END ╌╌
 </template>
 
 <script lang="ts" setup>

@@ -49,6 +49,17 @@ code, pre, kbd, samp
 ::selection
   background: var(--selection)
 
+:is(.no-select) ::selection
+  text-decoration: none
+
+.no-select, .no-select::before, .no-select::after
+  -webkit-tap-highlight-color: transparent
+  -webkit-touch-callout: none
+  user-select: none
+
+  &:focus
+    outline: none !important
+
 // Index<->projects wipe; gating and direction live in the wipe.global middleware.
 ::view-transition-old(root),
 ::view-transition-new(root)
