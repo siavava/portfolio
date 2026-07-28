@@ -163,6 +163,7 @@ export default defineNuxtConfig({
       prerender: true,
       headers: { "Content-Type": "application/xml; charset=utf-8" },
     },
+    "/archive": { redirect: { to: "/projects", statusCode: 301 } },
     "/**": { prerender: true },
   },
 
