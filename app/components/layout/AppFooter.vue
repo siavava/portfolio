@@ -69,6 +69,7 @@ onUnmounted(() => clearTimeout(closeTimer))
   justify-content: space-between
   border-top: 1px solid var(--divider)
   padding: 24px 0 48px
+  margin-top: 48px
   font-size: typography.font-size("xxs")
 
 .app-footer__version
