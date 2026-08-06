@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   },
 
   modules: [
+    "@nuxtjs/robots",
     "@nuxt/content",
     "@nuxt/image",
     "@pinia/nuxt",
@@ -27,6 +28,11 @@ export default defineNuxtConfig({
   site: {
     url: "https://amittai.studio",
     name: "amittai.studio",
+  },
+
+  robots: {
+    blockAiBots: false,
+    blockNonSeoBots: false,
   },
 
   ogImage: {
