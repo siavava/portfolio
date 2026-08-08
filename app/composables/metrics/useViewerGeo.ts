@@ -14,7 +14,7 @@ interface RawIpGeo {
   longitude?: number
 }
 
-const CACHE_KEY = "viewer-geo:v1"
+const CACHE_KEY = "viewer-geo:v2"
 const CACHE_TTL_MS = 24 * 3600 * 1000
 
 let resolved: Promise<ViewerGeo | null> | null = null
@@ -54,7 +54,13 @@ async function lookup(): Promise<ViewerGeo | null> {
   } catch { /* unreadable cache — fall through to a fresh lookup */ }
 
   const raw = await $fetch<RawIpGeo>("https://ipapi.co/json/").catch(() => null)
-  const state = raw?.region_code || raw?.country_code
+  // Region codes are only canonically recognized for the US ("Seattle, WA");
+  // everywhere else the country code is the meaningful label ("Nairobi, KE",
+  // not "Nairobi, 30") — with "UK" preferred over ISO's "GB".
+  const country = raw?.country_code === "GB" ? "UK" : raw?.country_code
+  const state = raw?.country_code === "US"
+    ? raw.region_code || raw.country_code
+    : country
   if (!raw?.city || !state) return null
 
   const geo: ViewerGeo = { city: raw.city, state }
