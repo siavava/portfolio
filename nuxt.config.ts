@@ -1,5 +1,10 @@
+import { fileURLToPath } from "node:url"
+
 import { applyTransforms } from "./transformers"
 import { latex } from "./configs"
+
+const pursServerModule = (name: string) =>
+  fileURLToPath(new URL(`./output/${name}/index.js`, import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -209,6 +214,14 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       autoSubfolderIndex: false,
+    },
+    // Vite resolves #purs through the package `imports` field, but nitro's
+    // rollup leaves it external and the built chunks can no longer resolve
+    // it at runtime — alias the server modules to their compiled entries so
+    // they inline into the server bundle.
+    alias: {
+      "#purs/App.Server.Sitemap": pursServerModule("App.Server.Sitemap"),
+      "#purs/App.Server.Tikz": pursServerModule("App.Server.Tikz"),
     },
     typescript: {
       // The nitro shells import #purs/App.Server.* — they get the paths

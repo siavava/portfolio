@@ -189,3 +189,11 @@ Editing `.purs` files during `nuxi dev` requires re-running `purs:build`
 content hash: after renaming an FFI implementation file, the companion `.js`
 must actually change (it does, since the path is in it) for the compiled
 `foreign.js` to be recopied.
+
+Two consumers resolve `#purs` differently in production: vite reads the
+package `imports` field, but nitro's rollup does not — every
+`App.Server.*` module a nitro route imports needs a matching entry in
+`nitro.alias` (nuxt.config) pointing at its compiled `output/.../index.js`,
+which inlines it into the server bundle. Without the entry, prerender and
+the deployed function fail with "Package import specifier #purs/… is not
+defined".
