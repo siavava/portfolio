@@ -7,19 +7,22 @@
 module App.Components.CueThreads
   ( CuesStore
   , DomElement
+  , Point
+  , RopePoint
   , ThreadArgs
   , ThreadBindings
+  , splinePath
+  , stepPoints
   , useCueThreads
   ) where
 
 import Prelude
 
+import App.Utils.JsMath (hypot)
 import Data.Array
   ( any
   , catMaybes
   , concatMap
-  , cons
-  , drop
   , filter
   , index
   , length
@@ -27,7 +30,6 @@ import Data.Array
   , null
   , range
   , snoc
-  , take
   , uncons
   ) as Array
 import Data.Foldable (foldM)
@@ -35,6 +37,7 @@ import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Int (round, toNumber)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Nullable (Nullable, null, toMaybe)
+import Data.Number.Format (toString)
 import Data.String (joinWith)
 import Data.Traversable (for, traverse)
 import Effect (Effect)
@@ -45,9 +48,7 @@ import Vue (Ref, onUnmounted, ref, watchGetter, write)
 foreign import data CuesStore :: Type
 foreign import data DomElement :: Type
 
-foreign import showNumberImpl :: Number -> String
 foreign import isClientImpl :: Boolean
-foreign import hypotImpl :: Fn2 Number Number Number
 foreign import sameElementImpl :: Fn2 DomElement DomElement Boolean
 foreign import centerImpl :: EffectFn1 DomElement Point
 foreign import markElementImpl :: EffectFn2 CuesStore String (Nullable DomElement)
@@ -106,12 +107,6 @@ type ThreadBindings =
   , imageClip :: Ref (Nullable String)
   }
 
-clampNumber :: Number -> Number -> Number -> Number
-clampNumber lo hi value = max lo (min hi value)
-
-clampInt :: Int -> Int -> Int -> Int
-clampInt lo hi value = max lo (min hi value)
-
 -- | Lay a slack rope between two measured centers, or nothing when the
 -- | target has collapsed to the origin (not laid out).
 mkRope :: DomElement -> Point -> DomElement -> Point -> Maybe Rope
@@ -119,8 +114,8 @@ mkRope root start target end
   | end.x == 0.0 && end.y == 0.0 = Nothing
   | otherwise =
       let
-        distance = runFn2 hypotImpl (end.x - start.x) (end.y - start.y)
-        count = clampInt minSegments maxSegments (round (distance / segmentDistance))
+        distance = hypot (end.x - start.x) (end.y - start.y)
+        count = clamp minSegments maxSegments (round (distance / segmentDistance))
         ropeLength = distance * slackRatio + slackPx
         mid i =
           let
@@ -176,7 +171,7 @@ stepPoints dt rootCenter targetCenter linkLength points =
       let
         dx = next.x - curr.x
         dy = next.y - curr.y
-        rawLength = runFn2 hypotImpl dx dy
+        rawLength = hypot dx dy
         len = if rawLength == 0.0 then 0.0001 else rawLength
         difference = (len - linkLength) / len
         ax = dx * difference * 0.5
@@ -205,7 +200,7 @@ splinePath points =
       <> joinWith "" (map segment (Array.range 0 (total - 2)))
   where
   total = Array.length points
-  num = showNumberImpl
+  num = toString
   fallback = { x: 0.0, y: 0.0, px: 0.0, py: 0.0, pinned: false }
   at i = fromMaybe fallback (Array.index points i)
   first = at 0
@@ -233,7 +228,6 @@ setup :: ThreadArgs -> Effect ThreadBindings
 setup args = do
   paths <- ref ([] :: Array String)
   imageClip <- ref (null :: Nullable String)
-  ropes <- Ref.new ([] :: Array Rope)
   ropesByRoot <- Ref.new ([] :: Array RootRopes)
   frame <- Ref.new 0
   previousTime <- Ref.new 0.0
@@ -258,47 +252,29 @@ setup args = do
       pure (rope { points = stepPoints dt rootCenter targetCenter rope.linkLength rope.points })
 
     tick timestamp = do
-      current <- Ref.read ropes
-      if Array.null current then Ref.write 0 frame
+      entries <- Ref.read ropesByRoot
+      if Array.null (Array.concatMap _.ropes entries) then Ref.write 0 frame
       else do
         prev <- Ref.read previousTime
         let
           previous = if prev == 0.0 then timestamp else prev
-          dt = clampNumber 8.0 33.0 (timestamp - previous)
+          dt = clamp 8.0 33.0 (timestamp - previous)
         Ref.write timestamp previousTime
-        stepped <- traverse (stepRope dt) current
-        Ref.write stepped ropes
-        renderPaths stepped
+        stepped <- for entries \entry -> do
+          ropes' <- traverse (stepRope dt) entry.ropes
+          pure entry { ropes = ropes' }
+        Ref.write stepped ropesByRoot
+        renderPaths (Array.concatMap _.ropes stepped)
         updateImageClip
         next <- runEffectFn1 rafImpl (mkEffectFn1 tick)
         Ref.write next frame
 
     rebuild groups = do
       entries <- Ref.read ropesByRoot
-      current <- Ref.read ropes
       let
-        -- The tick steps the flat rope list immutably, so the per-root
-        -- entries still hold each rope's birth state. Re-partition the
-        -- evolved flat list back onto the entries (same order, same
-        -- lengths) so kept roots keep their live physics state instead
-        -- of resetting to birth on every rebuild.
-        repartition rest es = case Array.uncons es of
-          Nothing -> []
-          Just { head: entry, tail } ->
-            let
-              n = Array.length entry.ropes
-            in
-              Array.cons (entry { ropes = Array.take n rest })
-                (repartition (Array.drop n rest) tail)
-
-        evolved =
-          if Array.length current == Array.length (Array.concatMap _.ropes entries) then
-            repartition current entries
-          else entries
-
         kept = Array.filter
           (\entry -> Array.any (\group -> runFn2 sameElementImpl entry.root group.root) groups)
-          evolved
+          entries
       updated <- foldM
         ( \acc group ->
             if Array.any (\entry -> runFn2 sameElementImpl entry.root group.root) acc then pure acc
@@ -310,7 +286,6 @@ setup args = do
         groups
       Ref.write updated ropesByRoot
       let flattened = Array.concatMap _.ropes updated
-      Ref.write flattened ropes
       if Array.null flattened then do
         pending <- Ref.read frame
         runEffectFn1 cancelRafImpl pending
