@@ -7,7 +7,7 @@ span.figma-select(ref="el", :data-note-trigger="note", @mouseenter="measure", @m
     span.figma-corner.figma-corner--tr
     span.figma-corner.figma-corner--bl
     span.figma-corner.figma-corner--br
-    span.figma-size-label {{ size }}
+    span.figma-size-label(:data-size="size")
 </template>
 
 <script lang="ts" setup>
@@ -84,6 +84,10 @@ const { size, measure, leave, toggle } = useFigmaSelect({
   padding: 3px 5px
   border-radius: 2px
   white-space: nowrap
+  // CSS-rendered so crawlers don't index the SSR placeholder into the
+  // search snippet.
+  &::after
+    content: attr(data-size)
 
 @media (min-width: 601px)
   .figma-select:hover .figma-select-corners
