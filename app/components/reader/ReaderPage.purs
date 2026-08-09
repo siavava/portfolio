@@ -71,7 +71,7 @@ import Vue
   , write
   )
 
--- | A raw `KeyboardEvent`.
+-- | A raw `KeyboardEvent`. @ts KeyboardEvent
 foreign import data KeyEvt :: Type
 
 -- | One projects-collection document — opaque; field access happens in
@@ -103,7 +103,7 @@ foreign import routePathNowImpl :: EffectFn1 RouteHandle String
 foreign import routerReplaceImpl :: EffectFn2 RouterHandle String Unit
 foreign import railCenterImpl :: EffectFn3 (Ref (Nullable RailHandle)) String String Unit
 foreign import scrollTopIfNarrowImpl :: Effect Unit
-foreign import onWindowScrollImpl :: EffectFn1 (Effect Unit) Unit
+foreign import watchWindowScrollImpl :: EffectFn1 (Effect Unit) Unit
 foreign import windowScrollYImpl :: Effect Number
 foreign import onKeydownImpl :: EffectFn1 (EffectFn1 KeyEvt Unit) Unit
 foreign import keyOfImpl :: KeyEvt -> String
@@ -294,7 +294,7 @@ setup args = do
           select (docPathImpl next) (Just (docTagImpl next))
 
   stuck <- ref false
-  runEffectFn1 onWindowScrollImpl do
+  runEffectFn1 watchWindowScrollImpl do
     y <- windowScrollYImpl
     write stuck (y > 4.0)
 
@@ -321,19 +321,22 @@ setup args = do
     mSelected <- toMaybe <$> read selected
     pure (isJust mPath && isJust mSelected)
 
-  seoTitle <- computed do
+  activeDoc <- computed do
     active <- read onProject
     mSelected <- toMaybe <$> read selected
-    pure case mSelected of
-      Just doc | active -> docTitleImpl doc <> " · Projects · Amittai Siavava"
-      _ -> "Projects · Amittai Siavava"
+    pure (if active then mSelected else Nothing)
+
+  seoTitle <- computed do
+    mDoc <- read activeDoc
+    pure
+      ( maybe "Projects · Amittai Siavava"
+          (\doc -> docTitleImpl doc <> " · Projects · Amittai Siavava")
+          mDoc
+      )
 
   seoDescription <- computed do
-    active <- read onProject
-    mSelected <- toMaybe <$> read selected
-    pure $ collapseWs case mSelected of
-      Just doc | active -> docSummaryImpl doc
-      _ -> pageDescription
+    mDoc <- read activeDoc
+    pure (collapseWs (maybe pageDescription docSummaryImpl mDoc))
 
   canonical <- computed do
     mPath <- toMaybe <$> read routePath
@@ -344,35 +347,24 @@ setup args = do
     pure (siteOrigin <> maybe "/projects" docPathImpl mSelected)
 
   ogKicker <- computed do
-    active <- read onProject
-    mSelected <- toMaybe <$> read selected
-    pure case mSelected of
-      Just doc | active -> titleCase (docTagImpl doc) <> " · " <> CU.take 4 (docDateImpl doc)
-      _ -> "Portfolio · Dartmouth"
+    mDoc <- read activeDoc
+    pure
+      ( maybe "Portfolio · Dartmouth"
+          (\doc -> titleCase (docTagImpl doc) <> " · " <> CU.take 4 (docDateImpl doc))
+          mDoc
+      )
 
   ogTitle <- computed do
-    active <- read onProject
-    mSelected <- toMaybe <$> read selected
-    pure case mSelected of
-      Just doc | active -> docTitleImpl doc
-      _ -> "Projects"
+    mDoc <- read activeDoc
+    pure (maybe "Projects" docTitleImpl mDoc)
 
   ogDescription <- computed do
-    active <- read onProject
-    mSelected <- toMaybe <$> read selected
-    pure case mSelected of
-      Just doc | active -> docSummaryImpl doc
-      _ -> pageDescription
+    mDoc <- read activeDoc
+    pure (maybe pageDescription docSummaryImpl mDoc)
 
   ogIndex <- computed do
-    active <- read onProject
-    if not active then pure (-1)
-    else do
-      list <- read ordered
-      mSelected <- toMaybe <$> read selected
-      pure case mSelected of
-        Just doc -> fromMaybe (-1) (Array.findIndex (\d -> docPathImpl d == docPathImpl doc) list)
-        Nothing -> -1
+    mDoc <- read activeDoc
+    if isJust mDoc then read selectedIndex else pure (-1)
 
   pure
     { docs
