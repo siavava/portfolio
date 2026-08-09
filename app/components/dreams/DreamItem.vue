@@ -24,20 +24,7 @@ const props = defineProps<{
   dream: { label: string, done?: boolean }
 }>()
 
-const parts = computed(() => {
-  const label = props.dream.label
-  const segments: { text: string, href?: string }[] = []
-  let last = 0
-  for (const match of label.matchAll(/\[([^\]]+)\]\(([^)\s]+)\)/g)) {
-    if (match.index > last) {
-      segments.push({ text: label.slice(last, match.index) })
-    }
-    segments.push({ text: match[1] ?? "", href: match[2] ?? "" })
-    last = match.index + match[0].length
-  }
-  if (last < label.length) segments.push({ text: label.slice(last) })
-  return segments
-})
+const { parts } = useDreamItem({ label: () => props.dream.label })
 </script>
 
 <style lang="sass" scoped>
