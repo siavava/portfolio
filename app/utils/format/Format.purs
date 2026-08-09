@@ -12,6 +12,7 @@ import Prelude
 import Data.Array (index, mapWithIndex)
 import Data.Foldable (elem)
 import Data.Maybe (fromMaybe)
+import Data.Nullable (Nullable, toMaybe)
 import Data.String (Pattern(..), joinWith, split, toUpper)
 import Data.String.CodeUnits (drop, take)
 
@@ -26,11 +27,13 @@ titleCase text = joinWith " " (mapWithIndex capitalize (split (Pattern " ") text
     | position > 0 && word `elem` minorWords = word
     | otherwise = toUpper (take 1 word) <> drop 1 word
 
--- | Render an ISO-ish date string as MM/YYYY.
-formatMonthYear :: String -> String
-formatMonthYear date =
+-- | Render an ISO-ish date string as MM/YYYY. The date is `Nullable`
+-- | because @nuxt/content returns SQL NULL for docs whose frontmatter
+-- | omits it — the original rendered those as the empty string.
+formatMonthYear :: Nullable String -> String
+formatMonthYear nullableDate =
   let
-    parts = split (Pattern "-") date
+    parts = split (Pattern "-") (fromMaybe "" (toMaybe nullableDate))
     year = fromMaybe "" (index parts 0)
     month = fromMaybe "" (index parts 1)
   in

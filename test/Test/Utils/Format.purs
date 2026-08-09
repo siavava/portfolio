@@ -6,6 +6,7 @@ import Prelude
 
 import App.Utils.Format (formatMonthYear, titleCase)
 import Data.Foldable (for_)
+import Data.Nullable (notNull, null)
 import Effect (Effect)
 import Test.Harness (Tally, expect)
 
@@ -30,4 +31,5 @@ suite t = do
   for_ titleCases \c ->
     expect t ("titleCase " <> show c.input) c.out (titleCase c.input)
   for_ monthYearCases \c ->
-    expect t ("formatMonthYear " <> show c.input) c.out (formatMonthYear c.input)
+    expect t ("formatMonthYear " <> show c.input) c.out (formatMonthYear (notNull c.input))
+  expect t "formatMonthYear null" "" (formatMonthYear null)
