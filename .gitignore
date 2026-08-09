@@ -40,3 +40,6 @@ app/types/purs/
 # vue-bridge build artifacts (tsc emits the purs FFI companion)
 packages/vue-bridge/src/Vue.js
 packages/vue-bridge/src/Vue.d.ts
+
+# Local working notes, never published.
+PURESCRIPT.md
