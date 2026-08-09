@@ -1,3 +1,4 @@
+import type { CSSProperties } from "vue"
 /**
  * Typed FFI implementations for `App.Components.ShelfSatori` — JS numeric
  * and string semantics (int32 `imul`, `\s+` whitespace squashing,
@@ -31,3 +32,7 @@ export const mkBookStyleImpl = (
   base: BookStyleBase,
   tilt: { transform: string, transformOrigin: string } | null,
 ): Record<string, string | number> => tilt == null ? { ...base } : { ...base, ...tilt }
+
+/** Identity — stamps a plain style record with the CSS-properties type
+ * the satori template consumes. */
+export const styleMapImpl = (r: object): CSSProperties => r as CSSProperties

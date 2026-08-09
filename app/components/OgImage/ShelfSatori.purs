@@ -12,7 +12,7 @@ module App.Components.ShelfSatori
   , SatoriArgs
   , SatoriBindings
   , StyleMap
-  , useShelfSatori
+  , setup
   ) where
 
 import Prelude
@@ -28,15 +28,28 @@ import Data.Number (max, pow, remainder, round) as Number
 import Data.Number.Format (toString)
 import Data.String.CodeUnits (length, take) as CodeUnits
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Computed, computed)
 
 -- | An assembled `:style` object (string/number CSS values). @ts import("vue").CSSProperties
 foreign import data StyleMap :: Type
 
+-- | Identity at runtime — stamps a style record as a `StyleMap`, so the
+-- | generated boundary types these fields as CSS properties.
+foreign import styleMapImpl :: forall r. { | r } -> StyleMap
+
+-- | JS `Math.imul` — int32 multiply with JS overflow semantics.
 foreign import imulImpl :: Fn2 Int Int Int
+
+-- | JS `text.replace(/\s+/g, " ").trim()` — the reference's
+-- | normalization.
 foreign import normalizeDescriptionImpl :: String -> String
+
+-- | JS `String#trimEnd`.
 foreign import trimEndImpl :: String -> String
+
+-- | The spine's style object, spreading the tilt transform in only when
+-- | the book leans — satori treats an explicit `rotate(0deg)` differently
+-- | from no transform at all.
 foreign import mkBookStyleImpl
   :: Fn2
        { display :: String
@@ -52,91 +65,64 @@ foreign import mkBookStyleImpl
        (Nullable { transform :: String, transformOrigin :: String })
        StyleMap
 
+-- | One seeded spine on the shelf.
 type Book =
-  { width :: Int, heightPct :: Int, gap :: Int, tilt :: Int, arc :: Number, lit :: Boolean }
+  { -- | Spine width, px.
+    width :: Int
+  -- | Spine height as a percentage of the shelf height.
+  , heightPct :: Int
+  -- | Gap to the next spine, px.
+  , gap :: Int
+  -- | Lean in degrees; 0 for upright spines (most of them).
+  , tilt :: Int
+  -- | Top-corner radius, px.
+  , arc :: Number
+  -- | Whether this is the highlighted spine marking the page's project.
+  , lit :: Boolean
+  }
 
 type SatoriArgs =
-  { index :: Effect Int
+  { -- | Reads the project's shelf index; -1 lights no spine.
+    index :: Effect Int
+  -- | Reads how many projects the shelf represents.
   , total :: Effect Int
+  -- | Reads the card's raw description text.
   , description :: Effect String
   }
 
 type SatoriBindings =
-  { books :: Computed (Array Book)
+  { -- | The seeded spine run filling the track, one spine lit.
+    books :: Computed (Array Book)
+  -- | Description squashed to one line and clamped to ~150 chars.
   , clampedDescription :: Computed String
+  -- | A spine's style object (size, colors, arc, optional tilt).
   , bookStyle :: Book -> StyleMap
-  , frame ::
-      { width :: String
-      , height :: String
-      , display :: String
-      , flexDirection :: String
-      , justifyContent :: String
-      , padding :: String
-      , backgroundColor :: String
-      , fontFamily :: String
-      }
-  , card ::
-      { display :: String
-      , flexDirection :: String
-      , padding :: String
-      , backgroundColor :: String
-      , border :: String
-      , borderRadius :: String
-      }
-  , kickerStyle :: { fontSize :: String, color :: String, letterSpacing :: String }
-  , titleStyle ::
-      { marginTop :: String
-      , fontSize :: String
-      , lineHeight :: Number
-      , color :: String
-      , maxWidth :: String
-      , maxHeight :: String
-      , overflow :: String
-      }
-  , descStyle ::
-      { marginTop :: String
-      , fontSize :: String
-      , lineHeight :: Number
-      , color :: String
-      , maxWidth :: String
-      , maxHeight :: String
-      , overflow :: String
-      }
-  , shelf :: { display :: String, flexDirection :: String, marginTop :: String }
-  , shelfBox ::
-      { position :: String
-      , display :: String
-      , alignItems :: String
-      , height :: String
-      , overflow :: String
-      , borderBottom :: String
-      }
-  , track :: { display :: String, alignItems :: String, flexShrink :: Number, marginLeft :: String }
-  , fadeLeft ::
-      { position :: String
-      , left :: String
-      , top :: String
-      , bottom :: String
-      , width :: String
-      , background :: String
-      }
-  , fadeRight ::
-      { position :: String
-      , right :: String
-      , top :: String
-      , bottom :: String
-      , width :: String
-      , background :: String
-      }
-  , footerRow ::
-      { display :: String
-      , alignItems :: String
-      , marginTop :: String
-      , fontFamily :: String
-      , fontSize :: String
-      }
-  , footerMuted :: { color :: String }
-  , footerLink :: { color :: String }
+  -- | Style of the 1200×630 page frame.
+  , frame :: StyleMap
+  -- | Style of the white content card.
+  , card :: StyleMap
+  -- | Style of the kicker line above the title.
+  , kickerStyle :: StyleMap
+  -- | Style of the title block, clamped to two lines.
+  , titleStyle :: StyleMap
+  -- | Style of the description block.
+  , descStyle :: StyleMap
+  -- | Style of the shelf column wrapper.
+  , shelf :: StyleMap
+  -- | Style of the clipped shelf viewport with its baseline rule.
+  , shelfBox :: StyleMap
+  -- | Style of the spine row, starting slightly off-canvas.
+  , track :: StyleMap
+  -- | Style of the left edge fade over the spines.
+  , fadeLeft :: StyleMap
+  -- | Style of the right edge fade over the spines.
+  , fadeRight :: StyleMap
+  -- | Style of the footer row, in the mono font.
+  , footerRow :: StyleMap
+  -- | Muted footer text color.
+  , footerMuted :: StyleMap
+  -- | Accent footer link color.
+  , footerLink :: StyleMap
   }
 
 orange :: String
@@ -301,9 +287,9 @@ bookStyle book =
         )
     )
 
-useShelfSatori :: EffectFn1 SatoriArgs SatoriBindings
-useShelfSatori = mkEffectFn1 setup
-
+-- | Builds the OG shelf card's data: the seeded spine run with the lit
+-- | spine mapping the project's index into the shelf, the clamped
+-- | description, and every static satori style record.
 setup :: SatoriArgs -> Effect SatoriBindings
 setup args = do
   books <- computed do
@@ -315,7 +301,7 @@ setup args = do
     { books
     , clampedDescription
     , bookStyle
-    , frame:
+    , frame: styleMapImpl
         { width: "1200px"
         , height: "630px"
         , display: "flex"
@@ -325,7 +311,7 @@ setup args = do
         , backgroundColor: page
         , fontFamily: "Proxima Soft"
         }
-    , card:
+    , card: styleMapImpl
         { display: "flex"
         , flexDirection: "column"
         , padding: "40px 48px"
@@ -333,12 +319,12 @@ setup args = do
         , border: "1px solid " <> borderColor
         , borderRadius: "22px"
         }
-    , kickerStyle:
+    , kickerStyle: styleMapImpl
         { fontSize: "25px"
         , color: mutedColor
         , letterSpacing: "0.01em"
         }
-    , titleStyle:
+    , titleStyle: styleMapImpl
         { marginTop: "14px"
         , fontSize: "52px"
         , lineHeight: 1.08
@@ -347,7 +333,7 @@ setup args = do
         , maxHeight: "116px"
         , overflow: "hidden"
         }
-    , descStyle:
+    , descStyle: styleMapImpl
         { marginTop: "20px"
         , fontSize: "27px"
         , lineHeight: 1.44
@@ -356,12 +342,12 @@ setup args = do
         , maxHeight: "80px"
         , overflow: "hidden"
         }
-    , shelf:
+    , shelf: styleMapImpl
         { display: "flex"
         , flexDirection: "column"
         , marginTop: "24px"
         }
-    , shelfBox:
+    , shelfBox: styleMapImpl
         { position: "relative"
         , display: "flex"
         , alignItems: "flex-end"
@@ -369,13 +355,13 @@ setup args = do
         , overflow: "hidden"
         , borderBottom: "1px solid " <> shelfLine
         }
-    , track:
+    , track: styleMapImpl
         { display: "flex"
         , alignItems: "flex-end"
         , flexShrink: 0.0
         , marginLeft: show trackStart <> "px"
         }
-    , fadeLeft:
+    , fadeLeft: styleMapImpl
         { position: "absolute"
         , left: "0"
         , top: "0"
@@ -383,7 +369,7 @@ setup args = do
         , width: show fadeWidth <> "px"
         , background: "linear-gradient(to right, " <> page <> ", " <> pageClear <> ")"
         }
-    , fadeRight:
+    , fadeRight: styleMapImpl
         { position: "absolute"
         , right: "0"
         , top: "0"
@@ -391,13 +377,13 @@ setup args = do
         , width: show fadeWidth <> "px"
         , background: "linear-gradient(to left, " <> page <> ", " <> pageClear <> ")"
         }
-    , footerRow:
+    , footerRow: styleMapImpl
         { display: "flex"
         , alignItems: "center"
         , marginTop: "18px"
         , fontFamily: "Departure Mono"
         , fontSize: "21px"
         }
-    , footerMuted: { color: monoMuted }
-    , footerLink: { color: orange }
+    , footerMuted: styleMapImpl { color: monoMuted }
+    , footerLink: styleMapImpl { color: orange }
     }

@@ -47,9 +47,5 @@ const {
   index: () => props.index,
   total: () => props.total,
   description: () => props.description,
-}) as unknown as Record<"frame" | "card" | "kickerStyle" | "titleStyle" | "descStyle" | "shelf" | "shelfBox" | "track" | "fadeLeft" | "fadeRight" | "footerRow" | "footerMuted" | "footerLink", import("vue").CSSProperties> & {
-  books: ReturnType<typeof useShelfSatori>["books"]
-  clampedDescription: ReturnType<typeof useShelfSatori>["clampedDescription"]
-  bookStyle: ReturnType<typeof useShelfSatori>["bookStyle"]
-}
+})
 </script>
