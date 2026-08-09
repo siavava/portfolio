@@ -25,29 +25,28 @@ module App.Components.InterestMap
 
 import Prelude
 
+import App.Components.InterestMap.Graph (buildAdj, parentOf, reachable)
 import Data.Array
   ( concatMap
-  , elem
   , filter
   , find
-  , findIndex
   , index
   , length
-  , modifyAt
   , null
   , slice
   , snoc
   , sortBy
-  , uncons
   ) as Array
-import Data.Foldable (foldl, for_, traverse_)
+import Data.Foldable (for_, traverse_)
 import Data.FoldableWithIndex (forWithIndex_)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Data.Number (abs, cos, pi, sin)
+import Data.Number.Format (toString)
 import Data.Traversable (traverse)
 import Effect (Effect)
+import Effect.Random (random)
 import Effect.Ref as Ref
 import Effect.Timer (IntervalId, TimeoutId, clearInterval, clearTimeout, setInterval, setTimeout)
 import Effect.Uncurried
@@ -79,7 +78,7 @@ import Vue
 -- | The interests collection's `branches` array.
 foreign import data BranchesData :: Type
 
--- | A DOM `HTMLElement`.
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
 -- | A `MapLayout` from `useInterestLayout`.
@@ -91,7 +90,7 @@ foreign import data LinkData :: Type
 -- | One `MapNode` of the layout.
 foreign import data NodeData :: Type
 
--- | A raw `PointerEvent`.
+-- | A raw `PointerEvent`. @ts PointerEvent
 foreign import data PointerEvt :: Type
 
 -- | A plain `Record<string, {x, y}>` of simulated node positions.
@@ -115,7 +114,6 @@ foreign import data SimHandle :: Type
 -- | A motion-v animation's controls.
 foreign import data SpringControls :: Type
 
-foreign import showNumberImpl :: Number -> String
 foreign import interestLayoutImpl :: EffectFn2 BranchesData Number LayoutData
 foreign import layoutNodesImpl :: LayoutData -> Array NodeData
 foreign import layoutLinksImpl :: LayoutData -> Array LinkData
@@ -130,7 +128,6 @@ foreign import linkPrereqImpl :: LinkData -> Boolean
 foreign import mkStringSetImpl :: Array String -> StringSet
 foreign import stringSetHasImpl :: Fn2 StringSet String Boolean
 foreign import shuffleKeyImpl :: Fn2 String Number Number
-foreign import randomImpl :: Effect Number
 foreign import useElementWidthImpl :: EffectFn1 (Ref (Nullable DomElement)) (Ref Number)
 foreign import useMediaQueryImpl :: EffectFn1 String (Ref Boolean)
 foreign import activeNamesImpl :: Effect (Ref (Array String))
@@ -204,46 +201,108 @@ origin = { x: 0.0, y: 0.0 }
 spokeAngles :: Array Number
 spokeAngles = [ 22.5, 45.0, 67.5, 90.0, 112.5, 135.0, 157.5 ]
 
--- | The tree parent of a node — the non-prereq link targeting it.
-parentOf :: Array LinkData -> String -> Maybe String
-parentOf links nodeId =
-  Array.find (\link -> linkTargetImpl link == nodeId && not (linkPrereqImpl link)) links
-    >>= \link -> toMaybe (linkSourceImpl link)
+-- | Whether a link's endpoints are all in `set` — the target, and the
+-- | source when the link has one.
+endpointsIn :: StringSet -> LinkData -> Boolean
+endpointsIn set link =
+  runFn2 stringSetHasImpl set (linkTargetImpl link)
+    && case toMaybe (linkSourceImpl link) of
+      Nothing -> true
+      Just source -> runFn2 stringSetHasImpl set source
 
--- | Insertion-ordered adjacency entries, one per source node.
-type AdjEntry = { key :: String, vals :: Array String }
+-- | The mutable handles the idle ring pulse reads and writes.
+type PulseDeps =
+  { pulseTimer :: Ref.Ref (Maybe TimeoutId)
+  , pulseInterval :: Ref.Ref (Maybe IntervalId)
+  , pulseTick :: Ref Int
+  , colorMode :: ColorModeApi
+  , wrapper :: Ref (Nullable DomElement)
+  }
 
-insertAdj :: String -> String -> Array AdjEntry -> Array AdjEntry
-insertAdj key val entries = case Array.findIndex (\entry -> entry.key == key) entries of
-  Just i -> fromMaybe entries
-    (Array.modifyAt i (\entry -> entry { vals = Array.snoc entry.vals val }) entries)
-  Nothing -> Array.snoc entries { key, vals: [ val ] }
+-- | Cancel the pending pulse timeout and the repeating pulse interval.
+stopPulse :: PulseDeps -> Effect Unit
+stopPulse deps = do
+  Ref.read deps.pulseTimer >>= traverse_ clearTimeout
+  Ref.read deps.pulseInterval >>= traverse_ clearInterval
+  Ref.write Nothing deps.pulseTimer
+  Ref.write Nothing deps.pulseInterval
 
-lookupAdj :: Array AdjEntry -> String -> Array String
-lookupAdj entries key = maybe [] _.vals (Array.find (\entry -> entry.key == key) entries)
+-- | Bump the pulse tick and fire one ring pulse in the current theme.
+runPulse :: PulseDeps -> Effect Unit
+runPulse deps = do
+  tick <- read deps.pulseTick
+  write deps.pulseTick (tick + 1)
+  dark <- runEffectFn1 isDarkImpl deps.colorMode
+  runEffectFn2 pulseRingsImpl deps.wrapper dark
 
--- | Every id reachable from `start` (inclusive) along the adjacency.
-reachable :: Array AdjEntry -> String -> Array String
-reachable adj start = go [] [ start ]
-  where
-  go seen frontier = case Array.uncons frontier of
-    Nothing -> seen
-    Just { head, tail } ->
-      if Array.elem head seen then go seen tail
-      else go (Array.snoc seen head) (tail <> lookupAdj adj head)
+-- | Restart the idle pulse: after a settle delay, pulse every five
+-- | seconds — unless the visitor prefers reduced motion.
+startPulse :: PulseDeps -> Effect Unit
+startPulse deps = do
+  stopPulse deps
+  reduced <- prefersReducedMotionImpl
+  unless reduced do
+    pending <- setTimeout 1000 do
+      runPulse deps
+      repeating <- setInterval 5000 (runPulse deps)
+      Ref.write (Just repeating) deps.pulseInterval
+    Ref.write (Just pending) deps.pulseTimer
 
--- | Adjacency over the layout's links (prereq edges included, root links
--- | skipped), keyed by `keyOf` with `valOf` appended per link.
-buildAdj
-  :: (LinkData -> Nullable String)
-  -> (LinkData -> Nullable String)
-  -> Array LinkData
-  -> Array AdjEntry
-buildAdj keyOf valOf = foldl step []
-  where
-  step acc link = case toMaybe (keyOf link), toMaybe (valOf link) of
-    Just key, Just val -> insertAdj key val acc
-    _, _ -> acc
+-- | The mutable handles node dragging reads and writes.
+type DragDeps =
+  { simNodes :: Ref.Ref (Array SimNodeData)
+  , simulation :: Ref.Ref (Maybe SimHandle)
+  , layout :: Computed (Nullable LayoutData)
+  , wrapper :: Ref (Nullable DomElement)
+  }
+
+-- | The sim node with the given id, if it exists.
+dragTarget :: DragDeps -> String -> Effect (Maybe SimNodeData)
+dragTarget deps nodeId = do
+  nodes <- Ref.read deps.simNodes
+  pure (Array.find (\n -> simNodeIdImpl n == nodeId) nodes)
+
+-- | A pointer event's position in the map's centered coordinate space.
+dragPoint :: DragDeps -> PointerEvt -> Effect Vec2
+dragPoint deps event = do
+  mLayout <- toMaybe <$> read deps.layout
+  case mLayout of
+    Nothing -> pure origin
+    Just l -> runEffectFn4 svgPointImpl deps.wrapper event (layoutCxImpl l) (layoutCyImpl l)
+
+-- | Pin the grabbed node under the pointer and heat the simulation.
+onDragStart :: DragDeps -> String -> PointerEvt -> Effect Unit
+onDragStart deps nodeId event = do
+  mNode <- dragTarget deps nodeId
+  mSim <- Ref.read deps.simulation
+  case mNode, mSim of
+    Just node, Just sim -> do
+      point <- dragPoint deps event
+      runEffectFn3 setSimFixedImpl node point.x point.y
+      runEffectFn2 simAlphaTargetImpl sim 0.35
+      runEffectFn1 simRestartImpl sim
+    _, _ -> pure unit
+
+-- | Follow the pointer while the grabbed node stays pinned.
+onDragMove :: DragDeps -> String -> PointerEvt -> Effect Unit
+onDragMove deps nodeId event = do
+  mNode <- dragTarget deps nodeId
+  for_ mNode \node -> do
+    fixed <- runEffectFn1 hasFixedImpl node
+    when fixed do
+      point <- dragPoint deps event
+      runEffectFn3 setSimFixedImpl node point.x point.y
+
+-- | Release the node and let the simulation cool back down.
+onDragEnd :: DragDeps -> String -> Effect Unit
+onDragEnd deps nodeId = do
+  mNode <- dragTarget deps nodeId
+  mSim <- Ref.read deps.simulation
+  case mNode, mSim of
+    Just node, Just sim -> do
+      runEffectFn1 clearSimFixedImpl node
+      runEffectFn2 simAlphaTargetImpl sim 0.0
+    _, _ -> pure unit
 
 useInterestMap :: EffectFn1 MapArgs MapBindings
 useInterestMap = mkEffectFn1 setup
@@ -279,7 +338,7 @@ setup args = do
 
   compact <- computed ((_ < 0.62) <$> read scale)
 
-  entropy <- randomImpl
+  entropy <- random
 
   appearanceOrder <- computed do
     mLayout <- toMaybe <$> read layout
@@ -306,13 +365,7 @@ setup args = do
   shownLinks <- computed do
     mLayout <- toMaybe <$> read layout
     appeared <- read appearedSet
-    let
-      visible link =
-        runFn2 stringSetHasImpl appeared (linkTargetImpl link)
-          && case toMaybe (linkSourceImpl link) of
-            Nothing -> true
-            Just source -> runFn2 stringSetHasImpl appeared source
-    pure (Array.filter visible (maybe [] layoutLinksImpl mLayout))
+    pure (Array.filter (endpointsIn appeared) (maybe [] layoutLinksImpl mLayout))
 
   positions <- shallowRef =<< runEffectFn1 positionsOfImpl []
   simulation <- Ref.new (Nothing :: Maybe SimHandle)
@@ -381,9 +434,12 @@ setup args = do
 
   wrapperStyle <- computed do
     h <- read height
-    pure { height: showNumberImpl h <> "px" }
+    pure { height: toString h <> "px" }
 
   let
+    pulseDeps = { pulseTimer, pulseInterval, pulseTick, colorMode, wrapper: args.wrapper }
+    dragDeps = { simNodes, simulation, layout, wrapper: args.wrapper }
+
     posOf mId = case mId of
       Nothing -> pure origin
       Just nodeId -> do
@@ -398,28 +454,6 @@ setup args = do
       Just pending -> clearInterval pending *> Ref.write Nothing entryTimer
       Nothing -> pure unit
 
-    stopPulse = do
-      Ref.read pulseTimer >>= traverse_ clearTimeout
-      Ref.read pulseInterval >>= traverse_ clearInterval
-      Ref.write Nothing pulseTimer
-      Ref.write Nothing pulseInterval
-
-    runPulse = do
-      tick <- read pulseTick
-      write pulseTick (tick + 1)
-      dark <- runEffectFn1 isDarkImpl colorMode
-      runEffectFn2 pulseRingsImpl args.wrapper dark
-
-    startPulse = do
-      stopPulse
-      reduced <- prefersReducedMotionImpl
-      unless reduced do
-        pending <- setTimeout 1000 do
-          runPulse
-          repeating <- setInterval 5000 runPulse
-          Ref.write (Just repeating) pulseInterval
-        Ref.write (Just pending) pulseTimer
-
     resetRings = do
       Ref.read ringControls >>= traverse_ (runEffectFn1 stopSpringImpl)
       Ref.read ringTimers >>= traverse_ clearTimeout
@@ -430,7 +464,7 @@ setup args = do
 
     resetEntry = do
       clearEntryTimer
-      stopPulse
+      stopPulse pulseDeps
       resetRings
       write entryStarted false
       write appearedCount 0
@@ -446,7 +480,7 @@ setup args = do
         if count >= Array.length order then do
           clearEntryTimer
           Ref.read simulation >>= traverse_ \sim -> runEffectFn2 simAlphaTargetImpl sim 0.0
-          startPulse
+          startPulse pulseDeps
         else
           for_ (Array.index order count) \node -> do
             nodes <- Ref.read simNodes
@@ -455,7 +489,8 @@ setup args = do
               Just simNode, Just sim -> do
                 mLayout <- toMaybe <$> read layout
                 let links = maybe [] layoutLinksImpl mLayout
-                from <- posOf (parentOf links (nodeIdImpl node))
+                from <- posOf
+                  (parentOf linkTargetImpl linkPrereqImpl linkSourceImpl links (nodeIdImpl node))
                 runEffectFn3 setSimEntryImpl simNode from.x from.y
                 active <- Ref.modify (_ + 1) activeSimCount
                 runEffectFn2 simSetNodesImpl sim (Array.slice 0 active nodes)
@@ -527,49 +562,11 @@ setup args = do
           )
         Ref.write (Just controls) heightControls
 
-    dragTarget nodeId = do
-      nodes <- Ref.read simNodes
-      pure (Array.find (\n -> simNodeIdImpl n == nodeId) nodes)
-
-    dragPoint event = do
-      mLayout <- toMaybe <$> read layout
-      case mLayout of
-        Nothing -> pure origin
-        Just l -> runEffectFn4 svgPointImpl args.wrapper event (layoutCxImpl l) (layoutCyImpl l)
-
-    onDragStart nodeId event = do
-      mNode <- dragTarget nodeId
-      mSim <- Ref.read simulation
-      case mNode, mSim of
-        Just node, Just sim -> do
-          point <- dragPoint event
-          runEffectFn3 setSimFixedImpl node point.x point.y
-          runEffectFn2 simAlphaTargetImpl sim 0.35
-          runEffectFn1 simRestartImpl sim
-        _, _ -> pure unit
-
-    onDragMove nodeId event = do
-      mNode <- dragTarget nodeId
-      for_ mNode \node -> do
-        fixed <- runEffectFn1 hasFixedImpl node
-        when fixed do
-          point <- dragPoint event
-          runEffectFn3 setSimFixedImpl node point.x point.y
-
-    onDragEnd nodeId = do
-      mNode <- dragTarget nodeId
-      mSim <- Ref.read simulation
-      case mNode, mSim of
-        Just node, Just sim -> do
-          runEffectFn1 clearSimFixedImpl node
-          runEffectFn2 simAlphaTargetImpl sim 0.0
-        _, _ -> pure unit
-
   runEffectFn4 watchPairImpl (read layout) (read appearanceOrder) rebuild true
 
   onUnmounted do
     clearEntryTimer
-    stopPulse
+    stopPulse pulseDeps
     resetRings
     Ref.read heightControls >>= traverse_ (runEffectFn1 stopSpringImpl)
     Ref.read simulation >>= traverse_ (runEffectFn1 simStopImpl)
@@ -596,13 +593,8 @@ setup args = do
     , pos: mkEffectFn1 (posOf <<< toMaybe)
     , litLink: mkEffectFn1 \link -> do
         lit <- read litNodes
-        pure
-          ( runFn2 stringSetHasImpl lit (linkTargetImpl link)
-              && case toMaybe (linkSourceImpl link) of
-                Nothing -> true
-                Just source -> runFn2 stringSetHasImpl lit source
-          )
-    , onDragStart: mkEffectFn2 onDragStart
-    , onDragMove: mkEffectFn2 onDragMove
-    , onDragEnd: mkEffectFn1 onDragEnd
+        pure (endpointsIn lit link)
+    , onDragStart: mkEffectFn2 (onDragStart dragDeps)
+    , onDragMove: mkEffectFn2 (onDragMove dragDeps)
+    , onDragEnd: mkEffectFn1 (onDragEnd dragDeps)
     }
