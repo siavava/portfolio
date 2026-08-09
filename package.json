@@ -1,11 +1,16 @@
 {
   "private": true,
   "packageManager": "bun@1.0.0",
+  "imports": {
+    "#purs/*": "./output/*/index.js"
+  },
   "scripts": {
     "notes-meta": "bun scripts/build-notes-meta.ts",
-    "build": "bun run notes-meta && nuxi build",
-    "dev": "nuxi dev",
-    "generate": "bun run notes-meta && nuxi generate",
+    "purs:build": "spago build && bun scripts/purs-dts.mjs",
+    "purs:check": "bun scripts/purs-golden.mjs check",
+    "build": "bun run purs:build && bun run notes-meta && nuxi build",
+    "dev": "bun run purs:build && nuxi dev",
+    "generate": "bun run purs:build && bun run notes-meta && nuxi generate",
     "preview": "nuxi preview",
     "lint": "eslint . --fix",
     "lint:md": "markdownlint-cli2 \"content/**/*.md\" \"*.md\"",
@@ -59,8 +64,11 @@
     "eslint-plugin-vue-pug": "1.0.0-alpha.5",
     "markdownlint-cli2": "^0.18.0",
     "pug": "^3.0.3",
+    "purescript": "^0.15.16",
+    "purs-tidy": "^0.11.1",
     "sass": "^1.97.3",
     "satori": "^0.28.0",
+    "spago": "^0.93.45",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.1.8"
   }

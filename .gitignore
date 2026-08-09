@@ -23,3 +23,8 @@ dist
 .claude
 .agents
 .vscode
+
+# purescript build artifacts
+output/
+.spago/
+.purs-repl
