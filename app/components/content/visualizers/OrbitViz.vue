@@ -38,70 +38,8 @@ VizFrame(variant="orbit-viz", title="Orbital motion", :note="note")
 </template>
 
 <script lang="ts" setup>
-import { useRafFn } from "@vueuse/core"
-
 /** ## OrbitViz — a 2-D top-down abstraction of astra's orbit loop. */
-const W = 640
-const H = 320
-const CX = W / 2
-const CY = H / 2
-
-type Planet = {
-  name: string
-  r: number
-  period: number
-  size: number
-  angle: number
-}
-
-const SEED: { name: string, r: number, period: number, size: number }[] = [
-  { name: "mercury", r: 26, period: 0.24, size: 2 },
-  { name: "venus", r: 40, period: 0.62, size: 3 },
-  { name: "earth", r: 56, period: 1, size: 3.2 },
-  { name: "mars", r: 72, period: 1.88, size: 2.6 },
-  { name: "jupiter", r: 100, period: 11.86, size: 5.5 },
-  { name: "saturn", r: 130, period: 29.45, size: 4.8 },
-]
-
-const planets = reactive<Planet[]>([])
-const mode = ref<"ideal" | "true">("ideal")
-const hovered = ref<string | null>(null)
-const note = ref("")
-
-const phaseFor = (i: number) => i * 2.399963 % (Math.PI * 2)
-
-function reset() {
-  planets.length = 0
-  SEED.forEach((s, i) => {
-    planets.push({ ...s, angle: phaseFor(i) })
-  })
-  note.value = noteText()
-}
-
-const noteText = () =>
-  mode.value === "true"
-    ? "true ratios — angular speed ∝ 1 / orbital period"
-    : "idealized — the range compressed so every orbit stays visible"
-
-const BASE = 0.35
-const omega = (p: Planet) =>
-  mode.value === "true" ? BASE / p.period : BASE * (1 / p.period) ** 0.35
-
-watch(mode, () => { note.value = noteText() })
-
-let last = 0
-const { resume } = useRafFn(({ timestamp: t }) => {
-  const dt = last ? Math.min((t - last) / 1000, 0.05) : 0
-  last = t
-  for (const p of planets) {
-    p.angle = (p.angle + omega(p) * dt) % (Math.PI * 2)
-  }
-}, { immediate: false })
-
-useAfterPaint(() => {
-  reset()
-  resume()
-})
+const { planets, mode, hovered, note, reset, w: W, h: H, cx: CX, cy: CY } = useOrbitViz()
 </script>
 
 <style lang="sass" scoped>
