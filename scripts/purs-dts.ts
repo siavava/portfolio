@@ -325,6 +325,42 @@ const translateRow = (row: TypeNode, locals: Set<string>): string => {
 const docComment = (text: string | null): string =>
   text ? `/** ${text.trim().replace(/\*\//g, "*\\/")} */\n` : ""
 
+/** Comments sitting on the line(s) above a record field inside a type
+ * synonym, read from the .purs source (docs.json drops row comments).
+ * A comment attaches to the next `field ::` line. */
+const fieldComments = (decl: Declaration, sourceLines: string[]): Map<string, string> => {
+  const comments = new Map<string, string>()
+  const start = decl.sourceSpan?.start?.[0] ?? 0
+  if (!start) return comments
+  let pending: string[] = []
+  for (let i = start - 1; i < Math.min(sourceLines.length, start + 80); i++) {
+    const line = sourceLines[i] ?? ""
+    if (i > start - 1 && /^\S/.test(line)) break
+    const comment = line.match(/^\s*(?:[,{]\s*)?--\s*\|?\s*(.*)$/)
+    if (comment) {
+      pending.push(comment[1] ?? "")
+      continue
+    }
+    const field = line.match(/^\s*[,{]?\s*([A-Za-z_][A-Za-z0-9_']*)\s*::/)
+    if (field && pending.length) comments.set(field[1] ?? "", pending.join(" ").trim())
+    if (!comment) pending = []
+  }
+  return comments
+}
+
+/** A top-level record synonym with per-field JSDoc, multi-line. */
+const documentedRecord = (row: TypeNode, locals: Set<string>, docs: Map<string, string>): string => {
+  const fields: string[] = []
+  let cursor = row
+  while (cursor.tag === "RCons") {
+    const [label, type, tail] = cursor.contents as [string, TypeNode, TypeNode]
+    const doc = docs.get(label)
+    fields.push(`${doc ? `  /** ${doc.replace(/\*\//g, "*\\/")} */\n` : ""}  ${label}: ${translate(type, locals)},`)
+    cursor = tail
+  }
+  return `{\n${fields.join("\n")}\n}`
+}
+
 const generate = (docsPath: string): void => {
   const docs = JSON.parse(readFileSync(docsPath, "utf8")) as ModuleDocs
   const moduleName = basename(dirname(docsPath))
@@ -371,9 +407,20 @@ const generate = (docsPath: string): void => {
   for (const decl of docs.declarations) {
     const { declType } = decl.info
     if (declType === "typeSynonym" && decl.info.type) {
-      lines.push(`${docComment(decl.comments)}export type ${decl.title} = ${translate(decl.info.type, locals)}`, "")
+      const t = decl.info.type
+      const isRecord = t.tag === "TypeApp" && isCon(pair(t)[0], "Prim", "Record")
+      const rowDocs = isRecord ? fieldComments(decl, sourceLines) : new Map<string, string>()
+      const body = rowDocs.size
+        ? documentedRecord(pair(t)[1], locals, rowDocs)
+        : translate(t, locals)
+      lines.push(`${docComment(decl.comments)}export type ${decl.title} = ${body}`, "")
     } else if (declType === "data" || declType === "newtype") {
-      lines.push(`/** PureScript ${declType} — opaque from TypeScript. */`, `export type ${decl.title} = unknown`, "")
+      const annotated = tsAnnotation(decl.comments)
+      if (annotated && !annotated.includes("$")) {
+        lines.push(`${docComment(decl.comments)}export type ${decl.title} = ${annotated}`, "")
+      } else {
+        lines.push(`/** PureScript ${declType} — opaque from TypeScript. */`, `export type ${decl.title} = unknown`, "")
+      }
     } else if (declType === "value" && decl.info.type) {
       lines.push(`${docComment(decl.comments)}export declare const ${decl.title}: ${translateValue(decl.info.type, locals, argNames(decl))}`, "")
     }
@@ -385,26 +432,75 @@ const generate = (docsPath: string): void => {
 
   const moduleComments = docs.comments ?? ""
   const handAdapted = /@ts-hand-adapted\b/.test(moduleComments) || HAND_ADAPTED.has(moduleName)
-  if (!handAdapted && !emittingInternal) emitShim(docs, moduleName)
+  if (!handAdapted && !emittingInternal) {
+    const boundary = docs.declarations.find(d => d.info.declType === "value" && d.title === "setup")
+    emitShim(docs, moduleName, boundary ? equationArgNames(boundary, sourceLines).map(n => n) : undefined)
+  }
+}
+
+/** Arity of a curried `a1 -> … -> aN -> Effect r` chain, or null. */
+const effectBoundaryArity = (t: TypeNode): number | null => {
+  let cursor = t
+  while (cursor.tag === "ForAll" || cursor.tag === "ParensInType") {
+    cursor = cursor.tag === "ForAll" ? forAllBody(cursor) : cursor.contents as TypeNode
+  }
+  let arity = 0
+  while (
+    cursor.tag === "TypeApp"
+    && pair(cursor)[0].tag === "TypeApp"
+    && isCon(pair(pair(cursor)[0])[0], "Prim", "Function")
+  ) {
+    arity++
+    cursor = pair(cursor)[1]
+  }
+  if (arity === 0) return null
+  return cursor.tag === "TypeApp" && isCon(pair(cursor)[0], "Effect", "Effect") ? arity : null
 }
 
 /** Emit a runtime shim re-exporting the module's boundary VALUES, ready for
  * Nuxt auto-import scanning — no hand-written file needed. Types are not
  * re-exported: module-local opaque helpers (DomElement, StyleMap, …) would
  * collide across modules in the global auto-import pool; consumers that
- * need a type import it from `#purs/<Module>` explicitly. */
-const emitShim = (docs: ModuleDocs, moduleName: string): void => {
-  const values = docs.declarations.filter(d => d.info.declType === "value").map(d => d.title)
-  if (!values.length) return
-
+ * need a type import it from `#purs/<Module>` explicitly.
+ *
+ * A value named `setup` with a curried `args -> Effect bindings` type is
+ * the module's component boundary: the shim uncurries it and exports it as
+ * `use<LastSegment>` (App.Components.Cue → useCue), so the .purs module
+ * keeps the idiomatic curried form with no mkEffectFn wrapper. Raw `setup`
+ * itself is not re-exported — the name would collide across modules. */
+const emitShim = (docs: ModuleDocs, moduleName: string, setupArgNames?: (string | null)[]): void => {
+  const jsdoc = (text: string | null): string[] =>
+    text ? [`/** ${text.trim().replace(/\*\//g, "*\\/").replace(/\n/g, "\n * ")} */`] : []
   const segments = moduleName.split(".")
+  const setupDecl = docs.declarations.find(d =>
+    d.info.declType === "value" && d.title === "setup" && d.info.type
+    && effectBoundaryArity(d.info.type) !== null)
+  const values = docs.declarations
+    .filter(d => d.info.declType === "value" && d !== setupDecl)
+    .map(d => d.title)
+  if (!setupDecl && !values.length) return
+
   const nested = (segments[0] === "App" ? segments.slice(1) : segments)
     .map(s => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase())
     .join("/")
-  const lines = [
-    `// Generated by scripts/purs-dts.ts from ${moduleName} — do not edit.`,
-    `export { ${values.join(", ")} } from "#purs/${moduleName}"`,
-  ]
+  const lines = [`// Generated by scripts/purs-dts.ts from ${moduleName} — do not edit.`]
+  if (values.length) lines.push(`export { ${values.join(", ")} } from "#purs/${moduleName}"`)
+  if (setupDecl?.info.type) {
+    const arity = effectBoundaryArity(setupDecl.info.type) as number
+    const publicName = `use${segments.at(-1)}`
+    const names = setupArgNames ?? []
+    const params = Array.from({ length: arity }, (_, i) => names[i] ?? `arg${i}`)
+    // Parameter types chain through the curried setup so hover keeps the
+    // real argument names instead of inferring the helper's generics.
+    const paramType = (i: number): string =>
+      `Parameters<${Array.from({ length: i }, () => "ReturnType<").join("")}typeof setup${">".repeat(i)}>[0]`
+    lines.push(
+      `import { setup } from "#purs/${moduleName}"`,
+      ...jsdoc(setupDecl.comments),
+      `export const ${publicName} = (${params.map((p, i) => `${p}: ${paramType(i)}`).join(", ")}) =>`,
+      `  setup${params.map(p => `(${p})`).join("")}()`,
+    )
+  }
   mkdirSync(dirname(`${shimDir}/${nested}.ts`), { recursive: true })
   writeFileSync(`${shimDir}/${nested}.ts`, `${lines.join("\n")}\n`)
   console.log(`generated .purs-shims/${nested}.ts`)
