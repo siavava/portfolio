@@ -273,14 +273,14 @@ function tsConfig({ purs }: { purs?: "app" | "server" } = {}) {
       // pulls the compiled .purs/output js into the type program (TS6307).
       ...purs
         ? {
-            paths: {
-              "#purs/*": ["../app/types/purs/*"],
-              ...purs === "server"
-                ? Object.fromEntries(pursServerModules.map(name =>
-                    [`#purs/${name}`, [`../app/types/purs/${name}.d.ts`]]))
-                : {},
-            },
-          }
+          paths: {
+            "#purs/*": ["../app/types/purs/*"],
+            ...purs === "server"
+              ? Object.fromEntries(pursServerModules.map(name =>
+                [`#purs/${name}`, [`../app/types/purs/${name}.d.ts`]]))
+              : {},
+          },
+        }
         : {},
     },
     vueCompilerOptions: {
