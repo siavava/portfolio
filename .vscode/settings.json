@@ -1,0 +1,15 @@
+{
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "purescript-lsp.outputPath": "output",
+
+  // PureScript IDE (nwolverson.ide-purescript) — completion, types on hover,
+  // go-to-definition, and rebuild-on-save through the purs ide server.
+  "purescript.addSpagoSources": true,
+  "purescript.buildCommand": "spago build --purs-args --json-errors",
+  "purescript.outputDirectory": "output/",
+  // Sources live inside the Nuxt app tree (spago builds them via the
+  // src -> app symlink); point the IDE at the real paths.
+  "purescript.sourcePath": "app",
+  "purescript.formatter": "purs-tidy",
+  "purescript.addNpmPath": true
+}
