@@ -87,6 +87,7 @@ export default defineNuxtConfig({
   },
 
   css: [
+    "katex/dist/katex.min.css",
     "@/styles/colors.scss",
     "@/styles/default.sass",
     "@/styles/typography.scss",
@@ -195,21 +196,15 @@ export default defineNuxtConfig({
           href: "/favicon.svg",
           color: "#111110",
         },
-        {
-          rel: "preconnect",
-          href: "https://cdn.jsdelivr.net",
-          crossorigin: "anonymous",
-        },
-        {
-          rel: "stylesheet",
-          href: "https://cdn.jsdelivr.net/npm/katex@0.16.42/dist/katex.min.css",
-          crossorigin: "anonymous",
-        },
       ],
     },
   },
 
   routeRules: {
+    // Unhashed static font files: cache hard, they change ~never.
+    "/fonts/**": {
+      headers: { "Cache-Control": "public, max-age=31536000, immutable" },
+    },
     // Explicit rule so the pre-rendered output keeps the XML content-type.
     "/sitemap.xml": {
       prerender: true,
