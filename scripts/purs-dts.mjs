@@ -1,7 +1,7 @@
 /**
  * Generates TypeScript declarations for the compiled PureScript modules.
  *
- * Reads the typed AST spago emits per module (`output/<Module>/docs.json`)
+ * Reads the typed AST spago emits per module (`.purs/output/<Module>/docs.json`)
  * and writes `app/types/purs/<Module>.d.ts`, so the TS boundary is derived
  * from the PureScript source instead of hand-maintained. Runs as part of
  * `bun run purs:build`.
@@ -9,6 +9,13 @@
  * Translation subset (enough for a JS-friendly module boundary): prims,
  * arrays, records, curried functions, Nullable, and same-module synonyms.
  * ADTs are exported as opaque types; anything untranslatable is `unknown`.
+ *
+ * Doc-comment directives (authored in .purs sources, read from docs.json):
+ * `@ts <expr>` on a foreign data declaration names its TS type — the rest
+ * of the line, with `$1`/`$2`… standing for the translated type arguments
+ * (e.g. `-- | A ref. @ts import("vue").Ref<$1>`). `@ts-internal` and
+ * `@ts-hand-adapted` in a module's doc comment mark the whole module;
+ * App.Server.* modules are internal automatically.
  */
 
 import { basename, dirname } from "node:path"
@@ -21,6 +28,7 @@ const shimDir = `${root}/.purs-shims`
 
 // Modules whose TS surface is a hand-written adapter (API reshaping,
 // default parameters) — declarations are generated, runtime shims are not.
+// Prefer the `@ts-hand-adapted` module doc pragma; this set is the fallback.
 const HAND_ADAPTED = new Set([
   "App.Utils.Coder",
   "App.Utils.Scroll",
@@ -33,63 +41,40 @@ const HAND_ADAPTED = new Set([
 ])
 
 // Modules only PureScript (or direct #purs imports) consume — no shim.
+// Prefer the `@ts-internal` module doc pragma; this set is the fallback.
+// App.Server.* modules are internal automatically (nitro aliases their
+// compiled entries directly — see nuxt.config.ts).
 const INTERNAL = new Set([
   "App.Composables.CaptionTypewriter",
-  "App.Server.Sitemap",
-  "App.Server.Tikz",
 ])
 
 const PRIMS = { String: "string", Int: "number", Number: "number", Boolean: "boolean", Char: "string" }
 
 // Foreign/opaque PureScript types with a precise TypeScript identity.
 // Keyed by fully-qualified name; values take the translated type arguments.
+// `@ts` doc annotations take precedence; this map is the fallback for
+// types not yet annotated in their .purs source.
 const TYPE_OVERRIDES = {
   "Vue.Ref": args => `import("vue").Ref<${args[0]}>`,
   "Vue.Computed": args => `import("vue").ComputedRef<${args[0]}>`,
   "Vue.ReactiveSet": args => `Set<${args[0]}>`,
-  "App.Components.ProjectShelf.DomElement": () => "HTMLElement",
-  "App.Components.ProjectShelf.MouseEvt": () => "MouseEvent",
-  "App.Components.ProjectShelf.StyleMap": () => "Record<string, string>",
-  "App.Stores.Cues.DomElement": () => "Element",
   "App.Stores.Cues.ReactiveMap": args => `Map<${args[0]}, ${args[1]}>`,
   "App.Composables.MetricsTracking.Router": () => "import(\"vue-router\").Router",
-  "App.Composables.ScrollReveal.DomElement": () => "HTMLElement",
-  "App.Composables.SideNoteLayout.DomElement": () => "HTMLElement",
-  "App.Composables.FigureSpotlight.DomElement": () => "HTMLElement",
-  "App.Composables.FigureSpotlight.MouseEvt": () => "MouseEvent",
-  "App.Composables.FigureSpotlight.KeyEvt": () => "KeyboardEvent",
-  "App.Composables.ScrollEdges.DomElement": () => "HTMLElement",
   "App.Composables.ProjectReferences.ProjectDoc": () => "import(\"@nuxt/content\").ProjectsCollectionItem",
   "App.Composables.Profile.ProfileAsync": () => "import(\"../../ffi/composables/profile\").ProfileAsync",
-  "App.Components.TooltipShell.StyleMap": () => "Record<string, string>",
-  "App.Components.ReviewBubble.StyleMap": () => "Record<string, string | number | undefined>",
-  "App.Components.Cue.DomElement": () => "HTMLElement",
-  "App.Components.SideNote.DomElement": () => "HTMLElement",
-  "App.Components.FigmaSelect.DomElement": () => "HTMLElement",
-  "App.Components.CueRoot.DomElement": () => "HTMLElement",
-  "App.Components.FigureSpotlight.DomElement": () => "HTMLElement",
-  "App.Components.BookcaseRail.DomElement": () => "HTMLElement",
   "App.Components.ReaderTopbar.ShareFn": () => "(options?: { title?: string, url?: string }) => Promise<void>",
   "App.Components.ReaderTopbar.CopyFn": () => "(text: string) => Promise<void>",
-  "App.Composables.DraggableBubble.DomElement": () => "HTMLElement",
-  "App.Composables.DraggableBubble.PointerEvt": () => "PointerEvent",
   "App.Composables.DraggableBubble.Vec2": () => "{ x: number, y: number }",
-  "App.Composables.ReaderPeeks.DomElement": () => "HTMLElement",
-  "App.Composables.ReaderPeeks.MouseEvt": () => "MouseEvent",
   "App.Composables.ReaderPeeks.PeekStyle": () => "Record<string, string>",
   "App.Composables.Metrics.Socket.WsData": () => "WsData",
   "App.Composables.Metrics.ViewerGeo.GeoData": () => "ViewerGeo",
   "App.Composables.Metrics.ViewerGeo.GeoPromise": () => "Promise<ViewerGeo | null>",
   "App.Composables.Metrics.ViewerLocation.LocPromise": () => "Promise<LocationData | null>",
   "App.Components.CodePage.TextAreaEl": () => "HTMLTextAreaElement",
-  "App.Components.CodePage.DomElement": () => "HTMLElement",
   "App.Components.CodePage.IntSet": () => "Set<number>",
   "App.Components.InterestMapNode.PulseEl": () => "SVGCircleElement",
   "App.Components.InterestMapNode.LabelEl": () => "SVGTextElement",
-  "App.Components.InterestMapNode.PointerEvt": () => "PointerEvent",
   "App.Components.InterestMapNode.MapNodeData": () => "MapNode",
-  "App.Components.InterestMap.DomElement": () => "HTMLElement",
-  "App.Components.InterestMap.PointerEvt": () => "PointerEvent",
   "App.Components.InterestMap.BranchesData": () => "InterestBranch[]",
   "App.Components.InterestMap.LayoutData": () => "MapLayout",
   "App.Components.InterestMap.NodeData": () => "MapNode",
@@ -99,12 +84,32 @@ const TYPE_OVERRIDES = {
   "App.Components.ReaderPage.RouteHandle": () => "import(\"vue-router\").RouteLocationNormalizedLoaded",
   "App.Components.ReaderPage.RouterHandle": () => "import(\"vue-router\").Router",
   "App.Components.ReaderPage.RailHandle": () => "import(\"../../ffi/components/reader-page\").RailHandle",
-  "App.Components.ReaderPage.KeyEvt": () => "KeyboardEvent",
   "App.Components.ReaderPage.SpotVal": () => "{ html: string, caption: string, n: number, capWidth: number }",
   "App.Components.SmokeViz.CanvasEl": () => "HTMLCanvasElement",
-  "App.Components.MulticopterViz.MouseEvt": () => "MouseEvent",
-  "App.Components.ShelfSatori.StyleMap": () => "import(\"vue\").CSSProperties",
   "App.Components.ParticleHashViz.SimParticles": () => "import(\"../../ffi/components/particle-hash-viz\").SimParticle[]",
+}
+
+// `@ts` doc annotations, fully-qualified name → type expression. Filled by
+// a pre-pass over every output module's docs.json — lookups are
+// cross-module (e.g. Vue.Ref referenced from App code), so collection
+// can't be limited to the emitted App.* set.
+const tsAnnotations = new Map()
+
+/** The `@ts <expr>` annotation in a doc comment (expression runs to end of line). */
+const tsAnnotation = comments => comments?.match(/@ts[ \t]+(.+)/)?.[1].trim()
+
+/** Substitute `$1`/`$2`… argument holes with the translated type arguments. */
+const fillHoles = (expr, args) =>
+  expr.replace(/\$(\d+)/g, (_, n) => args[Number(n) - 1] ?? "unknown")
+
+// Set per module by generate(), so unknown-fallback warnings can name it.
+// Internal modules skip the warning: their d.ts is not a consumer surface.
+let emittingModule = ""
+let emittingInternal = false
+
+const warnUnknown = subject => {
+  if (emittingInternal) return
+  console.warn(`warning: ${emittingModule}: ${subject} has no translation — emitted \`unknown\` (add an @ts annotation or a TYPE_OVERRIDES entry)`)
 }
 
 const escapeRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
@@ -212,9 +217,13 @@ const translate = (t, locals) => {
       const [modulePath, name] = t.contents
       if (modulePath.length === 1 && modulePath[0] === "Prim" && PRIMS[name]) return PRIMS[name]
       if (modulePath.join(".") === "Data.Unit" && name === "Unit") return "void"
-      const override = TYPE_OVERRIDES[`${modulePath.join(".")}.${name}`]
+      const qualified = `${modulePath.join(".")}.${name}`
+      const annotation = tsAnnotations.get(qualified)
+      if (annotation) return fillHoles(annotation, [])
+      const override = TYPE_OVERRIDES[qualified]
       if (override) return override([])
       if (locals.has(name)) return name
+      warnUnknown(qualified)
       return "unknown"
     }
     case "TypeApp": {
@@ -233,16 +242,27 @@ const translate = (t, locals) => {
         return `(${params.join(", ")}) => ${translate(args.at(-1), locals)}`
       }
       if (base.tag === "TypeConstructor") {
-        const override = TYPE_OVERRIDES[`${base.contents[0].join(".")}.${base.contents[1]}`]
+        const qualified = `${base.contents[0].join(".")}.${base.contents[1]}`
+        const annotation = tsAnnotations.get(qualified)
+        if (annotation) return fillHoles(annotation, args.map(a => translate(a, locals)))
+        const override = TYPE_OVERRIDES[qualified]
         if (override) return override(args.map(a => translate(a, locals)))
+        warnUnknown(qualified)
+        return "unknown"
       }
+      warnUnknown(`applied ${base.tag}`)
       return "unknown"
     }
+    // A bare type variable is legitimate polymorphism, not a missing
+    // mapping — degrade silently.
+    case "TypeVar":
+      return "unknown"
     case "ForAll":
       return translate(forAllBody(t), locals)
     case "ParensInType":
       return translate(t.contents, locals)
     default:
+      warnUnknown(typeof t.contents === "string" ? `${t.tag} ${t.contents}` : t.tag)
       return "unknown"
   }
 }
@@ -267,6 +287,10 @@ const docComment = (text) =>
 const generate = (docsPath) => {
   const docs = JSON.parse(readFileSync(docsPath, "utf8"))
   const moduleName = basename(dirname(docsPath))
+  emittingModule = moduleName
+  emittingInternal = moduleName.startsWith("App.Server.")
+    || /@ts-internal\b/.test(docs.comments ?? "")
+    || INTERNAL.has(moduleName)
 
   // A renamed or deleted module leaves its output dir behind; shimming it
   // would shadow real auto-imports (this bit us when App.Vue became Vue).
@@ -295,10 +319,10 @@ const generate = (docsPath) => {
 
   const lines = [
     "/**",
-    ` * Generated by scripts/purs-dts.mjs from output/${moduleName}/docs.json — do not edit.`,
+    ` * Generated by scripts/purs-dts.mjs from .purs/output/${moduleName}/docs.json — do not edit.`,
     " *",
     ` * TypeScript resolves \`#purs/${moduleName}\` here via tsconfig \`paths\`;`,
-    " * bundlers resolve it to `output/` via the package `imports` field.",
+    " * bundlers resolve it to `.purs/output/` via the package `imports` field.",
     " */",
     "",
   ]
@@ -318,7 +342,9 @@ const generate = (docsPath) => {
   writeFileSync(target, `${lines.join("\n").trim()}\n`)
   console.log(`generated ${target.replace(`${root}/`, "")}`)
 
-  if (!HAND_ADAPTED.has(moduleName) && !INTERNAL.has(moduleName)) emitShim(docs, moduleName)
+  const moduleComments = docs.comments ?? ""
+  const handAdapted = /@ts-hand-adapted\b/.test(moduleComments) || HAND_ADAPTED.has(moduleName)
+  if (!handAdapted && !emittingInternal) emitShim(docs, moduleName)
 }
 
 /** Emit a runtime shim re-exporting the module's boundary VALUES, ready for
@@ -343,14 +369,29 @@ const emitShim = (docs, moduleName) => {
   console.log(`generated .purs-shims/${nested}.ts`)
 }
 
+/** Pre-pass: record the `@ts` annotations on a module's data declarations. */
+const collectAnnotations = (docsPath) => {
+  const docs = JSON.parse(readFileSync(docsPath, "utf8"))
+  const moduleName = basename(dirname(docsPath))
+  for (const decl of docs.declarations) {
+    if (decl.info.declType !== "data" && decl.info.declType !== "newtype") continue
+    const expr = tsAnnotation(decl.comments)
+    if (expr) tsAnnotations.set(`${moduleName}.${decl.title}`, expr)
+  }
+}
+
+// Clear stale declarations and shims (renamed/removed modules would
+// otherwise leave orphaned .d.ts files and duplicate names in the
+// auto-import pool).
+rmSync(outDir, { recursive: true, force: true })
 mkdirSync(outDir, { recursive: true })
-// Clear stale shims (renamed/removed modules would otherwise linger and
-// duplicate names in the auto-import pool).
 rmSync(shimDir, { recursive: true, force: true })
 mkdirSync(shimDir, { recursive: true })
-const moduleDocs = readdirSync(`${root}/output`)
-  .filter(name => name.startsWith("App.") && existsSync(`${root}/output/${name}/docs.json`))
-  .map(name => `${root}/output/${name}/docs.json`)
+const allDocs = readdirSync(`${root}/.purs/output`)
+  .filter(name => existsSync(`${root}/.purs/output/${name}/docs.json`))
+  .map(name => `${root}/.purs/output/${name}/docs.json`)
+allDocs.forEach(collectAnnotations)
+const moduleDocs = allDocs.filter(path => basename(dirname(path)).startsWith("App."))
 if (moduleDocs.length === 0) {
   console.error("no compiled App.* modules found — run `spago build` first")
   process.exit(1)
