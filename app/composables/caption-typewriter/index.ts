@@ -8,7 +8,12 @@
  * the line boundary. `active` is a getter for the open state; every time it
  * flips truthy the caption is re-measured and retyped, with `onOpen` running
  * first (e.g. to size the figure). Honours `prefers-reduced-motion`.
+ *
+ * The geometry core — line merging and the reveal polygon — lives in the
+ * PureScript module `CaptionTypewriter.purs`; this file keeps the DOM
+ * measurement, the watch wiring, and the rAF loop.
  */
+import { linesOf, revealJs } from "#purs/App.Composables.CaptionTypewriter"
 import type { Ref } from "vue"
 
 interface Box {
@@ -70,45 +75,6 @@ export function useCaptionTypewriter(
     return units
   }
 
-  function linesOf(units: Box[]): Box[] {
-    const lines: Box[] = []
-    for (const unit of units) {
-      const line = lines[lines.length - 1]
-      if (line && unit.top < line.top + (unit.bottom - unit.top) * 0.5) {
-        line.left = Math.min(line.left, unit.left)
-        line.right = Math.max(line.right, unit.right)
-        line.top = Math.min(line.top, unit.top)
-        line.bottom = Math.max(line.bottom, unit.bottom)
-      } else {
-        lines.push({ ...unit })
-      }
-    }
-    return lines
-  }
-
-  function reveal(units: Box[], lines: Box[], shown: number): string {
-    if (shown <= 0) return "polygon(0 0, 0 0, 0 0)"
-    const last = units[shown - 1]!
-    let current = lines.findIndex(
-      line => last.top < line.bottom - 0.5 && last.bottom > line.top + 0.5)
-    if (current < 0) current = lines.length - 1
-    const rects: Box[] = lines.slice(0, current).map(line => ({ ...line }))
-    rects.push({
-      left: lines[current]!.left,
-      right: last.right,
-      top: lines[current]!.top,
-      bottom: lines[current]!.bottom,
-    })
-    const points: string[] = [`${rects[0]!.left}px ${rects[0]!.top}px`]
-    for (const rect of rects) {
-      points.push(`${rect.right}px ${rect.top}px`, `${rect.right}px ${rect.bottom}px`)
-    }
-    for (let i = rects.length - 1; i >= 0; i -= 1) {
-      points.push(`${rects[i]!.left}px ${rects[i]!.bottom}px`, `${rects[i]!.left}px ${rects[i]!.top}px`)
-    }
-    return `polygon(${points.join(", ")})`
-  }
-
   function start() {
     stop()
     const el = cap.value
@@ -130,7 +96,7 @@ export function useCaptionTypewriter(
       if (now - previous >= 16) {
         previous = now
         shown = Math.min(units.length, shown + perFrame)
-        el.style.clipPath = reveal(units, lines, shown)
+        el.style.clipPath = revealJs(units, lines, shown)
       }
       if (shown < units.length) {
         frame = requestAnimationFrame(tick)
