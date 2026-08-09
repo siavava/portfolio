@@ -22,6 +22,29 @@ import { basename, dirname } from "node:path"
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 
+/** One node of the purs docs.json type AST; `contents` varies by tag. */
+interface TypeNode {
+  tag: string
+  contents?: unknown
+}
+
+interface SourceSpan {
+  name: string
+  start: [number, number]
+}
+
+interface Declaration {
+  title: string
+  comments: string | null
+  sourceSpan?: SourceSpan
+  info: { declType: string, type?: TypeNode }
+}
+
+interface ModuleDocs {
+  comments: string | null
+  declarations: Declaration[]
+}
+
 const root = dirname(dirname(fileURLToPath(import.meta.url)))
 const outDir = `${root}/app/types/purs`
 const shimDir = `${root}/.purs-shims`
@@ -48,13 +71,19 @@ const INTERNAL = new Set([
   "App.Composables.CaptionTypewriter",
 ])
 
-const PRIMS = { String: "string", Int: "number", Number: "number", Boolean: "boolean", Char: "string" }
+const PRIMS: Record<string, string> = {
+  String: "string",
+  Int: "number",
+  Number: "number",
+  Boolean: "boolean",
+  Char: "string",
+}
 
 // Foreign/opaque PureScript types with a precise TypeScript identity.
 // Keyed by fully-qualified name; values take the translated type arguments.
 // `@ts` doc annotations take precedence; this map is the fallback for
 // types not yet annotated in their .purs source.
-const TYPE_OVERRIDES = {
+const TYPE_OVERRIDES: Record<string, (args: string[]) => string> = {
   "Vue.Ref": args => `import("vue").Ref<${args[0]}>`,
   "Vue.Computed": args => `import("vue").ComputedRef<${args[0]}>`,
   "Vue.ReactiveSet": args => `Set<${args[0]}>`,
@@ -93,13 +122,14 @@ const TYPE_OVERRIDES = {
 // a pre-pass over every output module's docs.json — lookups are
 // cross-module (e.g. Vue.Ref referenced from App code), so collection
 // can't be limited to the emitted App.* set.
-const tsAnnotations = new Map()
+const tsAnnotations = new Map<string, string>()
 
 /** The `@ts <expr>` annotation in a doc comment (expression runs to end of line). */
-const tsAnnotation = comments => comments?.match(/@ts[ \t]+(.+)/)?.[1].trim()
+const tsAnnotation = (comments: string | null | undefined): string | undefined =>
+  comments?.match(/@ts[ \t]+(.+)/)?.[1]?.trim()
 
 /** Substitute `$1`/`$2`… argument holes with the translated type arguments. */
-const fillHoles = (expr, args) =>
+const fillHoles = (expr: string, args: string[]): string =>
   expr.replace(/\$(\d+)/g, (_, n) => args[Number(n) - 1] ?? "unknown")
 
 // Set per module by generate(), so unknown-fallback warnings can name it.
@@ -107,29 +137,29 @@ const fillHoles = (expr, args) =>
 let emittingModule = ""
 let emittingInternal = false
 
-const warnUnknown = subject => {
+const warnUnknown = (subject: string): void => {
   if (emittingInternal) return
   console.warn(`warning: ${emittingModule}: ${subject} has no translation — emitted \`unknown\` (add an @ts annotation or a TYPE_OVERRIDES entry)`)
 }
 
-const escapeRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 
 /** Argument names from the defining equation (`transcodeJs args = ...`). */
-const equationArgNames = (decl, sourceLines) => {
+const equationArgNames = (decl: Declaration, sourceLines: string[]): (string | null)[] => {
   const startLine = decl.sourceSpan?.start?.[0] ?? 1
   const namePattern = new RegExp(`^${escapeRegExp(decl.title)}\\b(.*)$`)
   for (let line = startLine - 1; line < Math.min(sourceLines.length, startLine + 40); line++) {
     const match = sourceLines[line]?.match(namePattern)
     if (!match) continue
-    const rest = match[1]
+    const rest = match[1] ?? ""
     if (rest.trimStart().startsWith("::")) continue
-    const head = rest.split("=")[0].split("|")[0]
+    const head = (rest.split("=")[0] ?? "").split("|")[0] ?? ""
     const named = head.trim().split(/\s+/).filter(Boolean)
       .map(token => /^[a-z][A-Za-z0-9_']*$/.test(token) ? token : null)
     if (named.length) return named
     const lambda = rest.match(/mkEffectFn\d+\s*\\([^-]*?)->/)
     if (lambda) {
-      return lambda[1].trim().split(/\s+/).filter(Boolean)
+      return (lambda[1] ?? "").trim().split(/\s+/).filter(Boolean)
         .map(token => /^[a-z][A-Za-z0-9_']*$/.test(token) ? token : null)
     }
     return []
@@ -138,54 +168,63 @@ const equationArgNames = (decl, sourceLines) => {
 }
 
 /** Argument names from an FFI companion's arrow chain (`(text) => ...`). */
-const ffiArgNames = (ffiSource, name) => {
+const ffiArgNames = (ffiSource: string, name: string): string[] => {
   const match = ffiSource.match(new RegExp(`export const ${escapeRegExp(name)}\\s*=\\s*(.*)`))
   if (!match) return []
-  const names = []
-  let rest = match[1]
+  const names: string[] = []
+  let rest = match[1] ?? ""
   for (;;) {
     const arrow = rest.match(/^\(?\s*([A-Za-z_$][\w$]*)\s*\)?\s*=>\s*(.*)$/)
     if (!arrow) break
-    names.push(arrow[1])
-    rest = arrow[2]
+    names.push(arrow[1] ?? "")
+    rest = arrow[2] ?? ""
   }
   return names
 }
 
 /** The quantified body of a ForAll node (dict in current purs docs.json). */
-const forAllBody = t =>
-  Array.isArray(t.contents) ? t.contents.at(-1) : t.contents.type ?? t.contents
+const forAllBody = (t: TypeNode): TypeNode => {
+  if (Array.isArray(t.contents)) return t.contents.at(-1) as TypeNode
+  const contents = t.contents as { type?: TypeNode } & TypeNode
+  return contents.type ?? contents
+}
+
+const pair = (t: TypeNode): [TypeNode, TypeNode] => t.contents as [TypeNode, TypeNode]
 
 /** Unwind a TypeApp spine into its base constructor and argument list. */
-const unwindApps = (t) => {
-  const args = []
+const unwindApps = (t: TypeNode): { base: TypeNode, args: TypeNode[] } => {
+  const args: TypeNode[] = []
   let cursor = t
   while (cursor.tag === "TypeApp") {
-    args.unshift(cursor.contents[1])
-    cursor = cursor.contents[0]
+    const [head, arg] = pair(cursor)
+    args.unshift(arg)
+    cursor = head
   }
   return { base: cursor, args }
 }
 
-const effectFnArity = (base) => {
+const conParts = (t: TypeNode): [string[], string] => t.contents as [string[], string]
+
+const effectFnArity = (base: TypeNode): number | null => {
   if (base.tag !== "TypeConstructor") return null
-  const modulePath = base.contents[0].join(".")
+  const [path, name] = conParts(base)
+  const modulePath = path.join(".")
   if (modulePath === "Effect.Uncurried") {
-    const match = base.contents[1].match(/^EffectFn(\d+)$/)
+    const match = name.match(/^EffectFn(\d+)$/)
     return match ? Number(match[1]) : null
   }
   if (modulePath === "Data.Function.Uncurried") {
-    const match = base.contents[1].match(/^Fn(\d+)$/)
+    const match = name.match(/^Fn(\d+)$/)
     return match ? Number(match[1]) : null
   }
   return null
 }
 
 /** Translate a value's type, naming curried arguments from `names`. */
-const translateValue = (t, locals, names) => {
+const translateValue = (t: TypeNode, locals: Set<string>, names: (string | null)[]): string => {
   let cursor = t
   while (cursor.tag === "ForAll" || cursor.tag === "ParensInType") {
-    cursor = cursor.tag === "ForAll" ? forAllBody(cursor) : cursor.contents
+    cursor = cursor.tag === "ForAll" ? forAllBody(cursor) : cursor.contents as TypeNode
   }
 
   const { base, args } = unwindApps(cursor)
@@ -193,28 +232,26 @@ const translateValue = (t, locals, names) => {
   if (arity !== null && args.length === arity + 1) {
     const params = args.slice(0, -1)
       .map((arg, i) => `${names[i] ?? `arg${i}`}: ${translate(arg, locals)}`)
-    return `(${params.join(", ")}) => ${translate(args.at(-1), locals)}`
+    return `(${params.join(", ")}) => ${translate(args.at(-1) as TypeNode, locals)}`
   }
 
-  const parts = []
+  const parts: string[] = []
   let position = 0
-  while (
-    cursor.tag === "TypeApp"
-    && cursor.contents[0].tag === "TypeApp"
-    && isCon(cursor.contents[0].contents[0], "Prim", "Function")
-  ) {
+  while (cursor.tag === "TypeApp") {
+    const [head, body] = pair(cursor)
+    if (!(head.tag === "TypeApp" && isCon(pair(head)[0], "Prim", "Function"))) break
     const argName = names[position] ?? `arg${position}`
-    parts.push(`(${argName}: ${translate(cursor.contents[0].contents[1], locals)}) => `)
-    cursor = cursor.contents[1]
+    parts.push(`(${argName}: ${translate(pair(head)[1], locals)}) => `)
+    cursor = body
     position++
   }
   return parts.join("") + translate(cursor, locals)
 }
 
-const translate = (t, locals) => {
+const translate = (t: TypeNode, locals: Set<string>): string => {
   switch (t.tag) {
     case "TypeConstructor": {
-      const [modulePath, name] = t.contents
+      const [modulePath, name] = conParts(t)
       if (modulePath.length === 1 && modulePath[0] === "Prim" && PRIMS[name]) return PRIMS[name]
       if (modulePath.join(".") === "Data.Unit" && name === "Unit") return "void"
       const qualified = `${modulePath.join(".")}.${name}`
@@ -227,9 +264,9 @@ const translate = (t, locals) => {
       return "unknown"
     }
     case "TypeApp": {
-      const [head, arg] = t.contents
-      if (head.tag === "TypeApp" && isCon(head.contents[0], "Prim", "Function")) {
-        return `(arg0: ${translate(head.contents[1], locals)}) => ${translate(arg, locals)}`
+      const [head, arg] = pair(t)
+      if (head.tag === "TypeApp" && isCon(pair(head)[0], "Prim", "Function")) {
+        return `(arg0: ${translate(pair(head)[1], locals)}) => ${translate(arg, locals)}`
       }
       if (isCon(head, "Prim", "Array")) return `(${translate(arg, locals)})[]`
       if (isCon(head, "Prim", "Record")) return translateRow(arg, locals)
@@ -239,10 +276,11 @@ const translate = (t, locals) => {
       const arity = effectFnArity(base)
       if (arity !== null && args.length === arity + 1) {
         const params = args.slice(0, -1).map((a, i) => `arg${i}: ${translate(a, locals)}`)
-        return `(${params.join(", ")}) => ${translate(args.at(-1), locals)}`
+        return `(${params.join(", ")}) => ${translate(args.at(-1) as TypeNode, locals)}`
       }
       if (base.tag === "TypeConstructor") {
-        const qualified = `${base.contents[0].join(".")}.${base.contents[1]}`
+        const [basePath, baseName] = conParts(base)
+        const qualified = `${basePath.join(".")}.${baseName}`
         const annotation = tsAnnotations.get(qualified)
         if (annotation) return fillHoles(annotation, args.map(a => translate(a, locals)))
         const override = TYPE_OVERRIDES[qualified]
@@ -260,32 +298,35 @@ const translate = (t, locals) => {
     case "ForAll":
       return translate(forAllBody(t), locals)
     case "ParensInType":
-      return translate(t.contents, locals)
+      return translate(t.contents as TypeNode, locals)
     default:
       warnUnknown(typeof t.contents === "string" ? `${t.tag} ${t.contents}` : t.tag)
       return "unknown"
   }
 }
 
-const isCon = (t, modulePath, name) =>
-  t.tag === "TypeConstructor" && t.contents[0].join(".") === modulePath && t.contents[1] === name
+const isCon = (t: TypeNode, modulePath: string, name: string): boolean => {
+  if (t.tag !== "TypeConstructor") return false
+  const [path, conName] = conParts(t)
+  return path.join(".") === modulePath && conName === name
+}
 
-const translateRow = (row, locals) => {
-  const fields = []
+const translateRow = (row: TypeNode, locals: Set<string>): string => {
+  const fields: string[] = []
   let cursor = row
   while (cursor.tag === "RCons") {
-    const [label, type, tail] = cursor.contents
+    const [label, type, tail] = cursor.contents as [string, TypeNode, TypeNode]
     fields.push(`${label}: ${translate(type, locals)}`)
     cursor = tail
   }
   return `{ ${fields.join(", ")} }`
 }
 
-const docComment = (text) =>
+const docComment = (text: string | null): string =>
   text ? `/** ${text.trim().replace(/\*\//g, "*\\/")} */\n` : ""
 
-const generate = (docsPath) => {
-  const docs = JSON.parse(readFileSync(docsPath, "utf8"))
+const generate = (docsPath: string): void => {
+  const docs = JSON.parse(readFileSync(docsPath, "utf8")) as ModuleDocs
   const moduleName = basename(dirname(docsPath))
   emittingModule = moduleName
   emittingInternal = moduleName.startsWith("App.Server.")
@@ -294,7 +335,7 @@ const generate = (docsPath) => {
 
   // A renamed or deleted module leaves its output dir behind; shimming it
   // would shadow real auto-imports (this bit us when App.Vue became Vue).
-  const sourceFile = docs.declarations.find(d => d.sourceSpan?.name)?.sourceSpan.name
+  const sourceFile = docs.declarations.find(d => d.sourceSpan?.name)?.sourceSpan?.name
   if (sourceFile && !existsSync(`${root}/${sourceFile}`)) {
     console.log(`skipping stale output module ${moduleName} (${sourceFile} gone)`)
     return
@@ -305,21 +346,21 @@ const generate = (docsPath) => {
       .map(d => d.title),
   )
 
-  const sourcePath = docs.declarations.find(d => d.sourceSpan?.name)?.sourceSpan.name
+  const sourcePath = docs.declarations.find(d => d.sourceSpan?.name)?.sourceSpan?.name
   const sourceLines = sourcePath && existsSync(`${root}/${sourcePath}`)
     ? readFileSync(`${root}/${sourcePath}`, "utf8").split("\n")
     : []
   const ffiPath = sourcePath?.replace(/\.purs$/, ".js")
   const ffiSource = ffiPath && existsSync(`${root}/${ffiPath}`) ? readFileSync(`${root}/${ffiPath}`, "utf8") : ""
 
-  const argNames = (decl) => {
+  const argNames = (decl: Declaration): (string | null)[] => {
     const fromEquation = equationArgNames(decl, sourceLines)
     return fromEquation.length ? fromEquation : ffiArgNames(ffiSource, decl.title)
   }
 
   const lines = [
     "/**",
-    ` * Generated by scripts/purs-dts.mjs from .purs/output/${moduleName}/docs.json — do not edit.`,
+    ` * Generated by scripts/purs-dts.ts from .purs/output/${moduleName}/docs.json — do not edit.`,
     " *",
     ` * TypeScript resolves \`#purs/${moduleName}\` here via tsconfig \`paths\`;`,
     " * bundlers resolve it to `.purs/output/` via the package `imports` field.",
@@ -329,11 +370,11 @@ const generate = (docsPath) => {
 
   for (const decl of docs.declarations) {
     const { declType } = decl.info
-    if (declType === "typeSynonym") {
+    if (declType === "typeSynonym" && decl.info.type) {
       lines.push(`${docComment(decl.comments)}export type ${decl.title} = ${translate(decl.info.type, locals)}`, "")
     } else if (declType === "data" || declType === "newtype") {
       lines.push(`/** PureScript ${declType} — opaque from TypeScript. */`, `export type ${decl.title} = unknown`, "")
-    } else if (declType === "value") {
+    } else if (declType === "value" && decl.info.type) {
       lines.push(`${docComment(decl.comments)}export declare const ${decl.title}: ${translateValue(decl.info.type, locals, argNames(decl))}`, "")
     }
   }
@@ -352,7 +393,7 @@ const generate = (docsPath) => {
  * re-exported: module-local opaque helpers (DomElement, StyleMap, …) would
  * collide across modules in the global auto-import pool; consumers that
  * need a type import it from `#purs/<Module>` explicitly. */
-const emitShim = (docs, moduleName) => {
+const emitShim = (docs: ModuleDocs, moduleName: string): void => {
   const values = docs.declarations.filter(d => d.info.declType === "value").map(d => d.title)
   if (!values.length) return
 
@@ -361,7 +402,7 @@ const emitShim = (docs, moduleName) => {
     .map(s => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase())
     .join("/")
   const lines = [
-    `// Generated by scripts/purs-dts.mjs from ${moduleName} — do not edit.`,
+    `// Generated by scripts/purs-dts.ts from ${moduleName} — do not edit.`,
     `export { ${values.join(", ")} } from "#purs/${moduleName}"`,
   ]
   mkdirSync(dirname(`${shimDir}/${nested}.ts`), { recursive: true })
@@ -370,8 +411,8 @@ const emitShim = (docs, moduleName) => {
 }
 
 /** Pre-pass: record the `@ts` annotations on a module's data declarations. */
-const collectAnnotations = (docsPath) => {
-  const docs = JSON.parse(readFileSync(docsPath, "utf8"))
+const collectAnnotations = (docsPath: string): void => {
+  const docs = JSON.parse(readFileSync(docsPath, "utf8")) as ModuleDocs
   const moduleName = basename(dirname(docsPath))
   for (const decl of docs.declarations) {
     if (decl.info.declType !== "data" && decl.info.declType !== "newtype") continue

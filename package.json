@@ -8,8 +8,8 @@
   },
   "scripts": {
     "notes-meta": "bun scripts/build-notes-meta.ts",
-    "purs:build": "bun scripts/purs-ffi-stubs.mjs && bun run --cwd packages/vue-bridge build && bun scripts/spago-build.mjs && bun scripts/purs-dts.mjs",
-    "purs:check": "bun run purs:build && bun scripts/purs-test.mjs",
+    "purs:build": "bun scripts/purs-ffi-stubs.ts && bun run --cwd packages/vue-bridge build && bun scripts/spago-build.ts && bun scripts/purs-dts.ts",
+    "purs:check": "bun run purs:build && bun scripts/purs-test.ts",
     "build": "bun run purs:build && bun run notes-meta && nuxi build",
     "dev": "bun run purs:build && nuxi dev",
     "generate": "bun run purs:build && bun run notes-meta && nuxi generate",
