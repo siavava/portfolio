@@ -123,6 +123,55 @@ type Point = { x :: Number, y :: Number }
 
 type Parts = { nodes :: Array NodeOut, links :: Array LinkOut }
 
+-- | Per-child context threaded down to the grandchild and tip levels:
+-- | the scaled polar placement, the owning branch, and the child's drift
+-- | direction, angle, and ring radius.
+type ChildCtx =
+  { place :: Number -> Number -> Point
+  , branch :: BranchIn
+  , sign :: Number
+  , childAngle :: Number
+  , childR :: Int
+  }
+
+-- | Every node shares its branch identity and takes its id from its
+-- | label; only level, label side, and position vary.
+mkNode :: BranchIn -> Int -> Nullable String -> String -> Point -> NodeOut
+mkNode branch level labelSide label point =
+  { id: label
+  , label
+  , level
+  , branch: branch.label
+  , color: branch.color
+  , labelSide
+  , x: point.x
+  , y: point.y
+  }
+
+-- | Every link shares its branch identity, derives its id from its
+-- | endpoints ("root" when sourceless), and defaults to a plain tree
+-- | edge; the prerequisite pass overrides id and flag on top of this.
+mkLink
+  :: forall r p q
+   . { label :: String, color :: String | r }
+  -> Nullable String
+  -> String
+  -> { x :: Number, y :: Number | p }
+  -> { x :: Number, y :: Number | q }
+  -> LinkOut
+mkLink branch source target from to =
+  { id: fromMaybe "root" (toMaybe source) <> ":" <> target
+  , source
+  , target
+  , branch: branch.label
+  , color: branch.color
+  , prereq: null
+  , x1: from.x
+  , y1: from.y
+  , x2: to.x
+  , y2: to.y
+  }
+
 interestLayoutJs :: Fn2 (Array BranchIn) Number LayoutOut
 interestLayoutJs = mkFn2 \branches scale ->
   let
@@ -162,30 +211,8 @@ layoutBranch place sliceWidth b branch =
     origin = place radius angle
 
     rootParts =
-      { nodes:
-          [ { id: branch.label
-            , label: branch.label
-            , level: 1
-            , branch: branch.label
-            , color: branch.color
-            , labelSide: notNull "below"
-            , x: origin.x
-            , y: origin.y
-            }
-          ]
-      , links:
-          [ { id: "root:" <> branch.label
-            , source: null
-            , target: branch.label
-            , branch: branch.label
-            , color: branch.color
-            , prereq: null
-            , x1: 0.0
-            , y1: 0.0
-            , x2: origin.x
-            , y2: origin.y
-            }
-          ]
+      { nodes: [ mkNode branch 1 (notNull "below") branch.label origin ]
+      , links: [ mkLink branch null branch.label { x: 0.0, y: 0.0 } origin ]
       }
 
     count = length branch.children
@@ -202,7 +229,7 @@ layoutBranch place sliceWidth b branch =
             band = entry.ix `mod` 3
             bandIndex = fromMaybe 0 (index acc.counts band)
             childR = childRadius band bandIndex b
-            part = layoutChild place branch angle childAngle childR entry.child
+            part = layoutChild place branch origin angle childAngle childR entry.child
           in
             { counts: mapWithIndex (\i n -> if i == band then n + 1 else n) acc.counts
             , parts: snoc acc.parts part
@@ -212,118 +239,64 @@ layoutBranch place sliceWidth b branch =
       (mapWithIndex (\ix child -> { ix, child }) branch.children)
   in
     [ rootParts ] <> children.parts
-  where
-  layoutChild placeFn branch' branchAngle childAngle childR child =
-    let
-      point = placeFn (toNumber childR) childAngle
 
-      origin = placeFn (toNumber (fromMaybe 0 (index branchRadii (b `mod` length branchRadii))))
-        branchAngle
+-- | Place one child on its band ring and lay out its subtree, reusing
+-- | the branch origin already computed in `layoutBranch`.
+layoutChild
+  :: (Number -> Number -> Point)
+  -> BranchIn
+  -> Point
+  -> Number
+  -> Number
+  -> Int
+  -> ChildIn
+  -> Parts
+layoutChild place branch origin branchAngle childAngle childR child =
+  let
+    point = place (toNumber childR) childAngle
+    sign = if childAngle >= branchAngle then 1.0 else -1.0
+    ctx = { place, branch, sign, childAngle, childR }
 
-      childParts =
-        { nodes:
-            [ { id: child.label
-              , label: child.label
-              , level: 2
-              , branch: branch'.label
-              , color: branch'.color
-              , labelSide: null
-              , x: point.x
-              , y: point.y
-              }
-            ]
-        , links:
-            [ { id: branch'.label <> ":" <> child.label
-              , source: notNull branch'.label
-              , target: child.label
-              , branch: branch'.label
-              , color: branch'.color
-              , prereq: null
-              , x1: origin.x
-              , y1: origin.y
-              , x2: point.x
-              , y2: point.y
-              }
-            ]
-        }
+    grandchildren = concat
+      ( mapWithIndex (layoutGrandchild ctx child.label point)
+          (fromMaybe [] (toMaybe child.children))
+      )
+  in
+    { nodes: [ mkNode branch 2 null child.label point ] <> concatNodes grandchildren
+    , links:
+        [ mkLink branch (notNull branch.label) child.label origin point ]
+          <> concatLinks grandchildren
+    }
 
-      grandchildren = concat
-        ( mapWithIndex
-            ( \g grandchild ->
-                let
-                  drift = (if childAngle >= branchAngle then 1.0 else -1.0) * toNumber (g + 1) * 3.5
-                  leaf = placeFn (toNumber childR + 84.0) (childAngle + drift)
+-- | Drift the grandchild off its parent's angle — `ctx.sign` picks the
+-- | side once per child — and hang its leaf tips further out.
+layoutGrandchild :: ChildCtx -> String -> Point -> Int -> GrandchildIn -> Array Parts
+layoutGrandchild ctx parentLabel point g grandchild =
+  let
+    drift = ctx.sign * toNumber (g + 1) * 3.5
+    leaf = ctx.place (toNumber ctx.childR + 84.0) (ctx.childAngle + drift)
 
-                  grandParts =
-                    { nodes:
-                        [ { id: grandchild.label
-                          , label: grandchild.label
-                          , level: 3
-                          , branch: branch'.label
-                          , color: branch'.color
-                          , labelSide: null
-                          , x: leaf.x
-                          , y: leaf.y
-                          }
-                        ]
-                    , links:
-                        [ { id: child.label <> ":" <> grandchild.label
-                          , source: notNull child.label
-                          , target: grandchild.label
-                          , branch: branch'.label
-                          , color: branch'.color
-                          , prereq: null
-                          , x1: point.x
-                          , y1: point.y
-                          , x2: leaf.x
-                          , y2: leaf.y
-                          }
-                        ]
-                    }
-
-                  tips = mapWithIndex
-                    ( \l leafChild ->
-                        let
-                          sign = if childAngle >= branchAngle then 1.0 else -1.0
-                          leafDrift = drift + sign * toNumber (l + 1) * 5.0
-                          tip = placeFn (toNumber childR + 132.0) (childAngle + leafDrift)
-                        in
-                          { nodes:
-                              [ { id: leafChild.label
-                                , label: leafChild.label
-                                , level: 4
-                                , branch: branch'.label
-                                , color: branch'.color
-                                , labelSide: null
-                                , x: tip.x
-                                , y: tip.y
-                                }
-                              ]
-                          , links:
-                              [ { id: grandchild.label <> ":" <> leafChild.label
-                                , source: notNull grandchild.label
-                                , target: leafChild.label
-                                , branch: branch'.label
-                                , color: branch'.color
-                                , prereq: null
-                                , x1: leaf.x
-                                , y1: leaf.y
-                                , x2: tip.x
-                                , y2: tip.y
-                                }
-                              ]
-                          }
-                    )
-                    (fromMaybe [] (toMaybe grandchild.children))
-                in
-                  [ grandParts ] <> tips
-            )
-            (fromMaybe [] (toMaybe child.children))
-        )
-    in
-      { nodes: childParts.nodes <> concatNodes grandchildren
-      , links: childParts.links <> concatLinks grandchildren
+    grandParts =
+      { nodes: [ mkNode ctx.branch 3 null grandchild.label leaf ]
+      , links: [ mkLink ctx.branch (notNull parentLabel) grandchild.label point leaf ]
       }
+
+    tips = mapWithIndex (layoutTip ctx drift grandchild.label leaf)
+      (fromMaybe [] (toMaybe grandchild.children))
+  in
+    [ grandParts ] <> tips
+
+-- | Outermost ring: a leaf tip drifts further along the same side its
+-- | parent drifted.
+layoutTip :: ChildCtx -> Number -> String -> Point -> Int -> LeafIn -> Parts
+layoutTip ctx drift parentLabel leaf l leafChild =
+  let
+    leafDrift = drift + ctx.sign * toNumber (l + 1) * 5.0
+    tip = ctx.place (toNumber ctx.childR + 132.0) (ctx.childAngle + leafDrift)
+  in
+    { nodes: [ mkNode ctx.branch 4 null leafChild.label tip ]
+    , links: [ mkLink ctx.branch (notNull parentLabel) leafChild.label leaf tip ]
+    }
 
 -- | The prerequisite pass: every node's `requires` list threads a link
 -- | from the required node's position, cross-branch links flagged.
@@ -337,18 +310,10 @@ prereqPass branches nodes = concat (map branchReqs branches)
   addPrereqs node = fromMaybe [] (toMaybe node.requires) >>= \required ->
     case findNode required, findNode node.label of
       Just from, Just to ->
-        [ { id: "req:" <> required <> ":" <> node.label
-          , source: notNull required
-          , target: node.label
-          , branch: to.branch
-          , color: to.color
-          , prereq: notNull (from.branch /= to.branch)
-          , x1: from.x
-          , y1: from.y
-          , x2: to.x
-          , y2: to.y
-          }
-        ]
+        let
+          link = mkLink { label: to.branch, color: to.color } (notNull required) node.label from to
+        in
+          [ link { id = "req:" <> link.id, prereq = notNull (from.branch /= to.branch) } ]
       _, _ -> []
 
   branchReqs branch = branch.children >>= \child ->
