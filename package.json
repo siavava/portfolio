@@ -1,6 +1,6 @@
 {
   "private": true,
-  "packageManager": "bun@1.0.0",
+  "packageManager": "bun@1.2.22",
   "type": "module",
   "imports": {
     "#purs/*": "./output/*/index.js"
