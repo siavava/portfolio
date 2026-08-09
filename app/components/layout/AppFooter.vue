@@ -4,7 +4,7 @@ footer.app-footer.no-select
   span.app-footer__meta
     button.app-footer__theme(
       type="button",
-      :aria-label="mounted && isDark ? 'Switch to light mode' : 'Switch to dark mode'",
+      :aria-label="mounted && isDark ? 'lights on — switch to light mode' : 'lights off — switch to dark mode'",
       @click="toggleColor",
     ) {{ mounted && isDark ? "lights on" : "lights off" }}
     span.app-footer__divider |
