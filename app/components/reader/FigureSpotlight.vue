@@ -21,45 +21,15 @@ const props = defineProps<{ spot: FigSpotlightState | null }>()
 defineEmits<{ close: [] }>()
 
 const colorMode = useColorMode()
-const mode = computed(
-  () => colorMode.value === "dark" ? "dark-mode" : "light-mode",
-)
-
 const cap = useTemplateRef<HTMLElement>("cap")
 const figure = useTemplateRef<HTMLElement>("figure")
 
-function fitFigure() {
-  const fig = figure.value
-  if (!fig || !import.meta.client) return
-  const media = fig.querySelector<SVGSVGElement | HTMLImageElement>("svg, img")
-  if (!media) return
-  const maxW = window.innerWidth * 0.88
-  const maxH = window.innerHeight * 0.66
-  let aspect = 0
-  if (media instanceof SVGSVGElement) {
-    const vb = media.viewBox.baseVal
-    aspect = vb && vb.height ? vb.width / vb.height : 0
-    if (!aspect) {
-      const box = media.getBoundingClientRect()
-      aspect = box.height ? box.width / box.height : 0
-    }
-  } else {
-    aspect = (media.naturalWidth || media.width) / (media.naturalHeight || media.height || 1)
-  }
-  if (!aspect || !isFinite(aspect)) return
-  let width = maxW
-  let height = maxW / aspect
-  if (height > maxH) { height = maxH; width = maxH * aspect }
-  media.style.width = `${Math.round(width)}px`
-  media.style.height = `${Math.round(height)}px`
-  media.style.maxWidth = "none"
-  media.style.maxHeight = "none"
-}
+const { mode, fitFigure } = useFigureSpotlightOverlay({
+  figure,
+  colorModeValue: () => colorMode.value,
+})
 
 useCaptionTypewriter(cap, () => props.spot, fitFigure)
-
-onMounted(() => window.addEventListener("resize", fitFigure))
-onBeforeUnmount(() => window.removeEventListener("resize", fitFigure))
 </script>
 
 <style lang="sass">

@@ -12,17 +12,7 @@ const props = defineProps<{
 const el = useTemplateRef<HTMLElement>("el")
 const cues = useCues()
 
-onMounted(() => {
-  if (el.value) {
-    cues.registerMark(props.mark, el.value)
-  }
-})
-
-onUnmounted(() => {
-  cues.unregisterMark(props.mark)
-})
-
-const lit = computed(() => cues.activeTargets.includes(props.mark))
+const { lit } = useCue({ el, cues, mark: () => props.mark })
 </script>
 
 <style lang="sass" scoped>

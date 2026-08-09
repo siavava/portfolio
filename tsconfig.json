@@ -2,6 +2,18 @@
   // https://nuxt.com/docs/guide/concepts/typescript
   // Per-project compiler options (incl. the Pug language plugin) are
   // injected into the generated configs via nuxt.config.ts `typescript`.
+  // The paths below exist for bun (scripts/, golden harness), which resolves
+  // Nuxt-style aliases through this root config; the generated project
+  // configs carry their own alias maps.
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~~/*": ["./*"],
+      "~/*": ["./app/*"],
+      "@/*": ["./app/*"],
+      "#purs/*": ["./output/*/index.js"]
+    }
+  },
   "files": [],
   "references": [
     { "path": "./.nuxt/tsconfig.app.json" },

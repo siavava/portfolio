@@ -23,3 +23,23 @@ dist
 .claude
 .agents
 .vscode
+
+# purescript build artifacts
+.purs/
+.spago/
+.purs-repl
+.psc-ide-port
+.purs-shims/
+
+# generated purescript ffi companion stubs
+app/**/[A-Z]*.js
+
+# generated purescript type declarations
+app/types/purs/
+
+# vue-bridge build artifacts (tsc emits the purs FFI companion)
+packages/vue-bridge/src/Vue.js
+packages/vue-bridge/src/Vue.d.ts
+
+# Local working notes, never published.
+PURESCRIPT.md

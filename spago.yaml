@@ -1,0 +1,28 @@
+package:
+  name: portfolio
+  dependencies:
+    - arrays
+    - vue-bridge
+    - console
+    - effect
+    - either
+    - foldable-traversable
+    - functions
+    - integers
+    - js-timers
+    - maybe
+    - nullable
+    - numbers
+    - prelude
+    - random
+    - refs
+    - st
+    - strings
+  test:
+    main: Test.Main
+    dependencies:
+      - exceptions
+workspace:
+  packageSet:
+    registry: 80.3.1
+  extraPackages: {}

@@ -22,15 +22,13 @@ const props = defineProps<{
 const item = useTemplateRef<HTMLElement>("item")
 const { offset, dragging, zIndex, handlers } = useDraggableBubble(item)
 
-/** Deterministic per-bubble tilt in the ±3° band, like the reference. */
-const tilt = computed(() => props.index * 137 % 7 - 3)
-
-const style = computed(() => ({
-  "--tilt": `${tilt.value + (dragging.value ? 1.5 : 0)}deg`,
-  "--delay": `${props.index * 90}ms`,
-  "transform": `translate(${offset.x}px, ${offset.y}px) rotate(var(--tilt))`,
-  "zIndex": zIndex.value || undefined,
-}))
+const { style } = useReviewBubble({
+  dragging,
+  zIndex,
+  index: () => props.index,
+  offsetX: () => offset.x,
+  offsetY: () => offset.y,
+})
 </script>
 
 <style lang="sass" scoped>

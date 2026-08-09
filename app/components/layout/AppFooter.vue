@@ -37,28 +37,7 @@ defineProps<{
 
 const { isDark, toggle: toggleColor } = useColorToggle()
 
-const mounted = ref(false)
-onMounted(() => {
-  mounted.value = true
-})
-
-const showVersions = ref(false)
-
-let closeTimer: ReturnType<typeof setTimeout> | undefined
-
-const openVersions = () => {
-  clearTimeout(closeTimer)
-  showVersions.value = true
-}
-
-const closeVersions = () => {
-  clearTimeout(closeTimer)
-  closeTimer = setTimeout(() => {
-    showVersions.value = false
-  }, 300)
-}
-
-onUnmounted(() => clearTimeout(closeTimer))
+const { mounted, showVersions, openVersions, closeVersions } = useAppFooter()
 </script>
 
 <style lang="sass" scoped>

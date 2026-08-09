@@ -37,15 +37,11 @@ const props = withDefaults(defineProps<{
   delay: 0.3,
 })
 
-const alignClass = computed(() =>
-  props.align ? `align-${props.align}` : undefined)
-
-const anchorStyle = computed(() => {
-  if (!props.animate) return undefined
-  return {
-    "--tt-duration": `${props.duration}s`,
-    "--tt-delay": `${props.delay}s`,
-  }
+const { alignClass, anchorStyle } = useTooltipShell({
+  align: () => props.align ?? null,
+  animate: () => props.animate,
+  duration: () => props.duration,
+  delay: () => props.delay,
 })
 </script>
 

@@ -29,35 +29,18 @@ const { data } = await useAsyncData("projects-shelf", () =>
     .select("path", "title", "summary", "tag", "date", "repo", "featured")
     .all())
 
-const projects = computed<ProjectItem[]>(() => {
-  const items = (data.value ?? []).map(doc => ({
+const { projects, selected, onSelect } = useBookshelfPanel({
+  // Optional query fields normalize to the empty string the template
+  // would have rendered anyway.
+  docs: () => (data.value ?? []).map(doc => ({
     path: doc.path,
     title: doc.title,
-    summary: doc.summary,
-    tag: doc.tag,
-    year: Number(String(doc.date).slice(0, 4)),
-    date: String(doc.date),
+    summary: doc.summary ?? "",
+    tag: doc.tag ?? "",
+    date: doc.date,
     repo: doc.repo,
     featured: doc.featured,
-  }))
-  const byYear = (a: ProjectItem, b: ProjectItem) =>
-    b.year - a.year || a.title.localeCompare(b.title)
-  return [
-    ...items.filter(project => project.featured).sort(byYear),
-    ...items.filter(project => !project.featured).sort(byYear),
-  ]
-})
-
-const selected = shallowRef<ProjectItem | null>(null)
-
-const onSelect = (path: string) => {
-  selected.value = projects.value.find(project => project.path === path) ?? null
-}
-
-onMounted(() => {
-  const featured = projects.value.filter(project => project.featured)
-  const pool = featured.length ? featured : projects.value
-  selected.value = pool[Math.floor(Math.random() * pool.length)] ?? null
+  })),
 })
 </script>
 

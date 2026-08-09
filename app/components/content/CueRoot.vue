@@ -22,32 +22,13 @@ const el = useTemplateRef<HTMLElement>("el")
 const cues = useCues()
 const sideNotes = useSideNotes()
 
-const isActive = computed(() => cues.isActive(el.value))
-
-const enter = () => {
-  if (props.note) {
-    sideNotes.activate(props.note)
-  }
-  if (el.value) {
-    cues.activate(el.value, props.to.split(",").map(name => name.trim()))
-  }
-}
-
-const leave = () => {
-  cues.deactivate()
-  if (props.note) {
-    sideNotes.deactivate()
-  }
-}
-
-const toggle = () => {
-  if (el.value) {
-    cues.togglePin(el.value, props.to.split(",").map(name => name.trim()))
-  }
-  if (props.note) {
-    sideNotes.togglePin(props.note)
-  }
-}
+const { isActive, enter, leave, toggle } = useCueRoot({
+  el,
+  cues,
+  sideNotes,
+  to: () => props.to,
+  note: () => props.note ?? null,
+})
 </script>
 
 <style lang="sass" scoped>

@@ -63,23 +63,13 @@ defineEmits<{
 const { share, isSupported: canShare } = useShare()
 const { copy, copied } = useClipboard({ copiedDuring: 1600 })
 
-const onShare = () => {
-  if (canShare.value) share({ title: props.title, url: props.shareUrl }).catch((error: unknown) => { if ((error as Error)?.name !== "AbortError") copy(props.shareUrl) })
-  else copy(props.shareUrl)
-}
-
-const NAV_ICON = [
-  "M18 5H19V6H18V5Z", "M5 5H6V6H5V5Z", "M18 18H19V19H18V18Z",
-  "M5 18H6V19H5V18Z", "M9 17H8V7H9V17Z", "M20 6H19V18H20V6Z",
-  "M18 5V4H6V5H18Z", "M6 19V20H18V19H6Z", "M5 6H4V18H5V6Z",
-]
-
-const HOME_ICON = [
-  "M11 5H13V6H11V5Z", "M9 6H11V7H9V6Z", "M13 6H15V7H13V6Z",
-  "M7 7H9V8H7V7Z", "M15 7H17V8H15V7Z", "M5 8H7V9H5V8Z",
-  "M17 8H19V9H17V8Z", "M6 9H7V19H6V9Z", "M17 9H18V19H17V9Z",
-  "M6 19H18V20H6V19Z", "M11 14H13V19H11V14Z",
-]
+const { onShare, NAV_ICON, HOME_ICON } = useReaderTopbar({
+  share,
+  copy,
+  canShare,
+  title: () => props.title ?? null,
+  shareUrl: () => props.shareUrl,
+})
 </script>
 
 <style lang="sass" scoped>

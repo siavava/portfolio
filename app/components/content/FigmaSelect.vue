@@ -17,30 +17,13 @@ const props = defineProps<{
 }>()
 
 const el = useTemplateRef<HTMLElement>("el")
-const size = ref("0×0")
 const sideNotes = useSideNotes()
 
-const measure = () => {
-  const rect = el.value?.getBoundingClientRect()
-  if (rect) {
-    size.value = `${Math.round(rect.width)}×${Math.round(rect.height)}`
-  }
-  if (props.note) {
-    sideNotes.activate(props.note)
-  }
-}
-
-const leave = () => {
-  if (props.note) {
-    sideNotes.deactivate()
-  }
-}
-
-const toggle = () => {
-  if (props.note) {
-    sideNotes.togglePin(props.note)
-  }
-}
+const { size, measure, leave, toggle } = useFigmaSelect({
+  el,
+  sideNotes,
+  note: () => props.note ?? null,
+})
 </script>
 
 <style lang="sass" scoped>

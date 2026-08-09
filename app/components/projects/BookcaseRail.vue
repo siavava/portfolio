@@ -57,41 +57,13 @@ const rail = useTemplateRef<HTMLElement>("rail")
 const toc = useTemplateRef<HTMLElement>("toc")
 
 const { arrivedState } = useScroll(rail, { offset: { top: 2, bottom: 2 } })
-const canScrollUp = computed(() => !arrivedState.top)
-const canScrollDown = computed(() => !arrivedState.bottom)
 
-const scrollCentered = (
-  container: HTMLElement,
-  target: HTMLElement,
-  behavior: ScrollBehavior,
-) => {
-  const top = container.scrollTop
-    + (target.getBoundingClientRect().top - container.getBoundingClientRect().top)
-    - (container.clientHeight - target.offsetHeight) / 2
-  if (behavior === "smooth") glideScroll(container, { top })
-  else container.scrollTo({ top, behavior })
-}
-
-const centerActiveInToc = (behavior: ScrollBehavior) => {
-  const el = toc.value
-  if (!el?.clientHeight) return
-  const active = el.querySelector<HTMLElement>(".drawer-toc__item.active")
-  if (active) scrollCentered(el, active, behavior)
-}
-
-const center = (groupKey: string, behavior: ScrollBehavior) => {
-  nextTick(() => {
-    const el = rail.value
-    if (el?.clientHeight) {
-      const section = el.querySelector<HTMLElement>(`[data-group="${CSS.escape(groupKey)}"]`)
-      if (section) scrollCentered(el, section, behavior)
-    }
-    centerActiveInToc(behavior)
-  })
-}
-
-watch(() => props.open, (open) => {
-  if (open) nextTick(() => centerActiveInToc("instant"))
+const { canScrollUp, canScrollDown, center } = useBookcaseRail({
+  rail,
+  toc,
+  open: () => props.open,
+  arrivedTop: () => arrivedState.top,
+  arrivedBottom: () => arrivedState.bottom,
 })
 
 defineExpose({ center })

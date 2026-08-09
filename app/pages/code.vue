@@ -17,7 +17,7 @@ main.coder
             @click="from = f.id",
           ) {{ f.label }}
       textarea.coder__text(
-        ref="inputEl",
+        ref="input-el",
         v-model="input",
         :class="{ invalid: error }",
         :placeholder="inputPlaceholder",
@@ -56,7 +56,7 @@ main.coder
             :class="{ active: to === f.id }",
             @click="to = f.id",
           ) {{ f.label }}
-      .coder__text.coder__out(ref="outEl")
+      .coder__text.coder__out(ref="out-el")
         template(v-if="!error && tokens.length")
           span(
             v-for="(t, i) in tokens",
@@ -115,9 +115,6 @@ main.coder
 </template>
 
 <script lang="ts" setup>
-import type { CodeFormat, OutToken } from "~/utils/coder"
-import { useClipboard, useEventListener } from "@vueuse/core"
-
 const { data: profile } = await useProfile()
 
 useSeoMeta({
@@ -125,147 +122,39 @@ useSeoMeta({
   description: "A little transcoder: binary, decimal, hex, and letters — anything to anything.",
 })
 
-const isFormat = (v: unknown): v is CodeFormat =>
-  typeof v === "string" && CODE_FORMATS.some(f => f.id === v)
+const inputEl = useTemplateRef<HTMLTextAreaElement>("input-el")
+const outEl = useTemplateRef<HTMLElement>("out-el")
 
-const query = useRoute().query
-const sharedText = typeof query.q === "string" ? decodeShareText(query.q) : null
-
-const input = ref(sharedText ?? "")
-const from = ref<CodeFormat>(isFormat(query.from) ? query.from : "letters")
-const to = ref<CodeFormat>(isFormat(query.to) ? query.to : "binary")
-const preserve = ref(query.ws === undefined ? true : query.ws !== "0")
-
-const result = computed(() =>
-  transcode(input.value, from.value, to.value, { preserveWhitespace: preserve.value }),
-)
-const output = computed(() => result.value.ok ? result.value.output : "")
-const error = computed(() => result.value.ok ? "" : result.value.error)
-const bytes = computed(() => result.value.ok ? result.value.bytes : [])
-const tokens = computed<OutToken[]>(() => result.value.ok ? result.value.tokens : [])
-
-const inputEl = ref<HTMLTextAreaElement | null>(null)
-const outEl = ref<HTMLElement | null>(null)
-const cursorPos = ref(-1)
-const trackCursor = () => {
-  cursorPos.value = inputEl.value ? inputEl.value.selectionStart ?? -1 : -1
-}
-
-const autoGrow = () => {
-  const el = inputEl.value
-  if (!el) return
-  el.style.height = "auto"
-  el.style.height = `${el.scrollHeight + 2}px`
-}
-watch(input, () => nextTick(autoGrow))
-onMounted(() => {
-  autoGrow()
-  useEventListener(window, "resize", autoGrow)
-})
-
-const hotTokens = computed(() => {
-  const hot = new Set<number>()
-  const pos = cursorPos.value
-  if (pos < 0) return hot
-  tokens.value.forEach((t, i) => {
-    if (t.kind === "code" && t.srcStart >= 0 && pos >= t.srcStart && pos <= t.srcEnd) hot.add(i)
-  })
-  return hot
-})
-
-watch(hotTokens, (hot) => {
-  if (!hot.size || !outEl.value) return
-  nextTick(() => {
-    outEl.value?.querySelector(".coder__tok.hot")?.scrollIntoView({ block: "nearest" })
-  })
-})
-const byteCount = computed(() => bytes.value.length)
-
-const BYTE_CAP = 160
-const shownBytes = computed(() => bytes.value.slice(0, BYTE_CAP))
-
-const UNIT_NAMES: Record<CodeFormat, string> = {
-  letters: "chars",
-  binary: "bits",
-  decimal: "bytes",
-  hex: "nibbles",
-}
-const outputUnits = computed(() => {
-  const n = byteCount.value
-  const scaled = to.value === "binary" ? n * 8 : to.value === "hex" ? n * 2 : n
-  if (to.value === "letters") return `${output.value.length} chars`
-  return `${scaled} ${UNIT_NAMES[to.value]} · ${n} bytes`
-})
-
-const PLACEHOLDERS: Record<CodeFormat, string> = {
-  letters: "type anything…",
-  binary: "01101000 01101001 …",
-  decimal: "104 101 108 …",
-  hex: "68 65 6c 6c 6f …",
-}
-const inputPlaceholder = computed(() => PLACEHOLDERS[from.value])
-
-const swapTurns = ref(0)
-function swap() {
-  const prevOut = output.value
-  const hadError = !!error.value
-  ;[from.value, to.value] = [to.value, from.value]
-  if (!hadError && prevOut) input.value = prevOut
-  swapTurns.value++
-}
-
-const { copy, copied } = useClipboard({ copiedDuring: 1200 })
-const copyOutput = () => { if (output.value) copy(output.value) }
-
-const tipVisible = ref(false)
-let tipTimer: ReturnType<typeof setTimeout> | null = null
-const startTipTimer = () => {
-  tipTimer = setTimeout(() => { tipVisible.value = true }, 2000)
-}
-const clearTipTimer = () => {
-  if (tipTimer) { clearTimeout(tipTimer); tipTimer = null }
-  tipVisible.value = false
-}
-
-const { copy: copyLink, copied: shared } = useClipboard({ copiedDuring: 1600 })
-function share() {
-  if (!input.value.trim()) return
-  const params = new URLSearchParams({ from: from.value, to: to.value })
-  if (!preserve.value) params.set("ws", "0")
-  params.set("q", encodeShareText(input.value))
-  copyLink(`${location.origin}/code?${params.toString()}`)
-}
-
-const byteTitle = (b: number): string => {
-  const ch = b >= 32 && b < 127 ? String.fromCharCode(b) : "·"
-  return `${ch}  dec ${b}  bin ${b.toString(2).padStart(8, "0")}`
-}
-
-type Sample = { label: string, text: string, from: CodeFormat, to: CodeFormat }
-const SAMPLES: Sample[] = [
-  { label: "hello, world", text: "hello, world", from: "letters", to: "binary" },
-  { label: "01101000 01101001", text: "01101000 01101001", from: "binary", to: "letters" },
-  { label: "deadbeef", text: "de ad be ef", from: "hex", to: "decimal" },
-]
-function loadSample(s: Sample) {
-  input.value = s.text
-  from.value = s.from
-  to.value = s.to
-}
-
-// Deterministic: Math.random here would mismatch on hydration.
-const bitstrip = computed(() => {
-  const seedText = input.value || "code"
-  const seed = [...seedText].reduce((a, c) => a * 31 + c.charCodeAt(0) >>> 0, 7)
-  let x = seed || 7
-  let s = ""
-  for (let i = 0; i < 96; i++) {
-    x = x * 1103515245 + 12345 >>> 0
-    s += x >> 16 & 1
-    if (i % 8 === 7) s += " "
-  }
-  return s
-})
+const {
+  input,
+  from,
+  to,
+  preserve,
+  output,
+  error,
+  bytes,
+  tokens,
+  hotTokens,
+  byteCount,
+  shownBytes,
+  outputUnits,
+  inputPlaceholder,
+  bitstrip,
+  swapTurns,
+  copied,
+  shared,
+  tipVisible,
+  trackCursor,
+  swap,
+  copyOutput,
+  share,
+  startTipTimer,
+  clearTipTimer,
+  loadSample,
+  byteTitle,
+  samples: SAMPLES,
+  byteCap: BYTE_CAP,
+} = useCodePage({ inputEl, outEl, query: useRoute().query })
 </script>
 
 <style lang="sass" scoped>
