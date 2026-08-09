@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "nwolverson.ide-purescript",
+    "oxfordabstracts.purescript-fast-ide-vscode",
     "nwolverson.language-purescript"
   ]
 }
