@@ -4,8 +4,6 @@ aside.side-note(ref="el", :class="{ visible }")
 </template>
 
 <script lang="ts" setup>
-import { useEventListener } from "@vueuse/core"
-
 const props = defineProps<{
   /** Note name a trigger reveals on hover; omit for an always-on note. */
   name?: string
@@ -15,25 +13,14 @@ const el = useTemplateRef<HTMLElement>("el")
 const sideNotes = useSideNotes()
 const { register, unregister, relayout } = useSideNoteLayout()
 
-const visible = computed(() =>
-  !props.name || sideNotes.isVisible(props.name))
-
-const reflow = () => nextTick(() => relayout(sideNotes.isVisible))
-
-onMounted(() => {
-  if (props.name && el.value) {
-    register(props.name, el.value)
-    reflow()
-  }
+const { visible } = useSideNote({
+  el,
+  sideNotes,
+  register,
+  unregister,
+  name: () => props.name ?? null,
+  relayoutVisible: () => relayout(sideNotes.isVisible),
 })
-
-onUnmounted(() => {
-  if (props.name) unregister(props.name)
-})
-
-watch(() => [sideNotes.hovered, sideNotes.pinned.size], reflow)
-
-useEventListener("resize", reflow, { passive: true })
 </script>
 
 <style lang="sass" scoped>
