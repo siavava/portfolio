@@ -6,30 +6,36 @@
 -- | drawing is the SVG template over the returned refs.
 module App.Components.AStarViz
   ( AStarBindings
+  , draftMaze
+  , greedyLen
+  , neighborsOf
+  , shortestPath
   , useAStarViz
   ) where
 
 import Prelude
 
 import App.Composables.AfterPaint (useAfterPaint)
+import App.Utils.JsMath (hypot)
+import Control.Monad.ST (run) as ST
+import Control.Monad.ST.Ref (new, read, write) as STRef
 import Data.Array as Array
+import Data.Array.ST (peek, poke, push, thaw) as STArray
 import Data.Foldable (foldl, for_)
-import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Int (floor, toNumber)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Nullable (Nullable, notNull, null)
 import Data.Number (infinity)
+import Data.Number.Format (toString)
 import Data.Ord (abs)
 import Data.String (joinWith)
 import Effect (Effect)
+import Effect.Random (random)
 import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Vue (Ref, onBeforeUnmount, read, ref, watchRef, write)
 
-foreign import showNumberImpl :: Number -> String
 foreign import lcgNextImpl :: Number -> Number
-foreign import hypotImpl :: Fn2 Number Number Number
-foreign import randomImpl :: Effect Number
 foreign import startRafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
 type OpenNode = { i :: Int, g :: Int, f :: Number }
@@ -117,54 +123,68 @@ neighborsOf walls i =
       <> (if y < gridH - 1 then [ i + gridW ] else [])
 
 -- | BFS distance from start to goal, `-1` when unreachable — the ground
--- | truth the note scores against.
+-- | truth the note scores against. The queue is an STArray that only ever
+-- | grows; a cursor ref dequeues FIFO without shifting, so visit order
+-- | matches the original list-based BFS exactly.
 shortestPath :: Array Boolean -> Int
-shortestPath walls = go (setAt startCell 0 (Array.replicate total (-1))) [ startCell ]
-  where
-  go dist queue = case Array.uncons queue of
-    Nothing -> -1
-    Just { head: c, tail } ->
-      if c == goalCell then fromMaybe (-1) (Array.index dist c)
-      else
-        let
-          next = fromMaybe 0 (Array.index dist c) + 1
-          fresh = Array.filter (\n -> Array.index dist n == Just (-1)) (neighborsOf walls c)
-          dist' = foldl (\d n -> setAt n next d) dist fresh
-        in
-          go dist' (tail <> fresh)
+shortestPath walls = ST.run do
+  dist <- STArray.thaw (Array.replicate total (-1))
+  _ <- STArray.poke startCell 0 dist
+  queue <- STArray.thaw [ startCell ]
+  cursor <- STRef.new 0
+  let
+    go = do
+      idx <- STRef.read cursor
+      dequeued <- STArray.peek idx queue
+      case dequeued of
+        Nothing -> pure (-1)
+        Just c -> do
+          _ <- STRef.write (idx + 1) cursor
+          if c == goalCell then map (fromMaybe (-1)) (STArray.peek c dist)
+          else do
+            dc <- STArray.peek c dist
+            let next = fromMaybe 0 dc + 1
+            for_ (neighborsOf walls c) \n -> do
+              dn <- STArray.peek n dist
+              when (dn == Just (-1)) do
+                _ <- STArray.poke n next dist
+                void (STArray.push n queue)
+            go
+  go
 
 -- | Path length greedy best-first hands back, `-1` when unreachable —
 -- | used to prefer mazes where greedy goes wrong. The stable re-sort of
--- | the frontier mirrors the SFC's in-place `Array#sort` + `shift`.
+-- | the frontier mirrors the SFC's in-place `Array#sort` + `shift`, so
+-- | the queue stays a pure snapshot per dequeue; only `seen`/`from` move
+-- | to in-place STArray writes.
 greedyLen :: Array Boolean -> Int
-greedyLen walls =
-  go
-    [ { i: startCell, h: manh startCell } ]
-    (setAt startCell true (Array.replicate total false))
-    (Array.replicate total (-1))
+greedyLen walls = ST.run do
+  seen <- STArray.thaw (Array.replicate total false)
+  _ <- STArray.poke startCell true seen
+  from <- STArray.thaw (Array.replicate total (-1))
+  let
+    visit ci q n = do
+      alreadySeen <- STArray.peek n seen
+      if fromMaybe false alreadySeen then pure q
+      else do
+        _ <- STArray.poke n true seen
+        _ <- STArray.poke n ci from
+        pure (Array.snoc q { i: n, h: manh n })
+    walkLen at len =
+      if at == startCell then pure len
+      else do
+        prev <- STArray.peek at from
+        walkLen (fromMaybe (-1) prev) (len + 1)
+    go q = case Array.uncons (Array.sortBy (comparing _.h) q) of
+      Nothing -> pure (-1)
+      Just { head: c, tail: rest } ->
+        if c.i == goalCell then walkLen goalCell 0
+        else Array.foldM (visit c.i) rest (neighborsOf walls c.i) >>= go
+  go [ { i: startCell, h: manh startCell } ]
   where
   gx = goalCell `mod` gridW
   gy = goalCell `div` gridW
   manh i = abs (i `mod` gridW - gx) + abs (i `div` gridW - gy)
-  go q seen from = case Array.uncons (Array.sortBy (comparing _.h) q) of
-    Nothing -> -1
-    Just { head: c, tail: rest } ->
-      if c.i == goalCell then walkLen from goalCell 0
-      else
-        let
-          out = foldl (visit c.i) { seen, from, q: rest } (neighborsOf walls c.i)
-        in
-          go out.q out.seen out.from
-  visit ci acc n =
-    if fromMaybe false (Array.index acc.seen n) then acc
-    else
-      { seen: setAt n true acc.seen
-      , from: setAt n ci acc.from
-      , q: Array.snoc acc.q { i: n, h: manh n }
-      }
-  walkLen from at len =
-    if at == startCell then len
-    else walkLen from (fromMaybe (-1) (Array.index from at)) (len + 1)
 
 -- | One maze draft: two vertical barriers with offset gaps, a small trap
 -- | pocket between them, then random scatter walls. The rng call order
@@ -246,7 +266,7 @@ hOf mode i =
     dx = abs (i `mod` gridW - goalCell `mod` gridW)
     dy = abs (i `div` gridW - goalCell `div` gridW)
   in
-    if mode == "euclid" then runFn2 hypotImpl (toNumber dx) (toNumber dy)
+    if mode == "euclid" then hypot (toNumber dx) (toNumber dy)
     else toNumber (dx + dy)
 
 modeLabel :: String -> String
@@ -318,7 +338,7 @@ useAStarViz = do
       write note ("searching — shortest possible is " <> show optimal <> " steps")
 
     newMaze = do
-      buildMaze wallsRef optimalRef randomImpl
+      buildMaze wallsRef optimalRef random
       restart
 
     finish at = do
@@ -329,7 +349,7 @@ useAStarViz = do
           else walkBack (fromMaybe (-1) (Array.index cameFrom c)) (Array.cons c acc)
         path = walkBack at []
         points = joinWith " "
-          (map (\i -> showNumberImpl (sx i) <> "," <> showNumberImpl (sy i)) path)
+          (map (\i -> toString (sx i) <> "," <> toString (sy i)) path)
         len = Array.length path - 1
       write pathPoints (notNull points)
       optimal <- Ref.read optimalRef
