@@ -22,3 +22,9 @@ jobs:
       - run: bun run purs:check
 
       - run: bun run purs:format-check
+
+      # needs the output/ + .purs-shims trees purs:check built above
+      - run: bun run typecheck
+
+      # not `bun run lint` — the lint script runs --fix
+      - run: bunx eslint .
