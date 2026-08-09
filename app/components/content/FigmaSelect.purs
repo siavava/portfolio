@@ -9,7 +9,7 @@ module App.Components.FigmaSelect
   , FigmaArgs
   , FigmaBindings
   , SideNotesStore
-  , useFigmaSelect
+  , setup
   ) where
 
 import Prelude
@@ -18,36 +18,52 @@ import Data.Int (round)
 import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
+import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
 import Vue (Ref, read, ref, write)
 
+-- | The `useSideNotes()` store handle — hover/pin reveal of named notes.
 foreign import data SideNotesStore :: Type
+
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
+-- | `getBoundingClientRect` width/height of the element; null when the
+-- | element is null.
 foreign import rectSizeImpl
   :: EffectFn1 (Nullable DomElement) (Nullable { width :: Number, height :: Number })
 
+-- | Hover-reveals the named side note.
 foreign import sideNotesActivateImpl :: EffectFn2 SideNotesStore String Unit
+
+-- | Clears the side-note hover.
 foreign import sideNotesDeactivateImpl :: EffectFn1 SideNotesStore Unit
+
+-- | Pins or unpins the named side note.
 foreign import sideNotesTogglePinImpl :: EffectFn2 SideNotesStore String Unit
 
 type FigmaArgs =
-  { el :: Ref (Nullable DomElement)
+  { -- | Template ref to the rendered selection `<span>`.
+    el :: Ref (Nullable DomElement)
+  -- | Reads the `note` prop: side-note name to reveal, if any.
   , note :: Effect (Nullable String)
+  -- | The side-notes store handle.
   , sideNotes :: SideNotesStore
   }
 
 type FigmaBindings =
-  { size :: Ref String
+  { -- | The "W×H" label text, rounded to whole pixels.
+    size :: Ref String
+  -- | Mouseenter handler: measures the box and reveals the side note.
   , measure :: Effect Unit
+  -- | Mouseleave handler: clears the side-note hover.
   , leave :: Effect Unit
+  -- | Click handler: pins/unpins the side note.
   , toggle :: Effect Unit
   }
 
-useFigmaSelect :: EffectFn1 FigmaArgs FigmaBindings
-useFigmaSelect = mkEffectFn1 setup
-
+-- | Wires the Figma-style selection box: `measure` refreshes the "W×H"
+-- | size label on hover, and the handlers drive the linked side note's
+-- | reveal/pin state.
 setup :: FigmaArgs -> Effect FigmaBindings
 setup args = do
   size <- ref "0×0"

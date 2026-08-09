@@ -25,25 +25,42 @@ import Vue (Computed, Ref, computed, onBeforeUnmount, onMounted, read)
 
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
+
+-- | The spotlighted media element — an `<svg>` or `<img>`.
 foreign import data MediaEl :: Type
 
+-- | The figure's media element with its aspect ratio (SVG viewBox or
+-- | image natural size) and the viewport-derived max width/height;
+-- | null without a figure, media, or window (SSR).
 foreign import mediaBoxImpl
   :: EffectFn1 (Nullable DomElement)
        (Nullable { media :: MediaEl, aspect :: Number, maxW :: Number, maxH :: Number })
 
+-- | Writes explicit pixel width/height on the media, dropping its
+-- | max-width/max-height caps.
 foreign import setMediaSizeImpl :: EffectFn3 MediaEl Int Int Unit
+
+-- | Adds a passive window resize listener; returns the remove thunk
+-- | (manual cleanup — no-op stub during SSR).
 foreign import onWindowResizeImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
 type SpotlightArgs =
-  { figure :: Ref (Nullable DomElement)
+  { -- | Template ref to the spotlighted figure wrapper (v-html host).
+    figure :: Ref (Nullable DomElement)
+  -- | Reads the current color-mode value ("dark"/"light").
   , colorModeValue :: Effect String
   }
 
 type SpotlightBindings =
-  { mode :: Computed String
+  { -- | Overlay class: "dark-mode" or "light-mode".
+    mode :: Computed String
+  -- | Sizes the media to fit 88vw × 66vh while keeping its aspect.
   , fitFigure :: Effect Unit
   }
 
+-- | Wires the spotlight overlay: the color-mode class and `fitFigure`,
+-- | which sizes the spotlighted media to the viewport (re-run on window
+-- | resize and after the caption typewriter settles).
 useFigureSpotlightOverlay :: EffectFn1 SpotlightArgs SpotlightBindings
 useFigureSpotlightOverlay = mkEffectFn1 setup
 

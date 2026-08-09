@@ -25,15 +25,25 @@ import Vue
   , write
   )
 
+-- | The connections store's public surface.
 type ConnectionsBindings =
-  { nodes :: ReactiveSet String
-  , activeNames :: Ref (Array String)
-  , registerNode :: EffectFn1 String Unit
-  , unregisterNode :: EffectFn1 String Unit
-  , activate :: EffectFn1 (Array String) Unit
-  , deactivate :: Effect Unit
+  { -- | Node names the map has registered.
+    nodes :: ReactiveSet String
+  , -- | Names whose lineage the map currently lights.
+    activeNames :: Ref (Array String)
+  , -- | Register a map node's name (on mount).
+    registerNode :: EffectFn1 String Unit
+  , -- | Drop a node name (on unmount).
+    unregisterNode :: EffectFn1 String Unit
+  , -- | Light the registered subset of the hovered names (a miss on every
+    -- | name leaves the previous set lit).
+    activate :: EffectFn1 (Array String) Unit
+  , -- | Clear the lit names.
+    deactivate :: Effect Unit
   }
 
+-- | Assembles the connections store: the node registry and the
+-- | active-name state the map's lineage highlight follows.
 useConnectionsCore :: Effect ConnectionsBindings
 useConnectionsCore = do
   nodes <- reactiveSet

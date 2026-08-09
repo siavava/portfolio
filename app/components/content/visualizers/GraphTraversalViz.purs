@@ -63,16 +63,28 @@ type Adjacent = { to :: String, w :: Int, id :: String }
 type DistEntry = { id :: String, d :: Number }
 
 type GraphBindings =
-  { algo :: Ref String
+  { -- | Algorithm select — "bfs", "dfs", or "ucs".
+    algo :: Ref String
+  -- | Visit order so far, appended as each node lands.
   , order :: Ref (Array String)
+  -- | Ids of the edges the current run has traversed/relaxed — lit in
+  -- | the SVG.
   , activeEdges :: ReactiveSet String
+  -- | Node id → its active/visited/frontier flags, for class binding.
   , nodeClass :: EffectFn1 String NodeClass
+  -- | Node id → ":<dist>" tentative-distance label; UCS only, else "".
   , distLabel :: EffectFn1 String String
+  -- | Restart the animation from node A with the current algorithm.
   , run :: Effect Unit
+  -- | Clear every per-run mark and invalidate in-flight timers.
   , reset :: Effect Unit
+  -- | The fixed node roster with layout positions.
   , nodes :: Array GraphNode
+  -- | Precomputed edge endpoints and weight-label midpoints.
   , edgeViews :: Array EdgeView
+  -- | Canvas viewBox width in px.
   , w :: Number
+  -- | Canvas viewBox height in px.
   , h :: Number
   }
 
@@ -136,6 +148,11 @@ adjOf u = Array.concatMap pick graphEdges
     | e.b == u = [ { to: e.a, w: e.w, id: e.id } ]
     | otherwise = []
 
+-- | Wires the timer-driven traversal coroutines — running on mount and
+-- | on algorithm change, with a staleness token guarding orphaned
+-- | timers. Binds the algorithm select, the visit order, the lit edge
+-- | set, per-node class/label helpers, and run/reset actions over the
+-- | fixed weighted graph.
 useGraphTraversalViz :: Effect GraphBindings
 useGraphTraversalViz = do
   algo <- ref "bfs"

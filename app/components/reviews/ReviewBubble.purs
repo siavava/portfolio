@@ -8,7 +8,7 @@ module App.Components.ReviewBubble
   ( BubbleArgs
   , BubbleBindings
   , StyleMap
-  , useReviewBubble
+  , setup
   ) where
 
 import Prelude
@@ -18,27 +18,38 @@ import Data.Int (rem, toNumber)
 import Data.Nullable (Nullable, notNull, null)
 import Data.Number.Format (toString)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Computed, Ref, computed, read)
 
 -- | An assembled `:style` object. @ts Record<string, string | number | undefined>
 foreign import data StyleMap :: Type
 
+-- | Assembles the bubble style: `--tilt` and `--delay` variables, the
+-- | drag transform, and an optional z-index (null omits it).
 foreign import mkBubbleStyleImpl :: Fn4 String String String (Nullable Int) StyleMap
 
 type BubbleArgs =
-  { index :: Effect Int
+  { -- | Reads the bubble's position in the grid — seeds tilt and the
+    -- | reveal delay.
+    index :: Effect Int
+  -- | `useDraggableBubble`'s dragging flag — adds extra tilt.
   , dragging :: Ref Boolean
+  -- | `useDraggableBubble`'s stacking order; 0 leaves z-index unset.
   , zIndex :: Ref Int
+  -- | Reads the drag offset's x, in px.
   , offsetX :: Effect Number
+  -- | Reads the drag offset's y, in px.
   , offsetY :: Effect Number
   }
 
-type BubbleBindings = { style :: Computed StyleMap }
+type BubbleBindings =
+  { -- | The bubble's `:style`: tilt/delay variables, drag transform,
+    -- | and stacking order.
+    style :: Computed StyleMap
+  }
 
-useReviewBubble :: EffectFn1 BubbleArgs BubbleBindings
-useReviewBubble = mkEffectFn1 setup
-
+-- | Derives the bubble's style map: a deterministic per-index tilt in
+-- | the ±3° band (steeper while dragging), the staggered reveal delay,
+-- | and the drag-following transform.
 setup :: BubbleArgs -> Effect BubbleBindings
 setup args = do
   tilt <- computed do

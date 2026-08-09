@@ -10,6 +10,8 @@ module App.Utils.Katex
 
 import Data.Function.Uncurried (Fn2, runFn2)
 
+-- | KaTeX `renderToString` with the course macro map; returns the raw
+-- | TeX source when rendering throws.
 foreign import renderTexImpl :: Fn2 String Boolean String
 
 -- | Renders a TeX string to HTML+MathML with the course macro map. Set
@@ -17,5 +19,6 @@ foreign import renderTexImpl :: Fn2 String Boolean String
 renderTex :: String -> Boolean -> String
 renderTex = runFn2 renderTexImpl
 
+-- | Uncurried `renderTex` for the TypeScript shim.
 renderTexJs :: Fn2 String Boolean String
 renderTexJs = renderTexImpl

@@ -15,6 +15,7 @@ import Data.Number (isNaN) as Number
 -- | `Math.hypot` stays FFI for bit-exactness — it is not `sqrt (x*x + y*y)`.
 foreign import hypotImpl :: Fn2 Number Number Number
 
+-- | Bit-exact JS `Math.hypot` of two components.
 hypot :: Number -> Number -> Number
 hypot x y = runFn2 hypotImpl x y
 

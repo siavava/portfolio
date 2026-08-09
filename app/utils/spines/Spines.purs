@@ -42,11 +42,16 @@ spineWidth seed =
 -- | `transform` is the empty string when the spine stands straight — a
 -- | no-op in Vue style bindings, and typed `string` so `:style` accepts it.
 type SpineStyleJs =
-  { width :: String
-  , height :: String
-  , marginLeft :: String
-  , borderRadius :: String
-  , transform :: String
+  { -- | Spine width in px (`"12px"`).
+    width :: String
+  , -- | Spine height as a percentage of the shelf (`"68%"`).
+    height :: String
+  , -- | Nudge off the neighboring spine (`"0px"` or `"1px"`).
+    marginLeft :: String
+  , -- | Elliptical edge arc (`"50% / 1.8px"`).
+    borderRadius :: String
+  , -- | `rotate(±Ndeg)` lean, or `""` when standing straight.
+    transform :: String
   }
 
 -- | Seeded spine geometry: width, height, lean, and edge arcs.

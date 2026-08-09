@@ -17,7 +17,7 @@ module App.Components.ReaderPage
   , RouteHandle
   , RouterHandle
   , SpotVal
-  , useReaderPage
+  , setup
   ) where
 
 import Prelude
@@ -90,58 +90,136 @@ foreign import data RouterHandle :: Type
 -- | Whatever the figure spotlight holds when open.
 foreign import data SpotVal :: Type
 
+-- | The doc's route path.
 foreign import docPathImpl :: ProjectDoc -> String
+
+-- | The doc's category tag.
 foreign import docTagImpl :: ProjectDoc -> String
+
+-- | The doc's title.
 foreign import docTitleImpl :: ProjectDoc -> String
+
+-- | The doc's date, stringified.
 foreign import docDateImpl :: ProjectDoc -> String
+
+-- | The doc's summary, empty when absent.
 foreign import docSummaryImpl :: ProjectDoc -> String
+
+-- | The doc's featured flag, by JS truthiness.
 foreign import docFeaturedImpl :: ProjectDoc -> Boolean
+
+-- | The flattened text of the doc body's first minimark paragraph.
 foreign import openingTextImpl :: ProjectDoc -> String
+
+-- | `a.localeCompare(b)`.
 foreign import localeCompareImpl :: Fn2 String String Number
+
+-- | The route's catch-all slug segments, empty falsy parts dropped.
 foreign import slugPartsImpl :: EffectFn1 RouteHandle (Array String)
+
+-- | The route's current path.
 foreign import routePathNowImpl :: EffectFn1 RouteHandle String
+
+-- | `router.replace(path)`, promise discarded.
 foreign import routerReplaceImpl :: EffectFn2 RouterHandle String Unit
+
+-- | Calls the rail's exposed `center(key, behavior)` when it's mounted.
 foreign import railCenterImpl :: EffectFn3 (Ref (Nullable RailHandle)) String String Unit
+
+-- | Smooth-scrolls the window to the top, only on ≤1440px viewports
+-- | (where the rail is a drawer). SSR-safe no-op.
 foreign import scrollTopIfNarrowImpl :: Effect Unit
+
+-- | Passive window scroll listener via VueUse `useEventListener` —
+-- | cleans up with the component scope, hence no returned remover.
 foreign import watchWindowScrollImpl :: EffectFn1 (Effect Unit) Unit
+
+-- | `window.scrollY`, 0 during SSR.
 foreign import windowScrollYImpl :: Effect Number
+
+-- | Window keydown listener via VueUse `useEventListener` — cleans up
+-- | with the component scope.
 foreign import onKeydownImpl :: EffectFn1 (EffectFn1 KeyEvt Unit) Unit
+
+-- | `event.key`.
 foreign import keyOfImpl :: KeyEvt -> String
+
+-- | Whether meta, ctrl, or alt is held.
 foreign import hasModifierImpl :: KeyEvt -> Boolean
+
+-- | Whether the event targets an input, textarea, or contenteditable.
 foreign import isEditableTargetImpl :: KeyEvt -> Boolean
+
+-- | `event.preventDefault()`.
 foreign import preventDefaultImpl :: EffectFn1 KeyEvt Unit
 
 -- | One shelf of the bookcase rail.
-type DocGroup = { key :: String, label :: String, items :: Array ProjectDoc }
+type DocGroup =
+  { -- | Shelf key: the tag, or "featured".
+    key :: String
+  -- | Title-cased shelf label.
+  , label :: String
+  -- | The shelf's docs, in query order.
+  , items :: Array ProjectDoc
+  }
 
 type ReaderArgs =
-  { docs :: Effect (Array ProjectDoc)
+  { -- | Reads the queried project docs.
+    docs :: Effect (Array ProjectDoc)
+  -- | The current route — selection follows its catch-all slug.
   , route :: RouteHandle
+  -- | The router; selection replaces the path.
   , router :: RouterHandle
+  -- | Template ref to the BookcaseRail component (exposes `center`).
   , rail :: Ref (Nullable RailHandle)
+  -- | The figure-spotlight state ref; opening it clears the peeks.
   , spotlight :: Ref (Nullable SpotVal)
+  -- | Dismisses any open figure/reference peeks.
   , clearPeeks :: Effect Unit
+  -- | Closes the figure spotlight.
   , closeSpotlight :: Effect Unit
   }
 
 type ReaderBindings =
-  { docs :: Computed (Array ProjectDoc)
+  { -- | The queried docs, as a computed.
+    docs :: Computed (Array ProjectDoc)
+  -- | Rail shelves: a Featured shelf first when any doc is featured,
+  -- | then tag shelves, newest first.
   , groups :: Computed (Array DocGroup)
+  -- | The doc being read; falls back to featured, then the first doc.
   , selected :: Ref (Nullable ProjectDoc)
+  -- | Whether to render the summary dek — hidden when the article's
+  -- | opening paragraph already restates it.
   , showDek :: Computed Boolean
+  -- | Mobile drawer open state.
   , drawer :: Ref Boolean
+  -- | Reading order across the non-featured shelves — what arrow keys
+  -- | step through.
   , ordered :: Computed (Array ProjectDoc)
+  -- | Index of the selected doc in `ordered`, -1 when absent.
   , selectedIndex :: Computed Int
+  -- | True once the window has scrolled past 4px — topbar styling.
   , stuck :: Ref Boolean
+  -- | Absolute URL of the selected project, for the topbar share.
   , shareUrl :: Computed String
+  -- | `useSeoMeta` title for the selected project (or the index).
   , seoTitle :: Computed String
+  -- | `useSeoMeta` description — the summary, whitespace-collapsed.
   , seoDescription :: Computed String
+  -- | Canonical URL for the current route.
   , canonical :: Computed String
+  -- | OG-image kicker line: "Tag · Year" (or the portfolio default).
   , ogKicker :: Computed String
+  -- | OG-image title.
   , ogTitle :: Computed String
+  -- | OG-image description.
   , ogDescription :: Computed String
+  -- | Shelf index fed to the OG image; -1 on the bare `/projects` route.
   , ogIndex :: Computed Int
+  -- | Selects a project by path (closes the drawer, replaces the
+  -- | route); the optional group key steers the rail centering.
   , select :: EffectFn2 String (Nullable String) Unit
+  -- | Steps the selection by ±1 through `ordered`, wrapping.
   , step :: EffectFn1 Int Unit
   }
 
@@ -193,9 +271,9 @@ shelfOrder a b =
   in
     if diff < 0.0 then LT else if diff > 0.0 then GT else EQ
 
-useReaderPage :: EffectFn1 ReaderArgs ReaderBindings
-useReaderPage = mkEffectFn1 setup
-
+-- | Wires the projects reader: shelf grouping, route-driven selection
+-- | with rail centering, dek suppression, arrow-key stepping and the
+-- | drawer Escape, the scroll-stuck flag, and the SEO/OG text feeds.
 setup :: ReaderArgs -> Effect ReaderBindings
 setup args = do
   docs <- computed args.docs

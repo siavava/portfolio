@@ -16,13 +16,20 @@ import Effect (Effect)
 import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Ref, shallowRef, write)
 
+-- | The map-reveal store's public surface.
 type MapRevealBindings =
-  { offset :: Ref (Nullable Number)
-  , settled :: Ref Boolean
-  , drive :: EffectFn1 Number Unit
-  , settle :: Effect Unit
+  { -- | How far (px) the content sits above rest this frame; null once idle.
+    offset :: Ref (Nullable Number)
+  , -- | True once the spring lands and the page owns its layout again.
+    settled :: Ref Boolean
+  , -- | Per-frame offset write from the map's opening spring.
+    drive :: EffectFn1 Number Unit
+  , -- | Mark the spring landed and release the offset.
+    settle :: Effect Unit
   }
 
+-- | Assembles the map-reveal store: the per-frame offset the spring
+-- | drives and the settled flag that hands layout back to the page.
 useMapRevealCore :: Effect MapRevealBindings
 useMapRevealCore = do
   offset <- shallowRef (null :: Nullable Number)

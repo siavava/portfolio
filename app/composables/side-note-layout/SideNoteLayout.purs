@@ -24,9 +24,17 @@ import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEff
 -- | An `HTMLElement` — opaque here; only the FFI touches it. @ts HTMLElement
 foreign import data DomElement :: Type
 
+-- | Add the note element to the module-level registry under `name`.
 foreign import registerImpl :: EffectFn2 String DomElement Unit
+
+-- | Drop `name` from the registry.
 foreign import unregisterImpl :: EffectFn1 String Unit
+
+-- | Measure every registered note against its `[data-note-trigger]`;
+-- | notes without a trigger or positioning parent are skipped.
 foreign import measureImpl :: Effect (Array Measured)
+
+-- | Write the element's `style.top`.
 foreign import setTopImpl :: EffectFn2 DomElement String Unit
 
 -- | One note measured against its trigger: `group` numbers positioning
@@ -41,15 +49,21 @@ type Measured =
   }
 
 type SideNoteLayoutBindings =
-  { register :: EffectFn2 String DomElement Unit
-  , unregister :: EffectFn1 String Unit
-  , relayout :: EffectFn1 (EffectFn1 String Boolean) Unit
+  { -- | Register a note element under its name as it mounts.
+    register :: EffectFn2 String DomElement Unit
+  , -- | Remove a note by name on teardown.
+    unregister :: EffectFn1 String Unit
+  , -- | Re-place every note, given a visibility predicate by name.
+    relayout :: EffectFn1 (EffectFn1 String Boolean) Unit
   }
 
 -- | Vertical breathing room between stacked visible notes.
 gap :: Number
 gap = 16.0
 
+-- | The margin-note layout surface: register notes as they mount,
+-- | unregister them on teardown, and `relayout` whenever visibility or
+-- | geometry changes.
 useSideNoteLayout :: Effect SideNoteLayoutBindings
 useSideNoteLayout = pure
   { register: registerImpl

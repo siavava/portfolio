@@ -59,52 +59,113 @@ outerCap = 408
 edgeBias :: Number
 edgeBias = 0.12
 
--- Fixed-depth mirror of InterestBranch/InterestNode: the original layout
--- only ever descends four levels, and absent JS keys read as null.
-type LeafIn = { label :: String, requires :: Nullable (Array String) }
+-- The In family is a fixed-depth mirror of InterestBranch/InterestNode:
+-- the original layout only ever descends four levels, and absent JS keys
+-- read as null.
+
+-- | A fourth-level entry — the outermost tips of the map.
+type LeafIn =
+  { -- | Display label; labels are unique, so it doubles as the node id.
+    label :: String
+  , -- | Labels of prerequisite nodes, possibly in other branches.
+    requires :: Nullable (Array String)
+  }
+
+-- | A third-level entry, hung off its parent child node.
 type GrandchildIn =
-  { label :: String, requires :: Nullable (Array String), children :: Nullable (Array LeafIn) }
+  { -- | Display label; labels are unique, so it doubles as the node id.
+    label :: String
+  , -- | Labels of prerequisite nodes, possibly in other branches.
+    requires :: Nullable (Array String)
+  , -- | Leaf tips under this node.
+    children :: Nullable (Array LeafIn)
+  }
 
+-- | A second-level entry, fanned across its branch's slice.
 type ChildIn =
-  { label :: String
-  , requires :: Nullable (Array String)
-  , children :: Nullable (Array GrandchildIn)
+  { -- | Display label; labels are unique, so it doubles as the node id.
+    label :: String
+  , -- | Labels of prerequisite nodes, possibly in other branches.
+    requires :: Nullable (Array String)
+  , -- | Third-level entries under this node.
+    children :: Nullable (Array GrandchildIn)
   }
 
-type BranchIn = { label :: String, color :: String, children :: Array ChildIn }
+-- | One top-level interest branch — a slice of the fan.
+type BranchIn =
+  { -- | Branch label; also the id of the branch's root node.
+    label :: String
+  , -- | Branch accent color, inherited by every node and link in it.
+    color :: String
+  , -- | The branch's second-level entries.
+    children :: Array ChildIn
+  }
 
+-- | A placed map node.
 type NodeOut =
-  { id :: String
-  , label :: String
-  , level :: Int
-  , branch :: String
-  , color :: String
-  , labelSide :: Nullable String
-  , x :: Number
-  , y :: Number
+  { -- | Node id — the label itself (labels are unique across the map).
+    id :: String
+  , -- | Display label.
+    label :: String
+  , -- | Depth: 1 branch root, 2 child, 3 grandchild, 4 leaf tip.
+    level :: Int
+  , -- | The owning branch's label.
+    branch :: String
+  , -- | The owning branch's color.
+    color :: String
+  , -- | Forced label placement (`"below"` on branch roots); null lets
+    -- | the map component pick a side.
+    labelSide :: Nullable String
+  , -- | Horizontal offset from the polar origin `(cx, cy)`.
+    x :: Number
+  , -- | Vertical offset from the polar origin — negative above it.
+    y :: Number
   }
 
+-- | A placed map edge: a tree link, a center spoke, or a prerequisite
+-- | thread.
 type LinkOut =
-  { id :: String
-  , source :: Nullable String
-  , target :: String
-  , branch :: String
-  , color :: String
-  , prereq :: Nullable Boolean
-  , x1 :: Number
-  , y1 :: Number
-  , x2 :: Number
-  , y2 :: Number
+  { -- | `"source:target"` — `"root:…"` on center spokes, prefixed
+    -- | `"req:"` on prerequisite links.
+    id :: String
+  , -- | Source node id; null on the center-to-branch spokes.
+    source :: Nullable String
+  , -- | Target node id.
+    target :: String
+  , -- | The owning branch's label (the target's branch on prereq links).
+    branch :: String
+  , -- | The owning branch's color.
+    color :: String
+  , -- | Null on tree edges; on prerequisite links, whether the link
+    -- | crosses branches.
+    prereq :: Nullable Boolean
+  , -- | Source x, offset from the polar origin like node positions.
+    x1 :: Number
+  , -- | Source y.
+    y1 :: Number
+  , -- | Target x.
+    x2 :: Number
+  , -- | Target y.
+    y2 :: Number
   }
 
+-- | The finished layout the map component renders.
 type LayoutOut =
-  { width :: Number
-  , height :: Number
-  , cx :: Number
-  , cy :: Number
-  , rings :: Array Number
-  , nodes :: Array NodeOut
-  , links :: Array LinkOut
+  { -- | Scaled canvas width (936 × scale).
+    width :: Number
+  , -- | Scaled canvas height (792 × scale).
+    height :: Number
+  , -- | The polar origin's x in canvas coordinates — node and link
+    -- | offsets are relative to this point.
+    cx :: Number
+  , -- | The polar origin's y in canvas coordinates.
+    cy :: Number
+  , -- | Scaled radii of the four concentric guide rings.
+    rings :: Array Number
+  , -- | Every placed node, branch by branch.
+    nodes :: Array NodeOut
+  , -- | Tree links and spokes first, prerequisite links after.
+    links :: Array LinkOut
   }
 
 toRadians :: Number -> Number
@@ -172,6 +233,9 @@ mkLink branch source target from to =
   , y2: to.y
   }
 
+-- | Lay out the interest branches at `scale`: the canvas frame, guide
+-- | rings, every placed node, and the tree plus prerequisite links —
+-- | everything the map component draws. Pure; safe anywhere.
 interestLayoutJs :: Fn2 (Array BranchIn) Number LayoutOut
 interestLayoutJs = mkFn2 \branches scale ->
   let

@@ -12,7 +12,7 @@ module App.Composables.FigureSpotlight
   , KeyEvt
   , MouseEvt
   , SpotlightBindings
-  , useFigureSpotlight
+  , setup
   ) where
 
 import Prelude
@@ -34,36 +34,78 @@ foreign import data MouseEvt :: Type
 -- | A raw `KeyboardEvent`. @ts KeyboardEvent
 foreign import data KeyEvt :: Type
 
+-- | Every `selector` match under the content root; `[]` when the root
+-- | is null.
 foreign import figuresInImpl :: EffectFn2 (Nullable DomElement) String (Array DomElement)
+
+-- | A deep `cloneNode` of the element.
 foreign import cloneImpl :: EffectFn1 DomElement DomElement
+
+-- | Remove every `selector` match inside the element.
 foreign import removeAllImpl :: EffectFn2 DomElement String Unit
+
+-- | The element's `outerHTML`.
 foreign import outerHtmlImpl :: EffectFn1 DomElement String
+
+-- | The element's `innerHTML`.
 foreign import innerHtmlImpl :: EffectFn1 DomElement String
+
+-- | The first `selector` match inside the element, if any.
 foreign import querySelectorImpl :: EffectFn2 DomElement String (Nullable DomElement)
+
+-- | The element's bounding-rect width.
 foreign import rectWidthImpl :: EffectFn1 DomElement Number
+
+-- | Set `overflow` on the root element — `"hidden"` locks page scroll,
+-- | `""` restores it.
 foreign import setRootOverflowImpl :: EffectFn1 String Unit
+
+-- | The event's target element.
 foreign import targetOfImpl :: EffectFn1 MouseEvt DomElement
+
+-- | `el.closest(selector)`.
 foreign import closestImpl :: EffectFn2 DomElement String (Nullable DomElement)
+
+-- | Whether `parent` contains `child`.
 foreign import containsImpl :: EffectFn2 DomElement DomElement Boolean
+
+-- | The event's `key` string.
 foreign import keyOfImpl :: EffectFn1 KeyEvt String
+
+-- | Reference equality on elements.
 foreign import refEqImpl :: Fn2 DomElement DomElement Boolean
+
+-- | Attach a click listener to the element.
 foreign import addClickImpl :: EffectFn2 DomElement (EffectFn1 MouseEvt Unit) Unit
+
+-- | Detach a click listener from the element.
 foreign import removeClickImpl :: EffectFn2 DomElement (EffectFn1 MouseEvt Unit) Unit
+
+-- | Attach a `window` keydown listener (called from client-only
+-- | lifecycle hooks, so no SSR guard).
 foreign import addKeydownImpl :: EffectFn1 (EffectFn1 KeyEvt Unit) Unit
+
+-- | Detach a `window` keydown listener.
 foreign import removeKeydownImpl :: EffectFn1 (EffectFn1 KeyEvt Unit) Unit
 
 -- | A figure opened into the spotlight — mirrors the global
 -- | `FigSpotlightState` shape.
 type FigSpotlight =
-  { html :: String
-  , caption :: String
-  , n :: Int
-  , capWidth :: Int
+  { -- | The cloned figure markup, caption nodes stripped.
+    html :: String
+  , -- | The caption's inner HTML; `""` when the figure has none.
+    caption :: String
+  , -- | 1-based index among the article's spotlightable figures.
+    n :: Int
+  , -- | Caption card width: the figure's width clamped to 260–560px.
+    capWidth :: Int
   }
 
 type SpotlightBindings =
-  { spotlight :: Ref (Nullable FigSpotlight)
-  , close :: Effect Unit
+  { -- | The open figure; null while the spotlight is closed.
+    spotlight :: Ref (Nullable FigSpotlight)
+  , -- | Close the spotlight and restore page scroll.
+    close :: Effect Unit
   }
 
 -- | Caption nodes: stripped from the clone, harvested for the caption.
@@ -78,9 +120,9 @@ interactiveSelector = "a, button, input, select, textarea, [class*=visualiser], 
 figureSelector :: String
 figureSelector = "figure:not(.algorithm)"
 
-useFigureSpotlight :: EffectFn1 (Ref (Nullable DomElement)) SpotlightBindings
-useFigureSpotlight = mkEffectFn1 setup
-
+-- | Wire the spotlight over `content`: clicks on qualifying figures
+-- | open it, Escape (or `close`) dismisses it, and the listeners attach
+-- | on mount and tear down on unmount.
 setup :: Ref (Nullable DomElement) -> Effect SpotlightBindings
 setup content = do
   spotlight <- ref (null :: Nullable FigSpotlight)

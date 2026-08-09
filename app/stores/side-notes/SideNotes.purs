@@ -27,16 +27,26 @@ import Vue
   , write
   )
 
+-- | The side-note store's public surface.
 type SideNotesBindings =
-  { hovered :: Ref (Nullable String)
-  , pinned :: ReactiveSet String
-  , isVisible :: EffectFn1 String Boolean
-  , activate :: EffectFn1 String Unit
-  , deactivate :: Effect Unit
-  , reset :: Effect Unit
-  , togglePin :: EffectFn1 String Unit
+  { -- | The hovered trigger's note name, or null.
+    hovered :: Ref (Nullable String)
+  , -- | Note names pinned open by click.
+    pinned :: ReactiveSet String
+  , -- | Whether a note shows: its trigger is hovered, or it is pinned.
+    isVisible :: EffectFn1 String Boolean
+  , -- | Hover a trigger by note name.
+    activate :: EffectFn1 String Unit
+  , -- | Clear the hover.
+    deactivate :: Effect Unit
+  , -- | Clear the hover and every pin (route change).
+    reset :: Effect Unit
+  , -- | Pin or unpin a note by name.
+    togglePin :: EffectFn1 String Unit
   }
 
+-- | Assembles the side-note store: hover and pin state plus the
+-- | visibility check the margin notes render from.
 useSideNotesCore :: Effect SideNotesBindings
 useSideNotesCore = do
   hovered <- shallowRef (null :: Nullable String)

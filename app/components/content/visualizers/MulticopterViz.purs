@@ -29,29 +29,52 @@ import Vue (Ref, ref, write)
 -- | A raw `MouseEvent`. @ts MouseEvent
 foreign import data MouseEvt :: Type
 
+-- | The click position in the SVG's viewBox coordinates, via the
+-- | inverse screen CTM — null when the SVG is not laid out yet.
 foreign import clickPointImpl :: EffectFn1 MouseEvt (Nullable { x :: Number, y :: Number })
+
+-- | Wraps `useRafFn(fn, { immediate: false })`, passing the frame
+-- | timestamp through; returns the resume Effect.
 foreign import rafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
 type State = { x :: Number, y :: Number, vx :: Number, vy :: Number, th :: Number, om :: Number }
 
 type MulticopterBindings =
-  { "W" :: Number
+  { -- | Canvas viewBox width in px.
+    "W" :: Number
+  -- | Canvas viewBox height in px.
   , "H" :: Number
+  -- | Arrowhead length in px, shared by every force arrow.
   , "HEAD" :: Number
+  -- | Ground line y in viewBox px.
   , groundPx :: Number
+  -- | Rotor-arm half-length in px.
   , armPx :: Number
+  -- | Waypoint marker position in viewBox px.
   , targetPx :: Ref { x :: Number, y :: Number }
+  -- | Center of mass x in viewBox px (anchors the gravity arrow).
   , comX :: Ref Number
+  -- | Center of mass y in viewBox px (anchors the gravity arrow).
   , comY :: Ref Number
+  -- | The translate/rotate transform placing the craft group.
   , craftTransform :: Ref String
+  -- | Left thrust-arrow length in px, scaled from f1.
   , leftLen :: Ref Number
+  -- | Right thrust-arrow length in px, scaled from f2.
   , rightLen :: Ref Number
+  -- | Polyline `points` of the recent flight path.
   , trailPoints :: Ref String
+  -- | Gravity-arrow arrowhead polygon points.
   , gHead :: Ref String
+  -- | Thrust arrowhead polygon points, tip at the given (x, y).
   , head :: Fn2 Number Number String
+  -- | Status line — direction, tilt, and the two rotor forces.
   , note :: Ref String
+  -- | Click handler: set the waypoint from the click position.
   , flyTo :: EffectFn1 MouseEvt Unit
+  -- | Kick the craft (alternating side) to show the recovery.
   , nudge :: Effect Unit
+  -- | Home the craft and clear the trail.
   , reset :: Effect Unit
   }
 
@@ -131,6 +154,10 @@ gHeadPoints cx cy =
       <> ","
       <> toString y
 
+-- | Wires the cascaded PD controller and the fixed-step integrator
+-- | (frame-time accumulator, up to 240 substeps per frame), starting
+-- | after first paint. Binds the SVG display strings the template
+-- | renders, the click-to-waypoint handler, and nudge/reset actions.
 useMulticopterViz :: Effect MulticopterBindings
 useMulticopterViz = do
   s <- Ref.new { x: homeX, y: homeY, vx: 0.0, vy: 0.0, th: 0.0, om: 0.0 }
@@ -316,7 +343,7 @@ useMulticopterViz = do
   syncTrail
 
   resume <- runEffectFn1 rafLoopImpl (mkEffectFn1 tick)
-  runEffectFn1 useAfterPaint resume
+  useAfterPaint resume
 
   pure
     { "W": w

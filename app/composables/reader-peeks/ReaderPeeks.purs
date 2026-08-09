@@ -13,7 +13,7 @@ module App.Composables.ReaderPeeks
   , PeekStyle
   , PeeksBindings
   , RefPeek
-  , useReaderPeeks
+  , setup
   ) where
 
 import Prelude
@@ -59,41 +59,107 @@ type NotesMetaEntry = { title :: String, "module" :: String, summary :: String }
 -- | peekable figure — null when the caption is missing or blank.
 type FigData = { html :: String, n :: Int, left :: Number, top :: Number, width :: Number }
 
+-- | The build-time notes-index entry at this pathname; null when
+-- | unindexed.
 foreign import lookupNotesMetaImpl :: String -> Nullable NotesMetaEntry
+
+-- | `new URL(href).pathname` — the href must be absolute.
 foreign import urlPathnameImpl :: String -> String
+
+-- | The event's `clientX`.
 foreign import mouseXImpl :: MouseEvt -> Number
+
+-- | The nearest `<a>` enclosing the event target.
 foreign import closestAnchorImpl :: EffectFn1 MouseEvt (Nullable DomElement)
+
+-- | The nearest `<figure>` enclosing the event target.
 foreign import closestFigureImpl :: EffectFn1 MouseEvt (Nullable DomElement)
+
+-- | The raw `href` attribute; `""` when absent.
 foreign import hrefAttrImpl :: EffectFn1 DomElement String
+
+-- | Reference equality, null-tolerant.
 foreign import sameElementImpl :: Fn2 (Nullable DomElement) (Nullable DomElement) Boolean
+
+-- | Whether the figure peeks: inside the desk and not an algorithm
+-- | block.
 foreign import peekableFigureImpl :: EffectFn2 DomElement (Nullable DomElement) Boolean
+
+-- | The figure's caption markup, running number among the desk's
+-- | figures, and viewport rect; null when the caption is missing or
+-- | blank.
 foreign import figPeekDataImpl :: EffectFn2 DomElement (Nullable DomElement) (Nullable FigData)
+
+-- | The `root` element of whatever Vue handed the template ref.
 foreign import cardRootImpl :: CardInstance -> Nullable DomElement
+
+-- | The link's viewport top and bottom.
 foreign import linkRectImpl :: EffectFn1 DomElement { top :: Number, bottom :: Number }
+
+-- | The card's `offsetHeight`; 0 when null (not yet rendered).
 foreign import cardHeightImpl :: EffectFn1 (Nullable DomElement) Number
+
+-- | The viewport width.
 foreign import windowInnerWidthImpl :: Effect Number
+
+-- | The viewport height.
 foreign import windowInnerHeightImpl :: Effect Number
+
+-- | Append `"px"`.
 foreign import pxImpl :: Number -> String
+
+-- | Fixed-position style for the figure card: left, top, width.
 foreign import figStyleImpl :: Fn3 String String String PeekStyle
+
+-- | Fixed-position style for the reference card: left, width, and
+-- | whichever of top/bottom is non-null.
 foreign import refStyleImpl :: Fn4 String String (Nullable String) (Nullable String) PeekStyle
+
+-- | VueUse `useEventListener` on the desk ref — attaches when the ref
+-- | fills, detaches on scope disposal.
 foreign import onDeskEventImpl
   :: EffectFn3 (Ref (Nullable DomElement)) String (EffectFn1 MouseEvt Unit) Unit
 
+-- | A capture-phase, passive scroll listener on the window, disposed
+-- | with the component scope.
 foreign import onScrollCaptureImpl :: EffectFn1 (Effect Unit) Unit
+
+-- | Run after the pending DOM update flushes (Vue `nextTick`).
 foreign import nextTickImpl :: EffectFn1 (Effect Unit) Unit
 
 -- | Floating figure-caption card state.
-type FigPeek = { html :: String, n :: Int, style :: PeekStyle }
+type FigPeek =
+  { -- | The caption markup.
+    html :: String
+  , -- | 1-based figure number among the desk's peekable figures.
+    n :: Int
+  , -- | Fixed-position placement above the figure.
+    style :: PeekStyle
+  }
 
 -- | Floating notes-reference card state.
-type RefPeek = { "module" :: String, title :: String, summaryHtml :: String, style :: PeekStyle }
+type RefPeek =
+  { -- | The lesson's module label, shown above the title.
+    "module" :: String
+  , -- | The lesson title.
+    title :: String
+  , -- | The lesson summary, inline math rendered.
+    summaryHtml :: String
+  , -- | Fixed-position placement above (or below) the link.
+    style :: PeekStyle
+  }
 
 type PeeksBindings =
-  { figPeek :: Ref (Nullable FigPeek)
-  , refPeek :: Ref (Nullable RefPeek)
-  , refVisible :: Ref Boolean
-  , bindRefCard :: EffectFn1 CardInstance Unit
-  , clearPeeks :: Effect Unit
+  { -- | The figure-caption card; null when hidden.
+    figPeek :: Ref (Nullable FigPeek)
+  , -- | The notes-reference card; null when hidden.
+    refPeek :: Ref (Nullable RefPeek)
+  , -- | Fade state for the reference card.
+    refVisible :: Ref Boolean
+  , -- | Function template ref binding the card's root element.
+    bindRefCard :: EffectFn1 CardInstance Unit
+  , -- | Dismiss both overlays.
+    clearPeeks :: Effect Unit
   }
 
 refW :: Number
@@ -137,9 +203,6 @@ pxRound n = show (Int.round n) <> "px"
 -- | | `refVisible` | `Ref<boolean>` | Fade state for the reference card |
 -- | | `bindRefCard` | `(c: unknown) => void` | Template ref for the card element |
 -- | | `clearPeeks` | `() => void` | Dismiss both overlays |
-useReaderPeeks :: EffectFn1 (Ref (Nullable DomElement)) PeeksBindings
-useReaderPeeks = mkEffectFn1 setup
-
 setup :: Ref (Nullable DomElement) -> Effect PeeksBindings
 setup desk = do
   figPeek <- ref (null :: Nullable FigPeek)

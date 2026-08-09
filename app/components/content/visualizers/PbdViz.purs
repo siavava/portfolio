@@ -30,12 +30,26 @@ import Vue (Ref, read, ref, shallowRef, watchRef, write)
 -- | Module-local mutable particle store (a plain JS array).
 foreign import data SimArray :: Type -> Type
 
+-- | Wraps `useRafFn(fn, { immediate: false })`; returns the resume Effect.
 foreign import rafLoopImpl :: EffectFn1 (Effect Unit) (Effect Unit)
+
+-- | Mutable copy of an array, as a fresh store.
 foreign import thawImpl :: forall a. EffectFn1 (Array a) (SimArray a)
+
+-- | Read the cell at an index (unchecked).
 foreign import peekImpl :: forall a. EffectFn2 (SimArray a) Int a
+
+-- | Overwrite the cell at an index in place.
 foreign import pokeImpl :: forall a. EffectFn3 (SimArray a) Int a Unit
+
+-- | Mutable copy of the store — the pre-solve positions the velocity
+-- | update diffs against.
 foreign import snapshotImpl :: forall a. EffectFn1 (SimArray a) (SimArray a)
+
+-- | Immutable snapshot of the store.
 foreign import freezeImpl :: forall a. EffectFn1 (SimArray a) (Array a)
+
+-- | Number of cells in the store.
 foreign import lengthImpl :: forall a. EffectFn1 (SimArray a) Int
 
 type Particle =
@@ -47,13 +61,21 @@ type Segment =
 type Link = { a :: Int, b :: Int, rest :: Number }
 
 type PbdBindings =
-  { "W" :: Number
+  { -- | Canvas viewBox width in px.
+    "W" :: Number
+  -- | Canvas viewBox height in px.
   , "H" :: Number
+  -- | Frozen per-frame view of the chain particles.
   , particles :: Ref (Array Particle)
+  -- | Chain segments, strokes tinted by strain against rest length.
   , segments :: Ref (Array Segment)
+  -- | Constraint-solver iterations per substep — the stiffness control.
   , iterations :: Ref Int
+  -- | Status line — iterations, max stretch, and a stiffness hint.
   , note :: Ref String
+  -- | Whip the chain sideways (alternating direction).
   , swing :: Effect Unit
+  -- | Rebuild the chain hanging straight below the pin.
   , reset :: Effect Unit
   }
 
@@ -108,6 +130,11 @@ segmentsOf ps = constraints
             <> "%)"
         }
 
+-- | Wires the chain build and the frame loop (two solver substeps per
+-- | frame), starting after first paint. Binds the frozen
+-- | particle/segment views, the iteration count, the note line, and
+-- | swing/reset actions; changing iterations swings the chain so the
+-- | stiffness change shows.
 usePbdViz :: Effect PbdBindings
 usePbdViz = do
   particlesView <- shallowRef ([] :: Array Particle)
@@ -242,7 +269,7 @@ usePbdViz = do
     swing
 
   resume <- runEffectFn1 rafLoopImpl tick
-  runEffectFn1 useAfterPaint do
+  useAfterPaint do
     reset
     resume
 

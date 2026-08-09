@@ -15,7 +15,7 @@ module App.Components.CodePage
   , RouteQuery
   , Sample
   , TextAreaEl
-  , useCodePage
+  , setup
   ) where
 
 import Prelude
@@ -49,22 +49,55 @@ import Vue
 
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
+
+-- | A JS `Set` of `Int` indices — cheap `has` lookups from the template.
 foreign import data IntSet :: Type
+
+-- | The current route's query object (`useRoute().query`), read key by key
+-- | through `queryParamImpl`.
 foreign import data RouteQuery :: Type
+
+-- | A DOM `HTMLTextAreaElement` — the input panel's element.
 foreign import data TextAreaEl :: Type
 
+-- | The query value under a key, or null when absent or not a string.
 foreign import queryParamImpl :: Fn2 RouteQuery String (Nullable String)
+
+-- | `selectionStart` of the textarea; `-1` when the element is null.
 foreign import selectionStartImpl :: EffectFn1 (Nullable TextAreaEl) Int
+
+-- | Resizes the textarea to fit its content (height reset, then
+-- | `scrollHeight`). No-op on a null element.
 foreign import autoGrowImpl :: EffectFn1 (Nullable TextAreaEl) Unit
+
+-- | Adds a passive window resize listener; returns the remove thunk
+-- | (manual cleanup — no-op stub during SSR).
 foreign import onWindowResizeImpl :: EffectFn1 (Effect Unit) (Effect Unit)
+
+-- | Builds a JS `Set` from an array of indices.
 foreign import mkIntSetImpl :: Array Int -> IntSet
+
+-- | `Set#size`.
 foreign import setSizeImpl :: IntSet -> Int
+
+-- | Scrolls the first `.coder__tok.hot` inside the output panel into view
+-- | (`block: "nearest"`). No-op on a null element.
 foreign import scrollHotIntoViewImpl :: EffectFn1 (Nullable DomElement) Unit
+
+-- | VueUse `useClipboard` scoped to the calling component; `copied` stays
+-- | true for the given number of milliseconds after each copy.
 foreign import useClipboardImpl
   :: EffectFn1 Int { copy :: EffectFn1 String Unit, copied :: Ref Boolean }
 
+-- | Absolute `/code` share URL for (from, to, dropWhitespace, encoded
+-- | text) — reads `location.origin`, so client-only.
 foreign import shareUrlImpl :: EffectFn4 String String Boolean String String
+
+-- | Vue's `nextTick` with a callback, result discarded.
 foreign import nextTickImpl :: EffectFn1 (Effect Unit) Unit
+
+-- | 96 pseudo-random bits (space-grouped bytes) from an LCG seeded by the
+-- | text — deterministic, so SSR and hydration agree.
 foreign import bitstripImpl :: String -> String
 
 -- | One rendered piece of output, structurally identical to
@@ -74,39 +107,70 @@ type OutToken = { text :: String, kind :: String, srcStart :: Int, srcEnd :: Int
 type Sample = { label :: String, text :: String, from :: String, to :: String }
 
 type CodeArgs =
-  { inputEl :: Ref (Nullable TextAreaEl)
+  { -- | Template ref to the source textarea.
+    inputEl :: Ref (Nullable TextAreaEl)
+  -- | Template ref to the rendered output panel.
   , outEl :: Ref (Nullable DomElement)
+  -- | The route's query — seeds input/formats from a share link.
   , query :: RouteQuery
   }
 
 type CodeBindings =
-  { input :: Ref String
+  { -- | Source text, v-modeled by the input textarea.
+    input :: Ref String
+  -- | Source format id: letters, binary, decimal, or hex.
   , from :: Ref String
+  -- | Target format id.
   , to :: Ref String
+  -- | Whitespace-preservation toggle.
   , preserve :: Ref Boolean
+  -- | Transcoded text; empty while the input fails to parse.
   , output :: Computed String
+  -- | Conversion error message; empty on success.
   , error :: Computed String
+  -- | Decoded byte values feeding the ribbon and counts.
   , bytes :: Computed (Array Int)
+  -- | Output split into code/plain runs carrying source spans.
   , tokens :: Computed (Array OutToken)
+  -- | Indices of tokens covering the input caret — the highlight set.
   , hotTokens :: Computed IntSet
+  -- | Number of decoded bytes.
   , byteCount :: Computed Int
+  -- | First `byteCap` bytes, so the ribbon stays bounded.
   , shownBytes :: Computed (Array Int)
+  -- | Output-panel footer summary, e.g. "16 bits · 2 bytes".
   , outputUnits :: Computed String
+  -- | Input placeholder matching the source format.
   , inputPlaceholder :: Computed String
+  -- | Decorative bit string across the top, seeded by the input.
   , bitstrip :: Computed String
+  -- | Swap click count — drives the button's 180° rotations.
   , swapTurns :: Ref Int
+  -- | True briefly after copying the output.
   , copied :: Ref Boolean
+  -- | True briefly after copying a share link.
   , shared :: Ref Boolean
+  -- | Whitespace-toggle tooltip shown (after a hover delay).
   , tipVisible :: Ref Boolean
+  -- | Canned "try" conversions.
   , samples :: Array Sample
+  -- | Max bytes rendered in the ribbon.
   , byteCap :: Int
+  -- | Records the textarea caret to drive hot-token highlighting.
   , trackCursor :: Effect Unit
+  -- | Swaps from/to, feeding the output back in when it was valid.
   , swap :: Effect Unit
+  -- | Copies the output text.
   , copyOutput :: Effect Unit
+  -- | Copies a share URL encoding the current conversion.
   , share :: Effect Unit
+  -- | Arms the 2 s timer that shows the whitespace tip.
   , startTipTimer :: Effect Unit
+  -- | Cancels the timer and hides the whitespace tip.
   , clearTipTimer :: Effect Unit
+  -- | Fills input/from/to from a sample.
   , loadSample :: EffectFn1 Sample Unit
+  -- | Hover title for a byte chip: glyph, decimal, binary.
   , byteTitle :: Int -> String
   }
 
@@ -152,9 +216,10 @@ hotIndex pos i t =
   if t.kind == "code" && t.srcStart >= 0 && pos >= t.srcStart && pos <= t.srcEnd then Just i
   else Nothing
 
-useCodePage :: EffectFn1 CodeArgs CodeBindings
-useCodePage = mkEffectFn1 setup
-
+-- | Wires the `/code` transcoder: seeds state from share-link query
+-- | params, derives the conversion computeds and cursor-to-output
+-- | highlight set, and manages clipboard, tip timer, and textarea
+-- | auto-grow. Returns every ref and action `pages/code.vue` binds.
 setup :: CodeArgs -> Effect CodeBindings
 setup args = do
   let

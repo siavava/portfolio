@@ -31,11 +31,22 @@ import Vue (Ref, read, ref, shallowRef, watchRef, write)
 -- | Module-local mutable mass/force store (a plain JS array).
 foreign import data SimArray :: Type -> Type
 
+-- | Wraps `useRafFn(fn, { immediate: false })`; returns the resume Effect.
 foreign import rafLoopImpl :: EffectFn1 (Effect Unit) (Effect Unit)
+
+-- | Mutable copy of an array, as a fresh store.
 foreign import thawImpl :: forall a. EffectFn1 (Array a) (SimArray a)
+
+-- | Read the cell at an index (unchecked).
 foreign import peekImpl :: forall a. EffectFn2 (SimArray a) Int a
+
+-- | Overwrite the cell at an index in place.
 foreign import pokeImpl :: forall a. EffectFn3 (SimArray a) Int a Unit
+
+-- | Immutable snapshot of the store.
 foreign import freezeImpl :: forall a. EffectFn1 (SimArray a) (Array a)
+
+-- | Number of cells in the store.
 foreign import lengthImpl :: forall a. EffectFn1 (SimArray a) Int
 
 type Mass = { x :: Number, y :: Number, vx :: Number, vy :: Number }
@@ -46,13 +57,21 @@ type Segment =
 type Spring = { a :: Int, b :: Int, rest :: Number, k :: Number, bend :: Boolean }
 
 type MassSpringBindings =
-  { "W" :: Number
+  { -- | Canvas viewBox width in px.
+    "W" :: Number
+  -- | Canvas viewBox height in px.
   , "H" :: Number
+  -- | Frozen per-frame view of the masses, for the node circles.
   , masses :: Ref (Array Mass)
+  -- | Spring segments, strokes tinted by stretch against equilibrium.
   , segments :: Ref (Array Segment)
+  -- | Integrator select — "semi" (semi-implicit) or "explicit" Euler.
   , integrator :: Ref String
+  -- | Status line — equilibrium hint or the blow-up story.
   , note :: Ref String
+  -- | Kick the tail mass sideways (alternating direction).
   , perturb :: Effect Unit
+  -- | Rebuild the strand and settle it back to equilibrium.
   , reset :: Effect Unit
   }
 
@@ -117,6 +136,10 @@ segmentsOf eqLen ms = Array.catMaybes $ springs # Array.mapWithIndex \si s -> do
         <> "%)"
     }
 
+-- | Wires the strand build, the damped equilibrium warm-up, and the
+-- | frame loop (three integration steps per frame), starting after
+-- | first paint. Binds the frozen mass/segment views, the integrator
+-- | select, the note line, and perturb/reset actions.
 useMassSpringViz :: Effect MassSpringBindings
 useMassSpringViz = do
   massesView <- shallowRef ([] :: Array Mass)
@@ -250,7 +273,7 @@ useMassSpringViz = do
     when (mode == "explicit") perturb
 
   resume <- runEffectFn1 rafLoopImpl tick
-  runEffectFn1 useAfterPaint do
+  useAfterPaint do
     reset
     resume
 

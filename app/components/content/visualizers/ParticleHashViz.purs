@@ -76,29 +76,66 @@ type GridLine = { x1 :: Number, y1 :: Number, x2 :: Number, y2 :: Number }
 
 type CellRect = { x :: Number, y :: Number, w :: Number, h :: Number }
 
+-- | Fresh kernel state from the box/particle parameters, with an empty
+-- | `reactive` particle array.
 foreign import newSimStateImpl :: EffectFn1 SimParams SimState
+
+-- | The kernel's reactive particle array — a stable identity the
+-- | template iterates directly.
 foreign import particlesOfImpl :: SimState -> SimParticles
+
+-- | Swap in fresh particles, mutating the reactive array in place.
 foreign import replaceParticlesImpl :: EffectFn2 SimState (Array Particle) Unit
+
+-- | Position of the particle at an index, null when out of range.
 foreign import particleAtImpl :: EffectFn2 SimState Int (Nullable Point)
+
+-- | Plain snapshot of every particle position.
 foreign import positionsImpl :: EffectFn1 SimState (Array Point)
+
+-- | The integrate-and-collide kernel: advance by dt seconds, bounce off
+-- | the walls, then separate and impulse overlapping pairs found via a
+-- | spatial hash of the given cell size (px). Returns the contacts
+-- | resolved this step and stamps the hit times for the linger flags.
 foreign import stepImpl :: EffectFn3 SimState Number Number Int
+
+-- | Per-particle flag: collided within the last `linger` ms of `now`.
 foreign import hitFlagsImpl :: EffectFn4 SimState Number Int Number (Array Boolean)
+
+-- | `performance.now()`, in ms.
 foreign import nowImpl :: Effect Number
+
+-- | Starts a per-frame loop; the callback receives the rAF timestamp.
+-- | Returns the stop Effect. No-op on the server (`@/ffi/raf-loop`).
 foreign import startRafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
 type HashBindings =
-  { cellMode :: Ref String
+  { -- | Cell-size select — "radius", "half", or "double" the kernel radius.
+    cellMode :: Ref String
+  -- | Index of the current query particle.
   , queryIndex :: Ref Int
+  -- | Status line — cell size, candidates scanned, true neighbors,
+  -- | contacts resolved.
   , note :: Ref String
+  -- | Per-particle lingering-collision flag, for the hit class.
   , hitFlags :: Ref (Array Boolean)
+  -- | The reactive particle array the template iterates directly.
   , particles :: SimParticles
+  -- | The query particle's position (canvas center until seeded).
   , query :: Computed Point
+  -- | Hash-grid lines at the current cell size.
   , gridLines :: Computed (Array GridLine)
+  -- | The 3-by-3 cell block the query scans, clipped to the box.
   , visitedCells :: Computed (Array CellRect)
+  -- | Particle index → "query" / "neighbor" / "candidate" / "drift".
   , kindOf :: EffectFn1 Int String
+  -- | Pick a random particle as the new query.
   , newQuery :: Effect Unit
+  -- | Canvas viewBox width in px.
   , w :: Number
+  -- | Canvas viewBox height in px.
   , h :: Number
+  -- | Kernel (query) radius in px.
   , radius :: Number
   }
 
@@ -135,6 +172,10 @@ restitution = 0.9
 hitLinger :: Number
 hitLinger = 260.0
 
+-- | Wires the collision kernel and the hash-grid computeds, seeding the
+-- | particles and starting the frame loop after first paint (stopping
+-- | on unmount). Binds the cell-size select, the classification
+-- | helpers, and the grid geometry the SVG template draws with.
 useParticleHashViz :: Effect HashBindings
 useParticleHashViz = do
   sim <- runEffectFn1 newSimStateImpl
@@ -276,7 +317,7 @@ useParticleHashViz = do
             <> show contacts
         )
 
-  runEffectFn1 useAfterPaint do
+  useAfterPaint do
     seed
     stop <- runEffectFn1 startRafLoopImpl (mkEffectFn1 tick)
     Ref.write stop stopLoop

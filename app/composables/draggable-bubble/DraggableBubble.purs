@@ -10,7 +10,7 @@ module App.Composables.DraggableBubble
   , DomElement
   , PointerEvt
   , Vec2
-  , useDraggableBubble
+  , setup
   ) where
 
 import Prelude
@@ -31,23 +31,52 @@ foreign import data PointerEvt :: Type
 -- | The `reactive({ x, y })` translation object the template reads.
 foreign import data Vec2 :: Type
 
+-- | A fresh `reactive({ x: 0, y: 0 })`.
 foreign import newVec2Impl :: Effect Vec2
+
+-- | Read the x translation — a reactive read Vue can track.
 foreign import getXImpl :: EffectFn1 Vec2 Number
+
+-- | Read the y translation — a reactive read Vue can track.
 foreign import getYImpl :: EffectFn1 Vec2 Number
+
+-- | Write the x translation.
 foreign import setXImpl :: EffectFn2 Vec2 Number Unit
+
+-- | Write the y translation.
 foreign import setYImpl :: EffectFn2 Vec2 Number Unit
+
+-- | VueUse `useMediaQuery`: a ref tracking whether the query matches
+-- | (`false` during SSR).
 foreign import useMediaQueryImpl :: EffectFn1 String (Ref Boolean)
+
+-- | Run a motion-v spring from 1 to 0, feeding each frame's value to the
+-- | callback; returns the Effect that stops the animation.
 foreign import startSpringImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
+
+-- | The next value off the shared z-index stack (module state, so the
+-- | latest grab tops every bubble on the page).
 foreign import nextStackImpl :: Effect Int
+
+-- | `setPointerCapture` on the element (no-op when null), so the drag
+-- | keeps receiving moves outside the bubble.
 foreign import capturePointerImpl :: EffectFn2 (Nullable DomElement) PointerEvt Unit
+
+-- | The pointer's `clientX`.
 foreign import pointerXImpl :: PointerEvt -> Number
+
+-- | The pointer's `clientY`.
 foreign import pointerYImpl :: PointerEvt -> Number
 
 type BubbleBindings =
-  { offset :: Vec2
-  , dragging :: Ref Boolean
-  , zIndex :: Ref Int
-  , handlers ::
+  { -- | The accumulated drag translation the template binds as a transform.
+    offset :: Vec2
+  , -- | Whether a drag is live.
+    dragging :: Ref Boolean
+  , -- | The bubble's stack position, raised on each grab.
+    zIndex :: Ref Int
+  , -- | The pointer handlers to `v-on` onto the element.
+    handlers ::
       { pointerdown :: EffectFn1 PointerEvt Unit
       , pointermove :: EffectFn1 PointerEvt Unit
       , pointerup :: Effect Unit
@@ -68,9 +97,6 @@ type BubbleBindings =
 -- | `{ offset, dragging, zIndex, handlers }` — the accumulated
 -- | translation, drag state, z-index, and the pointer handlers to `v-on`
 -- | onto the element.
-useDraggableBubble :: EffectFn1 (Ref (Nullable DomElement)) BubbleBindings
-useDraggableBubble = mkEffectFn1 setup
-
 setup :: Ref (Nullable DomElement) -> Effect BubbleBindings
 setup el = do
   offset <- newVec2Impl

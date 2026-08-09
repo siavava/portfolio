@@ -16,7 +16,13 @@ import Data.String.Regex (Regex, replace, split)
 import Data.String.Regex.Flags (global)
 import Data.String.Regex.Unsafe (unsafeRegex)
 
+-- | `marked.parse` with the `$$…$$` block and `$…$` inline KaTeX
+-- | tokenizers registered once; `breaks: true` turns soft line breaks
+-- | into `<br>`.
 foreign import parseMarkdownImpl :: String -> String
+
+-- | Inline-mode KaTeX render of one bare TeX expression (delimiters
+-- | already stripped), with the course macro map.
 foreign import katexInlineImpl :: String -> String
 
 -- | Parses a full markdown string to HTML, rendering `$…$` and `$$…$$`

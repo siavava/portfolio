@@ -38,34 +38,61 @@ foreign import data ReactiveMap :: Type -> Type -> Type
 -- | A DOM `Element`. @ts Element
 foreign import data DomElement :: Type
 
+-- | A fresh shallow-reactive `Map`.
 foreign import newReactiveMapImpl :: forall k v. Effect (ReactiveMap k v)
+
+-- | `map.set(key, value)`.
 foreign import mapSetImpl :: forall k v. EffectFn3 (ReactiveMap k v) k v Unit
+
+-- | `map.delete(key)`.
 foreign import mapDeleteImpl :: forall k v. EffectFn2 (ReactiveMap k v) k Unit
+
+-- | `map.has(key)` — a tracked (reactive) read.
 foreign import mapHasImpl :: forall k v. EffectFn2 (ReactiveMap k v) k Boolean
+
+-- | `map.clear()`.
 foreign import mapClearImpl :: forall k v. EffectFn1 (ReactiveMap k v) Unit
+
+-- | The map's entries as `{ key, value }` pairs — a tracked read.
 foreign import mapEntriesImpl
   :: forall k v. EffectFn1 (ReactiveMap k v) (Array { key :: k, value :: v })
 
+-- | Reference equality (`===`) on DOM elements.
 foreign import sameElementImpl :: Fn2 DomElement DomElement Boolean
 
 -- | A root element together with the mark names it lights up.
 type CueGroup = { root :: DomElement, targets :: Array String }
 
+-- | The cue store's public surface.
 type CuesBindings =
-  { marks :: ReactiveMap String DomElement
-  , hovered :: Ref (Nullable CueGroup)
-  , pinned :: ReactiveMap DomElement (Array String)
-  , groups :: Computed (Array CueGroup)
-  , activeTargets :: Computed (Array String)
-  , isActive :: EffectFn1 (Nullable DomElement) Boolean
-  , registerMark :: EffectFn2 String DomElement Unit
-  , unregisterMark :: EffectFn1 String Unit
-  , activate :: EffectFn2 DomElement (Array String) Unit
-  , deactivate :: Effect Unit
-  , reset :: Effect Unit
-  , togglePin :: EffectFn2 DomElement (Array String) Unit
+  { -- | Mark name → mounted element, registered by cue marks.
+    marks :: ReactiveMap String DomElement
+  , -- | The hovered root's group, or null while nothing is hovered.
+    hovered :: Ref (Nullable CueGroup)
+  , -- | Pinned root element → the mark names it holds lit.
+    pinned :: ReactiveMap DomElement (Array String)
+  , -- | Every active group: the pins, plus the hovered group if unpinned.
+    groups :: Computed (Array CueGroup)
+  , -- | Mark names across all active groups — the overlay's draw list.
+    activeTargets :: Computed (Array String)
+  , -- | Whether a root drives the hovered group or holds a pin.
+    isActive :: EffectFn1 (Nullable DomElement) Boolean
+  , -- | Register a mark element under its name (on mount).
+    registerMark :: EffectFn2 String DomElement Unit
+  , -- | Drop a mark by name (on unmount).
+    unregisterMark :: EffectFn1 String Unit
+  , -- | Hover a root, activating the registered subset of its targets.
+    activate :: EffectFn2 DomElement (Array String) Unit
+  , -- | Clear the hovered group.
+    deactivate :: Effect Unit
+  , -- | Clear the hover and every pin (route change).
+    reset :: Effect Unit
+  , -- | Pin or unpin a root's targets (on click).
+    togglePin :: EffectFn2 DomElement (Array String) Unit
   }
 
+-- | Assembles the cue store: the mark registry, hover and pin state, and
+-- | the derived groups and targets the rope overlay draws from.
 useCuesCore :: Effect CuesBindings
 useCuesCore = do
   marks <- newReactiveMapImpl :: Effect (ReactiveMap String DomElement)

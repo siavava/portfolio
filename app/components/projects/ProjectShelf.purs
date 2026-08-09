@@ -11,7 +11,7 @@ module App.Components.ProjectShelf
   , ShelfBindings
   , ShelfBook
   , StyleMap
-  , useProjectShelf
+  , setup
   ) where
 
 import Prelude
@@ -23,7 +23,7 @@ import Data.Number.Format (toString)
 import Effect (Effect)
 import Effect.Ref as Ref
 import Effect.Timer (TimeoutId, clearTimeout, setTimeout)
-import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, mkEffectFn2, runEffectFn1, runEffectFn2)
+import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn2, runEffectFn1, runEffectFn2)
 import Vue (Ref, onMounted, onUnmounted, read, ref, watchGetter, write)
 
 -- | A DOM `HTMLElement`. @ts HTMLElement
@@ -35,41 +35,74 @@ foreign import data MouseEvt :: Type
 -- | An assembled `:style` object. @ts Record<string, string>
 foreign import data StyleMap :: Type
 
+-- | The event's `currentTarget` viewport rect: left, top, width.
 foreign import rectOfEventTargetImpl
   :: EffectFn1 MouseEvt { left :: Number, top :: Number, width :: Number }
 
+-- | Half the rendered tooltip bubble's width, or null before it exists.
 foreign import tooltipHalfWidthImpl :: EffectFn1 (Nullable DomElement) (Nullable Number)
+
+-- | `window.innerWidth`.
 foreign import windowInnerWidthImpl :: Effect Number
+
+-- | Assembles the tooltip `:style` object: left/top anchor plus the
+-- | optional `--shelf-tt-x`/`--shelf-tt-arrow` shift variables.
 foreign import mkStyleImpl :: Fn3 String String (Nullable { x :: String, arrow :: String }) StyleMap
+
+-- | The scroll left that centers the `.selected` book, or null when
+-- | nothing is selected or the shelf doesn't overflow.
 foreign import centerTargetImpl :: EffectFn1 DomElement (Nullable { left :: Number })
+
+-- | `scrollTo` with `behavior: "instant"`.
 foreign import instantScrollImpl :: EffectFn2 DomElement Number Unit
+
+-- | Eased horizontal scroll to the given left (`glideScroll`).
 foreign import glideToImpl :: EffectFn2 DomElement Number Unit
+
+-- | Vue's `nextTick` with a callback, result discarded.
 foreign import nextTickImpl :: EffectFn1 (Effect Unit) Unit
+
+-- | Adds a capturing, passive scroll listener on window; returns the
+-- | remove thunk (manual cleanup — no-op stub during SSR).
 foreign import onWindowScrollImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
+-- | One spine on the shelf.
 type ShelfBook = { path :: String, title :: String, date :: String }
 
 type ShelfArgs =
-  { viewport :: Ref (Nullable DomElement)
+  { -- | Template ref to the outer shelf wrapper (tooltip lives in it).
+    viewport :: Ref (Nullable DomElement)
+  -- | Template ref to the scrollable spine row.
   , shelf :: Ref (Nullable DomElement)
+  -- | Reads the `selectedPath` prop; null when nothing is selected.
   , selectedPath :: Effect (Nullable String)
   }
 
 type ShelfBindings =
-  { hovered :: Ref (Nullable ShelfBook)
+  { -- | The book under the pointer; null hides the tooltip.
+    hovered :: Ref (Nullable ShelfBook)
+  -- | The most recent hovered book — keeps the tooltip text mounted
+  -- | through the fade-out.
   , lastHovered :: Ref (Nullable ShelfBook)
+  -- | True when the tooltip should jump (fresh hover) instead of glide
+  -- | between spines.
   , tooltipSnap :: Ref Boolean
+  -- | Tooltip inline style: anchor position and edge-shift variables.
   , tooltipStyle :: Ref StyleMap
+  -- | Mouseenter handler: anchors the tooltip over the spine, shifted
+  -- | back inside the window edges.
   , hover :: EffectFn2 ShelfBook MouseEvt Unit
+  -- | Mouseleave handler: hides the tooltip after a 120 ms grace delay.
   , unhover :: Effect Unit
   }
 
 px :: Number -> String
 px n = toString n <> "px"
 
-useProjectShelf :: EffectFn1 ShelfArgs ShelfBindings
-useProjectShelf = mkEffectFn1 setup
-
+-- | Wires the shelf's hover state machine and tooltip anchoring with
+-- | edge-overflow shift, hides the tooltip on any window scroll, and
+-- | centers the selected spine — instantly on mount, gliding on later
+-- | selection changes.
 setup :: ShelfArgs -> Effect ShelfBindings
 setup args = do
   hovered <- ref (null :: Nullable ShelfBook)

@@ -10,7 +10,7 @@ module App.Components.CueRoot
   , CuesStore
   , DomElement
   , SideNotesStore
-  , useCueRoot
+  , setup
   ) where
 
 import Prelude
@@ -23,44 +23,71 @@ import Effect.Uncurried
   ( EffectFn1
   , EffectFn2
   , EffectFn3
-  , mkEffectFn1
   , runEffectFn1
   , runEffectFn2
   , runEffectFn3
   )
 import Vue (Computed, Ref, computed, read)
 
+-- | The `useCues()` store handle — hover activation and click pinning of
+-- | cue groups.
 foreign import data CuesStore :: Type
+
+-- | The `useSideNotes()` store handle — hover/pin reveal of named notes.
 foreign import data SideNotesStore :: Type
+
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
+-- | Whether this root is hovered or pinned in the cues store (false for
+-- | null).
 foreign import cuesIsActiveImpl :: EffectFn2 CuesStore (Nullable DomElement) Boolean
+
+-- | Hover-activates the root with its target mark names.
 foreign import cuesActivateImpl :: EffectFn3 CuesStore DomElement (Array String) Unit
+
+-- | Clears the store's hover activation.
 foreign import cuesDeactivateImpl :: EffectFn1 CuesStore Unit
+
+-- | Pins or unpins the root's cue group.
 foreign import cuesTogglePinImpl :: EffectFn3 CuesStore DomElement (Array String) Unit
+
+-- | Hover-reveals the named side note.
 foreign import sideNotesActivateImpl :: EffectFn2 SideNotesStore String Unit
+
+-- | Clears the side-note hover.
 foreign import sideNotesDeactivateImpl :: EffectFn1 SideNotesStore Unit
+
+-- | Pins or unpins the named side note.
 foreign import sideNotesTogglePinImpl :: EffectFn2 SideNotesStore String Unit
 
 type CueRootArgs =
-  { el :: Ref (Nullable DomElement)
+  { -- | Template ref to the rendered root `<span>`.
+    el :: Ref (Nullable DomElement)
+  -- | Reads the `to` prop: comma-separated cue mark names to light.
   , to :: Effect String
+  -- | Reads the `note` prop: side-note name to reveal, if any.
   , note :: Effect (Nullable String)
+  -- | The cues store handle.
   , cues :: CuesStore
+  -- | The side-notes store handle.
   , sideNotes :: SideNotesStore
   }
 
 type CueRootBindings =
-  { isActive :: Computed Boolean
+  { -- | True while this root is hovered or pinned — the highlight class.
+    isActive :: Computed Boolean
+  -- | Mouseenter handler: activates the cue group and its side note.
   , enter :: Effect Unit
+  -- | Mouseleave handler: clears hover state on both stores.
   , leave :: Effect Unit
+  -- | Click handler: pins/unpins the cue group and its side note.
   , toggle :: Effect Unit
   }
 
-useCueRoot :: EffectFn1 CueRootArgs CueRootBindings
-useCueRoot = mkEffectFn1 setup
-
+-- | Wires a cue root's hover/pin interactions: derives `isActive` from
+-- | the cues store and returns the enter/leave/toggle handlers that
+-- | activate or pin its marks and optional side note.
 setup :: CueRootArgs -> Effect CueRootBindings
 setup args = do
   isActive <- computed do

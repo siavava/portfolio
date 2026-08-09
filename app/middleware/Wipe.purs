@@ -14,7 +14,13 @@ import Prelude
 import Data.Function.Uncurried (Fn2, mkFn2)
 import Data.String as String
 
-type WipeDecision = { crossing :: Boolean, direction :: String }
+-- | What the middleware does with one navigation.
+type WipeDecision =
+  { -- | Whether this navigation crosses the index↔projects boundary at all.
+    crossing :: Boolean
+  , -- | `"ltr"` leaving the index, `"rtl"` leaving a project.
+    direction :: String
+  }
 
 isIndex :: String -> Boolean
 isIndex path = path == "/"

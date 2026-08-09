@@ -35,27 +35,52 @@ import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Vue (Ref, onBeforeUnmount, read, ref, watchRef, write)
 
+-- | One LCG step with JS int32 semantics — the multiply overflows
+-- | float64 precision before the mask, and that exact rounding matters
+-- | for reproducing the seeded maze sequence bit-for-bit.
 foreign import lcgNextImpl :: Number -> Number
+
+-- | Starts a per-frame loop; the callback receives the rAF timestamp.
+-- | Returns the stop Effect. No-op on the server (`@/ffi/raf-loop`).
 foreign import startRafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
 type OpenNode = { i :: Int, g :: Int, f :: Number }
 
 type AStarBindings =
-  { mode :: Ref String
+  { -- | Heuristic select — "manhattan", "euclid", or "greedy".
+    mode :: Ref String
+  -- | Slow-motion toggle: one expansion every ninth frame instead of
+  -- | two per frame.
   , slow :: Ref Boolean
+  -- | Status line — progress while searching, then the score against
+  -- | the true shortest path.
   , note :: Ref String
+  -- | Paint class per cell, row-major: "wall" / "visited" / "frontier"
+  -- | / "free".
   , cells :: Ref (Array String)
+  -- | Polyline `points` for the found route; null while searching.
   , pathPoints :: Ref (Nullable String)
+  -- | Draft a fresh random maze and restart the search.
   , newMaze :: Effect Unit
+  -- | Cell index → center x in viewBox px.
   , sx :: Int -> Number
+  -- | Cell index → center y in viewBox px.
   , sy :: Int -> Number
+  -- | Canvas viewBox width in px.
   , w :: Number
+  -- | Canvas viewBox height in px.
   , h :: Number
+  -- | Grid width in cells.
   , gw :: Int
+  -- | Cell size in px.
   , cs :: Number
+  -- | Grid origin x (left inset) in px.
   , ox :: Number
+  -- | Grid origin y (top inset) in px.
   , oy :: Number
+  -- | Start cell index.
   , start :: Int
+  -- | Goal cell index.
   , goal :: Int
   }
 
@@ -278,6 +303,11 @@ modeLabel mode =
 openOrder :: OpenNode -> OpenNode -> Ordering
 openOrder a b = compare a.f b.f <> compare a.g b.g
 
+-- | Wires the seeded maze build, the stepping A*/greedy search, and the
+-- | frame loop, starting after first paint and stopping on unmount.
+-- | Binds the mode and speed controls, the painted cell classes, the
+-- | found route, the score note, and the grid geometry the SVG template
+-- | draws with.
 useAStarViz :: Effect AStarBindings
 useAStarViz = do
   mode <- ref "manhattan"
@@ -418,7 +448,7 @@ useAStarViz = do
 
   _ <- watchRef mode \_ -> restart
 
-  runEffectFn1 useAfterPaint do
+  useAfterPaint do
     buildMaze wallsRef optimalRef seeded
     restart
     stop <- runEffectFn1 startRafLoopImpl (mkEffectFn1 \_ -> tick)

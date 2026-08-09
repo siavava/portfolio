@@ -34,9 +34,23 @@ foreign import jsNumberImpl :: String -> Number
 
 -- | One row of the projects query, coerced by the shell the way the original
 -- | handler did: `date` through `String(...)`, `featured` through truthiness.
-type ProjectDoc = { path :: String, date :: String, featured :: Boolean }
+type ProjectDoc =
+  { -- | The document's route path (`/projects/<slug>`).
+    path :: String
+  , -- | The frontmatter date as a string; its first four chars parse as
+    -- | the year.
+    date :: String
+  , -- | Featured docs rank priority 0.7; the rest 0.5.
+    featured :: Boolean
+  }
 
-type SitemapArgs = { docs :: Array ProjectDoc, thisYear :: Number }
+-- | Everything the pure core needs from the h3 shell.
+type SitemapArgs =
+  { -- | The projects collection, in query order.
+    docs :: Array ProjectDoc
+  , -- | The current year, the fallback for unparsable dates.
+    thisYear :: Number
+  }
 
 type Entry = { url :: String, changefreq :: String, priority :: Number, year :: Number }
 

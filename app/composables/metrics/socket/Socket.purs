@@ -40,16 +40,35 @@ foreign import data WsData :: Type
 
 -- | The vueuse `useWebSocket` surface the core drives.
 type WsHandle =
-  { status :: Ref String
-  , send :: EffectFn1 String Boolean
-  , open :: Effect Unit
+  { -- | Reactive connection status; `"OPEN"` while connected.
+    status :: Ref String
+  , -- | Send raw text; `false` when the socket isn't open.
+    send :: EffectFn1 String Boolean
+  , -- | Open the (deferred) connection.
+    open :: Effect Unit
   }
 
+-- | vueuse `useWebSocket` against the URL — deferred open, infinite
+-- | auto-reconnect on a 3s delay, callbacks on each (re)connect and on
+-- | each raw incoming message.
 foreign import connectImpl :: EffectFn3 String (Effect Unit) (EffectFn1 String Unit) WsHandle
+
+-- | Parse a raw message as JSON and hand its `scope` and payload to the
+-- | router callback; malformed or scope-less messages are dropped.
 foreign import parseRouteImpl :: EffectFn2 String (EffectFn2 String WsData Unit) Unit
+
+-- | `JSON.stringify`.
 foreign import stringifyImpl :: WsData -> String
+
+-- | Whether we are in the browser (`import.meta.client`) — the core
+-- | only opens the connection there.
 foreign import isClientImpl :: Effect Boolean
+
+-- | The singleton bindings in FFI module state; null until first
+-- | creation.
 foreign import instanceImpl :: Effect (Nullable SocketBindings)
+
+-- | Store the singleton bindings.
 foreign import setInstanceImpl :: EffectFn1 SocketBindings Unit
 
 -- | ## Scope
@@ -68,10 +87,16 @@ scopeKey Watch = "watch"
 type ScopeEntry = { key :: String, handler :: EffectFn1 WsData Unit }
 
 type SocketBindings =
-  { send :: EffectFn1 WsData Unit
-  , onScope :: EffectFn2 String (EffectFn1 WsData Unit) Unit
-  , onConnect :: EffectFn1 (Effect Unit) Unit
-  , isConnected :: Computed Boolean
+  { -- | Send a JSON payload; queued and flushed on reconnect when the
+    -- | socket is down.
+    send :: EffectFn1 WsData Unit
+  , -- | Register the handler for a scope key — one per scope, later
+    -- | registrations replace earlier ones.
+    onScope :: EffectFn2 String (EffectFn1 WsData Unit) Unit
+  , -- | Register a callback fired on every (re)connect.
+    onConnect :: EffectFn1 (Effect Unit) Unit
+  , -- | Reactive connection status.
+    isConnected :: Computed Boolean
   }
 
 createWs :: Effect SocketBindings

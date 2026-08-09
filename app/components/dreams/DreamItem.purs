@@ -8,7 +8,7 @@ module App.Components.DreamItem
   ( DreamArgs
   , DreamBindings
   , LabelPart
-  , useDreamItem
+  , setup
   ) where
 
 import Prelude
@@ -17,17 +17,30 @@ import Data.Foldable (foldl)
 import Data.Nullable (Nullable, notNull, null)
 import Data.String.CodeUnits (drop, length, slice)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Computed, computed)
 
+-- | Every `[text](url)` match in the label, with its code-unit index and
+-- | matched length — `String#matchAll` under the hood.
 foreign import linkMatchesImpl
   :: String -> Array { index :: Int, length :: Int, text :: String, href :: String }
 
-type LabelPart = { text :: String, href :: Nullable String }
+type LabelPart =
+  { -- | The segment's visible text.
+    text :: String
+  -- | Link target when the segment came from `[text](url)`; null for
+  -- | plain text.
+  , href :: Nullable String
+  }
 
-type DreamArgs = { label :: Effect String }
+type DreamArgs =
+  { -- | Reads the current dream's label text.
+    label :: Effect String
+  }
 
-type DreamBindings = { parts :: Computed (Array LabelPart) }
+type DreamBindings =
+  { -- | The label split into plain-text and link segments, in order.
+    parts :: Computed (Array LabelPart)
+  }
 
 partsOf :: String -> Array LabelPart
 partsOf label = scanned.segments <> trailing
@@ -54,7 +67,10 @@ partsOf label = scanned.segments <> trailing
     if scanned.last < length label then [ { text: drop scanned.last label, href: null } ]
     else []
 
-useDreamItem :: EffectFn1 DreamArgs DreamBindings
-useDreamItem = mkEffectFn1 \args -> do
+-- | Derives `parts` — the checklist label split into plain-text and
+-- | `[text](url)` link segments the template renders as text nodes and
+-- | external links.
+setup :: DreamArgs -> Effect DreamBindings
+setup args = do
   parts <- computed (partsOf <$> args.label)
   pure { parts }

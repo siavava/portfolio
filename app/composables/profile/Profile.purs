@@ -15,7 +15,12 @@ import Effect (Effect)
 -- | consumers destructure `data` after awaiting.
 foreign import data ProfileAsync :: Type
 
+-- | `useAsyncData("profile", …)` over the collection's first document;
+-- | Nuxt dedupes on the key, so every caller shares one fetch.
 foreign import useProfileImpl :: Effect ProfileAsync
 
+-- | The shared profile document handle — await it and destructure
+-- | `data`. Every consumer gets the same instance via the `"profile"`
+-- | async-data key.
 useProfile :: Effect ProfileAsync
 useProfile = useProfileImpl

@@ -11,9 +11,9 @@ module App.Components.CueThreads
   , RopePoint
   , ThreadArgs
   , ThreadBindings
+  , setup
   , splinePath
   , stepPoints
-  , useCueThreads
   ) where
 
 import Prelude
@@ -45,18 +45,42 @@ import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
 import Vue (Ref, onUnmounted, ref, watchGetter, write)
 
+-- | The `useCues()` store handle — mark registry and active cue groups.
 foreign import data CuesStore :: Type
+
+-- | A DOM `Element`.
 foreign import data DomElement :: Type
 
+-- | True in the browser, false during SSR.
 foreign import isClientImpl :: Boolean
+
+-- | Reference equality of two elements.
 foreign import sameElementImpl :: Fn2 DomElement DomElement Boolean
+
+-- | The element's first client-rect center, in viewport coordinates.
 foreign import centerImpl :: EffectFn1 DomElement Point
+
+-- | The registered element of a mark name, or null.
 foreign import markElementImpl :: EffectFn2 CuesStore String (Nullable DomElement)
+
+-- | The store's active cue groups (hovered plus pinned).
 foreign import groupsOfImpl :: EffectFn1 CuesStore (Array CueGroup)
+
+-- | Clears the store's hover activation.
 foreign import deactivateCuesImpl :: EffectFn1 CuesStore Unit
+
+-- | A `clip-path: inset(…)` covering the portrait card's viewport rect,
+-- | or null when no card is on the page.
 foreign import imageClipImpl :: Effect (Nullable String)
+
+-- | `requestAnimationFrame`, returning the frame id.
 foreign import rafImpl :: EffectFn1 (EffectFn1 Number Unit) Int
+
+-- | `cancelAnimationFrame`.
 foreign import cancelRafImpl :: EffectFn1 Int Unit
+
+-- | Adds a passive window touchstart listener; returns the remove thunk
+-- | (manual cleanup — no-op stub during SSR).
 foreign import onTouchStartImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
 -- Rope physics, tuned to the reference's Matter.js parameters.
@@ -85,10 +109,13 @@ airFriction = 0.015
 iterations :: Int
 iterations = 3
 
+-- | A point in viewport coordinates.
 type Point = { x :: Number, y :: Number }
 
 type CueGroup = { root :: DomElement, targets :: Array String }
 
+-- | One verlet particle: current and previous position, plus whether
+-- | it's pinned to a measured endpoint.
 type RopePoint = { x :: Number, y :: Number, px :: Number, py :: Number, pinned :: Boolean }
 
 type Rope =
@@ -100,10 +127,16 @@ type Rope =
 
 type RootRopes = { root :: DomElement, ropes :: Array Rope }
 
-type ThreadArgs = { cues :: CuesStore }
+type ThreadArgs =
+  { -- | The cues store handle.
+    cues :: CuesStore
+  }
 
 type ThreadBindings =
-  { paths :: Ref (Array String)
+  { -- | Spline path "d" attribute per rope, in render order.
+    paths :: Ref (Array String)
+  -- | Clip-path for the portrait while a cue is active — the overlay
+  -- | copy drawn above the image uses it.
   , imageClip :: Ref (Nullable String)
   }
 
@@ -221,9 +254,10 @@ splinePath points =
         <> " "
         <> num p2.y
 
-useCueThreads :: EffectFn1 ThreadArgs ThreadBindings
-useCueThreads = mkEffectFn1 setup
-
+-- | Runs the thread overlay: watches the store's active cue groups,
+-- | lays slack verlet ropes from each root to its marks, steps them per
+-- | animation frame, and publishes the spline paths plus the portrait
+-- | clip. Client-only; the loop parks while no group is active.
 setup :: ThreadArgs -> Effect ThreadBindings
 setup args = do
   paths <- ref ([] :: Array String)

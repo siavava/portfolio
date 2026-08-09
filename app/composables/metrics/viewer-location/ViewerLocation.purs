@@ -44,16 +44,27 @@ foreign import data LocPromise :: Type
 -- | A `LocationData` record from the backend.
 foreign import data LocData :: Type
 
+-- | Wrap the callback-style runner in a `Promise` callers can await.
 foreign import newLocPromiseImpl
   :: EffectFn1 (EffectFn1 (EffectFn1 (Nullable LocData) Unit) Unit) LocPromise
 
+-- | Read-only fetch of the backend's last known location; the callback
+-- | gets null on failure.
 foreign import fetchLocationImpl :: EffectFn2 String (EffectFn1 (Nullable LocData) Unit) Unit
+
+-- | Record the viewer's geo on the backend (city/state ride as query
+-- | params under the portfolio namespace); the callback gets a success
+-- | flag and the previous visitor's location.
 foreign import recordLocationImpl
   :: EffectFn3 String GeoData (EffectFn2 Boolean (Nullable LocData) Unit) Unit
 
+-- | Subscribe to the memoized geo promise.
 foreign import awaitGeoImpl :: EffectFn2 GeoPromise (EffectFn1 (Nullable GeoData) Unit) Unit
 
-type LocationApi = { getLocation :: Effect LocPromise }
+type LocationApi =
+  { -- | Record this visit; resolves the previous visitor's location.
+    getLocation :: Effect LocPromise
+  }
 
 -- | Record this visit; resolves the previous visitor's location — or
 -- | falls back to the read-only fetch when the geo lookup or the

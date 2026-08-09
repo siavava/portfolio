@@ -7,7 +7,7 @@
 module App.Composables.ScrollReveal
   ( DomElement
   , RevealBindings
-  , useScrollReveal
+  , setup
   ) where
 
 import Prelude
@@ -23,6 +23,8 @@ import Vue (Ref, ref, write)
 -- | An `HTMLElement` — opaque here; only the FFI touches it. @ts HTMLElement
 foreign import data DomElement :: Type
 
+-- | VueUse `useIntersectionObserver` on the target ref at the given
+-- | threshold; returns the Effect that stops observing.
 foreign import observeImpl
   :: EffectFn3
        (Ref (Nullable DomElement))
@@ -30,13 +32,14 @@ foreign import observeImpl
        (EffectFn1 (Array { isIntersecting :: Boolean }) Unit)
        (Effect Unit)
 
-type RevealBindings = { revealed :: Ref Boolean }
+type RevealBindings =
+  { -- | False until the element first scrolls into view, then true
+    -- | forever.
+    revealed :: Ref Boolean
+  }
 
 -- | Observe `target` at 15% visibility; `revealed` flips `true` on the
 -- | first intersecting entry, and observation stops there.
-useScrollReveal :: EffectFn1 (Ref (Nullable DomElement)) RevealBindings
-useScrollReveal = mkEffectFn1 setup
-
 setup :: Ref (Nullable DomElement) -> Effect RevealBindings
 setup target = do
   revealed <- ref false

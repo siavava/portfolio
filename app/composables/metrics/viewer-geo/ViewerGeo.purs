@@ -39,18 +39,37 @@ type RawGeoFields =
   , longitude :: Nullable Number
   }
 
+-- | Whether the app runs in development (ApiRoute's dev flag).
 foreign import devModeImpl :: Effect Boolean
+
+-- | `Date.now()`.
 foreign import nowImpl :: Effect Number
+
+-- | The localStorage cache entry; null when absent or unparsable.
 foreign import readCacheImpl :: Effect (Nullable CacheEntry)
+
+-- | Cache the location in localStorage with the current timestamp —
+-- | best-effort, swallowing quota and privacy-mode failures.
 foreign import writeCacheImpl :: EffectFn1 GeoData Unit
+
+-- | Query `ipapi.co` for the viewer's IP-based location, normalized at
+-- | the edge; the callback gets null on network failure.
 foreign import fetchGeoImpl :: EffectFn1 (EffectFn1 (Nullable RawGeoFields) Unit) Unit
+
+-- | Build a `ViewerGeo` from city and state, attaching lat/lon only
+-- | when both are present.
 foreign import mkGeoImpl :: Fn4 String String (Nullable Number) (Nullable Number) GeoData
+
+-- | Memoize the lookup in module state: the first call runs it and
+-- | keeps the promise, every later call returns the same promise.
 foreign import memoLookupImpl
   :: EffectFn1 (EffectFn1 (EffectFn1 (Nullable GeoData) Unit) Unit) GeoPromise
 
 type GeoApi =
-  { readCachedGeo :: Effect (Nullable GeoData)
-  , resolveViewerGeo :: Effect GeoPromise
+  { -- | The cached location, synchronously; null when absent or stale.
+    readCachedGeo :: Effect (Nullable GeoData)
+  , -- | Resolve (and memoize) the viewer's location.
+    resolveViewerGeo :: Effect GeoPromise
   }
 
 cacheTtlMs :: Number
@@ -111,6 +130,7 @@ lookupGeo done = do
           runEffectFn1 writeCacheImpl geo
           done (notNull geo)
 
+-- | The memoized lookup: at most one network round-trip per session.
 resolveViewerGeo :: Effect GeoPromise
 resolveViewerGeo = runEffectFn1 memoLookupImpl (mkEffectFn1 \done -> lookupGeo (runEffectFn1 done))
 

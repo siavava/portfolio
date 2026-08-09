@@ -17,12 +17,19 @@ import Effect.Timer (TimeoutId, clearTimeout, setTimeout)
 import Vue (Ref, onMounted, onUnmounted, ref, write)
 
 type FooterBindings =
-  { mounted :: Ref Boolean
+  { -- | True once mounted on the client — gates the theme-label text so
+    -- | SSR markup stays color-mode agnostic.
+    mounted :: Ref Boolean
+  -- | Past-versions popover open state.
   , showVersions :: Ref Boolean
+  -- | Mouseenter handler: opens the popover, cancelling a pending close.
   , openVersions :: Effect Unit
+  -- | Mouseleave handler: closes the popover after a 300 ms grace delay.
   , closeVersions :: Effect Unit
   }
 
+-- | Wires the footer: a client-mount flag for the theme label and the
+-- | hover-delayed past-versions popover with its 300 ms close grace.
 useAppFooter :: Effect FooterBindings
 useAppFooter = do
   mounted <- ref false

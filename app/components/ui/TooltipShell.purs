@@ -7,7 +7,7 @@ module App.Components.TooltipShell
   ( StyleMap
   , TooltipArgs
   , TooltipBindings
-  , useTooltipShell
+  , setup
   ) where
 
 import Prelude
@@ -17,29 +17,34 @@ import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Data.Number.Format (toString)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Computed, computed)
 
 -- | An assembled `:style` object. @ts Record<string, string>
 foreign import data StyleMap :: Type
 
+-- | The `--tt-duration`/`--tt-delay` CSS variable map.
 foreign import mkTimingVarsImpl :: Fn2 String String StyleMap
 
 type TooltipArgs =
-  { align :: Effect (Nullable String)
+  { -- | Reads the `align` prop: "left", "middle", "right", or null.
+    align :: Effect (Nullable String)
+  -- | Reads the `animate` prop — whether to emit timing variables.
   , animate :: Effect Boolean
+  -- | Reads the show/hide animation duration, in seconds.
   , duration :: Effect Number
+  -- | Reads the animation delay, in seconds.
   , delay :: Effect Number
   }
 
 type TooltipBindings =
-  { alignClass :: Computed (Nullable String)
+  { -- | The anchor's alignment class ("align-<side>"), or null.
+    alignClass :: Computed (Nullable String)
+  -- | The anchor's timing-variable style; null when not animating.
   , anchorStyle :: Computed (Nullable StyleMap)
   }
 
-useTooltipShell :: EffectFn1 TooltipArgs TooltipBindings
-useTooltipShell = mkEffectFn1 setup
-
+-- | Derives the anchored tooltip's alignment class and the
+-- | `--tt-duration`/`--tt-delay` timing variables from the props.
 setup :: TooltipArgs -> Effect TooltipBindings
 setup args = do
   alignClass <- computed do

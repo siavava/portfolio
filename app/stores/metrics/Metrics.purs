@@ -34,20 +34,44 @@ foreign import data Socket :: Type
 -- | The viewer's resolved location (the ambient `ViewerGeo` shape).
 foreign import data ViewerGeo :: Type
 
+-- | The app-wide socket singleton (`useSocket`).
 foreign import useSocketImpl :: Effect Socket
+
+-- | The socket's `isConnected` computed.
 foreign import socketConnectedImpl :: EffectFn1 Socket (Computed Boolean)
+
+-- | Run a handler on every (re)connect.
 foreign import socketOnConnectImpl :: EffectFn2 Socket (Effect Unit) Unit
+
+-- | Send a watch message for the path (namespaced by the impl), spreading
+-- | the viewer's geo fields into the payload when present.
 foreign import sendWatchImpl :: EffectFn3 Socket String (Nullable ViewerGeo) Unit
+
+-- | The viewer's geo from the localStorage cache — null on the server or
+-- | when never resolved.
 foreign import readCachedGeoImpl :: Effect (Nullable ViewerGeo)
+
+-- | Resolve the viewer's geo (cache or IP lookup, memoized) and hand it
+-- | to the callback; null when the lookup fails.
 foreign import resolveGeoImpl :: EffectFn1 (EffectFn1 (Nullable ViewerGeo) Unit) Unit
+
+-- | Fire `useViewerLocation().getLocation()` — records this visit on the
+-- | backend's location log, fire-and-forget.
 foreign import recordLocationImpl :: Effect Unit
 
+-- | The metrics store's public surface.
 type MetricsBindings =
-  { connected :: Computed Boolean
-  , watchPath :: EffectFn1 String Unit
-  , recordVisit :: Effect Unit
+  { -- | Whether the metrics socket is currently connected.
+    connected :: Computed Boolean
+  , -- | Register a path as the client's active view (counted server-side).
+    watchPath :: EffectFn1 String Unit
+  , -- | Resolve the viewer's geo, attribute the view, record the visit.
+    recordVisit :: Effect Unit
   }
 
+-- | Assembles the metrics store: connects the shared socket, re-watches
+-- | the active path on every (re)connect, and attributes views to the
+-- | viewer's resolved location.
 useMetricsCore :: Effect MetricsBindings
 useMetricsCore = do
   socket <- useSocketImpl

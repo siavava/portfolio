@@ -7,12 +7,13 @@
 module App.Composables.ScrollEdges
   ( DomElement
   , ScrollEdgesBindings
-  , useScrollEdges
+  , setup
   ) where
 
 import Prelude
 
 import Data.Nullable (Nullable)
+import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn3, mkEffectFn1, runEffectFn1, runEffectFn3)
 import Vue (Computed, Ref, computed)
 
@@ -23,21 +24,28 @@ foreign import data DomElement :: Type
 -- | read in the FFI so the computeds track it.
 foreign import data ArrivedState :: Type
 
+-- | VueUse `useScroll` on the element ref with left/right arrival
+-- | offsets; returns its reactive `arrivedState`.
 foreign import scrollArrivedStateImpl
   :: EffectFn3 (Ref (Nullable DomElement)) Number Number ArrivedState
 
+-- | Whether scroll has arrived at the left edge (a reactive read).
 foreign import arrivedLeftImpl :: EffectFn1 ArrivedState Boolean
+
+-- | Whether scroll has arrived at the right edge (a reactive read).
 foreign import arrivedRightImpl :: EffectFn1 ArrivedState Boolean
 
 type ScrollEdgesBindings =
-  { canScrollLeft :: Computed Boolean
-  , canScrollRight :: Computed Boolean
+  { -- | True while content remains beyond the left edge.
+    canScrollLeft :: Computed Boolean
+  , -- | True while content remains beyond the right edge.
+    canScrollRight :: Computed Boolean
   }
 
 -- | Track `el` with a 2px arrival offset on each edge; the computeds
 -- | stay `true` while content remains in that direction.
-useScrollEdges :: EffectFn1 (Ref (Nullable DomElement)) ScrollEdgesBindings
-useScrollEdges = mkEffectFn1 \el -> do
+setup :: Ref (Nullable DomElement) -> Effect ScrollEdgesBindings
+setup el = do
   arrived <- runEffectFn3 scrollArrivedStateImpl el 2.0 2.0
   canScrollLeft <- computed (not <$> runEffectFn1 arrivedLeftImpl arrived)
   canScrollRight <- computed (not <$> runEffectFn1 arrivedRightImpl arrived)

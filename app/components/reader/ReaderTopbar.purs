@@ -9,33 +9,48 @@ module App.Components.ReaderTopbar
   , ShareFn
   , TopbarArgs
   , TopbarBindings
-  , useReaderTopbar
+  , setup
   ) where
 
 import Prelude
 
 import Data.Nullable (Nullable)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn4, mkEffectFn1, runEffectFn2, runEffectFn4)
+import Effect.Uncurried (EffectFn2, EffectFn4, runEffectFn2, runEffectFn4)
 import Vue (Ref, read)
 
+-- | VueUse `useShare`'s `share` function.
 foreign import data ShareFn :: Type
+
+-- | VueUse `useClipboard`'s `copy` function.
 foreign import data CopyFn :: Type
 
+-- | Tries the native share sheet; on failure other than the user
+-- | cancelling (AbortError), copies the URL instead.
 foreign import shareWithFallbackImpl :: EffectFn4 ShareFn CopyFn (Nullable String) String Unit
+
+-- | Copies the URL, promise discarded.
 foreign import copyRunImpl :: EffectFn2 CopyFn String Unit
 
 type TopbarArgs =
-  { canShare :: Ref Boolean
+  { -- | VueUse `useShare`'s `isSupported` — native share availability.
+    canShare :: Ref Boolean
+  -- | The native share function.
   , share :: ShareFn
+  -- | The clipboard copy function (drives the `copied` flash).
   , copy :: CopyFn
+  -- | Reads the selected project's title, if any.
   , title :: Effect (Nullable String)
+  -- | Reads the absolute URL to share.
   , shareUrl :: Effect String
   }
 
 type TopbarBindings =
-  { onShare :: Effect Unit
+  { -- | Share-button handler: native share when supported, else copy.
+    onShare :: Effect Unit
+  -- | Pixel-icon path data for the drawer/navigator button.
   , "NAV_ICON" :: Array String
+  -- | Pixel-icon path data for the home link.
   , "HOME_ICON" :: Array String
   }
 
@@ -67,9 +82,9 @@ homeIcon =
   , "M11 14H13V19H11V14Z"
   ]
 
-useReaderTopbar :: EffectFn1 TopbarArgs TopbarBindings
-useReaderTopbar = mkEffectFn1 setup
-
+-- | Wires the topbar's share action — the native share sheet when
+-- | supported, clipboard copy otherwise — and hands the template its
+-- | pixel-icon path data.
 setup :: TopbarArgs -> Effect TopbarBindings
 setup args = do
   let

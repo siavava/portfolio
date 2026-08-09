@@ -35,8 +35,14 @@ import Data.String (Pattern(..), joinWith, split, toLower)
 import Data.String.CodeUnits as CU
 import Data.Traversable (mapAccumL, traverse)
 
+-- | UTF-8 bytes of a string (`TextEncoder`).
 foreign import utf8EncodeImpl :: String -> Array Int
+
+-- | String from UTF-8 bytes (`TextDecoder`, non-fatal — invalid
+-- | sequences become U+FFFD).
 foreign import utf8DecodeImpl :: Array Int -> String
+
+-- | The string split into per-code-point strings (`Array.from(str)`).
 foreign import codePointStringsImpl :: String -> Array String
 
 -- | base64url-encode arbitrary text for share links.
@@ -45,6 +51,7 @@ foreign import encodeShareText :: String -> String
 -- | Decode a share-link payload; null if malformed.
 foreign import decodeShareText :: String -> Nullable String
 
+-- | The four byte representations `/code` transcodes between.
 data CodeFormat = Letters | Binary | Decimal | Hex
 
 derive instance eqCodeFormat :: Eq CodeFormat
@@ -59,7 +66,18 @@ parseFormat _ = Letters
 type Span = { start :: Int, end :: Int }
 
 -- | One rendered piece of output. `code` tokens map back to input chars.
-type OutToken = { text :: String, kind :: String, srcStart :: Int, srcEnd :: Int }
+type OutToken =
+  { -- | The token's rendered text.
+    text :: String
+  , -- | `"code"` for byte/character tokens, `"plain"` for whitespace and
+    -- | synthesized separators.
+    kind :: String
+  , -- | Start of the source span, in code units into the input text; -1
+    -- | on synthesized separators.
+    srcStart :: Int
+  , -- | End (exclusive) of the source span; -1 on synthesized separators.
+    srcEnd :: Int
+  }
 
 data Segment
   = BytesSeg (Array Int) (Array Span)
@@ -349,12 +367,18 @@ pruneStrandedSep tokens = catMaybes (mapWithIndex keep tokens)
 
 -- entry point ------------------------------------------------------------
 
+-- | What `transcodeJs` hands the TypeScript shim.
 type TranscodeJs =
-  { ok :: Boolean
-  , error :: String
-  , output :: String
-  , bytes :: Array Int
-  , tokens :: Array OutToken
+  { -- | False when the input failed to parse in the source format.
+    ok :: Boolean
+  , -- | The parse error when `ok` is false; empty otherwise.
+    error :: String
+  , -- | The whole output text — the concatenated token texts.
+    output :: String
+  , -- | The decoded byte values, independent of the output format.
+    bytes :: Array Int
+  , -- | The output tokens with source spans, for cross-pane highlighting.
+    tokens :: Array OutToken
   }
 
 -- | JS-friendly entry point: plain-string formats in a flat record, so the

@@ -10,7 +10,7 @@ module App.Composables.ProjectReferences
   ( ProjectDoc
   , Reference
   , ReferencesBindings
-  , useProjectReferences
+  , setup
   ) where
 
 import Prelude
@@ -21,23 +21,42 @@ import Data.Nullable (Nullable, toMaybe)
 import Data.String (Pattern(..), contains, stripSuffix)
 import Data.String.CodeUnits as CU
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Computed, Ref, computed, read)
 
 -- | The open project document — opaque; field access happens in the FFI.
 foreign import data ProjectDoc :: Type
 
+-- | The doc's `repo` frontmatter; null when absent.
 foreign import repoOfImpl :: ProjectDoc -> Nullable String
+
+-- | The doc's `url` frontmatter; null when absent.
 foreign import urlOfImpl :: ProjectDoc -> Nullable String
+
+-- | The doc's `references` frontmatter; `[]` when absent.
 foreign import referencesOfImpl :: ProjectDoc -> Array String
+
+-- | The lesson title at this path in the build-time notes index; null
+-- | when unindexed.
 foreign import notesTitleImpl :: String -> Nullable String
+
+-- | The URL's pathname; null when the string doesn't parse as a URL.
 foreign import pathnameOfImpl :: String -> Nullable String
 
 -- | One rendered reference entry; `notes` marks links into the notes
 -- | site.
-type Reference = { href :: String, title :: String, notes :: Boolean }
+type Reference =
+  { -- | The link target (PDF urls gain a fit-to-page viewer fragment).
+    href :: String
+  , -- | The display title.
+    title :: String
+  , -- | Whether the link points into the notes site.
+    notes :: Boolean
+  }
 
-type ReferencesBindings = { references :: Computed (Array Reference) }
+type ReferencesBindings =
+  { -- | The rendered list: repo and live link lead, notes links follow.
+    references :: Computed (Array Reference)
+  }
 
 -- | Titles for the notes site's subject-index pages, which carry no
 -- | frontmatter of their own.
@@ -91,9 +110,8 @@ nonEmpty = case _ of
   Just "" -> Nothing
   other -> other
 
-useProjectReferences :: EffectFn1 (Ref (Nullable ProjectDoc)) ReferencesBindings
-useProjectReferences = mkEffectFn1 setup
-
+-- | Build the reference list for the open project document; the
+-- | computed re-derives whenever `selected` changes.
 setup :: Ref (Nullable ProjectDoc) -> Effect ReferencesBindings
 setup selected = do
   projectRefs <- computed do

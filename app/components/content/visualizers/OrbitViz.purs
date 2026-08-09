@@ -22,6 +22,8 @@ import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Vue (Ref, onBeforeUnmount, read, ref, watchRef, write)
 
+-- | Starts a per-frame loop; the callback receives the rAF timestamp.
+-- | Returns the stop Effect. No-op on the server (`@/ffi/raf-loop`).
 foreign import startRafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
 type Planet =
@@ -33,14 +35,23 @@ type Planet =
   }
 
 type OrbitBindings =
-  { planets :: Ref (Array Planet)
+  { -- | The six planets with live angles, re-written every frame.
+    planets :: Ref (Array Planet)
+  -- | Rate-mode select — "ideal" or "true".
   , mode :: Ref String
+  -- | Hovered planet name; lights the planet and its ring.
   , hovered :: Ref (Nullable String)
+  -- | One-line explanation of the current mode.
   , note :: Ref String
+  -- | Re-seed the planets at their golden-angle phases.
   , reset :: Effect Unit
+  -- | Canvas viewBox width in px.
   , w :: Number
+  -- | Canvas viewBox height in px.
   , h :: Number
+  -- | Sun center x in viewBox px.
   , cx :: Number
+  -- | Sun center y in viewBox px.
   , cy :: Number
   }
 
@@ -77,6 +88,10 @@ omega mode p =
   if mode == "true" then baseRate / p.period
   else baseRate * pow (1.0 / p.period) 0.35
 
+-- | Wires the planet roster and the rAF sweep that advances each orbit,
+-- | starting after first paint and stopping on unmount. Binds the live
+-- | planet array, the rate-mode select, hover state, the note line, a
+-- | reset action, and the canvas constants the SVG template draws with.
 useOrbitViz :: Effect OrbitBindings
 useOrbitViz = do
   planets <- ref ([] :: Array Planet)
@@ -107,7 +122,7 @@ useOrbitViz = do
 
   _ <- watchRef mode \m -> write note (noteText m)
 
-  runEffectFn1 useAfterPaint do
+  useAfterPaint do
     reset
     stop <- runEffectFn1 startRafLoopImpl (mkEffectFn1 tick)
     Ref.write stop stopLoop

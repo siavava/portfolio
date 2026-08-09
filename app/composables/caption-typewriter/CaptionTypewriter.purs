@@ -71,5 +71,7 @@ reveal units lines shown =
       in
         "polygon(" <> joinWith ", " points <> ")"
 
+-- | Uncurried `reveal` — the entry the TypeScript composable calls each
+-- | animation frame.
 revealJs :: Fn3 (Array Box) (Array Box) Int String
 revealJs = mkFn3 reveal

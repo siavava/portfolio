@@ -10,7 +10,7 @@ module App.Components.BookshelfPanel
   , PanelBindings
   , PanelProject
   , RawDoc
-  , useBookshelfPanel
+  , setup
   ) where
 
 import Prelude
@@ -33,39 +33,71 @@ import Vue
   , write
   )
 
+-- | An arbitrary JS value — the optional content-query fields, kept
+-- | opaque and read through JS coercion semantics.
 foreign import data JsValue :: Type
 
+-- | JS `String(value)` coercion.
 foreign import jsStringImpl :: JsValue -> String
+
+-- | JS `Number(value)` coercion — `NaN` when unparsable.
 foreign import jsNumberImpl :: String -> Number
+
+-- | JS truthiness of the value.
 foreign import truthyImpl :: JsValue -> Boolean
+
+-- | `a.localeCompare(b)`.
 foreign import localeCompareImpl :: Fn2 String String Number
 
+-- | One queried project doc, as the SFC selects it.
 type RawDoc =
-  { path :: String
+  { -- | Route path of the project page.
+    path :: String
+  -- | Project title.
   , title :: String
+  -- | Short summary blurb (empty when the doc has none).
   , summary :: String
+  -- | Category tag (empty when the doc has none).
   , tag :: String
+  -- | Doc date as queried — any JS value, stringified downstream.
   , date :: JsValue
+  -- | Optional repo URL, possibly undefined.
   , repo :: JsValue
+  -- | Optional featured flag, judged by JS truthiness.
   , featured :: JsValue
   }
 
+-- | A shelf entry: the doc plus its derived year and date string.
 type PanelProject =
-  { path :: String
+  { -- | Route path of the project page.
+    path :: String
+  -- | Project title.
   , title :: String
+  -- | Short summary blurb.
   , summary :: String
+  -- | Category tag.
   , tag :: String
+  -- | Year parsed from the date's first four characters (`NaN` capable).
   , year :: Number
+  -- | The doc date stringified.
   , date :: String
+  -- | Optional repo URL, passed through untouched.
   , repo :: JsValue
+  -- | Optional featured flag, judged by JS truthiness.
   , featured :: JsValue
   }
 
-type PanelArgs = { docs :: Effect (Array RawDoc) }
+type PanelArgs =
+  { -- | Reads the queried project docs (empty while loading).
+    docs :: Effect (Array RawDoc)
+  }
 
 type PanelBindings =
-  { projects :: Computed (Array PanelProject)
+  { -- | Shelf ordering: featured first, then newest year, then title.
+    projects :: Computed (Array PanelProject)
+  -- | The project shown on the card; seeded randomly on mount.
   , selected :: Ref (Nullable PanelProject)
+  -- | Shelf select handler: picks the project with the given path.
   , onSelect :: EffectFn1 String Unit
   }
 
@@ -99,9 +131,9 @@ byYear a b =
         else if order > 0.0 then GT
         else EQ
 
-useBookshelfPanel :: EffectFn1 PanelArgs PanelBindings
-useBookshelfPanel = mkEffectFn1 setup
-
+-- | Shapes the queried project docs into the shelf ordering — featured
+-- | first, newest year, then title — and drives the selected card,
+-- | seeding it with a random (preferably featured) project on mount.
 setup :: PanelArgs -> Effect PanelBindings
 setup args = do
   projects <- computed do

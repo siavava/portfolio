@@ -13,7 +13,7 @@ module App.Components.InterestMapNode
   , NodeBindings
   , PointerEvt
   , PulseEl
-  , useInterestMapNode
+  , setup
   ) where
 
 import Prelude
@@ -39,48 +39,94 @@ import Vue
   , write
   )
 
+-- | The label's SVG `<text>` element.
 foreign import data LabelEl :: Type
+
+-- | One placed `MapNode` of the layout.
 foreign import data MapNodeData :: Type
+
 -- | A raw `PointerEvent`. @ts PointerEvent
 foreign import data PointerEvt :: Type
+
+-- | The pulse-ring SVG `<circle>` element.
 foreign import data PulseEl :: Type
 
+-- | A node's display label.
 foreign import nodeLabelImpl :: MapNodeData -> String
+
+-- | A node's depth: 1 branch root through 4 leaf tip.
 foreign import nodeLevelImpl :: MapNodeData -> Int
+
+-- | Whether the node's label is forced below the dot (branch roots).
 foreign import labelSideBelowImpl :: MapNodeData -> Boolean
+
+-- | Whether the visitor prefers reduced motion; SSR counts as reduced,
+-- | so server-rendered markup never animates.
 foreign import prefersReducedMotionImpl :: Effect Boolean
+
+-- | One WAAPI ripple on the pulse ring: radius r → 2r while fading out.
 foreign import animatePulseImpl :: EffectFn2 PulseEl Number Unit
+
+-- | The label's `getBBox` as a plain record.
 foreign import getBBoxImpl :: EffectFn1 LabelEl LabelBox
+
+-- | Runs the callback once `document.fonts.ready` resolves.
 foreign import onFontsReadyImpl :: EffectFn1 (Effect Unit) Unit
+
+-- | Captures the pointer on the event's target (failures swallowed).
 foreign import capturePointerImpl :: EffectFn1 PointerEvt Unit
+
+-- | Vue's `nextTick` with a callback, result discarded.
 foreign import nextTickImpl :: EffectFn1 (Effect Unit) Unit
 
+-- | An SVG bounding box in the node's local coordinates.
 type LabelBox = { x :: Number, y :: Number, width :: Number, height :: Number }
 
+-- | The transparent hover/drag hit rect around the dot and label.
 type HitBox = { x :: Int, y :: Int, width :: Int, height :: Int }
 
 type NodeArgs =
-  { node :: Effect MapNodeData
+  { -- | Reads the `node` prop — this node's placed layout entry.
+    node :: Effect MapNodeData
+  -- | Reads the map's compact flag (narrow layouts hide most labels).
   , compact :: Effect Boolean
+  -- | Reads the map's pulse counter; each bump ripples this node.
   , pulseTick :: Effect Int
+  -- | Template ref to the pulse-ring `<circle>`.
   , pulseRing :: Ref (Nullable PulseEl)
+  -- | Template ref to the label `<text>`.
   , label :: Ref (Nullable LabelEl)
+  -- | Registers the node's label with the connections store.
   , registerNode :: EffectFn1 String Unit
+  -- | Drops the node's label from the connections store.
   , unregisterNode :: EffectFn1 String Unit
+  -- | Emits `dragstart` upward with the node id and pointer event.
   , emitDragstart :: EffectFn1 PointerEvt Unit
+  -- | Emits `dragmove` upward with the node id and pointer event.
   , emitDragmove :: EffectFn1 PointerEvt Unit
+  -- | Emits `dragend` upward with the node id.
   , emitDragend :: Effect Unit
   }
 
 type NodeBindings =
-  { dotRadius :: Computed Number
+  { -- | Dot radius: 3 on branch roots, 2.5 elsewhere.
+    dotRadius :: Computed Number
+  -- | Whether to render the label — always on branch roots, hidden on
+  -- | deeper nodes when compact.
   , showLabel :: Computed Boolean
+  -- | Label text split onto at most two lines.
   , lines :: Computed (Array String)
+  -- | Padded label bounds for the backdrop rect; null until measured.
   , labelBox :: Ref (Nullable LabelBox)
+  -- | Label y offset: 16 below the dot, raised further for two lines.
   , labelY :: Computed Int
+  -- | The hover/drag hit rect, sized to the label layout.
   , hitBox :: Computed HitBox
+  -- | Pointerdown handler: starts the drag and captures the pointer.
   , onPointerdown :: EffectFn1 PointerEvt Unit
+  -- | Pointermove handler: forwards moves while dragging.
   , onPointermove :: EffectFn1 PointerEvt Unit
+  -- | Pointerup/cancel handler: ends the drag.
   , onPointerup :: Effect Unit
   }
 
@@ -108,9 +154,10 @@ padBox box =
   padX = 5.0
   padY = 2.0
 
-useInterestMapNode :: EffectFn1 NodeArgs NodeBindings
-useInterestMapNode = mkEffectFn1 setup
-
+-- | Wires one map node: label splitting and font-aware measurement, the
+-- | level-staggered pulse ripple, connection registration for the
+-- | node's lifetime, and the pointer-drag handlers that re-emit to the
+-- | map.
 setup :: NodeArgs -> Effect NodeBindings
 setup args = do
   dotRadius <- computed do

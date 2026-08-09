@@ -11,7 +11,7 @@ module App.Components.SmokeViz
   ( CanvasEl
   , SmokeArgs
   , SmokeBindings
-  , useSmokeViz
+  , setup
   ) where
 
 import Prelude
@@ -20,7 +20,7 @@ import App.Composables.AfterPaint (useAfterPaint)
 import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
+import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
 import Vue (Ref, read, ref, watchRef, write)
 
 -- | The `<canvas>` element behind the plume.
@@ -30,24 +30,47 @@ foreign import data CanvasEl :: Type
 -- | canvas handles).
 foreign import data SmokeSim :: Type
 
+-- | Fresh zeroed grid state; the theme colors stay at their defaults
+-- | until `initCanvasImpl` reads them off the canvas.
 foreign import newSmokeSimImpl :: Effect SmokeSim
+
+-- | Bind the sim to the mounted canvas: size it, read the theme colors
+-- | from computed style, and build the offscreen grid buffer.
 foreign import initCanvasImpl :: EffectFn2 SmokeSim CanvasEl Unit
+
+-- | One solver step — inject at the emitter, buoyancy, vorticity
+-- | confinement when the Boolean is on, then the project/advect/project
+-- | sweeps and dissipation. Hard-resets itself on numeric blow-up.
 foreign import stepImpl :: EffectFn2 SmokeSim Boolean Unit
+
+-- | Paint the density field into the offscreen `ImageData`, then scale
+-- | it onto the visible canvas.
 foreign import renderImpl :: EffectFn1 SmokeSim Unit
+
+-- | Zero every field array; the canvas binding stays.
 foreign import hardResetImpl :: EffectFn1 SmokeSim Unit
+
+-- | Wraps `useRafFn(fn, { immediate: false })`; returns the resume Effect.
 foreign import rafLoopImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
-type SmokeArgs = { canvas :: Ref (Nullable CanvasEl) }
+type SmokeArgs =
+  { -- | Template ref to the `<canvas>` the sim binds to after first paint.
+    canvas :: Ref (Nullable CanvasEl)
+  }
 
 type SmokeBindings =
-  { confine :: Ref Boolean
+  { -- | Vorticity-confinement toggle, bound to the select.
+    confine :: Ref Boolean
+  -- | One-line status/explanation under the canvas.
   , note :: Ref String
+  -- | Zero the fields and refresh the note for the current toggle.
   , reset :: Effect Unit
   }
 
-useSmokeViz :: EffectFn1 SmokeArgs SmokeBindings
-useSmokeViz = mkEffectFn1 setup
-
+-- | Wires the smoke sim to the canvas after first paint and starts the
+-- | frame loop (one solver step + render per rAF). Binds the confine
+-- | toggle, the note line, and a reset action; toggling confine resets
+-- | the field so the two regimes start alike.
 setup :: SmokeArgs -> Effect SmokeBindings
 setup args = do
   confine <- ref true
@@ -71,7 +94,7 @@ setup args = do
   _ <- watchRef confine \_ -> reset
 
   resume <- runEffectFn1 rafLoopImpl tick
-  runEffectFn1 useAfterPaint do
+  useAfterPaint do
     element <- toMaybe <$> read args.canvas
     case element of
       Nothing -> pure unit

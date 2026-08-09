@@ -41,14 +41,34 @@ foreign import data SimArray :: Type -> Type
 -- | Spatial-hash bucket table for the self-contact pass (a JS `Map`).
 foreign import data ContactTable :: Type
 
+-- | Wraps `useRafFn(fn, { immediate: false })`; returns the resume Effect.
 foreign import rafLoopImpl :: EffectFn1 (Effect Unit) (Effect Unit)
+
+-- | Mutable copy of an array, as a fresh store.
 foreign import thawImpl :: forall a. EffectFn1 (Array a) (SimArray a)
+
+-- | Read the cell at an index (unchecked).
 foreign import peekImpl :: forall a. EffectFn2 (SimArray a) Int a
+
+-- | Overwrite the cell at an index in place.
 foreign import pokeImpl :: forall a. EffectFn3 (SimArray a) Int a Unit
+
+-- | Mutable copy of the store — the pre-solve positions the velocity
+-- | update diffs against.
 foreign import snapshotImpl :: forall a. EffectFn1 (SimArray a) (SimArray a)
+
+-- | Immutable snapshot of the store.
 foreign import freezeImpl :: forall a. EffectFn1 (SimArray a) (Array a)
+
+-- | Number of cells in the store.
 foreign import lengthImpl :: forall a. EffectFn1 (SimArray a) Int
+
+-- | Hash every particle into `Map` buckets of size-px cells, in index
+-- | order.
 foreign import buildContactTableImpl :: EffectFn2 Number (SimArray Particle) ContactTable
+
+-- | Bucket contents of the 3-by-3 cell neighborhood around (x, y), in
+-- | the reference's dc/dr scan order.
 foreign import contactCandidatesImpl :: EffectFn4 ContactTable Number Number Number (Array Int)
 
 type Particle =
@@ -60,13 +80,21 @@ type Segment =
 type Link = { a :: Int, b :: Int, rest :: Number }
 
 type ClothBindings =
-  { "W" :: Number
+  { -- | Canvas viewBox width in px.
+    "W" :: Number
+  -- | Canvas viewBox height in px.
   , "H" :: Number
+  -- | Frozen per-frame view of the cloth particles.
   , particles :: Ref (Array Particle)
+  -- | Warp/weft segments, strokes tinted by strain against rest length.
   , segments :: Ref (Array Segment)
+  -- | Constraint-solver iterations per substep — the stiffness control.
   , iterations :: Ref Int
+  -- | Status line — iterations, max stretch, gust/breeze state.
   , note :: Ref String
+  -- | Blow a decaying gust across the cloth (alternating direction).
   , gust :: Effect Unit
+  -- | Rebuild the pinned grid at rest.
   , reset :: Effect Unit
   }
 
@@ -159,6 +187,11 @@ segmentsOf ps = constraints
             <> "%)"
         }
 
+-- | Wires the cloth build and the frame loop (two solver substeps per
+-- | frame), starting after first paint. Binds the frozen
+-- | particle/segment views, the iteration count, the note line, and
+-- | gust/reset actions; changing iterations re-blows the gust so the
+-- | stiffness change shows.
 usePbdClothViz :: Effect ClothBindings
 usePbdClothViz = do
   particlesView <- shallowRef ([] :: Array Particle)
@@ -331,7 +364,7 @@ usePbdClothViz = do
     Ref.write gustTime gustLeft
 
   resume <- runEffectFn1 rafLoopImpl tick
-  runEffectFn1 useAfterPaint do
+  useAfterPaint do
     reset
     resume
 

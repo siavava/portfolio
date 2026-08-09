@@ -29,6 +29,7 @@ import Effect.Uncurried
 -- | An HTML element, opaque to PureScript.
 foreign import data GlideElement :: Type
 
+-- | The scroll DOM metrics a glide reads up front, in one snapshot.
 type ScrollMetrics =
   { scrollTop :: Number
   , scrollLeft :: Number
@@ -38,12 +39,25 @@ type ScrollMetrics =
   , clientWidth :: Number
   }
 
+-- | Snapshot the element's scroll offsets and content/viewport sizes.
 foreign import readMetricsImpl :: EffectFn1 GlideElement ScrollMetrics
+
+-- | Set the element's `scrollTop` and `scrollLeft` directly.
 foreign import setScrollImpl :: EffectFn3 GlideElement Number Number Unit
+
+-- | Whether `(prefers-reduced-motion: reduce)` matches.
 foreign import prefersReducedMotionImpl :: Effect Boolean
+
+-- | `performance.now()`.
 foreign import nowImpl :: Effect Number
+
+-- | Schedule the next glide frame, recording the rAF handle per element.
 foreign import scheduleFrameImpl :: EffectFn2 GlideElement (EffectFn1 Number Unit) Unit
+
+-- | Cancel the element's pending glide frame, if any.
 foreign import cancelActiveImpl :: EffectFn1 GlideElement Unit
+
+-- | Drop the element's rAF bookkeeping once its glide completes.
 foreign import clearActiveImpl :: EffectFn1 GlideElement Unit
 
 -- | Absolute scroll offsets; a null axis stays put.
@@ -80,5 +94,6 @@ glideScroll el target duration = do
         else runEffectFn1 clearActiveImpl el
     runEffectFn2 scheduleFrameImpl el (mkEffectFn1 step)
 
+-- | Uncurried `glideScroll` for the TypeScript shim.
 glideScrollJs :: EffectFn3 GlideElement GlideTarget Number Unit
 glideScrollJs = mkEffectFn3 \el target duration -> glideScroll el target duration

@@ -9,7 +9,7 @@ module App.Components.SideNote
   , SideNoteArgs
   , SideNoteBindings
   , SideNotesStore
-  , useSideNote
+  , setup
   ) where
 
 import Prelude
@@ -17,7 +17,7 @@ import Prelude
 import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
+import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
 import Vue
   ( Computed
   , Ref
@@ -28,30 +28,53 @@ import Vue
   , watchGetter
   )
 
+-- | The `useSideNotes()` store handle — hover/pin visibility of named
+-- | notes.
 foreign import data SideNotesStore :: Type
+
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
+-- | Whether the named note is currently hovered or pinned.
 foreign import sideNotesIsVisibleImpl :: EffectFn2 SideNotesStore String Boolean
+
+-- | The currently hovered note name, or null.
 foreign import sideNotesHoveredImpl :: EffectFn1 SideNotesStore (Nullable String)
+
+-- | How many notes are pinned.
 foreign import sideNotesPinnedSizeImpl :: EffectFn1 SideNotesStore Int
+
+-- | Vue's `nextTick` with a callback, result discarded.
 foreign import nextTickImpl :: EffectFn1 (Effect Unit) Unit
+
+-- | Adds a passive window resize listener; returns the remove thunk
+-- | (manual cleanup — no-op stub during SSR).
 foreign import onWindowResizeImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
 type SideNoteArgs =
-  { el :: Ref (Nullable DomElement)
+  { -- | Template ref to the rendered `<aside>`.
+    el :: Ref (Nullable DomElement)
+  -- | Reads the `name` prop; null/empty means an always-on note.
   , name :: Effect (Nullable String)
+  -- | The side-notes store handle.
   , sideNotes :: SideNotesStore
+  -- | Registers the note element with the layout under its trigger name.
   , register :: EffectFn2 String DomElement Unit
+  -- | Drops the note from the layout.
   , unregister :: EffectFn1 String Unit
+  -- | Repositions the currently visible notes (`useSideNoteLayout`).
   , relayoutVisible :: Effect Unit
   }
 
-type SideNoteBindings = { visible :: Computed Boolean }
+type SideNoteBindings =
+  { -- | True while the note should show: always for unnamed notes,
+    -- | otherwise while its trigger is hovered or pinned.
+    visible :: Computed Boolean
+  }
 
-useSideNote :: EffectFn1 SideNoteArgs SideNoteBindings
-useSideNote = mkEffectFn1 setup
-
+-- | Registers the note with the side-note layout for the component's
+-- | lifetime, derives `visible` from the store, and re-lays out visible
+-- | notes on store changes and window resizes.
 setup :: SideNoteArgs -> Effect SideNoteBindings
 setup args = do
   let

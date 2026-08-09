@@ -20,7 +20,7 @@ module App.Components.InterestMap
   , Spoke
   , StringSet
   , Vec2
-  , useInterestMap
+  , setup
   ) where
 
 import Prelude
@@ -114,51 +114,147 @@ foreign import data SimHandle :: Type
 -- | A motion-v animation's controls.
 foreign import data SpringControls :: Type
 
+-- | Builds the scaled polar `MapLayout` for the branches
+-- | (`useInterestLayout`).
 foreign import interestLayoutImpl :: EffectFn2 BranchesData Number LayoutData
+
+-- | The layout's placed nodes.
 foreign import layoutNodesImpl :: LayoutData -> Array NodeData
+
+-- | The layout's edges: tree links, center spokes, prereq threads.
 foreign import layoutLinksImpl :: LayoutData -> Array LinkData
+
+-- | The orbital-ring radii, innermost first.
 foreign import layoutRingsImpl :: LayoutData -> Array Number
+
+-- | The polar origin's x within the SVG.
 foreign import layoutCxImpl :: LayoutData -> Number
+
+-- | The polar origin's y within the SVG.
 foreign import layoutCyImpl :: LayoutData -> Number
+
+-- | A node's id (its unique label).
 foreign import nodeIdImpl :: NodeData -> String
+
+-- | A node's depth: 1 branch root through 4 leaf tip.
 foreign import nodeLevelImpl :: NodeData -> Int
+
+-- | A link's source node id; null on the center-to-branch spokes.
 foreign import linkSourceImpl :: LinkData -> Nullable String
+
+-- | A link's target node id.
 foreign import linkTargetImpl :: LinkData -> String
+
+-- | Whether the link is a prerequisite thread.
 foreign import linkPrereqImpl :: LinkData -> Boolean
+
+-- | Builds a JS `Set` from ids.
 foreign import mkStringSetImpl :: Array String -> StringSet
+
+-- | `Set#has`.
 foreign import stringSetHasImpl :: Fn2 StringSet String Boolean
+
+-- | FNV-style hash of a node id and the visit seed — the appearance
+-- | shuffle key.
 foreign import shuffleKeyImpl :: Fn2 String Number Number
+
+-- | Reactive element width (VueUse `useElementSize`); the observer stops
+-- | with the component scope.
 foreign import useElementWidthImpl :: EffectFn1 (Ref (Nullable DomElement)) (Ref Number)
+
+-- | Reactive media-query match (VueUse `useMediaQuery`); the listener
+-- | stops with the component scope.
 foreign import useMediaQueryImpl :: EffectFn1 String (Ref Boolean)
+
+-- | The connections store's `activeNames` ref — names whose lineage
+-- | should light up.
 foreign import activeNamesImpl :: Effect (Ref (Array String))
+
+-- | The mapReveal pinia store handle.
 foreign import useMapRevealImpl :: Effect RevealHandle
+
+-- | Feeds the store the opening spring's offset from its target so the
+-- | page below can track the map.
 foreign import revealDriveImpl :: EffectFn2 RevealHandle Number Unit
+
+-- | Marks the reveal settled and clears the store's offset.
 foreign import revealSettleImpl :: EffectFn1 RevealHandle Unit
+
+-- | The `@nuxtjs/color-mode` instance.
 foreign import useColorModeImpl :: Effect ColorModeApi
+
+-- | Whether the current color mode is dark.
 foreign import isDarkImpl :: EffectFn1 ColorModeApi Boolean
+
+-- | Wraps a layout node as a sim node seeded at — and homing to — its
+-- | layout position.
 foreign import mkSimNodeImpl :: EffectFn1 NodeData SimNodeData
+
+-- | A sim node's id.
 foreign import simNodeIdImpl :: SimNodeData -> String
+
+-- | Whether the sim node is pinned (`fx` set) — i.e. mid-drag.
 foreign import hasFixedImpl :: EffectFn1 SimNodeData Boolean
+
+-- | Builds the d3-force simulation — home pull, collision, mild
+-- | repulsion — parked at alpha 0; the callback fires per tick.
 foreign import createSimulationImpl :: EffectFn2 (Array SimNodeData) (Effect Unit) SimHandle
+
+-- | Stops the simulation's internal timer.
 foreign import simStopImpl :: EffectFn1 SimHandle Unit
+
+-- | Restarts the simulation's internal timer.
 foreign import simRestartImpl :: EffectFn1 SimHandle Unit
+
+-- | Sets the simulation's alpha target — above zero keeps it hot.
 foreign import simAlphaTargetImpl :: EffectFn2 SimHandle Number Unit
+
+-- | Replaces the simulation's node array.
 foreign import simSetNodesImpl :: EffectFn2 SimHandle (Array SimNodeData) Unit
+
+-- | Teleports a sim node to (x, y) with zero velocity — the entry spawn.
 foreign import setSimEntryImpl :: EffectFn3 SimNodeData Number Number Unit
+
+-- | Pins a sim node at (x, y) via `fx`/`fy`.
 foreign import setSimFixedImpl :: EffectFn3 SimNodeData Number Number Unit
+
+-- | Unpins a sim node.
 foreign import clearSimFixedImpl :: EffectFn1 SimNodeData Unit
+
+-- | Snapshots the nodes' positions as an id-keyed record.
 foreign import positionsOfImpl :: EffectFn1 (Array SimNodeData) PositionMap
+
+-- | The position under an id, or null when unknown.
 foreign import lookupPosImpl :: Fn2 PositionMap String (Nullable Vec2)
+
+-- | A pointer event's position in the map's centered coordinate space:
+-- | client coords minus the SVG rect and `(cx, cy)`.
 foreign import svgPointImpl
   :: EffectFn4 (Ref (Nullable DomElement)) PointerEvt Number Number Vec2
 
+-- | Runs a motion-v spring from → to with the given visual duration and
+-- | bounce, calling back per frame and once on completion; the returned
+-- | controls stop it.
 foreign import springImpl
   :: EffectFn6 Number Number Number Number (EffectFn1 Number Unit) (Effect Unit) SpringControls
 
+-- | Stops a running spring.
 foreign import stopSpringImpl :: EffectFn1 SpringControls Unit
+
+-- | In-place indexed write to the ring-radii ref
+-- | (`radii.value[i] = v`), growing the array as needed.
 foreign import setRingRadiusImpl :: EffectFn3 (Ref (Array Number)) Int Number Unit
+
+-- | Whether the visitor prefers reduced motion; SSR counts as reduced,
+-- | so server-rendered markup never animates.
 foreign import prefersReducedMotionImpl :: Effect Boolean
+
+-- | One idle heartbeat: WAAPI stroke pulses across the rings plus a dash
+-- | glint along the spokes, colored for the current theme.
 foreign import pulseRingsImpl :: EffectFn2 (Ref (Nullable DomElement)) Boolean Unit
+
+-- | A two-source Vue `watch` (element-compared), optionally immediate;
+-- | stops with the component scope.
 foreign import watchPairImpl
   :: forall a b. EffectFn4 (Effect a) (Effect b) (Effect Unit) Boolean Unit
 
@@ -169,29 +265,57 @@ type Vec2 = { x :: Number, y :: Number }
 type Spoke = { deg :: Number, ux :: Number, uy :: Number, len :: Number }
 
 type MapArgs =
-  { wrapper :: Ref (Nullable DomElement)
+  { -- | Template ref to the wrapper div: measured for scale, height-
+    -- | animated on open, and queried for the SVG by drag and pulse code.
+    wrapper :: Ref (Nullable DomElement)
+  -- | Reads the interests collection's branches; null until the content
+  -- | query lands.
   , branches :: Effect (Nullable BranchesData)
   }
 
 type MapBindings =
-  { layout :: Computed (Nullable LayoutData)
+  { -- | The scaled polar layout (width/height/cx/cy/rings/nodes/links),
+    -- | or null before the branches arrive — gates the whole SVG.
+    layout :: Computed (Nullable LayoutData)
+  -- | Decorative spoke rays: angle, unit direction, scaled length.
   , spokes :: Computed (Array Spoke)
+  -- | Radius of the center fade-out gradient circle.
   , fadeRadius :: Computed Number
+  -- | True on narrow layouts (scale < 0.62) — nodes drop to compact
+  -- | labels.
   , compact :: Computed Boolean
+  -- | Bumped on every idle ring pulse; nodes key their own pulse off it.
   , pulseTick :: Ref Int
+  -- | Ids revealed so far by the entry stagger — a node renders once its
+  -- | id is in here.
   , appearedSet :: Computed StringSet
+  -- | Links whose endpoints have all appeared.
   , shownLinks :: Computed (Array LinkData)
+  -- | Hover lineage: ids reachable up and down from the hovered node.
   , glowSet :: Computed StringSet
+  -- | Connection lineage: ids reachable from the connections store's
+  -- | active names — non-empty dims everything else.
   , litNodes :: Computed StringSet
+  -- | The hovered node id, written back by node hover events.
   , hovered :: Ref (Nullable String)
+  -- | Ring radii mid-wave; the template reads these until settled.
   , ringRadii :: Ref (Array Number)
+  -- | True once the opening ring wave finishes — rings then use the
+  -- | layout radii directly.
   , ringsSettled :: Ref Boolean
+  -- | 0–1 spoke growth, tracking the fourth ring's spring.
   , spokeProgress :: Computed Number
+  -- | Wrapper inline style: the spring-animated height in px.
   , wrapperStyle :: Computed { height :: String }
+  -- | The simulated position of a node id (origin for null or unknown).
   , pos :: EffectFn1 (Nullable String) Vec2
+  -- | Whether both of a link's endpoints are lit.
   , litLink :: EffectFn1 LinkData Boolean
+  -- | Pointerdown on a node: pin it under the pointer and heat the sim.
   , onDragStart :: EffectFn2 String PointerEvt Unit
+  -- | Pointermove: keep the pinned node under the pointer.
   , onDragMove :: EffectFn2 String PointerEvt Unit
+  -- | Pointerup/cancel: release the node and let the sim cool.
   , onDragEnd :: EffectFn1 String Unit
   }
 
@@ -304,9 +428,10 @@ onDragEnd deps nodeId = do
       runEffectFn2 simAlphaTargetImpl sim 0.0
     _, _ -> pure unit
 
-useInterestMap :: EffectFn1 MapArgs MapBindings
-useInterestMap = mkEffectFn1 setup
-
+-- | Wires the whole interest map: the scaled polar layout, the opening
+-- | height spring (driving the mapReveal store), the ring wave and
+-- | staggered node entry through the d3-force simulation, lineage
+-- | lighting, the idle pulse, and node dragging.
 setup :: MapArgs -> Effect MapBindings
 setup args = do
   containerWidth <- runEffectFn1 useElementWidthImpl args.wrapper
