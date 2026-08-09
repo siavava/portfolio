@@ -30,7 +30,7 @@ function configure() {
           if (match) return { type: "blockMath", raw: match[0], text: match[1]!.trim() }
         },
         renderer(token) {
-          const text = (token as unknown as { text: string }).text
+          const text = "text" in token && typeof token.text === "string" ? token.text : ""
           const html = katex.renderToString(text, {
             ...KOPTS,
             displayMode: true,
@@ -47,7 +47,7 @@ function configure() {
           if (match) return { type: "inlineMath", raw: match[0], text: match[1]!.trim() }
         },
         renderer(token) {
-          const text = (token as unknown as { text: string }).text
+          const text = "text" in token && typeof token.text === "string" ? token.text : ""
           return katex.renderToString(text, { ...KOPTS, displayMode: false })
         },
       },
