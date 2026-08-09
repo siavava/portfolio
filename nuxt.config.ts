@@ -11,6 +11,13 @@ export default defineNuxtConfig({
     viewTransition: true,
   },
 
+  // PureScript FFI companions must sit beside their .purs modules with the
+  // module's basename; keep them (and .purs sources) out of auto-import scans.
+  ignore: [
+    "app/**/*.purs",
+    "app/utils/Coder.js",
+  ],
+
   modules: [
     "@nuxtjs/robots",
     "@nuxt/content",
@@ -201,12 +208,18 @@ function tsConfig() {
       "../configs/**/*",
       "../transformers/**/*",
       "../app/types/*.d.ts",
+      "../app/types/purs/*.d.ts",
     ],
     compilerOptions: {
       composite: true,
       noEmit: false,
       allowImportingTsExtensions: true,
       rewriteRelativeImportExtensions: true,
+      // TypeScript sees the PureScript modules through these typed
+      // declarations; bundlers resolve #purs to output/ via package imports.
+      paths: {
+        "#purs/*": ["../app/types/purs/*"],
+      },
     },
     vueCompilerOptions: {
       plugins: [
