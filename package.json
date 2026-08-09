@@ -7,7 +7,7 @@
   },
   "scripts": {
     "notes-meta": "bun scripts/build-notes-meta.ts",
-    "purs:build": "bun scripts/purs-ffi-stubs.mjs && bun run --cwd packages/vue-bridge build && spago build && bun scripts/purs-dts.mjs",
+    "purs:build": "bun scripts/purs-ffi-stubs.mjs && bun run --cwd packages/vue-bridge build && spago build --pure && bun scripts/purs-dts.mjs",
     "purs:check": "bun scripts/purs-golden.mjs check",
     "build": "bun run purs:build && bun run notes-meta && nuxi build",
     "dev": "bun run purs:build && nuxi dev",
