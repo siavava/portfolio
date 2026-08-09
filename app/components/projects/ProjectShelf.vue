@@ -28,8 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useEventListener } from "@vueuse/core"
-
 interface ShelfBook {
   path: string
   title: string
@@ -51,69 +49,11 @@ const viewport = useTemplateRef<HTMLElement>("viewport")
 const shelf = useTemplateRef<HTMLElement>("shelf")
 const { canScrollLeft, canScrollRight } = useScrollEdges(shelf)
 
-const centerBook = (behavior: ScrollBehavior) => {
-  nextTick(() => {
-    const el = shelf.value
-    const book = el?.querySelector<HTMLElement>(".selected")
-    if (!el || !book || el.scrollWidth <= el.clientWidth) return
-    const left = book.offsetLeft - el.clientWidth / 2 + book.offsetWidth / 2
-    if (behavior === "smooth") glideScroll(el, { left })
-    else el.scrollTo({ left, behavior })
-  })
-}
-
-onMounted(() => centerBook("instant"))
-watch(() => props.selectedPath, (_, previous) =>
-  centerBook(previous == null ? "instant" : "smooth"))
-
-const hovered = shallowRef<ShelfBook | null>(null)
-const lastHovered = shallowRef<ShelfBook | null>(null)
-const tooltipSnap = ref(false)
-const tooltipStyle = ref<Record<string, string>>({ left: "0px", top: "0px" })
-let hideTimer: ReturnType<typeof setTimeout> | undefined
-
-const hover = (book: ShelfBook, event: MouseEvent) => {
-  const spine = event.currentTarget as HTMLElement
-  clearTimeout(hideTimer)
-  tooltipSnap.value = !hovered.value
-
-  const spineRect = spine.getBoundingClientRect()
-  const spineCenterX = spineRect.left + spineRect.width / 2
-  tooltipStyle.value = { ...tooltipStyle.value, left: `${spineCenterX}px`, top: `${spineRect.top}px` }
-
-  hovered.value = book
-  lastHovered.value = book
-
-  nextTick(() => {
-    const bubble = viewport.value?.querySelector<HTMLElement>(".project-shelf__tooltip .tooltip-shell")
-    if (!bubble) return
-
-    const halfWidth = bubble.offsetWidth / 2
-    const edgePad = 8
-    const overflowLeft = halfWidth - spineCenterX + edgePad
-    const overflowRight = spineCenterX + halfWidth - (window.innerWidth - edgePad)
-    const shift = overflowLeft > 0 ? overflowLeft : overflowRight > 0 ? -overflowRight : 0
-
-    tooltipStyle.value = {
-      ...tooltipStyle.value,
-      "--shelf-tt-x": `calc(-50% + ${shift}px)`,
-      "--shelf-tt-arrow": `calc(50% - ${shift}px)`,
-    }
-  })
-}
-
-const unhover = () => {
-  clearTimeout(hideTimer)
-  hideTimer = setTimeout(() => {
-    hovered.value = null
-  }, 120)
-}
-
-useEventListener(window, "scroll", () => {
-  hovered.value = null
-}, { capture: true, passive: true })
-
-onUnmounted(() => clearTimeout(hideTimer))
+const { hovered, lastHovered, tooltipSnap, tooltipStyle, hover, unhover } = useProjectShelf({
+  viewport,
+  shelf,
+  selectedPath: () => props.selectedPath ?? null,
+})
 </script>
 
 <style lang="sass" scoped>
