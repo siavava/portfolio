@@ -190,10 +190,16 @@ content hash: after renaming an FFI implementation file, the companion `.js`
 must actually change (it does, since the path is in it) for the compiled
 `foreign.js` to be recopied.
 
-`purs:build` runs `spago build --pure` — the lockfile is authoritative and
-spago skips its registry refresh (which clones two git repos and costs about
-a minute on a cold CI machine). After changing dependencies in a
-`spago.yaml`, run `bunx spago install` once to refresh `spago.lock`.
+`purs:build` builds through `scripts/spago-build.mjs`, which runs
+`spago build --pure`. The lockfile pins package resolution (after changing
+dependencies in a `spago.yaml`, run `bunx spago install` once to refresh
+`spago.lock`), but `--pure` does not prevent spago from cloning the two
+purescript registry repos whenever its global cache is cold — and a CI
+home directory always is, costing about a minute per build. On CI
+(`VERCEL`/`CI`) the wrapper therefore points `XDG_CACHE_HOME` into
+`node_modules/.cache`, which Vercel persists across deployments: the
+clone happens once and warm builds skip it. (Local caches are untouched —
+macOS spago caches under `~/Library/Caches/spago-nodejs` and ignores XDG.)
 
 Two consumers resolve `#purs` differently in production: vite reads the
 package `imports` field, but nitro's rollup does not — every
