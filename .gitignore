@@ -26,6 +26,8 @@ dist
 
 # purescript build artifacts
 .purs/
+# Guard: a bare `spago build` (without --output) would recreate this.
+output/
 .spago/
 .purs-repl
 .psc-ide-port
