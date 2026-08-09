@@ -28,3 +28,4 @@ dist
 output/
 .spago/
 .purs-repl
+.psc-ide-port
