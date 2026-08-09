@@ -12,10 +12,11 @@ export default defineNuxtConfig({
   },
 
   // PureScript FFI companions must sit beside their .purs modules with the
-  // module's basename; keep them (and .purs sources) out of auto-import scans.
+  // module's basename (uppercase); keep them and .purs sources out of
+  // auto-import scans.
   ignore: [
     "app/**/*.purs",
-    "app/utils/Coder.js",
+    "app/**/[A-Z]*.js",
   ],
 
   modules: [
@@ -90,7 +91,21 @@ export default defineNuxtConfig({
   imports: {
     dirs: [
       "~/composables/**",
+      "~/utils/**",
+      "~/stores/**",
+      // Build-time shims generated from the PureScript modules
+      // (purs:build) join the auto-import pool.
+      "~~/.purs-shims/**",
     ],
+  },
+
+  vite: {
+    resolve: {
+      // Probe .ts before .js: on this case-insensitive filesystem an
+      // extensionless `~/utils/scroll` would otherwise resolve to the
+      // PureScript FFI stub `Scroll.js` instead of the shim `scroll.ts`.
+      extensions: [".mts", ".ts", ".mjs", ".js", ".json", ".vue"],
+    },
   },
 
   hooks: {
@@ -183,12 +198,12 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
 
-    // customize tsconfig.app.json
-    tsConfig: tsConfig(),
-    // customize tsconfig.shared.json
-    sharedTsConfig: tsConfig(),
-    // customize tsconfig.node.json
-    nodeTsConfig: tsConfig(),
+    // Only the app project sees the PureScript layers; giving them to the
+    // shared/node projects drags app-runtime files (ffi, stores) into
+    // projects that lack the auto-import types.
+    tsConfig: tsConfig({ purs: "app" }),
+    sharedTsConfig: tsConfig({}),
+    nodeTsConfig: tsConfig({}),
   },
 
   nitro: {
@@ -196,20 +211,24 @@ export default defineNuxtConfig({
       autoSubfolderIndex: false,
     },
     typescript: {
-      // customize tsconfig.server.json
-      tsConfig: tsConfig(),
+      // The nitro shells import #purs/App.Server.* — they get the paths
+      // mapping and only the server-module declarations.
+      tsConfig: tsConfig({ purs: "server" }),
     },
   },
 })
 
-function tsConfig() {
+function tsConfig({ purs }: { purs?: "app" | "server" } = {}) {
+  const include = [
+    "../configs/**/*",
+    "../transformers/**/*",
+    "../app/types/*.d.ts",
+  ]
+  if (purs === "app") include.push("../app/types/purs/*.d.ts", "../.purs-shims/**/*.ts")
+  if (purs === "server") include.push("../app/types/purs/App.Server.*.d.ts")
+
   return {
-    include: [
-      "../configs/**/*",
-      "../transformers/**/*",
-      "../app/types/*.d.ts",
-      "../app/types/purs/*.d.ts",
-    ],
+    include,
     compilerOptions: {
       composite: true,
       noEmit: false,
@@ -217,9 +236,9 @@ function tsConfig() {
       rewriteRelativeImportExtensions: true,
       // TypeScript sees the PureScript modules through these typed
       // declarations; bundlers resolve #purs to output/ via package imports.
-      paths: {
-        "#purs/*": ["../app/types/purs/*"],
-      },
+      ...purs
+        ? { paths: { "#purs/*": ["../app/types/purs/*"] } }
+        : {},
     },
     vueCompilerOptions: {
       plugins: [

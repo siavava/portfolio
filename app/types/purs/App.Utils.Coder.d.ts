@@ -15,10 +15,10 @@ export type TranscodeJs = { ok: boolean, error: string, output: string, bytes: (
 
 /** JS-friendly entry point: plain-string formats in a flat record, so the
 TypeScript shim needs no knowledge of curried or ADT conventions. */
-export declare const transcodeJs: (args: { input: string, from: string, to: string, preserveWhitespace: boolean }) => TranscodeJs
+export declare const transcodeJs: (arg0: { input: string, from: string, to: string, preserveWhitespace: boolean }) => TranscodeJs
 
 /** base64url-encode arbitrary text for share links. */
-export declare const encodeShareText: (text: string) => string
+export declare const encodeShareText: (arg0: string) => string
 
 /** Decode a share-link payload; null if malformed. */
-export declare const decodeShareText: (encoded: string) => string | null
+export declare const decodeShareText: (arg0: string) => string | null
