@@ -1,0 +1,6 @@
+package:
+  name: vue-bridge
+  description: "Effect-wrapped PureScript bindings to Vue's composition API"
+  dependencies:
+    - effect
+    - prelude

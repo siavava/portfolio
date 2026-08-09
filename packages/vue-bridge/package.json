@@ -1,0 +1,29 @@
+{
+  "name": "purescript-vue-bridge",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Effect-wrapped PureScript bindings to Vue's composition API",
+  "license": "MIT",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/Vue.d.ts",
+      "default": "./src/Vue.js"
+    }
+  },
+  "files": [
+    "src",
+    "spago.yaml",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepack": "tsc"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

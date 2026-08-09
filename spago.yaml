@@ -2,14 +2,19 @@ package:
   name: portfolio
   dependencies:
     - arrays
+    - vue-bridge
     - console
     - effect
     - either
     - foldable-traversable
+    - functions
     - integers
+    - js-timers
     - maybe
     - nullable
+    - numbers
     - prelude
+    - refs
     - strings
   test:
     main: Test.Main

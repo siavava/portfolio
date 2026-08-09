@@ -10,11 +10,16 @@
             "effect",
             "either",
             "foldable-traversable",
+            "functions",
             "integers",
+            "js-timers",
             "maybe",
             "nullable",
+            "numbers",
             "prelude",
-            "strings"
+            "refs",
+            "strings",
+            "vue-bridge"
           ],
           "build_plan": [
             "arrays",
@@ -35,6 +40,7 @@
             "identity",
             "integers",
             "invariant",
+            "js-timers",
             "maybe",
             "newtype",
             "nonempty",
@@ -52,7 +58,25 @@
             "tuples",
             "type-equality",
             "unfoldable",
-            "unsafe-coerce"
+            "unsafe-coerce",
+            "vue-bridge"
+          ]
+        },
+        "test": {
+          "dependencies": [],
+          "build_plan": []
+        }
+      },
+      "vue-bridge": {
+        "path": "packages/vue-bridge",
+        "core": {
+          "dependencies": [
+            "effect",
+            "prelude"
+          ],
+          "build_plan": [
+            "effect",
+            "prelude"
           ]
         },
         "test": {
@@ -935,6 +959,15 @@
       "integrity": "sha256-HyoT1I5qIHRq8RSZji6zZDvqnpVjLw748utrKwZtqsw=",
       "dependencies": [
         "control",
+        "prelude"
+      ]
+    },
+    "js-timers": {
+      "type": "registry",
+      "version": "6.1.0",
+      "integrity": "sha256-mYEL4zjFOzrDeVCnR9Hg3pcZaBZilB6zPGaZ4fzRmzg=",
+      "dependencies": [
+        "effect",
         "prelude"
       ]
     },
