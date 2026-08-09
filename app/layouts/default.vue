@@ -1,7 +1,8 @@
 <template lang="pug">
-a.skip-link(href="#main-content") skip to content
-#main-content.page-shell(tabindex="-1")
-  slot
+div
+  a.skip-link(href="#main-content") skip to content
+  #main-content.page-shell(tabindex="-1")
+    slot
 </template>
 
 <style lang="sass" scoped>
