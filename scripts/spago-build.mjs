@@ -7,13 +7,13 @@
  * cache relocates into `node_modules/.cache`, which Vercel persists
  * across deployments, so the clone happens once and warm builds skip it.
  */
-import { spawnSync } from "node:child_process"
 import { join } from "node:path"
+import { spawnSync } from "node:child_process"
 
 const env = { ...process.env }
 if ((env.VERCEL || env.CI) && !env.XDG_CACHE_HOME)
   env.XDG_CACHE_HOME = join(process.cwd(), "node_modules", ".cache", "xdg")
 
 const spago = join(process.cwd(), "node_modules", ".bin", "spago")
-const { status } = spawnSync(spago, ["build", "--pure"], { stdio: "inherit", env })
+const { status } = spawnSync(spago, ["build", "--pure", "--output", ".purs/output"], { stdio: "inherit", env })
 process.exit(status ?? 1)

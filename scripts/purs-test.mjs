@@ -4,6 +4,6 @@
  * `spago test` shells out to node, which cannot import the .ts files.
  * `purs:check` chains `purs:build` first, so the compiled output exists.
  */
-import { main } from "../output/Test.Main/index.js"
+import { main } from "../.purs/output/Test.Main/index.js"
 
 main()

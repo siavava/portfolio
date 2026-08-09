@@ -25,7 +25,7 @@ dist
 .vscode
 
 # purescript build artifacts
-output/
+.purs/
 .spago/
 .purs-repl
 .psc-ide-port

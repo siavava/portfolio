@@ -4,7 +4,7 @@
   // purescript-lsp (oxfordabstracts.purescript-fast-ide-vscode) drives the
   // compiler's built-in `purs lsp`; purs must be on PATH (bun global install).
   // Sources live in app/ (spago builds them via the src -> app symlink).
-  "purescript-lsp.outputPath": "output",
+  "purescript-lsp.outputPath": ".purs/output",
   "purescript-lsp.globs": ["app/**/*.purs"],
   "purescript-lsp.formatter": "purs-tidy"
 }

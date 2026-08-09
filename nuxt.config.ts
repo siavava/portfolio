@@ -1,10 +1,18 @@
 import { fileURLToPath } from "node:url"
+import { readdirSync } from "node:fs"
 
 import { applyTransforms } from "./transformers"
 import { latex } from "./configs"
 
 const pursServerModule = (name: string) =>
-  fileURLToPath(new URL(`./output/${name}/index.js`, import.meta.url))
+  fileURLToPath(new URL(`./.purs/output/${name}/index.js`, import.meta.url))
+
+// Every app/server/*.purs module, by basename. Safe to readdir at
+// config-eval time: app/server is checked-in source, and the alias values
+// are plain path strings rollup resolves later (after purs:build).
+const pursServerModules = readdirSync(fileURLToPath(new URL("./app/server", import.meta.url)))
+  .filter(file => file.endsWith(".purs"))
+  .map(file => `App.Server.${file.replace(/\.purs$/, "")}`)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -95,9 +103,9 @@ export default defineNuxtConfig({
 
   imports: {
     dirs: [
-      "~/composables/**",
-      "~/utils/**",
-      "~/stores/**",
+      "@/composables/**",
+      "@/utils/**",
+      "@/stores/**",
       // Build-time shims generated from the PureScript modules
       // (purs:build) join the auto-import pool.
       "~~/.purs-shims/**",
@@ -110,6 +118,17 @@ export default defineNuxtConfig({
       // extensionless `~/utils/scroll` would otherwise resolve to the
       // PureScript FFI stub `Scroll.js` instead of the shim `scroll.ts`.
       extensions: [".mts", ".ts", ".mjs", ".js", ".json", ".vue"],
+    },
+    // Dependencies vite otherwise discovers mid-session (triggering a
+    // dev-server page reload on first hit).
+    optimizeDeps: {
+      include: [
+        "@vue/devtools-core",
+        "@vue/devtools-kit",
+        "@vueuse/core",
+        "d3-force",
+        "motion-v",
+      ],
     },
   },
 
@@ -217,12 +236,11 @@ export default defineNuxtConfig({
     },
     // Vite resolves #purs through the package `imports` field, but nitro's
     // rollup leaves it external and the built chunks can no longer resolve
-    // it at runtime — alias the server modules to their compiled entries so
-    // they inline into the server bundle.
-    alias: {
-      "#purs/App.Server.Sitemap": pursServerModule("App.Server.Sitemap"),
-      "#purs/App.Server.Tikz": pursServerModule("App.Server.Tikz"),
-    },
+    // it at runtime — alias the server modules (derived from app/server/*.purs
+    // above) to their compiled entries so they inline into the server bundle.
+    alias: Object.fromEntries(
+      pursServerModules.map(name => [`#purs/${name}`, pursServerModule(name)]),
+    ),
     typescript: {
       // The nitro shells import #purs/App.Server.* — they get the paths
       // mapping and only the server-module declarations.
@@ -248,9 +266,21 @@ function tsConfig({ purs }: { purs?: "app" | "server" } = {}) {
       allowImportingTsExtensions: true,
       rewriteRelativeImportExtensions: true,
       // TypeScript sees the PureScript modules through these typed
-      // declarations; bundlers resolve #purs to output/ via package imports.
+      // declarations; bundlers resolve #purs to .purs/output/ via package
+      // imports. The server project needs EXACT per-module keys too: nuxt
+      // injects the nitro aliases into tsconfig.server.json paths, and an
+      // exact key beats the wildcard — without these overrides the alias
+      // pulls the compiled .purs/output js into the type program (TS6307).
       ...purs
-        ? { paths: { "#purs/*": ["../app/types/purs/*"] } }
+        ? {
+            paths: {
+              "#purs/*": ["../app/types/purs/*"],
+              ...purs === "server"
+                ? Object.fromEntries(pursServerModules.map(name =>
+                    [`#purs/${name}`, [`../app/types/purs/${name}.d.ts`]]))
+                : {},
+            },
+          }
         : {},
     },
     vueCompilerOptions: {

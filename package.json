@@ -3,7 +3,7 @@
   "packageManager": "bun@1.2.22",
   "type": "module",
   "imports": {
-    "#purs/*": "./output/*/index.js"
+    "#purs/*": "./.purs/output/*/index.js"
   },
   "scripts": {
     "notes-meta": "bun scripts/build-notes-meta.ts",

@@ -20,7 +20,7 @@ start:
 # is rebuilt by `bun run purs:build` / `bun run dev`.
 clean:
 	@rm -rf .output .nuxt dist node_modules/.cache
-	@rm -rf output .purs-shims app/types/purs .purs-repl .data/content
+	@rm -rf .purs .purs-shims app/types/purs .purs-repl .data/content
 	@rm -f packages/vue-bridge/src/Vue.js packages/vue-bridge/src/Vue.d.ts
 	@find app -type f -name "[A-Z]*.js" -not -path "*/node_modules/*" -delete
 
