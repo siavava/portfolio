@@ -1,5 +1,6 @@
 {
   "private": true,
+  "version": "5.1.1",
   "packageManager": "bun@1.2.22",
   "type": "module",
   "imports": {
