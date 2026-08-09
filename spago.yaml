@@ -18,7 +18,8 @@ package:
     - strings
   test:
     main: Test.Main
-    dependencies: []
+    dependencies:
+      - exceptions
 workspace:
   packageSet:
     registry: 80.3.1

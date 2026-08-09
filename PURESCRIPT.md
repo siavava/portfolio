@@ -4,8 +4,9 @@ This branch (`pure`) converts the portfolio's TypeScript to PureScript —
 utils, composables (including the metrics network stack), all five pinia
 store cores, the metrics plugin wiring, route middleware, the nitro route
 cores, and the SFC script logic component by component. Behavior is pinned
-by an 858-case golden diff (`bun run purs:check`), `nuxi typecheck`, and
-byte-parity checks on the server routes.
+by a unit-test suite of cases recorded from the original TypeScript
+(`bun run purs:check`), `nuxi typecheck`, and byte-parity checks on the
+server routes.
 
 ## Layout — the Nuxt structure, operating in PureScript
 
@@ -144,7 +145,11 @@ What remains TypeScript, by design: compiler macros (`defineProps`/
 three hand-adapter shims, typed FFI implementations, and nitro/plugin
 file shells that the framework must scan.
 
-Verification: 858-case golden diff, `nuxi typecheck` at zero errors,
+Verification: the `test/` unit suite (exact assertions extracted from
+recordings of the original TypeScript before it was deleted — share-link
+encodings are compatibility-critical; KaTeX-rendered output is only
+smoke-checked, since its exact HTML belongs to the katex package),
+`nuxi typecheck` at zero errors,
 frame-level jsdom parity harnesses for the visualizers (seeded RNG,
 manual rAF pump — e.g. the mass-spring integrator blow-up lands on the
 same frame in both implementations), byte-parity on server routes, and
@@ -181,7 +186,7 @@ for syntax. Settings point the server at `app/**/*.purs`, `output/`, and
 
 ```sh
 bun run purs:build   # spago build + regenerate d.ts and .purs-shims (runs before dev/build)
-bun run purs:check   # 858-case golden diff against recorded behavior
+bun run purs:check   # unit tests (test/) — runs through bun, not `spago test`
 ```
 
 Editing `.purs` files during `nuxi dev` requires re-running `purs:build`

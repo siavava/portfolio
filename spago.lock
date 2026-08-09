@@ -63,8 +63,21 @@
           ]
         },
         "test": {
-          "dependencies": [],
-          "build_plan": []
+          "dependencies": [
+            "exceptions"
+          ],
+          "build_plan": [
+            "control",
+            "effect",
+            "either",
+            "exceptions",
+            "invariant",
+            "maybe",
+            "newtype",
+            "prelude",
+            "safe-coerce",
+            "unsafe-coerce"
+          ]
         }
       },
       "vue-bridge": {
@@ -859,6 +872,17 @@
         "prelude",
         "tuples",
         "unfoldable"
+      ]
+    },
+    "exceptions": {
+      "type": "registry",
+      "version": "6.1.0",
+      "integrity": "sha256-nRrr+N0wk0TUFOWLR7e1n1oxcXo/X345bQUtoY9lW6A=",
+      "dependencies": [
+        "effect",
+        "either",
+        "maybe",
+        "prelude"
       ]
     },
     "exists": {

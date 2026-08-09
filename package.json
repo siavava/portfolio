@@ -8,7 +8,7 @@
   "scripts": {
     "notes-meta": "bun scripts/build-notes-meta.ts",
     "purs:build": "bun scripts/purs-ffi-stubs.mjs && bun run --cwd packages/vue-bridge build && bun scripts/spago-build.mjs && bun scripts/purs-dts.mjs",
-    "purs:check": "bun scripts/purs-golden.mjs check",
+    "purs:check": "bun run purs:build && bun scripts/purs-test.mjs",
     "build": "bun run purs:build && bun run notes-meta && nuxi build",
     "dev": "bun run purs:build && nuxi dev",
     "generate": "bun run purs:build && bun run notes-meta && nuxi generate",
@@ -17,8 +17,8 @@
     "lint:md": "markdownlint-cli2 \"content/**/*.md\" \"*.md\"",
     "typecheck": "nuxi typecheck",
     "start": "node .output/server/index.mjs",
-    "purs:format": "purs-tidy format-in-place 'app/**/*.purs' 'packages/**/*.purs'",
-    "purs:format-check": "purs-tidy check 'app/**/*.purs' 'packages/**/*.purs'"
+    "purs:format": "purs-tidy format-in-place 'app/**/*.purs' 'packages/**/*.purs' 'test/**/*.purs'",
+    "purs:format-check": "purs-tidy check 'app/**/*.purs' 'packages/**/*.purs' 'test/**/*.purs'"
   },
   "lint-staged": {
     "*.{ts,vue}": [
