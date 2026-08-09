@@ -32,6 +32,7 @@ import Vue (Computed, Ref, computed, read)
 
 foreign import data CuesStore :: Type
 foreign import data SideNotesStore :: Type
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
 foreign import cuesIsActiveImpl :: EffectFn2 CuesStore (Nullable DomElement) Boolean

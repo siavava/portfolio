@@ -15,20 +15,20 @@ import Prelude
 
 import App.Composables.AfterPaint (useAfterPaint)
 import Data.Array as Array
-import Data.Function.Uncurried (Fn2, mkFn2, runFn2)
+import Data.Function.Uncurried (Fn2, mkFn2)
 import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, toMaybe)
 import Data.Number (abs, cos, isFinite, max, min, pi, remainder, sin) as Number
+import Data.Number.Format (fixed, toString, toStringWith)
 import Data.String (joinWith)
 import Effect (Effect, whileE)
 import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Vue (Ref, ref, write)
 
+-- | A raw `MouseEvent`. @ts MouseEvent
 foreign import data MouseEvt :: Type
 
-foreign import showNumberImpl :: Number -> String
-foreign import toFixedImpl :: Fn2 Number Int String
 foreign import clickPointImpl :: EffectFn1 MouseEvt (Nullable { x :: Number, y :: Number })
 foreign import rafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
@@ -106,33 +106,30 @@ headLen = 7.0
 waypointNote :: String
 waypointNote = "click anywhere to set a waypoint"
 
-clampTo :: Number -> Number -> Number -> Number
-clampTo v lo hi = Number.max lo (Number.min hi v)
-
 headPoints :: Number -> Number -> String
 headPoints x y =
-  showNumberImpl (x - 4.0) <> "," <> showNumberImpl (y + headLen) <> " "
-    <> showNumberImpl (x + 4.0)
+  toString (x - 4.0) <> "," <> toString (y + headLen) <> " "
+    <> toString (x + 4.0)
     <> ","
-    <> showNumberImpl (y + headLen)
+    <> toString (y + headLen)
     <> " "
-    <> showNumberImpl x
+    <> toString x
     <> ","
-    <> showNumberImpl y
+    <> toString y
 
 gHeadPoints :: Number -> Number -> String
 gHeadPoints cx cy =
   let
     y = cy + 34.0
   in
-    showNumberImpl (cx - 4.0) <> "," <> showNumberImpl (y - headLen) <> " "
-      <> showNumberImpl (cx + 4.0)
+    toString (cx - 4.0) <> "," <> toString (y - headLen) <> " "
+      <> toString (cx + 4.0)
       <> ","
-      <> showNumberImpl (y - headLen)
+      <> toString (y - headLen)
       <> " "
-      <> showNumberImpl cx
+      <> toString cx
       <> ","
-      <> showNumberImpl y
+      <> toString y
 
 useMulticopterViz :: Effect MulticopterBindings
 useMulticopterViz = do
@@ -171,9 +168,9 @@ useMulticopterViz = do
       write comX cx
       write comY cy
       write craftTransform
-        ( "translate(" <> runFn2 toFixedImpl cx 2 <> "," <> runFn2 toFixedImpl cy 2
+        ( "translate(" <> toStringWith (fixed 2) cx <> "," <> toStringWith (fixed 2) cy
             <> ") rotate("
-            <> runFn2 toFixedImpl (-st.th * 180.0 / Number.pi) 2
+            <> toStringWith (fixed 2) (-st.th * 180.0 / Number.pi)
             <> ")"
         )
       write leftLen (Number.max (headLen + 2.0) (fa * 3.2))
@@ -183,9 +180,8 @@ useMulticopterViz = do
     syncTrail = do
       points <- Ref.read trail
       write trailPoints $ joinWith " " $ points <#> \p ->
-        runFn2 toFixedImpl (originX + p.x * scale) 1 <> "," <> runFn2 toFixedImpl
-          (originY - p.y * scale)
-          1
+        toStringWith (fixed 1) (originX + p.x * scale) <> ","
+          <> toStringWith (fixed 1) (originY - p.y * scale)
 
     reset = do
       Ref.write { x: homeX, y: homeY, vx: 0.0, vy: 0.0, th: 0.0, om: 0.0 } s
@@ -202,8 +198,8 @@ useMulticopterViz = do
       st <- Ref.read s
       t <- Ref.read target
       let
-        axDes = clampTo (1.6 * (t.x - st.x) - 2.0 * st.vx) (-6.0) 6.0
-        thDes = clampTo (-axDes / gravity) (-0.5) 0.5
+        axDes = clamp (-6.0) 6.0 (1.6 * (t.x - st.x) - 2.0 * st.vx)
+        thDes = clamp (-0.5) 0.5 (-axDes / gravity)
         ayDes = 5.0 * (t.y - st.y) - 3.4 * st.vy
         c = Number.cos st.th
         rawThrust = craftMass * (gravity + ayDes) / (if Number.abs c < 0.3 then 0.3 else c)
@@ -252,16 +248,17 @@ useMulticopterViz = do
             else if dy > 0.0 then "easing down"
             else "climbing"
         write note
-          ( dirText <> " · tilt " <> (if deg > 0.0 then "+" else "") <> runFn2 toFixedImpl deg 0
+          ( dirText <> " · tilt " <> (if deg > 0.0 then "+" else "")
+              <> toStringWith (fixed 0) deg
               <> "° · f1="
-              <> runFn2 toFixedImpl fa 1
+              <> toStringWith (fixed 1) fa
               <> " f2="
-              <> runFn2 toFixedImpl fb 1
+              <> toStringWith (fixed 1) fb
           )
       else
         write note
-          ( "holding at waypoint · f1=" <> runFn2 toFixedImpl fa 1 <> " f2="
-              <> runFn2 toFixedImpl fb 1
+          ( "holding at waypoint · f1=" <> toStringWith (fixed 1) fa <> " f2="
+              <> toStringWith (fixed 1) fb
               <> " — click to fly somewhere else"
           )
 
@@ -271,8 +268,8 @@ useMulticopterViz = do
         Nothing -> pure unit
         Just pt -> do
           Ref.write
-            { x: clampTo ((pt.x - originX) / scale) (-10.3) 10.3
-            , y: clampTo ((originY - pt.y) / scale) 0.6 9.2
+            { x: clamp (-10.3) 10.3 ((pt.x - originX) / scale)
+            , y: clamp 0.6 9.2 ((originY - pt.y) / scale)
             }
             target
           write note "waypoint set — banking toward it"

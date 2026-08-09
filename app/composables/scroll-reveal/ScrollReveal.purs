@@ -20,7 +20,7 @@ import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, EffectFn3, mkEffectFn1, runEffectFn3)
 import Vue (Ref, ref, write)
 
--- | An `HTMLElement` — opaque here; only the FFI touches it.
+-- | An `HTMLElement` — opaque here; only the FFI touches it. @ts HTMLElement
 foreign import data DomElement :: Type
 
 foreign import observeImpl

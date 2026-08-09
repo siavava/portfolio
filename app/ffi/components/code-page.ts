@@ -7,6 +7,8 @@ import type { ShallowRef } from "vue"
 import { nextTick } from "vue"
 import { useClipboard } from "@vueuse/core"
 
+export { onWindowResizeImpl } from "@/ffi/window-events"
+
 export const queryParamImpl = (query: Record<string, unknown>, key: string): string | null => {
   const value = query[key]
   return typeof value === "string" ? value : null
@@ -19,12 +21,6 @@ export const autoGrowImpl = (el: HTMLTextAreaElement | null): void => {
   if (!el) return
   el.style.height = "auto"
   el.style.height = `${el.scrollHeight + 2}px`
-}
-
-export const onWindowResizeImpl = (fn: () => void): () => void => {
-  if (typeof window === "undefined") return () => {}
-  window.addEventListener("resize", fn)
-  return () => window.removeEventListener("resize", fn)
 }
 
 export const mkIntSetImpl = (indices: number[]): Set<number> => new Set(indices)

@@ -16,7 +16,7 @@ import Data.Nullable (Nullable)
 import Effect.Uncurried (EffectFn1, EffectFn3, mkEffectFn1, runEffectFn1, runEffectFn3)
 import Vue (Computed, Ref, computed)
 
--- | An `HTMLElement` — opaque here; only the FFI touches it.
+-- | An `HTMLElement` — opaque here; only the FFI touches it. @ts HTMLElement
 foreign import data DomElement :: Type
 
 -- | The reactive `arrivedState` from VueUse's `useScroll` — opaque;

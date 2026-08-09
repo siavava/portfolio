@@ -3,8 +3,6 @@
  * measurement, the cues-store bridge, and frame/listener plumbing behind
  * the thread overlay.
  */
-export { showNumberImpl } from "../js-show"
-
 interface CueGroupLike {
   root: Element
   targets: string[]
@@ -17,8 +15,6 @@ interface CuesStoreLike {
 }
 
 export const isClientImpl = typeof window !== "undefined"
-
-export const hypotImpl = (dx: number, dy: number): number => Math.hypot(dx, dy)
 
 export const sameElementImpl = (a: Element, b: Element): boolean => a === b
 

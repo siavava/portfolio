@@ -22,6 +22,7 @@ import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEff
 import Vue (Ref, read, ref, write)
 
 foreign import data SideNotesStore :: Type
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
 foreign import rectSizeImpl

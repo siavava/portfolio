@@ -1,7 +1,7 @@
 /**
- * Typed FFI implementations for `App.Components.PbdClothViz` — JS numeric
- * primitives, the frame loop, the mutable particle-store cells, and the
- * spatial-hash bucket table behind the cloth's self-contact pass. The
+ * Typed FFI implementations for `App.Components.PbdClothViz` — the frame
+ * loop, the mutable particle-store cells, and the spatial-hash bucket
+ * table behind the cloth's self-contact pass. The
  * bucket table is the one solver piece kept here (no ordered-map package
  * in the build): buckets are keyed and iterated exactly like the
  * reference's `Map<number, number[]>`, while the distance checks and
@@ -9,16 +9,10 @@
  */
 import { useRafFn } from "@vueuse/core"
 
-export { showNumberImpl } from "../js-show"
-
 interface ClothPoint {
   x: number
   y: number
 }
-
-export const hypotImpl = (dx: number, dy: number): number => Math.hypot(dx, dy)
-
-export const toFixedImpl = (n: number, digits: number): string => n.toFixed(digits)
 
 /** Mirrors the SFC's `useRafFn(fn, { immediate: false })`; returns `resume`. */
 export const rafLoopImpl = (fn: () => void): () => void => {

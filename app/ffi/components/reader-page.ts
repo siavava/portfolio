@@ -66,7 +66,7 @@ export const scrollTopIfNarrowImpl = (): void => {
   }
 }
 
-export const onWindowScrollImpl = (handler: () => void): void => {
+export const watchWindowScrollImpl = (handler: () => void): void => {
   useEventListener("scroll", handler, { passive: true })
 }
 

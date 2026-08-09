@@ -4,6 +4,7 @@
  * shared with the other side-note trigger components' FFI modules.
  */
 export { nextTickImpl } from "./project-shelf"
+export { onWindowResizeImpl } from "@/ffi/window-events"
 
 export interface SideNotesStore {
   hovered: string | null
@@ -31,10 +32,4 @@ export const sideNotesDeactivateImpl = (store: SideNotesStore): void => {
 
 export const sideNotesTogglePinImpl = (store: SideNotesStore, name: string): void => {
   store.togglePin(name)
-}
-
-export const onWindowResizeImpl = (fn: () => void): () => void => {
-  if (typeof window === "undefined") return () => {}
-  window.addEventListener("resize", fn, { passive: true })
-  return () => window.removeEventListener("resize", fn)
 }

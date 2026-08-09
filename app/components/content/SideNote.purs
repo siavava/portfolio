@@ -29,6 +29,7 @@ import Vue
   )
 
 foreign import data SideNotesStore :: Type
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
 foreign import sideNotesIsVisibleImpl :: EffectFn2 SideNotesStore String Boolean

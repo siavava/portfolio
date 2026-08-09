@@ -19,17 +19,22 @@ import Prelude
 import Data.Function.Uncurried (Fn3, runFn3)
 import Data.Maybe (Maybe(..), isNothing)
 import Data.Nullable (Nullable, notNull, null, toMaybe, toNullable)
+import Data.Number.Format (toString)
 import Effect (Effect)
 import Effect.Ref as Ref
 import Effect.Timer (TimeoutId, clearTimeout, setTimeout)
 import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, mkEffectFn2, runEffectFn1, runEffectFn2)
 import Vue (Ref, onMounted, onUnmounted, read, ref, watchGetter, write)
 
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
+
+-- | A raw `MouseEvent`. @ts MouseEvent
 foreign import data MouseEvt :: Type
+
+-- | An assembled `:style` object. @ts Record<string, string>
 foreign import data StyleMap :: Type
 
-foreign import showNumberImpl :: Number -> String
 foreign import rectOfEventTargetImpl
   :: EffectFn1 MouseEvt { left :: Number, top :: Number, width :: Number }
 
@@ -60,7 +65,7 @@ type ShelfBindings =
   }
 
 px :: Number -> String
-px n = showNumberImpl n <> "px"
+px n = toString n <> "px"
 
 useProjectShelf :: EffectFn1 ShelfArgs ShelfBindings
 useProjectShelf = mkEffectFn1 setup

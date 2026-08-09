@@ -17,17 +17,17 @@ import Prelude
 import Data.Array (filter, foldM, nub, sortWith)
 import Data.Foldable (for_)
 import Data.Number (infinity)
+import Data.Number.Format (toString)
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
 
--- | An `HTMLElement` — opaque here; only the FFI touches it.
+-- | An `HTMLElement` — opaque here; only the FFI touches it. @ts HTMLElement
 foreign import data DomElement :: Type
 
 foreign import registerImpl :: EffectFn2 String DomElement Unit
 foreign import unregisterImpl :: EffectFn1 String Unit
 foreign import measureImpl :: Effect (Array Measured)
 foreign import setTopImpl :: EffectFn2 DomElement String Unit
-foreign import showNumberImpl :: Number -> String
 
 -- | One note measured against its trigger: `group` numbers positioning
 -- | parents in first-seen order, `desired` is the trigger's offset from
@@ -69,7 +69,7 @@ relayout isVisible = do
   place floor note = do
     visible <- runEffectFn1 isVisible note.name
     let top = if visible then max note.desired floor else note.desired
-    runEffectFn2 setTopImpl note.el (showNumberImpl top <> "px")
+    runEffectFn2 setTopImpl note.el (toString top <> "px")
     pure (if visible then top + note.height + gap else floor)
 
 -- | Split the measurements into per-parent groups, preserving both the

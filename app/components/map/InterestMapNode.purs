@@ -41,6 +41,7 @@ import Vue
 
 foreign import data LabelEl :: Type
 foreign import data MapNodeData :: Type
+-- | A raw `PointerEvent`. @ts PointerEvent
 foreign import data PointerEvt :: Type
 foreign import data PulseEl :: Type
 

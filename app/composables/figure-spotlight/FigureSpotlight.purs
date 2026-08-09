@@ -27,8 +27,11 @@ import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
 import Vue (Ref, onBeforeUnmount, onMounted, read, ref, write)
 
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
+-- | A raw `MouseEvent`. @ts MouseEvent
 foreign import data MouseEvt :: Type
+-- | A raw `KeyboardEvent`. @ts KeyboardEvent
 foreign import data KeyEvt :: Type
 
 foreign import figuresInImpl :: EffectFn2 (Nullable DomElement) String (Array DomElement)

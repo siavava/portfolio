@@ -25,15 +25,15 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Nullable (Nullable, toNullable)
 import Data.Number (floor)
 import Data.Number (max, pow, remainder, round) as Number
+import Data.Number.Format (toString)
 import Data.String.CodeUnits (length, take) as CodeUnits
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Computed, computed)
 
--- | An assembled `:style` object (string/number CSS values).
+-- | An assembled `:style` object (string/number CSS values). @ts import("vue").CSSProperties
 foreign import data StyleMap :: Type
 
-foreign import showNumberImpl :: Number -> String
 foreign import imulImpl :: Fn2 Int Int Int
 foreign import normalizeDescriptionImpl :: String -> String
 foreign import trimEndImpl :: String -> String
@@ -288,8 +288,8 @@ bookStyle book =
     , marginRight: show book.gap <> "px"
     , backgroundColor: if book.lit then selFill else bookFill
     , border: "1px solid " <> (if book.lit then selLine else bookLine)
-    , borderTopLeftRadius: showNumberImpl book.arc <> "px"
-    , borderTopRightRadius: showNumberImpl book.arc <> "px"
+    , borderTopLeftRadius: toString book.arc <> "px"
+    , borderTopRightRadius: toString book.arc <> "px"
     }
     ( toNullable
         ( if book.tilt /= 0 then

@@ -4,6 +4,8 @@
  * same element cancels the previous one).
  */
 
+export { prefersReducedMotionImpl } from "@/ffi/reduced-motion"
+
 const active = new WeakMap<HTMLElement, number>()
 
 export const readMetricsImpl = (el: HTMLElement) => ({
@@ -19,9 +21,6 @@ export const setScrollImpl = (el: HTMLElement, top: number, left: number): void 
   el.scrollTop = top
   el.scrollLeft = left
 }
-
-export const prefersReducedMotionImpl = (): boolean =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
 export const nowImpl = (): number => performance.now()
 

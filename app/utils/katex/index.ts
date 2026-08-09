@@ -1,4 +1,4 @@
-import { KATEX_MACROS } from "../../ffi/utils/katex"
+import { KATEX_MACROS } from "@/ffi/utils/katex"
 import { renderTexJs } from "#purs/App.Utils.Katex"
 
 export { KATEX_MACROS }

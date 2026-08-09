@@ -3,10 +3,8 @@
  * measurements, scrolling, and listeners behind the shelf's setup
  * composable.
  */
-import { glideScroll } from "../../utils/scroll"
+import { glideScroll } from "@/utils/scroll"
 import { nextTick } from "vue"
-
-export { showNumberImpl } from "../js-show"
 
 export const rectOfEventTargetImpl = (event: MouseEvent) => {
   const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()

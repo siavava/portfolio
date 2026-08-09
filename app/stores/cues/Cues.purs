@@ -35,6 +35,7 @@ import Vue (Computed, Ref, computed, read, shallowRef, write)
 -- | A `shallowReactive(new Map<k, v>())` from Vue.
 foreign import data ReactiveMap :: Type -> Type -> Type
 
+-- | A DOM `Element`. @ts Element
 foreign import data DomElement :: Type
 
 foreign import newReactiveMapImpl :: forall k v. Effect (ReactiveMap k v)

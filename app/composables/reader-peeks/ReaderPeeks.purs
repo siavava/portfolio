@@ -39,10 +39,10 @@ import Effect.Uncurried
   )
 import Vue (Ref, read, ref, requestFrame, write)
 
--- | A DOM `HTMLElement`.
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
--- | A raw `MouseEvent`.
+-- | A raw `MouseEvent`. @ts MouseEvent
 foreign import data MouseEvt :: Type
 
 -- | Whatever Vue hands a function template ref (component instance,

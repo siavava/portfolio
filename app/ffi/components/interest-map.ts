@@ -15,7 +15,7 @@ import { animate } from "motion-v"
 import { storeToRefs } from "pinia"
 import { watch } from "vue"
 
-export { showNumberImpl } from "../js-show"
+export { prefersReducedMotionImpl } from "@/ffi/reduced-motion"
 
 interface SimNode extends SimulationNodeDatum {
   id: string
@@ -59,8 +59,6 @@ export const shuffleKeyImpl = (id: string, seed: number): number => {
   for (const ch of id) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0
   return h >>> 0
 }
-
-export const randomImpl = (): number => Math.random()
 
 export const useElementWidthImpl = (el: Ref<HTMLElement | null>): Ref<number> =>
   useElementSize(el).width
@@ -193,9 +191,6 @@ export const stopSpringImpl = (controls: { stop: () => void }): void => {
 export const setRingRadiusImpl = (radii: Ref<number[]>, index: number, value: number): void => {
   radii.value[index] = value
 }
-
-export const prefersReducedMotionImpl = (): boolean =>
-  typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
 /** The idle heartbeat: WAAPI stroke pulses over rings and spokes. */
 export const pulseRingsImpl = (wrapper: Ref<HTMLElement | null>, dark: boolean): void => {

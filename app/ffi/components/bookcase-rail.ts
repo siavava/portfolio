@@ -2,7 +2,7 @@
  * Typed FFI implementations for `App.Components.BookcaseRail` — the scroll
  * geometry and DOM queries behind center-on-selection.
  */
-import { glideScroll } from "../../utils/scroll"
+import { glideScroll } from "@/utils/scroll"
 
 export { nextTickImpl } from "./project-shelf"
 

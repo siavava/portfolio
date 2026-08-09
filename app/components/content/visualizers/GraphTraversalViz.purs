@@ -20,6 +20,7 @@ import Data.Int (toNumber)
 import Data.Maybe (Maybe(..), maybe)
 import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Data.Number (infinity)
+import Data.Number.Format (toString)
 import Effect (Effect)
 import Effect.Ref as Ref
 import Effect.Timer (setTimeout)
@@ -37,8 +38,6 @@ import Vue
   , watchRef
   , write
   )
-
-foreign import showNumberImpl :: Number -> String
 
 type GraphNode = { id :: String, x :: Number, y :: Number }
 
@@ -284,7 +283,7 @@ useGraphTraversalViz = do
       else do
         ds <- read dist
         case Array.find (\e -> e.id == nodeId) ds of
-          Just entry | entry.d < infinity -> pure (":" <> showNumberImpl entry.d)
+          Just entry | entry.d < infinity -> pure (":" <> toString entry.d)
           _ -> pure ""
 
   _ <- watchRef algo \_ -> run

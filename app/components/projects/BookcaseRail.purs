@@ -28,6 +28,7 @@ import Effect.Uncurried
   )
 import Vue (Computed, Ref, computed, read, watchGetter)
 
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
 foreign import centerOffsetImpl :: EffectFn2 DomElement DomElement Number

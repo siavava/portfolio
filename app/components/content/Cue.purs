@@ -21,6 +21,7 @@ import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, mkEffectFn1, runEffect
 import Vue (Computed, Ref, computed, onMounted, onUnmounted, read)
 
 foreign import data CuesStore :: Type
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
 foreign import registerMarkImpl :: EffectFn3 CuesStore String DomElement Unit

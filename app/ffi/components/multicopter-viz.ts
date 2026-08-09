@@ -5,10 +5,6 @@
  */
 import { useRafFn } from "@vueuse/core"
 
-export { showNumberImpl } from "../js-show"
-
-export const toFixedImpl = (n: number, digits: number): string => n.toFixed(digits)
-
 /** The click position in the SVG's viewBox coordinates, via the inverse
  * screen CTM — `null` when the SVG is not laid out yet. */
 export const clickPointImpl = (event: MouseEvent): { x: number, y: number } | null => {

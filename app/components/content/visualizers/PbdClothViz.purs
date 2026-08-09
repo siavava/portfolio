@@ -16,10 +16,11 @@ module App.Components.PbdClothViz
 import Prelude
 
 import App.Composables.AfterPaint (useAfterPaint)
+import App.Utils.JsMath (hypot, orEps)
 import Data.Array as Array
-import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Int (toNumber)
-import Data.Number (abs, isFinite, isNaN, max, min, round, sin, sqrt2) as Number
+import Data.Number (abs, isFinite, max, min, round, sin, sqrt2) as Number
+import Data.Number.Format (fixed, toString, toStringWith)
 import Effect (Effect, forE, foreachE)
 import Effect.Ref as Ref
 import Effect.Uncurried
@@ -40,9 +41,6 @@ foreign import data SimArray :: Type -> Type
 -- | Spatial-hash bucket table for the self-contact pass (a JS `Map`).
 foreign import data ContactTable :: Type
 
-foreign import showNumberImpl :: Number -> String
-foreign import hypotImpl :: Fn2 Number Number Number
-foreign import toFixedImpl :: Fn2 Number Int String
 foreign import rafLoopImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 foreign import thawImpl :: forall a. EffectFn1 (Array a) (SimArray a)
 foreign import peekImpl :: forall a. EffectFn2 (SimArray a) Int a
@@ -143,17 +141,13 @@ shears = Array.range 0 (rows - 1) # Array.concatMap \j ->
       ]
     else []
 
--- | JS `Math.hypot(...) || 1e-6` — the falsy check replaces 0 and NaN.
-orEps :: Number -> Number
-orEps raw = if raw == 0.0 || Number.isNaN raw then 1.0e-6 else raw
-
 segmentsOf :: Array Particle -> Array Segment
 segmentsOf ps = constraints
   # Array.mapMaybe \c -> do
       a <- Array.index ps c.a
       b <- Array.index ps c.b
       let
-        len = runFn2 hypotImpl (b.x - a.x) (b.y - a.y)
+        len = hypot (b.x - a.x) (b.y - a.y)
         tint = Number.round (Number.min 1.0 (Number.abs (len - c.rest) / c.rest / 0.15) * 100.0)
       pure
         { ax: a.x
@@ -161,7 +155,7 @@ segmentsOf ps = constraints
         , bx: b.x
         , by: b.y
         , stroke: "color-mix(in srgb, var(--blue-underline), var(--orange-underline) "
-            <> showNumberImpl tint
+            <> toString tint
             <> "%)"
         }
 
@@ -186,7 +180,7 @@ usePbdClothViz = do
       let state = if left > 0.0 then "gust blowing" else "ambient breeze"
       pure
         ( "iterations: " <> show iters <> " · max stretch "
-            <> runFn2 toFixedImpl (peak * 100.0) 1
+            <> toStringWith (fixed 1) (peak * 100.0)
             <> "% · "
             <> state
         )
@@ -226,7 +220,7 @@ usePbdClothViz = do
       let
         dx = b.x - a.x
         dy = b.y - a.y
-        len = orEps (runFn2 hypotImpl dx dy)
+        len = orEps (hypot dx dy)
         wSum = a.w + b.w
       unless (wSum == 0.0) do
         let
@@ -240,12 +234,12 @@ usePbdClothViz = do
       foreachE shears \c -> do
         a <- runEffectFn2 peekImpl m c.a
         b <- runEffectFn2 peekImpl m c.b
-        let len = orEps (runFn2 hypotImpl (b.x - a.x) (b.y - a.y))
+        let len = orEps (hypot (b.x - a.x) (b.y - a.y))
         when (len < c.rest * diagFloor) (projectPair m c.a c.b (c.rest * diagFloor))
       foreachE constraints \c -> do
         a <- runEffectFn2 peekImpl m c.a
         b <- runEffectFn2 peekImpl m c.b
-        let len = orEps (runFn2 hypotImpl (b.x - a.x) (b.y - a.y))
+        let len = orEps (hypot (b.x - a.x) (b.y - a.y))
         when (len < c.rest * compFloor) (projectPair m c.a c.b (c.rest * compFloor))
 
     projectContacts m total = do
@@ -258,7 +252,7 @@ usePbdClothViz = do
           when (j > i) do
             a <- runEffectFn2 peekImpl m i
             b <- runEffectFn2 peekImpl m j
-            when (runFn2 hypotImpl (b.x - a.x) (b.y - a.y) < minSep)
+            when (hypot (b.x - a.x) (b.y - a.y) < minSep)
               (projectPair m i j minSep)
 
     step = do
@@ -321,7 +315,7 @@ usePbdClothViz = do
         foreachE constraints \c -> do
           a <- runEffectFn2 peekImpl m c.a
           b <- runEffectFn2 peekImpl m c.b
-          let len = runFn2 hypotImpl (b.x - a.x) (b.y - a.y)
+          let len = hypot (b.x - a.x) (b.y - a.y)
           Ref.modify_ (\ms -> Number.max ms (Number.abs (len - c.rest) / c.rest)) stretch
         maxStretch <- Ref.read stretch
         peak <- Ref.read peakStretch

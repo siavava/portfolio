@@ -57,7 +57,7 @@ glideScroll el target duration = do
   runEffectFn1 cancelActiveImpl el
   m <- runEffectFn1 readMetricsImpl el
   let
-    clampAxis limit v = max 0.0 (min v limit)
+    clampAxis limit = clamp 0.0 limit
     toTop = fromMaybe m.scrollTop
       (clampAxis (m.scrollHeight - m.clientHeight) <$> toMaybe target.top)
     toLeft = fromMaybe m.scrollLeft

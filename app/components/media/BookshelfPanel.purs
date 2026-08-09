@@ -21,6 +21,7 @@ import Data.Int (floor, toNumber)
 import Data.Nullable (Nullable, null, toNullable)
 import Data.String.CodeUnits (take)
 import Effect (Effect)
+import Effect.Random (random)
 import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue
   ( Computed
@@ -38,7 +39,6 @@ foreign import jsStringImpl :: JsValue -> String
 foreign import jsNumberImpl :: String -> Number
 foreign import truthyImpl :: JsValue -> Boolean
 foreign import localeCompareImpl :: Fn2 String String Number
-foreign import randomImpl :: Effect Number
 
 type RawDoc =
   { path :: String
@@ -124,7 +124,7 @@ setup args = do
     let
       featured = filter (truthyImpl <<< _.featured) catalog
       pool = if length featured > 0 then featured else catalog
-    roll <- randomImpl
+    roll <- random
     write selected (toNullable (index pool (floor (roll * toNumber (length pool)))))
 
   pure { projects, selected, onSelect: mkEffectFn1 onSelect }

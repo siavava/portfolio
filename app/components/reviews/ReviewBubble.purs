@@ -16,13 +16,14 @@ import Prelude
 import Data.Function.Uncurried (Fn4, runFn4)
 import Data.Int (rem, toNumber)
 import Data.Nullable (Nullable, notNull, null)
+import Data.Number.Format (toString)
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Computed, Ref, computed, read)
 
+-- | An assembled `:style` object. @ts Record<string, string | number | undefined>
 foreign import data StyleMap :: Type
 
-foreign import showNumberImpl :: Number -> String
 foreign import mkBubbleStyleImpl :: Fn4 String String String (Nullable Int) StyleMap
 
 type BubbleArgs =
@@ -52,9 +53,9 @@ setup args = do
     y <- args.offsetY
     z <- read args.zIndex
     let
-      tiltVar = showNumberImpl (toNumber baseTilt + (if dragging then 1.5 else 0.0)) <> "deg"
+      tiltVar = toString (toNumber baseTilt + (if dragging then 1.5 else 0.0)) <> "deg"
       delayVar = show (index * 90) <> "ms"
-      transform = "translate(" <> showNumberImpl x <> "px, " <> showNumberImpl y <>
+      transform = "translate(" <> toString x <> "px, " <> toString y <>
         "px) rotate(var(--tilt))"
     pure (runFn4 mkBubbleStyleImpl tiltVar delayVar transform (if z == 0 then null else notNull z))
 

@@ -17,6 +17,7 @@ import Data.Foldable (foldl)
 import Data.Int (toNumber)
 import Data.Int.Bits (zshr)
 import Data.Number (round)
+import Data.Number.Format (toString)
 import Data.Ord (abs)
 
 -- | First UTF-16 code unit of each code point, matching
@@ -48,9 +49,6 @@ type SpineStyleJs =
   , transform :: String
   }
 
--- | Render a number the way JS string interpolation does ("2", not "2.0").
-foreign import showNumberImpl :: Number -> String
-
 -- | Seeded spine geometry: width, height, lean, and edge arcs.
 spineStyle :: String -> SpineStyleJs
 spineStyle title =
@@ -64,7 +62,7 @@ spineStyle title =
     { width: show width <> "px"
     , height: show (50 + (seed `zshr` 2) `mod` 36) <> "%"
     , marginLeft: show ((seed `zshr` 6) `mod` 2) <> "px"
-    , borderRadius: "50% / " <> showNumberImpl arc <> "px"
+    , borderRadius: "50% / " <> toString arc <> "px"
     , transform:
         if tilted then "rotate(" <> show (if (seed `zshr` 5) `mod` 2 == 1 then lean else -lean) <>
           "deg)"

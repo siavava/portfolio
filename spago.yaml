@@ -14,7 +14,9 @@ package:
     - nullable
     - numbers
     - prelude
+    - random
     - refs
+    - st
     - strings
   test:
     main: Test.Main

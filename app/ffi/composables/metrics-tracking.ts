@@ -5,7 +5,7 @@
  * imported explicitly so the compiled `output/` chain resolves it.
  */
 import type { Router } from "vue-router"
-import { useMetrics } from "../../stores/metrics"
+import { useMetrics } from "@/stores/metrics"
 
 type MetricsStore = ReturnType<typeof useMetrics>
 

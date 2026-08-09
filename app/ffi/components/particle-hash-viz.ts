@@ -11,6 +11,8 @@
  */
 import { reactive } from "vue"
 
+export { startRafLoopImpl } from "@/ffi/raf-loop"
+
 export type SimParticle = { x: number, y: number, vx: number, vy: number }
 
 type SimParams = {
@@ -128,24 +130,3 @@ export const hitFlagsImpl = (state: SimState, now: number, count: number, linger
 }
 
 export const nowImpl = (): number => performance.now()
-
-export const randomImpl = (): number => Math.random()
-
-export const hypotImpl = (x: number, y: number): number => Math.hypot(x, y)
-
-export const toFixed0Impl = (n: number): string => n.toFixed(0)
-
-/**
- * Starts a per-frame loop and returns the Effect that stops it. The
- * callback receives the rAF timestamp, like vueuse's useRafFn.
- */
-export const startRafLoopImpl = (tick: (t: number) => void): () => void => {
-  if (typeof window === "undefined") return () => {}
-  let id = 0
-  const loop = (t: number) => {
-    tick(t)
-    id = requestAnimationFrame(loop)
-  }
-  id = requestAnimationFrame(loop)
-  return () => cancelAnimationFrame(id)
-}

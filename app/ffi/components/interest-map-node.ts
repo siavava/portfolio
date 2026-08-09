@@ -5,14 +5,13 @@
  */
 import { nextTick } from "vue"
 
+export { prefersReducedMotionImpl } from "@/ffi/reduced-motion"
+
 export const nodeLabelImpl = (node: MapNode): string => node.label
 
 export const nodeLevelImpl = (node: MapNode): number => node.level
 
 export const labelSideBelowImpl = (node: MapNode): boolean => node.labelSide === "below"
-
-export const prefersReducedMotionImpl = (): boolean =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
 export const animatePulseImpl = (el: SVGCircleElement, r: number): void => {
   el.animate(

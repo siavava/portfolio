@@ -4,8 +4,6 @@
  * `trimEnd`) plus the conditional-spread style assembly behind the
  * build-time OG shelf card.
  */
-export { showNumberImpl } from "../js-show"
-
 export const imulImpl = (a: number, b: number): number => Math.imul(a, b)
 
 /** JS `text.replace(/\s+/g, " ").trim()` — the reference's normalization. */

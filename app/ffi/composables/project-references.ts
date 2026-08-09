@@ -3,7 +3,7 @@
  * the build-time notes index and the document/URL accessors behind the
  * reference assembly.
  */
-import notesMeta from "../../assets/notes-meta.json"
+import notesMeta from "@/assets/notes-meta.json"
 
 interface ReferencedDoc {
   references?: string[]

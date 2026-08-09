@@ -23,6 +23,7 @@ import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, EffectFn3, mkEffectFn1, runEffectFn1, runEffectFn3)
 import Vue (Computed, Ref, computed, onBeforeUnmount, onMounted, read)
 
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 foreign import data MediaEl :: Type
 

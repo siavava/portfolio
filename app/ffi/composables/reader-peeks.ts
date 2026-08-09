@@ -7,7 +7,7 @@ import type { Ref } from "vue"
 import notesMeta from "@/assets/notes-meta.json"
 import { useEventListener } from "@vueuse/core"
 
-export { nextTickImpl } from "../components/project-shelf"
+export { nextTickImpl } from "@/ffi/components/project-shelf"
 
 export const lookupNotesMetaImpl = (path: string): NotesMeta | null =>
   (notesMeta as Record<string, NotesMeta>)[path] ?? null

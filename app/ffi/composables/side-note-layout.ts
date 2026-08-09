@@ -4,8 +4,6 @@
  * placement math.
  */
 
-export { showNumberImpl } from "../js-show"
-
 const notes = new Map<string, HTMLElement>()
 
 type Measured = {

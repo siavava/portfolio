@@ -15,13 +15,15 @@ module App.Components.MassSpringViz
 import Prelude
 
 import App.Composables.AfterPaint (useAfterPaint)
+import App.Utils.JsMath (hypot, orEps)
 import Data.Array as Array
-import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Int (toNumber)
 import Data.Maybe (fromMaybe)
-import Data.Number (abs, isFinite, isNaN, min, round) as Number
+import Data.Number (abs, isFinite, min, round) as Number
+import Data.Number.Format (toString)
 import Data.Traversable (traverse)
 import Effect (Effect, forE, foreachE)
+import Effect.Random (random)
 import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, runEffectFn1, runEffectFn2, runEffectFn3)
 import Vue (Ref, read, ref, shallowRef, watchRef, write)
@@ -29,9 +31,6 @@ import Vue (Ref, read, ref, shallowRef, watchRef, write)
 -- | Module-local mutable mass/force store (a plain JS array).
 foreign import data SimArray :: Type -> Type
 
-foreign import showNumberImpl :: Number -> String
-foreign import hypotImpl :: Fn2 Number Number Number
-foreign import randomImpl :: Effect Number
 foreign import rafLoopImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 foreign import thawImpl :: forall a. EffectFn1 (Array a) (SimArray a)
 foreign import peekImpl :: forall a. EffectFn2 (SimArray a) Int a
@@ -99,16 +98,12 @@ springs =
     <> map (\i -> { a: i, b: i + 2, rest: 2.0 * restLen, k: kb, bend: true })
       (Array.range 0 (count - 3))
 
--- | JS `Math.hypot(...) || 1e-6` — the falsy check replaces 0 and NaN.
-orEps :: Number -> Number
-orEps raw = if raw == 0.0 || Number.isNaN raw then 1.0e-6 else raw
-
 segmentsOf :: Array Number -> Array Mass -> Array Segment
 segmentsOf eqLen ms = Array.catMaybes $ springs # Array.mapWithIndex \si s -> do
   a <- Array.index ms s.a
   b <- Array.index ms s.b
   let
-    len = runFn2 hypotImpl (b.x - a.x) (b.y - a.y)
+    len = hypot (b.x - a.x) (b.y - a.y)
     baseline = fromMaybe s.rest (Array.index eqLen si)
     tint = Number.round (Number.min 1.0 (Number.abs (len - baseline) / s.rest / 0.25) * 100.0)
   pure
@@ -118,7 +113,7 @@ segmentsOf eqLen ms = Array.catMaybes $ springs # Array.mapWithIndex \si s -> do
     , by: b.y
     , bend: s.bend
     , stroke: "color-mix(in srgb, var(--blue-underline), var(--orange-underline) "
-        <> showNumberImpl tint
+        <> toString tint
         <> "%)"
     }
 
@@ -148,7 +143,7 @@ useMassSpringViz = do
         let
           dx = b.x - a.x
           dy = b.y - a.y
-          len = orEps (runFn2 hypotImpl dx dy)
+          len = orEps (hypot dx dy)
           nx = dx / len
           ny = dy / len
           stretch = s.k * (len - s.rest)
@@ -190,7 +185,7 @@ useMassSpringViz = do
       eqLen <- springs # traverse \s -> do
         a <- runEffectFn2 peekImpl m s.a
         b <- runEffectFn2 peekImpl m s.b
-        pure (runFn2 hypotImpl (b.x - a.x) (b.y - a.y))
+        pure (hypot (b.x - a.x) (b.y - a.y))
       Ref.write eqLen eqLenRef
       write note restNote
       syncViews
@@ -201,7 +196,7 @@ useMassSpringViz = do
       when (total >= count) do
         tail <- runEffectFn2 peekImpl m (count - 1)
         d <- Ref.read dir
-        roll <- randomImpl
+        roll <- random
         let jitter = 0.8 + 0.4 * roll
         runEffectFn3 pokeImpl m (count - 1)
           (tail { vx = tail.vx + d * 150.0 * jitter, vy = tail.vy - 250.0 * jitter })

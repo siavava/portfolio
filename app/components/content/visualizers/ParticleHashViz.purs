@@ -18,15 +18,17 @@ module App.Components.ParticleHashViz
 import Prelude
 
 import App.Composables.AfterPaint (useAfterPaint)
+import App.Utils.JsMath (hypot)
 import Data.Array as Array
-import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Int (ceil, floor, toNumber)
 import Data.Maybe (fromMaybe)
 import Data.Nullable (Nullable, toMaybe)
 import Data.Number (cos, pi, sin)
+import Data.Number.Format (fixed, toStringWith)
 import Data.Ord (abs)
 import Data.Traversable (for)
 import Effect (Effect)
+import Effect.Random (random)
 import Effect.Ref as Ref
 import Effect.Uncurried
   ( EffectFn1
@@ -82,9 +84,6 @@ foreign import positionsImpl :: EffectFn1 SimState (Array Point)
 foreign import stepImpl :: EffectFn3 SimState Number Number Int
 foreign import hitFlagsImpl :: EffectFn4 SimState Number Int Number (Array Boolean)
 foreign import nowImpl :: Effect Number
-foreign import randomImpl :: Effect Number
-foreign import hypotImpl :: Fn2 Number Number Number
-foreign import toFixed0Impl :: Number -> String
 foreign import startRafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
 type HashBindings =
@@ -230,19 +229,19 @@ useParticleHashViz = do
             r = floor ((p.y - originY) / size)
           in
             if not (abs (c - qc.col) <= 1 && abs (r - qc.row) <= 1) then "drift"
-            else if runFn2 hypotImpl (p.x - q.x) (p.y - q.y) < kernelRadius then "neighbor"
+            else if hypot (p.x - q.x) (p.y - q.y) < kernelRadius then "neighbor"
             else "candidate"
     pure (Array.mapWithIndex kindAt positions)
 
   let
     seed = do
       fresh <- for (Array.range 1 particleCount) \_ -> do
-        r1 <- randomImpl
+        r1 <- random
         let speed = 18.0 + r1 * 22.0
-        r2 <- randomImpl
+        r2 <- random
         let angle = r2 * pi * 2.0
-        r3 <- randomImpl
-        r4 <- randomImpl
+        r3 <- random
+        r4 <- random
         pure
           { x: originX + particleR + r3 * (boxW - 2.0 * particleR)
           , y: originY + particleR + r4 * (boxH - 2.0 * particleR)
@@ -252,7 +251,7 @@ useParticleHashViz = do
       runEffectFn2 replaceParticlesImpl sim fresh
 
     newQuery = do
-      r <- randomImpl
+      r <- random
       write queryIndex (floor (r * toNumber particleCount))
 
     tick t = do
@@ -270,7 +269,7 @@ useParticleHashViz = do
           (Array.filter (\k -> k == "candidate" || k == "neighbor") allKinds)
         neighbors = Array.length (Array.filter (_ == "neighbor") allKinds)
       write note
-        ( "cell = " <> toFixed0Impl size <> "px · candidates scanned " <> show candidates
+        ( "cell = " <> toStringWith (fixed 0) size <> "px · candidates scanned " <> show candidates
             <> " · true neighbors "
             <> show neighbors
             <> " · contacts "

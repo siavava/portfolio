@@ -1,15 +1,9 @@
 /**
- * Typed FFI implementations for `App.Components.MassSpringViz` — JS numeric
- * primitives, the frame loop, and the mutable mass/force-store cells the
- * PureScript integrators sweep over.
+ * Typed FFI implementations for `App.Components.MassSpringViz` — the
+ * frame loop and the mutable mass/force-store cells the PureScript
+ * integrators sweep over.
  */
 import { useRafFn } from "@vueuse/core"
-
-export { showNumberImpl } from "../js-show"
-
-export const hypotImpl = (dx: number, dy: number): number => Math.hypot(dx, dy)
-
-export const randomImpl = (): number => Math.random()
 
 /** Mirrors the SFC's `useRafFn(fn, { immediate: false })`; returns `resume`. */
 export const rafLoopImpl = (fn: () => void): () => void => {

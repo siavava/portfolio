@@ -4,11 +4,11 @@
  * Nuxt auto-imports in TypeScript land; here they are imported explicitly
  * from their real paths so the compiled `output/` chain resolves them.
  */
-import { Scope, useSocket } from "../../composables/metrics/socket"
+import { Scope, useSocket } from "@/composables/metrics/socket"
 import type { ComputedRef } from "vue"
-import { useViewerGeo } from "../../composables/metrics/viewer-geo"
-import { useViewerLocation } from "../../composables/metrics/viewer-location"
-import { withNamespace } from "../../utils/metrics"
+import { useViewerGeo } from "@/composables/metrics/viewer-geo"
+import { useViewerLocation } from "@/composables/metrics/viewer-location"
+import { withNamespace } from "@/utils/metrics"
 
 type Socket = ReturnType<typeof useSocket>
 

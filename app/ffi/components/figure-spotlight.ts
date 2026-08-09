@@ -3,6 +3,8 @@
  * media measurement (SVG viewBox or image natural size), the sizing
  * writes, and the resize listener.
  */
+export { onWindowResizeImpl } from "@/ffi/window-events"
+
 export const mediaBoxImpl = (
   fig: HTMLElement | null,
 ): { media: SVGSVGElement | HTMLImageElement, aspect: number, maxW: number, maxH: number } | null => {
@@ -28,10 +30,4 @@ export const setMediaSizeImpl = (media: SVGSVGElement | HTMLImageElement, width:
   media.style.height = `${height}px`
   media.style.maxWidth = "none"
   media.style.maxHeight = "none"
-}
-
-export const onWindowResizeImpl = (fn: () => void): () => void => {
-  if (typeof window === "undefined") return () => {}
-  window.addEventListener("resize", fn)
-  return () => window.removeEventListener("resize", fn)
 }

@@ -47,6 +47,7 @@ import Vue
   , write
   )
 
+-- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 foreign import data IntSet :: Type
 foreign import data RouteQuery :: Type

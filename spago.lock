@@ -17,7 +17,9 @@
             "nullable",
             "numbers",
             "prelude",
+            "random",
             "refs",
+            "st",
             "strings",
             "vue-bridge"
           ],
@@ -50,6 +52,7 @@
             "partial",
             "prelude",
             "profunctor",
+            "random",
             "refs",
             "safe-coerce",
             "st",
@@ -1082,6 +1085,16 @@
         "newtype",
         "prelude",
         "tuples"
+      ]
+    },
+    "random": {
+      "type": "registry",
+      "version": "6.0.0",
+      "integrity": "sha256-7sZRo6P9UIiXDZ9s2QL9T8h3wlIwLdQrR4+oZKOijQw=",
+      "dependencies": [
+        "effect",
+        "integers",
+        "prelude"
       ]
     },
     "refs": {

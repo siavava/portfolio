@@ -17,12 +17,11 @@ import Data.Array (findIndex, index, last, length, reverse, slice, snoc)
 import Data.Foldable (foldl)
 import Data.Function.Uncurried (Fn3, mkFn3)
 import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Number.Format (toString)
 import Data.String (joinWith)
 
 -- | A measured rectangle relative to the caption's box.
 type Box = { left :: Number, right :: Number, top :: Number, bottom :: Number }
-
-foreign import showNumberImpl :: Number -> String
 
 -- | Merge per-character boxes into one box per visual line: a unit whose
 -- | top sits above the running line's midpoint joins it, else starts a
@@ -62,7 +61,7 @@ reveal units lines shown =
           , top: currentLine.top
           , bottom: currentLine.bottom
           }
-        px n = showNumberImpl n <> "px"
+        px n = toString n <> "px"
         firstRect = fromMaybe lastUnit (index rects 0)
         forward = rects >>= \rect ->
           [ px rect.right <> " " <> px rect.top, px rect.right <> " " <> px rect.bottom ]

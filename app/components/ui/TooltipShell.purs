@@ -15,13 +15,14 @@ import Prelude
 import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, notNull, null, toMaybe)
+import Data.Number.Format (toString)
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue (Computed, computed)
 
+-- | An assembled `:style` object. @ts Record<string, string>
 foreign import data StyleMap :: Type
 
-foreign import showNumberImpl :: Number -> String
 foreign import mkTimingVarsImpl :: Fn2 String String StyleMap
 
 type TooltipArgs =
@@ -54,6 +55,6 @@ setup args = do
       delay <- args.delay
       pure
         ( notNull
-            (runFn2 mkTimingVarsImpl (showNumberImpl duration <> "s") (showNumberImpl delay <> "s"))
+            (runFn2 mkTimingVarsImpl (toString duration <> "s") (toString delay <> "s"))
         )
   pure { alignClass, anchorStyle }

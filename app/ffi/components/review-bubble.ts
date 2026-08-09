@@ -2,8 +2,6 @@
  * Typed FFI implementations for `App.Components.ReviewBubble` — the style
  * map following the bubble's drag offset.
  */
-export { showNumberImpl } from "../js-show"
-
 export const mkBubbleStyleImpl = (
   tilt: string,
   delay: string,

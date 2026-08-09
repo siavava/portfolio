@@ -22,10 +22,10 @@ import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
 import Vue (Ref, read, ref, watchRef, write)
 
--- | The draggable element (an `HTMLElement`).
+-- | The draggable element (an `HTMLElement`). @ts HTMLElement
 foreign import data DomElement :: Type
 
--- | A raw `PointerEvent`.
+-- | A raw `PointerEvent`. @ts PointerEvent
 foreign import data PointerEvt :: Type
 
 -- | The `reactive({ x, y })` translation object the template reads.
