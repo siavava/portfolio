@@ -6,7 +6,7 @@
  */
 
 /** Title-case a phrase, keeping minor words lowercase past the first. */
-export declare const titleCase: (arg0: string) => string
+export declare const titleCase: (text: string) => string
 
 /** Render an ISO-ish date string as MM/YYYY. */
-export declare const formatMonthYear: (arg0: string) => string
+export declare const formatMonthYear: (date: string) => string
