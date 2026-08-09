@@ -1,0 +1,24 @@
+name: check
+
+on: push
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      # scripts/spago-build.mjs relocates spago's global cache here on CI,
+      # so caching it skips the registry clone (~1 min) on warm runs.
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/xdg
+          key: spago-${{ hashFiles('spago.lock') }}
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run purs:check
+
+      - run: bun run purs:format-check
