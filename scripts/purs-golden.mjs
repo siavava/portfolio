@@ -7,10 +7,13 @@
  * (now PureScript-backed) modules and diffs them against the recording.
  */
 
-import { decodeShareText, encodeShareText, transcode } from "../app/utils/coder.ts"
-import { formatMonthYear, titleCase } from "../app/utils/format.ts"
+import { decodeShareText, encodeShareText, transcode } from "../app/utils/coder/index.ts"
+import { formatMonthYear, titleCase } from "../.purs-shims/utils/format.ts"
+import { hashLabel, spineStyle } from "../.purs-shims/utils/spines.ts"
 import { readFileSync, writeFileSync } from "node:fs"
+import { renderInlineMath, renderMarkdownMath } from "../.purs-shims/utils/markdown-math.ts"
 import { fileURLToPath } from "node:url"
+import { renderTex } from "../app/utils/katex/index.ts"
 
 const GOLDEN = fileURLToPath(new URL("./purs-golden.json", import.meta.url))
 
@@ -64,12 +67,29 @@ cases.push({ kind: "format", input: "of mice and men" })
 cases.push({ kind: "monthYear", input: "2026-08" })
 cases.push({ kind: "monthYear", input: "2026" })
 cases.push({ kind: "monthYear", input: "" })
+for (const input of [...SAMPLES, "Attention Is All You Need", "Neural Networks", "astra", "A Very Long Book Title That Overflows The Shelf Entirely", "ゼロから作る", "🎉🎉🎉"]) {
+  cases.push({ kind: "spine", input })
+}
+for (const input of ["", "x^2 + y^2 = z^2", "\\R^2 \\to \\N", "\\frac{a}{b}", "\\invalid{cmd", "\\qed"]) {
+  cases.push({ kind: "tex", input, display: false })
+  cases.push({ kind: "tex", input, display: true })
+}
+for (const input of ["", "# Heading\n\nSome **bold** prose with $e = mc^2$.", "$$\\sum_{i=0}^n i = \\frac{n(n+1)}{2}$$", "inline $a+b$ and\nline break", "- list\n- items", "$unclosed", "**emphasis** _under_ and *star*"]) {
+  cases.push({ kind: "markdown", input })
+}
+for (const input of ["", "pure text", "$x^2$", "mix $a_i$ and **bold** and _em_ tails", "a < b & c > d", "snake_case_word stays put", "*star em* and **strong**", "$first$ then $second$", "$$"]) {
+  cases.push({ kind: "inlineMath", input })
+}
 
 const run = (c) => {
   if (c.kind === "transcode") return transcode(c.input, c.from, c.to, { preserveWhitespace: c.preserveWhitespace })
   if (c.kind === "share") return { encoded: encodeShareText(c.input), roundTrip: decodeShareText(encodeShareText(c.input)) }
   if (c.kind === "shareDecode") return { decoded: decodeShareText(c.input) }
   if (c.kind === "format") return { out: titleCase(c.input) }
+  if (c.kind === "spine") return { hash: hashLabel(c.input), style: spineStyle(c.input) }
+  if (c.kind === "tex") return { out: renderTex(c.input, c.display) }
+  if (c.kind === "markdown") return { out: renderMarkdownMath(c.input) }
+  if (c.kind === "inlineMath") return { out: renderInlineMath(c.input) }
   return { out: formatMonthYear(c.input) }
 }
 

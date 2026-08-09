@@ -45260,5 +45260,749 @@
   "result": {
    "out": ""
   }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": ""
+  },
+  "result": {
+   "hash": 0,
+   "style": {
+    "width": "7px",
+    "height": "50%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 1.5px",
+    "transform": "rotate(-4deg)"
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "hi"
+  },
+  "result": {
+   "hash": 3329,
+   "style": {
+    "width": "11px",
+    "height": "54%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "hi yo"
+  },
+  "result": {
+   "hash": 99208853,
+   "style": {
+    "width": "11px",
+    "height": "63%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "hello, world"
+  },
+  "result": {
+   "hash": 640608884,
+   "style": {
+    "width": "9px",
+    "height": "79%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 1.6px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "  leading and  double  spaces "
+  },
+  "result": {
+   "hash": 718021829,
+   "style": {
+    "width": "13px",
+    "height": "75%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 2.3px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "line one\nline two\n\nline four"
+  },
+  "result": {
+   "hash": 1276224354,
+   "style": {
+    "width": "14px",
+    "height": "54%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 2.5px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "naïve café — résumé"
+  },
+  "result": {
+   "hash": 626638389,
+   "style": {
+    "width": "13px",
+    "height": "67%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2.3px",
+    "transform": "rotate(7deg)"
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "emoji 🎉 and 中文 mixed"
+  },
+  "result": {
+   "hash": 396259844,
+   "style": {
+    "width": "9px",
+    "height": "67%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 1.6px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "01101000 01101001"
+  },
+  "result": {
+   "hash": 596948737,
+   "style": {
+    "width": "16px",
+    "height": "62%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2.9px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "01101000 01101001 / 01111001 01101111"
+  },
+  "result": {
+   "hash": 942089295,
+   "style": {
+    "width": "11px",
+    "height": "77%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 2px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "0b01101000 0B01101001"
+  },
+  "result": {
+   "hash": 1064695649,
+   "style": {
+    "width": "11px",
+    "height": "78%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 2px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "104 101 108 108 111"
+  },
+  "result": {
+   "hash": 626635498,
+   "style": {
+    "width": "19px",
+    "height": "64%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 3.4px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "68 65 6c 6c 6f"
+  },
+  "result": {
+   "hash": 470775309,
+   "style": {
+    "width": "13px",
+    "height": "85%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2.3px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "0x68 0X65"
+  },
+  "result": {
+   "hash": 140234301,
+   "style": {
+    "width": "7px",
+    "height": "61%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 1.5px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "68656c6c6f"
+  },
+  "result": {
+   "hash": 894611275,
+   "style": {
+    "width": "14px",
+    "height": "60%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 2.5px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "not-binary"
+  },
+  "result": {
+   "hash": 1290897467,
+   "style": {
+    "width": "9px",
+    "height": "76%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 1.6px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "999"
+  },
+  "result": {
+   "hash": 56601,
+   "style": {
+    "width": "7px",
+    "height": "52%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 1.5px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "abc xyz"
+  },
+  "result": {
+   "hash": 1208298277,
+   "style": {
+    "width": "17px",
+    "height": "59%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 3.1px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "0110100"
+  },
+  "result": {
+   "hash": 1100063249,
+   "style": {
+    "width": "11px",
+    "height": "54%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "011010001"
+  },
+  "result": {
+   "hash": 598829010,
+   "style": {
+    "width": "11px",
+    "height": "78%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 2px",
+    "transform": "rotate(-5deg)"
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "6865c"
+  },
+  "result": {
+   "hash": 51592066,
+   "style": {
+    "width": "8px",
+    "height": "58%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 1.5px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "104 / 105"
+  },
+  "result": {
+   "hash": 749313894,
+   "style": {
+    "width": "11px",
+    "height": "75%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 2px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "/"
+  },
+  "result": {
+   "hash": 47,
+   "style": {
+    "width": "9px",
+    "height": "61%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 1.6px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "\t\ttabbed\tinput"
+  },
+  "result": {
+   "hash": 1006278221,
+   "style": {
+    "width": "9px",
+    "height": "57%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 1.6px",
+    "transform": "rotate(-4deg)"
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "Attention Is All You Need"
+  },
+  "result": {
+   "hash": 1543383018,
+   "style": {
+    "width": "17px",
+    "height": "72%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 3.1px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "Neural Networks"
+  },
+  "result": {
+   "hash": 1085156678,
+   "style": {
+    "width": "20px",
+    "height": "59%",
+    "marginLeft": "1px",
+    "borderRadius": "50% / 3.6px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "astra"
+  },
+  "result": {
+   "hash": 93122609,
+   "style": {
+    "width": "11px",
+    "height": "78%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "A Very Long Book Title That Overflows The Shelf Entirely"
+  },
+  "result": {
+   "hash": 1230275877,
+   "style": {
+    "width": "21px",
+    "height": "67%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 3.8px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "ゼロから作る"
+  },
+  "result": {
+   "hash": 241910274,
+   "style": {
+    "width": "14px",
+    "height": "66%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2.5px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "spine",
+   "input": "🎉🎉🎉"
+  },
+  "result": {
+   "hash": 54968508,
+   "style": {
+    "width": "13px",
+    "height": "77%",
+    "marginLeft": "0px",
+    "borderRadius": "50% / 2.3px",
+    "transform": ""
+   }
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "",
+   "display": false
+  },
+  "result": {
+   "out": "<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow></mrow><annotation encoding=\"application/x-tex\"></annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "",
+   "display": true
+  },
+  "result": {
+   "out": "<span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow></mrow><annotation encoding=\"application/x-tex\"></annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "x^2 + y^2 = z^2",
+   "display": false
+  },
+  "result": {
+   "out": "<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup><mo>=</mo><msup><mi>z</mi><mn>2</mn></msup></mrow><annotation encoding=\"application/x-tex\">x^2 + y^2 = z^2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8974em;vertical-align:-0.0833em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">x</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8141em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:1.0085em;vertical-align:-0.1944em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0359em;\">y</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8141em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.8141em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.044em;\">z</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8141em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "x^2 + y^2 = z^2",
+   "display": true
+  },
+  "result": {
+   "out": "<span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup><mo>=</mo><msup><mi>z</mi><mn>2</mn></msup></mrow><annotation encoding=\"application/x-tex\">x^2 + y^2 = z^2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.9474em;vertical-align:-0.0833em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">x</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:1.0585em;vertical-align:-0.1944em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0359em;\">y</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.8641em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.044em;\">z</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span></span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "\\R^2 \\to \\N",
+   "display": false
+  },
+  "result": {
+   "out": "<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msup><mi mathvariant=\"double-struck\">R</mi><mn>2</mn></msup><mo>→</mo><mi mathvariant=\"double-struck\">N</mi></mrow><annotation encoding=\"application/x-tex\">\\R^2 \\to \\N</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8141em;\"></span><span class=\"mord\"><span class=\"mord mathbb\">R</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8141em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6889em;\"></span><span class=\"mord mathbb\">N</span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "\\R^2 \\to \\N",
+   "display": true
+  },
+  "result": {
+   "out": "<span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><msup><mi mathvariant=\"double-struck\">R</mi><mn>2</mn></msup><mo>→</mo><mi mathvariant=\"double-struck\">N</mi></mrow><annotation encoding=\"application/x-tex\">\\R^2 \\to \\N</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8641em;\"></span><span class=\"mord\"><span class=\"mord mathbb\">R</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8641em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6889em;\"></span><span class=\"mord mathbb\">N</span></span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "\\frac{a}{b}",
+   "display": false
+  },
+  "result": {
+   "out": "<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mfrac><mi>a</mi><mi>b</mi></mfrac></mrow><annotation encoding=\"application/x-tex\">\\frac{a}{b}</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.0404em;vertical-align:-0.345em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6954em;\"><span style=\"top:-2.655em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\">b</span></span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.394em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\">a</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.345em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "\\frac{a}{b}",
+   "display": true
+  },
+  "result": {
+   "out": "<span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><mfrac><mi>a</mi><mi>b</mi></mfrac></mrow><annotation encoding=\"application/x-tex\">\\frac{a}{b}</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1.7936em;vertical-align:-0.686em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.1076em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">b</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">a</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "\\invalid{cmd",
+   "display": false
+  },
+  "result": {
+   "out": "<span class=\"katex-error\" title=\"ParseError: KaTeX parse error: Expected &#x27;}&#x27;, got &#x27;EOF&#x27; at end of input: \\invalid{cmd\" style=\"color:#cc0000\">\\invalid{cmd</span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "\\invalid{cmd",
+   "display": true
+  },
+  "result": {
+   "out": "<span class=\"katex-error\" title=\"ParseError: KaTeX parse error: Expected &#x27;}&#x27;, got &#x27;EOF&#x27; at end of input: \\invalid{cmd\" style=\"color:#cc0000\">\\invalid{cmd</span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "\\qed",
+   "display": false
+  },
+  "result": {
+   "out": "<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi mathvariant=\"normal\">□</mi></mrow><annotation encoding=\"application/x-tex\">\\qed</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.675em;\"></span><span class=\"enclosing qed\"><span class=\"mord amsrm\">□</span></span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "tex",
+   "input": "\\qed",
+   "display": true
+  },
+  "result": {
+   "out": "<span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><mi mathvariant=\"normal\">□</mi></mrow><annotation encoding=\"application/x-tex\">\\qed</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.675em;\"></span><span class=\"enclosing qed\"><span class=\"mord amsrm\">□</span></span></span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "markdown",
+   "input": ""
+  },
+  "result": {
+   "out": ""
+  }
+ },
+ {
+  "case": {
+   "kind": "markdown",
+   "input": "# Heading\n\nSome **bold** prose with $e = mc^2$."
+  },
+  "result": {
+   "out": "<h1>Heading</h1>\n<p>Some <strong>bold</strong> prose with <span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>e</mi><mo>=</mo><mi>m</mi><msup><mi>c</mi><mn>2</mn></msup></mrow><annotation encoding=\"application/x-tex\">e = mc^2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.4306em;\"></span><span class=\"mord mathnormal\">e</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.8141em;\"></span><span class=\"mord mathnormal\">m</span><span class=\"mord\"><span class=\"mord mathnormal\">c</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8141em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span></span></span></span>.</p>\n"
+  }
+ },
+ {
+  "case": {
+   "kind": "markdown",
+   "input": "$$\\sum_{i=0}^n i = \\frac{n(n+1)}{2}$$"
+  },
+  "result": {
+   "out": "<div class=\"math-block\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mi>n</mi></munderover><mi>i</mi><mo>=</mo><mfrac><mrow><mi>n</mi><mo stretchy=\"false\">(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo stretchy=\"false\">)</mo></mrow><mn>2</mn></mfrac></mrow><annotation encoding=\"application/x-tex\">\\sum_{i=0}^n i = \\frac{n(n+1)}{2}</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:2.9291em;vertical-align:-1.2777em;\"></span><span class=\"mop op-limits\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.6514em;\"><span style=\"top:-1.8723em;margin-left:0em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\">i</span><span class=\"mrel mtight\">=</span><span class=\"mord mtight\">0</span></span></span></span><span style=\"top:-3.05em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span><span class=\"mop op-symbol large-op\">∑</span></span></span><span style=\"top:-4.3em;margin-left:0em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">n</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.2777em;\"><span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\">i</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:2.113em;vertical-align:-0.686em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.427em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\">2</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">n</span><span class=\"mopen\">(</span><span class=\"mord mathnormal\">n</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mord\">1</span><span class=\"mclose\">)</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.686em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span></span></span></div>"
+  }
+ },
+ {
+  "case": {
+   "kind": "markdown",
+   "input": "inline $a+b$ and\nline break"
+  },
+  "result": {
+   "out": "<p>inline <span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding=\"application/x-tex\">a+b</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6667em;vertical-align:-0.0833em;\"></span><span class=\"mord mathnormal\">a</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6944em;\"></span><span class=\"mord mathnormal\">b</span></span></span></span> and<br>line break</p>\n"
+  }
+ },
+ {
+  "case": {
+   "kind": "markdown",
+   "input": "- list\n- items"
+  },
+  "result": {
+   "out": "<ul>\n<li>list</li>\n<li>items</li>\n</ul>\n"
+  }
+ },
+ {
+  "case": {
+   "kind": "markdown",
+   "input": "$unclosed"
+  },
+  "result": {
+   "out": "<p>$unclosed</p>\n"
+  }
+ },
+ {
+  "case": {
+   "kind": "markdown",
+   "input": "**emphasis** _under_ and *star*"
+  },
+  "result": {
+   "out": "<p><strong>emphasis</strong> <em>under</em> and <em>star</em></p>\n"
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": ""
+  },
+  "result": {
+   "out": ""
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": "pure text"
+  },
+  "result": {
+   "out": "pure text"
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": "$x^2$"
+  },
+  "result": {
+   "out": "<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msup><mi>x</mi><mn>2</mn></msup></mrow><annotation encoding=\"application/x-tex\">x^2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8141em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">x</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8141em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">2</span></span></span></span></span></span></span></span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": "mix $a_i$ and **bold** and _em_ tails"
+  },
+  "result": {
+   "out": "mix <span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding=\"application/x-tex\">a_i</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.5806em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">a</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3117em;\"><span style=\"top:-2.55em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">i</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span> and <strong>bold</strong> and <em>em</em> tails"
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": "a < b & c > d"
+  },
+  "result": {
+   "out": "a &lt; b &amp; c &gt; d"
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": "snake_case_word stays put"
+  },
+  "result": {
+   "out": "snake_case_word stays put"
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": "*star em* and **strong**"
+  },
+  "result": {
+   "out": "<em>star em</em> and <strong>strong</strong>"
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": "$first$ then $second$"
+  },
+  "result": {
+   "out": "<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>f</mi><mi>i</mi><mi>r</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding=\"application/x-tex\">first</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8889em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.1076em;\">f</span><span class=\"mord mathnormal\">i</span><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">r</span><span class=\"mord mathnormal\">s</span><span class=\"mord mathnormal\">t</span></span></span></span> then <span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>s</mi><mi>e</mi><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi></mrow><annotation encoding=\"application/x-tex\">second</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6944em;\"></span><span class=\"mord mathnormal\">seco</span><span class=\"mord mathnormal\">n</span><span class=\"mord mathnormal\">d</span></span></span></span>"
+  }
+ },
+ {
+  "case": {
+   "kind": "inlineMath",
+   "input": "$$"
+  },
+  "result": {
+   "out": "<span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow></mrow><annotation encoding=\"application/x-tex\"></annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"></span></span>"
+  }
  }
 ]
