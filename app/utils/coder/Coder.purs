@@ -20,15 +20,20 @@ module App.Utils.Coder
 
 import Prelude
 
-import Data.Array (catMaybes, concatMap, index, last, length, mapWithIndex, slice, snoc)
+import Control.Monad.ST as ST
+import Control.Monad.ST.Ref as STRef
+import Data.Array (catMaybes, concat, concatMap, groupBy, index, length, mapWithIndex, slice, snoc)
+import Data.Array.NonEmpty as NEA
+import Data.Array.ST as STA
 import Data.Either (Either(..))
-import Data.Foldable (all, foldM, foldl)
+import Data.Foldable (all, foldl)
 import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Monoid (power)
 import Data.Nullable (Nullable)
 import Data.String (Pattern(..), joinWith, split, toLower)
 import Data.String.CodeUnits as CU
+import Data.Traversable (mapAccumL, traverse)
 
 foreign import utf8EncodeImpl :: String -> Array Int
 foreign import utf8DecodeImpl :: Array Int -> String
@@ -66,8 +71,24 @@ segBytes _ = []
 
 -- character classes ------------------------------------------------------
 
+-- Matches the JS \s class the TS original split whitespace with.
 isWsChar :: Char -> Boolean
-isWsChar c = c == ' ' || c == '\t' || c == '\n' || c == '\r'
+isWsChar c =
+  c == ' '
+    || c == '\t'
+    || c == '\n'
+    || c == '\r'
+    || c == '\x0B'
+    || c == '\x0C'
+    || c == '\x00A0'
+    || c == '\x1680'
+    || (c >= '\x2000' && c <= '\x200A')
+    || c == '\x2028'
+    || c == '\x2029'
+    || c == '\x202F'
+    || c == '\x205F'
+    || c == '\x3000'
+    || c == '\xFEFF'
 
 isSpaceTab :: Char -> Boolean
 isSpaceTab c = c == ' ' || c == '\t'
@@ -172,19 +193,21 @@ parseRadix radix s = fromMaybe 0 (Int.fromStringAs radix s)
 
 -- | UTF-8 encode `text`, giving every byte the char span it came from.
 textToByteSegment :: Int -> String -> Segment
-textToByteSegment offset text = BytesSeg st.bytes st.spans
+textToByteSegment offset text =
+  BytesSeg (concatMap _.encoded chunks) (concatMap spanBytes chunks)
   where
-  st = foldl step { bytes: [], spans: [], pos: 0 } (codePointStringsImpl text)
-  step acc ch =
+  chunks = (mapAccumL step 0 (codePointStringsImpl text)).value
+  step pos ch =
     let
-      encoded = utf8EncodeImpl ch
       chLen = CU.length ch
-      span = { start: offset + acc.pos, end: offset + acc.pos + chLen }
     in
-      { bytes: acc.bytes <> encoded
-      , spans: acc.spans <> map (const span) encoded
-      , pos: acc.pos + chLen
+      { accum: pos + chLen
+      , value:
+          { encoded: utf8EncodeImpl ch
+          , span: { start: offset + pos, end: offset + pos + chLen }
+          }
       }
+  spanBytes chunk = map (const chunk.span) chunk.encoded
 
 -- | Scanner items for coded-format input: tokens and preserved whitespace.
 data Item = NewlineItem Int | SlashItem Int | TokenItem String Int
@@ -207,20 +230,9 @@ codedItems preserve input = st.items
     | run.text == "/" = if preserve then snoc items (SlashItem (lineStart + run.start)) else items
     | otherwise = snoc items (TokenItem run.text (lineStart + run.start))
 
-type DecodeState = { bytes :: Array Int, spans :: Array Span, segs :: Array Segment }
-
-flushBytes :: DecodeState -> DecodeState
-flushBytes st =
-  if length st.bytes > 0 then
-    { bytes: [], spans: [], segs: snoc st.segs (BytesSeg st.bytes st.spans) }
-  else st
-
-pushWs :: DecodeState -> String -> Int -> DecodeState
-pushWs st text start =
-  let
-    flushed = flushBytes st
-  in
-    flushed { segs = snoc flushed.segs (WsSeg text start (start + CU.length text)) }
+-- | A parsed scanner item: preserved whitespace, or one token's bytes all
+-- | sharing the token's input span.
+data Chunk = WsChunk String Int | ByteChunk (Array Int) Span
 
 -- | Decode source text in `format` into segments carrying input spans.
 decodeInput :: CodeFormat -> Boolean -> String -> Either String (Array Segment)
@@ -232,50 +244,59 @@ decodeInput Letters preserve input
         | run.isWs = WsSeg run.text run.start (run.start + CU.length run.text)
         | otherwise = textToByteSegment run.start run.text
 decodeInput format preserve input =
-  map (\st -> (flushBytes st).segs)
-    (foldM step { bytes: [], spans: [], segs: [] } (codedItems preserve input))
+  map chunksToSegs (traverse parseItem (codedItems preserve input))
   where
-  step st (NewlineItem start) = Right (pushWs st "\n" start)
-  step st (SlashItem start) = Right (pushWs st " " start)
-  step st (TokenItem token start) = case tokenToBytes format token of
-    Left err -> Left err
-    Right bs ->
+  parseItem (NewlineItem start) = Right (WsChunk "\n" start)
+  parseItem (SlashItem start) = Right (WsChunk " " start)
+  parseItem (TokenItem token start) =
+    map (\bs -> ByteChunk bs { start, end: start + CU.length token }) (tokenToBytes format token)
+
+  chunksToSegs chunks = concatMap groupSegs (groupBy bothBytes chunks)
+
+  bothBytes a b = isByteChunk a && isByteChunk b
+
+  isByteChunk (ByteChunk _ _) = true
+  isByteChunk _ = false
+
+  groupSegs grp = case NEA.head grp of
+    WsChunk text start -> [ WsSeg text start (start + CU.length text) ]
+    ByteChunk _ _ ->
       let
-        span = { start, end: start + CU.length token }
+        parts = NEA.toArray grp
       in
-        Right (st { bytes = st.bytes <> bs, spans = st.spans <> map (const span) bs })
+        [ BytesSeg (concatMap chunkBytes parts) (concatMap chunkSpans parts) ]
+
+  chunkBytes (ByteChunk bs _) = bs
+  chunkBytes _ = []
+
+  chunkSpans (ByteChunk bs span) = map (const span) bs
+  chunkSpans _ = []
 
 -- encoding ---------------------------------------------------------------
 
 -- | Split a byte run into UTF-8 characters, merging each char's byte spans.
 bytesToCharTokens :: Array Int -> Array Span -> Array OutToken
-bytesToCharTokens bytes spans = go 0 []
+bytesToCharTokens bytes spans = STA.run do
+  out <- STA.new
+  cursor <- STRef.new 0
+  ST.while (map (_ < total) (STRef.read cursor)) do
+    i <- STRef.read cursor
+    let
+      b = fromMaybe 0 (index bytes i)
+      charLen =
+        if b < 0x80 then 1
+        else if b >= 0xF0 then 4
+        else if b >= 0xE0 then 3
+        else if b >= 0xC0 then 2
+        else 1
+      text = utf8DecodeImpl (slice i (i + charLen) bytes)
+      first = fromMaybe { start: 0, end: 0 } (index spans i)
+      lastSpan = fromMaybe first (index spans (min (i + charLen) (length spans) - 1))
+    _ <- STA.push { text, kind: "code", srcStart: first.start, srcEnd: lastSpan.end } out
+    STRef.write (i + charLen) cursor
+  pure out
   where
   total = length bytes
-  go i acc
-    | i >= total = acc
-    | otherwise =
-        let
-          b = fromMaybe 0 (index bytes i)
-          charLen =
-            if b < 0x80 then 1
-            else if b >= 0xF0 then 4
-            else if b >= 0xE0 then 3
-            else if b >= 0xC0 then 2
-            else 1
-          text = utf8DecodeImpl (slice i (i + charLen) bytes)
-          first = fromMaybe { start: 0, end: 0 } (index spans i)
-          lastSpan = fromMaybe first (index spans (min (i + charLen) (length spans) - 1))
-        in
-          go (i + charLen)
-            (snoc acc { text, kind: "code", srcStart: first.start, srcEnd: lastSpan.end })
-
-sepTokens :: Array OutToken -> Array OutToken
-sepTokens tokens = case last tokens of
-  Nothing -> tokens
-  Just prev ->
-    if endsWithWs prev.text then tokens
-    else snoc tokens { text: " ", kind: "plain", srcStart: -1, srcEnd: -1 }
 
 formatByte :: CodeFormat -> Int -> String
 formatByte Binary b = padZeros 8 (Int.toStringAs Int.binary b)
@@ -284,34 +305,47 @@ formatByte _ b = show b
 
 -- | Encode segments into `format`, keeping per-token input spans.
 encodeSegs :: CodeFormat -> Boolean -> Array Segment -> Array OutToken
-encodeSegs format preserve segs = pruneStrandedSep (foldl seg [] segs)
+encodeSegs Letters preserve segs = pruneStrandedSep (concatMap seg segs)
   where
-  seg tokens (WsSeg text start end)
-    | not preserve = tokens
-    | format == Letters = snoc tokens { text, kind: "plain", srcStart: start, srcEnd: end }
-    | otherwise = foldl (wsChar start end) tokens (CU.toCharArray text)
-  seg tokens (BytesSeg bytes spans)
-    | format == Letters = tokens <> bytesToCharTokens bytes spans
-    | otherwise = foldl (byteToken spans) tokens (mapWithIndex (\i b -> { i, b }) bytes)
+  seg (WsSeg text start end)
+    | preserve = [ { text, kind: "plain", srcStart: start, srcEnd: end } ]
+    | otherwise = []
+  seg (BytesSeg bytes spans) = bytesToCharTokens bytes spans
+encodeSegs format preserve segs = pruneStrandedSep (concat (mapWithIndex withSep emissions))
+  where
+  emissions = concatMap seg segs
 
-  wsChar start end tokens ch
-    | ch == '\n' = snoc tokens { text: "\n", kind: "plain", srcStart: start, srcEnd: end }
-    | otherwise = snoc (sepTokens tokens) { text: "/", kind: "code", srcStart: start, srcEnd: end }
+  seg (WsSeg text start end)
+    | preserve = map (wsToken start end) (CU.toCharArray text)
+    | otherwise = []
+  seg (BytesSeg bytes spans) = mapWithIndex (byteToken spans) bytes
 
-  byteToken spans tokens { i, b } =
+  wsToken start end ch
+    | ch == '\n' = { text: "\n", kind: "plain", srcStart: start, srcEnd: end }
+    | otherwise = { text: "/", kind: "code", srcStart: start, srcEnd: end }
+
+  byteToken spans i b =
     let
       span = fromMaybe { start: -1, end: -1 } (index spans i)
     in
-      snoc (sepTokens tokens)
-        { text: formatByte format b, kind: "code", srcStart: span.start, srcEnd: span.end }
+      { text: formatByte format b, kind: "code", srcStart: span.start, srcEnd: span.end }
 
-  -- A separator stranded before a newline would render as trailing space.
-  pruneStrandedSep tokens = catMaybes (mapWithIndex keep tokens)
-    where
-    keep i t =
-      if t.text == " " && t.kind == "plain" && map _.text (index tokens (i + 1)) == Just "\n" then
-        Nothing
-      else Just t
+  -- The token before emission `i` is always emission `i - 1`, so the
+  -- separator check reads it instead of the accumulated output.
+  withSep i tok = case index emissions (i - 1) of
+    Just prev
+      | tok.text /= "\n" && not (endsWithWs prev.text) ->
+          [ { text: " ", kind: "plain", srcStart: -1, srcEnd: -1 }, tok ]
+    _ -> [ tok ]
+
+-- | A separator stranded before a newline would render as trailing space.
+pruneStrandedSep :: Array OutToken -> Array OutToken
+pruneStrandedSep tokens = catMaybes (mapWithIndex keep tokens)
+  where
+  keep i t =
+    if t.text == " " && t.kind == "plain" && map _.text (index tokens (i + 1)) == Just "\n" then
+      Nothing
+    else Just t
 
 -- entry point ------------------------------------------------------------
 

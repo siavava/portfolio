@@ -13,6 +13,11 @@ import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Test.Harness (Tally, expect)
 
+-- "a\x{00A0}b" — the \x escape munches hex digits greedily, so the trailing
+-- 'b' must stay outside the literal.
+nbspInput :: String
+nbspInput = "a\x00a0" <> "b"
+
 type TranscodeCase =
   { label :: String
   , input :: String
@@ -323,6 +328,24 @@ transcodeCases =
     , ok: true
     , error: ""
     , output: "68 65 6c 6c 6f"
+    }
+  , { label: "letters→binary \"a\\x00a0b\" (ws)"
+    , input: nbspInput
+    , from: "letters"
+    , to: "binary"
+    , preserveWhitespace: true
+    , ok: true
+    , error: ""
+    , output: "01100001 / 01100010"
+    }
+  , { label: "letters→binary \"a\\x00a0b\""
+    , input: nbspInput
+    , from: "letters"
+    , to: "binary"
+    , preserveWhitespace: false
+    , ok: true
+    , error: ""
+    , output: "01100001 11000010 10100000 01100010"
     }
   ]
 
