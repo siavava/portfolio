@@ -65,7 +65,6 @@ import Vue
   , computed
   , onMounted
   , read
-  , read
   , ref
   , shallowRef
   , watchGetter

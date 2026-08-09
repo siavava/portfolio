@@ -41,7 +41,6 @@ import Vue
   , onMounted
   , onUnmounted
   , read
-  , read
   , ref
   , watchGetter
   , watchRef
