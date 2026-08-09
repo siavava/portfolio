@@ -1,3 +1,7 @@
+/**
+ * Typed FFI implementations for `App.Utils.Katex`, and the single source of
+ * the course-wide macro map.
+ */
 import katex from "katex"
 import latex from "~~/configs/latex"
 
@@ -13,15 +17,7 @@ import latex from "~~/configs/latex"
  */
 export const KATEX_MACROS: Record<string, string> = latex()
 
-/**
- * ## renderTex
- *
- * Renders a TeX string to HTML+MathML using
- * `KATEX_MACROS`. Errors never throw — the
- * raw source is returned on failure. Set
- * `displayMode` for centered block math.
- */
-export function renderTex(src: string, displayMode = false): string {
+export const renderTexImpl = (src: string, displayMode: boolean): string => {
   try {
     return katex.renderToString(src, {
       macros: KATEX_MACROS,

@@ -16,7 +16,7 @@
  * other byte, `/` tokens are skipped, and whitespace only separates groups
  * when decoding.
  */
-import * as Coder from "#purs/App.Utils.Coder"
+import { transcodeJs } from "#purs/App.Utils.Coder"
 
 export type CodeFormat = "letters" | "binary" | "decimal" | "hex"
 
@@ -46,7 +46,7 @@ export function transcode(
   to: CodeFormat,
   options: { preserveWhitespace?: boolean } = {},
 ): TranscodeResult {
-  const result = Coder.transcodeJs({
+  const result = transcodeJs({
     input,
     from,
     to,
@@ -58,7 +58,7 @@ export function transcode(
 }
 
 /** base64url-encode arbitrary text for share links. */
-export const encodeShareText = (text: string): string => Coder.encodeShareText(text)
+export { encodeShareText } from "#purs/App.Utils.Coder"
 
 /** Decode a share-link payload; null if malformed. */
-export const decodeShareText = (encoded: string): string | null => Coder.decodeShareText(encoded)
+export { decodeShareText } from "#purs/App.Utils.Coder"

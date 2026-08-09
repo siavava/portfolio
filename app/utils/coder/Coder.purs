@@ -124,7 +124,10 @@ splitRunsBy p s = finish (foldl step { runs: [], current: Nothing, pos: 0 } (CU.
           | cur.isWs == ws ->
               st { current = Just (cur { text = cur.text <> chStr }), pos = st.pos + 1 }
           | otherwise ->
-              { runs: snoc st.runs cur, current: Just { isWs: ws, text: chStr, start: st.pos }, pos: st.pos + 1 }
+              { runs: snoc st.runs cur
+              , current: Just { isWs: ws, text: chStr, start: st.pos }
+              , pos: st.pos + 1
+              }
         Nothing ->
           st { current = Just { isWs: ws, text: chStr, start: st.pos }, pos = st.pos + 1 }
   finish st = case st.current of
@@ -178,7 +181,10 @@ textToByteSegment offset text = BytesSeg st.bytes st.spans
       chLen = CU.length ch
       span = { start: offset + acc.pos, end: offset + acc.pos + chLen }
     in
-      { bytes: acc.bytes <> encoded, spans: acc.spans <> map (const span) encoded, pos: acc.pos + chLen }
+      { bytes: acc.bytes <> encoded
+      , spans: acc.spans <> map (const span) encoded
+      , pos: acc.pos + chLen
+      }
 
 -- | Scanner items for coded-format input: tokens and preserved whitespace.
 data Item = NewlineItem Int | SlashItem Int | TokenItem String Int
@@ -205,7 +211,8 @@ type DecodeState = { bytes :: Array Int, spans :: Array Span, segs :: Array Segm
 
 flushBytes :: DecodeState -> DecodeState
 flushBytes st =
-  if length st.bytes > 0 then { bytes: [], spans: [], segs: snoc st.segs (BytesSeg st.bytes st.spans) }
+  if length st.bytes > 0 then
+    { bytes: [], spans: [], segs: snoc st.segs (BytesSeg st.bytes st.spans) }
   else st
 
 pushWs :: DecodeState -> String -> Int -> DecodeState
@@ -250,12 +257,18 @@ bytesToCharTokens bytes spans = go 0 []
     | otherwise =
         let
           b = fromMaybe 0 (index bytes i)
-          charLen = if b < 0x80 then 1 else if b >= 0xF0 then 4 else if b >= 0xE0 then 3 else if b >= 0xC0 then 2 else 1
+          charLen =
+            if b < 0x80 then 1
+            else if b >= 0xF0 then 4
+            else if b >= 0xE0 then 3
+            else if b >= 0xC0 then 2
+            else 1
           text = utf8DecodeImpl (slice i (i + charLen) bytes)
           first = fromMaybe { start: 0, end: 0 } (index spans i)
           lastSpan = fromMaybe first (index spans (min (i + charLen) (length spans) - 1))
         in
-          go (i + charLen) (snoc acc { text, kind: "code", srcStart: first.start, srcEnd: lastSpan.end })
+          go (i + charLen)
+            (snoc acc { text, kind: "code", srcStart: first.start, srcEnd: lastSpan.end })
 
 sepTokens :: Array OutToken -> Array OutToken
 sepTokens tokens = case last tokens of
@@ -289,13 +302,15 @@ encodeSegs format preserve segs = pruneStrandedSep (foldl seg [] segs)
     let
       span = fromMaybe { start: -1, end: -1 } (index spans i)
     in
-      snoc (sepTokens tokens) { text: formatByte format b, kind: "code", srcStart: span.start, srcEnd: span.end }
+      snoc (sepTokens tokens)
+        { text: formatByte format b, kind: "code", srcStart: span.start, srcEnd: span.end }
 
   -- A separator stranded before a newline would render as trailing space.
   pruneStrandedSep tokens = catMaybes (mapWithIndex keep tokens)
     where
     keep i t =
-      if t.text == " " && t.kind == "plain" && map _.text (index tokens (i + 1)) == Just "\n" then Nothing
+      if t.text == " " && t.kind == "plain" && map _.text (index tokens (i + 1)) == Just "\n" then
+        Nothing
       else Just t
 
 -- entry point ------------------------------------------------------------
@@ -310,7 +325,8 @@ type TranscodeJs =
 
 -- | JS-friendly entry point: plain-string formats in a flat record, so the
 -- | TypeScript shim needs no knowledge of curried or ADT conventions.
-transcodeJs :: { input :: String, from :: String, to :: String, preserveWhitespace :: Boolean } -> TranscodeJs
+transcodeJs
+  :: { input :: String, from :: String, to :: String, preserveWhitespace :: Boolean } -> TranscodeJs
 transcodeJs args =
   if args.input == "" then { ok: true, error: "", output: "", bytes: [], tokens: [] }
   else case decodeInput (parseFormat args.from) args.preserveWhitespace args.input of
