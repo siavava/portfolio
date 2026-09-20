@@ -11,6 +11,24 @@
     --#{$name}: #{$value}
   --wipe-tint: rgba(255, 255, 255, 0.24)
 
+// Söhne (Klim Type Foundry) — the face the timeline is set in. Commercial,
+// like Proxima Soft and Arizona Text: drop the licensed woff2 files into
+// public/fonts/ before deploying publicly. Until they are there the stack
+// falls through to the system sans and the timeline still sets correctly.
+@font-face
+  font-family: "Soehne"
+  font-style: normal
+  font-weight: 400
+  font-display: swap
+  src: url("/fonts/soehne-buch.woff2") format("woff2")
+
+@font-face
+  font-family: "Soehne"
+  font-style: normal
+  font-weight: 500
+  font-display: swap
+  src: url("/fonts/soehne-kraftig.woff2") format("woff2")
+
 *, *::before, *::after
   box-sizing: border-box
   margin: 0

@@ -44,6 +44,7 @@ export default defineNuxtConfig({
     "@vercel/analytics",
     "@vercel/speed-insights",
     "nuxt-og-image",
+    "motion-v/nuxt",
   ],
 
   site: {

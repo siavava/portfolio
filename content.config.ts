@@ -19,6 +19,14 @@ export default defineContentConfig({
         interest: z.string().optional(),
       }),
     }),
+    timeline: defineCollection({
+      type: "page",
+      source: { include: "timeline/**" },
+      schema: z.object({
+        title: z.string(),
+        year: z.number(),
+      }),
+    }),
     reviews: defineCollection({
       type: "page",
       source: { include: "reviews/**" },
