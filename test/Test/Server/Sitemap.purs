@@ -46,7 +46,7 @@ suite t = do
   let xml = sitemapXml args
   expect t "xml declaration prefix" xmlDecl (take (length xmlDecl) xml)
   expectContains t "xsl stylesheet include"
-    "<?xml-stylesheet type=\"text/xsl\" href=\"https://amittai.studio/sitemap.xsl\"?>"
+    "<?xml-stylesheet type=\"text/xsl\" href=\"/sitemap.xsl\"?>"
     xml
   expectContains t "urlset open tag"
     "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\" xmlns:video=\"http://www.google.com/schemas/sitemap-video/1.1\">"

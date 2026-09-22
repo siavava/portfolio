@@ -94,12 +94,13 @@ sortEntries = sortBy \a b -> compare b.priority a.priority <> compare b.year a.y
 
 -- | The exact prelude `SitemapStream` pushes before the first entry: XML
 -- | declaration, XSL stylesheet include, and the `<urlset>` open tag with
--- | the default namespaces.
+-- | the default namespaces. The stylesheet href is root-relative: browsers
+-- | refuse a cross-origin XSL.
 xmlHeader :: String
 xmlHeader =
   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     <> "<?xml-stylesheet type=\"text/xsl\" href=\""
-    <> escapeXmlAttr (siteDomain <> "/sitemap.xsl")
+    <> escapeXmlAttr "/sitemap.xsl"
     <> "\"?>"
     <> "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\""
     <> " xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\""
