@@ -215,6 +215,18 @@ export default defineNuxtConfig({
     "/**": { prerender: true },
   },
 
+  // Prerendering is a build concern. In dev the rule has one effect: Nuxt
+  // marks every route prerendered, so a client-side navigation loads the
+  // page's /_payload.json instead of querying, and the dev server answers
+  // that from a payload cache (.nuxt/cache/nuxt/payload) that never
+  // invalidates on content changes — an edit to who.md showed up on a fresh
+  // load and vanished on the next in-app navigation.
+  $development: {
+    routeRules: {
+      "/**": { prerender: false },
+    },
+  },
+
   typescript: {
     strict: true,
 
