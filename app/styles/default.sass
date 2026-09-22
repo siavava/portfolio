@@ -78,6 +78,30 @@ code, pre, kbd, samp
   &:focus
     outline: none !important
 
+// The timeline's page transitions (App.Composables.TimelineTransition):
+// the page it grows out of dims behind the panel, and comes back as the
+// panel docks. The panel's own motion is motion-v; only the page underneath
+// is styled here.
+.timeline-open-leave-active
+  transition: opacity 0.34s ease, filter 0.34s ease
+  pointer-events: none
+
+.timeline-open-leave-to
+  opacity: 0.28
+  filter: blur(14px)
+
+.timeline-dock-enter-active
+  transition: opacity 0.34s ease, filter 0.34s ease
+
+.timeline-dock-enter-from
+  opacity: 0.28
+  filter: blur(14px)
+
+@media (prefers-reduced-motion: reduce)
+  .timeline-open-leave-active,
+  .timeline-dock-enter-active
+    transition-duration: 0.01s
+
 // Index<->projects wipe; gating and direction live in the wipe.global middleware.
 ::view-transition-old(root),
 ::view-transition-new(root)

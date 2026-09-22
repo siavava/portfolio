@@ -1,112 +1,89 @@
 <template lang="pug">
-Teleport(v-if="mounted", to="body")
-  AnimatePresence(:on-exit-complete="() => emit('landed')")
-    Motion.timeline(
-      v-if="open",
-      key="timeline",
-      as="div",
-      role="dialog",
-      aria-modal="true",
-      aria-label="Timeline",
-    )
-      Motion.timeline__scrim(
-        as="div",
-        :initial="{ opacity: 0 }",
-        :animate="{ opacity: 1 }",
-        :exit="{ opacity: 0 }",
-        :transition="{ duration: 0.26, ease: 'easeOut' }",
-        @click="hide",
-      )
-      Motion.timeline__panel(
-        as="section",
-        :class="{ 'content-visible': contentVisible }",
-        :style="origin ? { transformOrigin: '0 0' } : undefined",
-        :initial="panelFrom",
-        :animate="panelTo",
-        :exit="panelExit",
-        :transition="panelMove",
-      )
-        //- Exit lives on Motion, not the `content-visible` class: Vue stops
-        //- patching the exiting subtree, so a class change never lands there.
-        Motion.timeline__content(
-          as="div",
-          :exit="{ opacity: 0, transition: { duration: 0.07, ease: 'easeOut' } }",
-        )
-          header.timeline__head
-            span.timeline__title {{ profile.name }}
-            button.timeline__close(
-              ref="close-el",
-              type="button",
-              aria-label="close the timeline",
-              @click="hide",
-            ) close
-              span.timeline__close-key esc
+main.timeline(:class="{ 'font-site': siteFace }", aria-label="Timeline")
+  Motion.timeline__panel(
+    as="section",
+    :class="{ 'content-visible': contentVisible }",
+    :style="store.origin ? { transformOrigin: '0 0' } : undefined",
+    :initial="panelFrom",
+    :animate="panelTo",
+    :transition="panelMove",
+  )
+    .timeline__content
+      header.timeline__head
+        span.timeline__title {{ profile.name }}
+        button.timeline__close(
+          ref="close-el",
+          type="button",
+          aria-label="close the timeline",
+          @click="hide",
+        ) close
+          span.timeline__close-key esc
 
-          section.timeline__rail.is-loading(ref="rail-el", aria-label="Years")
-            .timeline__viewport
-              .timeline__track(data-timeline-track)
-                .timeline__labels(data-timeline-labels)
-                  .timeline__labels-inner(aria-hidden="true")
-                    p.timeline__caption years
-                .timeline__markers
-                  .timeline__rule(aria-hidden="true")
-                    .timeline__rule-line(data-timeline-rail)
-                  .timeline__row
-                    .timeline__marker(
-                      v-for="row in rows",
-                      :key="row.year",
-                      data-timeline-marker,
-                      :style="{ width: `${row.width}px` }",
-                    )
-                      .timeline__marker-inner
-                        span.timeline__tick(aria-hidden="true")
-                        p.timeline__year {{ row.year }}
-                        .timeline__body
-                          ContentRenderer(v-if="row.doc", :value="row.doc")
-
-          .timeline__column.is-loading(ref="column-el")
-            .timeline__column-head(data-timeline-labels, aria-hidden="true")
-              p.timeline__caption years
-            .timeline__column-body
-              .timeline__rule-v(aria-hidden="true")
-                .timeline__rule-line-v(data-timeline-rail)
-              ol.timeline__entries
-                li.timeline__entry(
+      section.timeline__rail.is-loading(ref="rail-el", aria-label="Years")
+        .timeline__viewport
+          .timeline__track(data-timeline-track)
+            .timeline__labels(data-timeline-labels)
+              .timeline__labels-inner(aria-hidden="true")
+                p.timeline__caption years
+            .timeline__markers
+              .timeline__rule(aria-hidden="true")
+                .timeline__rule-line(data-timeline-rail)
+              .timeline__row
+                .timeline__marker(
                   v-for="row in rows",
                   :key="row.year",
-                  data-timeline-entry,
-                  :class="{ filled: row.filled }",
-                  :aria-label="String(row.year)",
+                  data-timeline-marker,
+                  :style="{ width: `${row.width}px` }",
                 )
-                  div
-                    .timeline__entry-head
-                      span.timeline__tick-h(aria-hidden="true")
-                      p.timeline__year {{ row.year }}
-                    .timeline__entry-body(v-if="row.doc")
-                      ContentRenderer(:value="row.doc")
+                  .timeline__marker-inner
+                    span.timeline__tick(aria-hidden="true")
+                    p.timeline__year {{ row.year }}
+                    .timeline__body
+                      ContentRenderer(v-if="row.doc", :value="row.doc")
 
-          footer.timeline__foot
-            .timeline__foot-left
-              button.timeline__glyph(
-                type="button",
-                :aria-label="isDark ? 'lights on — switch to light mode' : 'lights off — switch to dark mode'",
-                @click="toggleColor",
-              )
-                Icon(:name="isDark ? 'lucide:sun' : 'lucide:moon'")
-              span.timeline__foot-rule(aria-hidden="true")
-              .timeline__foot-socials
-                a.timeline__glyph(
-                  v-for="social in profile.socials",
-                  :key="social.label",
-                  :href="social.url",
-                  :aria-label="social.label",
-                  target="_blank",
-                  rel="noopener noreferrer",
-                )
-                  Icon(:name="social.icon")
-            a.timeline__foot-mail(:href="`mailto:${profile.email}`")
-              span.timeline__foot-mail-full {{ profile.email }}
-              span.timeline__foot-mail-short email
+      .timeline__column.is-loading(ref="column-el")
+        .timeline__column-head(data-timeline-labels, aria-hidden="true")
+          p.timeline__caption years
+        .timeline__column-body
+          .timeline__rule-v(aria-hidden="true")
+            .timeline__rule-line-v(data-timeline-rail)
+          ol.timeline__entries
+            li.timeline__entry(
+              v-for="row in rows",
+              :key="row.year",
+              data-timeline-entry,
+              :class="{ filled: row.filled }",
+              :aria-label="String(row.year)",
+            )
+              div
+                .timeline__entry-head
+                  span.timeline__tick-h(aria-hidden="true")
+                  p.timeline__year {{ row.year }}
+                .timeline__entry-body(v-if="row.doc")
+                  ContentRenderer(:value="row.doc")
+
+      footer.timeline__foot
+        .timeline__foot-left
+          button.timeline__glyph(
+            type="button",
+            :aria-label="isDark ? 'lights on — switch to light mode' : 'lights off — switch to dark mode'",
+            @click="toggleColor",
+          )
+            Icon(:name="isDark ? 'lucide:sun' : 'lucide:moon'")
+          span.timeline__foot-rule(aria-hidden="true")
+          .timeline__foot-socials
+            a.timeline__glyph(
+              v-for="social in profile.socials",
+              :key="social.label",
+              :href="social.url",
+              :aria-label="social.label",
+              target="_blank",
+              rel="noopener noreferrer",
+            )
+              Icon(:name="social.icon")
+        a.timeline__foot-mail(:href="`mailto:${profile.email}`")
+          span.timeline__foot-mail-full {{ profile.email }}
+          span.timeline__foot-mail-short email
 </template>
 
 <script lang="ts" setup>
@@ -116,15 +93,28 @@ defineProps<{
   profile: ProfileData
 }>()
 
-/** Fired when the close-out finishes and the slab has docked into the bar. */
-const emit = defineEmits<{
-  landed: []
-}>()
+const route = useRoute()
+const router = useRouter()
+const store = useTimelineStore()
 
-// Not awaited: an async setup resolves `defineExpose` too late for the name
-// bar's template ref.
 const { data: docs } = useAsyncData("timeline", () =>
   queryCollection("timeline").order("year", "ASC").all())
+
+const landOn = computed(() => {
+  const raw = route.query.year
+  const year = Number(Array.isArray(raw) ? raw[0] : raw)
+  return Number.isInteger(year) ? year : null
+})
+
+// `?font=2` sets the panel in the site's own face, for comparison.
+const siteFace = computed(() => route.query.font === "2")
+
+// Closing is leaving the route: back to whatever opened it when history
+// has that, otherwise home.
+const hide = () => {
+  if (typeof window.history.state?.back === "string") router.back()
+  else router.push("/")
+}
 
 const { isDark, toggle: toggleColor } = useColorToggle()
 
@@ -132,25 +122,18 @@ const railEl = useTemplateRef<HTMLElement>("rail-el")
 const columnEl = useTemplateRef<HTMLElement>("column-el")
 const closeEl = useTemplateRef<HTMLButtonElement>("close-el")
 
-const { open, mounted, columns, show: reveal, hide } = useTimeline({
+const { columns } = useTimeline({
   years: () => (docs.value ?? []).map(doc => doc.year),
+  landOn: () => landOn.value,
+  close: hide,
   rail: railEl,
   column: columnEl,
 })
 
-const origin = ref<{ left: number, top: number, width: number, height: number } | null>(null)
-
-function show(from?: DOMRect) {
-  origin.value = from
-    ? { left: from.left, top: from.top, width: from.width, height: from.height }
-    : null
-  reveal()
-}
-
 const reduceMotion = useReducedMotion()
 
 const panelFrom = computed(() => {
-  const from = origin.value
+  const from = store.origin
   if (!from || reduceMotion.value) return { opacity: 0, y: 12, scale: 0.994 }
   const inset = window.matchMedia("(max-width: 900px)").matches ? 0 : 12
   return {
@@ -163,42 +146,21 @@ const panelFrom = computed(() => {
 })
 
 const panelTo = computed(() =>
-  origin.value && !reduceMotion.value
+  store.origin && !reduceMotion.value
     ? { opacity: 1, x: 0, y: 0, scaleX: 1, scaleY: 1 }
     : { opacity: 1, y: 0, scale: 1 })
 
 const panelMove = computed(() =>
-  origin.value && !reduceMotion.value
+  store.origin && !reduceMotion.value
     ? { type: "spring", stiffness: 290, damping: 22, mass: 0.75 }
     : { duration: 0.48, ease: [0.22, 1, 0.36, 1] })
 
-// The slab docks clean — any overshoot at the slot clips into the page
-// text or flashes a sliver. The bounce is the bar absorbing the landing:
-// see the `landed` emit. The delay holds the slab until the content fades.
-const EXIT_SETTLE = { delay: 0.09, type: "spring", stiffness: 380, damping: 30, mass: 0.7 }
-
-const panelExit = computed(() => {
-  const from = origin.value
-  if (!from || reduceMotion.value)
-    return { opacity: 0, y: 8, transition: { duration: 0.24, ease: "easeIn" } }
-  const inset = window.matchMedia("(max-width: 900px)").matches ? 0 : 12
-  return {
-    x: from.left - inset,
-    y: from.top - inset,
-    scaleX: from.width / (window.innerWidth - inset * 2),
-    scaleY: from.height / (window.innerHeight - inset * 2),
-    transition: EXIT_SETTLE,
-  }
-})
-
-// Text is visibly squashed mid-morph, so it waits for the slab to land.
-const contentVisible = ref(false)
-watch(open, (showing) => {
-  if (!showing) {
-    contentVisible.value = false
-    return
-  }
-  window.setTimeout(() => { contentVisible.value = true }, origin.value && !reduceMotion.value ? 260 : 0)
+// Text is visibly squashed mid-morph, so it waits for the slab to land;
+// with no bar to grow from there is no morph to wait out.
+const contentVisible = ref(!store.origin)
+onMounted(() => {
+  if (contentVisible.value) return
+  window.setTimeout(() => { contentVisible.value = true }, reduceMotion.value ? 0 : 260)
 })
 
 const rows = computed(() => {
@@ -206,14 +168,10 @@ const rows = computed(() => {
   return columns.value.map(column => ({ ...column, doc: byYear.get(column.year) ?? null }))
 })
 
-// Without this, tab walks the page behind the scrim.
-watch(open, async (showing) => {
-  if (!showing) return
+onMounted(async () => {
   await nextTick()
   closeEl.value?.focus()
 })
-
-defineExpose({ show, hide, open })
 </script>
 
 <style lang="sass" scoped>
@@ -240,6 +198,10 @@ defineExpose({ show, hide, open })
   @media (max-width: 900px)
     --timeline-inset: 20px
 
+  &.font-site
+    font-family: typography.font("sans-serif")
+    letter-spacing: 0
+
 .dark-mode .timeline
   --tl-surface: #f4f4f2
   --tl-ink: #111110
@@ -249,12 +211,6 @@ defineExpose({ show, hide, open })
   --tl-tick: rgba(0, 0, 0, 0.26)
   --tl-tick-lit: rgba(0, 0, 0, 0.63)
 
-.timeline__scrim
-  position: absolute
-  inset: 0
-  background: color-mix(in srgb, var(--background) 72%, transparent)
-  backdrop-filter: blur(14px)
-  -webkit-backdrop-filter: blur(14px)
 
 .timeline__panel
   position: absolute
@@ -533,7 +489,9 @@ defineExpose({ show, hide, open })
   min-height: 0
   overflow-y: auto
   overscroll-behavior: contain
-  padding: 4px var(--timeline-inset) 48px
+  // Half a viewport of room below, so the sweep can carry the last year up
+  // to the middle of the screen.
+  padding: 4px var(--timeline-inset) 50dvh
   scrollbar-width: none
 
   &::-webkit-scrollbar

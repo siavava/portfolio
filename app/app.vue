@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   NuxtLayout
-    NuxtPage
+    NuxtPage(:transition="transition")
   CueThreads
 </template>
 
@@ -36,6 +36,17 @@ useSeoMeta({
 })
 
 const { data: profile } = await useProfile()
+
+// The timeline's page transitions: the panel grows out of the name bar over
+// the page it came from and docks back into it. The store carries the bar's
+// rect between the bar, the panel, and these hooks.
+const timeline = useTimelineStore()
+const { transition } = useTimelineTransition({
+  origin: () => timeline.origin,
+  originPath: () => timeline.originPath,
+  land: () => timeline.land(),
+  clearOrigin: () => timeline.clearOrigin(),
+})
 
 const { data: projectCount } = await useAsyncData("og-project-count", () =>
   queryCollection("projects").count())

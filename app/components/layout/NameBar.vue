@@ -15,10 +15,10 @@ Motion.name-bar.no-select(
 )
   span.name-bar__name {{ profile.name }}
   span.name-bar__location
-    span.name-bar__location-text {{ profile.location }}
+    //- A target's preview borrows this slot for its year.
+    Transition(name="name-bar-swap", mode="out-in")
+      span.name-bar__location-text(:key="answer ?? 'place'") {{ answer ?? profile.location }}
     Icon.name-bar__expand(name="ph:arrows-out-simple", aria-hidden="true")
-
-Timeline(ref="timeline-el", :profile, @landed="onLanded")
 </template>
 
 <script lang="ts" setup>
@@ -52,15 +52,19 @@ const onDriftEnd = () => {
   drift.value = { x: 0, y: 0 }
 }
 
+const route = useRoute()
+const router = useRouter()
+const store = useTimelineStore()
+
 // The docking slab's impact: a quick squash-and-release when the timeline
 // lands back in the bar.
 const pulse = ref(false)
 
-const onLanded = () => {
+watch(() => store.landings, () => {
   if (reduceMotion.value) return
   pulse.value = true
   window.setTimeout(() => { pulse.value = false }, 320)
-}
+})
 
 const barPose = computed(() =>
   pulse.value
@@ -73,11 +77,13 @@ const barPose = computed(() =>
     }
     : drift.value)
 
-const timeline = useTemplateRef<{ show: (from?: DOMRect) => void, open: boolean }>("timeline-el")
-const showing = computed(() => timeline.value?.open ?? false)
+const showing = computed(() => route.path === "/timeline")
+const answer = computed(() => store.focusYear)
 
 const openTimeline = (event: MouseEvent) => {
-  timeline.value?.show((event.currentTarget as HTMLElement).getBoundingClientRect())
+  const { left, top, width, height } = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  store.begin({ left, top, width, height }, route.path)
+  router.push("/timeline")
 }
 </script>
 
@@ -156,6 +162,18 @@ const openTimeline = (event: MouseEvent) => {
 .name-bar__location-text
   display: inline-block
   transition: opacity 0.18s ease, transform 0.22s ease
+
+.name-bar-swap-enter-active,
+.name-bar-swap-leave-active
+  transition: opacity 0.14s ease, transform 0.14s ease
+
+.name-bar-swap-enter-from
+  opacity: 0
+  transform: translateY(4px)
+
+.name-bar-swap-leave-to
+  opacity: 0
+  transform: translateY(-4px)
 
 .name-bar__expand
   position: absolute

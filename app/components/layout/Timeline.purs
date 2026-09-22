@@ -25,21 +25,38 @@ module App.Components.Timeline
   , introExponent
   , introProgress
   , markerOpacity
+  , scrollFloor
+  , scrollLimit
   , setup
+  , sweepEnd
+  , targetIndex
   ) where
 
 import Prelude
 
-import Data.Array (elem, init, length, mapWithIndex, range, scanl, singleton, take, (!!), (:))
+import Data.Array
+  ( elem
+  , findIndex
+  , init
+  , last
+  , length
+  , mapWithIndex
+  , range
+  , scanl
+  , singleton
+  , take
+  , (!!)
+  , (:)
+  )
 import Data.Foldable (maximum, minimum, sum, traverse_)
-import Data.Function.Uncurried (Fn1, Fn2, mkFn1, mkFn2)
+import Data.Function.Uncurried (Fn1, Fn2, Fn3, Fn4, mkFn1, mkFn2, mkFn3, mkFn4)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Nullable (Nullable, toMaybe)
 import Data.Number (asin, log, pow, sin)
 import Effect (Effect)
 import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
-import Vue (Computed, Ref, computed, onMounted, onUnmounted, read, ref, write)
+import Vue (Computed, Ref, computed, onMounted, onUnmounted, read)
 
 -- | An `HTMLElement` — opaque here; only the FFI touches it. @ts HTMLElement
 foreign import data DomElement :: Type
@@ -149,14 +166,11 @@ type Column =
   , filled :: Boolean
   -- | Column width on the rail, in px.
   , width :: Number
-  -- | `animation-delay` for this column's fade-in, in ms.
-  , delay :: Number
   }
 
 -- | Every year from the earliest entry to the latest, gaps included — the
 -- | empty stretches are the point, since they show the shape of a life
--- | rather than a list of jobs. Widths and fade delays come along, since
--- | both follow from the same filled/empty split.
+-- | rather than a list of jobs.
 columnsFor :: Array Int -> Array Column
 columnsFor years = case minimum years, maximum years of
   Just first, Just final -> build (range first final)
@@ -165,19 +179,56 @@ columnsFor years = case minimum years, maximum years of
   build span =
     let
       count = length span
-      sized index year =
-        (if elem year years then filledWidth else emptyWidth)
-          + (if index == count - 1 then tailPad else 0.0)
-      widths = mapWithIndex sized span
-      delays = introDelays widths
       column index year =
         { year
         , filled: elem year years
-        , width: fromMaybe emptyWidth (widths !! index)
-        , delay: fromMaybe 0.0 (delays !! index)
+        , width:
+            (if elem year years then filledWidth else emptyWidth)
+              + (if index == count - 1 then tailPad else 0.0)
         }
     in
       mapWithIndex column span
+
+-- | The column a requested year lands on, or -1 for the end of the rail.
+targetIndex :: Array Column -> Nullable Int -> Int
+targetIndex columns wanted = case toMaybe wanted of
+  Just year -> fromMaybe (-1) (findIndex (\column -> column.year == year) columns)
+  Nothing -> -1
+
+-- | How far the track scrolls for the column starting at `offset` to sit
+-- | with its left edge at the viewport's centre, given the gutter (the lead
+-- | inset plus the labels) before the first column.
+centeredAt :: Number -> Number -> Number -> Number
+centeredAt gutter viewport offset = gutter + offset - viewport / 2.0
+
+-- | The rail's scroll limit: far enough that the last year sits centred
+-- | with the empty half of the viewport after it. The sweep overshoots the
+-- | rail's natural end on purpose, so the latest year lands mid-screen
+-- | rather than against the edge.
+scrollLimit :: Array Number -> Number -> Number -> Number
+scrollLimit sizes gutter viewport = case last (offsets sizes) of
+  Just offset -> max 0.0 (centeredAt gutter viewport offset)
+  Nothing -> 0.0
+
+-- | The rail's scroll floor, the mirror of `scrollLimit`: as far back as
+-- | the track can be pushed for the first year to sit centred, the empty
+-- | half of the viewport before it. Negative — the track past its start —
+-- | and never above zero.
+scrollFloor :: Number -> Number -> Number
+scrollFloor gutter viewport = min 0.0 (centeredAt gutter viewport 0.0)
+
+-- | Where the sweep stops: the target column centred — the last year when
+-- | none was asked for — held within the floor and the limit.
+sweepEnd :: Array Number -> Number -> Number -> Int -> Number
+sweepEnd sizes gutter viewport target =
+  let
+    floor = scrollFloor gutter viewport
+    limit = scrollLimit sizes gutter viewport
+    index = if target < 0 then length sizes - 1 else target
+  in
+    case offsets sizes !! index of
+      Just offset -> clamp floor limit (centeredAt gutter viewport offset)
+      Nothing -> limit
 
 type FadeInput =
   { -- | The column's left edge, relative to the rail viewport.
@@ -268,10 +319,20 @@ type RailKernel =
   , opacity :: Fn1 FadeInput Number
   -- | Fling velocity after a frame of the given length.
   , decay :: Fn2 Number Number Number
-  -- | Clamp a scroll offset into [0, limit].
-  , clampTo :: Fn2 Number Number Number
-  -- | True when the sweep should be skipped and the rail opened at rest on
-  -- | the latest year.
+  -- | Clamp a scroll offset into [floor, limit].
+  , clampTo :: Fn3 Number Number Number Number
+  -- | The scroll floor for the gutter before the first column and the
+  -- | viewport extent.
+  , scrollFloor :: Fn2 Number Number Number
+  -- | The scroll limit for the measured extents, the same gutter, and the
+  -- | same viewport extent.
+  , scrollLimit :: Fn3 (Array Number) Number Number Number
+  -- | Where the sweep stops, for the same measurements and the target
+  -- | column.
+  , sweepEnd :: Fn4 (Array Number) Number Number Int Number
+  -- | The column to land on, or -1 for the end of the rail.
+  , target :: Int
+  -- | True when the sweep should be skipped and the rail opened at rest.
   , reduced :: Boolean
   -- | Every constant the rail's feel depends on.
   , tuning :: Tuning
@@ -280,13 +341,17 @@ type RailKernel =
 -- | The pure policy the FFI kernel calls back into — no DOM and no state,
 -- | just the arithmetic deciding where the rail sits and how bright each
 -- | column is.
-kernelFor :: Boolean -> RailKernel
-kernelFor reduced =
+kernelFor :: Boolean -> Int -> RailKernel
+kernelFor reduced target =
   { delays: mkFn1 introDelays
   , progress: mkFn2 introProgress
   , opacity: mkFn1 markerOpacity
   , decay: mkFn2 decayVelocity
-  , clampTo: mkFn2 \limit value -> clamp 0.0 limit value
+  , clampTo: mkFn3 clamp
+  , scrollFloor: mkFn2 scrollFloor
+  , scrollLimit: mkFn3 scrollLimit
+  , sweepEnd: mkFn4 sweepEnd
+  , target
   , reduced
   , tuning
   }
@@ -294,6 +359,10 @@ kernelFor reduced =
 type TimelineArgs =
   { -- | Reads the years that have entries, in any order.
     years :: Effect (Array Int)
+  -- | Reads the year the route asks to land on, if any.
+  , landOn :: Effect (Nullable Int)
+  -- | Leaves the timeline route — what Escape does.
+  , close :: Effect Unit
   -- | Template ref to the wide-viewport rail section.
   , rail :: Ref (Nullable DomElement)
   -- | Template ref to the narrow-viewport scroller.
@@ -301,33 +370,21 @@ type TimelineArgs =
   }
 
 type TimelineBindings =
-  { -- | Whether the overlay is showing.
-    open :: Ref Boolean
-  -- | True once mounted on the client — gates the teleported overlay so SSR
-  -- | markup never contains it.
-  , mounted :: Ref Boolean
-  -- | Every year on the rail, filled and empty alike.
-  , columns :: Computed (Array Column)
-  -- | Opens the overlay and starts the sweep.
-  , show :: Effect Unit
-  -- | Closes the overlay and tears the sweep down.
-  , hide :: Effect Unit
+  { -- | Every year on the rail, filled and empty alike.
+    columns :: Computed (Array Column)
   }
 
--- | Wires the timeline overlay: the year columns, open/close state with
--- | Escape and scroll-lock, and the sweep that runs once the overlay has
--- | painted. Both layouts are started; whichever one this width does not
--- | render hands back a no-op teardown, so a breakpoint crossed while the
--- | overlay is open still has a live kernel waiting on the other side.
+-- | Wires the timeline page: the year columns, scroll-lock and Escape for
+-- | as long as it is mounted, and the sweep that runs once it has painted —
+-- | landing on the requested year when there is one. Both layouts are
+-- | started; whichever one this width does not render hands back a no-op
+-- | teardown, so a breakpoint crossed while the page is up still has a
+-- | live kernel waiting on the other side.
 setup :: TimelineArgs -> Effect TimelineBindings
 setup args = do
-  open <- ref false
-  mounted <- ref false
   columns <- computed (columnsFor <$> args.years)
   running <- Ref.new ([] :: Array (Effect Unit))
   release <- Ref.new ([] :: Array (Effect Unit))
-
-  onMounted (write mounted true)
 
   let
     runAll cell = do
@@ -336,7 +393,9 @@ setup args = do
       traverse_ identity pending
 
     startSweep = runEffectFn1 nextTickImpl do
-      kernel <- kernelFor <$> prefersReducedMotionImpl
+      reduced <- prefersReducedMotionImpl
+      target <- targetIndex <$> read columns <*> args.landOn
+      let kernel = kernelFor reduced target
       wide <- toMaybe <$> read args.rail
       narrow <- toMaybe <$> read args.column
       rail <- case wide of
@@ -347,18 +406,12 @@ setup args = do
         Nothing -> pure []
       Ref.write (rail <> stack) running
 
-    hide = whenM (read open) do
-      write open false
-      runAll running
-      runAll release
-
-    show = unlessM (read open) do
-      write open true
-      unlock <- lockScrollImpl
-      unbind <- runEffectFn1 onEscapeImpl hide
-      Ref.write [ unlock, unbind ] release
-      startSweep
+  onMounted do
+    unlock <- lockScrollImpl
+    unbind <- runEffectFn1 onEscapeImpl args.close
+    Ref.write [ unlock, unbind ] release
+    startSweep
 
   onUnmounted (runAll running *> runAll release)
 
-  pure { open, mounted, columns, show, hide }
+  pure { columns }

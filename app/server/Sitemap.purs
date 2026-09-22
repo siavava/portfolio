@@ -1,7 +1,7 @@
 -- | ## Sitemap
 -- |
 -- | Pure core behind `server/routes/sitemap.xml.ts`: assembles the sitemap
--- | entries (two static routes plus the projects collection, prioritized by
+-- | entries (three static routes plus the projects collection, prioritized by
 -- | kind, sorted by priority then year, both descending) and serializes them
 -- | to the exact XML the `sitemap` package's `SitemapStream` produced —
 -- | declaration, XSL stylesheet include, default namespaces, and per-entry
@@ -68,6 +68,7 @@ entries :: SitemapArgs -> Array Entry
 entries { docs, thisYear } =
   [ { url: "/", changefreq: "monthly", priority: 1.0, year: thisYear }
   , { url: "/projects", changefreq: "monthly", priority: 0.8, year: thisYear }
+  , { url: "/timeline", changefreq: "monthly", priority: 0.7, year: thisYear }
   ] <> map docEntry docs
   where
   docEntry doc =

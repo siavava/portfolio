@@ -25,6 +25,8 @@ footer.app-footer.no-select
             span.app-footer__versions-label {{ past.label }}
             span.app-footer__versions-url {{ past.url.replace("https://", "") }}
     span.app-footer__divider |
+    NuxtLink(to="/timeline") timeline
+    span.app-footer__divider |
     a(href="/sitemap.xml", target="_blank", rel="noopener") sitemap
     span.app-footer__divider |
     NuxtLink(to="/") {{ profile.site }}

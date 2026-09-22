@@ -2,7 +2,9 @@
 .bookshelf-panel
   .bookshelf-panel__card
     template(v-if="selected")
-      p.bookshelf-panel__meta {{ titleCase(selected.tag) }} · {{ selected.year }}
+      p.bookshelf-panel__meta
+        | {{ titleCase(selected.tag) }} ·
+        NuxtLink.bookshelf-panel__year(:to="{ path: '/timeline', query: { year: selected.year } }") {{ selected.year }}
       p.bookshelf-panel__title {{ selected.title }}
       p.bookshelf-panel__blurb {{ selected.summary }}
       NuxtLink.bookshelf-panel__link.no-select(:to="selected.path")
@@ -75,6 +77,17 @@ const { projects, selected, onSelect } = useBookshelfPanel({
   margin: 0 0 6px
   font-size: typography.font-size("xs")
   color: var(--foreground)
+
+.bookshelf-panel__year
+  color: inherit
+  border-bottom: 1px dashed var(--divider)
+  transition: color 0.2s ease, border-color 0.2s ease
+
+  &:hover
+    color: var(--foreground-strong)
+    border-bottom-style: solid
+    border-bottom-color: var(--foreground-strong)
+    text-decoration: none
 
 .bookshelf-panel__title
   margin: 0 0 7px

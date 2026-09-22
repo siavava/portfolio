@@ -40,7 +40,11 @@ interface RailKernel {
   progress: (sizes: number[], elapsed: number) => number
   opacity: (input: FadeInput) => number
   decay: (velocity: number, frameMs: number) => number
-  clampTo: (limit: number, value: number) => number
+  clampTo: (floor: number, limit: number, value: number) => number
+  scrollFloor: (gutter: number, viewport: number) => number
+  scrollLimit: (sizes: number[], gutter: number, viewport: number) => number
+  sweepEnd: (sizes: number[], gutter: number, viewport: number, target: number) => number
+  target: number
   reduced: boolean
   tuning: Tuning
 }
@@ -95,6 +99,7 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
   })
 
   let lead = readInset(section, 24)
+  let floor = 0
   let limit = 0
   let at = 0
   let velocity = 0
@@ -110,11 +115,14 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
   let anchor = { at: 0, x: 0 }
   let sample = { t: 0, x: 0 }
 
+  const gutter = () => lead + labels.offsetWidth
+  const range = () => limit - floor
+
   const measure = () => {
     lead = readInset(section, 24)
-    const content = track.scrollWidth || track.offsetWidth
-    limit = Math.max(0, lead + content - (section.clientWidth - lead))
-    return limit
+    floor = kernel.scrollFloor(gutter(), section.clientWidth)
+    limit = kernel.scrollLimit(sizes, gutter(), section.clientWidth)
+    return range()
   }
 
   const pinLabels = () => {
@@ -143,7 +151,7 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
   }
 
   const paint = (next: number) => {
-    at = kernel.clampTo(limit, next)
+    at = kernel.clampTo(floor, limit, next)
     track.style.transform = `translate3d(${snap(lead - at)}px, 0, 0)`
     pinLabels()
     fadeColumns()
@@ -167,9 +175,9 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
         flingFrame = 0
         return
       }
-      const next = kernel.clampTo(limit, at + velocity * frameMs)
+      const next = kernel.clampTo(floor, limit, at + velocity * frameMs)
       if (next !== at) paint(next)
-      if (next <= 0 || next >= limit) {
+      if (next <= floor || next >= limit) {
         velocity = 0
         flingFrame = 0
         return
@@ -201,8 +209,9 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
 
   const sweep = () => {
     measure()
-    if (kernel.reduced || limit <= 0) {
-      paint(limit)
+    const end = kernel.sweepEnd(sizes, gutter(), section.clientWidth, kernel.target)
+    if (kernel.reduced || end === 0) {
+      paint(end)
       section.classList.remove("is-loading")
       return
     }
@@ -221,7 +230,7 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
       if (start === 0) start = now
       const progress = kernel.progress(sizes, now - start)
       section.style.setProperty("--timeline-progress", String(progress))
-      paint(progress * limit)
+      paint(progress * end)
       if (progress < 1) {
         sweepFrame = requestAnimationFrame(step)
         return
@@ -236,7 +245,7 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
       event.preventDefault()
       return
     }
-    if (limit <= 0) return
+    if (range() <= 0) return
     // Deliberately unnegated: wheel-down advances the rail toward now.
     const delta = wheelDelta(event) * tuning.wheelGain
     event.preventDefault()
@@ -256,7 +265,7 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
   }
 
   const onPointerDown = (event: PointerEvent) => {
-    if (sweeping || isInteractive(event.target) || limit <= 0 || pointerId !== null) return
+    if (sweeping || isInteractive(event.target) || range() <= 0 || pointerId !== null) return
     axis = null
     origin = { x: event.clientX, y: event.clientY }
     // Touch waits for an axis: a vertical swipe belongs to the page, not the rail.
@@ -309,14 +318,14 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
   }
 
   const onKeyDown = (event: KeyboardEvent) => {
-    if (sweeping || limit <= 0 || isTyping(event.target) || section.offsetParent === null) return
+    if (sweeping || range() <= 0 || isTyping(event.target) || section.offsetParent === null) return
     const back = event.key === "ArrowLeft" || event.key === "ArrowUp"
     const forward = event.key === "ArrowRight" || event.key === "ArrowDown"
     if (!back && !forward) return
     stopFling()
     velocity = 0
     event.preventDefault()
-    paint(at + (back ? -1 : 1) * limit * tuning.keyStep)
+    paint(at + (back ? -1 : 1) * range() * tuning.keyStep)
   }
 
   /** The section itself must never scroll; the track's transform is the scroll. */
@@ -365,10 +374,11 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): () => v
 
 export const startColumnImpl = (scroller: HTMLElement, kernel: RailKernel): () => void => {
   const entries = [...scroller.querySelectorAll<HTMLElement>("[data-timeline-entry]")]
+  const first = entries[0]
   const rail = scroller.querySelector<HTMLElement>("[data-timeline-rail]")
   const labels = scroller.querySelector<HTMLElement>("[data-timeline-labels]")
 
-  if (!rail || entries.length === 0 || scroller.clientHeight === 0) {
+  if (!rail || !first || scroller.clientHeight === 0) {
     scroller.classList.remove("is-loading")
     return noop
   }
@@ -377,14 +387,18 @@ export const startColumnImpl = (scroller: HTMLElement, kernel: RailKernel): () =
   const sizes = entries.map(entry => entry.offsetHeight)
   const delays = kernel.delays(sizes)
   const extent = () => Math.max(0, scroller.scrollHeight - scroller.clientHeight)
+  // Where the first entry starts in the scroller's scroll space.
+  const gutter = first.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop
 
   entries.forEach((entry, index) => {
     const inner = entry.firstElementChild
     if (inner instanceof HTMLElement) inner.style.animationDelay = `${delays[index] ?? 0}ms`
   })
 
-  if (kernel.reduced) {
-    scroller.scrollTop = extent()
+  // A scroller cannot go negative, so an early year lands as high as it can.
+  const end = Math.max(0, Math.min(extent(), kernel.sweepEnd(sizes, gutter, scroller.clientHeight, kernel.target)))
+  if (kernel.reduced || end <= 0) {
+    scroller.scrollTop = end
     scroller.classList.remove("is-loading")
     return noop
   }
@@ -421,7 +435,7 @@ export const startColumnImpl = (scroller: HTMLElement, kernel: RailKernel): () =
     if (start === 0) start = now
     const progress = kernel.progress(sizes, now - start)
     scroller.style.setProperty("--timeline-progress", String(progress))
-    scroller.scrollTop = progress * extent()
+    scroller.scrollTop = progress * end
     if (progress < 1) {
       frame = requestAnimationFrame(step)
       return
