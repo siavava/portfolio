@@ -24,6 +24,12 @@ export default defineNuxtConfig({
     viewTransition: true,
   },
 
+  // Linked, not inlined: the client's preload helper refetches inlined component
+  // CSS before each lazy chunk resolves, one round trip after another at hydration.
+  features: {
+    inlineStyles: false,
+  },
+
   // PureScript FFI companions must sit beside their .purs modules with the
   // module's basename (uppercase); keep them and .purs sources out of
   // auto-import scans.
