@@ -9,9 +9,17 @@
 -- | the current year, WHATWG URL resolution, and JS `Number` coercion — stay
 -- | in the h3 shell or the FFI companion `app/ffi/sitemap.ts`.
 module App.Server.Sitemap
-  ( ProjectDoc
+  ( Entry
+  , ProjectDoc
   , SitemapArgs
+  , docYear
+  , entries
+  , escapeXmlAttr
+  , escapeXmlText
   , sitemapXml
+  , sortEntries
+  , urlElement
+  , xmlHeader
   ) where
 
 import Prelude
@@ -26,10 +34,8 @@ import Data.String.Regex (Regex, replace)
 import Data.String.Regex.Flags (global, unicode)
 import Data.String.Regex.Unsafe (unsafeRegex)
 
--- | `new URL(url, base).toString()` — WHATWG resolution and percent-encoding.
 foreign import resolveUrlImpl :: Fn2 String String String
 
--- | JS `Number(str)` coercion, NaN and all.
 foreign import jsNumberImpl :: String -> Number
 
 -- | One row of the projects query, coerced by the shell the way the original
@@ -52,6 +58,7 @@ type SitemapArgs =
     thisYear :: Number
   }
 
+-- | One sitemap entry before serialization; `year` only orders ties.
 type Entry = { url :: String, changefreq :: String, priority :: Number, year :: Number }
 
 siteDomain :: String
@@ -64,6 +71,9 @@ sitemapXml args =
     <> joinWith "" (map urlElement (sortEntries (entries args)))
     <> "</urlset>"
 
+-- | The three static routes (`/` at 1.0, `/projects` at 0.8, `/timeline`
+-- | at 0.7, all dated this year) followed by one entry per project doc
+-- | (0.7 featured, 0.5 otherwise), unsorted.
 entries :: SitemapArgs -> Array Entry
 entries { docs, thisYear } =
   [ { url: "/", changefreq: "monthly", priority: 1.0, year: thisYear }
@@ -125,8 +135,6 @@ urlElement entry =
     <> "</priority>"
     <> "</url>"
 
--- | Invalid XML 1.0 characters the `sitemap` package strips from output:
--- | control characters, delete, C1 controls, surrogates, non-characters.
 invalidXmlChars :: Regex
 invalidXmlChars = unsafeRegex
   "[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F-\\u0084\\u0086-\\u009F\\uD800-\\uDFFF\\p{NChar}]"
