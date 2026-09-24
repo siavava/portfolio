@@ -22,6 +22,7 @@ import Test.Server.Tikz as Tikz
 import Test.Stores.Connections as Connections
 import Test.Stores.Cues as Cues
 import Test.Stores.MapReveal as MapReveal
+import Test.Stores.SideNotes as SideNotes
 import Test.Utils.Coder as Coder
 import Test.Utils.Format as Format
 import Test.Utils.JsMath as JsMath
@@ -60,4 +61,5 @@ main = do
   Connections.suite tally
   Cues.suite tally
   MapReveal.suite tally
+  SideNotes.suite tally
   report tally
