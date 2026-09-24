@@ -3,32 +3,32 @@
   .error-scene(aria-hidden="true")
     svg.error-rings(viewBox="0 0 440 220")
       circle.error-ring(
-        v-for="(radius, index) in RING_RADII",
+        v-for="(radius, index) in rings",
         :key="radius",
         cx="220",
         cy="220",
-        :r="ringRadii[index] ?? 0",
+        :r="ringRadius(index)",
       )
       line.error-spoke(
-        v-for="spoke in SPOKES",
+        v-for="spoke in spokes",
         :key="spoke.deg",
         x1="220",
         y1="220",
-        :x2="220 + spoke.ux * (ringRadii[2] ?? 0) * 1.1",
-        :y2="220 - spoke.uy * (ringRadii[2] ?? 0) * 1.1",
+        :x2="spokeEnd(spoke).x",
+        :y2="spokeEnd(spoke).y",
       )
       g.error-stray(:class="{ placed }")
         line.error-thread(x1="220", y1="220", :x2="stray.x", :y2="stray.y")
         circle.error-echo(:cx="stray.x", :cy="stray.y", r="3")
         circle.error-node(:cx="stray.x", :cy="stray.y", r="3")
-  p.error-meta {{ error.statusCode }} | {{ notFound ? "not found" : "error" }}
-  h1.error-title {{ notFound ? "Off the map." : "Something broke." }}
+  p.error-meta {{ error.statusCode }} | {{ statusWord }}
+  h1.error-title {{ heading }}
   p.error-detail(v-if="notFound")
     | There is nothing at
     |
     code.error-path {{ route.fullPath }}
     | .
-  p.error-detail(v-else) {{ error.statusMessage || "An unexpected error occurred." }}
+  p.error-detail(v-else) {{ detail }}
   nav.error-links
     a.error-link(href="/")
       span.error-link__arrow.error-link__arrow--back ←
@@ -41,7 +41,6 @@
 
 <script lang="ts" setup>
 import type { NuxtError } from "#app"
-import { animate } from "motion-v"
 
 /** ## error — themed stand-in for Nuxt's default error page; a stray node off the interest map. */
 const props = defineProps<{ error: NuxtError }>()
@@ -49,64 +48,13 @@ const props = defineProps<{ error: NuxtError }>()
 const route = useRoute()
 const colorMode = useColorMode()
 
-const mode = computed(
-  () => colorMode.value === "dark" ? "dark-mode" : "light-mode",
-)
-
-const notFound = computed(() => props.error.statusCode === 404)
-
-const RING_RADII = [66, 126, 186]
-
-const SPOKES = [16, 38, 64, 88, 112, 138, 164].map(deg => ({
-  deg,
-  ux: Math.cos(deg * Math.PI / 180),
-  uy: Math.sin(deg * Math.PI / 180),
-}))
-
-const ringRadii = ref<number[]>([])
-const placed = ref(false)
-const stray = ref({ x: 118, y: 86 })
-const waveControls: { stop: () => void }[] = []
-const waveTimers: ReturnType<typeof setTimeout>[] = []
-
-const scatterStray = () => {
-  const theta = (15 + Math.random() * 150) * Math.PI / 180
-  const rMin = 84
-  const rMax = Math.min(200, 195 / Math.sin(theta))
-  const radius = rMin + Math.random() * (rMax - rMin)
-  stray.value = {
-    x: +(220 + radius * Math.cos(theta)).toFixed(1),
-    y: +(220 - radius * Math.sin(theta)).toFixed(1),
-  }
-}
-
-onMounted(() => {
-  scatterStray()
-  RING_RADII.forEach((target, index) => {
-    waveTimers.push(setTimeout(() => {
-      waveControls.push(animate(0, target, {
-        type: "spring",
-        visualDuration: 0.4,
-        bounce: 0.3,
-        onUpdate: (latest) => {
-          ringRadii.value[index] = Math.max(0, latest)
-        },
-        onComplete: () => {
-          if (index === RING_RADII.length - 1) placed.value = true
-        },
-      }))
-    }, index * 110))
-  })
+const { mode, notFound, rings, spokes, placed, stray, statusWord, heading, detail, ringRadius, spokeEnd, title } = useErrorPage({
+  colorModeValue: () => colorMode.value,
+  statusCode: () => props.error.statusCode,
+  statusMessage: () => props.error.statusMessage ?? null,
 })
 
-onBeforeUnmount(() => {
-  waveControls.forEach(control => control.stop())
-  waveTimers.forEach(timer => clearTimeout(timer))
-})
-
-useHead({
-  title: `${props.error.statusCode} · Amittai Siavava`,
-})
+useHead({ title })
 </script>
 
 <style lang="sass" scoped>

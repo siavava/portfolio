@@ -7,6 +7,7 @@ import Test.Build.NotesMeta as NotesMeta
 import Test.Components.AStar as AStar
 import Test.Components.AlgorithmBlock as AlgorithmBlock
 import Test.Components.CueThreads as CueThreads
+import Test.Components.LayoutChrome as LayoutChrome
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
 import Test.Composables.DraggableBubble as DraggableBubble
 import Test.Composables.FigureSpotlight as FigureSpotlight
@@ -51,6 +52,7 @@ main = do
   CueThreads.suite tally
   AStar.suite tally
   AlgorithmBlock.suite tally
+  LayoutChrome.suite tally
   Links.suite tally
   InterestLayout.suite tally
   Sitemap.suite tally
