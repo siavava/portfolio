@@ -11,6 +11,7 @@ import Test.Server.Sitemap as Sitemap
 import Test.Server.Tikz as Tikz
 import Test.Utils.Coder as Coder
 import Test.Utils.Format as Format
+import Test.Utils.JsMath as JsMath
 import Test.Utils.MarkdownMath as MarkdownMath
 import Test.Utils.Spines as Spines
 
@@ -26,4 +27,5 @@ main = do
   InterestLayout.suite tally
   Sitemap.suite tally
   Tikz.suite tally
+  JsMath.suite tally
   report tally
