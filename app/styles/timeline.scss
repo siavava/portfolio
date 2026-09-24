@@ -1,0 +1,17 @@
+@mixin slab {
+  --tl-accent: #ffcb00;
+
+  @supports (color: color(display-p3 1 1 1)) {
+    --tl-accent: color(display-p3 0.98 0.8 0.14);
+  }
+
+  --tl-highlight: var(--tl-accent);
+}
+
+@mixin slab-light {
+  --tl-highlight: #876500;
+
+  @supports (color: oklch(from red calc(l - 0.1) c h)) {
+    --tl-highlight: oklch(from var(--tl-accent) min(l, 0.53) c h);
+  }
+}
