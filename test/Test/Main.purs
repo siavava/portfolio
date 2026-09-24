@@ -15,6 +15,7 @@ import Test.Components.CueRoot as CueRoot
 import Test.Components.CueThreads as CueThreads
 import Test.Components.DreamItem as DreamItem
 import Test.Components.FigmaSelect as FigmaSelect
+import Test.Components.FigureSpotlight as FigureSpotlightComponent
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.NowItem as NowItem
@@ -114,6 +115,7 @@ main = do
   BookcaseShelf.suite tally
   CueRoot.suite tally
   FigmaSelect.suite tally
+  FigureSpotlightComponent.suite tally
   ProjectShelf.suite tally
   ProseA.suite tally
   SideNote.suite tally

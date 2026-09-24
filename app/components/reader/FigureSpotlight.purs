@@ -9,6 +9,8 @@ module App.Components.FigureSpotlight
   ( DomElement
   , SpotlightArgs
   , SpotlightBindings
+  , fittedSize
+  , modeClassFor
   , useFigureSpotlightOverlay
   ) where
 
@@ -16,7 +18,7 @@ import Prelude
 
 import Data.Int (round)
 import Data.Maybe (Maybe(..))
-import Data.Nullable (Nullable, toMaybe)
+import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Data.Number (isFinite)
 import Effect (Effect)
 import Effect.Ref as Ref
@@ -64,25 +66,39 @@ type SpotlightBindings =
 useFigureSpotlightOverlay :: EffectFn1 SpotlightArgs SpotlightBindings
 useFigureSpotlightOverlay = mkEffectFn1 setup
 
+-- | The overlay class for a color-mode value: dark for "dark", light for
+-- | anything else.
+modeClassFor :: String -> String
+modeClassFor value = if value == "dark" then "dark-mode" else "light-mode"
+
+-- | The whole-pixel size that fits media of the given aspect ratio inside
+-- | `maxW` × `maxH`: full width, unless that runs taller than `maxH`, when
+-- | full height instead. Null for an aspect of 0, NaN or infinity — media
+-- | that could not be measured is left alone.
+fittedSize :: Number -> Number -> Number -> Nullable { width :: Int, height :: Int }
+fittedSize aspect maxW maxH
+  | aspect /= 0.0 && isFinite aspect =
+      let
+        height = maxW / aspect
+        fitted =
+          if height > maxH then { width: maxH * aspect, height: maxH }
+          else { width: maxW, height }
+      in
+        notNull { width: round fitted.width, height: round fitted.height }
+  | otherwise = null
+
 setup :: SpotlightArgs -> Effect SpotlightBindings
 setup args = do
-  mode <- computed do
-    value <- args.colorModeValue
-    pure (if value == "dark" then "dark-mode" else "light-mode")
+  mode <- computed (modeClassFor <$> args.colorModeValue)
 
   let
     fitFigure = do
       box <- runEffectFn1 mediaBoxImpl =<< read args.figure
       case toMaybe box of
-        Just found | found.aspect /= 0.0 && isFinite found.aspect -> do
-          let
-            width = found.maxW
-            height = found.maxW / found.aspect
-            fitted =
-              if height > found.maxH then { width: found.maxH * found.aspect, height: found.maxH }
-              else { width, height }
-          runEffectFn3 setMediaSizeImpl found.media (round fitted.width) (round fitted.height)
-        _ -> pure unit
+        Just found -> case toMaybe (fittedSize found.aspect found.maxW found.maxH) of
+          Just fitted -> runEffectFn3 setMediaSizeImpl found.media fitted.width fitted.height
+          Nothing -> pure unit
+        Nothing -> pure unit
 
   stopResize <- Ref.new (pure unit :: Effect Unit)
   onMounted do
