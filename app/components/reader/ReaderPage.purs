@@ -17,7 +17,18 @@ module App.Components.ReaderPage
   , RouteHandle
   , RouterHandle
   , SpotVal
+  , arrowStep
+  , collapseWs
+  , dekShown
+  , groupByKey
+  , ogFooterFor
+  , ogKickerFor
+  , routePathFor
+  , seoTitleFor
   , setup
+  , siteUrlFor
+  , sortShelvesBy
+  , wrapIndex
   ) where
 
 import Prelude
@@ -90,13 +101,10 @@ foreign import data RouterHandle :: Type
 -- | Whatever the figure spotlight holds when open.
 foreign import data SpotVal :: Type
 
--- | The doc's route path.
 foreign import docPathImpl :: ProjectDoc -> String
 
--- | The doc's category tag.
 foreign import docTagImpl :: ProjectDoc -> String
 
--- | The doc's title.
 foreign import docTitleImpl :: ProjectDoc -> String
 
 -- | The doc's date, stringified.
@@ -117,7 +125,6 @@ foreign import localeCompareImpl :: Fn2 String String Number
 -- | The route's catch-all slug segments, empty falsy parts dropped.
 foreign import slugPartsImpl :: EffectFn1 RouteHandle (Array String)
 
--- | The route's current path.
 foreign import routePathNowImpl :: EffectFn1 RouteHandle String
 
 -- | `router.replace(path)`, promise discarded.
@@ -141,7 +148,6 @@ foreign import windowScrollYImpl :: Effect Number
 -- | with the component scope.
 foreign import onKeydownImpl :: EffectFn1 (EffectFn1 KeyEvt Unit) Unit
 
--- | `event.key`.
 foreign import keyOfImpl :: KeyEvt -> String
 
 -- | Whether meta, ctrl, or alt is held.
@@ -150,7 +156,6 @@ foreign import hasModifierImpl :: KeyEvt -> Boolean
 -- | Whether the event targets an input, textarea, or contenteditable.
 foreign import isEditableTargetImpl :: KeyEvt -> Boolean
 
--- | `event.preventDefault()`.
 foreign import preventDefaultImpl :: EffectFn1 KeyEvt Unit
 
 -- | One shelf of the bookcase rail.
@@ -216,6 +221,10 @@ type ReaderBindings =
   , ogDescription :: Computed String
   -- | Shelf index fed to the OG image; -1 on the bare `/projects` route.
   , ogIndex :: Computed Int
+  -- | OG-image footer line: "N Projects", over every queried doc.
+  , ogFooter :: Computed String
+  -- | Shelf total fed to the OG image: every queried doc.
+  , ogTotal :: Computed Int
   -- | Selects a project by path (closes the drawer, replaces the
   -- | route); the optional group key steers the rail centering.
   , select :: EffectFn2 String (Nullable String) Unit
@@ -240,36 +249,101 @@ trailingDots = unsafeRegex "[.…]+$" noFlags
 collapseWs :: String -> String
 collapseWs = trim <<< Regex.replace whitespaceRun " "
 
--- | The featured document, else the first, else nothing.
+-- | The OG image's footer line for a count of projects.
+ogFooterFor :: Int -> String
+ogFooterFor count = show count <> " Projects"
+
 fallbackDoc :: Array ProjectDoc -> Maybe ProjectDoc
 fallbackDoc docs = case Array.find docFeaturedImpl docs of
   Just doc -> Just doc
   Nothing -> Array.head docs
 
--- | Insertion-ordered by-tag grouping.
-groupByTag :: Array ProjectDoc -> Array { key :: String, items :: Array ProjectDoc }
-groupByTag = foldl step []
+-- | Insertion-ordered grouping by a key: groups in the order their key
+-- | first appears, items in their original order within each.
+groupByKey :: forall a. (a -> String) -> Array a -> Array { key :: String, items :: Array a }
+groupByKey keyOf = foldl step []
   where
-  step acc doc =
+  step acc item =
     let
-      tag = docTagImpl doc
+      key = keyOf item
     in
-      case Array.findIndex (\entry -> entry.key == tag) acc of
+      case Array.findIndex (\entry -> entry.key == key) acc of
         Just i -> fromMaybe acc
-          (Array.modifyAt i (\entry -> entry { items = Array.snoc entry.items doc }) acc)
-        Nothing -> Array.snoc acc { key: tag, items: [ doc ] }
+          (Array.modifyAt i (\entry -> entry { items = Array.snoc entry.items item }) acc)
+        Nothing -> Array.snoc acc { key, items: [ item ] }
 
--- | Newest shelf first, by the first item's date (`localeCompare` desc).
-shelfOrder
-  :: { key :: String, items :: Array ProjectDoc }
-  -> { key :: String, items :: Array ProjectDoc }
+groupByTag :: Array ProjectDoc -> Array { key :: String, items :: Array ProjectDoc }
+groupByTag = groupByKey docTagImpl
+
+shelfOrderBy
+  :: forall a
+   . (a -> String)
+  -> { key :: String, items :: Array a }
+  -> { key :: String, items :: Array a }
   -> Ordering
-shelfOrder a b =
+shelfOrderBy dateOf a b =
   let
-    dateOf entry = maybe "" docDateImpl (Array.head entry.items)
-    diff = runFn2 localeCompareImpl (dateOf b) (dateOf a)
+    firstDate entry = maybe "" dateOf (Array.head entry.items)
+    diff = runFn2 localeCompareImpl (firstDate b) (firstDate a)
   in
     if diff < 0.0 then LT else if diff > 0.0 then GT else EQ
+
+-- | Groups sorted newest first by `shelfOrderBy` — stable, so groups
+-- | dated alike keep their order.
+sortShelvesBy
+  :: forall a
+   . (a -> String)
+  -> Array { key :: String, items :: Array a }
+  -> Array { key :: String, items :: Array a }
+sortShelvesBy dateOf = Array.sortBy (shelfOrderBy dateOf)
+
+-- | The project path a catch-all slug names; null for the bare index.
+routePathFor :: Array String -> Nullable String
+routePathFor parts
+  | Array.null parts = null
+  | otherwise = notNull ("/projects/" <> joinWith "/" parts)
+
+-- | Whether a project's summary shows as a dek over its article: not when
+-- | there is none, nor when the opening paragraph already begins with the
+-- | summary's first 40 characters — compared case-insensitively with
+-- | whitespace collapsed and the summary's trailing dots dropped.
+dekShown :: String -> String -> Boolean
+dekShown summary openingText
+  | summary == "" = false
+  | otherwise =
+      let
+        opening = toLower (collapseWs openingText)
+        dek = Regex.replace trailingDots "" (toLower (collapseWs summary))
+      in
+        not (isJust (stripPrefix (Pattern (CU.take 40 dek)) opening))
+
+-- | The index `direction` steps from `idx` in a list of `len`, wrapping
+-- | around either end.
+wrapIndex :: Int -> Int -> Int -> Int
+wrapIndex len idx direction = (idx + direction + len) `mod` len
+
+-- | The step an arrow key asks for — 1 for right, -1 for left — or 0 when
+-- | the key is not an arrow, a modifier is held, or it is typing in a
+-- | field.
+arrowStep :: String -> Boolean -> Boolean -> Int
+arrowStep key modified editable
+  | key /= "ArrowLeft" && key /= "ArrowRight" = 0
+  | modified || editable = 0
+  | key == "ArrowRight" = 1
+  | otherwise = -1
+
+-- | The page title for the project being read, or the index's.
+seoTitleFor :: Nullable String -> String
+seoTitleFor title =
+  maybe "Projects · Amittai Siavava" (_ <> " · Projects · Amittai Siavava") (toMaybe title)
+
+-- | The OG kicker for a project's tag and date: `Tag · Year`.
+ogKickerFor :: String -> String -> String
+ogKickerFor tag date = titleCase tag <> " · " <> CU.take 4 date
+
+-- | The absolute URL of a site path, the projects index when there is none.
+siteUrlFor :: Nullable String -> String
+siteUrlFor path = siteOrigin <> fromMaybe "/projects" (toMaybe path)
 
 -- | Wires the projects reader: shelf grouping, route-driven selection
 -- | with rail centering, dek suppression, arrow-key stepping and the
@@ -281,18 +355,14 @@ setup args = do
   groups <- computed do
     ds <- read docs
     let
-      shelves = Array.sortBy shelfOrder (groupByTag ds)
+      shelves = sortShelvesBy docDateImpl (groupByTag ds)
         <#> \entry -> { key: entry.key, label: titleCase entry.key, items: entry.items }
       featured = Array.filter docFeaturedImpl ds
     pure
       if Array.null featured then shelves
       else Array.cons { key: "featured", label: "Featured", items: featured } shelves
 
-  routePath <- computed do
-    parts <- runEffectFn1 slugPartsImpl args.route
-    pure
-      if Array.null parts then null
-      else notNull ("/projects/" <> joinWith "/" parts)
+  routePath <- computed (routePathFor <$> runEffectFn1 slugPartsImpl args.route)
 
   initialDocs <- args.docs
   initialPath <- toMaybe <$> read routePath
@@ -305,17 +375,7 @@ setup args = do
     mSelected <- toMaybe <$> read selected
     pure case mSelected of
       Nothing -> false
-      Just doc ->
-        let
-          summary = docSummaryImpl doc
-        in
-          if summary == "" then false
-          else
-            let
-              opening = toLower (collapseWs (openingTextImpl doc))
-              dek = Regex.replace trailingDots "" (toLower (collapseWs summary))
-            in
-              not (isJust (stripPrefix (Pattern (CU.take 40 dek)) opening))
+      Just doc -> dekShown (docSummaryImpl doc) (openingTextImpl doc)
 
   drawer <- ref false
   centerGroup <- Ref.new (Nothing :: Maybe String)
@@ -368,7 +428,7 @@ setup args = do
       unless (Array.null list) do
         idx <- read selectedIndex
         let len = Array.length list
-        for_ (Array.index list ((idx + direction + len) `mod` len)) \next ->
+        for_ (Array.index list (wrapIndex len idx direction)) \next ->
           select (docPathImpl next) (Just (docTagImpl next))
 
   stuck <- ref false
@@ -380,12 +440,11 @@ setup args = do
     open <- read drawer
     let key = keyOfImpl event
     if key == "Escape" && open then write drawer false
-    else if key /= "ArrowLeft" && key /= "ArrowRight" then pure unit
-    else if hasModifierImpl event then pure unit
-    else if isEditableTargetImpl event then pure unit
-    else do
-      runEffectFn1 preventDefaultImpl event
-      step (if key == "ArrowRight" then 1 else -1)
+    else case arrowStep key (hasModifierImpl event) (isEditableTargetImpl event) of
+      0 -> pure unit
+      direction -> do
+        runEffectFn1 preventDefaultImpl event
+        step direction
 
   _ <- watchGetter (read args.spotlight) \value _ ->
     when (isJust (toMaybe value)) args.clearPeeks
@@ -406,29 +465,23 @@ setup args = do
 
   seoTitle <- computed do
     mDoc <- read activeDoc
-    pure
-      ( maybe "Projects · Amittai Siavava"
-          (\doc -> docTitleImpl doc <> " · Projects · Amittai Siavava")
-          mDoc
-      )
+    pure (seoTitleFor (toNullable (docTitleImpl <$> mDoc)))
 
   seoDescription <- computed do
     mDoc <- read activeDoc
     pure (collapseWs (maybe pageDescription docSummaryImpl mDoc))
 
-  canonical <- computed do
-    mPath <- toMaybe <$> read routePath
-    pure (siteOrigin <> fromMaybe "/projects" mPath)
+  canonical <- computed (siteUrlFor <$> read routePath)
 
   shareUrl <- computed do
     mSelected <- toMaybe <$> read selected
-    pure (siteOrigin <> maybe "/projects" docPathImpl mSelected)
+    pure (siteUrlFor (toNullable (docPathImpl <$> mSelected)))
 
   ogKicker <- computed do
     mDoc <- read activeDoc
     pure
       ( maybe "Portfolio · Dartmouth"
-          (\doc -> titleCase (docTagImpl doc) <> " · " <> CU.take 4 (docDateImpl doc))
+          (\doc -> ogKickerFor (docTagImpl doc) (docDateImpl doc))
           mDoc
       )
 
@@ -443,6 +496,10 @@ setup args = do
   ogIndex <- computed do
     mDoc <- read activeDoc
     if isJust mDoc then read selectedIndex else pure (-1)
+
+  ogTotal <- computed (Array.length <$> read docs)
+
+  ogFooter <- computed (ogFooterFor <$> read ogTotal)
 
   pure
     { docs
@@ -461,6 +518,8 @@ setup args = do
     , ogTitle
     , ogDescription
     , ogIndex
+    , ogFooter
+    , ogTotal
     , select: mkEffectFn2 \path groupKey -> select path (toMaybe groupKey)
     , step: mkEffectFn1 step
     }

@@ -32,6 +32,7 @@ import Test.Components.PbdClothViz as PbdClothViz
 import Test.Components.PbdViz as PbdViz
 import Test.Components.ProjectShelf as ProjectShelf
 import Test.Components.ProseA as ProseA
+import Test.Components.Reader as Reader
 import Test.Components.ReviewBubble as ReviewBubble
 import Test.Components.ScrollFades as ScrollFades
 import Test.Components.ShelfSatori as ShelfSatori
@@ -87,6 +88,7 @@ main = do
   AlgorithmBlock.suite tally
   LayoutChrome.suite tally
   CodePage.suite tally
+  Reader.suite tally
   ShelfSatori.suite tally
   SmokeViz.suite tally
   OrbitViz.suite tally

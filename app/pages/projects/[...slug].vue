@@ -60,7 +60,6 @@ const { spotlight, close: closeSpotlight } = useFigureSpotlight(desk)
 const { isDark, toggle: toggleColor } = useColorToggle()
 
 const {
-  docs,
   groups,
   selected,
   showDek,
@@ -76,6 +75,8 @@ const {
   ogTitle,
   ogDescription,
   ogIndex,
+  ogFooter,
+  ogTotal,
   select,
   step,
 } = useReaderPage({
@@ -106,9 +107,9 @@ defineOgImage("Shelf", {
   kicker: () => ogKicker.value,
   title: () => ogTitle.value,
   description: () => ogDescription.value,
-  footer: () => `${docs.value.length} Projects`,
+  footer: () => ogFooter.value,
   index: () => ogIndex.value,
-  total: () => docs.value.length,
+  total: () => ogTotal.value,
 }, {
   width: 1200,
   height: 630,
