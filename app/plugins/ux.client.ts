@@ -55,7 +55,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   })
 
+  // The router scrolls after the page transition, so re-arm the tracker's
+  // settle once it ends too.
   nuxtApp.hook("page:finish", () => {
+    push(["ready"])
+  })
+  nuxtApp.hook("page:transition:finish", () => {
     push(["ready"])
   })
 
