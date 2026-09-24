@@ -15,6 +15,7 @@ import Test.Composables.ReaderPeeks as ReaderPeeks
 import Test.Composables.SideNoteLayout as SideNoteLayout
 import Test.Harness (newTally, report)
 import Test.Map.InterestLayout as InterestLayout
+import Test.Middleware.Wipe as Wipe
 import Test.Server.Sitemap as Sitemap
 import Test.Server.Tikz as Tikz
 import Test.Utils.Coder as Coder
@@ -48,6 +49,7 @@ main = do
   ViewerGeo.suite tally
   ApiRoute.suite tally
   Socket.suite tally
+  Wipe.suite tally
   JsMath.suite tally
   Scroll.suite tally
   report tally
