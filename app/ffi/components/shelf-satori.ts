@@ -1,17 +1,10 @@
 import type { CSSProperties } from "vue"
 /**
- * Typed FFI implementations for `App.Components.ShelfSatori` — JS numeric
- * and string semantics (int32 `imul`, `\s+` whitespace squashing,
- * `trimEnd`) plus the conditional-spread style assembly behind the
- * build-time OG shelf card.
+ * Typed FFI implementations for `App.Components.ShelfSatori` — JS int32
+ * `imul` plus the conditional-spread style assembly behind the build-time
+ * OG shelf card.
  */
 export const imulImpl = (a: number, b: number): number => Math.imul(a, b)
-
-/** JS `text.replace(/\s+/g, " ").trim()` — the reference's normalization. */
-export const normalizeDescriptionImpl = (text: string): string =>
-  text.replace(/\s+/g, " ").trim()
-
-export const trimEndImpl = (text: string): string => text.trimEnd()
 
 interface BookStyleBase {
   display: string

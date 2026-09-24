@@ -4,15 +4,29 @@
 -- | rendered through satori (nuxt-og-image) — no window, no lifecycle.
 -- | Seeded spine geometry (FNV-style uint32 hashing, mirrored bit-exact
 -- | via an `imul` FFI prim plus unsigned views), the shelf fill loop, the
--- | description clamp, and every static style record are pure PureScript;
--- | the FFI carries only JS string/whitespace semantics and the
+-- | description clamp (JS `\s` squashing and trimming through the same
+-- | `RegExp`), and every static style record are pure PureScript; the FFI
+-- | carries only `imul`, the identity style-map stamp and the
 -- | conditional-spread style assembly.
 module App.Components.ShelfSatori
   ( Book
   , SatoriArgs
   , SatoriBindings
+  , SpineStyle
+  , SpineTilt
   , StyleMap
+  , bookFields
+  , bookTilt
+  , booksFor
+  , clampDescription
+  , normalizeDescription
+  , seedFor
   , setup
+  , spineGeom
+  , toUint32
+  , trimEnd
+  , umod
+  , ushr
   ) where
 
 import Prelude
@@ -26,44 +40,39 @@ import Data.Nullable (Nullable, toNullable)
 import Data.Number (floor)
 import Data.Number (max, pow, remainder, round) as Number
 import Data.Number.Format (toString)
+import Data.String (trim)
 import Data.String.CodeUnits (length, take) as CodeUnits
+import Data.String.Regex (Regex, replace)
+import Data.String.Regex.Flags (global, noFlags)
+import Data.String.Regex.Unsafe (unsafeRegex)
 import Effect (Effect)
 import Vue (Computed, computed)
 
 -- | An assembled `:style` object (string/number CSS values). @ts import("vue").CSSProperties
 foreign import data StyleMap :: Type
 
--- | Identity at runtime — stamps a style record as a `StyleMap`, so the
--- | generated boundary types these fields as CSS properties.
 foreign import styleMapImpl :: forall r. { | r } -> StyleMap
 
--- | JS `Math.imul` — int32 multiply with JS overflow semantics.
 foreign import imulImpl :: Fn2 Int Int Int
 
--- | JS `text.replace(/\s+/g, " ").trim()` — the reference's
--- | normalization.
-foreign import normalizeDescriptionImpl :: String -> String
+-- | A spine's own style fields, before the optional tilt is spread in.
+type SpineStyle =
+  { display :: String
+  , flexShrink :: Number
+  , width :: String
+  , height :: String
+  , marginRight :: String
+  , backgroundColor :: String
+  , border :: String
+  , borderTopLeftRadius :: String
+  , borderTopRightRadius :: String
+  }
 
--- | JS `String#trimEnd`.
-foreign import trimEndImpl :: String -> String
+-- | The transform a leaning spine adds to its style.
+type SpineTilt = { transform :: String, transformOrigin :: String }
 
--- | The spine's style object, spreading the tilt transform in only when
--- | the book leans — satori treats an explicit `rotate(0deg)` differently
--- | from no transform at all.
-foreign import mkBookStyleImpl
-  :: Fn2
-       { display :: String
-       , flexShrink :: Number
-       , width :: String
-       , height :: String
-       , marginRight :: String
-       , backgroundColor :: String
-       , border :: String
-       , borderTopLeftRadius :: String
-       , borderTopRightRadius :: String
-       }
-       (Nullable { transform :: String, transformOrigin :: String })
-       StyleMap
+-- | Spreads the tilt only when the book leans: satori treats rotate(0deg) unlike no transform.
+foreign import mkBookStyleImpl :: Fn2 SpineStyle (Nullable SpineTilt) StyleMap
 
 -- | One seeded spine on the shelf.
 type Book =
@@ -204,6 +213,9 @@ seedFor i =
   in
     toUint32 h2
 
+-- | One spine's seeded geometry: the seed's roll picks a narrow, middle or
+-- | wide width band, two offset seeds give height and gap, one in nine
+-- | spines leans, and the top arc scales with width (never under 1.5px).
 spineGeom :: Int -> { width :: Int, heightPct :: Int, gap :: Int, tilt :: Int, arc :: Number }
 spineGeom i =
   let
@@ -255,37 +267,62 @@ booksFor index total =
         fromMaybe bare (Array.modifyAt lit (_ { lit = true }) bare)
     else bare
 
+whitespaceRun :: Regex
+whitespaceRun = unsafeRegex "\\s+" global
+
+trailingWhitespace :: Regex
+trailingWhitespace = unsafeRegex "\\s+$" noFlags
+
+-- | The reference's `text.replace(/\s+/g, " ").trim()`: every whitespace
+-- | run squashed to one space, then both ends trimmed.
+normalizeDescription :: String -> String
+normalizeDescription = trim <<< replace whitespaceRun " "
+
+-- | JS `String#trimEnd`, as a replace of the trailing run.
+trimEnd :: String -> String
+trimEnd = replace trailingWhitespace ""
+
+-- | The card's description on one line: whitespace squashed, and past 152
+-- | code units cut to 150, trailing space dropped, and an ellipsis added —
+-- | so a clamp never ends on a space before the `…`.
 clampDescription :: String -> String
 clampDescription description =
   let
-    text = normalizeDescriptionImpl description
+    text = normalizeDescription description
   in
-    if CodeUnits.length text > 152 then trimEndImpl (CodeUnits.take 150 text) <> "…"
+    if CodeUnits.length text > 152 then trimEnd (CodeUnits.take 150 text) <> "…"
     else text
 
+-- | A spine's style fields: its size (height as its share of the shelf,
+-- | rounded to whole pixels), gap, arc, and the selection colours when it
+-- | is the lit one.
+bookFields :: Book -> SpineStyle
+bookFields book =
+  { display: "flex"
+  , flexShrink: 0.0
+  , width: show book.width <> "px"
+  , height: show (Int.round (Int.toNumber book.heightPct / 100.0 * Int.toNumber shelfHeight)) <>
+      "px"
+  , marginRight: show book.gap <> "px"
+  , backgroundColor: if book.lit then selFill else bookFill
+  , border: "1px solid " <> (if book.lit then selLine else bookLine)
+  , borderTopLeftRadius: toString book.arc <> "px"
+  , borderTopRightRadius: toString book.arc <> "px"
+  }
+
+-- | A leaning spine's rotation about its foot; null for an upright one.
+bookTilt :: Book -> Nullable SpineTilt
+bookTilt book = toNullable
+  ( if book.tilt /= 0 then
+      Just
+        { transform: "rotate(" <> show book.tilt <> "deg)"
+        , transformOrigin: "bottom center"
+        }
+    else Nothing
+  )
+
 bookStyle :: Book -> StyleMap
-bookStyle book =
-  runFn2 mkBookStyleImpl
-    { display: "flex"
-    , flexShrink: 0.0
-    , width: show book.width <> "px"
-    , height: show (Int.round (Int.toNumber book.heightPct / 100.0 * Int.toNumber shelfHeight)) <>
-        "px"
-    , marginRight: show book.gap <> "px"
-    , backgroundColor: if book.lit then selFill else bookFill
-    , border: "1px solid " <> (if book.lit then selLine else bookLine)
-    , borderTopLeftRadius: toString book.arc <> "px"
-    , borderTopRightRadius: toString book.arc <> "px"
-    }
-    ( toNullable
-        ( if book.tilt /= 0 then
-            Just
-              { transform: "rotate(" <> show book.tilt <> "deg)"
-              , transformOrigin: "bottom center"
-              }
-          else Nothing
-        )
-    )
+bookStyle book = runFn2 mkBookStyleImpl (bookFields book) (bookTilt book)
 
 -- | Builds the OG shelf card's data: the seeded spine run with the lit
 -- | spine mapping the project's index into the shelf, the clamped

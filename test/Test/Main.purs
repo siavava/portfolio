@@ -10,6 +10,7 @@ import Test.Components.CodePage as CodePage
 import Test.Components.CueThreads as CueThreads
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
+import Test.Components.ShelfSatori as ShelfSatori
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
 import Test.Composables.DraggableBubble as DraggableBubble
 import Test.Composables.FigureSpotlight as FigureSpotlight
@@ -56,6 +57,7 @@ main = do
   AlgorithmBlock.suite tally
   LayoutChrome.suite tally
   CodePage.suite tally
+  ShelfSatori.suite tally
   Links.suite tally
   InterestLayout.suite tally
   Sitemap.suite tally
