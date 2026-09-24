@@ -7,6 +7,10 @@
 -- | rides along so views attribute to a place. The dashboard itself now
 -- | lives in the standalone status app. The pinia shell is
 -- | `defineStore("metrics", useMetricsCore)`.
+-- |
+-- | The socket, geo, and location composables are called directly — the
+-- | FFI only builds the watch payload, reads the client flag, and
+-- | subscribes to the geo promise.
 module App.Stores.Metrics
   ( MetricsBindings
   , useMetricsCore
@@ -14,50 +18,22 @@ module App.Stores.Metrics
 
 import Prelude
 
+import App.Composables.Metrics.Socket (Scope(..), WsData, scopeKey, useSocketCore)
+import App.Composables.Metrics.ViewerGeo (GeoData, GeoPromise, useViewerGeo)
+import App.Composables.Metrics.ViewerLocation (useViewerLocation)
+import App.Utils.Metrics (withNamespace)
+import Data.Function.Uncurried (Fn3, runFn3)
 import Data.Maybe (Maybe(..))
-import Data.Nullable (Nullable, notNull, toMaybe)
+import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Effect (Effect)
-import Effect.Uncurried
-  ( EffectFn1
-  , EffectFn2
-  , EffectFn3
-  , mkEffectFn1
-  , runEffectFn1
-  , runEffectFn2
-  , runEffectFn3
-  )
+import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
 import Vue (Computed, read, ref, write)
 
--- | The singleton socket handle from `useSocket`.
-foreign import data Socket :: Type
+foreign import watchPayloadImpl :: Fn3 String String (Nullable GeoData) WsData
 
--- | The viewer's resolved location (the ambient `ViewerGeo` shape).
-foreign import data ViewerGeo :: Type
+foreign import isClientImpl :: Effect Boolean
 
--- | The app-wide socket singleton (`useSocket`).
-foreign import useSocketImpl :: Effect Socket
-
--- | The socket's `isConnected` computed.
-foreign import socketConnectedImpl :: EffectFn1 Socket (Computed Boolean)
-
--- | Run a handler on every (re)connect.
-foreign import socketOnConnectImpl :: EffectFn2 Socket (Effect Unit) Unit
-
--- | Send a watch message for the path (namespaced by the impl), spreading
--- | the viewer's geo fields into the payload when present.
-foreign import sendWatchImpl :: EffectFn3 Socket String (Nullable ViewerGeo) Unit
-
--- | The viewer's geo from the localStorage cache — null on the server or
--- | when never resolved.
-foreign import readCachedGeoImpl :: Effect (Nullable ViewerGeo)
-
--- | Resolve the viewer's geo (cache or IP lookup, memoized) and hand it
--- | to the callback; null when the lookup fails.
-foreign import resolveGeoImpl :: EffectFn1 (EffectFn1 (Nullable ViewerGeo) Unit) Unit
-
--- | Fire `useViewerLocation().getLocation()` — records this visit on the
--- | backend's location log, fire-and-forget.
-foreign import recordLocationImpl :: Effect Unit
+foreign import awaitGeoImpl :: EffectFn2 GeoPromise (EffectFn1 (Nullable GeoData) Unit) Unit
 
 -- | The metrics store's public surface.
 type MetricsBindings =
@@ -74,35 +50,38 @@ type MetricsBindings =
 -- | viewer's resolved location.
 useMetricsCore :: Effect MetricsBindings
 useMetricsCore = do
-  socket <- useSocketImpl
-  connected <- runEffectFn1 socketConnectedImpl socket
+  socket <- useSocketCore
+  geoApi <- useViewerGeo
 
   currentPath <- ref "/"
 
-  -- Seeded synchronously so a returning visitor's first view is attributed.
-  viewerGeo <- readCachedGeoImpl >>= ref
+  client <- isClientImpl
+  cachedGeo <- if client then geoApi.readCachedGeo else pure null
+  viewerGeo <- ref cachedGeo
 
   let
     watchPath path = do
       write currentPath path
       geo <- read viewerGeo
-      runEffectFn3 sendWatchImpl socket path geo
+      let payload = runFn3 watchPayloadImpl (scopeKey Watch) (withNamespace path) geo
+      runEffectFn1 socket.send payload
 
-    -- The same-path re-watch attaches geo without recounting the view;
-    -- the visit itself records once the geo lookup settles.
-    recordVisit = runEffectFn1 resolveGeoImpl $ mkEffectFn1 \resolved -> do
-      case toMaybe resolved of
-        Just geo -> do
-          write viewerGeo (notNull geo)
-          path <- read currentPath
-          unless (path == "") (watchPath path)
-        Nothing -> pure unit
-      recordLocationImpl
+    recordVisit = do
+      pending <- geoApi.resolveViewerGeo
+      runEffectFn2 awaitGeoImpl pending $ mkEffectFn1 \resolved -> do
+        case toMaybe resolved of
+          Just geo -> do
+            write viewerGeo (notNull geo)
+            path <- read currentPath
+            unless (path == "") (watchPath path)
+          Nothing -> pure unit
+        locationApi <- useViewerLocation
+        void locationApi.getLocation
 
-  runEffectFn2 socketOnConnectImpl socket (read currentPath >>= watchPath)
+  runEffectFn1 socket.onConnect (read currentPath >>= watchPath)
 
   pure
-    { connected
+    { connected: socket.isConnected
     , watchPath: mkEffectFn1 watchPath
     , recordVisit
     }
