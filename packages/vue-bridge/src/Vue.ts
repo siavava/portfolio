@@ -9,7 +9,7 @@
  * Effect thunks invoked from one.
  */
 import type { ComputedRef, Ref } from "vue"
-import { computed, onBeforeUnmount, onMounted, onUnmounted, ref, shallowReactive, shallowRef, watch } from "vue"
+import { computed, inject, onBeforeUnmount, onMounted, onUnmounted, provide, ref, shallowReactive, shallowRef, watch } from "vue"
 
 export type { ComputedRef, Ref } from "vue"
 
@@ -35,6 +35,9 @@ export const watchRefImpl = <T>(source: Ref<T>, callback: (value: T) => void): (
   watch(source, value => callback(value))
 
 export const onMountedImpl = (fn: () => void): void => { onMounted(fn) }
+
+export const provideImpl = <T>(key: string, value: T): void => { provide(key, value) }
+export const injectImpl = <T>(key: string, fallback: T): T => inject(key, fallback)
 export const onBeforeUnmountImpl = (fn: () => void): void => { onBeforeUnmount(fn) }
 export const onUnmountedImpl = (fn: () => void): void => { onUnmounted(fn) }
 

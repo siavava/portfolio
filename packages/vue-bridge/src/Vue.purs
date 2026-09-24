@@ -10,6 +10,8 @@ module Vue
   , Ref
   , cancelFrame
   , computed
+  , inject
+  , provide
   , reactiveSet
   , ref
   , shallowRef
@@ -42,59 +44,44 @@ foreign import data Computed :: Type -> Type
 -- | A `shallowReactive(new Set<a>())` from Vue.
 foreign import data ReactiveSet :: Type -> Type
 
--- | Vue `ref(value)`.
 foreign import refImpl :: forall a. EffectFn1 a (Ref a)
 
--- | Vue `shallowRef(value)`.
 foreign import shallowRefImpl :: forall a. EffectFn1 a (Ref a)
 
--- | `shallowReactive(new Set())`.
 foreign import reactiveSetImpl :: forall a. Effect (ReactiveSet a)
 
--- | `set.add(value)`.
 foreign import setAddImpl :: forall a. EffectFn2 (ReactiveSet a) a Unit
 
--- | `set.delete(value)`.
 foreign import setDeleteImpl :: forall a. EffectFn2 (ReactiveSet a) a Unit
 
--- | `set.has(value)` — a tracked (reactive) read.
 foreign import setHasImpl :: forall a. EffectFn2 (ReactiveSet a) a Boolean
 
--- | `set.clear()`.
 foreign import setClearImpl :: forall a. EffectFn1 (ReactiveSet a) Unit
 
--- | `ref.value` — a tracked read.
 foreign import readRefImpl :: forall a. EffectFn1 (Ref a) a
 
--- | `ref.value = v`.
 foreign import writeRefImpl :: forall a. EffectFn2 (Ref a) a Unit
 
--- | Vue `computed` over the getter thunk.
 foreign import computedImpl :: forall a. EffectFn1 (Effect a) (Computed a)
 
--- | `computed.value` — a tracked read.
 foreign import readComputedImpl :: forall a. EffectFn1 (Computed a) a
 
--- | Vue `watch(ref, cb)`; returns the stop function.
 foreign import watchRefImpl :: forall a. EffectFn2 (Ref a) (EffectFn1 a Unit) (Effect Unit)
 
--- | Vue `onMounted`.
 foreign import onMountedImpl :: EffectFn1 (Effect Unit) Unit
 
--- | Vue `onBeforeUnmount`.
+foreign import provideImpl :: forall a. EffectFn2 String a Unit
+
+foreign import injectImpl :: forall a. EffectFn2 String a a
+
 foreign import onBeforeUnmountImpl :: EffectFn1 (Effect Unit) Unit
 
--- | Vue `onUnmounted`.
 foreign import onUnmountedImpl :: EffectFn1 (Effect Unit) Unit
 
--- | Vue `watch(getter, cb)`; the callback gets (value, previous), and the
--- | returned Effect stops the watcher.
 foreign import watchGetterImpl :: forall a. EffectFn2 (Effect a) (EffectFn2 a a Unit) (Effect Unit)
 
--- | `requestAnimationFrame`; returns the handle.
 foreign import requestFrameImpl :: EffectFn1 (Effect Unit) Int
 
--- | `cancelAnimationFrame`.
 foreign import cancelFrameImpl :: EffectFn1 Int Unit
 
 -- | A deep-reactive ref seeded with the value.
@@ -148,6 +135,17 @@ computed = runEffectFn1 computedImpl
 -- | Watch a ref; returns the stop handle.
 watchRef :: forall a. Ref a -> (a -> Effect Unit) -> Effect (Effect Unit)
 watchRef source callback = runEffectFn2 watchRefImpl source (mkEffectFn1 callback)
+
+-- | Offer a value to every descendant under a string key — refs and
+-- | computeds stay reactive on the other side.
+provide :: forall a. String -> a -> Effect Unit
+provide = runEffectFn2 provideImpl
+
+-- | The value an ancestor provided under the key, or the fallback when
+-- | none did. The caller names the type it expects; the key is the
+-- | contract.
+inject :: forall a. String -> a -> Effect a
+inject = runEffectFn2 injectImpl
 
 -- | Run an action once the component mounts.
 onMounted :: Effect Unit -> Effect Unit
