@@ -33,6 +33,7 @@ import Test.Transformers.TikzTex as TikzTex
 import Test.Utils.Coder as Coder
 import Test.Utils.Format as Format
 import Test.Utils.JsMath as JsMath
+import Test.Utils.Katex as Katex
 import Test.Utils.Links as Links
 import Test.Utils.MarkdownMath as MarkdownMath
 import Test.Utils.Metrics as Metrics
@@ -71,6 +72,7 @@ main = do
   Socket.suite tally
   Wipe.suite tally
   JsMath.suite tally
+  Katex.suite tally
   Scroll.suite tally
   Connections.suite tally
   Cues.suite tally
