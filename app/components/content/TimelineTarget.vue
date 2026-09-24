@@ -4,9 +4,12 @@ span.timeline-target(
   :class="{ 'is-shown': shown }",
   role="link",
   tabindex="0",
-  :aria-label="`${year} on the timeline`",
+  :aria-description="description",
+  :aria-describedby="describedBy",
   @mouseenter="enter",
   @mouseleave="leave",
+  @focus="focus",
+  @blur="blur",
   @click="press",
   @keydown.enter.prevent="open",
 )
@@ -16,9 +19,10 @@ Teleport(to="body")
   Transition(name="timeline-peek")
     .timeline-peek(
       v-if="shown && placement",
+      :id="peekId",
       ref="peek",
-      :class="{ above: placement.above, 'font-site': siteFace }",
-      :style="{ left: `${placement.left}px`, top: `${placement.top}px` }",
+      :class="{ above: placement.above, 'is-measuring': !ready }",
+      :style="peekStyle",
       @mouseenter="enter",
       @mouseleave="leave",
     )
@@ -26,47 +30,66 @@ Teleport(to="body")
       .timeline-peek__body
         ContentRenderer(v-if="doc", :value="doc")
         p.timeline-peek__empty(v-else) nothing written for this year yet
-      NuxtLink.timeline-peek__open(:to="{ path: '/timeline', query: { year } }")
+      a.timeline-peek__open(:href="href", tabindex="-1", @click="follow")
         | open timeline
-        span.timeline-peek__arrow(aria-hidden="true") ↗
+        PointerArrow.timeline-peek__arrow
 </template>
 
 <script lang="ts" setup>
 const props = defineProps<{
   /** The year this phrase belongs to; MDC hands it over as a string. */
   year: number | string
+  /** The month of the period within that year it belongs to, when it is
+   * about one period rather than the whole year — `Jun`. */
+  period?: string
 }>()
-
-const year = computed(() => Number(props.year))
 
 const { data: docs } = useAsyncData("timeline", () =>
   queryCollection("timeline").order("year", "ASC").all())
-
-const doc = computed(() => (docs.value ?? []).find(entry => entry.year === year.value) ?? null)
-
-const route = useRoute()
-const siteFace = computed(() => route.query.font === "2")
 
 const el = useTemplateRef<HTMLElement>("el")
 const peek = useTemplateRef<HTMLElement>("peek")
 const router = useRouter()
 const store = useTimelineStore()
 
-const open = () => router.push({ path: "/timeline", query: { year: year.value } })
-
-const { shown, placement, enter, leave, press } = useTimelineTarget({ el, peek, open })
-
-watch(shown, (up) => {
-  if (up) store.focus(year.value)
-  else store.blur()
+const {
+  year,
+  doc,
+  href,
+  description,
+  peekId,
+  describedBy,
+  shown,
+  ready,
+  placement,
+  peekStyle,
+  enter,
+  leave,
+  focus,
+  blur,
+  press,
+  open,
+  follow,
+} = useTimelineTarget({
+  year: () => props.year,
+  period: () => props.period ?? null,
+  docs: () => docs.value ?? [],
+  peekId: useId(),
+  el,
+  peek,
+  router,
+  focusYear: store.focus,
+  blurYear: store.blur,
 })
 </script>
 
 <style lang="sass">
+@use "@/styles/timeline"
 @use "@/styles/typography"
 
 .timeline-target
   border-bottom: 1px dashed var(--divider)
+  border-radius: 2px
   cursor: pointer
   transition: color 0.2s ease, border-color 0.2s ease
 
@@ -76,10 +99,9 @@ watch(shown, (up) => {
     border-bottom-color: var(--foreground-strong)
 
   &:focus-visible
-    outline: none
+    outline: 2px solid var(--accent)
+    outline-offset: 2px
 
-// The preview is a piece of the timeline surfacing on the page, so it wears
-// the name bar's slab: black on the light site, light on the dark one.
 .timeline-peek
   position: fixed
   z-index: 95
@@ -89,19 +111,18 @@ watch(shown, (up) => {
   color: rgba(255, 255, 255, 0.72)
   border-radius: 12px
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28)
-  font-family: typography.font("timeline")
-  letter-spacing: -0.01em
+  font-family: typography.font("sans-serif")
+  --tl-faint: rgba(255, 255, 255, 0.5)
+  @include timeline.slab
 
-  &.above
-    transform: translateY(-100%)
+  &.is-measuring
+    visibility: hidden
 
   .dark-mode &
     background: #f4f4f2
     color: rgba(0, 0, 0, 0.66)
-
-  &.font-site
-    font-family: typography.font("sans-serif")
-    letter-spacing: 0
+    --tl-faint: rgba(0, 0, 0, 0.55)
+    @include timeline.slab-light
 
 .timeline-peek__year
   margin-bottom: 10px
@@ -126,21 +147,26 @@ watch(shown, (up) => {
     text-decoration: underline
     text-decoration-color: rgba(255, 255, 255, 0.28)
     text-underline-offset: 2px
+    transition: color 0.2s ease
+
+    &:hover
+      color: var(--tl-highlight)
+      text-decoration-color: var(--tl-highlight)
 
     .dark-mode &
       text-decoration-color: rgba(0, 0, 0, 0.28)
 
 .timeline-peek__empty
   font-style: italic
-  color: rgba(255, 255, 255, 0.4)
+  color: rgba(255, 255, 255, 0.5)
 
   .dark-mode &
-    color: rgba(0, 0, 0, 0.4)
+    color: rgba(0, 0, 0, 0.55)
 
 .timeline-peek__open
   display: inline-flex
-  align-items: baseline
-  gap: 5px
+  align-items: center
+  text-decoration: none
   margin-top: 14px
   padding-top: 10px
   width: 100%
@@ -149,49 +175,34 @@ watch(shown, (up) => {
   font-weight: 500
   letter-spacing: 0.08em
   text-transform: uppercase
-  color: rgba(255, 255, 255, 0.55)
+  color: rgba(255, 255, 255, 0.6)
   transition: color 0.2s ease
 
   &:hover
-    color: var(--bar-foreground)
+    color: var(--tl-highlight)
     text-decoration: none
 
   .dark-mode &
     border-top-color: rgba(0, 0, 0, 0.18)
-    color: rgba(0, 0, 0, 0.5)
+    color: rgba(0, 0, 0, 0.6)
 
     &:hover
-      color: #111110
+      color: var(--tl-highlight)
 
 .timeline-peek__arrow
-  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1)
+  --pointer-gap: 1px
+  font-size: 1.25em
 
 .timeline-peek__open:hover .timeline-peek__arrow
-  transform: translate(2px, -2px)
-
-.timeline-peek-enter-active
-  transition: opacity 0.18s ease, transform 0.26s cubic-bezier(0.22, 1, 0.36, 1)
+  transform: translate(2.5px, -2.5px)
 
 .timeline-peek-leave-active
   transition: opacity 0.14s ease
-
-.timeline-peek-enter-from
-  opacity: 0
-  transform: translateY(6px)
-
-  &.above
-    transform: translateY(calc(-100% - 6px))
 
 .timeline-peek-leave-to
   opacity: 0
 
 @media (prefers-reduced-motion: reduce)
-  .timeline-peek-enter-active, .timeline-peek-leave-active
-    transition: opacity 0.12s ease
-
-  .timeline-peek-enter-from
-    transform: none
-
-    &.above
-      transform: translateY(-100%)
+  .timeline-peek-leave-active
+    transition: opacity 0.1s ease
 </style>

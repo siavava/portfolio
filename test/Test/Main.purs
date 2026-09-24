@@ -42,6 +42,7 @@ import Test.Components.SideNote as SideNote
 import Test.Components.SmokeViz as SmokeViz
 import Test.Components.TikzDiagram as TikzDiagram
 import Test.Components.Timeline as Timeline
+import Test.Components.TimelineTarget as TimelineTarget
 import Test.Components.TooltipShell as TooltipShell
 import Test.Components.Visualizers as Visualizers
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
@@ -89,6 +90,7 @@ main = do
   AStar.suite tally
   Visualizers.suite tally
   Timeline.suite tally
+  TimelineTarget.suite tally
   AlgorithmBlock.suite tally
   LayoutChrome.suite tally
   CodePage.suite tally
