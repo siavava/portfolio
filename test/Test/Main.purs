@@ -7,6 +7,7 @@ import Test.Build.NotesMeta as NotesMeta
 import Test.Components.AStar as AStar
 import Test.Components.AlgorithmBlock as AlgorithmBlock
 import Test.Components.BioTarget as BioTarget
+import Test.Components.BookcaseShelf as BookcaseShelf
 import Test.Components.CodePage as CodePage
 import Test.Components.ContactPanel as ContactPanel
 import Test.Components.CueThreads as CueThreads
@@ -98,6 +99,7 @@ main = do
   NowItem.suite tally
   ScrollFades.suite tally
   BioTarget.suite tally
+  BookcaseShelf.suite tally
   ProseA.suite tally
   TikzDiagram.suite tally
   report tally

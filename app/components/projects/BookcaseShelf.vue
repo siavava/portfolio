@@ -28,8 +28,10 @@ const emit = defineEmits<{
   select: [path: string]
 }>()
 
-const hasSelection = computed(() =>
-  props.books.some(book => book.path === props.selectedPath))
+const { hasSelection } = useBookcaseShelf({
+  books: () => props.books,
+  selectedPath: () => props.selectedPath ?? null,
+})
 </script>
 
 <style lang="sass" scoped>
