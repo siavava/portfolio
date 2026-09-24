@@ -16,6 +16,7 @@ import Test.Components.CueThreads as CueThreads
 import Test.Components.DreamItem as DreamItem
 import Test.Components.FigmaSelect as FigmaSelect
 import Test.Components.FigureSpotlight as FigureSpotlightComponent
+import Test.Components.GraphTraversalViz as GraphTraversalViz
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.NowItem as NowItem
@@ -74,6 +75,7 @@ main = do
   LayoutChrome.suite tally
   CodePage.suite tally
   ShelfSatori.suite tally
+  GraphTraversalViz.suite tally
   Links.suite tally
   InterestLayout.suite tally
   Sitemap.suite tally

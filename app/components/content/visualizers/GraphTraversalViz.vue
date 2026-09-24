@@ -33,7 +33,7 @@ VizFrame(variant="graph-traversal-viz", title="Graph traversal")
     )
       circle(r="15")
       text {{ n.id }}{{ distLabel(n.id) }}
-  template(#note) order: {{ order.join(" → ") || "—" }}
+  template(#note) order: {{ orderLabel }}
   template(#legend)
     .viz-legend
       span
@@ -50,7 +50,7 @@ VizFrame(variant="graph-traversal-viz", title="Graph traversal")
 <script lang="ts" setup>
 /** ## GraphTraversalViz — BFS, DFS, and uniform-cost search animated over one weighted graph. */
 const {
-  algo, run, reset, order, activeEdges, nodeClass, distLabel,
+  algo, run, reset, orderLabel, activeEdges, nodeClass, distLabel,
   nodes, edgeViews, w: W, h: H,
 } = useGraphTraversalViz()
 </script>

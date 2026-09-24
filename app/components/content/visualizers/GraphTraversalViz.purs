@@ -5,10 +5,27 @@
 -- | their staleness token, and the per-node class/label helpers. The SFC
 -- | keeps only the call here.
 module App.Components.GraphTraversalViz
-  ( EdgeView
+  ( Adjacent
+  , DistEntry
+  , EdgeView
   , GraphBindings
+  , GraphEdge
   , GraphNode
   , NodeClass
+  , edgeViewsAll
+  , graphAdjacent
+  , graphEdges
+  , graphNodeAt
+  , graphNodeClass
+  , graphNodes
+  , nearestUnsettled
+  , orderText
+  , traversalDequeue
+  , traversalExpand
+  , ucsDistance
+  , ucsDistanceLabel
+  , ucsRelax
+  , ucsStart
   , useGraphTraversalViz
   ) where
 
@@ -21,13 +38,16 @@ import Data.Maybe (Maybe(..), maybe)
 import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Data.Number (infinity)
 import Data.Number.Format (toString)
+import Data.String (joinWith)
 import Effect (Effect)
 import Effect.Ref as Ref
 import Effect.Timer (setTimeout)
 import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import Vue
-  ( ReactiveSet
+  ( Computed
+  , ReactiveSet
   , Ref
+  , computed
   , onBeforeUnmount
   , onMounted
   , reactiveSet
@@ -67,6 +87,8 @@ type GraphBindings =
     algo :: Ref String
   -- | Visit order so far, appended as each node lands.
   , order :: Ref (Array String)
+  -- | The visit order as the note line shows it — see `orderText`.
+  , orderLabel :: Computed String
   -- | Ids of the edges the current run has traversed/relaxed — lit in
   -- | the SVG.
   , activeEdges :: ReactiveSet String
@@ -88,6 +110,7 @@ type GraphBindings =
   , h :: Number
   }
 
+-- | The fixed node roster, laid out left to right across the canvas.
 graphNodes :: Array GraphNode
 graphNodes =
   [ { id: "A", x: 80.0, y: 150.0 }
@@ -100,6 +123,7 @@ graphNodes =
   , { id: "H", x: 480.0, y: 220.0 }
   ]
 
+-- | The weighted, undirected edge list.
 graphEdges :: Array GraphEdge
 graphEdges =
   [ { id: "AB", a: "A", b: "B", w: 4 }
@@ -114,17 +138,20 @@ graphEdges =
   , { id: "FH", a: "F", b: "H", w: 7 }
   ]
 
-nodeAt :: String -> { x :: Number, y :: Number }
-nodeAt nodeId = maybe { x: 0.0, y: 0.0 } (\n -> { x: n.x, y: n.y })
+-- | A node's position by id; the origin for an unknown id.
+graphNodeAt :: String -> { x :: Number, y :: Number }
+graphNodeAt nodeId = maybe { x: 0.0, y: 0.0 } (\n -> { x: n.x, y: n.y })
   (Array.find (\n -> n.id == nodeId) graphNodes)
 
+-- | Every edge with its endpoint coordinates and the midpoint its
+-- | weight label sits at.
 edgeViewsAll :: Array EdgeView
 edgeViewsAll = map view graphEdges
   where
   view e =
     let
-      pa = nodeAt e.a
-      pb = nodeAt e.b
+      pa = graphNodeAt e.a
+      pb = graphNodeAt e.b
     in
       { id: e.id
       , a: e.a
@@ -138,21 +165,111 @@ edgeViewsAll = map view graphEdges
       , my: (pa.y + pb.y) / 2.0
       }
 
+-- | The note line's rendering of a visit order: ids joined by arrows,
+-- | or an em dash while the joined text is empty — the SFC's
+-- | `order.join(" → ") || "—"`.
+orderText :: Array String -> String
+orderText ids = case joinWith " → " ids of
+  "" -> "—"
+  joined -> joined
+
 -- | Neighbors in the order the SFC built its adjacency lists: one pass
 -- | over the edge list, each endpoint contributing the other.
-adjOf :: String -> Array Adjacent
-adjOf u = Array.concatMap pick graphEdges
+graphAdjacent :: String -> Array Adjacent
+graphAdjacent u = Array.concatMap pick graphEdges
   where
   pick e
     | e.a == u = [ { to: e.b, w: e.w, id: e.id } ]
     | e.b == u = [ { to: e.a, w: e.w, id: e.id } ]
     | otherwise = []
 
+-- | The next node to visit and the frontier left behind: BFS takes the
+-- | oldest entry (a queue), anything else — DFS — the newest (a stack).
+traversalDequeue :: String -> Array String -> Maybe { cur :: String, rest :: Array String }
+traversalDequeue al q =
+  if al == "bfs" then Array.uncons q <#> \{ head, tail } -> { cur: head, rest: tail }
+  else Array.unsnoc q <#> \{ init, last } -> { cur: last, rest: init }
+
+-- | Visiting `cur` in BFS/DFS: each neighbor not seen yet joins the
+-- | frontier and the seen list, in adjacency order, and the edge it was
+-- | reached by is lit.
+traversalExpand
+  :: String
+  -> { queue :: Array String, seen :: Array String }
+  -> { queue :: Array String, seen :: Array String, lit :: Array String }
+traversalExpand cur start =
+  foldl visit { queue: start.queue, seen: start.seen, lit: [] } (graphAdjacent cur)
+  where
+  visit acc edge
+    | Array.elem edge.to acc.seen = acc
+    | otherwise =
+        { queue: Array.snoc acc.queue edge.to
+        , seen: Array.snoc acc.seen edge.to
+        , lit: Array.snoc acc.lit edge.id
+        }
+
+-- | A node's tentative distance; infinite until reached (or unlisted).
+ucsDistance :: Array DistEntry -> String -> Number
+ucsDistance ds nodeId = maybe infinity _.d (Array.find (\e -> e.id == nodeId) ds)
+
+-- | Uniform-cost search's starting distances: 0 at A, infinite
+-- | elsewhere, in roster order.
+ucsStart :: Array DistEntry
+ucsStart = map (\n -> { id: n.id, d: if n.id == "A" then 0.0 else infinity }) graphNodes
+
+-- | The unsettled node with the least tentative distance — the first in
+-- | roster order on a tie; nothing once every node is settled.
+nearestUnsettled :: Array DistEntry -> Array String -> Maybe String
+nearestUnsettled ds doneIds = foldl pick Nothing graphNodes
+  where
+  pick u n =
+    if Array.elem n.id doneIds then u
+    else case u of
+      Nothing -> Just n.id
+      Just cur -> if ucsDistance ds n.id < ucsDistance ds cur then Just n.id else u
+
+-- | Settling `u` in uniform-cost search: every neighbor reached more
+-- | cheaply through `u` takes the shorter distance (strictly shorter —
+-- | a tie keeps the old one), and the edges that improved are lit.
+ucsRelax :: String -> Array DistEntry -> { dist :: Array DistEntry, lit :: Array String }
+ucsRelax u ds0 = foldl relax { dist: ds0, lit: [] } (graphAdjacent u)
+  where
+  relax acc edge =
+    let
+      du = ucsDistance acc.dist u
+    in
+      if du + toNumber edge.w < ucsDistance acc.dist edge.to then
+        { dist: map
+            ( \entry ->
+                if entry.id == edge.to then entry { d = du + toNumber edge.w }
+                else entry
+            )
+            acc.dist
+        , lit: Array.snoc acc.lit edge.id
+        }
+      else acc
+
+-- | A node's flags given the active node, the visited list, and the
+-- | frontier.
+graphNodeClass :: Nullable String -> Array String -> Array String -> String -> NodeClass
+graphNodeClass a v f nodeId =
+  { active: toMaybe a == Just nodeId
+  , visited: Array.elem nodeId v
+  , frontier: Array.elem nodeId f
+  }
+
+-- | A node's ":<dist>" label under uniform-cost search — empty until its
+-- | distance is finite.
+ucsDistanceLabel :: Array DistEntry -> String -> String
+ucsDistanceLabel ds nodeId = case Array.find (\e -> e.id == nodeId) ds of
+  Just entry | entry.d < infinity -> ":" <> toString entry.d
+  _ -> ""
+
 -- | Wires the timer-driven traversal coroutines — running on mount and
 -- | on algorithm change, with a staleness token guarding orphaned
--- | timers. Binds the algorithm select, the visit order, the lit edge
--- | set, per-node class/label helpers, and run/reset actions over the
--- | fixed weighted graph.
+-- | timers. Binds the algorithm select, the visit order and its note
+-- | label, the lit edge set, per-node class/label helpers, and run/reset
+-- | actions over the fixed weighted graph.
 useGraphTraversalViz :: Effect GraphBindings
 useGraphTraversalViz = do
   algo <- ref "bfs"
@@ -169,8 +286,6 @@ useGraphTraversalViz = do
     delayThen ms eff = void (setTimeout ms eff)
 
     pushRef r x = read r >>= \xs -> write r (Array.snoc xs x)
-
-    dOf ds nodeId = maybe infinity _.d (Array.find (\e -> e.id == nodeId) ds)
 
     reset = do
       Ref.modify_ (_ + 1) token
@@ -203,11 +318,7 @@ useGraphTraversalViz = do
       let
         loop = do
           q <- Ref.read queue
-          let
-            dequeued =
-              if al == "bfs" then Array.uncons q <#> \{ head, tail } -> { cur: head, rest: tail }
-              else Array.unsnoc q <#> \{ init, last } -> { cur: last, rest: init }
-          case dequeued of
+          case traversalDequeue al q of
             Nothing -> do
               write frontier []
               finishRun
@@ -220,12 +331,12 @@ useGraphTraversalViz = do
                 s <- stale
                 unless s do
                   pushRef visited cur
-                  for_ (adjOf cur) \edge -> do
-                    seenIds <- Ref.read seen
-                    unless (Array.elem edge.to seenIds) do
-                      Ref.write (Array.snoc seenIds edge.to) seen
-                      Ref.modify_ (flip Array.snoc edge.to) queue
-                      setAdd activeEdges edge.id
+                  q1 <- Ref.read queue
+                  seenIds <- Ref.read seen
+                  let expanded = traversalExpand cur { queue: q1, seen: seenIds }
+                  Ref.write expanded.seen seen
+                  Ref.write expanded.queue queue
+                  for_ expanded.lit (setAdd activeEdges)
                   q2 <- Ref.read queue
                   write frontier q2
                   write active null
@@ -235,8 +346,7 @@ useGraphTraversalViz = do
       loop
 
     runUcs stale finishRun = do
-      dRef <- Ref.new
-        (map (\n -> { id: n.id, d: if n.id == "A" then 0.0 else infinity }) graphNodes)
+      dRef <- Ref.new ucsStart
       Ref.read dRef >>= write dist
       doneRef <- Ref.new ([] :: Array String)
       let
@@ -245,16 +355,10 @@ useGraphTraversalViz = do
           if Array.length doneIds >= Array.length graphNodes then finishRun
           else do
             ds <- Ref.read dRef
-            let
-              pick u n =
-                if Array.elem n.id doneIds then u
-                else case u of
-                  Nothing -> Just n.id
-                  Just cur -> if dOf ds n.id < dOf ds cur then Just n.id else u
-            case foldl pick Nothing graphNodes of
+            case nearestUnsettled ds doneIds of
               Nothing -> finishRun
               Just u
-                | dOf ds u == infinity -> finishRun
+                | ucsDistance ds u == infinity -> finishRun
                 | otherwise -> do
                     write active (notNull u)
                     pushRef order u
@@ -263,21 +367,11 @@ useGraphTraversalViz = do
                       unless s do
                         Ref.modify_ (flip Array.snoc u) doneRef
                         pushRef visited u
-                        for_ (adjOf u) \edge -> do
-                          ds2 <- Ref.read dRef
-                          let du = dOf ds2 u
-                          when (du + toNumber edge.w < dOf ds2 edge.to) do
-                            Ref.write
-                              ( map
-                                  ( \entry ->
-                                      if entry.id == edge.to then entry { d = du + toNumber edge.w }
-                                      else entry
-                                  )
-                                  ds2
-                              )
-                              dRef
-                            Ref.read dRef >>= write dist
-                            setAdd activeEdges edge.id
+                        ds2 <- Ref.read dRef
+                        let relaxed = ucsRelax u ds2
+                        Ref.write relaxed.dist dRef
+                        unless (Array.null relaxed.lit) (write dist relaxed.dist)
+                        for_ relaxed.lit (setAdd activeEdges)
                         write active null
                         delayThen 160 do
                           s2 <- stale
@@ -288,20 +382,16 @@ useGraphTraversalViz = do
       a <- read active
       v <- read visited
       f <- read frontier
-      pure
-        { active: toMaybe a == Just nodeId
-        , visited: Array.elem nodeId v
-        , frontier: Array.elem nodeId f
-        }
+      pure (graphNodeClass a v f nodeId)
 
     distLabel nodeId = do
       al <- read algo
       if al /= "ucs" then pure ""
       else do
         ds <- read dist
-        case Array.find (\e -> e.id == nodeId) ds of
-          Just entry | entry.d < infinity -> pure (":" <> toString entry.d)
-          _ -> pure ""
+        pure (ucsDistanceLabel ds nodeId)
+
+  orderLabel <- computed (orderText <$> read order)
 
   _ <- watchRef algo \_ -> run
 
@@ -316,6 +406,7 @@ useGraphTraversalViz = do
   pure
     { algo
     , order
+    , orderLabel
     , activeEdges
     , nodeClass: mkEffectFn1 nodeClass
     , distLabel: mkEffectFn1 distLabel
