@@ -31,6 +31,7 @@ import Test.Components.PageShell as PageShell
 import Test.Components.ParticleHashViz as ParticleHashViz
 import Test.Components.PbdClothViz as PbdClothViz
 import Test.Components.PbdViz as PbdViz
+import Test.Components.Period as Period
 import Test.Components.ProjectShelf as ProjectShelf
 import Test.Components.ProseA as ProseA
 import Test.Components.Reader as Reader
@@ -148,6 +149,7 @@ main = do
   CueRoot.suite tally
   FigmaSelect.suite tally
   FigureSpotlightComponent.suite tally
+  Period.suite tally
   ProjectShelf.suite tally
   ProseA.suite tally
   SideNote.suite tally
