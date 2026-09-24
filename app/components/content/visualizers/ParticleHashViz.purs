@@ -7,11 +7,22 @@
 -- | which mutates the reactive particle array in place; PureScript owns
 -- | the parameters, state, and lifecycle around it.
 module App.Components.ParticleHashViz
-  ( CellRect
+  ( Cell
+  , CellRect
   , GridLine
   , HashBindings
+  , Particle
   , Point
   , SimParticles
+  , hashCellOf
+  , hashCellSize
+  , hashFrameDt
+  , hashGridLines
+  , hashKinds
+  , hashNote
+  , hashVisitedCells
+  , queryIndexFor
+  , seedHashParticle
   , useParticleHashViz
   ) where
 
@@ -51,7 +62,6 @@ import Vue
   , write
   )
 
--- | The FFI kernel's mutable simulation state (params + particles).
 foreign import data SimState :: Type
 
 -- | The `reactive([])` particle array the template iterates directly.
@@ -76,37 +86,25 @@ type GridLine = { x1 :: Number, y1 :: Number, x2 :: Number, y2 :: Number }
 
 type CellRect = { x :: Number, y :: Number, w :: Number, h :: Number }
 
--- | Fresh kernel state from the box/particle parameters, with an empty
--- | `reactive` particle array.
+-- | A hash-grid cell by column and row from the box's top-left.
+type Cell = { col :: Int, row :: Int }
+
 foreign import newSimStateImpl :: EffectFn1 SimParams SimState
 
--- | The kernel's reactive particle array — a stable identity the
--- | template iterates directly.
 foreign import particlesOfImpl :: SimState -> SimParticles
 
--- | Swap in fresh particles, mutating the reactive array in place.
 foreign import replaceParticlesImpl :: EffectFn2 SimState (Array Particle) Unit
 
--- | Position of the particle at an index, null when out of range.
 foreign import particleAtImpl :: EffectFn2 SimState Int (Nullable Point)
 
--- | Plain snapshot of every particle position.
 foreign import positionsImpl :: EffectFn1 SimState (Array Point)
 
--- | The integrate-and-collide kernel: advance by dt seconds, bounce off
--- | the walls, then separate and impulse overlapping pairs found via a
--- | spatial hash of the given cell size (px). Returns the contacts
--- | resolved this step and stamps the hit times for the linger flags.
 foreign import stepImpl :: EffectFn3 SimState Number Number Int
 
--- | Per-particle flag: collided within the last `linger` ms of `now`.
 foreign import hitFlagsImpl :: EffectFn4 SimState Number Int Number (Array Boolean)
 
--- | `performance.now()`, in ms.
 foreign import nowImpl :: Effect Number
 
--- | Starts a per-frame loop; the callback receives the rAF timestamp.
--- | Returns the stop Effect. No-op on the server (`@/ffi/raf-loop`).
 foreign import startRafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
 type HashBindings =
@@ -172,6 +170,116 @@ restitution = 0.9
 hitLinger :: Number
 hitLinger = 260.0
 
+-- | The hash cell size for a mode: half or double the kernel radius, or
+-- | the radius itself.
+hashCellSize :: String -> Number
+hashCellSize m =
+  if m == "half" then kernelRadius / 2.0
+  else if m == "double" then kernelRadius * 2.0
+  else kernelRadius
+
+-- | The grid lines at a cell size: verticals from the box's left edge,
+-- | then horizontals from its top, every `size` px while within half a
+-- | pixel of the box — a line that overshoots the far edge by less than
+-- | that is drawn on it.
+hashGridLines :: Number -> Array GridLine
+hashGridLines size = vertical originX [] <> horizontal originY []
+  where
+  vertical x acc
+    | x <= originX + boxW + 0.5 =
+        let
+          cx = min x (originX + boxW)
+        in
+          vertical (x + size) (Array.snoc acc { x1: cx, y1: originY, x2: cx, y2: originY + boxH })
+    | otherwise = acc
+  horizontal y acc
+    | y <= originY + boxH + 0.5 =
+        let
+          cy = min y (originY + boxH)
+        in
+          horizontal (y + size) (Array.snoc acc { x1: originX, y1: cy, x2: originX + boxW, y2: cy })
+    | otherwise = acc
+
+-- | The cell a point falls in at a cell size.
+hashCellOf :: Number -> Point -> Cell
+hashCellOf size p = { col: floor ((p.x - originX) / size), row: floor ((p.y - originY) / size) }
+
+-- | The 3-by-3 block of cells around `qc` that a query scans, column by
+-- | column, dropping cells outside the grid and clipping the last
+-- | column and row to the box.
+hashVisitedCells :: Number -> Cell -> Array CellRect
+hashVisitedCells size qc =
+  Array.concatMap
+    (\c -> Array.concatMap (rectFor c) (Array.range (qc.row - 1) (qc.row + 1)))
+    (Array.range (qc.col - 1) (qc.col + 1))
+  where
+  cols = ceil (boxW / size)
+  rows = ceil (boxH / size)
+  rectFor c r =
+    if c < 0 || r < 0 || c >= cols || r >= rows then []
+    else
+      [ { x: originX + toNumber c * size
+        , y: originY + toNumber r * size
+        , w: min size (originX + boxW - (originX + toNumber c * size))
+        , h: min size (originY + boxH - (originY + toNumber r * size))
+        }
+      ]
+
+-- | Each particle's kind for the query at index `qi`, position `q`, in
+-- | cell `qc`: the query itself; outside the 3-by-3 block, "drift" (never
+-- | examined); inside it, "neighbor" when truly within the kernel radius,
+-- | else "candidate" (scanned for nothing).
+hashKinds :: Number -> Cell -> Point -> Int -> Array Point -> Array String
+hashKinds size qc q qi positions = Array.mapWithIndex kindAt positions
+  where
+  kindAt i p =
+    if i == qi then "query"
+    else
+      let
+        c = floor ((p.x - originX) / size)
+        r = floor ((p.y - originY) / size)
+      in
+        if not (abs (c - qc.col) <= 1 && abs (r - qc.row) <= 1) then "drift"
+        else if hypot (p.x - q.x) (p.y - q.y) < kernelRadius then "neighbor"
+        else "candidate"
+
+-- | The status line: the cell size, the particles the query scanned
+-- | (candidates and neighbors), the true neighbors among them, and the
+-- | contacts the last step resolved.
+hashNote :: Number -> Array String -> Int -> String
+hashNote size kinds contacts =
+  "cell = " <> toStringWith (fixed 0) size <> "px · candidates scanned " <> show candidates
+    <> " · true neighbors "
+    <> show neighbors
+    <> " · contacts "
+    <> show contacts
+  where
+  candidates = Array.length (Array.filter (\k -> k == "candidate" || k == "neighbor") kinds)
+  neighbors = Array.length (Array.filter (_ == "neighbor") kinds)
+
+-- | A particle seeded from four uniform draws: speed (18–40 px/s) and
+-- | heading, then a position anywhere in the box a radius clear of the
+-- | walls.
+seedHashParticle :: Number -> Number -> Number -> Number -> Particle
+seedHashParticle r1 r2 r3 r4 =
+  { x: originX + particleR + r3 * (boxW - 2.0 * particleR)
+  , y: originY + particleR + r4 * (boxH - 2.0 * particleR)
+  , vx: cos angle * speed
+  , vy: sin angle * speed
+  }
+  where
+  speed = 18.0 + r1 * 22.0
+  angle = r2 * pi * 2.0
+
+-- | A uniform draw → a particle index.
+queryIndexFor :: Number -> Int
+queryIndexFor r = floor (r * toNumber particleCount)
+
+-- | Seconds since the previous frame stamp (ms): 0 on the first frame,
+-- | capped at 0.05.
+hashFrameDt :: Number -> Number -> Number
+hashFrameDt previous t = if previous == 0.0 then 0.0 else min ((t - previous) / 1000.0) 0.05
+
 -- | Wires the collision kernel and the hash-grid computeds, seeding the
 -- | particles and starting the frame loop after first paint (stopping
 -- | on unmount). Binds the cell-size select, the classification
@@ -195,65 +303,18 @@ useParticleHashViz = do
   lastStamp <- Ref.new 0.0
   stopLoop <- Ref.new (pure unit :: Effect Unit)
 
-  cellSize <- computed do
-    m <- read cellMode
-    pure
-      ( if m == "half" then kernelRadius / 2.0
-        else if m == "double" then kernelRadius * 2.0
-        else kernelRadius
-      )
+  cellSize <- computed (hashCellSize <$> read cellMode)
 
   query <- computed do
     qi <- read queryIndex
     mp <- toMaybe <$> runEffectFn2 particleAtImpl sim qi
     pure (fromMaybe { x: canvasW / 2.0, y: canvasH / 2.0 } mp)
 
-  gridLines <- computed do
-    size <- read cellSize
-    let
-      vertical x acc
-        | x <= originX + boxW + 0.5 =
-            let
-              cx = min x (originX + boxW)
-            in
-              vertical (x + size)
-                (Array.snoc acc { x1: cx, y1: originY, x2: cx, y2: originY + boxH })
-        | otherwise = acc
-      horizontal y acc
-        | y <= originY + boxH + 0.5 =
-            let
-              cy = min y (originY + boxH)
-            in
-              horizontal (y + size)
-                (Array.snoc acc { x1: originX, y1: cy, x2: originX + boxW, y2: cy })
-        | otherwise = acc
-    pure (vertical originX [] <> horizontal originY [])
+  gridLines <- computed (hashGridLines <$> read cellSize)
 
-  queryCell <- computed do
-    size <- read cellSize
-    q <- read query
-    pure { col: floor ((q.x - originX) / size), row: floor ((q.y - originY) / size) }
+  queryCell <- computed (hashCellOf <$> read cellSize <*> read query)
 
-  visitedCells <- computed do
-    size <- read cellSize
-    qc <- read queryCell
-    let
-      cols = ceil (boxW / size)
-      rows = ceil (boxH / size)
-      rectFor c r =
-        if c < 0 || r < 0 || c >= cols || r >= rows then []
-        else
-          [ { x: originX + toNumber c * size
-            , y: originY + toNumber r * size
-            , w: min size (originX + boxW - (originX + toNumber c * size))
-            , h: min size (originY + boxH - (originY + toNumber r * size))
-            }
-          ]
-    pure
-      ( Array.concatMap
-          (\c -> Array.concatMap (rectFor c) (Array.range (qc.row - 1) (qc.row + 1)))
-          (Array.range (qc.col - 1) (qc.col + 1))
-      )
+  visitedCells <- computed (hashVisitedCells <$> read cellSize <*> read queryCell)
 
   kinds <- computed do
     size <- read cellSize
@@ -261,43 +322,25 @@ useParticleHashViz = do
     q <- read query
     qi <- read queryIndex
     positions <- runEffectFn1 positionsImpl sim
-    let
-      kindAt i p =
-        if i == qi then "query"
-        else
-          let
-            c = floor ((p.x - originX) / size)
-            r = floor ((p.y - originY) / size)
-          in
-            if not (abs (c - qc.col) <= 1 && abs (r - qc.row) <= 1) then "drift"
-            else if hypot (p.x - q.x) (p.y - q.y) < kernelRadius then "neighbor"
-            else "candidate"
-    pure (Array.mapWithIndex kindAt positions)
+    pure (hashKinds size qc q qi positions)
 
   let
     seed = do
       fresh <- for (Array.range 1 particleCount) \_ -> do
         r1 <- random
-        let speed = 18.0 + r1 * 22.0
         r2 <- random
-        let angle = r2 * pi * 2.0
         r3 <- random
         r4 <- random
-        pure
-          { x: originX + particleR + r3 * (boxW - 2.0 * particleR)
-          , y: originY + particleR + r4 * (boxH - 2.0 * particleR)
-          , vx: cos angle * speed
-          , vy: sin angle * speed
-          }
+        pure (seedHashParticle r1 r2 r3 r4)
       runEffectFn2 replaceParticlesImpl sim fresh
 
     newQuery = do
       r <- random
-      write queryIndex (floor (r * toNumber particleCount))
+      write queryIndex (queryIndexFor r)
 
     tick t = do
       previous <- Ref.read lastStamp
-      let dt = if previous == 0.0 then 0.0 else min ((t - previous) / 1000.0) 0.05
+      let dt = hashFrameDt previous t
       Ref.write t lastStamp
       size <- read cellSize
       contacts <- runEffectFn3 stepImpl sim dt size
@@ -305,17 +348,7 @@ useParticleHashViz = do
       flags <- runEffectFn4 hitFlagsImpl sim now particleCount hitLinger
       write hitFlags flags
       allKinds <- read kinds
-      let
-        candidates = Array.length
-          (Array.filter (\k -> k == "candidate" || k == "neighbor") allKinds)
-        neighbors = Array.length (Array.filter (_ == "neighbor") allKinds)
-      write note
-        ( "cell = " <> toStringWith (fixed 0) size <> "px · candidates scanned " <> show candidates
-            <> " · true neighbors "
-            <> show neighbors
-            <> " · contacts "
-            <> show contacts
-        )
+      write note (hashNote size allKinds contacts)
 
   useAfterPaint do
     seed
