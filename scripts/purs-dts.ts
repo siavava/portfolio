@@ -49,24 +49,12 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)))
 const outDir = `${root}/app/types/purs`
 const shimDir = `${root}/.purs-shims`
 
-// Modules whose TS surface is a hand-written adapter (API reshaping,
-// default parameters) — declarations are generated, runtime shims are not.
-// Prefer the `@ts-hand-adapted` module doc pragma; this set is the fallback.
 const HAND_ADAPTED = new Set([
   "App.Utils.Coder",
   "App.Utils.Scroll",
-  "App.Utils.Katex",
-  "App.Composables.Metrics.Socket",
-  "App.Composables.Metrics.ViewerGeo",
-  "App.Composables.Metrics.ViewerLocation",
   "App.Composables.Map.InterestLayout",
-  "App.Utils.Metrics",
 ])
 
-// Modules only PureScript (or direct #purs imports) consume — no shim.
-// Prefer the `@ts-internal` module doc pragma; this set is the fallback.
-// App.Server.* modules are internal automatically (nitro aliases their
-// compiled entries directly — see nuxt.config.ts).
 const INTERNAL = new Set([
   "App.Composables.CaptionTypewriter",
 ])
@@ -79,14 +67,13 @@ const PRIMS: Record<string, string> = {
   Char: "string",
 }
 
-// Foreign/opaque PureScript types with a precise TypeScript identity.
-// Keyed by fully-qualified name; values take the translated type arguments.
-// `@ts` doc annotations take precedence; this map is the fallback for
-// types not yet annotated in their .purs source.
 const TYPE_OVERRIDES: Record<string, (args: string[]) => string> = {
   "Vue.Ref": args => `import("vue").Ref<${args[0]}>`,
   "Vue.Computed": args => `import("vue").ComputedRef<${args[0]}>`,
   "Vue.ReactiveSet": args => `Set<${args[0]}>`,
+  "Data.Maybe.Maybe": () => "unknown",
+  "Data.Ordering.Ordering": () => "unknown",
+  "Effect.Ref.Ref": () => "unknown",
   "App.Stores.Cues.ReactiveMap": args => `Map<${args[0]}, ${args[1]}>`,
   "App.Composables.MetricsTracking.Router": () => "import(\"vue-router\").Router",
   "App.Composables.ProjectReferences.ProjectDoc": () => "import(\"@nuxt/content\").ProjectsCollectionItem",
@@ -94,6 +81,7 @@ const TYPE_OVERRIDES: Record<string, (args: string[]) => string> = {
   "App.Components.ReaderTopbar.ShareFn": () => "(options?: { title?: string, url?: string }) => Promise<void>",
   "App.Components.ReaderTopbar.CopyFn": () => "(text: string) => Promise<void>",
   "App.Composables.DraggableBubble.Vec2": () => "{ x: number, y: number }",
+  "App.Stores.Timeline.Rect": () => "{ left: number, top: number, width: number, height: number }",
   "App.Composables.ReaderPeeks.PeekStyle": () => "Record<string, string>",
   "App.Composables.Metrics.Socket.WsData": () => "WsData",
   "App.Composables.Metrics.ViewerGeo.GeoData": () => "ViewerGeo",
@@ -118,10 +106,7 @@ const TYPE_OVERRIDES: Record<string, (args: string[]) => string> = {
   "App.Components.ParticleHashViz.SimParticles": () => "import(\"../../ffi/components/particle-hash-viz\").SimParticle[]",
 }
 
-// `@ts` doc annotations, fully-qualified name → type expression. Filled by
-// a pre-pass over every output module's docs.json — lookups are
-// cross-module (e.g. Vue.Ref referenced from App code), so collection
-// can't be limited to the emitted App.* set.
+// Collected from every output module, not just App.*: lookups are cross-module.
 const tsAnnotations = new Map<string, string>()
 
 /** The `@ts <expr>` annotation in a doc comment (expression runs to end of line). */
@@ -132,8 +117,6 @@ const tsAnnotation = (comments: string | null | undefined): string | undefined =
 const fillHoles = (expr: string, args: string[]): string =>
   expr.replace(/\$(\d+)/g, (_, n) => args[Number(n) - 1] ?? "unknown")
 
-// Set per module by generate(), so unknown-fallback warnings can name it.
-// Internal modules skip the warning: their d.ts is not a consumer surface.
 let emittingModule = ""
 let emittingInternal = false
 
@@ -152,7 +135,7 @@ const equationArgNames = (decl: Declaration, sourceLines: string[]): (string | n
     const match = sourceLines[line]?.match(namePattern)
     if (!match) continue
     const rest = match[1] ?? ""
-    if (rest.trimStart().startsWith("::")) continue
+    if (rest.trimStart().startsWith("::") || !rest.trim()) continue
     const head = (rest.split("=")[0] ?? "").split("|")[0] ?? ""
     const named = head.trim().split(/\s+/).filter(Boolean)
       .map(token => /^[a-z][A-Za-z0-9_']*$/.test(token) ? token : null)
@@ -270,7 +253,11 @@ const translate = (t: TypeNode, locals: Set<string>): string => {
       }
       if (isCon(head, "Prim", "Array")) return `(${translate(arg, locals)})[]`
       if (isCon(head, "Prim", "Record")) return translateRow(arg, locals)
-      if (isCon(head, "Data.Nullable", "Nullable")) return `${translate(arg, locals)} | null`
+      if (isCon(head, "Data.Nullable", "Nullable")) {
+        // Parenthesized: `() => void | null` would mean a function returning `void | null`.
+        const inner = translate(arg, locals)
+        return `${inner.includes("=>") ? `(${inner})` : inner} | null`
+      }
       if (isCon(head, "Effect", "Effect")) return `() => ${translate(arg, locals)}`
       const { base, args } = unwindApps(t)
       const arity = effectFnArity(base)
@@ -291,8 +278,6 @@ const translate = (t: TypeNode, locals: Set<string>): string => {
       warnUnknown(`applied ${base.tag}`)
       return "unknown"
     }
-    // A bare type variable is legitimate polymorphism, not a missing
-    // mapping — degrade silently.
     case "TypeVar":
       return "unknown"
     case "ForAll":
@@ -369,8 +354,7 @@ const generate = (docsPath: string): void => {
     || /@ts-internal\b/.test(docs.comments ?? "")
     || INTERNAL.has(moduleName)
 
-  // A renamed or deleted module leaves its output dir behind; shimming it
-  // would shadow real auto-imports (this bit us when App.Vue became Vue).
+  // A renamed module leaves a stale output dir; shimming it would shadow real auto-imports.
   const sourceFile = docs.declarations.find(d => d.sourceSpan?.name)?.sourceSpan?.name
   if (sourceFile && !existsSync(`${root}/${sourceFile}`)) {
     console.log(`skipping stale output module ${moduleName} (${sourceFile} gone)`)
@@ -490,8 +474,6 @@ const emitShim = (docs: ModuleDocs, moduleName: string, setupArgNames?: (string 
     const publicName = `use${segments.at(-1)}`
     const names = setupArgNames ?? []
     const params = Array.from({ length: arity }, (_, i) => names[i] ?? `arg${i}`)
-    // Parameter types chain through the curried setup so hover keeps the
-    // real argument names instead of inferring the helper's generics.
     const paramType = (i: number): string =>
       `Parameters<${Array.from({ length: i }, () => "ReturnType<").join("")}typeof setup${">".repeat(i)}>[0]`
     lines.push(
@@ -517,9 +499,6 @@ const collectAnnotations = (docsPath: string): void => {
   }
 }
 
-// Clear stale declarations and shims (renamed/removed modules would
-// otherwise leave orphaned .d.ts files and duplicate names in the
-// auto-import pool).
 rmSync(outDir, { recursive: true, force: true })
 mkdirSync(outDir, { recursive: true })
 rmSync(shimDir, { recursive: true, force: true })
