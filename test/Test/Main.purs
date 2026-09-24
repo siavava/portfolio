@@ -14,6 +14,7 @@ import Test.Components.CueThreads as CueThreads
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.NowItem as NowItem
+import Test.Components.ProjectShelf as ProjectShelf
 import Test.Components.ProseA as ProseA
 import Test.Components.ScrollFades as ScrollFades
 import Test.Components.ShelfSatori as ShelfSatori
@@ -100,6 +101,7 @@ main = do
   ScrollFades.suite tally
   BioTarget.suite tally
   BookcaseShelf.suite tally
+  ProjectShelf.suite tally
   ProseA.suite tally
   TikzDiagram.suite tally
   report tally

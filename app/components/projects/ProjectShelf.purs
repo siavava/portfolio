@@ -11,7 +11,10 @@ module App.Components.ProjectShelf
   , ShelfBindings
   , ShelfBook
   , StyleMap
+  , edgeShift
+  , px
   , setup
+  , shiftVarsFor
   ) where
 
 import Prelude
@@ -42,7 +45,6 @@ foreign import rectOfEventTargetImpl
 -- | Half the rendered tooltip bubble's width, or null before it exists.
 foreign import tooltipHalfWidthImpl :: EffectFn1 (Nullable DomElement) (Nullable Number)
 
--- | `window.innerWidth`.
 foreign import windowInnerWidthImpl :: Effect Number
 
 -- | Assembles the tooltip `:style` object: left/top anchor plus the
@@ -96,8 +98,30 @@ type ShelfBindings =
   , unhover :: Effect Unit
   }
 
+-- | A length in pixels, as CSS writes it.
 px :: Number -> String
 px n = toString n <> "px"
+
+-- | How far a tooltip of the given half-width, centered at `centerX` in a
+-- | window `winWidth` wide, shifts to keep 8px inside the window: right by
+-- | its overflow past the left edge, else left by its overflow past the
+-- | right, else not at all.
+edgeShift :: Number -> Number -> Number -> Number
+edgeShift halfWidth centerX winWidth =
+  let
+    edgePad = 8.0
+    overflowLeft = halfWidth - centerX + edgePad
+    overflowRight = centerX + halfWidth - (winWidth - edgePad)
+  in
+    if overflowLeft > 0.0 then overflowLeft
+    else if overflowRight > 0.0 then -overflowRight
+    else 0.0
+
+-- | The tooltip's shift variables: the bubble moves by the shift and its
+-- | arrow back by the same, so the arrow stays over the spine.
+shiftVarsFor :: Number -> { x :: String, arrow :: String }
+shiftVarsFor shift =
+  { x: "calc(-50% + " <> px shift <> ")", arrow: "calc(50% - " <> px shift <> ")" }
 
 -- | Wires the shelf's hover state machine and tooltip anchoring with
 -- | edge-overflow shift, hides the tooltip on any window scroll, and
@@ -152,19 +176,7 @@ setup args = do
           Nothing -> pure unit
           Just halfWidth -> do
             winWidth <- windowInnerWidthImpl
-            let
-              edgePad = 8.0
-              overflowLeft = halfWidth - centerX + edgePad
-              overflowRight = centerX + halfWidth - (winWidth - edgePad)
-              shift =
-                if overflowLeft > 0.0 then overflowLeft
-                else if overflowRight > 0.0 then -overflowRight
-                else 0.0
-            Ref.write
-              ( Just
-                  { x: "calc(-50% + " <> px shift <> ")", arrow: "calc(50% - " <> px shift <> ")" }
-              )
-              shiftVars
+            Ref.write (Just (shiftVarsFor (edgeShift halfWidth centerX winWidth))) shiftVars
             applyStyle
 
     unhover = do
