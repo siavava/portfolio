@@ -6,6 +6,7 @@ import Effect (Effect)
 import Test.Build.NotesMeta as NotesMeta
 import Test.Components.AStar as AStar
 import Test.Components.AlgorithmBlock as AlgorithmBlock
+import Test.Components.CodePage as CodePage
 import Test.Components.CueThreads as CueThreads
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
@@ -54,6 +55,7 @@ main = do
   AStar.suite tally
   AlgorithmBlock.suite tally
   LayoutChrome.suite tally
+  CodePage.suite tally
   Links.suite tally
   InterestLayout.suite tally
   Sitemap.suite tally

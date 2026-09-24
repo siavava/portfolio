@@ -30,7 +30,7 @@ main.coder
         @focus="trackCursor",
       )
       .coder__panel-foot
-        span {{ input.length }} chars
+        span {{ charCount }} chars
         span.coder__foot-sep(v-if="!error") ·
         span(v-if="!error") {{ byteCount }} bytes
         span.coder__error(v-if="error") {{ error }}
@@ -39,7 +39,7 @@ main.coder
       button.coder__swap(
         type="button",
         title="swap sides",
-        :style="{ transform: `rotate(${swapTurns * 180}deg)` }",
+        :style="swapStyle",
         @click="swap",
       )
         span.coder__swap-h ⇄
@@ -63,15 +63,15 @@ main.coder
             :key="i",
             :class="t.kind === 'code' ? ['coder__tok', { hot: hotTokens.has(i) }] : 'coder__plain'",
           ) {{ t.text }}
-        span.coder__out-placeholder(v-else) {{ error ? "—" : "output" }}
+        span.coder__out-placeholder(v-else) {{ outPlaceholder }}
       .coder__panel-foot
         span(v-if="!error") {{ outputUnits }}
         span.coder__copy-wrap
           button.coder__copy(
             type="button",
-            :disabled="!output || !!error",
+            :disabled="copyDisabled",
             @click="copyOutput",
-          ) {{ copied ? "copied" : "copy" }}
+          ) {{ copyLabel }}
 
   section.coder__bytes(v-if="bytes.length && !error")
     span.coder__legend bytes · {{ bytes.length }}
@@ -80,16 +80,16 @@ main.coder
         v-for="(b, i) in shownBytes",
         :key="i",
         :title="byteTitle(b)",
-      ) {{ b.toString(16).padStart(2, "0") }}
-      span.coder__byte-more(v-if="bytes.length > BYTE_CAP") +{{ bytes.length - BYTE_CAP }} more
+      ) {{ byteHex(b) }}
+      span.coder__byte-more(v-if="moreBytes") {{ moreBytes }}
 
-  .coder__try(:class="{ faded: input.length > 0 }")
+  .coder__try(:class="{ faded: inputUsed }")
     span.coder__legend try
     button.coder__chip(
       v-for="s in SAMPLES",
       :key="s.label",
       type="button",
-      :tabindex="input.length ? -1 : 0",
+      :tabindex="chipTabindex",
       @click="loadSample(s)",
     ) {{ s.label }}
     .coder__actions
@@ -105,10 +105,10 @@ main.coder
         span.coder__tip(v-if="tipVisible") newlines kept · space ⇢ /
       button.coder__share(
         type="button",
-        :disabled="!input.trim()",
-        :title="input.trim() ? 'copy a link to this exact conversion' : 'nothing to share yet'",
+        :disabled="!canShare",
+        :title="shareTitle",
         @click="share",
-      ) {{ shared ? "link copied" : "share ⇗" }}
+      ) {{ shareLabel }}
 
   .coder__footer
     AppFooter(v-if="profile", :profile)
@@ -130,19 +130,26 @@ const {
   from,
   to,
   preserve,
-  output,
   error,
   bytes,
+  charCount,
+  inputUsed,
+  chipTabindex,
   tokens,
   hotTokens,
   byteCount,
   shownBytes,
+  moreBytes,
   outputUnits,
   inputPlaceholder,
   bitstrip,
-  swapTurns,
-  copied,
-  shared,
+  swapStyle,
+  canShare,
+  shareTitle,
+  shareLabel,
+  copyLabel,
+  copyDisabled,
+  outPlaceholder,
   tipVisible,
   trackCursor,
   swap,
@@ -152,8 +159,8 @@ const {
   clearTipTimer,
   loadSample,
   byteTitle,
+  byteHex,
   samples: SAMPLES,
-  byteCap: BYTE_CAP,
 } = useCodePage({ inputEl, outEl, query: useRoute().query })
 </script>
 

@@ -15,7 +15,25 @@ module App.Components.CodePage
   , RouteQuery
   , Sample
   , TextAreaEl
+  , bitstripFor
+  , byteHex
+  , byteTitle
+  , chipTabindexFor
+  , copyDisabledFor
+  , copyLabelFor
+  , formatPlaceholder
+  , hotIndex
+  , hotIndices
+  , moreBytesLabel
+  , outPlaceholderFor
+  , seedFormat
+  , seedPreserve
   , setup
+  , shareLinkLabelFor
+  , shareTitleFor
+  , swapTransform
+  , unitName
+  , unitsSummary
   ) where
 
 import Prelude
@@ -25,9 +43,9 @@ import Data.Array (catMaybes, elem, length, mapWithIndex, slice) as Array
 import Data.Char (fromCharCode)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Int as Int
-import Data.Maybe (Maybe(..), fromMaybe, isJust)
+import Data.Maybe (Maybe(..), fromMaybe, isJust, maybe)
 import Data.Monoid (power)
-import Data.Nullable (Nullable, toMaybe)
+import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Data.String (trim)
 import Data.String.CodeUnits as CU
 import Effect (Effect)
@@ -60,44 +78,28 @@ foreign import data RouteQuery :: Type
 -- | A DOM `HTMLTextAreaElement` — the input panel's element.
 foreign import data TextAreaEl :: Type
 
--- | The query value under a key, or null when absent or not a string.
 foreign import queryParamImpl :: Fn2 RouteQuery String (Nullable String)
 
--- | `selectionStart` of the textarea; `-1` when the element is null.
 foreign import selectionStartImpl :: EffectFn1 (Nullable TextAreaEl) Int
 
--- | Resizes the textarea to fit its content (height reset, then
--- | `scrollHeight`). No-op on a null element.
 foreign import autoGrowImpl :: EffectFn1 (Nullable TextAreaEl) Unit
 
--- | Adds a passive window resize listener; returns the remove thunk
--- | (manual cleanup — no-op stub during SSR).
 foreign import onWindowResizeImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
--- | Builds a JS `Set` from an array of indices.
 foreign import mkIntSetImpl :: Array Int -> IntSet
 
--- | `Set#size`.
 foreign import setSizeImpl :: IntSet -> Int
 
--- | Scrolls the first `.coder__tok.hot` inside the output panel into view
--- | (`block: "nearest"`). No-op on a null element.
 foreign import scrollHotIntoViewImpl :: EffectFn1 (Nullable DomElement) Unit
 
--- | VueUse `useClipboard` scoped to the calling component; `copied` stays
--- | true for the given number of milliseconds after each copy.
 foreign import useClipboardImpl
   :: EffectFn1 Int { copy :: EffectFn1 String Unit, copied :: Ref Boolean }
 
--- | Absolute `/code` share URL for (from, to, dropWhitespace, encoded
--- | text) — reads `location.origin`, so client-only.
+-- | Reads `location.origin`, so client-only.
 foreign import shareUrlImpl :: EffectFn4 String String Boolean String String
 
--- | Vue's `nextTick` with a callback, result discarded.
 foreign import nextTickImpl :: EffectFn1 (Effect Unit) Unit
 
--- | 96 pseudo-random bits (space-grouped bytes) from an LCG seeded by the
--- | text — deterministic, so SSR and hydration agree.
 foreign import bitstripImpl :: String -> String
 
 -- | One rendered piece of output, structurally identical to
@@ -130,6 +132,12 @@ type CodeBindings =
   , error :: Computed String
   -- | Decoded byte values feeding the ribbon and counts.
   , bytes :: Computed (Array Int)
+  -- | Length of the input in UTF-16 code units, like JS `.length`.
+  , charCount :: Computed Int
+  -- | True once anything is typed — fades the "try" chips away.
+  , inputUsed :: Computed Boolean
+  -- | Chip tab index: out of the tab order (-1) once the input is used.
+  , chipTabindex :: Computed Int
   -- | Output split into code/plain runs carrying source spans.
   , tokens :: Computed (Array OutToken)
   -- | Indices of tokens covering the input caret — the highlight set.
@@ -138,6 +146,8 @@ type CodeBindings =
   , byteCount :: Computed Int
   -- | First `byteCap` bytes, so the ribbon stays bounded.
   , shownBytes :: Computed (Array Int)
+  -- | "+N more" past the ribbon's cap; null when every byte is shown.
+  , moreBytes :: Computed (Nullable String)
   -- | Output-panel footer summary, e.g. "16 bits · 2 bytes".
   , outputUnits :: Computed String
   -- | Input placeholder matching the source format.
@@ -146,10 +156,24 @@ type CodeBindings =
   , bitstrip :: Computed String
   -- | Swap click count — drives the button's 180° rotations.
   , swapTurns :: Ref Int
+  -- | The swap button's inline style: half a turn per swap.
+  , swapStyle :: Computed { transform :: String }
   -- | True briefly after copying the output.
   , copied :: Ref Boolean
   -- | True briefly after copying a share link.
   , shared :: Ref Boolean
+  -- | Whether there is anything but whitespace to share.
+  , canShare :: Computed Boolean
+  -- | The share button's hover title.
+  , shareTitle :: Computed String
+  -- | The share button's label, confirming a copied link.
+  , shareLabel :: Computed String
+  -- | The copy button's label, confirming a copy.
+  , copyLabel :: Computed String
+  -- | Copy is off with no output or while the input fails to parse.
+  , copyDisabled :: Computed Boolean
+  -- | Output-panel placeholder: a dash on error, else "output".
+  , outPlaceholder :: Computed String
   -- | Whitespace-toggle tooltip shown (after a hover delay).
   , tipVisible :: Ref Boolean
   -- | Canned "try" conversions.
@@ -172,6 +196,8 @@ type CodeBindings =
   , loadSample :: EffectFn1 Sample Unit
   -- | Hover title for a byte chip: glyph, decimal, binary.
   , byteTitle :: Int -> String
+  -- | A byte chip's text: two lowercase hex digits.
+  , byteHex :: Int -> String
   }
 
 byteCap :: Int
@@ -187,21 +213,26 @@ samples =
   , { label: "deadbeef", text: "de ad be ef", from: "hex", to: "decimal" }
   ]
 
+-- | The unit the output footer counts in, per target format id.
 unitName :: String -> String
 unitName "letters" = "chars"
 unitName "binary" = "bits"
 unitName "hex" = "nibbles"
 unitName _ = "bytes"
 
-placeholder :: String -> String
-placeholder "binary" = "01101000 01101001 …"
-placeholder "decimal" = "104 101 108 …"
-placeholder "hex" = "68 65 6c 6c 6f …"
-placeholder _ = "type anything…"
+-- | The input placeholder per source format id; letters (and anything
+-- | unknown) get the free-text prompt.
+formatPlaceholder :: String -> String
+formatPlaceholder "binary" = "01101000 01101001 …"
+formatPlaceholder "decimal" = "104 101 108 …"
+formatPlaceholder "hex" = "68 65 6c 6c 6f …"
+formatPlaceholder _ = "type anything…"
 
 padZeros :: Int -> String -> String
 padZeros width s = power "0" (max 0 (width - CU.length s)) <> s
 
+-- | Hover title for a byte chip: the glyph (a middle dot outside
+-- | printable ASCII), the decimal value, and eight binary digits.
 byteTitle :: Int -> String
 byteTitle b =
   let
@@ -211,10 +242,88 @@ byteTitle b =
   in
     ch <> "  dec " <> show b <> "  bin " <> padZeros 8 (Int.toStringAs Int.binary b)
 
-hotIndex :: Int -> Int -> OutToken -> Maybe Int
+-- | A byte chip's text: the value in lowercase hex, padded to two digits
+-- | (JS `b.toString(16).padStart(2, "0")`).
+byteHex :: Int -> String
+byteHex b = padZeros 2 (Int.toStringAs Int.hexadecimal b)
+
+-- | The ribbon's overflow label, "+N more", for a byte count past the cap
+-- | (first argument); null when every byte fits.
+moreBytesLabel :: Int -> Int -> Nullable String
+moreBytesLabel cap n
+  | n > cap = notNull ("+" <> show (n - cap) <> " more")
+  | otherwise = null
+
+-- | The share button's title: an invitation once the input holds more
+-- | than whitespace (JS `trim`), else why it is disabled.
+shareTitleFor :: String -> String
+shareTitleFor i
+  | trim i /= "" = "copy a link to this exact conversion"
+  | otherwise = "nothing to share yet"
+
+-- | The swap button's CSS transform after the given number of swaps.
+swapTransform :: Int -> String
+swapTransform turns = "rotate(" <> show (turns * 180) <> "deg)"
+
+-- | Copy is disabled for (output, error) when the output is empty or an
+-- | error is showing — JS `!output || !!error`.
+copyDisabledFor :: String -> String -> Boolean
+copyDisabledFor output error = output == "" || error /= ""
+
+-- | A share link's format param when it names a known format, else the
+-- | fallback — a hand-edited URL cannot select a missing format.
+seedFormat :: String -> Nullable String -> String
+seedFormat fallback param = case toMaybe param of
+  Just v | Array.elem v formatIds -> v
+  _ -> fallback
+
+-- | A share link's `ws` param: whitespace is preserved unless it is "0".
+seedPreserve :: Nullable String -> Boolean
+seedPreserve ws = maybe true (_ /= "0") (toMaybe ws)
+
+-- | The token's index when it is a code token whose source span covers
+-- | the caret (both ends inclusive); plain runs never light up (null).
+hotIndex :: Int -> Int -> OutToken -> Nullable Int
 hotIndex pos i t =
-  if t.kind == "code" && t.srcStart >= 0 && pos >= t.srcStart && pos <= t.srcEnd then Just i
-  else Nothing
+  if t.kind == "code" && t.srcStart >= 0 && pos >= t.srcStart && pos <= t.srcEnd then notNull i
+  else null
+
+-- | The indices of the tokens that light for a caret at `pos`; none while
+-- | no caret has been recorded (a negative position).
+hotIndices :: Int -> Array OutToken -> Array Int
+hotIndices pos toks
+  | pos < 0 = []
+  | otherwise = Array.catMaybes (Array.mapWithIndex (\i -> toMaybe <<< hotIndex pos i) toks)
+
+-- | The output footer's summary for a non-letters target: the count in its
+-- | own unit — eight bits or two nibbles a byte — and the byte count.
+unitsSummary :: String -> Int -> String
+unitsSummary to n =
+  let
+    scaled = if to == "binary" then n * 8 else if to == "hex" then n * 2 else n
+  in
+    show scaled <> " " <> unitName to <> " · " <> show n <> " bytes"
+
+-- | The "try" chips' tab index: out of the tab order once the input is used.
+chipTabindexFor :: Boolean -> Int
+chipTabindexFor used = if used then (-1) else 0
+
+-- | The share button's label, confirming a copied link.
+shareLinkLabelFor :: Boolean -> String
+shareLinkLabelFor copied = if copied then "link copied" else "share ⇗"
+
+-- | The copy button's label, confirming a copy.
+copyLabelFor :: Boolean -> String
+copyLabelFor copied = if copied then "copied" else "copy"
+
+-- | The output panel's placeholder: a dash while an error shows.
+outPlaceholderFor :: String -> String
+outPlaceholderFor e = if e == "" then "output" else "—"
+
+-- | The decorative bit strip for the input, seeded by "code" while it is
+-- | empty.
+bitstripFor :: String -> String
+bitstripFor i = bitstripImpl (if i == "" then "code" else i)
 
 -- | Wires the `/code` transcoder: seeds state from share-link query
 -- | params, derives the conversion computeds and cursor-to-output
@@ -223,20 +332,16 @@ hotIndex pos i t =
 setup :: CodeArgs -> Effect CodeBindings
 setup args = do
   let
-    param key = toMaybe (runFn2 queryParamImpl args.query key)
+    rawParam key = runFn2 queryParamImpl args.query key
 
-    pickFormat fallback key = case param key of
-      Just v | Array.elem v formatIds -> v
-      _ -> fallback
+    param key = toMaybe (rawParam key)
 
     sharedText = param "q" >>= (decodeShareText >>> toMaybe)
 
   input <- ref (fromMaybe "" sharedText)
-  from <- ref (pickFormat "letters" "from")
-  to <- ref (pickFormat "binary" "to")
-  preserve <- ref case param "ws" of
-    Nothing -> true
-    Just ws -> ws /= "0"
+  from <- ref (seedFormat "letters" (rawParam "from"))
+  to <- ref (seedFormat "binary" (rawParam "to"))
+  preserve <- ref (seedPreserve (rawParam "ws"))
   cursorPos <- ref (-1)
   swapTurns <- ref 0
   tipVisible <- ref false
@@ -269,31 +374,45 @@ setup args = do
   hotTokens <- computed do
     pos <- read cursorPos
     toks <- read tokens
-    let hot = if pos < 0 then [] else Array.catMaybes (Array.mapWithIndex (hotIndex pos) toks)
-    pure (mkIntSetImpl hot)
+    pure (mkIntSetImpl (hotIndices pos toks))
 
   byteCount <- computed (Array.length <$> read bytes)
   shownBytes <- computed (Array.slice 0 byteCap <$> read bytes)
+  moreBytes <- computed (moreBytesLabel byteCap <$> read byteCount)
+
+  charCount <- computed (CU.length <$> read input)
+  inputUsed <- computed ((_ > 0) <$> read charCount)
+  chipTabindex <- computed (chipTabindexFor <$> read inputUsed)
 
   outputUnits <- computed do
     n <- read byteCount
     t <- read to
-    let scaled = if t == "binary" then n * 8 else if t == "hex" then n * 2 else n
     if t == "letters" then do
       o <- read output
       pure (show (CU.length o) <> " chars")
     else
-      pure (show scaled <> " " <> unitName t <> " · " <> show n <> " bytes")
+      pure (unitsSummary t n)
 
-  inputPlaceholder <- computed (placeholder <$> read from)
+  inputPlaceholder <- computed (formatPlaceholder <$> read from)
 
   -- Deterministic: Math.random here would mismatch on hydration.
-  bitstrip <- computed do
-    i <- read input
-    pure (bitstripImpl (if i == "" then "code" else i))
+  bitstrip <- computed (bitstripFor <$> read input)
+
+  swapStyle <- computed do
+    turns <- read swapTurns
+    pure { transform: swapTransform turns }
 
   clipOut <- runEffectFn1 useClipboardImpl 1200
   clipLink <- runEffectFn1 useClipboardImpl 1600
+
+  canShare <- computed do
+    i <- read input
+    pure (trim i /= "")
+  shareTitle <- computed (shareTitleFor <$> read input)
+  shareLabel <- computed (shareLinkLabelFor <$> read clipLink.copied)
+  copyLabel <- computed (copyLabelFor <$> read clipOut.copied)
+  copyDisabled <- computed (copyDisabledFor <$> read output <*> read error)
+  outPlaceholder <- computed (outPlaceholderFor <$> read error)
 
   let
     autoGrow = read args.inputEl >>= runEffectFn1 autoGrowImpl
@@ -360,16 +479,27 @@ setup args = do
     , output
     , error
     , bytes
+    , charCount
+    , inputUsed
+    , chipTabindex
     , tokens
     , hotTokens
     , byteCount
     , shownBytes
+    , moreBytes
     , outputUnits
     , inputPlaceholder
     , bitstrip
     , swapTurns
+    , swapStyle
     , copied: clipOut.copied
     , shared: clipLink.copied
+    , canShare
+    , shareTitle
+    , shareLabel
+    , copyLabel
+    , copyDisabled
+    , outPlaceholder
     , tipVisible
     , samples
     , byteCap
@@ -381,4 +511,5 @@ setup args = do
     , clearTipTimer
     , loadSample: mkEffectFn1 loadSample
     , byteTitle
+    , byteHex
     }
