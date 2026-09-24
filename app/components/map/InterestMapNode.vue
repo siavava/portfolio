@@ -3,15 +3,15 @@ g.node-group(
   :class="[`level-${node.level}`, { dimmed, glowing, shown }]",
   :transform="`translate(${x}, ${y})`",
 )
-  circle.node-glow(cx="0", cy="0", :r="glowing ? 40 : 0", :fill="node.color")
+  circle.node-glow(cx="0", cy="0", :r="glowRadius", :fill="node.color")
   circle.pulse-dot(
-    v-for="ripple in glowing ? 3 : 0",
+    v-for="ripple in ripples",
     :key="ripple",
     cx="0",
     cy="0",
     :r="dotRadius",
     :fill="node.color",
-    :style="{ animationDelay: `${(ripple - 1) * 0.4}s` }",
+    :style="rippleStyle(ripple)",
   )
   circle.node-pulse(ref="pulse-ring", cx="0", cy="0", :r="dotRadius", :fill="node.color")
   circle.node-dot(cx="0", cy="0", :r="dotRadius", :fill="node.color")
@@ -29,7 +29,7 @@ g.node-group(
     text-anchor="middle",
     :y="labelY",
   )
-    tspan(v-for="(line, lineIndex) in lines", :key="lineIndex", x="0", :dy="lineIndex === 0 ? 0 : 11") {{ line }}
+    tspan(v-for="(line, lineIndex) in lines", :key="lineIndex", x="0", :dy="lineDy(lineIndex)") {{ line }}
   rect.hit-zone(
     v-if="shown",
     :x="hitBox.x",
@@ -73,7 +73,11 @@ const label = useTemplateRef<SVGTextElement>("label")
 const {
   dotRadius,
   showLabel,
+  glowRadius,
+  ripples,
+  rippleStyle,
   lines,
+  lineDy,
   labelBox,
   labelY,
   hitBox,
@@ -83,6 +87,7 @@ const {
 } = useInterestMapNode({
   node: () => props.node,
   compact: () => props.compact,
+  glowing: () => props.glowing,
   pulseTick: () => props.pulseTick,
   pulseRing,
   label,

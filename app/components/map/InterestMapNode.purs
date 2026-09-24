@@ -2,8 +2,9 @@
 -- |
 -- | The setup composable behind `InterestMapNode.vue`: label line
 -- | splitting and measurement, the pulse-ripple animation, connection
--- | registration, and pointer-drag state. The SFC keeps only the compiler
--- | macros, template refs, and the connections-store handle.
+-- | registration, pointer-drag state, and the glow and ripple values the
+-- | template binds. The SFC keeps only the compiler macros, template refs,
+-- | and the connections-store handle.
 module App.Components.InterestMapNode
   ( HitBox
   , LabelBox
@@ -13,14 +14,25 @@ module App.Components.InterestMapNode
   , NodeBindings
   , PointerEvt
   , PulseEl
+  , lineDy
+  , nodeDotRadius
+  , nodeHitBox
+  , nodeLabelAboveY
+  , nodeLabelShown
+  , nodePulseDelay
+  , padLabelBox
+  , rippleDelay
   , setup
+  , splitLines
   ) where
 
 import Prelude
 
 import Data.Array (length, slice) as Array
+import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, notNull, null, toMaybe)
+import Data.Number.Format (toString)
 import Data.String (Pattern(..), joinWith, split)
 import Data.String.CodeUnits as CU
 import Effect (Effect)
@@ -51,7 +63,6 @@ foreign import data PointerEvt :: Type
 -- | The pulse-ring SVG `<circle>` element.
 foreign import data PulseEl :: Type
 
--- | A node's display label.
 foreign import nodeLabelImpl :: MapNodeData -> String
 
 -- | A node's depth: 1 branch root through 4 leaf tip.
@@ -67,7 +78,6 @@ foreign import prefersReducedMotionImpl :: Effect Boolean
 -- | One WAAPI ripple on the pulse ring: radius r → 2r while fading out.
 foreign import animatePulseImpl :: EffectFn2 PulseEl Number Unit
 
--- | The label's `getBBox` as a plain record.
 foreign import getBBoxImpl :: EffectFn1 LabelEl LabelBox
 
 -- | Runs the callback once `document.fonts.ready` resolves.
@@ -90,6 +100,8 @@ type NodeArgs =
     node :: Effect MapNodeData
   -- | Reads the map's compact flag (narrow layouts hide most labels).
   , compact :: Effect Boolean
+  -- | Reads the `glowing` prop — the node is on a lit or hovered lineage.
+  , glowing :: Effect Boolean
   -- | Reads the map's pulse counter; each bump ripples this node.
   , pulseTick :: Effect Int
   -- | Template ref to the pulse-ring `<circle>`.
@@ -114,8 +126,17 @@ type NodeBindings =
   -- | Whether to render the label — always on branch roots, hidden on
   -- | deeper nodes when compact.
   , showLabel :: Computed Boolean
+  -- | Radius of the soft glow disc: 40 while glowing, 0 otherwise.
+  , glowRadius :: Computed Number
+  -- | How many ripple dots to render: 3 while glowing, none otherwise.
+  -- | The template's `v-for` over it counts 1 through n.
+  , ripples :: Computed Int
+  -- | Inline style for ripple `n`: its staggered animation delay.
+  , rippleStyle :: Int -> { animationDelay :: String }
   -- | Label text split onto at most two lines.
   , lines :: Computed (Array String)
+  -- | A label line's `dy`: 0 for the first line, 11 for each after.
+  , lineDy :: Int -> Int
   -- | Padded label bounds for the backdrop rect; null until measured.
   , labelBox :: Ref (Nullable LabelBox)
   -- | Label y offset: 16 below the dot, raised further for two lines.
@@ -143,8 +164,51 @@ splitLines label =
   words = split (Pattern " ") label
   middle = (Array.length words + 1) / 2
 
-padBox :: LabelBox -> LabelBox
-padBox box =
+-- | The CSS animation delay of ripple `n` (counted from 1): 0.4s apart,
+-- | the first starting at once. Formatted as JS formats the number, so
+-- | ripple 3 reads `0.8s`.
+rippleDelay :: Int -> String
+rippleDelay ripple = toString (toNumber (ripple - 1) * 0.4) <> "s"
+
+-- | The vertical step before a label line: none for the first line, one
+-- | 11px line height for each after it.
+lineDy :: Int -> Int
+lineDy lineIndex = if lineIndex == 0 then 0 else 11
+
+-- | A dot's radius by node level: 3 on branch roots (level 1), 2.5 deeper.
+nodeDotRadius :: Int -> Number
+nodeDotRadius level = if level == 1 then 3.0 else 2.5
+
+-- | Whether a node's label renders: always on branch roots (level 1),
+-- | and on deeper nodes only when the map is not compact.
+nodeLabelShown :: Boolean -> Int -> Boolean
+nodeLabelShown compact level = not compact || level == 1
+
+-- | The y offset of a label drawn above its dot, by line count: 8 up for
+-- | one line, 19 up when it wraps onto two.
+nodeLabelAboveY :: Int -> Int
+nodeLabelAboveY lineCount = if lineCount > 1 then (-19) else (-8)
+
+-- | The transparent hover/drag hit rect: 48 wide and centered on the dot,
+-- | 34 tall (44 for a two-line label), reaching 10 past the dot on the
+-- | side away from the label — starting 10 above it for a label below,
+-- | ending 10 below it for a label above.
+nodeHitBox :: Boolean -> Boolean -> HitBox
+nodeHitBox below tall =
+  if below then
+    { x: -24, y: -10, width: 48, height: if tall then 44 else 34 }
+  else
+    { x: -24, y: if tall then -34 else -24, width: 48, height: if tall then 44 else 34 }
+
+-- | How long a node's pulse ripple waits, in ms: 100 per level below the
+-- | branch roots, so the pulse travels outward.
+nodePulseDelay :: Int -> Int
+nodePulseDelay level = (level - 1) * 100
+
+-- | The label backdrop's bounds: the measured box grown 5 on each side
+-- | horizontally and 2 vertically.
+padLabelBox :: LabelBox -> LabelBox
+padLabelBox box =
   { x: box.x - padX
   , y: box.y - padY
   , width: box.width + padX * 2.0
@@ -162,7 +226,7 @@ setup :: NodeArgs -> Effect NodeBindings
 setup args = do
   dotRadius <- computed do
     node <- args.node
-    pure (if nodeLevelImpl node == 1 then 3.0 else 2.5)
+    pure (nodeDotRadius (nodeLevelImpl node))
 
   _ <- watchGetter args.pulseTick \tick _ -> do
     ring <- toMaybe <$> read args.pulseRing
@@ -172,13 +236,18 @@ setup args = do
         unless reduced do
           r <- read dotRadius
           node <- args.node
-          void (setTimeout ((nodeLevelImpl node - 1) * 100) (runEffectFn2 animatePulseImpl el r))
+          let delay = nodePulseDelay (nodeLevelImpl node)
+          void (setTimeout delay (runEffectFn2 animatePulseImpl el r))
       _ -> pure unit
 
   showLabel <- computed do
     compact <- args.compact
     node <- args.node
-    pure (not compact || nodeLevelImpl node == 1)
+    pure (nodeLabelShown compact (nodeLevelImpl node))
+
+  glowRadius <- computed ((\glowing -> if glowing then 40.0 else 0.0) <$> args.glowing)
+
+  ripples <- computed ((\glowing -> if glowing then 3 else 0) <$> args.glowing)
 
   lines <- computed (splitLines <<< nodeLabelImpl <$> args.node)
 
@@ -191,7 +260,7 @@ setup args = do
         Nothing -> write labelBox null
         Just labelEl -> do
           box <- runEffectFn1 getBBoxImpl labelEl
-          write labelBox (notNull (padBox box))
+          write labelBox (notNull (padLabelBox box))
 
   onMounted do
     node <- args.node
@@ -215,20 +284,12 @@ setup args = do
   labelY <- computed do
     node <- args.node
     if labelSideBelowImpl node then pure 16
-    else do
-      ls <- read lines
-      pure (if Array.length ls > 1 then (-19) else (-8))
+    else nodeLabelAboveY <<< Array.length <$> read lines
 
   hitBox <- computed do
     node <- args.node
     ls <- read lines
-    let tall = Array.length ls > 1
-    pure
-      ( if labelSideBelowImpl node then
-          { x: -24, y: -10, width: 48, height: if tall then 44 else 34 }
-        else
-          { x: -24, y: if tall then -34 else -24, width: 48, height: if tall then 44 else 34 }
-      )
+    pure (nodeHitBox (labelSideBelowImpl node) (Array.length ls > 1))
 
   dragging <- Ref.new false
 
@@ -251,7 +312,11 @@ setup args = do
   pure
     { dotRadius
     , showLabel
+    , glowRadius
+    , ripples
+    , rippleStyle: \ripple -> { animationDelay: rippleDelay ripple }
     , lines
+    , lineDy
     , labelBox
     , labelY
     , hitBox
