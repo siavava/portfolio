@@ -25,6 +25,7 @@ import Test.Components.InterestMapNode as InterestMapNode
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.MassSpringViz as MassSpringViz
 import Test.Components.MulticopterViz as MulticopterViz
+import Test.Components.NameBar as NameBar
 import Test.Components.NowItem as NowItem
 import Test.Components.OrbitViz as OrbitViz
 import Test.Components.PageShell as PageShell
@@ -146,6 +147,7 @@ main = do
   ContactPanel.suite tally
   DreamItem.suite tally
   IndexPage.suite tally
+  NameBar.suite tally
   NowItem.suite tally
   PageShell.suite tally
   ReviewBubble.suite tally

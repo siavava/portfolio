@@ -1,90 +1,51 @@
 <template lang="pug">
 Motion.name-bar.no-select(
+  ref="bar",
   as="button",
   type="button",
-  aria-haspopup="dialog",
-  :aria-expanded="showing",
-  :aria-label="`${profile.name} — open the timeline`",
-  :class="{ 'is-away': showing }",
+  :aria-label="`${profile.name} — open timeline`",
+  :class="{ 'is-away': showing, 'is-quiet': quiet }",
   :animate="barPose",
-  :while-press="PRESSED",
-  :transition="SPRING",
+  :while-press="pressed",
+  :transition="spring",
   @click="openTimeline",
   @mousemove="onDrift",
   @mouseleave="onDriftEnd",
+  @blur="onBlur",
 )
+  span.name-bar__door(aria-hidden="true")
+    | timeline
+    PointerArrow.name-bar__arrow
   span.name-bar__name {{ profile.name }}
   span.name-bar__location
-    //- A target's preview borrows this slot for its year.
     Transition(name="name-bar-swap", mode="out-in")
       span.name-bar__location-text(:key="answer ?? 'place'") {{ answer ?? profile.location }}
-    Icon.name-bar__expand(name="ph:arrows-out-simple", aria-hidden="true")
+    PointerArrow.name-bar__location-arrow(aria-hidden="true")
+    span.name-bar__cue(aria-hidden="true")
+      | open timeline
+      PointerArrow.name-bar__arrow
 </template>
 
 <script lang="ts" setup>
-import { useReducedMotion } from "motion-v"
+import type { ComponentPublicInstance } from "vue"
 
 defineProps<{
   profile: ProfileData
 }>()
 
-// Hover motion is translation only: scaling the wide slab shimmers its text.
-const PRESSED = { scale: 0.996 }
-const SPRING = { type: "spring", stiffness: 300, damping: 24, mass: 0.6 }
-
-const reduceMotion = useReducedMotion()
-const drift = ref({ x: 0, y: 0 })
-
-let finePointer: MediaQueryList | null = null
-
-const onDrift = (event: MouseEvent) => {
-  if (reduceMotion.value) return
-  finePointer ??= window.matchMedia("(min-width: 901px) and (hover: hover)")
-  if (!finePointer.matches) return
-  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-  drift.value = {
-    x: ((event.clientX - rect.left) / rect.width - 0.5) * 10,
-    y: ((event.clientY - rect.top) / rect.height - 0.5) * 6,
-  }
-}
-
-const onDriftEnd = () => {
-  drift.value = { x: 0, y: 0 }
-}
-
 const route = useRoute()
 const router = useRouter()
 const store = useTimelineStore()
+const bar = useTemplateRef<ComponentPublicInstance>("bar")
 
-// The docking slab's impact: a quick squash-and-release when the timeline
-// lands back in the bar.
-const pulse = ref(false)
-
-watch(() => store.landings, () => {
-  if (reduceMotion.value) return
-  pulse.value = true
-  window.setTimeout(() => { pulse.value = false }, 320)
+const { pressed, spring, barPose, showing, quiet, answer, onDrift, onDriftEnd, onBlur, openTimeline } = useNameBar({
+  bar,
+  path: () => route.path,
+  landings: () => store.landings,
+  focusYear: () => store.focusYear,
+  begin: (rect, scroll, path) => store.begin(rect, scroll, path),
+  navigate: () => router.push("/timeline"),
 })
-
-const barPose = computed(() =>
-  pulse.value
-    ? {
-      x: 0,
-      y: 0,
-      scaleX: [1, 0.985, 1],
-      scaleY: [1, 0.94, 1],
-      transition: { duration: 0.3, times: [0, 0.35, 1], ease: "easeOut" },
-    }
-    : drift.value)
-
-const showing = computed(() => route.path === "/timeline")
-const answer = computed(() => store.focusYear)
-
-const openTimeline = (event: MouseEvent) => {
-  const { left, top, width, height } = (event.currentTarget as HTMLElement).getBoundingClientRect()
-  store.begin({ left, top, width, height }, route.path)
-  router.push("/timeline")
-}
 </script>
 
 <style lang="sass" scoped>
@@ -118,13 +79,14 @@ const openTimeline = (event: MouseEvent) => {
       border-radius: 14px
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22)
 
+    &:hover, &:focus-visible:not(.is-quiet)
       .name-bar__location-text
         opacity: 0
         transform: translateY(6px)
 
-      .name-bar__expand
+      .name-bar__cue
         opacity: 1
-        transform: translateY(-50%) scale(1)
+        transform: translateY(-50%)
 
   .dark-mode &
     background: #f4f4f2
@@ -157,7 +119,7 @@ const openTimeline = (event: MouseEvent) => {
   color: var(--bar-muted)
 
   .dark-mode &
-    color: rgba(0, 0, 0, 0.5)
+    color: rgba(0, 0, 0, 0.55)
 
 .name-bar__location-text
   display: inline-block
@@ -175,24 +137,59 @@ const openTimeline = (event: MouseEvent) => {
   opacity: 0
   transform: translateY(-4px)
 
-.name-bar__expand
+.name-bar__cue, .name-bar__door
+  display: inline-flex
+  align-items: center
+  font-size: typography.font-size("xxs")
+  font-weight: 500
+  letter-spacing: 0.08em
+  text-transform: uppercase
+  white-space: nowrap
+
+.name-bar__cue
   position: absolute
   top: 50%
   right: 0
-  transform: translateY(-50%) scale(0.4)
-  width: 1.1em
-  height: 1.1em
+  color: var(--bar-foreground)
   opacity: 0
-  transition: opacity 0.16s ease, transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1)
+  transform: translateY(calc(-50% - 6px))
+  transition: opacity 0.16s ease, transform 0.22s ease
+  pointer-events: none
+
+  .dark-mode &
+    color: #111110
 
   @media (max-width: 900px)
-    position: static
-    transform: none
-    opacity: 0.7
-    margin-left: 8px
-    transition: none
+    display: none
 
-.name-bar:focus-visible
+.name-bar__door
+  display: none
+
+  @media (max-width: 900px)
+    display: inline-flex
+    position: absolute
+    top: 14px
+    right: 20px
+    color: var(--bar-muted)
+
+    .dark-mode &
+      color: rgba(0, 0, 0, 0.55)
+
+.name-bar__arrow
+  --pointer-gap: 1px
+  font-size: 1.25em
+
+  @media (min-width: 901px) and (hover: hover)
+    .name-bar:is(:hover, :focus-visible:not(.is-quiet)) &
+      transform: translate(2.5px, -2.5px)
+
+.name-bar__location-arrow
+  display: none
+
+  @media (min-width: 901px) and (hover: none)
+    display: inline-block
+
+.name-bar:focus-visible:not(.is-quiet)
   outline: 2px solid var(--accent)
   outline-offset: -3px
 </style>
