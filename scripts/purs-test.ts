@@ -9,7 +9,7 @@
  * exercise pure policy only, never those composables, so `#imports`
  * resolves to a stub whose every export throws if it is ever called.
  */
-import { plugin } from "bun"
+import { Glob, plugin } from "bun"
 
 // Must list every name an FFI file imports from `#imports`: a missing named export fails at load.
 const NUXT_ONLY = [
@@ -36,6 +36,20 @@ plugin({
     }))
   },
 })
+
+// A suite Test.Main never imports never runs, and the check would pass without it.
+const root = new URL("..", import.meta.url).pathname
+const registry = await Bun.file(`${root}test/Test/Main.purs`).text()
+const unregistered = [...new Glob("test/Test/**/*.purs").scanSync({ cwd: root })]
+  .map(path => path.replace(/^test\//, "").replace(/\.purs$/, "").replaceAll("/", "."))
+  .filter(module => module !== "Test.Main" && module !== "Test.Harness")
+  .filter(module => !new RegExp(`^import ${module.replaceAll(".", "\\.")}\\b`, "m").test(registry))
+  .sort()
+
+if (unregistered.length > 0) {
+  console.error(`✗ not registered in test/Test/Main.purs: ${unregistered.join(", ")}`)
+  process.exit(1)
+}
 
 // Imported after the plugin is registered, so the FFI's `#imports` resolves.
 const { main } = await import("../.purs/output/Test.Main/index.js")
