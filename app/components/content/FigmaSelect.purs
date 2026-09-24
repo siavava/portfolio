@@ -9,14 +9,16 @@ module App.Components.FigmaSelect
   , FigmaArgs
   , FigmaBindings
   , SideNotesStore
+  , selectNoteOf
   , setup
+  , sizeLabel
   ) where
 
 import Prelude
 
 import Data.Int (round)
 import Data.Maybe (Maybe(..))
-import Data.Nullable (Nullable, toMaybe)
+import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
 import Vue (Ref, read, ref, write)
@@ -27,18 +29,13 @@ foreign import data SideNotesStore :: Type
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
--- | `getBoundingClientRect` width/height of the element; null when the
--- | element is null.
 foreign import rectSizeImpl
   :: EffectFn1 (Nullable DomElement) (Nullable { width :: Number, height :: Number })
 
--- | Hover-reveals the named side note.
 foreign import sideNotesActivateImpl :: EffectFn2 SideNotesStore String Unit
 
--- | Clears the side-note hover.
 foreign import sideNotesDeactivateImpl :: EffectFn1 SideNotesStore Unit
 
--- | Pins or unpins the named side note.
 foreign import sideNotesTogglePinImpl :: EffectFn2 SideNotesStore String Unit
 
 type FigmaArgs =
@@ -61,6 +58,17 @@ type FigmaBindings =
   , toggle :: Effect Unit
   }
 
+-- | The note when present and non-empty — JS truthiness of
+-- | `props.note`; null otherwise.
+selectNoteOf :: Nullable String -> Nullable String
+selectNoteOf value = case toMaybe value of
+  Just text | text /= "" -> notNull text
+  _ -> null
+
+-- | The "W×H" label for a measured box, each side rounded to whole pixels.
+sizeLabel :: Number -> Number -> String
+sizeLabel width height = show (round width) <> "×" <> show (round height)
+
 -- | Wires the Figma-style selection box: `measure` refreshes the "W×H"
 -- | size label on hover, and the handlers drive the linked side note's
 -- | reveal/pin state.
@@ -68,18 +76,12 @@ setup :: FigmaArgs -> Effect FigmaBindings
 setup args = do
   size <- ref "0×0"
   let
-    -- The note name when present and non-empty — JS truthiness of
-    -- `props.note`.
-    presentNote = do
-      note <- args.note
-      pure case toMaybe note of
-        Just name | name /= "" -> Just name
-        _ -> Nothing
+    presentNote = toMaybe <<< selectNoteOf <$> args.note
 
     measure = do
       rect <- runEffectFn1 rectSizeImpl =<< read args.el
       case toMaybe rect of
-        Just box -> write size (show (round box.width) <> "×" <> show (round box.height))
+        Just box -> write size (sizeLabel box.width box.height)
         Nothing -> pure unit
       presentNote >>= case _ of
         Just note -> runEffectFn2 sideNotesActivateImpl args.sideNotes note
