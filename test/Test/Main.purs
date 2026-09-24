@@ -8,6 +8,7 @@ import Test.Components.AStar as AStar
 import Test.Components.AlgorithmBlock as AlgorithmBlock
 import Test.Components.BioTarget as BioTarget
 import Test.Components.CodePage as CodePage
+import Test.Components.ContactPanel as ContactPanel
 import Test.Components.CueThreads as CueThreads
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
@@ -91,6 +92,7 @@ main = do
   Cues.suite tally
   MapReveal.suite tally
   SideNotes.suite tally
+  ContactPanel.suite tally
   IndexPage.suite tally
   NowItem.suite tally
   BioTarget.suite tally

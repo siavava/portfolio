@@ -1,19 +1,21 @@
 <template lang="pug">
 .contact-panel.no-select
   a.contact-panel__reveal(
-    :href="`mailto:${profile.email}`",
-    @mouseenter="hovering = true",
-    @mouseleave="hovering = false",
-  ) {{ hovering ? profile.email : "Email" }}
+    :href="href",
+    @mouseenter="enter",
+    @mouseleave="leave",
+  ) {{ label }}
   SocialGrid(:socials="profile.socials")
 </template>
 
 <script lang="ts" setup>
-defineProps<{
+const props = defineProps<{
   profile: ProfileData
 }>()
 
-const hovering = ref(false)
+const { href, label, enter, leave } = useContactPanel({
+  email: () => props.profile.email,
+})
 </script>
 
 <style lang="sass" scoped>
