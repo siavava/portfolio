@@ -7,6 +7,7 @@ import Test.Build.NotesMeta as NotesMeta
 import Test.Components.AStar as AStar
 import Test.Components.AlgorithmBlock as AlgorithmBlock
 import Test.Components.CueThreads as CueThreads
+import Test.Composables.CaptionTypewriter as CaptionTypewriter
 import Test.Composables.DraggableBubble as DraggableBubble
 import Test.Composables.FigureSpotlight as FigureSpotlight
 import Test.Composables.Metrics.ApiRoute as ApiRoute
@@ -62,6 +63,7 @@ main = do
   TikzFigAudit.suite tally
   Metrics.suite tally
   NotesMeta.suite tally
+  CaptionTypewriter.suite tally
   SideNoteLayout.suite tally
   FigureSpotlight.suite tally
   ReaderPeeks.suite tally
