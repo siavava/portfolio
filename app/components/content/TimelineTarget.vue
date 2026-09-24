@@ -135,12 +135,19 @@ const {
     color: #111110
 
 .timeline-peek__body
-  p
+  p, ul
     font-size: typography.font-size("s")
     line-height: 1.55
 
-  p + p
+  p + p, ul + p
     margin-top: 10px
+
+  p + ul
+    margin-top: 4px
+
+  // A preview gives a period's headline and first paragraph; the timeline has the rest.
+  .period__body > :nth-child(n + 3)
+    display: none
 
   a
     color: inherit
