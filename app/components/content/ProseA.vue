@@ -3,6 +3,7 @@ NuxtLink(
   :to="target",
   :target="external ? '_blank' : undefined",
   :rel="external ? 'noopener noreferrer' : undefined",
+  :prefetch-on="quietPrefetch ? 'interaction' : 'visibility'",
 )
   slot
 </template>
@@ -20,7 +21,7 @@ const { href = "", to = "" } = defineProps<{
   to?: string
 }>()
 
-const { target, external } = useProseA({
+const { target, external, quietPrefetch } = useProseA({
   href: () => href,
   to: () => to,
 })
