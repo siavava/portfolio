@@ -4,6 +4,9 @@
 -- | keyed by a namespaced route: `<p>:` portfolio, `<b>:` blog, `<n>:`
 -- | notes. These helpers move the portfolio's paths in and out of its
 -- | namespace; the cross-site dashboard lives in the standalone status app.
+-- |
+-- | Only PureScript consumes it (the metrics store core and
+-- | `ViewerLocation`). @ts-internal
 module App.Utils.Metrics
   ( inNamespace
   , metricsNamespace

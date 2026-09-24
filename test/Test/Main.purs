@@ -22,6 +22,7 @@ import Test.Utils.Format as Format
 import Test.Utils.JsMath as JsMath
 import Test.Utils.Links as Links
 import Test.Utils.MarkdownMath as MarkdownMath
+import Test.Utils.Metrics as Metrics
 import Test.Utils.Scroll as Scroll
 import Test.Utils.Spines as Spines
 
@@ -38,6 +39,7 @@ main = do
   InterestLayout.suite tally
   Sitemap.suite tally
   Tikz.suite tally
+  Metrics.suite tally
   SideNoteLayout.suite tally
   FigureSpotlight.suite tally
   ReaderPeeks.suite tally
