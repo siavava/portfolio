@@ -77,6 +77,8 @@ export const revealSettleImpl = (reveal: RevealStore): void => {
   reveal.settle()
 }
 
+export const revealSettledImpl = (reveal: RevealStore): boolean => reveal.settled
+
 export const useColorModeImpl = (): ColorModeApi => useColorMode()
 
 export const isDarkImpl = (colorMode: ColorModeApi): boolean => colorMode.value === "dark"

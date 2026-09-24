@@ -3,11 +3,12 @@
 -- | The setup composable behind `InterestMap.vue`: the polar layout feed,
 -- | the d3-force entry simulation, lineage lighting from the connections
 -- | store, the opening height spring that drives the mapReveal store, the
--- | orbital-ring wave, the idle ring pulse, and node dragging. The SFC
--- | keeps only the interests content query, the wrapper template ref, and
--- | one call here. The d3-force and motion-v numeric kernels stay behind
--- | the FFI edge; orchestration, parameters, state machine, and lifecycle
--- | live here.
+-- | orbital-ring wave, the idle ring pulse, node dragging, and the small
+-- | per-element helpers the template binds (ring radii, spoke tips, link
+-- | and node highlight state). The SFC keeps only the interests content
+-- | query, the wrapper template ref, and one call here. The d3-force and
+-- | motion-v numeric kernels stay behind the FFI edge; orchestration,
+-- | parameters, state machine, and lifecycle live here.
 module App.Components.InterestMap
   ( BranchesData
   , DomElement
@@ -25,7 +26,24 @@ module App.Components.InterestMap
 
 import Prelude
 
-import App.Components.InterestMap.Graph (buildAdj, parentOf, reachable)
+import App.Components.InterestMap.Geometry
+  ( compactAt
+  , linkClasses
+  , mapScale
+  , openTarget
+  , opensInPlace
+  , ringRadiusAt
+  , spokeGrowth
+  , spokeTipAt
+  , spokesAt
+  )
+import App.Components.InterestMap.Graph
+  ( appearanceOrderBy
+  , buildAdj
+  , endpointsWithin
+  , lineage
+  , parentOf
+  )
 import Data.Array
   ( concatMap
   , filter
@@ -35,14 +53,12 @@ import Data.Array
   , null
   , slice
   , snoc
-  , sortBy
   ) as Array
 import Data.Foldable (for_, traverse_)
 import Data.FoldableWithIndex (forWithIndex_)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Nullable (Nullable, notNull, null, toMaybe)
-import Data.Number (abs, cos, pi, sin)
 import Data.Number.Format (toString)
 import Data.Traversable (traverse)
 import Effect (Effect)
@@ -102,7 +118,6 @@ foreign import data StringSet :: Type
 -- | The `@nuxtjs/color-mode` instance — read at pulse time.
 foreign import data ColorModeApi :: Type
 
--- | The mapReveal pinia store handle.
 foreign import data RevealHandle :: Type
 
 -- | A mutable d3-force simulation node.
@@ -118,7 +133,6 @@ foreign import data SpringControls :: Type
 -- | (`useInterestLayout`).
 foreign import interestLayoutImpl :: EffectFn2 BranchesData Number LayoutData
 
--- | The layout's placed nodes.
 foreign import layoutNodesImpl :: LayoutData -> Array NodeData
 
 -- | The layout's edges: tree links, center spokes, prereq threads.
@@ -127,10 +141,8 @@ foreign import layoutLinksImpl :: LayoutData -> Array LinkData
 -- | The orbital-ring radii, innermost first.
 foreign import layoutRingsImpl :: LayoutData -> Array Number
 
--- | The polar origin's x within the SVG.
 foreign import layoutCxImpl :: LayoutData -> Number
 
--- | The polar origin's y within the SVG.
 foreign import layoutCyImpl :: LayoutData -> Number
 
 -- | A node's id (its unique label).
@@ -142,16 +154,12 @@ foreign import nodeLevelImpl :: NodeData -> Int
 -- | A link's source node id; null on the center-to-branch spokes.
 foreign import linkSourceImpl :: LinkData -> Nullable String
 
--- | A link's target node id.
 foreign import linkTargetImpl :: LinkData -> String
 
--- | Whether the link is a prerequisite thread.
 foreign import linkPrereqImpl :: LinkData -> Boolean
 
--- | Builds a JS `Set` from ids.
 foreign import mkStringSetImpl :: Array String -> StringSet
 
--- | `Set#has`.
 foreign import stringSetHasImpl :: Fn2 StringSet String Boolean
 
 -- | FNV-style hash of a node id and the visit seed — the appearance
@@ -170,7 +178,6 @@ foreign import useMediaQueryImpl :: EffectFn1 String (Ref Boolean)
 -- | should light up.
 foreign import activeNamesImpl :: Effect (Ref (Array String))
 
--- | The mapReveal pinia store handle.
 foreign import useMapRevealImpl :: Effect RevealHandle
 
 -- | Feeds the store the opening spring's offset from its target so the
@@ -180,17 +187,17 @@ foreign import revealDriveImpl :: EffectFn2 RevealHandle Number Unit
 -- | Marks the reveal settled and clears the store's offset.
 foreign import revealSettleImpl :: EffectFn1 RevealHandle Unit
 
--- | The `@nuxtjs/color-mode` instance.
+-- | Whether the opening spring has already landed once this visit.
+foreign import revealSettledImpl :: EffectFn1 RevealHandle Boolean
+
 foreign import useColorModeImpl :: Effect ColorModeApi
 
--- | Whether the current color mode is dark.
 foreign import isDarkImpl :: EffectFn1 ColorModeApi Boolean
 
 -- | Wraps a layout node as a sim node seeded at — and homing to — its
 -- | layout position.
 foreign import mkSimNodeImpl :: EffectFn1 NodeData SimNodeData
 
--- | A sim node's id.
 foreign import simNodeIdImpl :: SimNodeData -> String
 
 -- | Whether the sim node is pinned (`fx` set) — i.e. mid-drag.
@@ -200,16 +207,13 @@ foreign import hasFixedImpl :: EffectFn1 SimNodeData Boolean
 -- | repulsion — parked at alpha 0; the callback fires per tick.
 foreign import createSimulationImpl :: EffectFn2 (Array SimNodeData) (Effect Unit) SimHandle
 
--- | Stops the simulation's internal timer.
 foreign import simStopImpl :: EffectFn1 SimHandle Unit
 
--- | Restarts the simulation's internal timer.
 foreign import simRestartImpl :: EffectFn1 SimHandle Unit
 
 -- | Sets the simulation's alpha target — above zero keeps it hot.
 foreign import simAlphaTargetImpl :: EffectFn2 SimHandle Number Unit
 
--- | Replaces the simulation's node array.
 foreign import simSetNodesImpl :: EffectFn2 SimHandle (Array SimNodeData) Unit
 
 -- | Teleports a sim node to (x, y) with zero velocity — the entry spawn.
@@ -218,13 +222,11 @@ foreign import setSimEntryImpl :: EffectFn3 SimNodeData Number Number Unit
 -- | Pins a sim node at (x, y) via `fx`/`fy`.
 foreign import setSimFixedImpl :: EffectFn3 SimNodeData Number Number Unit
 
--- | Unpins a sim node.
 foreign import clearSimFixedImpl :: EffectFn1 SimNodeData Unit
 
 -- | Snapshots the nodes' positions as an id-keyed record.
 foreign import positionsOfImpl :: EffectFn1 (Array SimNodeData) PositionMap
 
--- | The position under an id, or null when unknown.
 foreign import lookupPosImpl :: Fn2 PositionMap String (Nullable Vec2)
 
 -- | A pointer event's position in the map's centered coordinate space:
@@ -238,7 +240,6 @@ foreign import svgPointImpl
 foreign import springImpl
   :: EffectFn6 Number Number Number Number (EffectFn1 Number Unit) (Effect Unit) SpringControls
 
--- | Stops a running spring.
 foreign import stopSpringImpl :: EffectFn1 SpringControls Unit
 
 -- | In-place indexed write to the ring-radii ref
@@ -258,10 +259,12 @@ foreign import pulseRingsImpl :: EffectFn2 (Ref (Nullable DomElement)) Boolean U
 foreign import watchPairImpl
   :: forall a b. EffectFn4 (Effect a) (Effect b) (Effect Unit) Boolean Unit
 
--- | A point in the map's centered coordinate space.
+-- | A point in the map's centered coordinate space (the same record as
+-- | `App.Components.InterestMap.Geometry.Vec2`).
 type Vec2 = { x :: Number, y :: Number }
 
--- | One orbital spoke's unit direction and length.
+-- | One orbital spoke's unit direction and length (the same record as
+-- | `App.Components.InterestMap.Geometry.Spoke`).
 type Spoke = { deg :: Number, ux :: Number, uy :: Number, len :: Number }
 
 type MapArgs =
@@ -296,6 +299,8 @@ type MapBindings =
   -- | Connection lineage: ids reachable from the connections store's
   -- | active names — non-empty dims everything else.
   , litNodes :: Computed StringSet
+  -- | Whether any node is lit — the SVG's `has-highlight` class.
+  , hasHighlight :: Computed Boolean
   -- | The hovered node id, written back by node hover events.
   , hovered :: Ref (Nullable String)
   -- | Ring radii mid-wave; the template reads these until settled.
@@ -307,6 +312,23 @@ type MapBindings =
   , spokeProgress :: Computed Number
   -- | Wrapper inline style: the spring-animated height in px.
   , wrapperStyle :: Computed { height :: String }
+  -- | A ring's drawn radius, given its index and layout radius: the layout
+  -- | radius once the wave settles, its mid-wave radius (0 before it
+  -- | starts) until then.
+  , ringRadius :: EffectFn2 Int Number Number
+  -- | A spoke's outer end at the current growth.
+  , spokeTip :: EffectFn1 Spoke Vec2
+  -- | A link's classes: a prerequisite thread, and — while something is
+  -- | lit — dimmed or lit by whether both its endpoints are.
+  , linkState :: EffectFn1 LinkData { prereq :: Boolean, dimmed :: Boolean, lit :: Boolean }
+  -- | Whether the entry stagger has revealed the node id yet.
+  , nodeShown :: EffectFn1 String Boolean
+  -- | Whether the node id is on the hovered or the lit lineage.
+  , nodeGlowing :: EffectFn1 String Boolean
+  -- | Whether the node id sits outside a non-empty lit lineage.
+  , nodeDimmed :: EffectFn1 String Boolean
+  -- | Node hover events: the hovered id, or null on leave.
+  , hover :: EffectFn1 (Nullable String) Unit
   -- | The simulated position of a node id (origin for null or unknown).
   , pos :: EffectFn1 (Nullable String) Vec2
   -- | Whether both of a link's endpoints are lit.
@@ -322,19 +344,10 @@ type MapBindings =
 origin :: Vec2
 origin = { x: 0.0, y: 0.0 }
 
-spokeAngles :: Array Number
-spokeAngles = [ 22.5, 45.0, 67.5, 90.0, 112.5, 135.0, 157.5 ]
-
--- | Whether a link's endpoints are all in `set` — the target, and the
--- | source when the link has one.
 endpointsIn :: StringSet -> LinkData -> Boolean
 endpointsIn set link =
-  runFn2 stringSetHasImpl set (linkTargetImpl link)
-    && case toMaybe (linkSourceImpl link) of
-      Nothing -> true
-      Just source -> runFn2 stringSetHasImpl set source
+  endpointsWithin (runFn2 stringSetHasImpl set) (linkTargetImpl link) (linkSourceImpl link)
 
--- | The mutable handles the idle ring pulse reads and writes.
 type PulseDeps =
   { pulseTimer :: Ref.Ref (Maybe TimeoutId)
   , pulseInterval :: Ref.Ref (Maybe IntervalId)
@@ -343,7 +356,6 @@ type PulseDeps =
   , wrapper :: Ref (Nullable DomElement)
   }
 
--- | Cancel the pending pulse timeout and the repeating pulse interval.
 stopPulse :: PulseDeps -> Effect Unit
 stopPulse deps = do
   Ref.read deps.pulseTimer >>= traverse_ clearTimeout
@@ -351,7 +363,6 @@ stopPulse deps = do
   Ref.write Nothing deps.pulseTimer
   Ref.write Nothing deps.pulseInterval
 
--- | Bump the pulse tick and fire one ring pulse in the current theme.
 runPulse :: PulseDeps -> Effect Unit
 runPulse deps = do
   tick <- read deps.pulseTick
@@ -359,8 +370,6 @@ runPulse deps = do
   dark <- runEffectFn1 isDarkImpl deps.colorMode
   runEffectFn2 pulseRingsImpl deps.wrapper dark
 
--- | Restart the idle pulse: after a settle delay, pulse every five
--- | seconds — unless the visitor prefers reduced motion.
 startPulse :: PulseDeps -> Effect Unit
 startPulse deps = do
   stopPulse deps
@@ -372,7 +381,6 @@ startPulse deps = do
       Ref.write (Just repeating) deps.pulseInterval
     Ref.write (Just pending) deps.pulseTimer
 
--- | The mutable handles node dragging reads and writes.
 type DragDeps =
   { simNodes :: Ref.Ref (Array SimNodeData)
   , simulation :: Ref.Ref (Maybe SimHandle)
@@ -380,13 +388,11 @@ type DragDeps =
   , wrapper :: Ref (Nullable DomElement)
   }
 
--- | The sim node with the given id, if it exists.
 dragTarget :: DragDeps -> String -> Effect (Maybe SimNodeData)
 dragTarget deps nodeId = do
   nodes <- Ref.read deps.simNodes
   pure (Array.find (\n -> simNodeIdImpl n == nodeId) nodes)
 
--- | A pointer event's position in the map's centered coordinate space.
 dragPoint :: DragDeps -> PointerEvt -> Effect Vec2
 dragPoint deps event = do
   mLayout <- toMaybe <$> read deps.layout
@@ -394,7 +400,6 @@ dragPoint deps event = do
     Nothing -> pure origin
     Just l -> runEffectFn4 svgPointImpl deps.wrapper event (layoutCxImpl l) (layoutCyImpl l)
 
--- | Pin the grabbed node under the pointer and heat the simulation.
 onDragStart :: DragDeps -> String -> PointerEvt -> Effect Unit
 onDragStart deps nodeId event = do
   mNode <- dragTarget deps nodeId
@@ -407,7 +412,6 @@ onDragStart deps nodeId event = do
       runEffectFn1 simRestartImpl sim
     _, _ -> pure unit
 
--- | Follow the pointer while the grabbed node stays pinned.
 onDragMove :: DragDeps -> String -> PointerEvt -> Effect Unit
 onDragMove deps nodeId event = do
   mNode <- dragTarget deps nodeId
@@ -417,7 +421,6 @@ onDragMove deps nodeId event = do
       point <- dragPoint deps event
       runEffectFn3 setSimFixedImpl node point.x point.y
 
--- | Release the node and let the simulation cool back down.
 onDragEnd :: DragDeps -> String -> Effect Unit
 onDragEnd deps nodeId = do
   mNode <- dragTarget deps nodeId
@@ -436,9 +439,7 @@ setup :: MapArgs -> Effect MapBindings
 setup args = do
   containerWidth <- runEffectFn1 useElementWidthImpl args.wrapper
 
-  scale <- computed do
-    width <- read containerWidth
-    pure (if width == 0.0 then 1.0 else min 1.0 (width / 936.0))
+  scale <- computed (mapScale <$> read containerWidth)
 
   layout <- computed do
     mBranches <- toMaybe <$> args.branches
@@ -451,26 +452,18 @@ setup args = do
 
   fadeRadius <- computed ((150.0 * _) <$> read scale)
 
-  spokes <- computed do
-    s <- read scale
-    pure $ spokeAngles <#> \deg ->
-      let
-        rad = deg * pi / 180.0
-        ux = cos rad
-        uy = sin rad
-      in
-        { deg, ux, uy, len: min 516.0 (468.0 / abs ux) * s }
+  spokes <- computed (spokesAt <$> read scale)
 
-  compact <- computed ((_ < 0.62) <$> read scale)
+  compact <- computed (compactAt <$> read scale)
 
   entropy <- random
 
   appearanceOrder <- computed do
     mLayout <- toMaybe <$> read layout
-    let nodes = maybe [] layoutNodesImpl mLayout
-    pure $ map _.node $ Array.sortBy
-      (\a b -> compare (nodeLevelImpl a.node) (nodeLevelImpl b.node) <> compare a.key b.key)
-      (nodes <#> \node -> { node, key: runFn2 shuffleKeyImpl (nodeIdImpl node) entropy })
+    let
+      nodes = maybe [] layoutNodesImpl mLayout
+      shuffle node = runFn2 shuffleKeyImpl (nodeIdImpl node) entropy
+    pure (appearanceOrderBy nodeLevelImpl shuffle nodes)
 
   appearedCount <- ref 0
 
@@ -516,18 +509,19 @@ setup args = do
       Just nodeId -> do
         children <- read childrenMap
         parents <- read parentsMap
-        pure (mkStringSetImpl (reachable children nodeId <> reachable parents nodeId))
+        pure (mkStringSetImpl (lineage children parents nodeId))
 
-  litNodes <- computed do
+  litIds <- computed do
     names <- read activeNames
-    if Array.null names then pure (mkStringSetImpl [])
+    if Array.null names then pure []
     else do
       children <- read childrenMap
       parents <- read parentsMap
-      pure
-        ( mkStringSetImpl
-            (Array.concatMap (\name -> reachable children name <> reachable parents name) names)
-        )
+      pure (Array.concatMap (lineage children parents) names)
+
+  litNodes <- computed (mkStringSetImpl <$> read litIds)
+
+  hasHighlight <- computed (not <<< Array.null <$> read litIds)
 
   targetHeight <- computed do
     mLayout <- toMaybe <$> read layout
@@ -536,6 +530,7 @@ setup args = do
   singleColumn <- runEffectFn1 useMediaQueryImpl "(max-width: 900px)"
   height <- ref 0.0
   entryStarted <- ref false
+  mounting <- Ref.new true
 
   reveal <- useMapRevealImpl
 
@@ -553,9 +548,7 @@ setup args = do
         | otherwise -> do
             settled <- read ringsSettled
             if settled then pure 1.0
-            else do
-              radii <- read ringRadii
-              pure (fromMaybe 0.0 (Array.index radii 3) / target)
+            else spokeGrowth target <$> read ringRadii
 
   wrapperStyle <- computed do
     h <- read height
@@ -564,6 +557,12 @@ setup args = do
   let
     pulseDeps = { pulseTimer, pulseInterval, pulseTick, colorMode, wrapper: args.wrapper }
     dragDeps = { simNodes, simulation, layout, wrapper: args.wrapper }
+
+    has set nodeId = runFn2 stringSetHasImpl set nodeId
+
+    litHas nodeId = flip has nodeId <$> read litNodes
+
+    litLinkOf link = (\lit -> endpointsIn lit link) <$> read litNodes
 
     posOf mId = case mId of
       Nothing -> pure origin
@@ -667,25 +666,35 @@ setup args = do
       for_ mLayout \_ -> do
         single <- read singleColumn
         full <- read targetHeight
-        let target = if single then 0.0 else full
+        let target = openTarget single full
         when (target == 0.0) do
           resetEntry
           runEffectFn1 revealSettleImpl reveal
         Ref.read heightControls >>= traverse_ (runEffectFn1 stopSpringImpl)
         h <- read height
-        controls <- runEffectFn6 springImpl h target 0.35 0.35
-          ( mkEffectFn1 \latest -> do
-              write height (max 0.0 latest)
-              when (target > 0.0) (runEffectFn2 revealDriveImpl reveal (latest - target))
-          )
-          ( when (target > 0.0) do
-              runEffectFn1 revealSettleImpl reveal
-              started <- read entryStarted
-              unless started $ waveRings do
-                write entryStarted true
-                beginEntry
-          )
-        Ref.write (Just controls) heightControls
+        seen <- runEffectFn1 revealSettledImpl reveal
+        first <- Ref.read mounting
+        Ref.write false mounting
+        if opensInPlace { first, seen, height: h, target } then do
+          write height target
+          started <- read entryStarted
+          unless started $ waveRings do
+            write entryStarted true
+            beginEntry
+        else do
+          controls <- runEffectFn6 springImpl h target 0.35 0.35
+            ( mkEffectFn1 \latest -> do
+                write height (max 0.0 latest)
+                when (target > 0.0) (runEffectFn2 revealDriveImpl reveal (latest - target))
+            )
+            ( when (target > 0.0) do
+                runEffectFn1 revealSettleImpl reveal
+                started <- read entryStarted
+                unless started $ waveRings do
+                  write entryStarted true
+                  beginEntry
+            )
+          Ref.write (Just controls) heightControls
 
   runEffectFn4 watchPairImpl (read layout) (read appearanceOrder) rebuild true
 
@@ -710,15 +719,35 @@ setup args = do
     , shownLinks
     , glowSet
     , litNodes
+    , hasHighlight
     , hovered
     , ringRadii
     , ringsSettled
     , spokeProgress
     , wrapperStyle
     , pos: mkEffectFn1 (posOf <<< toMaybe)
-    , litLink: mkEffectFn1 \link -> do
-        lit <- read litNodes
-        pure (endpointsIn lit link)
+    , litLink: mkEffectFn1 litLinkOf
+    , ringRadius: mkEffectFn2 \ringIndex radius -> do
+        settled <- read ringsSettled
+        if settled then pure radius
+        else (\radii -> ringRadiusAt settled radii ringIndex radius) <$> read ringRadii
+    , spokeTip: mkEffectFn1 \spoke -> do
+        progress <- read spokeProgress
+        pure (spokeTipAt progress spoke)
+    , linkState: mkEffectFn1 \link -> do
+        highlight <- read hasHighlight
+        lit <- if highlight then litLinkOf link else pure false
+        pure (linkClasses (linkPrereqImpl link) highlight lit)
+    , nodeShown: mkEffectFn1 \nodeId -> do
+        appeared <- read appearedSet
+        pure (has appeared nodeId)
+    , nodeGlowing: mkEffectFn1 \nodeId -> do
+        glow <- read glowSet
+        if has glow nodeId then pure true else litHas nodeId
+    , nodeDimmed: mkEffectFn1 \nodeId -> do
+        highlight <- read hasHighlight
+        if highlight then not <$> litHas nodeId else pure false
+    , hover: mkEffectFn1 (write hovered)
     , onDragStart: mkEffectFn2 (onDragStart dragDeps)
     , onDragMove: mkEffectFn2 (onDragMove dragDeps)
     , onDragEnd: mkEffectFn1 (onDragEnd dragDeps)
