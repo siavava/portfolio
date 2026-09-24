@@ -14,6 +14,7 @@ module App.Composables.Map.InterestLayout
   , LeafIn
   , LinkOut
   , NodeOut
+  , childRadius
   , interestLayoutJs
   ) where
 
@@ -58,10 +59,6 @@ outerCap = 408
 
 edgeBias :: Number
 edgeBias = 0.12
-
--- The In family is a fixed-depth mirror of InterestBranch/InterestNode:
--- the original layout only ever descends four levels, and absent JS keys
--- read as null.
 
 -- | A fourth-level entry — the outermost tips of the map.
 type LeafIn =
@@ -171,6 +168,10 @@ type LayoutOut =
 toRadians :: Number -> Number
 toRadians degrees = degrees * pi / 180.0
 
+-- | The ring radius for a branch's child: its band's base (children
+-- | cycle through three bands), stepped out by how many earlier children
+-- | share that band, jittered by a few pixels per branch so neighbouring
+-- | slices don't line up; the outermost band is capped at 408.
 childRadius :: Int -> Int -> Int -> Int
 childRadius band bandIndex branchIndex =
   let
@@ -184,9 +185,6 @@ type Point = { x :: Number, y :: Number }
 
 type Parts = { nodes :: Array NodeOut, links :: Array LinkOut }
 
--- | Per-child context threaded down to the grandchild and tip levels:
--- | the scaled polar placement, the owning branch, and the child's drift
--- | direction, angle, and ring radius.
 type ChildCtx =
   { place :: Number -> Number -> Point
   , branch :: BranchIn
@@ -195,8 +193,6 @@ type ChildCtx =
   , childR :: Int
   }
 
--- | Every node shares its branch identity and takes its id from its
--- | label; only level, label side, and position vary.
 mkNode :: BranchIn -> Int -> Nullable String -> String -> Point -> NodeOut
 mkNode branch level labelSide label point =
   { id: label
@@ -209,9 +205,6 @@ mkNode branch level labelSide label point =
   , y: point.y
   }
 
--- | Every link shares its branch identity, derives its id from its
--- | endpoints ("root" when sourceless), and defaults to a plain tree
--- | edge; the prerequisite pass overrides id and flag on top of this.
 mkLink
   :: forall r p q
    . { label :: String, color :: String | r }
@@ -304,8 +297,6 @@ layoutBranch place sliceWidth b branch =
   in
     [ rootParts ] <> children.parts
 
--- | Place one child on its band ring and lay out its subtree, reusing
--- | the branch origin already computed in `layoutBranch`.
 layoutChild
   :: (Number -> Number -> Point)
   -> BranchIn
@@ -332,8 +323,6 @@ layoutChild place branch origin branchAngle childAngle childR child =
           <> concatLinks grandchildren
     }
 
--- | Drift the grandchild off its parent's angle — `ctx.sign` picks the
--- | side once per child — and hang its leaf tips further out.
 layoutGrandchild :: ChildCtx -> String -> Point -> Int -> GrandchildIn -> Array Parts
 layoutGrandchild ctx parentLabel point g grandchild =
   let
@@ -350,8 +339,6 @@ layoutGrandchild ctx parentLabel point g grandchild =
   in
     [ grandParts ] <> tips
 
--- | Outermost ring: a leaf tip drifts further along the same side its
--- | parent drifted.
 layoutTip :: ChildCtx -> Number -> String -> Point -> Int -> LeafIn -> Parts
 layoutTip ctx drift parentLabel leaf l leafChild =
   let
@@ -362,8 +349,6 @@ layoutTip ctx drift parentLabel leaf l leafChild =
     , links: [ mkLink ctx.branch (notNull parentLabel) leafChild.label leaf tip ]
     }
 
--- | The prerequisite pass: every node's `requires` list threads a link
--- | from the required node's position, cross-branch links flagged.
 prereqPass :: Array BranchIn -> Array NodeOut -> Array LinkOut
 prereqPass branches nodes = concat (map branchReqs branches)
   where
