@@ -20,6 +20,7 @@ import Test.Middleware.Wipe as Wipe
 import Test.Server.Sitemap as Sitemap
 import Test.Server.Tikz as Tikz
 import Test.Stores.Connections as Connections
+import Test.Stores.Cues as Cues
 import Test.Utils.Coder as Coder
 import Test.Utils.Format as Format
 import Test.Utils.JsMath as JsMath
@@ -56,4 +57,5 @@ main = do
   JsMath.suite tally
   Scroll.suite tally
   Connections.suite tally
+  Cues.suite tally
   report tally
