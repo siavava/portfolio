@@ -11,6 +11,8 @@ module App.Components.CueThreads
   , RopePoint
   , ThreadArgs
   , ThreadBindings
+  , frameDt
+  , layRope
   , setup
   , splinePath
   , stepPoints
@@ -51,39 +53,25 @@ foreign import data CuesStore :: Type
 -- | A DOM `Element`.
 foreign import data DomElement :: Type
 
--- | True in the browser, false during SSR.
 foreign import isClientImpl :: Boolean
 
--- | Reference equality of two elements.
 foreign import sameElementImpl :: Fn2 DomElement DomElement Boolean
 
--- | The element's first client-rect center, in viewport coordinates.
 foreign import centerImpl :: EffectFn1 DomElement Point
 
--- | The registered element of a mark name, or null.
 foreign import markElementImpl :: EffectFn2 CuesStore String (Nullable DomElement)
 
--- | The store's active cue groups (hovered plus pinned).
 foreign import groupsOfImpl :: EffectFn1 CuesStore (Array CueGroup)
 
--- | Clears the store's hover activation.
 foreign import deactivateCuesImpl :: EffectFn1 CuesStore Unit
 
--- | A `clip-path: inset(…)` covering the portrait card's viewport rect,
--- | or null when no card is on the page.
 foreign import imageClipImpl :: Effect (Nullable String)
 
--- | `requestAnimationFrame`, returning the frame id.
 foreign import rafImpl :: EffectFn1 (EffectFn1 Number Unit) Int
 
--- | `cancelAnimationFrame`.
 foreign import cancelRafImpl :: EffectFn1 Int Unit
 
--- | Adds a passive window touchstart listener; returns the remove thunk
--- | (manual cleanup — no-op stub during SSR).
 foreign import onTouchStartImpl :: EffectFn1 (Effect Unit) (Effect Unit)
-
--- Rope physics, tuned to the reference's Matter.js parameters.
 
 minSegments :: Int
 minSegments = 6
@@ -140,10 +128,19 @@ type ThreadBindings =
   , imageClip :: Ref (Nullable String)
   }
 
--- | Lay a slack rope between two measured centers, or nothing when the
--- | target has collapsed to the origin (not laid out).
 mkRope :: DomElement -> Point -> DomElement -> Point -> Maybe Rope
-mkRope root start target end
+mkRope root start target end =
+  (\laid -> { root, target, points: laid.points, linkLength: laid.linkLength })
+    <$> layRope start end
+
+-- | A slack rope's particles and link length between two measured
+-- | centers: an interior particle per `segmentDistance` px of span, held
+-- | between `minSegments` and `maxSegments`, spaced evenly along the
+-- | straight line between the two pinned ends; the links share the span
+-- | plus 6% and 8px of slack, so the rope hangs. Nothing when the end has
+-- | collapsed to the origin — a target that is not laid out.
+layRope :: Point -> Point -> Maybe { points :: Array RopePoint, linkLength :: Number }
+layRope start end
   | end.x == 0.0 && end.y == 0.0 = Nothing
   | otherwise =
       let
@@ -162,7 +159,7 @@ mkRope root start target end
             <> map mid (Array.range 1 count)
             <> [ { x: end.x, y: end.y, px: end.x, py: end.y, pinned: true } ]
       in
-        Just { root, target, points, linkLength: ropeLength / toNumber (count + 1) }
+        Just { points, linkLength: ropeLength / toNumber (count + 1) }
 
 -- | One verlet integration step plus constraint relaxation, with the
 -- | endpoints re-pinned to the freshly measured centers.
@@ -223,6 +220,14 @@ stepPoints dt rootCenter targetCenter linkLength points =
             }
       in
         go (Array.snoc acc curr') next' tail
+
+-- | The step a frame at `timestamp` advances the ropes by, in ms, after
+-- | the frame at `previous` (0 before the first frame, which then steps
+-- | the minimum): held between 8 and 33 ms, so a stalled tab does not
+-- | fling the ropes and a fast display does not freeze them.
+frameDt :: Number -> Number -> Number
+frameDt previous timestamp =
+  clamp 8.0 33.0 (timestamp - (if previous == 0.0 then timestamp else previous))
 
 -- | Catmull-Rom spline through the rope points, as in the reference.
 splinePath :: Array RopePoint -> String
@@ -290,9 +295,7 @@ setup args = do
       if Array.null (Array.concatMap _.ropes entries) then Ref.write 0 frame
       else do
         prev <- Ref.read previousTime
-        let
-          previous = if prev == 0.0 then timestamp else prev
-          dt = clamp 8.0 33.0 (timestamp - previous)
+        let dt = frameDt prev timestamp
         Ref.write timestamp previousTime
         stepped <- for entries \entry -> do
           ropes' <- traverse (stepRope dt) entry.ropes
