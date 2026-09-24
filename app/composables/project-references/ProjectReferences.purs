@@ -10,14 +10,17 @@ module App.Composables.ProjectReferences
   ( ProjectDoc
   , Reference
   , ReferencesBindings
+  , leadReferences
+  , noteReference
   , setup
+  , urlTitle
   ) where
 
 import Prelude
 
 import Data.Array (catMaybes)
 import Data.Maybe (Maybe(..), fromMaybe, isJust, maybe)
-import Data.Nullable (Nullable, toMaybe)
+import Data.Nullable (Nullable, null, toMaybe)
 import Data.String (Pattern(..), contains, stripSuffix)
 import Data.String.CodeUnits as CU
 import Effect (Effect)
@@ -26,20 +29,14 @@ import Vue (Computed, Ref, computed, read)
 -- | The open project document — opaque; field access happens in the FFI.
 foreign import data ProjectDoc :: Type
 
--- | The doc's `repo` frontmatter; null when absent.
 foreign import repoOfImpl :: ProjectDoc -> Nullable String
 
--- | The doc's `url` frontmatter; null when absent.
 foreign import urlOfImpl :: ProjectDoc -> Nullable String
 
--- | The doc's `references` frontmatter; `[]` when absent.
 foreign import referencesOfImpl :: ProjectDoc -> Array String
 
--- | The lesson title at this path in the build-time notes index; null
--- | when unindexed.
 foreign import notesTitleImpl :: String -> Nullable String
 
--- | The URL's pathname; null when the string doesn't parse as a URL.
 foreign import pathnameOfImpl :: String -> Nullable String
 
 -- | One rendered reference entry; `notes` marks links into the notes
@@ -58,8 +55,6 @@ type ReferencesBindings =
     references :: Computed (Array Reference)
   }
 
--- | Titles for the notes site's subject-index pages, which carry no
--- | frontmatter of their own.
 subjectLabel :: String -> Maybe String
 subjectLabel = case _ of
   "/algorithms" -> Just "Algorithms"
@@ -86,8 +81,6 @@ urlTitle url
 isPdf :: String -> Boolean
 isPdf url = isJust (stripSuffix (Pattern ".pdf") url)
 
--- | `/amittai\.space\/./` — some occurrence of "amittai.space/"
--- | followed by a (non-newline) character.
 hasArticlePath :: String -> Boolean
 hasArticlePath url = go 0
   where
@@ -98,17 +91,44 @@ hasArticlePath url = go 0
       Just c | c /= '\n' -> true
       _ -> go (i + 1)
 
--- | `.replace(/\/+$/, "")`.
 stripTrailingSlashes :: String -> String
 stripTrailingSlashes path = case stripSuffix (Pattern "/") path of
   Just rest -> stripTrailingSlashes rest
   Nothing -> path
 
--- | JS string truthiness: empty strings drop out.
 nonEmpty :: Maybe String -> Maybe String
 nonEmpty = case _ of
   Just "" -> Nothing
   other -> other
+
+-- | The project's own links, in reading order: the repository, then the
+-- | live link named by `urlTitle` (a PDF opens fit to the page). Absent
+-- | or empty fields drop out.
+leadReferences :: Nullable String -> Nullable String -> Array Reference
+leadReferences repoN urlN = catMaybes
+  [ repo <#> \href -> { href, title: "Project repository", notes: false }
+  , url <#> \raw ->
+      { href: if isPdf raw then raw <> "#view=FitV&zoom=page-fit" else raw
+      , title: urlTitle raw
+      , notes: false
+      }
+  ]
+  where
+  repo = nonEmpty (toMaybe repoN)
+  url = nonEmpty (toMaybe urlN)
+
+-- | One frontmatter reference into the notes site, titled from the notes
+-- | index (`titleAt`, keyed by the URL's pathname without trailing
+-- | slashes), else from the subject-index labels, else by the path
+-- | itself. An href that doesn't parse as a URL is keyed as written.
+noteReference :: (String -> Nullable String) -> String -> Reference
+noteReference titleAt href =
+  let
+    path = stripTrailingSlashes (fromMaybe href (toMaybe (pathnameOfImpl href)))
+  in
+    case toMaybe (titleAt path) of
+      Just title -> { href, title, notes: true }
+      Nothing -> { href, title: fromMaybe path (subjectLabel path), notes: true }
 
 -- | Build the reference list for the open project document; the
 -- | computed re-derives whenever `selected` changes.
@@ -116,29 +136,12 @@ setup :: Ref (Nullable ProjectDoc) -> Effect ReferencesBindings
 setup selected = do
   projectRefs <- computed do
     mDoc <- toMaybe <$> read selected
-    let
-      repo = nonEmpty (mDoc >>= repoOfImpl >>> toMaybe)
-      url = nonEmpty (mDoc >>= urlOfImpl >>> toMaybe)
-    pure $ catMaybes
-      [ repo <#> \href -> { href, title: "Project repository", notes: false }
-      , url <#> \raw ->
-          { href: if isPdf raw then raw <> "#view=FitV&zoom=page-fit" else raw
-          , title: urlTitle raw
-          , notes: false
-          }
-      ]
+    pure (leadReferences (maybe null repoOfImpl mDoc) (maybe null urlOfImpl mDoc))
 
   references <- computed do
     lead <- read projectRefs
     mDoc <- toMaybe <$> read selected
-    let
-      entries = maybe [] referencesOfImpl mDoc <#> \href ->
-        let
-          path = stripTrailingSlashes (fromMaybe href (toMaybe (pathnameOfImpl href)))
-        in
-          case toMaybe (notesTitleImpl path) of
-            Just title -> { href, title, notes: true }
-            Nothing -> { href, title: fromMaybe path (subjectLabel path), notes: true }
+    let entries = maybe [] referencesOfImpl mDoc <#> noteReference notesTitleImpl
     pure (lead <> entries)
 
   pure { references }
