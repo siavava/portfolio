@@ -26,6 +26,7 @@ import Test.Stores.SideNotes as SideNotes
 import Test.Transformers.Fences as TransformersFences
 import Test.Transformers.TikzCaption as TikzCaption
 import Test.Transformers.TikzFigAudit as TikzFigAudit
+import Test.Transformers.TikzRender as TikzRender
 import Test.Transformers.TikzSvg as TikzSvg
 import Test.Transformers.TikzTex as TikzTex
 import Test.Utils.Coder as Coder
@@ -54,6 +55,7 @@ main = do
   TikzTex.suite tally
   TikzCaption.suite tally
   TikzSvg.suite tally
+  TikzRender.suite tally
   TikzFigAudit.suite tally
   Metrics.suite tally
   NotesMeta.suite tally
