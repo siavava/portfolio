@@ -7,6 +7,8 @@ module App.Components.TooltipShell
   ( StyleMap
   , TooltipArgs
   , TooltipBindings
+  , alignClassFor
+  , seconds
   , setup
   ) where
 
@@ -22,7 +24,6 @@ import Vue (Computed, computed)
 -- | An assembled `:style` object. @ts Record<string, string>
 foreign import data StyleMap :: Type
 
--- | The `--tt-duration`/`--tt-delay` CSS variable map.
 foreign import mkTimingVarsImpl :: Fn2 String String StyleMap
 
 type TooltipArgs =
@@ -43,23 +44,28 @@ type TooltipBindings =
   , anchorStyle :: Computed (Nullable StyleMap)
   }
 
+-- | The anchor's alignment class for the `align` prop: `align-<side>`, or
+-- | null when no side is given.
+alignClassFor :: Nullable String -> Nullable String
+alignClassFor align = case toMaybe align of
+  Just side -> notNull ("align-" <> side)
+  Nothing -> null
+
+-- | A duration in seconds as a CSS time, the way a template string prints
+-- | the number: `2.5s`, `0.3s`, `1s`.
+seconds :: Number -> String
+seconds n = toString n <> "s"
+
 -- | Derives the anchored tooltip's alignment class and the
 -- | `--tt-duration`/`--tt-delay` timing variables from the props.
 setup :: TooltipArgs -> Effect TooltipBindings
 setup args = do
-  alignClass <- computed do
-    align <- args.align
-    pure case toMaybe align of
-      Just side -> notNull ("align-" <> side)
-      Nothing -> null
+  alignClass <- computed (alignClassFor <$> args.align)
   anchorStyle <- computed do
     animate <- args.animate
     if not animate then pure null
     else do
       duration <- args.duration
       delay <- args.delay
-      pure
-        ( notNull
-            (runFn2 mkTimingVarsImpl (toString duration <> "s") (toString delay <> "s"))
-        )
+      pure (notNull (runFn2 mkTimingVarsImpl (seconds duration) (seconds delay)))
   pure { alignClass, anchorStyle }

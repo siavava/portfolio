@@ -23,6 +23,7 @@ import Test.Components.ScrollFades as ScrollFades
 import Test.Components.ShelfSatori as ShelfSatori
 import Test.Components.SideNote as SideNote
 import Test.Components.TikzDiagram as TikzDiagram
+import Test.Components.TooltipShell as TooltipShell
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
 import Test.Composables.DraggableBubble as DraggableBubble
 import Test.Composables.FigureSpotlight as FigureSpotlight
@@ -104,6 +105,7 @@ main = do
   IndexPage.suite tally
   NowItem.suite tally
   ScrollFades.suite tally
+  TooltipShell.suite tally
   BioTarget.suite tally
   BookcaseShelf.suite tally
   CueRoot.suite tally
