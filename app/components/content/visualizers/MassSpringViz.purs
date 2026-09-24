@@ -6,9 +6,21 @@
 -- | PureScript over a module-local mutable store (plain JS array cells via
 -- | FFI prims).
 module App.Components.MassSpringViz
-  ( Mass
+  ( Force
+  , Mass
   , MassSpringBindings
   , Segment
+  , Spring
+  , hangingStrand
+  , kickedTail
+  , massEscaped
+  , settleStep
+  , springForce
+  , springLengths
+  , stepMass
+  , strandRestNote
+  , strandSegments
+  , strandSprings
   , useMassSpringViz
   ) where
 
@@ -18,35 +30,27 @@ import App.Composables.AfterPaint (useAfterPaint)
 import App.Utils.JsMath (hypot, orEps)
 import Data.Array as Array
 import Data.Int (toNumber)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Number (abs, isFinite, min, round) as Number
 import Data.Number.Format (toString)
-import Data.Traversable (traverse)
 import Effect (Effect, forE, foreachE)
 import Effect.Random (random)
 import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, runEffectFn1, runEffectFn2, runEffectFn3)
 import Vue (Ref, read, ref, shallowRef, watchRef, write)
 
--- | Module-local mutable mass/force store (a plain JS array).
 foreign import data SimArray :: Type -> Type
 
--- | Wraps `useRafFn(fn, { immediate: false })`; returns the resume Effect.
 foreign import rafLoopImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
--- | Mutable copy of an array, as a fresh store.
 foreign import thawImpl :: forall a. EffectFn1 (Array a) (SimArray a)
 
--- | Read the cell at an index (unchecked).
 foreign import peekImpl :: forall a. EffectFn2 (SimArray a) Int a
 
--- | Overwrite the cell at an index in place.
 foreign import pokeImpl :: forall a. EffectFn3 (SimArray a) Int a Unit
 
--- | Immutable snapshot of the store.
 foreign import freezeImpl :: forall a. EffectFn1 (SimArray a) (Array a)
 
--- | Number of cells in the store.
 foreign import lengthImpl :: forall a. EffectFn1 (SimArray a) Int
 
 type Mass = { x :: Number, y :: Number, vx :: Number, vy :: Number }
@@ -54,7 +58,12 @@ type Mass = { x :: Number, y :: Number, vx :: Number, vy :: Number }
 type Segment =
   { ax :: Number, ay :: Number, bx :: Number, by :: Number, bend :: Boolean, stroke :: String }
 
+-- | A spring between masses `a` and `b`: rest length, stiffness, and
+-- | whether it is a bend spring (skipping a mass) or structural.
 type Spring = { a :: Int, b :: Int, rest :: Number, k :: Number, bend :: Boolean }
+
+-- | A force (or acceleration — every mass is 1) in px/s².
+type Force = { fx :: Number, fy :: Number }
 
 type MassSpringBindings =
   { -- | Canvas viewBox width in px.
@@ -108,17 +117,24 @@ gravity = 220.0
 dt :: Number
 dt = 1.0 / 90.0
 
-restNote :: String
-restNote = "hanging at equilibrium — perturb it and compare integrators"
+-- | The note at rest.
+strandRestNote :: String
+strandRestNote = "hanging at equilibrium — perturb it and compare integrators"
 
-springs :: Array Spring
-springs =
+-- | The structural springs between neighbors, then the softer bend
+-- | springs spanning two links.
+strandSprings :: Array Spring
+strandSprings =
   map (\i -> { a: i, b: i + 1, rest: restLen, k: ks, bend: false }) (Array.range 0 (count - 2))
     <> map (\i -> { a: i, b: i + 2, rest: 2.0 * restLen, k: kb, bend: true })
       (Array.range 0 (count - 3))
 
-segmentsOf :: Array Number -> Array Mass -> Array Segment
-segmentsOf eqLen ms = Array.catMaybes $ springs # Array.mapWithIndex \si s -> do
+-- | Every spring as a drawable segment, its stroke tinted from blue
+-- | toward orange by how far it has stretched or squashed from its
+-- | equilibrium length (`eqLen`, falling back to its rest length):
+-- | fully orange at a quarter of its rest length.
+strandSegments :: Array Number -> Array Mass -> Array Segment
+strandSegments eqLen ms = Array.catMaybes $ strandSprings # Array.mapWithIndex \si s -> do
   a <- Array.index ms s.a
   b <- Array.index ms s.b
   let
@@ -136,6 +152,81 @@ segmentsOf eqLen ms = Array.catMaybes $ springs # Array.mapWithIndex \si s -> do
         <> "%)"
     }
 
+-- | The strand hanging straight down from the anchor, each link
+-- | pre-stretched by the weight of the masses below it.
+hangingStrand :: Array Mass
+hangingStrand = chain { masses: [ { x: anchorX, y: anchorY, vx: 0.0, vy: 0.0 } ], y: anchorY } 1
+  where
+  chain acc i =
+    if i >= count then acc.masses
+    else
+      let
+        y = acc.y + restLen + toNumber (count - i) * gravity / ks
+      in
+        chain { masses: Array.snoc acc.masses { x: anchorX, y, vx: 0.0, vy: 0.0 }, y } (i + 1)
+
+-- | The pull spring `s` exerts on its mass `a` (mass `b` feels the
+-- | opposite): Hooke stretch plus damping along the spring's axis.
+springForce :: Spring -> Mass -> Mass -> Force
+springForce s a b = { fx: mag * nx, fy: mag * ny }
+  where
+  dx = b.x - a.x
+  dy = b.y - a.y
+  len = orEps (hypot dx dy)
+  nx = dx / len
+  ny = dy / len
+  stretch = s.k * (len - s.rest)
+  rel = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny
+  mag = stretch + kd * rel
+
+-- | One heavily damped warm-up step (velocity × 0.94) toward
+-- | equilibrium.
+settleStep :: Mass -> Force -> Mass
+settleStep mass force =
+  let
+    vx' = (mass.vx + dt * force.fx) * 0.94
+    vy' = (mass.vy + dt * force.fy) * 0.94
+  in
+    mass { vx = vx', vy = vy', x = mass.x + dt * vx', y = mass.y + dt * vy' }
+
+-- | One integration step: "semi" (semi-implicit Euler) moves by the
+-- | updated velocity; anything else — explicit Euler — by the old one.
+stepMass :: String -> Mass -> Force -> Mass
+stepMass mode mass force =
+  if mode == "semi" then
+    let
+      vx' = mass.vx + dt * force.fx
+      vy' = mass.vy + dt * force.fy
+    in
+      mass { vx = vx', vy = vy', x = mass.x + dt * vx', y = mass.y + dt * vy' }
+  else
+    mass
+      { x = mass.x + dt * mass.vx
+      , y = mass.y + dt * mass.vy
+      , vx = mass.vx + dt * force.fx
+      , vy = mass.vy + dt * force.fy
+      }
+
+-- | A mass the strand cannot recover from: non-finite x, or more than
+-- | 30px off the canvas.
+massEscaped :: Mass -> Boolean
+massEscaped mass =
+  not (Number.isFinite mass.x) || mass.x < -30.0 || mass.x > w + 30.0
+    || mass.y < -30.0
+    || mass.y > h + 30.0
+
+-- | The tail's kick toward side `d` (±1), scaled by `jitter`: sideways
+-- | and upward.
+kickedTail :: Number -> Number -> Mass -> Mass
+kickedTail d jitter tail = tail { vx = tail.vx + d * 150.0 * jitter, vy = tail.vy - 250.0 * jitter }
+
+-- | Every spring's current length.
+springLengths :: Array Mass -> Array Number
+springLengths ms = strandSprings <#> \s ->
+  case Array.index ms s.a, Array.index ms s.b of
+    Just a, Just b -> hypot (b.x - a.x) (b.y - a.y)
+    _, _ -> 0.0
+
 -- | Wires the strand build, the damped equilibrium warm-up, and the
 -- | frame loop (three integration steps per frame), starting after
 -- | first paint. Binds the frozen mass/segment views, the integrator
@@ -145,7 +236,7 @@ useMassSpringViz = do
   massesView <- shallowRef ([] :: Array Mass)
   segmentsView <- shallowRef ([] :: Array Segment)
   integrator <- ref "semi"
-  note <- ref restNote
+  note <- ref strandRestNote
   eqLenRef <- Ref.new ([] :: Array Number)
   dir <- Ref.new 1.0
   sim <- Ref.new =<< runEffectFn1 thawImpl ([] :: Array Mass)
@@ -155,62 +246,36 @@ useMassSpringViz = do
       frozen <- runEffectFn1 freezeImpl =<< Ref.read sim
       eqLen <- Ref.read eqLenRef
       write massesView frozen
-      write segmentsView (segmentsOf eqLen frozen)
+      write segmentsView (strandSegments eqLen frozen)
 
     computeForces m = do
       total <- runEffectFn1 lengthImpl m
       f <- runEffectFn1 thawImpl (Array.replicate total { fx: 0.0, fy: gravity })
-      foreachE springs \s -> do
+      foreachE strandSprings \s -> do
         a <- runEffectFn2 peekImpl m s.a
         b <- runEffectFn2 peekImpl m s.b
-        let
-          dx = b.x - a.x
-          dy = b.y - a.y
-          len = orEps (hypot dx dy)
-          nx = dx / len
-          ny = dy / len
-          stretch = s.k * (len - s.rest)
-          rel = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny
-          mag = stretch + kd * rel
+        let pull = springForce s a b
         fa <- runEffectFn2 peekImpl f s.a
-        runEffectFn3 pokeImpl f s.a { fx: fa.fx + mag * nx, fy: fa.fy + mag * ny }
+        runEffectFn3 pokeImpl f s.a { fx: fa.fx + pull.fx, fy: fa.fy + pull.fy }
         fb <- runEffectFn2 peekImpl f s.b
-        runEffectFn3 pokeImpl f s.b { fx: fb.fx - mag * nx, fy: fb.fy - mag * ny }
+        runEffectFn3 pokeImpl f s.b { fx: fb.fx - pull.fx, fy: fb.fy - pull.fy }
       pure f
 
     reset = do
-      let
-        chain acc i =
-          if i >= count then acc.masses
-          else
-            let
-              y = acc.y + restLen + toNumber (count - i) * gravity / ks
-            in
-              chain { masses: Array.snoc acc.masses { x: anchorX, y, vx: 0.0, vy: 0.0 }, y } (i + 1)
-        initial = chain
-          { masses: [ { x: anchorX, y: anchorY, vx: 0.0, vy: 0.0 } ], y: anchorY }
-          1
-      m <- runEffectFn1 thawImpl initial
+      m <- runEffectFn1 thawImpl hangingStrand
       Ref.write m sim
       forE 0 2400 \_ -> do
         f <- computeForces m
         forE 1 count \i -> do
           mass <- runEffectFn2 peekImpl m i
           force <- runEffectFn2 peekImpl f i
-          let
-            vx' = (mass.vx + dt * force.fx) * 0.94
-            vy' = (mass.vy + dt * force.fy) * 0.94
-          runEffectFn3 pokeImpl m i
-            (mass { vx = vx', vy = vy', x = mass.x + dt * vx', y = mass.y + dt * vy' })
+          runEffectFn3 pokeImpl m i (settleStep mass force)
       forE 0 count \i -> do
         mass <- runEffectFn2 peekImpl m i
         runEffectFn3 pokeImpl m i (mass { vx = 0.0, vy = 0.0 })
-      eqLen <- springs # traverse \s -> do
-        a <- runEffectFn2 peekImpl m s.a
-        b <- runEffectFn2 peekImpl m s.b
-        pure (hypot (b.x - a.x) (b.y - a.y))
+      eqLen <- springLengths <$> runEffectFn1 freezeImpl m
       Ref.write eqLen eqLenRef
-      write note restNote
+      write note strandRestNote
       syncViews
 
     perturb = do
@@ -220,9 +285,7 @@ useMassSpringViz = do
         tail <- runEffectFn2 peekImpl m (count - 1)
         d <- Ref.read dir
         roll <- random
-        let jitter = 0.8 + 0.4 * roll
-        runEffectFn3 pokeImpl m (count - 1)
-          (tail { vx = tail.vx + d * 150.0 * jitter, vy = tail.vy - 250.0 * jitter })
+        runEffectFn3 pokeImpl m (count - 1) (kickedTail d (0.8 + 0.4 * roll) tail)
         Ref.write (-d) dir
 
     step = do
@@ -232,30 +295,11 @@ useMassSpringViz = do
       forE 1 count \i -> do
         mass <- runEffectFn2 peekImpl m i
         force <- runEffectFn2 peekImpl f i
-        if mode == "semi" then do
-          let
-            vx' = mass.vx + dt * force.fx
-            vy' = mass.vy + dt * force.fy
-          runEffectFn3 pokeImpl m i
-            (mass { vx = vx', vy = vy', x = mass.x + dt * vx', y = mass.y + dt * vy' })
-        else
-          runEffectFn3 pokeImpl m i
-            ( mass
-                { x = mass.x + dt * mass.vx
-                , y = mass.y + dt * mass.vy
-                , vx = mass.vx + dt * force.fx
-                , vy = mass.vy + dt * force.fy
-                }
-            )
+        runEffectFn3 pokeImpl m i (stepMass mode mass force)
       blownRef <- Ref.new false
       forE 1 count \i -> do
         mass <- runEffectFn2 peekImpl m i
-        when
-          ( not (Number.isFinite mass.x) || mass.x < -30.0 || mass.x > w + 30.0
-              || mass.y < -30.0
-              || mass.y > h + 30.0
-          )
-          (Ref.write true blownRef)
+        when (massEscaped mass) (Ref.write true blownRef)
       blown <- Ref.read blownRef
       if blown then do
         reset

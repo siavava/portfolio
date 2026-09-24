@@ -19,6 +19,7 @@ import Test.Components.FigureSpotlight as FigureSpotlightComponent
 import Test.Components.GraphTraversalViz as GraphTraversalViz
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
+import Test.Components.MassSpringViz as MassSpringViz
 import Test.Components.MulticopterViz as MulticopterViz
 import Test.Components.NowItem as NowItem
 import Test.Components.OrbitViz as OrbitViz
@@ -82,6 +83,7 @@ main = do
   OrbitViz.suite tally
   GraphTraversalViz.suite tally
   MulticopterViz.suite tally
+  MassSpringViz.suite tally
   Links.suite tally
   InterestLayout.suite tally
   Sitemap.suite tally
