@@ -27,6 +27,7 @@ import Test.Components.MassSpringViz as MassSpringViz
 import Test.Components.MulticopterViz as MulticopterViz
 import Test.Components.NowItem as NowItem
 import Test.Components.OrbitViz as OrbitViz
+import Test.Components.PageShell as PageShell
 import Test.Components.ParticleHashViz as ParticleHashViz
 import Test.Components.PbdClothViz as PbdClothViz
 import Test.Components.PbdViz as PbdViz
@@ -138,6 +139,7 @@ main = do
   DreamItem.suite tally
   IndexPage.suite tally
   NowItem.suite tally
+  PageShell.suite tally
   ReviewBubble.suite tally
   ScrollFades.suite tally
   TooltipShell.suite tally

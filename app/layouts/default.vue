@@ -1,9 +1,14 @@
 <template lang="pug">
 div
-  a.skip-link(href="#main-content") skip to content
+  a.skip-link(v-if="skipLink", href="#main-content") skip to content
   #main-content.page-shell(tabindex="-1")
     slot
 </template>
+
+<script lang="ts" setup>
+const route = useRoute()
+const { skipLink } = usePageShell({ path: () => route.path })
+</script>
 
 <style lang="sass" scoped>
 .skip-link
