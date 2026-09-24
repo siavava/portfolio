@@ -84,6 +84,8 @@ export default defineNuxtConfig({
       { name: "Proxima Soft", provider: "local", weights: [500], global: true },
       { name: "Departure Mono", provider: "local", weights: [400], global: true },
       { name: "Arizona Text", provider: "local", weights: [400, 700], styles: ["normal", "italic"], global: true },
+      // Only math uses it, and katex.min.css loads it where math renders.
+      { name: "KaTeX_Main", preload: false },
     ],
   },
 
