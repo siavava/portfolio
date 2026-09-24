@@ -1,16 +1,11 @@
 {
   "js/ts.tsdk.path": "node_modules/typescript/lib",
 
-  // purescript-lsp (oxfordabstracts.purescript-fast-ide-vscode) drives
-  // `purs lsp` from @oxfordabstracts/purescript-lsp (bun global install —
-  // a purs fork based on 0.15.15). Its output dir is separate from the
-  // CLI's .purs/output: the fork and the 0.15.16 toolchain would
-  // invalidate each other's externs if they shared one.
+  // Not .purs/output: the LSP's purs fork and the CLI toolchain would invalidate each other's externs.
   "purescript-lsp.outputPath": "output",
-  // Globs must cover dependency sources too — the LSP's indexer builds
-  // from these, and app modules fail as "unknown" when deps are missing.
   "purescript-lsp.globs": [
     "app/**/*.purs",
+    "test/**/*.purs",
     "packages/*/src/**/*.purs",
     ".spago/p/*/src/**/*.purs"
   ],
