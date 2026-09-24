@@ -2,7 +2,7 @@
 figure.algorithm(:style="{ '--algo-digits': maxDigits }")
   .algo-rule.top
   .algo-caption
-    span.algo-name Algorithm{{ number ? ` ${number}` : "" }}:
+    span.algo-name {{ heading }}
     span.algo-title(v-html="captionHtml")
   .algo-rule.under
   ol.algo-body
@@ -16,7 +16,7 @@ figure.algorithm(:style="{ '--algo-digits': maxDigits }")
         span.algo-guide(
           v-for="depth in ln.level",
           :key="depth",
-          :class="{ foot: ln.feet.includes(depth - 1) }",
+          :class="{ foot: isFoot(ln, depth) }",
           :style="footDepthStyle(ln, depth)"
         )
         span.algo-code(v-html="ln.html")
@@ -29,119 +29,16 @@ figure.algorithm(:style="{ '--algo-digits': maxDigits }")
  * ## AlgorithmBlock
  *
  * Renders algorithm2e-style pseudocode from a fenced
- * code block. Parses `caption:`/`number:` directives,
- * derives nesting depth from indentation (two spaces
- * per level) and splits trailing `// ` or `▷`
- * comments. Keywords are bolded, `$…$` spans are
- * rendered as math, and indentation guides draw the
- * bracket "feet" that close each block.
- *
+ * code block; the parser lives in `AlgorithmBlock.purs`.
  * `meta` (`caption="…" number=N`) overrides the
  * in-body directives.
  */
 const { code = "", meta = "" } = defineProps<{ code?: string, meta?: string }>()
 
-const escapeHtml = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-
-const KEYWORDS =
-  /\b(while|do|for each|foreach|for|to|downto|if|then|else if|else|repeat|until|return|call|loop|break|continue|function|procedure|output|input|and|or|not|nil)\b/gi
-const CONTROL = /^(start|stop|end|begin)$/i
-
-const renderSeg = (text: string, isComment = false): string =>
-  text
-    .split(/(\$[^$]+\$)/g)
-    .map((seg) => {
-      if (seg.startsWith("$") && seg.endsWith("$") && seg.length > 1) {
-        return renderTex(seg.slice(1, -1))
-      }
-      let escaped = escapeHtml(seg)
-        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      if (!isComment) escaped = escaped.replace(KEYWORDS, match => `<b class="kw">${match}</b>`)
-      return escaped
-    })
-    .join("")
-
-type Line = {
-  level: number
-  html: string
-  comment: string
-  feet: number[]
-  footPush: number
-}
-
-const footDepthStyle = (ln: Line, depth: number) =>
-  ln.feet.includes(depth - 1)
-    ? { "--foot-depth": Math.max(...ln.feet) - (depth - 1) }
-    : null
-
-const parsed = computed(() => {
-  const raw = code.replace(/\r/g, "")
-  let caption = ""
-  let number = ""
-  const rows: { level: number, content: string, comment: string }[] = []
-
-  for (const line of raw.split("\n")) {
-    const cap = line.match(/^\s*caption:\s*(.*)$/i)
-    if (cap) { caption = cap[1]!.trim(); continue }
-    const num = line.match(/^\s*number:\s*(.*)$/i)
-    if (num) { number = num[1]!.trim(); continue }
-    if (!line.trim() && !rows.length) continue
-    const indent = line.match(/^ */)?.[0].length ?? 0
-    let content = line.trim()
-    let comment = ""
-    const slash = content.indexOf(" // ")
-    const tri = content.indexOf("▷")
-    let cut = -1
-    if (slash >= 0) cut = slash
-    if (tri >= 0 && (cut < 0 || tri < cut)) cut = tri
-    if (cut >= 0) {
-      comment = content.slice(cut).replace(/^\s*(?:\/\/|▷)\s*/, "")
-      content = content.slice(0, cut).trim()
-    }
-    rows.push({ level: Math.floor(indent / 2), content, comment })
-  }
-  while (
-    rows.length
-    && !rows[rows.length - 1]!.content
-    && !rows[rows.length - 1]!.comment
-  ) {
-    rows.pop()
-  }
-
-  const capMatch = meta.match(/caption="([^"]*)"/)
-  if (capMatch) caption = capMatch[1]!
-  const numMatch = meta.match(/number=(\d+)/)
-  if (numMatch) number = numMatch[1]!
-
-  const lines: Line[] = rows.map((row, i) => {
-    const feet: number[] = []
-    const next = rows[i + 1]
-    for (let depth = 0; depth < row.level; depth++) {
-      if (!next || next.level <= depth) feet.push(depth)
-    }
-    const html = CONTROL.test(row.content)
-      ? `<i class="ctrl">${row.content.toLowerCase()}</i>`
-      : renderSeg(row.content)
-    const footPush = feet.length
-      ? 0.1 + (Math.max(...feet) - Math.min(...feet)) * 0.46
-      : 0
-    return {
-      level: row.level,
-      html,
-      comment: renderSeg(row.comment, true),
-      feet,
-      footPush,
-    }
-  })
-
-  return { caption, number, lines }
+const { lines, heading, captionHtml, maxDigits, footDepthStyle, isFoot } = useAlgorithmBlock({
+  code: () => code,
+  meta: () => meta,
 })
-
-const lines = computed(() => parsed.value.lines)
-const maxDigits = computed(() => String(lines.value.length).length || 1)
-const number = computed(() => parsed.value.number)
-const captionHtml = computed(() => renderSeg(parsed.value.caption))
 </script>
 
 <style lang="sass" scoped>
