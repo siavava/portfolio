@@ -4,9 +4,9 @@ footer.app-footer.no-select
   span.app-footer__meta
     button.app-footer__theme(
       type="button",
-      :aria-label="mounted && isDark ? 'lights on — switch to light mode' : 'lights off — switch to dark mode'",
+      :aria-label="themeAria",
       @click="toggleColor",
-    ) {{ mounted && isDark ? "lights on" : "lights off" }}
+    ) {{ themeLabel }}
     span.app-footer__divider |
     span.app-footer__version(
       @mouseenter="openVersions",
@@ -23,7 +23,7 @@ footer.app-footer.no-select
             rel="noopener",
           )
             span.app-footer__versions-label {{ past.label }}
-            span.app-footer__versions-url {{ past.url.replace("https://", "") }}
+            span.app-footer__versions-url {{ versionHost(past.url) }}
     span.app-footer__divider |
     NuxtLink(to="/timeline") timeline
     span.app-footer__divider |
@@ -37,9 +37,9 @@ defineProps<{
   profile: ProfileData
 }>()
 
-const { isDark, toggle: toggleColor } = useColorToggle()
-
-const { mounted, showVersions, openVersions, closeVersions } = useAppFooter()
+const { toggleColor, themeLabel, themeAria, versionHost, showVersions, openVersions, closeVersions } = useAppFooter({
+  colorToggle: useColorToggle(),
+})
 </script>
 
 <style lang="sass" scoped>
