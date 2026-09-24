@@ -20,6 +20,7 @@ import Test.Components.GraphTraversalViz as GraphTraversalViz
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.NowItem as NowItem
+import Test.Components.OrbitViz as OrbitViz
 import Test.Components.ProjectShelf as ProjectShelf
 import Test.Components.ProseA as ProseA
 import Test.Components.ReviewBubble as ReviewBubble
@@ -75,6 +76,7 @@ main = do
   LayoutChrome.suite tally
   CodePage.suite tally
   ShelfSatori.suite tally
+  OrbitViz.suite tally
   GraphTraversalViz.suite tally
   Links.suite tally
   InterestLayout.suite tally

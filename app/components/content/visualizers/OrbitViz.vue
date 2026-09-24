@@ -31,7 +31,7 @@ VizFrame(variant="orbit-viz", title="Orbital motion", :note="note")
       v-for="p in planets",
       :key="p.name",
       :class="{ lit: hovered === p.name }",
-      :transform="`translate(${CX + p.r * Math.cos(p.angle)},${CY + p.r * Math.sin(p.angle)})`",
+      :transform="planetTransform(p)",
     )
       circle(:r="p.size")
       text.planet-label(v-if="hovered === p.name", y="-8") {{ p.name }}
@@ -39,7 +39,9 @@ VizFrame(variant="orbit-viz", title="Orbital motion", :note="note")
 
 <script lang="ts" setup>
 /** ## OrbitViz — a 2-D top-down abstraction of astra's orbit loop. */
-const { planets, mode, hovered, note, reset, w: W, h: H, cx: CX, cy: CY } = useOrbitViz()
+const {
+  planets, mode, hovered, note, reset, planetTransform, w: W, h: H, cx: CX, cy: CY,
+} = useOrbitViz()
 </script>
 
 <style lang="sass" scoped>

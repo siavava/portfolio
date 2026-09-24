@@ -7,6 +7,13 @@
 module App.Components.OrbitViz
   ( OrbitBindings
   , Planet
+  , advancePlanet
+  , goldenPhase
+  , initialPlanets
+  , orbitFrameDt
+  , orbitNote
+  , orbitRate
+  , planetTransform
   , useOrbitViz
   ) where
 
@@ -16,14 +23,13 @@ import App.Composables.AfterPaint (useAfterPaint)
 import Data.Array (mapWithIndex)
 import Data.Int (toNumber)
 import Data.Nullable (Nullable, null)
-import Data.Number (pi, pow, remainder)
+import Data.Number (cos, pi, pow, remainder, sin)
+import Data.Number.Format (toString)
 import Effect (Effect)
 import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Vue (Ref, onBeforeUnmount, read, ref, watchRef, write)
 
--- | Starts a per-frame loop; the callback receives the rAF timestamp.
--- | Returns the stop Effect. No-op on the server (`@/ffi/raf-loop`).
 foreign import startRafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
 type Planet =
@@ -45,6 +51,9 @@ type OrbitBindings =
   , note :: Ref String
   -- | Re-seed the planets at their golden-angle phases.
   , reset :: Effect Unit
+  -- | Planet → the `translate(…)` placing it on its orbit around the
+  -- | sun — `planetTransform` applied to the sun center.
+  , planetTransform :: Planet -> String
   -- | Canvas viewBox width in px.
   , w :: Number
   -- | Canvas viewBox height in px.
@@ -61,6 +70,12 @@ canvasW = 640.0
 canvasH :: Number
 canvasH = 320.0
 
+sunX :: Number
+sunX = canvasW / 2.0
+
+sunY :: Number
+sunY = canvasH / 2.0
+
 baseRate :: Number
 baseRate = 0.35
 
@@ -75,23 +90,59 @@ seedPlanets =
   ]
 
 -- | Golden-angle offsets spread the starting positions around the sun.
-phaseFor :: Int -> Number
-phaseFor i = remainder (toNumber i * 2.399963) (pi * 2.0)
+goldenPhase :: Int -> Number
+goldenPhase i = remainder (toNumber i * 2.399963) (pi * 2.0)
 
-noteText :: String -> String
-noteText mode =
+-- | The note line for a rate mode: "true" explains the true ratios,
+-- | anything else the idealized compression.
+orbitNote :: String -> String
+orbitNote mode =
   if mode == "true" then "true ratios — angular speed ∝ 1 / orbital period"
   else "idealized — the range compressed so every orbit stays visible"
 
-omega :: String -> Planet -> Number
-omega mode p =
+-- | The SVG transform placing a planet at its current angle on an orbit
+-- | around (cx, cy). Plain `Number#toString` formatting, exactly as the
+-- | template literal it replaced interpolated the coordinates.
+planetTransform :: Number -> Number -> Planet -> String
+planetTransform cx cy p =
+  let
+    x = cx + p.r * cos p.angle
+    y = cy + p.r * sin p.angle
+  in
+    "translate(" <> toString x <> "," <> toString y <> ")"
+
+-- | Angular rate in rad/s: "true" is inversely proportional to the
+-- | orbital period; the idealized mode takes the 0.35th power of that
+-- | ratio so the outer planets still visibly move.
+orbitRate :: String -> Planet -> Number
+orbitRate mode p =
   if mode == "true" then baseRate / p.period
   else baseRate * pow (1.0 / p.period) 0.35
+
+-- | The roster at its seed positions: each planet at its golden-angle
+-- | phase.
+initialPlanets :: Array Planet
+initialPlanets =
+  mapWithIndex
+    (\i s -> { name: s.name, r: s.r, period: s.period, size: s.size, angle: goldenPhase i })
+    seedPlanets
+
+-- | Seconds since the previous frame stamp (ms): 0 on the first frame
+-- | (no previous stamp), capped at 0.05 so a stalled tab cannot fling
+-- | the planets.
+orbitFrameDt :: Number -> Number -> Number
+orbitFrameDt previous t = if previous == 0.0 then 0.0 else min ((t - previous) / 1000.0) 0.05
+
+-- | One planet advanced by `dt` seconds at its mode's rate, the angle
+-- | kept within a turn.
+advancePlanet :: String -> Number -> Planet -> Planet
+advancePlanet mode dt p = p { angle = remainder (p.angle + orbitRate mode p * dt) (pi * 2.0) }
 
 -- | Wires the planet roster and the rAF sweep that advances each orbit,
 -- | starting after first paint and stopping on unmount. Binds the live
 -- | planet array, the rate-mode select, hover state, the note line, a
--- | reset action, and the canvas constants the SVG template draws with.
+-- | reset action, the per-planet transform, and the canvas constants the
+-- | SVG template draws with.
 useOrbitViz :: Effect OrbitBindings
 useOrbitViz = do
   planets <- ref ([] :: Array Planet)
@@ -103,24 +154,19 @@ useOrbitViz = do
 
   let
     reset = do
-      write planets
-        ( mapWithIndex
-            (\i s -> { name: s.name, r: s.r, period: s.period, size: s.size, angle: phaseFor i })
-            seedPlanets
-        )
+      write planets initialPlanets
       m <- read mode
-      write note (noteText m)
+      write note (orbitNote m)
 
     tick t = do
       previous <- Ref.read lastStamp
-      let dt = if previous == 0.0 then 0.0 else min ((t - previous) / 1000.0) 0.05
+      let dt = orbitFrameDt previous t
       Ref.write t lastStamp
       m <- read mode
       ps <- read planets
-      write planets
-        (map (\p -> p { angle = remainder (p.angle + omega m p * dt) (pi * 2.0) }) ps)
+      write planets (map (advancePlanet m dt) ps)
 
-  _ <- watchRef mode \m -> write note (noteText m)
+  _ <- watchRef mode \m -> write note (orbitNote m)
 
   useAfterPaint do
     reset
@@ -135,8 +181,9 @@ useOrbitViz = do
     , hovered
     , note
     , reset
+    , planetTransform: planetTransform sunX sunY
     , w: canvasW
     , h: canvasH
-    , cx: canvasW / 2.0
-    , cy: canvasH / 2.0
+    , cx: sunX
+    , cy: sunY
     }
