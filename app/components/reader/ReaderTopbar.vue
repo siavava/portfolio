@@ -23,25 +23,23 @@ header.desk-topbar.no-select(:class="{ stuck }")
     span.rt-title {{ title }}
 
   .rt-actions
-    span.rt-count(v-if="index >= 0") {{ index + 1 }} / {{ total }}
+    span.rt-count(v-if="count") {{ count }}
     button.rt-icon.rt-share(
       type="button",
       :class="{ done: copied }",
-      :aria-label="copied ? 'Link copied' : 'Share this project'",
+      :aria-label="shareLabel",
       @click="onShare",
     )
-      Icon(:name="copied ? 'lucide:check' : 'lucide:share-2'")
+      Icon(:name="shareIcon")
     button.rt-icon.rt-theme(
       type="button",
-      :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'",
+      :aria-label="themeLabel",
       @click="$emit('toggle-color')",
     )
-      Icon(:name="isDark ? 'lucide:sun' : 'lucide:moon'")
+      Icon(:name="themeIcon")
 </template>
 
 <script lang="ts" setup>
-import { useClipboard, useShare } from "@vueuse/core"
-
 /** ## ReaderTopbar — the reading desk's sticky bar: drawer trigger, home link, prev/next, crumb, count, share, and light/dark toggle. */
 const props = defineProps<{
   tag?: string
@@ -60,15 +58,22 @@ defineEmits<{
   "toggle-color": []
 }>()
 
-const { share, isSupported: canShare } = useShare()
-const { copy, copied } = useClipboard({ copiedDuring: 1600 })
-
-const { onShare, NAV_ICON, HOME_ICON } = useReaderTopbar({
-  share,
-  copy,
-  canShare,
+const {
+  onShare,
+  copied,
+  shareLabel,
+  shareIcon,
+  themeLabel,
+  themeIcon,
+  count,
+  NAV_ICON,
+  HOME_ICON,
+} = useReaderTopbar({
   title: () => props.title ?? null,
   shareUrl: () => props.shareUrl,
+  isDark: () => props.isDark,
+  index: () => props.index,
+  total: () => props.total,
 })
 </script>
 
