@@ -24,6 +24,7 @@ import Test.Components.MulticopterViz as MulticopterViz
 import Test.Components.NowItem as NowItem
 import Test.Components.OrbitViz as OrbitViz
 import Test.Components.ParticleHashViz as ParticleHashViz
+import Test.Components.PbdClothViz as PbdClothViz
 import Test.Components.ProjectShelf as ProjectShelf
 import Test.Components.ProseA as ProseA
 import Test.Components.ReviewBubble as ReviewBubble
@@ -85,6 +86,7 @@ main = do
   GraphTraversalViz.suite tally
   MulticopterViz.suite tally
   MassSpringViz.suite tally
+  PbdClothViz.suite tally
   ParticleHashViz.suite tally
   Links.suite tally
   InterestLayout.suite tally

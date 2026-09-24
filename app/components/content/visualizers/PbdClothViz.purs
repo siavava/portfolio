@@ -8,8 +8,23 @@
 -- | pass stays in the FFI (`Map`-keyed buckets, exact JS iteration order).
 module App.Components.PbdClothViz
   ( ClothBindings
+  , Link
   , Particle
   , Segment
+  , Wind
+  , clothLinks
+  , clothNote
+  , clothPredicted
+  , clothProjected
+  , clothRest
+  , clothRunaway
+  , clothSegments
+  , clothShears
+  , clothStrain
+  , clothVelocity
+  , compressionFloor
+  , contactPush
+  , gustEnvelope
   , usePbdClothViz
   ) where
 
@@ -18,7 +33,9 @@ import Prelude
 import App.Composables.AfterPaint (useAfterPaint)
 import App.Utils.JsMath (hypot, orEps)
 import Data.Array as Array
+import Data.Foldable (for_)
 import Data.Int (toNumber)
+import Data.Maybe (Maybe(..))
 import Data.Number (abs, isFinite, max, min, round, sin, sqrt2) as Number
 import Data.Number.Format (fixed, toString, toStringWith)
 import Effect (Effect, forE, foreachE)
@@ -35,40 +52,26 @@ import Effect.Uncurried
   )
 import Vue (Ref, read, ref, shallowRef, watchRef, write)
 
--- | Module-local mutable particle store (a plain JS array).
 foreign import data SimArray :: Type -> Type
 
--- | Spatial-hash bucket table for the self-contact pass (a JS `Map`).
 foreign import data ContactTable :: Type
 
--- | Wraps `useRafFn(fn, { immediate: false })`; returns the resume Effect.
 foreign import rafLoopImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
--- | Mutable copy of an array, as a fresh store.
 foreign import thawImpl :: forall a. EffectFn1 (Array a) (SimArray a)
 
--- | Read the cell at an index (unchecked).
 foreign import peekImpl :: forall a. EffectFn2 (SimArray a) Int a
 
--- | Overwrite the cell at an index in place.
 foreign import pokeImpl :: forall a. EffectFn3 (SimArray a) Int a Unit
 
--- | Mutable copy of the store — the pre-solve positions the velocity
--- | update diffs against.
 foreign import snapshotImpl :: forall a. EffectFn1 (SimArray a) (SimArray a)
 
--- | Immutable snapshot of the store.
 foreign import freezeImpl :: forall a. EffectFn1 (SimArray a) (Array a)
 
--- | Number of cells in the store.
 foreign import lengthImpl :: forall a. EffectFn1 (SimArray a) Int
 
--- | Hash every particle into `Map` buckets of size-px cells, in index
--- | order.
 foreign import buildContactTableImpl :: EffectFn2 Number (SimArray Particle) ContactTable
 
--- | Bucket contents of the 3-by-3 cell neighborhood around (x, y), in
--- | the reference's dc/dr scan order.
 foreign import contactCandidatesImpl :: EffectFn4 ContactTable Number Number Number (Array Int)
 
 type Particle =
@@ -77,7 +80,14 @@ type Particle =
 type Segment =
   { ax :: Number, ay :: Number, bx :: Number, by :: Number, stroke :: String }
 
+-- | A distance constraint between particles `a` and `b`.
 type Link = { a :: Int, b :: Int, rest :: Number }
+
+-- | The air for one substep: whether a gust is blowing, its decaying
+-- | envelope (1 → 0) and direction (±1), the gust wave's phase, and the
+-- | breeze clock in seconds.
+type Wind =
+  { blowing :: Boolean, envelope :: Number, dir :: Number, phase :: Number, time :: Number }
 
 type ClothBindings =
   { -- | Canvas viewBox width in px.
@@ -153,15 +163,15 @@ at :: Int -> Int -> Int
 at i j = j * cols + i
 
 -- | Warp/weft distance constraints, in the reference's push order.
-constraints :: Array Link
-constraints = Array.range 0 (rows - 1) # Array.concatMap \j ->
+clothLinks :: Array Link
+clothLinks = Array.range 0 (rows - 1) # Array.concatMap \j ->
   Array.range 0 (cols - 1) # Array.concatMap \i ->
     (if i < cols - 1 then [ { a: at i j, b: at (i + 1) j, rest: restLen } ] else [])
       <> (if j < rows - 1 then [ { a: at i j, b: at i (j + 1), rest: restLen } ] else [])
 
 -- | Both diagonals of every quad, used as compression-only floors.
-shears :: Array Link
-shears = Array.range 0 (rows - 1) # Array.concatMap \j ->
+clothShears :: Array Link
+clothShears = Array.range 0 (rows - 1) # Array.concatMap \j ->
   Array.range 0 (cols - 1) # Array.concatMap \i ->
     if i < cols - 1 && j < rows - 1 then
       [ { a: at i j, b: at (i + 1) (j + 1), rest: shearRest }
@@ -169,8 +179,10 @@ shears = Array.range 0 (rows - 1) # Array.concatMap \j ->
       ]
     else []
 
-segmentsOf :: Array Particle -> Array Segment
-segmentsOf ps = constraints
+-- | Every warp/weft link as a drawable segment, its stroke tinted from
+-- | blue toward orange by its strain: fully orange at 15%.
+clothSegments :: Array Particle -> Array Segment
+clothSegments ps = clothLinks
   # Array.mapMaybe \c -> do
       a <- Array.index ps c.a
       b <- Array.index ps c.b
@@ -186,6 +198,104 @@ segmentsOf ps = constraints
             <> toString tint
             <> "%)"
         }
+
+-- | The cloth at rest: a 13 × 8 grid at link spacing, its top row pinned
+-- | with zero inverse mass.
+clothRest :: Array Particle
+clothRest = Array.range 0 (rows - 1) # Array.concatMap \j ->
+  map (build j) (Array.range 0 (cols - 1))
+  where
+  build j i =
+    { x: originX + toNumber i * restLen
+    , y: originY + toNumber j * restLen
+    , vx: 0.0
+    , vy: 0.0
+    , w: if j == 0 then 0.0 else 1.0
+    , pinned: j == 0
+    }
+
+-- | A gust's strength from the seconds it has left: full when fresh,
+-- | fading linearly, none once spent.
+gustEnvelope :: Number -> Number
+gustEnvelope left = if left > 0.0 then left / gustTime else 0.0
+
+-- | Free particle `idx`'s predicted position: the gust (while blowing)
+-- | shoves it along `dir` and lifts it, the ambient breeze sways it —
+-- | both growing with depth below the pinned row, both rippled by a
+-- | travelling wave — then gravity and damping, and a step along the new
+-- | velocity.
+clothPredicted :: Wind -> Int -> Particle -> Particle
+clothPredicted wind idx p = p { vx = vx', vy = vy', x = p.x + dt * vx', y = p.y + dt * vy' }
+  where
+  depth = toNumber (idx / cols) / toNumber (rows - 1)
+  wave = Number.sin (wind.phase + (p.y - originY) * 0.02 + (p.x - originX) * 0.008)
+  vxGust =
+    if wind.blowing then p.vx + dt * wind.dir * wind.envelope * depth * (1800.0 + 900.0 * wave)
+    else p.vx
+  vyGust =
+    if wind.blowing then p.vy - dt * wind.envelope * depth * (220.0 + 130.0 * wave)
+    else p.vy
+  breeze = Number.sin (wind.time * 0.9 + depth * 2.1) * 20.0
+    + Number.sin (wind.time * 1.7 + (p.x - originX) * 0.02) * 13.0
+  vx' = (vxGust + dt * breeze * depth) * damping
+  vy' = (vyGust + dt * gravity) * damping
+
+-- | Projects a pair onto distance `target`, each moving in proportion to
+-- | its inverse mass; nothing when both are pinned.
+clothProjected :: Particle -> Particle -> Number -> Maybe { a :: Particle, b :: Particle }
+clothProjected a b target =
+  if wSum == 0.0 then Nothing
+  else
+    Just
+      { a: a { x = a.x + a.w / wSum * nx, y = a.y + a.w / wSum * ny }
+      , b: b { x = b.x - b.w / wSum * nx, y = b.y - b.w / wSum * ny }
+      }
+  where
+  dx = b.x - a.x
+  dy = b.y - a.y
+  len = orEps (hypot dx dy)
+  wSum = a.w + b.w
+  diff = (len - target) / len
+  nx = dx * diff
+  ny = dy * diff
+
+-- | A compression-only limit: a link squashed below `fraction` of its
+-- | rest length is pushed back out to it; otherwise nothing.
+compressionFloor :: Number -> Link -> Particle -> Particle -> Maybe { a :: Particle, b :: Particle }
+compressionFloor fraction c a b =
+  if orEps (hypot (b.x - a.x) (b.y - a.y)) < c.rest * fraction then
+    clothProjected a b (c.rest * fraction)
+  else Nothing
+
+-- | Self-contact: two particles closer than the 13px minimum separation
+-- | are pushed apart to it; otherwise nothing.
+contactPush :: Particle -> Particle -> Maybe { a :: Particle, b :: Particle }
+contactPush a b =
+  if hypot (b.x - a.x) (b.y - a.y) < minSep then clothProjected a b minSep
+  else Nothing
+
+-- | The velocity the solve implies: displacement from the pre-solve
+-- | position over the step.
+clothVelocity :: Particle -> Particle -> Particle
+clothVelocity before p = p { vx = (p.x - before.x) / dt, vy = (p.y - before.y) / dt }
+
+-- | A particle the sim cannot recover: non-finite x, or beyond 4000px on
+-- | either axis.
+clothRunaway :: Particle -> Boolean
+clothRunaway p = not (Number.isFinite p.x) || Number.abs p.x > 4000.0 || Number.abs p.y > 4000.0
+
+-- | A link's strain: stretch or squash as a fraction of rest length.
+clothStrain :: Link -> Particle -> Particle -> Number
+clothStrain c a b = Number.abs (hypot (b.x - a.x) (b.y - a.y) - c.rest) / c.rest
+
+-- | The status line: iterations, the peak stretch as a percentage, and
+-- | whether a gust is blowing (seconds left) or only the breeze.
+clothNote :: Int -> Number -> Number -> String
+clothNote iters peak left =
+  "iterations: " <> show iters <> " · max stretch "
+    <> toStringWith (fixed 1) (peak * 100.0)
+    <> "% · "
+    <> (if left > 0.0 then "gust blowing" else "ambient breeze")
 
 -- | Wires the cloth build and the frame loop (two solver substeps per
 -- | frame), starting after first paint. Binds the frozen
@@ -210,32 +320,15 @@ usePbdClothViz = do
       iters <- read iterations
       peak <- Ref.read peakStretch
       left <- Ref.read gustLeft
-      let state = if left > 0.0 then "gust blowing" else "ambient breeze"
-      pure
-        ( "iterations: " <> show iters <> " · max stretch "
-            <> toStringWith (fixed 1) (peak * 100.0)
-            <> "% · "
-            <> state
-        )
+      pure (clothNote iters peak left)
 
     syncViews = do
       frozen <- runEffectFn1 freezeImpl =<< Ref.read sim
       write particlesView frozen
-      write segmentsView (segmentsOf frozen)
+      write segmentsView (clothSegments frozen)
 
     reset = do
-      let
-        build j i =
-          { x: originX + toNumber i * restLen
-          , y: originY + toNumber j * restLen
-          , vx: 0.0
-          , vy: 0.0
-          , w: if j == 0 then 0.0 else 1.0
-          , pinned: j == 0
-          }
-        grid = Array.range 0 (rows - 1) # Array.concatMap \j ->
-          map (build j) (Array.range 0 (cols - 1))
-      fresh <- runEffectFn1 thawImpl grid
+      fresh <- runEffectFn1 thawImpl clothRest
       Ref.write fresh sim
       Ref.write 0.0 gustLeft
       Ref.write 0.0 peakStretch
@@ -247,33 +340,24 @@ usePbdClothViz = do
       Ref.modify_ negate gustDir
       Ref.write 0.0 peakStretch
 
+    pokePair m ia ib pair = do
+      runEffectFn3 pokeImpl m ia pair.a
+      runEffectFn3 pokeImpl m ib pair.b
+
     projectPair m ia ib target = do
       a <- runEffectFn2 peekImpl m ia
       b <- runEffectFn2 peekImpl m ib
-      let
-        dx = b.x - a.x
-        dy = b.y - a.y
-        len = orEps (hypot dx dy)
-        wSum = a.w + b.w
-      unless (wSum == 0.0) do
-        let
-          diff = (len - target) / len
-          nx = dx * diff
-          ny = dy * diff
-        runEffectFn3 pokeImpl m ia (a { x = a.x + a.w / wSum * nx, y = a.y + a.w / wSum * ny })
-        runEffectFn3 pokeImpl m ib (b { x = b.x - b.w / wSum * nx, y = b.y - b.w / wSum * ny })
+      for_ (clothProjected a b target) (pokePair m ia ib)
 
     projectLimits m = do
-      foreachE shears \c -> do
+      foreachE clothShears \c -> do
         a <- runEffectFn2 peekImpl m c.a
         b <- runEffectFn2 peekImpl m c.b
-        let len = orEps (hypot (b.x - a.x) (b.y - a.y))
-        when (len < c.rest * diagFloor) (projectPair m c.a c.b (c.rest * diagFloor))
-      foreachE constraints \c -> do
+        for_ (compressionFloor diagFloor c a b) (pokePair m c.a c.b)
+      foreachE clothLinks \c -> do
         a <- runEffectFn2 peekImpl m c.a
         b <- runEffectFn2 peekImpl m c.b
-        let len = orEps (hypot (b.x - a.x) (b.y - a.y))
-        when (len < c.rest * compFloor) (projectPair m c.a c.b (c.rest * compFloor))
+        for_ (compressionFloor compFloor c a b) (pokePair m c.a c.b)
 
     projectContacts m total = do
       let size = minSep * 2.0
@@ -285,8 +369,7 @@ usePbdClothViz = do
           when (j > i) do
             a <- runEffectFn2 peekImpl m i
             b <- runEffectFn2 peekImpl m j
-            when (hypot (b.x - a.x) (b.y - a.y) < minSep)
-              (projectPair m i j minSep)
+            for_ (contactPush a b) (pokePair m i j)
 
     step = do
       m <- Ref.read sim
@@ -296,36 +379,22 @@ usePbdClothViz = do
 
       left <- Ref.read gustLeft
       dir <- Ref.read gustDir
-      let
-        blowing = left > 0.0
-        envelope = if blowing then left / gustTime else 0.0
+      let blowing = left > 0.0
       Ref.modify_ (_ + dt) time
       when blowing do
         Ref.write (left - dt) gustLeft
         Ref.modify_ (_ + dt * 7.0) phase
       phaseNow <- Ref.read phase
       timeNow <- Ref.read time
+      let
+        wind =
+          { blowing, envelope: gustEnvelope left, dir, phase: phaseNow, time: timeNow }
 
       forE 0 total \idx -> do
         p <- runEffectFn2 peekImpl m idx
-        unless p.pinned do
-          let
-            depth = toNumber (idx / cols) / toNumber (rows - 1)
-            wave = Number.sin (phaseNow + (p.y - originY) * 0.02 + (p.x - originX) * 0.008)
-            vxGust =
-              if blowing then p.vx + dt * dir * envelope * depth * (1800.0 + 900.0 * wave)
-              else p.vx
-            vyGust =
-              if blowing then p.vy - dt * envelope * depth * (220.0 + 130.0 * wave)
-              else p.vy
-            breeze = Number.sin (timeNow * 0.9 + depth * 2.1) * 20.0
-              + Number.sin (timeNow * 1.7 + (p.x - originX) * 0.02) * 13.0
-            vx' = (vxGust + dt * breeze * depth) * damping
-            vy' = (vyGust + dt * gravity) * damping
-          runEffectFn3 pokeImpl m idx
-            (p { vx = vx', vy = vy', x = p.x + dt * vx', y = p.y + dt * vy' })
+        unless p.pinned (runEffectFn3 pokeImpl m idx (clothPredicted wind idx p))
 
-      forE 0 iters \_ -> foreachE constraints \c -> projectPair m c.a c.b c.rest
+      forE 0 iters \_ -> foreachE clothLinks \c -> projectPair m c.a c.b c.rest
       forE 0 shearIters \_ -> projectLimits m
       projectContacts m total
       projectContacts m total
@@ -336,20 +405,18 @@ usePbdClothViz = do
         p <- runEffectFn2 peekImpl m i
         unless p.pinned do
           before <- runEffectFn2 peekImpl prev i
-          let p' = p { vx = (p.x - before.x) / dt, vy = (p.y - before.y) / dt }
+          let p' = clothVelocity before p
           runEffectFn3 pokeImpl m i p'
-          when (not (Number.isFinite p'.x) || Number.abs p'.x > 4000.0 || Number.abs p'.y > 4000.0)
-            (Ref.write true blownRef)
+          when (clothRunaway p') (Ref.write true blownRef)
 
       blown <- Ref.read blownRef
       if blown then reset
       else do
         stretch <- Ref.new 0.0
-        foreachE constraints \c -> do
+        foreachE clothLinks \c -> do
           a <- runEffectFn2 peekImpl m c.a
           b <- runEffectFn2 peekImpl m c.b
-          let len = hypot (b.x - a.x) (b.y - a.y)
-          Ref.modify_ (\ms -> Number.max ms (Number.abs (len - c.rest) / c.rest)) stretch
+          Ref.modify_ (\ms -> Number.max ms (clothStrain c a b)) stretch
         maxStretch <- Ref.read stretch
         peak <- Ref.read peakStretch
         when (maxStretch > peak) (Ref.write maxStretch peakStretch)
