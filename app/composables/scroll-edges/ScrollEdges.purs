@@ -14,25 +14,19 @@ import Prelude
 
 import Data.Nullable (Nullable)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn3, mkEffectFn1, runEffectFn1, runEffectFn3)
+import Effect.Uncurried (EffectFn1, EffectFn3, runEffectFn1, runEffectFn3)
 import Vue (Computed, Ref, computed)
 
 -- | An `HTMLElement` — opaque here; only the FFI touches it. @ts HTMLElement
 foreign import data DomElement :: Type
 
--- | The reactive `arrivedState` from VueUse's `useScroll` — opaque;
--- | read in the FFI so the computeds track it.
 foreign import data ArrivedState :: Type
 
--- | VueUse `useScroll` on the element ref with left/right arrival
--- | offsets; returns its reactive `arrivedState`.
 foreign import scrollArrivedStateImpl
   :: EffectFn3 (Ref (Nullable DomElement)) Number Number ArrivedState
 
--- | Whether scroll has arrived at the left edge (a reactive read).
 foreign import arrivedLeftImpl :: EffectFn1 ArrivedState Boolean
 
--- | Whether scroll has arrived at the right edge (a reactive read).
 foreign import arrivedRightImpl :: EffectFn1 ArrivedState Boolean
 
 type ScrollEdgesBindings =
