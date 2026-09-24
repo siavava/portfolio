@@ -156,4 +156,12 @@ const {
 
 .period__body > :deep(p:first-child)
   margin-top: 0
+
+.period__body > :deep(ul)
+  margin: 0
+  padding-left: 1.1em
+  list-style-type: "– "
+
+.period__body > :deep(ul li::marker)
+  color: var(--tl-faint, currentColor)
 </style>

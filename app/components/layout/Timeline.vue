@@ -776,15 +776,9 @@ const {
 
   :deep(ul)
     max-width: 18rem
-    margin: 0
-    padding-left: 1.1em
-    list-style-type: "– "
     font-size: typography.font-size("s")
     line-height: 1.55
     letter-spacing: -0.01em
-
-  :deep(li::marker)
-    color: var(--tl-faint)
 
   :deep(p + p),
   :deep(ul + p)
