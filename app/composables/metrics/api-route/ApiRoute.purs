@@ -3,15 +3,16 @@
 -- | The metrics backend's base URLs for the current environment — the
 -- | same server the blog reports to.
 module App.Composables.Metrics.ApiRoute
-  ( useApiRoute
+  ( apiRouteFor
+  , useApiRoute
   , useWebSocketRoute
+  , webSocketRouteFor
   ) where
 
 import Prelude
 
 import Effect (Effect)
 
--- | Whether the app runs in development (Nuxt's `import.meta.dev`).
 foreign import isDevImpl :: Effect Boolean
 
 -- | ## useApiRoute
@@ -26,8 +27,11 @@ foreign import isDevImpl :: Effect Boolean
 -- | | Development | `http://localhost:8080` |
 -- | | Production | `https://api.amittai.studio` |
 useApiRoute :: Effect String
-useApiRoute = isDevImpl <#> \dev ->
-  if dev then "http://localhost:8080" else "https://api.amittai.studio"
+useApiRoute = apiRouteFor <$> isDevImpl
+
+-- | The REST base URL in development (`true`) or production (`false`).
+apiRouteFor :: Boolean -> String
+apiRouteFor dev = if dev then "http://localhost:8080" else "https://api.amittai.studio"
 
 -- | ## useWebSocketRoute
 -- |
@@ -41,5 +45,9 @@ useApiRoute = isDevImpl <#> \dev ->
 -- | | Development | `ws://localhost:8080` |
 -- | | Production | `wss://api.amittai.studio` |
 useWebSocketRoute :: Effect String
-useWebSocketRoute = isDevImpl <#> \dev ->
-  if dev then "ws://localhost:8080" else "wss://api.amittai.studio"
+useWebSocketRoute = webSocketRouteFor <$> isDevImpl
+
+-- | The WebSocket base URL in development (`true`) or production
+-- | (`false`).
+webSocketRouteFor :: Boolean -> String
+webSocketRouteFor dev = if dev then "ws://localhost:8080" else "wss://api.amittai.studio"
