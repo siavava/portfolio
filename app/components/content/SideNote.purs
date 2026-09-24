@@ -9,13 +9,14 @@ module App.Components.SideNote
   , SideNoteArgs
   , SideNoteBindings
   , SideNotesStore
+  , nameOf
   , setup
   ) where
 
 import Prelude
 
 import Data.Maybe (Maybe(..))
-import Data.Nullable (Nullable, toMaybe)
+import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
 import Vue
@@ -35,20 +36,14 @@ foreign import data SideNotesStore :: Type
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
--- | Whether the named note is currently hovered or pinned.
 foreign import sideNotesIsVisibleImpl :: EffectFn2 SideNotesStore String Boolean
 
--- | The currently hovered note name, or null.
 foreign import sideNotesHoveredImpl :: EffectFn1 SideNotesStore (Nullable String)
 
--- | How many notes are pinned.
 foreign import sideNotesPinnedSizeImpl :: EffectFn1 SideNotesStore Int
 
--- | Vue's `nextTick` with a callback, result discarded.
 foreign import nextTickImpl :: EffectFn1 (Effect Unit) Unit
 
--- | Adds a passive window resize listener; returns the remove thunk
--- | (manual cleanup — no-op stub during SSR).
 foreign import onWindowResizeImpl :: EffectFn1 (Effect Unit) (Effect Unit)
 
 type SideNoteArgs =
@@ -72,19 +67,20 @@ type SideNoteBindings =
     visible :: Computed Boolean
   }
 
+-- | The name when present and non-empty — JS truthiness of
+-- | `props.name`; null otherwise.
+nameOf :: Nullable String -> Nullable String
+nameOf value = case toMaybe value of
+  Just text | text /= "" -> notNull text
+  _ -> null
+
 -- | Registers the note with the side-note layout for the component's
 -- | lifetime, derives `visible` from the store, and re-lays out visible
 -- | notes on store changes and window resizes.
 setup :: SideNoteArgs -> Effect SideNoteBindings
 setup args = do
   let
-    -- The note name when present and non-empty — JS truthiness of
-    -- `props.name`.
-    presentName = do
-      name <- args.name
-      pure case toMaybe name of
-        Just value | value /= "" -> Just value
-        _ -> Nothing
+    presentName = toMaybe <<< nameOf <$> args.name
 
     reflow = runEffectFn1 nextTickImpl args.relayoutVisible
 

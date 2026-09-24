@@ -20,6 +20,7 @@ import Test.Components.ProjectShelf as ProjectShelf
 import Test.Components.ProseA as ProseA
 import Test.Components.ScrollFades as ScrollFades
 import Test.Components.ShelfSatori as ShelfSatori
+import Test.Components.SideNote as SideNote
 import Test.Components.TikzDiagram as TikzDiagram
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
 import Test.Composables.DraggableBubble as DraggableBubble
@@ -107,5 +108,6 @@ main = do
   FigmaSelect.suite tally
   ProjectShelf.suite tally
   ProseA.suite tally
+  SideNote.suite tally
   TikzDiagram.suite tally
   report tally
