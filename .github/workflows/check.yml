@@ -10,7 +10,7 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
-      # scripts/spago-build.mjs relocates spago's global cache here on CI,
+      # scripts/spago-build.ts relocates spago's global cache here on CI,
       # so caching it skips the registry clone (~1 min) on warm runs.
       - uses: actions/cache@v4
         with:
@@ -19,12 +19,17 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      - run: bun run purs:check
-
       - run: bun run purs:format-check
 
-      # needs the output/ + .purs-shims trees purs:check built above
+      - name: build purescript
+        run: bun run purs:build
+
+      # needs the .purs/output + .purs-shims trees purs:build made above
       - run: bun run typecheck
+
+      # every suite under test/Test, which the runner checks Test.Main registers
+      - name: purescript tests
+        run: bun scripts/purs-test.ts
 
       # not `bun run lint` — the lint script runs --fix
       - run: bunx eslint .
