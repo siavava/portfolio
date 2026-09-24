@@ -10,7 +10,9 @@ module App.Composables.DraggableBubble
   , DomElement
   , PointerEvt
   , Vec2
+  , dragTranslation
   , setup
+  , springsHome
   ) where
 
 import Prelude
@@ -31,41 +33,26 @@ foreign import data PointerEvt :: Type
 -- | The `reactive({ x, y })` translation object the template reads.
 foreign import data Vec2 :: Type
 
--- | A fresh `reactive({ x: 0, y: 0 })`.
 foreign import newVec2Impl :: Effect Vec2
 
--- | Read the x translation — a reactive read Vue can track.
 foreign import getXImpl :: EffectFn1 Vec2 Number
 
--- | Read the y translation — a reactive read Vue can track.
 foreign import getYImpl :: EffectFn1 Vec2 Number
 
--- | Write the x translation.
 foreign import setXImpl :: EffectFn2 Vec2 Number Unit
 
--- | Write the y translation.
 foreign import setYImpl :: EffectFn2 Vec2 Number Unit
 
--- | VueUse `useMediaQuery`: a ref tracking whether the query matches
--- | (`false` during SSR).
 foreign import useMediaQueryImpl :: EffectFn1 String (Ref Boolean)
 
--- | Run a motion-v spring from 1 to 0, feeding each frame's value to the
--- | callback; returns the Effect that stops the animation.
 foreign import startSpringImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
--- | The next value off the shared z-index stack (module state, so the
--- | latest grab tops every bubble on the page).
 foreign import nextStackImpl :: Effect Int
 
--- | `setPointerCapture` on the element (no-op when null), so the drag
--- | keeps receiving moves outside the bubble.
 foreign import capturePointerImpl :: EffectFn2 (Nullable DomElement) PointerEvt Unit
 
--- | The pointer's `clientX`.
 foreign import pointerXImpl :: PointerEvt -> Number
 
--- | The pointer's `clientY`.
 foreign import pointerYImpl :: PointerEvt -> Number
 
 type BubbleBindings =
@@ -83,6 +70,23 @@ type BubbleBindings =
       , pointercancel :: Effect Unit
       }
   }
+
+-- | The translation while dragging: the offset the bubble had when it
+-- | was grabbed, moved by however far the pointer has travelled since.
+dragTranslation
+  :: { x :: Number, y :: Number }
+  -> { x :: Number, y :: Number }
+  -> { x :: Number, y :: Number }
+  -> { x :: Number, y :: Number }
+dragTranslation base start pointer =
+  { x: base.x + pointer.x - start.x
+  , y: base.y + pointer.y - start.y
+  }
+
+-- | Whether the bubble springs back to its resting place: only on the
+-- | collapse to a single column, and only when it was tossed somewhere.
+springsHome :: Boolean -> Number -> Number -> Boolean
+springsHome mobile x y = not (not mobile || (x == 0.0 && y == 0.0))
 
 -- | ## useDraggableBubble
 -- |
@@ -112,11 +116,10 @@ setup el = do
       Just stop -> stop
       Nothing -> pure unit
 
-  -- On collapse to a single column, spring any tossed bubble back home.
   _ <- watchRef singleColumn \mobile -> do
     startX <- runEffectFn1 getXImpl offset
     startY <- runEffectFn1 getYImpl offset
-    unless (not mobile || (startX == 0.0 && startY == 0.0)) do
+    when (springsHome mobile startX startY) do
       stopReset
       stop <- runEffectFn1 startSpringImpl $ mkEffectFn1 \t -> do
         runEffectFn2 setXImpl offset (startX * t)
@@ -143,8 +146,10 @@ setup el = do
       when isDragging do
         start <- Ref.read pointerStart
         base <- Ref.read offsetStart
-        runEffectFn2 setXImpl offset (base.x + pointerXImpl event - start.x)
-        runEffectFn2 setYImpl offset (base.y + pointerYImpl event - start.y)
+        let
+          moved = dragTranslation base start { x: pointerXImpl event, y: pointerYImpl event }
+        runEffectFn2 setXImpl offset moved.x
+        runEffectFn2 setYImpl offset moved.y
 
     onPointerup = write dragging false
 
