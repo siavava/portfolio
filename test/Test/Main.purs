@@ -9,6 +9,7 @@ import Test.Composables.DraggableBubble as DraggableBubble
 import Test.Composables.FigureSpotlight as FigureSpotlight
 import Test.Composables.ProjectReferences as ProjectReferences
 import Test.Composables.ReaderPeeks as ReaderPeeks
+import Test.Composables.SideNoteLayout as SideNoteLayout
 import Test.Harness (newTally, report)
 import Test.Map.InterestLayout as InterestLayout
 import Test.Server.Sitemap as Sitemap
@@ -34,6 +35,7 @@ main = do
   InterestLayout.suite tally
   Sitemap.suite tally
   Tikz.suite tally
+  SideNoteLayout.suite tally
   FigureSpotlight.suite tally
   ReaderPeeks.suite tally
   ProjectReferences.suite tally
