@@ -23,6 +23,7 @@ import Test.Stores.Connections as Connections
 import Test.Stores.Cues as Cues
 import Test.Stores.MapReveal as MapReveal
 import Test.Stores.SideNotes as SideNotes
+import Test.Transformers.Fences as TransformersFences
 import Test.Utils.Coder as Coder
 import Test.Utils.Format as Format
 import Test.Utils.JsMath as JsMath
@@ -45,6 +46,7 @@ main = do
   InterestLayout.suite tally
   Sitemap.suite tally
   Tikz.suite tally
+  TransformersFences.suite tally
   Metrics.suite tally
   NotesMeta.suite tally
   SideNoteLayout.suite tally
