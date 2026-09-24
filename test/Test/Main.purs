@@ -11,6 +11,7 @@ import Test.Components.CueThreads as CueThreads
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.ShelfSatori as ShelfSatori
+import Test.Components.TikzDiagram as TikzDiagram
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
 import Test.Composables.DraggableBubble as DraggableBubble
 import Test.Composables.FigureSpotlight as FigureSpotlight
@@ -88,4 +89,5 @@ main = do
   MapReveal.suite tally
   SideNotes.suite tally
   IndexPage.suite tally
+  TikzDiagram.suite tally
   report tally
