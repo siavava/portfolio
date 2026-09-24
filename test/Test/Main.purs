@@ -39,6 +39,7 @@ import Test.Components.ReviewBubble as ReviewBubble
 import Test.Components.ScrollFades as ScrollFades
 import Test.Components.ShelfSatori as ShelfSatori
 import Test.Components.SideNote as SideNote
+import Test.Components.Site as Site
 import Test.Components.SmokeViz as SmokeViz
 import Test.Components.TikzDiagram as TikzDiagram
 import Test.Components.Timeline as Timeline
@@ -149,6 +150,7 @@ main = do
   PageShell.suite tally
   ReviewBubble.suite tally
   ScrollFades.suite tally
+  Site.suite tally
   TooltipShell.suite tally
   BioTarget.suite tally
   BookcaseShelf.suite tally

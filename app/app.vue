@@ -1,21 +1,20 @@
 <template lang="pug">
 div
+  NuxtRouteAnnouncer
   NuxtLayout
     NuxtPage(:transition="transition")
   CueThreads
 </template>
 
 <script lang="ts" setup>
-/**
- * Site-wide SEO and social-card metadata. og:image and twitter:image are
- * injected by nuxt-og-image from the page-level defineOgImage call.
- */
 const cues = useCues()
 const sideNotes = useSideNotes()
 const route = useRoute()
-watch(() => route.path, () => {
-  cues.reset()
-  sideNotes.reset()
+const { shelfCard } = useSite({
+  path: () => route.path,
+  resetCues: () => cues.reset(),
+  resetSideNotes: () => sideNotes.reset(),
+  shareImage: (ogImage, twitterImage) => useSeoMeta({ ogImage, twitterImage }),
 })
 
 const title = "Amittai"
@@ -37,13 +36,11 @@ useSeoMeta({
 
 const { data: profile } = await useProfile()
 
-// The timeline's page transitions: the panel grows out of the name bar over
-// the page it came from and docks back into it. The store carries the bar's
-// rect between the bar, the panel, and these hooks.
 const timeline = useTimelineStore()
 const { transition } = useTimelineTransition({
   origin: () => timeline.origin,
   originPath: () => timeline.originPath,
+  originScroll: () => timeline.originScroll,
   land: () => timeline.land(),
   clearOrigin: () => timeline.clearOrigin(),
 })
@@ -51,27 +48,13 @@ const { transition } = useTimelineTransition({
 const { data: projectCount } = await useAsyncData("og-project-count", () =>
   queryCollection("projects").count())
 
-defineOgImage("Shelf", {
-  kicker: () => profile.value?.og.kicker ?? "",
-  title: () => profile.value?.name ?? "",
-  description: () => profile.value?.og.description ?? "",
-  footer: () => `${projectCount.value ?? 0} Projects`,
-  total: () => projectCount.value ?? 0,
-}, {
+defineOgImage("Shelf", shelfCard({
+  profile: () => profile.value ?? null,
+  projectCount: () => projectCount.value ?? null,
+}), {
   width: 1200,
   height: 630,
 })
-
-if (import.meta.client) {
-  onMounted(() => {
-    const content = (selector: string) =>
-      document.head.querySelector(selector)?.getAttribute("content") ?? undefined
-    const ogImage = content("meta[property=\"og:image\"]")
-    if (ogImage) {
-      useSeoMeta({ ogImage, twitterImage: content("meta[name=\"twitter:image\"]") ?? ogImage })
-    }
-  })
-}
 
 useHead({
   htmlAttrs: {
