@@ -6,6 +6,12 @@
 module App.Utils.Scroll
   ( GlideElement
   , GlideTarget
+  , ScrollMetrics
+  , ScrollOffsets
+  , easeOutCubic
+  , glideAt
+  , glideDestination
+  , glideProgress
   , glideScrollJs
   ) where
 
@@ -39,57 +45,72 @@ type ScrollMetrics =
   , clientWidth :: Number
   }
 
--- | Snapshot the element's scroll offsets and content/viewport sizes.
 foreign import readMetricsImpl :: EffectFn1 GlideElement ScrollMetrics
 
--- | Set the element's `scrollTop` and `scrollLeft` directly.
 foreign import setScrollImpl :: EffectFn3 GlideElement Number Number Unit
 
--- | Whether `(prefers-reduced-motion: reduce)` matches.
 foreign import prefersReducedMotionImpl :: Effect Boolean
 
--- | `performance.now()`.
 foreign import nowImpl :: Effect Number
 
--- | Schedule the next glide frame, recording the rAF handle per element.
 foreign import scheduleFrameImpl :: EffectFn2 GlideElement (EffectFn1 Number Unit) Unit
 
--- | Cancel the element's pending glide frame, if any.
 foreign import cancelActiveImpl :: EffectFn1 GlideElement Unit
 
--- | Drop the element's rAF bookkeeping once its glide completes.
 foreign import clearActiveImpl :: EffectFn1 GlideElement Unit
 
 -- | Absolute scroll offsets; a null axis stays put.
 type GlideTarget = { top :: Nullable Number, left :: Nullable Number }
 
--- | Animates an element's scroll position with an ease-out cubic, replacing
--- | native smooth scrolling where browsers cut the animation short. Reduced
--- | motion gets an instant jump; a new glide cancels the previous one.
+-- | A resolved pair of scroll offsets.
+type ScrollOffsets = { top :: Number, left :: Number }
+
+-- | Where a glide lands: each requested axis clamped into the element's
+-- | scrollable range, a null axis staying where it is.
+glideDestination :: ScrollMetrics -> GlideTarget -> ScrollOffsets
+glideDestination m target =
+  { top: fromMaybe m.scrollTop
+      (clampAxis (m.scrollHeight - m.clientHeight) <$> toMaybe target.top)
+  , left: fromMaybe m.scrollLeft
+      (clampAxis (m.scrollWidth - m.clientWidth) <$> toMaybe target.left)
+  }
+  where
+  clampAxis limit = clamp 0.0 limit
+
+-- | The glide's ease-out cubic: fast off the mark, settling into the end.
+easeOutCubic :: Number -> Number
+easeOutCubic t = 1.0 - (1.0 - t) `pow` 3.0
+
+-- | How far through a glide that started at `start` and lasts `duration`
+-- | ms a frame stamped `now` is, capped at 1.
+glideProgress :: Number -> Number -> Number -> Number
+glideProgress start duration now = min 1.0 ((now - start) / duration)
+
+-- | The offsets at eased progress `k` from the snapshot's offsets to the
+-- | destination.
+glideAt :: ScrollMetrics -> ScrollOffsets -> Number -> ScrollOffsets
+glideAt m to k =
+  { top: m.scrollTop + (to.top - m.scrollTop) * k
+  , left: m.scrollLeft + (to.left - m.scrollLeft) * k
+  }
+
+-- | Replaces native smooth scrolling, which some browsers cut short.
 glideScroll :: GlideElement -> GlideTarget -> Number -> Effect Unit
 glideScroll el target duration = do
   runEffectFn1 cancelActiveImpl el
   m <- runEffectFn1 readMetricsImpl el
-  let
-    clampAxis limit = clamp 0.0 limit
-    toTop = fromMaybe m.scrollTop
-      (clampAxis (m.scrollHeight - m.clientHeight) <$> toMaybe target.top)
-    toLeft = fromMaybe m.scrollLeft
-      (clampAxis (m.scrollWidth - m.clientWidth) <$> toMaybe target.left)
+  let to = glideDestination m target
   reduced <- prefersReducedMotionImpl
   if reduced then
-    runEffectFn3 setScrollImpl el toTop toLeft
+    runEffectFn3 setScrollImpl el to.top to.left
   else do
     start <- nowImpl
     let
-      ease t = 1.0 - (1.0 - t) `pow` 3.0
       step now = do
         let
-          t = min 1.0 ((now - start) / duration)
-          k = ease t
-        runEffectFn3 setScrollImpl el
-          (m.scrollTop + (toTop - m.scrollTop) * k)
-          (m.scrollLeft + (toLeft - m.scrollLeft) * k)
+          t = glideProgress start duration now
+          at = glideAt m to (easeOutCubic t)
+        runEffectFn3 setScrollImpl el at.top at.left
         if t < 1.0 then runEffectFn2 scheduleFrameImpl el (mkEffectFn1 step)
         else runEffectFn1 clearActiveImpl el
     runEffectFn2 scheduleFrameImpl el (mkEffectFn1 step)

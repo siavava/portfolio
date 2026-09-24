@@ -14,6 +14,7 @@ import Test.Utils.Format as Format
 import Test.Utils.JsMath as JsMath
 import Test.Utils.Links as Links
 import Test.Utils.MarkdownMath as MarkdownMath
+import Test.Utils.Scroll as Scroll
 import Test.Utils.Spines as Spines
 
 main :: Effect Unit
@@ -30,4 +31,5 @@ main = do
   Sitemap.suite tally
   Tikz.suite tally
   JsMath.suite tally
+  Scroll.suite tally
   report tally
