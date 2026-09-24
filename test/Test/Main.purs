@@ -8,6 +8,7 @@ import Test.Components.AStar as AStar
 import Test.Components.AlgorithmBlock as AlgorithmBlock
 import Test.Components.BioTarget as BioTarget
 import Test.Components.BookcaseShelf as BookcaseShelf
+import Test.Components.BookshelfPanel as BookshelfPanel
 import Test.Components.CodePage as CodePage
 import Test.Components.ContactPanel as ContactPanel
 import Test.Components.CueRoot as CueRoot
@@ -101,6 +102,7 @@ main = do
   Cues.suite tally
   MapReveal.suite tally
   SideNotes.suite tally
+  BookshelfPanel.suite tally
   ContactPanel.suite tally
   DreamItem.suite tally
   IndexPage.suite tally

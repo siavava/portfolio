@@ -10,7 +10,11 @@ module App.Components.BookshelfPanel
   , PanelBindings
   , PanelProject
   , RawDoc
+  , byYear
+  , seedFrom
   , setup
+  , shelve
+  , yearOf
   ) where
 
 import Prelude
@@ -18,6 +22,7 @@ import Prelude
 import Data.Array (filter, find, index, length, sortBy)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Int (floor, toNumber)
+import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, null, toNullable)
 import Data.String.CodeUnits (take)
 import Effect (Effect)
@@ -43,7 +48,6 @@ foreign import jsStringImpl :: JsValue -> String
 -- | JS `Number(value)` coercion — `NaN` when unparsable.
 foreign import jsNumberImpl :: String -> Number
 
--- | JS truthiness of the value.
 foreign import truthyImpl :: JsValue -> Boolean
 
 -- | `a.localeCompare(b)`.
@@ -107,16 +111,26 @@ toProject doc =
   , title: doc.title
   , summary: doc.summary
   , tag: doc.tag
-  , year: jsNumberImpl (take 4 (jsStringImpl doc.date))
+  , year: yearOf (jsStringImpl doc.date)
   , date: jsStringImpl doc.date
   , repo: doc.repo
   , featured: doc.featured
   }
 
+-- | The year a stringified doc date names: `Number` of its first four
+-- | characters, so a date that does not open with a year reads `NaN` (and
+-- | an empty one 0), exactly as the original coercion did.
+yearOf :: String -> Number
+yearOf date = jsNumberImpl (take 4 date)
+
 -- | `b.year - a.year || a.title.localeCompare(b.title)` — including the
 -- | JS falsiness (`0`/`NaN`) deciding the fallthrough to the title tie
 -- | break.
-byYear :: PanelProject -> PanelProject -> Ordering
+byYear
+  :: forall r
+   . { year :: Number, title :: String | r }
+  -> { year :: Number, title :: String | r }
+  -> Ordering
 byYear a b =
   let
     diff = b.year - a.year
@@ -131,6 +145,25 @@ byYear a b =
         else if order > 0.0 then GT
         else EQ
 
+-- | The shelf ordering: the featured projects, then the rest, each run
+-- | sorted by `byYear`.
+shelve
+  :: forall r
+   . ({ year :: Number, title :: String | r } -> Boolean)
+  -> Array { year :: Number, title :: String | r }
+  -> Array { year :: Number, title :: String | r }
+shelve isFeatured items =
+  sortBy byYear (filter isFeatured items) <> sortBy byYear (filter (not <<< isFeatured) items)
+
+-- | The project a card opens on, for a roll in [0, 1): drawn from the
+-- | featured projects when there are any, otherwise from the whole
+-- | catalog; nothing when the catalog is empty.
+seedFrom :: forall a. (a -> Boolean) -> Array a -> Number -> Maybe a
+seedFrom isFeatured catalog roll = index pool (floor (roll * toNumber (length pool)))
+  where
+  featured = filter isFeatured catalog
+  pool = if length featured > 0 then featured else catalog
+
 -- | Shapes the queried project docs into the shelf ordering — featured
 -- | first, newest year, then title — and drives the selected card,
 -- | seeding it with a random (preferably featured) project on mount.
@@ -138,11 +171,7 @@ setup :: PanelArgs -> Effect PanelBindings
 setup args = do
   projects <- computed do
     docs <- args.docs
-    let items = map toProject docs
-    pure
-      ( sortBy byYear (filter (truthyImpl <<< _.featured) items)
-          <> sortBy byYear (filter (not <<< truthyImpl <<< _.featured) items)
-      )
+    pure (shelve (truthyImpl <<< _.featured) (map toProject docs))
 
   selected <- shallowRef (null :: Nullable PanelProject)
 
@@ -153,10 +182,7 @@ setup args = do
 
   onMounted do
     catalog <- read projects
-    let
-      featured = filter (truthyImpl <<< _.featured) catalog
-      pool = if length featured > 0 then featured else catalog
     roll <- random
-    write selected (toNullable (index pool (floor (roll * toNumber (length pool)))))
+    write selected (toNullable (seedFrom (truthyImpl <<< _.featured) catalog roll))
 
   pure { projects, selected, onSelect: mkEffectFn1 onSelect }
