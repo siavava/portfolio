@@ -10,6 +10,7 @@ import Test.Components.BioTarget as BioTarget
 import Test.Components.BookcaseShelf as BookcaseShelf
 import Test.Components.CodePage as CodePage
 import Test.Components.ContactPanel as ContactPanel
+import Test.Components.CueRoot as CueRoot
 import Test.Components.CueThreads as CueThreads
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
@@ -101,6 +102,7 @@ main = do
   ScrollFades.suite tally
   BioTarget.suite tally
   BookcaseShelf.suite tally
+  CueRoot.suite tally
   ProjectShelf.suite tally
   ProseA.suite tally
   TikzDiagram.suite tally

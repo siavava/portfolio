@@ -10,13 +10,15 @@ module App.Components.CueRoot
   , CuesStore
   , DomElement
   , SideNotesStore
+  , cueTargets
+  , noteOf
   , setup
   ) where
 
 import Prelude
 
 import Data.Maybe (Maybe(..))
-import Data.Nullable (Nullable, toMaybe)
+import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Data.String (Pattern(..), split, trim)
 import Effect (Effect)
 import Effect.Uncurried
@@ -39,26 +41,18 @@ foreign import data SideNotesStore :: Type
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
 
--- | Whether this root is hovered or pinned in the cues store (false for
--- | null).
 foreign import cuesIsActiveImpl :: EffectFn2 CuesStore (Nullable DomElement) Boolean
 
--- | Hover-activates the root with its target mark names.
 foreign import cuesActivateImpl :: EffectFn3 CuesStore DomElement (Array String) Unit
 
--- | Clears the store's hover activation.
 foreign import cuesDeactivateImpl :: EffectFn1 CuesStore Unit
 
--- | Pins or unpins the root's cue group.
 foreign import cuesTogglePinImpl :: EffectFn3 CuesStore DomElement (Array String) Unit
 
--- | Hover-reveals the named side note.
 foreign import sideNotesActivateImpl :: EffectFn2 SideNotesStore String Unit
 
--- | Clears the side-note hover.
 foreign import sideNotesDeactivateImpl :: EffectFn1 SideNotesStore Unit
 
--- | Pins or unpins the named side note.
 foreign import sideNotesTogglePinImpl :: EffectFn2 SideNotesStore String Unit
 
 type CueRootArgs =
@@ -85,6 +79,17 @@ type CueRootBindings =
   , toggle :: Effect Unit
   }
 
+-- | The note when present and non-empty — JS truthiness of
+-- | `props.note`; null otherwise.
+noteOf :: Nullable String -> Nullable String
+noteOf value = case toMaybe value of
+  Just text | text /= "" -> notNull text
+  _ -> null
+
+-- | The cue mark names a `to` prop lists: split on commas and trimmed.
+cueTargets :: String -> Array String
+cueTargets to = map trim (split (Pattern ",") to)
+
 -- | Wires a cue root's hover/pin interactions: derives `isActive` from
 -- | the cues store and returns the enter/leave/toggle handlers that
 -- | activate or pin its marks and optional side note.
@@ -95,17 +100,9 @@ setup args = do
     runEffectFn2 cuesIsActiveImpl args.cues el
 
   let
-    -- The note name when present and non-empty — JS truthiness of
-    -- `props.note`.
-    presentNote = do
-      note <- args.note
-      pure case toMaybe note of
-        Just name | name /= "" -> Just name
-        _ -> Nothing
+    presentNote = toMaybe <<< noteOf <$> args.note
 
-    targets = do
-      to <- args.to
-      pure (map trim (split (Pattern ",") to))
+    targets = cueTargets <$> args.to
 
     enter = do
       presentNote >>= case _ of
