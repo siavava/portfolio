@@ -163,6 +163,10 @@ const {
 @use "@/styles/timeline"
 @use "@/styles/typography"
 
+// Chrome's paint timing never counts text painted inside an opacity-0 effect,
+// so load-time fades start from an invisible 1% and the first paint stays on record.
+$unseen: 0.01
+
 .timeline
   --timeline-inset: 28px
   --timeline-rail: 44px
@@ -437,7 +441,7 @@ const {
     pointer-events: none
 
 .timeline__labels-inner.is-entering
-  opacity: 0
+  opacity: $unseen
   animation: timeline-fade 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards
 
 .timeline__caption
@@ -483,7 +487,7 @@ const {
   position: relative
 
   &.is-entering
-    opacity: 0
+    opacity: $unseen
     animation: timeline-in 720ms cubic-bezier(0.22, 1, 0.36, 1) forwards
 
 .timeline__marker-inner.is-settling,
@@ -650,7 +654,7 @@ const {
   padding: 4px 0 0 calc(1rem + 12px)
 
   &.is-entering
-    opacity: 0
+    opacity: $unseen
     animation: timeline-fade 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards
 
 .timeline__column-body
@@ -718,7 +722,7 @@ const {
     padding-bottom: 32px
 
   > div.is-entering
-    opacity: 0
+    opacity: $unseen
     animation: timeline-in 720ms cubic-bezier(0.22, 1, 0.36, 1) forwards
 
 .timeline__entry-head
@@ -803,7 +807,7 @@ const {
 
 @keyframes timeline-rise
   from
-    opacity: 0
+    opacity: $unseen
     transform: translateY(12px) scale(0.994)
   to
     opacity: 1
@@ -811,7 +815,7 @@ const {
 
 @keyframes timeline-in
   from
-    opacity: 0
+    opacity: $unseen
     transform: translateY(6px)
   to
     opacity: 1
@@ -819,7 +823,7 @@ const {
 
 @keyframes timeline-fade
   from
-    opacity: 0
+    opacity: $unseen
   to
     opacity: 1
 
