@@ -7,6 +7,7 @@ import Test.Build.NotesMeta as NotesMeta
 import Test.Components.AStar as AStar
 import Test.Components.AlgorithmBlock as AlgorithmBlock
 import Test.Components.CueThreads as CueThreads
+import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
 import Test.Composables.DraggableBubble as DraggableBubble
@@ -82,4 +83,5 @@ main = do
   Cues.suite tally
   MapReveal.suite tally
   SideNotes.suite tally
+  IndexPage.suite tally
   report tally
