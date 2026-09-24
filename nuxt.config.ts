@@ -142,6 +142,40 @@ export default defineNuxtConfig({
   },
 
   hooks: {
+    // ContentRenderer lazily imports every content component, so any page with content
+    // prefetched them all. Code blocks, TikZ figures, the visualizers, and KaTeX (imported
+    // only by those and the project page) render only under /projects, which still
+    // modulepreloads what it renders.
+    "build:manifest"(manifest) {
+      const projectsPage = "pages/projects/[...slug].vue"
+      const owned = new Set(Object.keys(manifest).filter(key =>
+        /^components\/content\/(?:visualizers\/|ProsePre\.vue$|TikzFigure\.vue$)/.test(key)))
+      const into = new Map<string, { from: string, dynamic: boolean }[]>()
+      for (const [from, chunk] of Object.entries(manifest)) {
+        for (const to of chunk.imports ?? []) into.set(to, [...into.get(to) ?? [], { from, dynamic: false }])
+        for (const to of chunk.dynamicImports ?? []) into.set(to, [...into.get(to) ?? [], { from, dynamic: true }])
+      }
+      for (let grew = true; grew;) {
+        grew = false
+        for (const [key, edges] of into) {
+          if (owned.has(key) || manifest[key]?.isEntry) continue
+          if (edges.every(edge => owned.has(edge.from) || edge.from === projectsPage && !edge.dynamic)) {
+            owned.add(key)
+            grew = true
+          }
+        }
+      }
+      for (const key of owned) {
+        const chunk = manifest[key]
+        if (!chunk) continue
+        chunk.prefetch = false
+        for (const css of chunk.css ?? []) {
+          const sheet = manifest[css]
+          if (sheet) sheet.prefetch = false
+        }
+      }
+    },
+
     // The study's build-time pipeline: TikZ blocks render to themed SVG
     // before @nuxt/content ever parses the markdown.
     async "content:file:beforeParse"(ctx) {
