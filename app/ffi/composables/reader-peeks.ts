@@ -53,8 +53,6 @@ export const cardHeightImpl = (card: HTMLElement | null): number => card?.offset
 export const windowInnerWidthImpl = (): number => window.innerWidth
 export const windowInnerHeightImpl = (): number => window.innerHeight
 
-export const pxImpl = (n: number): string => `${n}px`
-
 export const figStyleImpl = (left: string, top: string, width: string): Record<string, string> =>
   ({ left, top, width })
 

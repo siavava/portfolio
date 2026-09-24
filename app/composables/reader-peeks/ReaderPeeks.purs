@@ -13,6 +13,12 @@ module App.Composables.ReaderPeeks
   , PeekStyle
   , PeeksBindings
   , RefPeek
+  , figCardPlacement
+  , peekNotesPath
+  , refCardBottom
+  , refCardFitsAbove
+  , refCardLeft
+  , refCardTop
   , setup
   ) where
 
@@ -23,6 +29,7 @@ import Data.Function.Uncurried (Fn2, Fn3, Fn4, runFn2, runFn3, runFn4)
 import Data.Int as Int
 import Data.Maybe (Maybe(..), isJust)
 import Data.Nullable (Nullable, notNull, null, toMaybe)
+import Data.Number.Format (toString)
 import Data.String (Pattern(..), stripPrefix)
 import Data.String.CodeUnits as CU
 import Effect (Effect)
@@ -52,79 +59,47 @@ foreign import data CardInstance :: Type
 -- | A `Record<string, string>` of fixed-position style declarations.
 foreign import data PeekStyle :: Type
 
--- | One lesson's metadata in the notes-site index.
 type NotesMetaEntry = { title :: String, "module" :: String, summary :: String }
 
--- | Caption markup, running figure number, and viewport rect of a
--- | peekable figure — null when the caption is missing or blank.
 type FigData = { html :: String, n :: Int, left :: Number, top :: Number, width :: Number }
 
--- | The build-time notes-index entry at this pathname; null when
--- | unindexed.
 foreign import lookupNotesMetaImpl :: String -> Nullable NotesMetaEntry
 
--- | `new URL(href).pathname` — the href must be absolute.
 foreign import urlPathnameImpl :: String -> String
 
--- | The event's `clientX`.
 foreign import mouseXImpl :: MouseEvt -> Number
 
--- | The nearest `<a>` enclosing the event target.
 foreign import closestAnchorImpl :: EffectFn1 MouseEvt (Nullable DomElement)
 
--- | The nearest `<figure>` enclosing the event target.
 foreign import closestFigureImpl :: EffectFn1 MouseEvt (Nullable DomElement)
 
--- | The raw `href` attribute; `""` when absent.
 foreign import hrefAttrImpl :: EffectFn1 DomElement String
 
--- | Reference equality, null-tolerant.
 foreign import sameElementImpl :: Fn2 (Nullable DomElement) (Nullable DomElement) Boolean
 
--- | Whether the figure peeks: inside the desk and not an algorithm
--- | block.
 foreign import peekableFigureImpl :: EffectFn2 DomElement (Nullable DomElement) Boolean
 
--- | The figure's caption markup, running number among the desk's
--- | figures, and viewport rect; null when the caption is missing or
--- | blank.
 foreign import figPeekDataImpl :: EffectFn2 DomElement (Nullable DomElement) (Nullable FigData)
 
--- | The `root` element of whatever Vue handed the template ref.
 foreign import cardRootImpl :: CardInstance -> Nullable DomElement
 
--- | The link's viewport top and bottom.
 foreign import linkRectImpl :: EffectFn1 DomElement { top :: Number, bottom :: Number }
 
--- | The card's `offsetHeight`; 0 when null (not yet rendered).
 foreign import cardHeightImpl :: EffectFn1 (Nullable DomElement) Number
 
--- | The viewport width.
 foreign import windowInnerWidthImpl :: Effect Number
 
--- | The viewport height.
 foreign import windowInnerHeightImpl :: Effect Number
 
--- | Append `"px"`.
-foreign import pxImpl :: Number -> String
-
--- | Fixed-position style for the figure card: left, top, width.
 foreign import figStyleImpl :: Fn3 String String String PeekStyle
 
--- | Fixed-position style for the reference card: left, width, and
--- | whichever of top/bottom is non-null.
 foreign import refStyleImpl :: Fn4 String String (Nullable String) (Nullable String) PeekStyle
 
--- | VueUse `useEventListener` on the desk ref — attaches when the ref
--- | fills, detaches on scope disposal.
 foreign import onDeskEventImpl
   :: EffectFn3 (Ref (Nullable DomElement)) String (EffectFn1 MouseEvt Unit) Unit
 
--- | A capture-phase, passive scroll listener on the window, disposed
--- | with the component scope.
 foreign import onScrollCaptureImpl :: EffectFn1 (Effect Unit) Unit
 
--- | Run after the pending DOM update flushes (Vue `nextTick`).
 foreign import nextTickImpl :: EffectFn1 (Effect Unit) Unit
 
 -- | Floating figure-caption card state.
@@ -178,13 +153,58 @@ stripTrailingSlashes :: String -> String
 stripTrailingSlashes s =
   if CU.takeRight 1 s == "/" then stripTrailingSlashes (CU.dropRight 1 s) else s
 
-metaFor :: String -> Nullable NotesMetaEntry
-metaFor href = case stripPrefix (Pattern notesPrefix) href of
+-- | The notes-index key a link points at — the URL's pathname with
+-- | trailing slashes dropped — when the href leads into the notes site;
+-- | null for any other href.
+peekNotesPath :: String -> Nullable String
+peekNotesPath href = case stripPrefix (Pattern notesPrefix) href of
   Nothing -> null
-  Just _ -> lookupNotesMetaImpl (stripTrailingSlashes (urlPathnameImpl href))
+  Just _ -> notNull (stripTrailingSlashes (urlPathnameImpl href))
+
+metaFor :: String -> Nullable NotesMetaEntry
+metaFor href = case toMaybe (peekNotesPath href) of
+  Nothing -> null
+  Just path -> lookupNotesMetaImpl path
+
+px :: Number -> String
+px n = toString n <> "px"
 
 pxRound :: Number -> String
 pxRound n = show (Int.round n) <> "px"
+
+-- | The figure card's placement for a figure's viewport rect: centred
+-- | over the figure, 10px above its top but never within 8px of the
+-- | viewport's top, and as wide as the figure within 260–560px.
+figCardPlacement
+  :: { left :: Number, top :: Number, width :: Number }
+  -> { left :: String, top :: String, width :: String }
+figCardPlacement rect =
+  { left: px (rect.left + rect.width / 2.0)
+  , top: px (max 8.0 (rect.top - 10.0))
+  , width: px (min 560.0 (max 260.0 rect.width))
+  }
+
+-- | The reference card's left edge for the pointer's `clientX` and the
+-- | viewport width: centred on the pointer, kept 12px inside both edges.
+refCardLeft :: Number -> Number -> Number
+refCardLeft mouseX winWidth = min (max 12.0 (mouseX - refW / 2.0)) (winWidth - refW - 12.0)
+
+-- | Whether the reference card, `height` pixels tall, fits above a link
+-- | whose top sits at `linkTop` with 8px to spare — or has not rendered
+-- | yet (height 0), when it goes above by default.
+refCardFitsAbove :: Number -> Number -> Boolean
+refCardFitsAbove height linkTop = height == 0.0 || linkTop - height - refGap >= 8.0
+
+-- | The card's `bottom` offset when it floats above the link: the gap
+-- | above the link's top, measured up from the viewport's bottom, in
+-- | whole pixels.
+refCardBottom :: Number -> Number -> String
+refCardBottom winHeight linkTop = pxRound (winHeight - linkTop + refGap)
+
+-- | The card's `top` offset when it drops below the link: the gap below
+-- | the link's bottom, in whole pixels.
+refCardTop :: Number -> String
+refCardTop linkBottom = pxRound (linkBottom + refGap)
 
 -- | ## useReaderPeeks
 -- |
@@ -220,14 +240,13 @@ setup desk = do
       figData <- runEffectFn2 figPeekDataImpl fig deskEl
       case toMaybe figData of
         Nothing -> write figPeek null
-        Just d -> write figPeek $ notNull
-          { html: d.html
-          , n: d.n
-          , style: runFn3 figStyleImpl
-              (pxImpl (d.left + d.width / 2.0))
-              (pxImpl (max 8.0 (d.top - 10.0)))
-              (pxImpl (min 560.0 (max 260.0 d.width)))
-          }
+        Just d -> do
+          let place = figCardPlacement { left: d.left, top: d.top, width: d.width }
+          write figPeek $ notNull
+            { html: d.html
+            , n: d.n
+            , style: runFn3 figStyleImpl place.left place.top place.width
+            }
 
     clearRef = do
       Ref.read refTimer >>= case _ of
@@ -253,20 +272,20 @@ setup desk = do
           rect <- runEffectFn1 linkRectImpl link
           mouseX <- Ref.read refMouseX
           winWidth <- windowInnerWidthImpl
-          let left = min (max 12.0 (mouseX - refW / 2.0)) (winWidth - refW - 12.0)
+          let left = refCardLeft mouseX winWidth
           card <- Ref.read refCard
           height <- runEffectFn1 cardHeightImpl card
           style <-
-            if height == 0.0 || rect.top - height - refGap >= 8.0 then do
+            if refCardFitsAbove height rect.top then do
               winHeight <- windowInnerHeightImpl
               pure
-                ( runFn4 refStyleImpl (pxRound left) (pxImpl refW) null
-                    (notNull (pxRound (winHeight - rect.top + refGap)))
+                ( runFn4 refStyleImpl (pxRound left) (px refW) null
+                    (notNull (refCardBottom winHeight rect.top))
                 )
             else
               pure
-                ( runFn4 refStyleImpl (pxRound left) (pxImpl refW)
-                    (notNull (pxRound (rect.bottom + refGap)))
+                ( runFn4 refStyleImpl (pxRound left) (px refW)
+                    (notNull (refCardTop rect.bottom))
                     null
                 )
           write refPeek (notNull (peek { style = style }))
@@ -285,7 +304,7 @@ setup desk = do
             { "module": meta."module"
             , title: meta.title
             , summaryHtml: renderInlineMath meta.summary
-            , style: runFn4 refStyleImpl "-9999px" (pxImpl refW) (notNull "0px") null
+            , style: runFn4 refStyleImpl "-9999px" (px refW) (notNull "0px") null
             }
           runEffectFn1 nextTickImpl do
             positionRef
