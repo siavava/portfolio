@@ -12,7 +12,8 @@ svg.pointer-arrow(
 </template>
 
 <style lang="sass" scoped>
-.pointer-arrow
+// Lowest specificity: a parent's class on the arrow must win whichever CSS chunk loads last.
+:where(.pointer-arrow)
   display: inline-block
   flex-shrink: 0
   width: 1em
