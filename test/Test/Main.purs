@@ -6,6 +6,7 @@ import Effect (Effect)
 import Test.Build.NotesMeta as NotesMeta
 import Test.Components.AStar as AStar
 import Test.Components.AlgorithmBlock as AlgorithmBlock
+import Test.Components.BioTarget as BioTarget
 import Test.Components.CodePage as CodePage
 import Test.Components.CueThreads as CueThreads
 import Test.Components.IndexPage as IndexPage
@@ -89,5 +90,6 @@ main = do
   MapReveal.suite tally
   SideNotes.suite tally
   IndexPage.suite tally
+  BioTarget.suite tally
   TikzDiagram.suite tally
   report tally

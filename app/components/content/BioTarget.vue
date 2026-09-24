@@ -1,8 +1,8 @@
 <template lang="pug">
 span.bio-target(
   :class="{ active: isActive }",
-  @mouseenter="connections.activate(names)",
-  @mouseleave="connections.deactivate()",
+  @mouseenter="enter",
+  @mouseleave="leave",
 )
   slot
 </template>
@@ -15,11 +15,12 @@ const props = defineProps<{
 
 const connections = useConnections()
 
-const names = computed(() =>
-  props.node.split(",").map(name => name.trim()).filter(Boolean))
-
-const isActive = computed(() =>
-  names.value.some(name => connections.activeNames.includes(name)))
+const { isActive, enter, leave } = useBioTarget({
+  node: () => props.node,
+  activeNames: () => connections.activeNames,
+  activate: connections.activate,
+  deactivate: connections.deactivate,
+})
 </script>
 
 <style lang="sass" scoped>
