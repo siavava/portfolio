@@ -7,11 +7,14 @@
 -- | and every output token carries the input character span that produced it,
 -- | so the UI can highlight where the cursor lands on the other side.
 -- |
--- | `app/utils/coder.ts` is a thin typed shim over `transcodeJs`; the platform
--- | edges (UTF-8 codecs, base64) live in the FFI companion `Coder.js`.
+-- | `CodePage.purs` calls `transcodeJs` directly; `index.ts` beside this
+-- | module re-exports `codeFormats` and the share-link codec for the `/code`
+-- | template. The platform edges (UTF-8 codecs, base64) live in the typed
+-- | FFI at `app/ffi/utils/coder.ts`.
 module App.Utils.Coder
   ( CodeFormat(..)
   , OutToken
+  , codeFormats
   , TranscodeJs
   , transcodeJs
   , encodeShareText
@@ -35,14 +38,10 @@ import Data.String (Pattern(..), joinWith, split, toLower)
 import Data.String.CodeUnits as CU
 import Data.Traversable (mapAccumL, traverse)
 
--- | UTF-8 bytes of a string (`TextEncoder`).
 foreign import utf8EncodeImpl :: String -> Array Int
 
--- | String from UTF-8 bytes (`TextDecoder`, non-fatal — invalid
--- | sequences become U+FFFD).
 foreign import utf8DecodeImpl :: Array Int -> String
 
--- | The string split into per-code-point strings (`Array.from(str)`).
 foreign import codePointStringsImpl :: String -> Array String
 
 -- | base64url-encode arbitrary text for share links.
@@ -56,13 +55,22 @@ data CodeFormat = Letters | Binary | Decimal | Hex
 
 derive instance eqCodeFormat :: Eq CodeFormat
 
+-- | The format picker's entries, in display order. Each `id` is the wire
+-- | string `transcodeJs` accepts as `from`/`to`; the label is the id itself.
+codeFormats :: Array { id :: String, label :: String }
+codeFormats =
+  [ { id: "letters", label: "letters" }
+  , { id: "binary", label: "binary" }
+  , { id: "decimal", label: "decimal" }
+  , { id: "hex", label: "hex" }
+  ]
+
 parseFormat :: String -> CodeFormat
 parseFormat "binary" = Binary
 parseFormat "decimal" = Decimal
 parseFormat "hex" = Hex
 parseFormat _ = Letters
 
--- | Input character span [start, end) in code units, mirroring JS indices.
 type Span = { start :: Int, end :: Int }
 
 -- | One rendered piece of output. `code` tokens map back to input chars.
@@ -87,9 +95,6 @@ segBytes :: Segment -> Array Int
 segBytes (BytesSeg bytes _) = bytes
 segBytes _ = []
 
--- character classes ------------------------------------------------------
-
--- Matches the JS \s class the TS original split whitespace with.
 isWsChar :: Char -> Boolean
 isWsChar c =
   c == ' '
@@ -120,8 +125,6 @@ isDigitChar c = c >= '0' && c <= '9'
 isHexChar :: Char -> Boolean
 isHexChar c = isDigitChar c || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')
 
--- small string helpers ---------------------------------------------------
-
 clip :: String -> String
 clip s = if CU.length s > 24 then CU.take 24 s <> "…" else s
 
@@ -146,8 +149,6 @@ endsWithWs s = case CU.charAt (CU.length s - 1) s of
   Just c -> isWsChar c
   Nothing -> false
 
--- | Split a string into alternating runs classified by `isWs`, with
--- | code-unit start offsets — the pure replacement for regex scanning.
 type Run = { isWs :: Boolean, text :: String, start :: Int }
 
 splitRunsBy :: (Char -> Boolean) -> String -> Array Run
@@ -173,9 +174,6 @@ splitRunsBy p s = finish (foldl step { runs: [], current: Nothing, pos: 0 } (CU.
     Just cur -> snoc st.runs cur
     Nothing -> st.runs
 
--- decoding ---------------------------------------------------------------
-
--- | Parse one coded token (no whitespace) into bytes, or an error string.
 tokenToBytes :: CodeFormat -> String -> Either String (Array Int)
 tokenToBytes Binary token =
   let
@@ -209,7 +207,6 @@ tokenToBytes _ token =
 parseRadix :: Int.Radix -> String -> Int
 parseRadix radix s = fromMaybe 0 (Int.fromStringAs radix s)
 
--- | UTF-8 encode `text`, giving every byte the char span it came from.
 textToByteSegment :: Int -> String -> Segment
 textToByteSegment offset text =
   BytesSeg (concatMap _.encoded chunks) (concatMap spanBytes chunks)
@@ -227,7 +224,6 @@ textToByteSegment offset text =
       }
   spanBytes chunk = map (const chunk.span) chunk.encoded
 
--- | Scanner items for coded-format input: tokens and preserved whitespace.
 data Item = NewlineItem Int | SlashItem Int | TokenItem String Int
 
 codedItems :: Boolean -> String -> Array Item
@@ -248,11 +244,8 @@ codedItems preserve input = st.items
     | run.text == "/" = if preserve then snoc items (SlashItem (lineStart + run.start)) else items
     | otherwise = snoc items (TokenItem run.text (lineStart + run.start))
 
--- | A parsed scanner item: preserved whitespace, or one token's bytes all
--- | sharing the token's input span.
 data Chunk = WsChunk String Int | ByteChunk (Array Int) Span
 
--- | Decode source text in `format` into segments carrying input spans.
 decodeInput :: CodeFormat -> Boolean -> String -> Either String (Array Segment)
 decodeInput Letters preserve input
   | not preserve = Right [ textToByteSegment 0 input ]
@@ -290,9 +283,6 @@ decodeInput format preserve input =
   chunkSpans (ByteChunk bs span) = map (const span) bs
   chunkSpans _ = []
 
--- encoding ---------------------------------------------------------------
-
--- | Split a byte run into UTF-8 characters, merging each char's byte spans.
 bytesToCharTokens :: Array Int -> Array Span -> Array OutToken
 bytesToCharTokens bytes spans = STA.run do
   out <- STA.new
@@ -321,7 +311,6 @@ formatByte Binary b = padZeros 8 (Int.toStringAs Int.binary b)
 formatByte Hex b = padZeros 2 (Int.toStringAs Int.hexadecimal b)
 formatByte _ b = show b
 
--- | Encode segments into `format`, keeping per-token input spans.
 encodeSegs :: CodeFormat -> Boolean -> Array Segment -> Array OutToken
 encodeSegs Letters preserve segs = pruneStrandedSep (concatMap seg segs)
   where
@@ -348,15 +337,12 @@ encodeSegs format preserve segs = pruneStrandedSep (concat (mapWithIndex withSep
     in
       { text: formatByte format b, kind: "code", srcStart: span.start, srcEnd: span.end }
 
-  -- The token before emission `i` is always emission `i - 1`, so the
-  -- separator check reads it instead of the accumulated output.
   withSep i tok = case index emissions (i - 1) of
     Just prev
       | tok.text /= "\n" && not (endsWithWs prev.text) ->
           [ { text: " ", kind: "plain", srcStart: -1, srcEnd: -1 }, tok ]
     _ -> [ tok ]
 
--- | A separator stranded before a newline would render as trailing space.
 pruneStrandedSep :: Array OutToken -> Array OutToken
 pruneStrandedSep tokens = catMaybes (mapWithIndex keep tokens)
   where
@@ -365,9 +351,7 @@ pruneStrandedSep tokens = catMaybes (mapWithIndex keep tokens)
       Nothing
     else Just t
 
--- entry point ------------------------------------------------------------
-
--- | What `transcodeJs` hands the TypeScript shim.
+-- | What `transcodeJs` hands its caller (`CodePage.purs`).
 type TranscodeJs =
   { -- | False when the input failed to parse in the source format.
     ok :: Boolean
@@ -381,8 +365,8 @@ type TranscodeJs =
     tokens :: Array OutToken
   }
 
--- | JS-friendly entry point: plain-string formats in a flat record, so the
--- | TypeScript shim needs no knowledge of curried or ADT conventions.
+-- | Flat-record entry point: formats are the plain `codeFormats` id strings,
+-- | so callers need no knowledge of the `CodeFormat` ADT.
 transcodeJs
   :: { input :: String, from :: String, to :: String, preserveWhitespace :: Boolean } -> TranscodeJs
 transcodeJs args =
