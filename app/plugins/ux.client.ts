@@ -34,11 +34,16 @@ export default defineNuxtPlugin((nuxtApp) => {
   let current = normalizePath(router.currentRoute.value.path)
   push(["nav", current])
 
-  router.afterEach((to, _from, failure) => {
+  router.afterEach((to, from, failure) => {
     const path = normalizePath(to.path)
     if (failure || path === current) return
     current = path
     push(["nav", path])
+    // A page component that stays mounted (the project reader keeps one
+    // across projects) fires no page:finish; this is Nuxt's own test for it.
+    if (to.matched.at(-1)?.components?.default === from.matched.at(-1)?.components?.default) {
+      void nextTick(() => push(["ready"]))
+    }
   })
 
   nuxtApp.hook("page:finish", () => {
