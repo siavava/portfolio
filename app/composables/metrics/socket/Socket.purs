@@ -4,14 +4,16 @@
 -- | connection pattern the blog uses. Handles auto-reconnect (in the
 -- | vueuse FFI), message queuing while disconnected, and scope-based
 -- | routing of incoming messages. The singleton lives in FFI module
--- | state; `app/composables/metrics/useSocket.ts` is the hand-adapted
--- | shim exposing `useSocket` and the `Scope` enum to TypeScript.
+-- | state. Only PureScript consumes it: the metrics store core calls
+-- | `useSocketCore` and addresses messages with `scopeKey`. @ts-internal
 module App.Composables.Metrics.Socket
   ( Scope(..)
   , SocketBindings
   , WsData
+  , scopeHandlerFor
   , scopeKey
   , useSocketCore
+  , withScopeHandler
   ) where
 
 import Prelude
@@ -38,37 +40,22 @@ import Vue (Computed, Ref, computed, read)
 -- | A parsed WebSocket message payload (`Record<string, unknown>`).
 foreign import data WsData :: Type
 
--- | The vueuse `useWebSocket` surface the core drives.
 type WsHandle =
-  { -- | Reactive connection status; `"OPEN"` while connected.
-    status :: Ref String
-  , -- | Send raw text; `false` when the socket isn't open.
-    send :: EffectFn1 String Boolean
-  , -- | Open the (deferred) connection.
-    open :: Effect Unit
+  { status :: Ref String
+  , send :: EffectFn1 String Boolean
+  , open :: Effect Unit
   }
 
--- | vueuse `useWebSocket` against the URL — deferred open, infinite
--- | auto-reconnect on a 3s delay, callbacks on each (re)connect and on
--- | each raw incoming message.
 foreign import connectImpl :: EffectFn3 String (Effect Unit) (EffectFn1 String Unit) WsHandle
 
--- | Parse a raw message as JSON and hand its `scope` and payload to the
--- | router callback; malformed or scope-less messages are dropped.
 foreign import parseRouteImpl :: EffectFn2 String (EffectFn2 String WsData Unit) Unit
 
--- | `JSON.stringify`.
 foreign import stringifyImpl :: WsData -> String
 
--- | Whether we are in the browser (`import.meta.client`) — the core
--- | only opens the connection there.
 foreign import isClientImpl :: Effect Boolean
 
--- | The singleton bindings in FFI module state; null until first
--- | creation.
 foreign import instanceImpl :: Effect (Nullable SocketBindings)
 
--- | Store the singleton bindings.
 foreign import setInstanceImpl :: EffectFn1 SocketBindings Unit
 
 -- | ## Scope
@@ -85,6 +72,21 @@ scopeKey :: Scope -> String
 scopeKey Watch = "watch"
 
 type ScopeEntry = { key :: String, handler :: EffectFn1 WsData Unit }
+
+-- | Register `handler` for the scope `key`: it replaces any handler the
+-- | scope already had (one per scope) and joins the end of the table.
+withScopeHandler
+  :: forall h
+   . String
+  -> h
+  -> Array { key :: String, handler :: h }
+  -> Array { key :: String, handler :: h }
+withScopeHandler key handler entries =
+  snoc (filter (\entry -> entry.key /= key) entries) { key, handler }
+
+-- | The handler registered for the scope `key`, if any.
+scopeHandlerFor :: forall h. String -> Array { key :: String, handler :: h } -> Maybe h
+scopeHandlerFor key entries = _.handler <$> find (\entry -> entry.key == key) entries
 
 type SocketBindings =
   { -- | Send a JSON payload; queued and flushed on reconnect when the
@@ -123,8 +125,8 @@ createWs = do
 
     routeMessage = mkEffectFn2 \scope wsData -> do
       entries <- Ref.read scopeHandlers
-      case find (\entry -> entry.key == scope) entries of
-        Just entry -> runEffectFn1 entry.handler wsData
+      case scopeHandlerFor scope entries of
+        Just handler -> runEffectFn1 handler wsData
         Nothing -> pure unit
 
     onMessage raw = runEffectFn2 parseRouteImpl raw routeMessage
@@ -144,9 +146,7 @@ createWs = do
       sent <- if connected then runEffectFn1 handle.send msg else pure false
       unless sent (Ref.modify_ (flip snoc msg) pending)
 
-    onScope scope handler = Ref.modify_
-      (\entries -> snoc (filter (\entry -> entry.key /= scope) entries) { key: scope, handler })
-      scopeHandlers
+    onScope scope handler = Ref.modify_ (withScopeHandler scope handler) scopeHandlers
 
     onConnect handler = Ref.modify_ (flip snoc handler) connectHandlers
 
@@ -159,8 +159,8 @@ createWs = do
 
 -- | ## useSocketCore
 -- |
--- | Singleton core behind `useSocket` — creates the shared connection on
--- | first call and returns the same bindings ever after.
+-- | The shared connection's singleton — creates it on first call and
+-- | returns the same bindings ever after.
 -- |
 -- | ### Returns
 -- |

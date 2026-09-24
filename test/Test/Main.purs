@@ -8,6 +8,7 @@ import Test.Components.CueThreads as CueThreads
 import Test.Composables.DraggableBubble as DraggableBubble
 import Test.Composables.FigureSpotlight as FigureSpotlight
 import Test.Composables.Metrics.ApiRoute as ApiRoute
+import Test.Composables.Metrics.Socket as Socket
 import Test.Composables.ProjectReferences as ProjectReferences
 import Test.Composables.ReaderPeeks as ReaderPeeks
 import Test.Composables.SideNoteLayout as SideNoteLayout
@@ -42,6 +43,7 @@ main = do
   ProjectReferences.suite tally
   DraggableBubble.suite tally
   ApiRoute.suite tally
+  Socket.suite tally
   JsMath.suite tally
   Scroll.suite tally
   report tally
