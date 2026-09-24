@@ -30,7 +30,7 @@ import App.Components.ErrorPage
 import Data.Array (all, concatMap, length, (!!))
 import Data.Maybe (Maybe(..))
 import Data.Nullable (notNull, null)
-import Data.Number (abs, atan2, pi, sqrt)
+import Data.Number (abs, atan2, pi, round, sqrt)
 import Effect (Effect)
 import Test.Harness (Tally, expect)
 
@@ -43,6 +43,12 @@ spoke64 = { deg: 64, ux: 0.43837114678907746, uy: 0.8987940462991669 }
 spoke164 :: Spoke
 spoke164 = { deg: 164, ux: -0.9612616959383187, uy: 0.27563735581699966 }
 
+-- | A spoke to twelve places: platforms' sin and cos can differ in the last bit.
+settled :: Spoke -> Spoke
+settled s = { deg: s.deg, ux: places s.ux, uy: places s.uy }
+  where
+  places x = round (x * 1.0e12) / 1.0e12
+
 suite :: Tally -> Effect Unit
 suite t = do
   expect t "the rings rest at 66, 126 and 186" [ 66.0, 126.0, 186.0 ] ringTargets
@@ -50,9 +56,12 @@ suite t = do
   expect t "seven spokes fan out" 7 (length spokes)
   expect t "the spokes are keyed by their angles" [ 16, 38, 64, 88, 112, 138, 164 ]
     (map _.deg spokes)
-  expect t "the first spoke's unit vector matches the original" (Just spoke16) (spokes !! 0)
-  expect t "the middle spoke's unit vector matches the original" (Just spoke64) (spokes !! 2)
-  expect t "the last spoke's unit vector matches the original" (Just spoke164) (spokes !! 6)
+  expect t "the first spoke's unit vector matches the original" (Just (settled spoke16))
+    (settled <$> spokes !! 0)
+  expect t "the middle spoke's unit vector matches the original" (Just (settled spoke64))
+    (settled <$> spokes !! 2)
+  expect t "the last spoke's unit vector matches the original" (Just (settled spoke164))
+    (settled <$> spokes !! 6)
   expect t "every spoke is a unit vector" true
     (all (\s -> abs (s.ux * s.ux + s.uy * s.uy - 1.0) < 1.0e-12) spokes)
   expect t "every spoke points into the upper half-disc" true (all (\s -> s.uy > 0.0) spokes)
