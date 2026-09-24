@@ -24,6 +24,7 @@ import Test.Stores.Cues as Cues
 import Test.Stores.MapReveal as MapReveal
 import Test.Stores.SideNotes as SideNotes
 import Test.Transformers.Fences as TransformersFences
+import Test.Transformers.TikzCaption as TikzCaption
 import Test.Transformers.TikzTex as TikzTex
 import Test.Utils.Coder as Coder
 import Test.Utils.Format as Format
@@ -49,6 +50,7 @@ main = do
   Tikz.suite tally
   TransformersFences.suite tally
   TikzTex.suite tally
+  TikzCaption.suite tally
   Metrics.suite tally
   NotesMeta.suite tally
   SideNoteLayout.suite tally
