@@ -8,7 +8,9 @@
 -- | edges stay in the shell.
 module App.Server.Tikz
   ( cacheFileName
+  , responsiveSvgRoot
   , sanitizeHash
+  , stripFigureWrapper
   , tikzResponseHtml
   ) where
 
@@ -43,6 +45,9 @@ figureOpen = unsafeRegex "^\\s*<figure[^>]*>" noFlags
 figureClose :: Regex
 figureClose = unsafeRegex "</figure>\\s*$" noFlags
 
+-- | Drop the `<figure …>` opening the body (after any leading whitespace)
+-- | and the `</figure>` closing it (before any trailing whitespace); a
+-- | figure tag anywhere else is kept.
 stripFigureWrapper :: String -> String
 stripFigureWrapper raw = replace figureClose "" (replace figureOpen "" raw)
 
@@ -86,6 +91,5 @@ responsiveSvgRoot = replace' svgOpenTag \tag _ -> retag tag
               out
           Nothing -> replace svgBare ("<svg style=\"" <> decl <> "\"") out
 
--- | The first capture group of the first match, `Nothing` when unmatched.
 firstGroup :: Regex -> String -> Maybe String
 firstGroup regex s = join (match regex s >>= flip NEA.index 1)
