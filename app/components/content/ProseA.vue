@@ -20,9 +20,8 @@ const { href = "", to = "" } = defineProps<{
   to?: string
 }>()
 
-const target = computed(() => to || href)
-
-const external = computed(() =>
-  ["http", "//", "mailto:"].some(prefix =>
-    target.value.startsWith(prefix)))
+const { target, external } = useProseA({
+  href: () => href,
+  to: () => to,
+})
 </script>
