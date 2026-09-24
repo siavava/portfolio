@@ -11,24 +11,6 @@
     --#{$name}: #{$value}
   --wipe-tint: rgba(255, 255, 255, 0.24)
 
-// Söhne (Klim Type Foundry) — the face the timeline is set in. Commercial,
-// like Proxima Soft and Arizona Text: drop the licensed woff2 files into
-// public/fonts/ before deploying publicly. Until they are there the stack
-// falls through to the system sans and the timeline still sets correctly.
-@font-face
-  font-family: "Soehne"
-  font-style: normal
-  font-weight: 400
-  font-display: swap
-  src: url("/fonts/soehne-buch.woff2") format("woff2")
-
-@font-face
-  font-family: "Soehne"
-  font-style: normal
-  font-weight: 500
-  font-display: swap
-  src: url("/fonts/soehne-kraftig.woff2") format("woff2")
-
 *, *::before, *::after
   box-sizing: border-box
   margin: 0
@@ -75,16 +57,14 @@ code, pre, kbd, samp
   -webkit-touch-callout: none
   user-select: none
 
-  &:focus
-    outline: none !important
+.nuxt-route-announcer
+  user-select: none
 
-// The timeline's page transitions (App.Composables.TimelineTransition):
-// the page it grows out of dims behind the panel, and comes back as the
-// panel docks. The panel's own motion is motion-v; only the page underneath
-// is styled here.
+// The page held under the timeline: out of reach, and out of a select-all.
 .timeline-open-leave-active
   transition: opacity 0.34s ease, filter 0.34s ease
   pointer-events: none
+  user-select: none
 
 .timeline-open-leave-to
   opacity: 0.28
@@ -102,7 +82,6 @@ code, pre, kbd, samp
   .timeline-dock-enter-active
     transition-duration: 0.01s
 
-// Index<->projects wipe; gating and direction live in the wipe.global middleware.
 ::view-transition-old(root),
 ::view-transition-new(root)
   mix-blend-mode: normal
