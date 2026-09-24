@@ -1,11 +1,19 @@
 -- | Golden cases for the seeded bookshelf spine geometry, extracted from
--- | recordings of the original TypeScript implementation.
+-- | recordings of the original TypeScript implementation, plus the shape
+-- | every spine keeps whatever its title: the hash is the classic
+-- | `hash * 31 + unit` over each code point's first UTF-16 unit and is never
+-- | negative, and a spine is 7–21px wide, 50–85% tall, nudged 0 or 1px, and
+-- | either straight or leaning 4–7 degrees one way or the other.
 module Test.Utils.Spines (suite) where
 
 import Prelude
 
 import App.Utils.Spines (SpineStyleJs, hashLabel, spineStyle)
+import Data.Array (all, range)
 import Data.Foldable (for_)
+import Data.Int (fromString)
+import Data.Maybe (Maybe(..))
+import Data.String (Pattern(..), stripPrefix, stripSuffix)
 import Effect (Effect)
 import Test.Harness (Tally, expect)
 
@@ -95,7 +103,58 @@ cases =
     }
   ]
 
+titles :: Array String
+titles =
+  map _.input cases
+    <> map (\i -> "Volume " <> show i) (range 1 60)
+    <> map (\i -> "An Exceedingly Long Title For A Book, Part " <> show i) (range 1 20)
+
+intWithin :: String -> String -> String -> Maybe Int
+intWithin prefix suffix text = stripPrefix (Pattern prefix) text
+  >>= stripSuffix (Pattern suffix)
+  >>= fromString
+
+inRange :: Int -> Int -> Maybe Int -> Boolean
+inRange lo hi = case _ of
+  Just n -> n >= lo && n <= hi
+  Nothing -> false
+
+leansWell :: String -> Boolean
+leansWell = case _ of
+  "" -> true
+  transform -> case intWithin "rotate(" "deg)" transform of
+    Just n -> (n >= 4 && n <= 7) || (n >= -7 && n <= -4)
+    Nothing -> false
+
 suite :: Tally -> Effect Unit
-suite t = for_ cases \c -> do
-  expect t ("hashLabel " <> show c.input) c.hash (hashLabel c.input)
-  expect t ("spineStyle " <> show c.input) c.style (spineStyle c.input)
+suite t = do
+  for_ cases \c -> do
+    expect t ("hashLabel " <> show c.input) c.hash (hashLabel c.input)
+    expect t ("spineStyle " <> show c.input) c.style (spineStyle c.input)
+
+  expect t "hashLabel of one letter is its code unit" 97 (hashLabel "a")
+  expect t "hashLabel folds hash * 31 + unit" (97 * 31 + 98) (hashLabel "ab")
+  expect t "hashLabel folds left to right" ((97 * 31 + 98) * 31 + 99) (hashLabel "abc")
+  expect t "hashLabel reads only an astral character's first unit (0xD83C)" 55356
+    (hashLabel "🎉")
+  expect t "hashLabel tells anagrams apart" false (hashLabel "stone" == hashLabel "notes")
+  expect t "hashLabel is never negative, even after wrapping" true
+    (all (\title -> hashLabel title >= 0) titles)
+
+  let styles = map spineStyle titles
+  expect t "every spine is 7 to 21px wide" true
+    (all (inRange 7 21 <<< intWithin "" "px" <<< _.width) styles)
+  expect t "every spine is 50 to 85% of the shelf tall" true
+    (all (inRange 50 85 <<< intWithin "" "%" <<< _.height) styles)
+  expect t "every spine is nudged 0 or 1px" true
+    (all (\style -> style.marginLeft == "0px" || style.marginLeft == "1px") styles)
+  expect t "every spine's edge arc is an elliptical radius in px" true
+    ( all
+        ( \style -> case stripPrefix (Pattern "50% / ") style.borderRadius of
+            Just arc -> stripSuffix (Pattern "px") arc /= Nothing
+            Nothing -> false
+        )
+        styles
+    )
+  expect t "every spine stands straight or leans 4 to 7 degrees either way" true
+    (all (leansWell <<< _.transform) styles)
