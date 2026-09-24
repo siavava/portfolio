@@ -2,8 +2,9 @@
 -- |
 -- | The setup composable behind `BookcaseRail.vue`: the scroll-fade state
 -- | and the center-on-selection scrolling for both the shelf rail and the
--- | drawer's table of contents. The SFC keeps only the macros, template
--- | refs, and scroll glue plus one call here.
+-- | drawer's table of contents. VueUse's scroll tracker stays behind the
+-- | FFI edge; the SFC keeps only the macros and template refs plus one
+-- | call here.
 module App.Components.BookcaseRail
   ( DomElement
   , RailArgs
@@ -29,6 +30,19 @@ import Vue (Computed, Ref, computed, read, watchGetter)
 
 -- | A DOM `HTMLElement`. @ts HTMLElement
 foreign import data DomElement :: Type
+
+-- | The reactive `arrivedState` from VueUse's `useScroll` — opaque; read
+-- | in the FFI so the computeds track it.
+-- | @ts import("@vueuse/core").UseScrollReturn["arrivedState"]
+foreign import data ArrivedState :: Type
+
+-- | VueUse `useScroll` on the rail ref with 2px top/bottom arrival
+-- | offsets; returns its reactive `arrivedState`.
+foreign import railArrivedStateImpl :: EffectFn1 (Ref (Nullable DomElement)) ArrivedState
+
+foreign import arrivedTopImpl :: EffectFn1 ArrivedState Boolean
+
+foreign import arrivedBottomImpl :: EffectFn1 ArrivedState Boolean
 
 -- | The container `scrollTop` that vertically centers the target.
 foreign import centerOffsetImpl :: EffectFn2 DomElement DomElement Number
@@ -60,10 +74,6 @@ type RailArgs =
   , toc :: Ref (Nullable DomElement)
   -- | Reads the `open` prop — whether the mobile drawer is showing.
   , open :: Effect Boolean
-  -- | Reads VueUse `useScroll`'s arrived-at-top state for the rail.
-  , arrivedTop :: Effect Boolean
-  -- | Reads VueUse `useScroll`'s arrived-at-bottom state for the rail.
-  , arrivedBottom :: Effect Boolean
   }
 
 type RailBindings =
@@ -76,13 +86,15 @@ type RailBindings =
   , center :: EffectFn2 String String Unit
   }
 
--- | Wires the project rail's scroll chrome: fade visibility from the
--- | scroll arrived-state, center-on-selection for shelf sections and the
--- | drawer toc, and an instant re-center when the drawer opens.
+-- | Wires the project rail's scroll chrome: fade visibility from VueUse's
+-- | scroll arrived-state on the rail (2px offsets), center-on-selection
+-- | for shelf sections and the drawer toc, and an instant re-center when
+-- | the drawer opens.
 setup :: RailArgs -> Effect RailBindings
 setup args = do
-  canScrollUp <- computed (not <$> args.arrivedTop)
-  canScrollDown <- computed (not <$> args.arrivedBottom)
+  arrived <- runEffectFn1 railArrivedStateImpl args.rail
+  canScrollUp <- computed (not <$> runEffectFn1 arrivedTopImpl arrived)
+  canScrollDown <- computed (not <$> runEffectFn1 arrivedBottomImpl arrived)
 
   let
     scrollCentered container target behavior = do

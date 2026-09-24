@@ -29,8 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useScroll } from "@vueuse/core"
-
 interface ShelfBook {
   path: string
   title: string
@@ -56,14 +54,10 @@ const emit = defineEmits<{
 const rail = useTemplateRef<HTMLElement>("rail")
 const toc = useTemplateRef<HTMLElement>("toc")
 
-const { arrivedState } = useScroll(rail, { offset: { top: 2, bottom: 2 } })
-
 const { canScrollUp, canScrollDown, center } = useBookcaseRail({
   rail,
   toc,
   open: () => props.open,
-  arrivedTop: () => arrivedState.top,
-  arrivedBottom: () => arrivedState.bottom,
 })
 
 defineExpose({ center })

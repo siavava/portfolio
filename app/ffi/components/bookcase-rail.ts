@@ -1,10 +1,22 @@
 /**
- * Typed FFI implementations for `App.Components.BookcaseRail` — the scroll
- * geometry and DOM queries behind center-on-selection.
+ * Typed FFI implementations for `App.Components.BookcaseRail` — the VueUse
+ * scroll tracker behind the rail's fades, plus the scroll geometry and DOM
+ * queries behind center-on-selection.
  */
+import type { Ref } from "vue"
 import { glideScroll } from "@/utils/scroll"
+import { useScroll } from "@vueuse/core"
 
 export { nextTickImpl } from "./project-shelf"
+
+type ArrivedState = ReturnType<typeof useScroll>["arrivedState"]
+
+export const railArrivedStateImpl = (rail: Ref<HTMLElement | null>): ArrivedState =>
+  useScroll(rail, { offset: { top: 2, bottom: 2 } }).arrivedState
+
+export const arrivedTopImpl = (state: ArrivedState): boolean => state.top
+
+export const arrivedBottomImpl = (state: ArrivedState): boolean => state.bottom
 
 export const centerOffsetImpl = (container: HTMLElement, target: HTMLElement): number =>
   container.scrollTop
