@@ -13,8 +13,9 @@ const props = defineProps<{
   color?: string
 }>()
 
-const fadeStyle = computed(() =>
-  props.color ? { "--fade-color": props.color } : undefined)
+const { fadeStyle } = useScrollFades({
+  color: () => props.color ?? null,
+})
 </script>
 
 <style lang="sass" scoped>

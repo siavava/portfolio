@@ -14,6 +14,7 @@ import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.NowItem as NowItem
 import Test.Components.ProseA as ProseA
+import Test.Components.ScrollFades as ScrollFades
 import Test.Components.ShelfSatori as ShelfSatori
 import Test.Components.TikzDiagram as TikzDiagram
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
@@ -95,6 +96,7 @@ main = do
   ContactPanel.suite tally
   IndexPage.suite tally
   NowItem.suite tally
+  ScrollFades.suite tally
   BioTarget.suite tally
   ProseA.suite tally
   TikzDiagram.suite tally
