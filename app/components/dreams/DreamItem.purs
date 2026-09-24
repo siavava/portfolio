@@ -8,6 +8,7 @@ module App.Components.DreamItem
   ( DreamArgs
   , DreamBindings
   , LabelPart
+  , partsOf
   , setup
   ) where
 
@@ -19,8 +20,6 @@ import Data.String.CodeUnits (drop, length, slice)
 import Effect (Effect)
 import Vue (Computed, computed)
 
--- | Every `[text](url)` match in the label, with its code-unit index and
--- | matched length — `String#matchAll` under the hood.
 foreign import linkMatchesImpl
   :: String -> Array { index :: Int, length :: Int, text :: String, href :: String }
 
@@ -42,6 +41,9 @@ type DreamBindings =
     parts :: Computed (Array LabelPart)
   }
 
+-- | The label split into its segments, in order: the text between links
+-- | as plain segments (none where two links touch), each `[text](url)` as
+-- | a link segment, and whatever follows the last link.
 partsOf :: String -> Array LabelPart
 partsOf label = scanned.segments <> trailing
   where

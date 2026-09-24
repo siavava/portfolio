@@ -12,6 +12,7 @@ import Test.Components.CodePage as CodePage
 import Test.Components.ContactPanel as ContactPanel
 import Test.Components.CueRoot as CueRoot
 import Test.Components.CueThreads as CueThreads
+import Test.Components.DreamItem as DreamItem
 import Test.Components.FigmaSelect as FigmaSelect
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
@@ -99,6 +100,7 @@ main = do
   MapReveal.suite tally
   SideNotes.suite tally
   ContactPanel.suite tally
+  DreamItem.suite tally
   IndexPage.suite tally
   NowItem.suite tally
   ScrollFades.suite tally
