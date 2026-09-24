@@ -13,19 +13,19 @@ VizFrame(variant="a-star-viz", title="A-star search", :note="note")
       option(value="euclid") A* (Euclidean)
       option(value="greedy") greedy best-first
     button.viz-btn.primary(type="button", @click="newMaze") new maze
-    button.viz-btn(type="button", @click="slow = !slow") {{ slow ? "speed: slow" : "speed: fast" }}
+    button.viz-btn(type="button", @click="slow = !slow") {{ speedLabel }}
   svg.viz-canvas(:viewBox="`0 0 ${W} ${H}`")
     g
       rect.cell(
         v-for="(c, i) in cells",
         :key="i",
-        :x="OX + (i % GW) * CS + 0.5",
-        :y="OY + Math.floor(i / GW) * CS + 0.5",
+        :x="cellX(i)",
+        :y="cellY(i)",
         :width="CS - 1", :height="CS - 1",
         :class="c",
       )
     polyline.route(v-if="pathPoints", :points="pathPoints")
-    rect.mark.start(:x="sx(start) - 4", :y="sy(start) - 4", width="8", height="8")
+    rect.mark.start(:x="startMark.x", :y="startMark.y", width="8", height="8")
     circle.mark.goal(:cx="sx(goal)", :cy="sy(goal)", r="4.5")
   template(#legend)
     .viz-legend
@@ -46,8 +46,8 @@ VizFrame(variant="a-star-viz", title="A-star search", :note="note")
 <script lang="ts" setup>
 /** ## AStarViz — A-star vs. greedy best-first animated live on a random grid maze. */
 const {
-  mode, slow, note, cells, pathPoints, newMaze, sx, sy,
-  w: W, h: H, gw: GW, cs: CS, ox: OX, oy: OY, start, goal,
+  mode, slow, speedLabel, note, cells, pathPoints, newMaze,
+  sx, sy, cellX, cellY, startMark, w: W, h: H, cs: CS, goal,
 } = useAStarViz()
 </script>
 

@@ -6,10 +6,32 @@
 -- | drawing is the SVG template over the returned refs.
 module App.Components.AStarViz
   ( AStarBindings
+  , OpenNode
+  , Search
+  , buildMaze
+  , cellX
+  , cellY
   , draftMaze
+  , draftScore
+  , frontierOrder
   , greedyLen
+  , isKeeperMaze
+  , mazeCellClasses
+  , mazeGoal
+  , mazeHeuristic
+  , mazeRoute
+  , mazeRoutePoints
+  , mazeSeed
+  , mazeStart
   , neighborsOf
+  , searchModeLabel
+  , searchScoreNote
+  , searchSpeedLabel
+  , searchStep
+  , searchingNote
+  , seededRng
   , shortestPath
+  , startSearch
   , useAStarViz
   ) where
 
@@ -33,18 +55,25 @@ import Effect (Effect)
 import Effect.Random (random)
 import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
-import Vue (Ref, onBeforeUnmount, read, ref, watchRef, write)
+import Vue (Computed, Ref, computed, onBeforeUnmount, read, ref, watchRef, write)
 
--- | One LCG step with JS int32 semantics — the multiply overflows
--- | float64 precision before the mask, and that exact rounding matters
--- | for reproducing the seeded maze sequence bit-for-bit.
+-- JS int32 semantics: the multiply's float64 rounding before the mask is what reproduces seeded mazes.
 foreign import lcgNextImpl :: Number -> Number
 
--- | Starts a per-frame loop; the callback receives the rAF timestamp.
--- | Returns the stop Effect. No-op on the server (`@/ffi/raf-loop`).
 foreign import startRafLoopImpl :: EffectFn1 (EffectFn1 Number Unit) (Effect Unit)
 
+-- | A frontier entry: cell index, path cost so far, and priority.
 type OpenNode = { i :: Int, g :: Int, f :: Number }
+
+-- | The stepping search's state: the frontier, best-known cost and
+-- | predecessor per cell, the expanded set, and the expansion count.
+type Search =
+  { open :: Array OpenNode
+  , gScore :: Array Number
+  , cameFrom :: Array Int
+  , closed :: Array Boolean
+  , expanded :: Int
+  }
 
 type AStarBindings =
   { -- | Heuristic select — "manhattan", "euclid", or "greedy".
@@ -52,6 +81,8 @@ type AStarBindings =
   -- | Slow-motion toggle: one expansion every ninth frame instead of
   -- | two per frame.
   , slow :: Ref Boolean
+  -- | Speed button text — "speed: slow" or "speed: fast".
+  , speedLabel :: Computed String
   -- | Status line — progress while searching, then the score against
   -- | the true shortest path.
   , note :: Ref String
@@ -66,6 +97,13 @@ type AStarBindings =
   , sx :: Int -> Number
   -- | Cell index → center y in viewBox px.
   , sy :: Int -> Number
+  -- | Cell index → its rect's top-left x in viewBox px.
+  , cellX :: Int -> Number
+  -- | Cell index → its rect's top-left y in viewBox px.
+  , cellY :: Int -> Number
+  -- | Top-left corner of the 8px start marker, centered on the start
+  -- | cell.
+  , startMark :: { x :: Number, y :: Number }
   -- | Canvas viewBox width in px.
   , w :: Number
   -- | Canvas viewBox height in px.
@@ -120,11 +158,17 @@ slowEvery = 9
 restFrames :: Int
 restFrames = 210
 
-startCell :: Int
-startCell = 7 * gridW
+-- | The start cell: the left edge, row 7.
+mazeStart :: Int
+mazeStart = 7 * gridW
 
-goalCell :: Int
-goalCell = 3 * gridW - 1
+-- | The goal cell: the right edge, row 2.
+mazeGoal :: Int
+mazeGoal = 3 * gridW - 1
+
+-- | The seed of the maze shown on first paint.
+mazeSeed :: Number
+mazeSeed = toNumber 0x2545f49
 
 sx :: Int -> Number
 sx i = originX + toNumber (i `mod` gridW) * cellSize + cellSize / 2.0
@@ -132,9 +176,22 @@ sx i = originX + toNumber (i `mod` gridW) * cellSize + cellSize / 2.0
 sy :: Int -> Number
 sy i = originY + toNumber (i `div` gridW) * cellSize + cellSize / 2.0
 
+-- | Cell index → the x of its rect's top-left corner: the column's left
+-- | edge plus a half-pixel inset, so the 1px-narrower rects leave a
+-- | grid-line gap.
+cellX :: Int -> Number
+cellX i = originX + toNumber (i `mod` gridW) * cellSize + 0.5
+
+-- | Cell index → the y of its rect's top-left corner, row-wise like
+-- | `cellX`.
+cellY :: Int -> Number
+cellY i = originY + toNumber (i `div` gridW) * cellSize + 0.5
+
 setAt :: forall a. Int -> a -> Array a -> Array a
 setAt i v arr = fromMaybe arr (Array.updateAt i v arr)
 
+-- | The open cells beside `i` — left, right, up, down, clipped to the
+-- | grid — skipping walls.
 neighborsOf :: Array Boolean -> Int -> Array Int
 neighborsOf walls i =
   Array.filter (\n -> not (fromMaybe false (Array.index walls n))) candidates
@@ -154,8 +211,8 @@ neighborsOf walls i =
 shortestPath :: Array Boolean -> Int
 shortestPath walls = ST.run do
   dist <- STArray.thaw (Array.replicate total (-1))
-  _ <- STArray.poke startCell 0 dist
-  queue <- STArray.thaw [ startCell ]
+  _ <- STArray.poke mazeStart 0 dist
+  queue <- STArray.thaw [ mazeStart ]
   cursor <- STRef.new 0
   let
     go = do
@@ -165,7 +222,7 @@ shortestPath walls = ST.run do
         Nothing -> pure (-1)
         Just c -> do
           _ <- STRef.write (idx + 1) cursor
-          if c == goalCell then map (fromMaybe (-1)) (STArray.peek c dist)
+          if c == mazeGoal then map (fromMaybe (-1)) (STArray.peek c dist)
           else do
             dc <- STArray.peek c dist
             let next = fromMaybe 0 dc + 1
@@ -185,7 +242,7 @@ shortestPath walls = ST.run do
 greedyLen :: Array Boolean -> Int
 greedyLen walls = ST.run do
   seen <- STArray.thaw (Array.replicate total false)
-  _ <- STArray.poke startCell true seen
+  _ <- STArray.poke mazeStart true seen
   from <- STArray.thaw (Array.replicate total (-1))
   let
     visit ci q n = do
@@ -196,19 +253,19 @@ greedyLen walls = ST.run do
         _ <- STArray.poke n ci from
         pure (Array.snoc q { i: n, h: manh n })
     walkLen at len =
-      if at == startCell then pure len
+      if at == mazeStart then pure len
       else do
         prev <- STArray.peek at from
         walkLen (fromMaybe (-1) prev) (len + 1)
     go q = case Array.uncons (Array.sortBy (comparing _.h) q) of
       Nothing -> pure (-1)
       Just { head: c, tail: rest } ->
-        if c.i == goalCell then walkLen goalCell 0
+        if c.i == mazeGoal then walkLen mazeGoal 0
         else Array.foldM (visit c.i) rest (neighborsOf walls c.i) >>= go
-  go [ { i: startCell, h: manh startCell } ]
+  go [ { i: mazeStart, h: manh mazeStart } ]
   where
-  gx = goalCell `mod` gridW
-  gy = goalCell `div` gridW
+  gx = mazeGoal `mod` gridW
+  gy = mazeGoal `div` gridW
   manh i = abs (i `mod` gridW - gx) + abs (i `div` gridW - gy)
 
 -- | One maze draft: two vertical barriers with offset gaps, a small trap
@@ -220,7 +277,7 @@ draftMaze rng = do
   let
     set x y = do
       let i = y * gridW + x
-      when (i /= startCell && i /= goalCell) do
+      when (i /= mazeStart && i /= mazeGoal) do
         Ref.modify_ (setAt i true) wallsRef
   r1 <- rng
   let bx1 = 6 + floor (r1 * 2.0)
@@ -252,8 +309,20 @@ draftMaze rng = do
 
 manhattanStartGoal :: Int
 manhattanStartGoal =
-  abs (startCell `mod` gridW - goalCell `mod` gridW)
-    + abs (startCell `div` gridW - goalCell `div` gridW)
+  abs (mazeStart `mod` gridW - mazeGoal `mod` gridW)
+    + abs (mazeStart `div` gridW - mazeGoal `div` gridW)
+
+-- | A solvable draft's score: its detour over the straight Manhattan
+-- | distance, plus 2 when greedy best-first finds a longer path than
+-- | the optimum.
+draftScore :: Int -> Int -> Number
+draftScore opt greedy =
+  toNumber opt / toNumber manhattanStartGoal + (if greedy > opt then 2.0 else 0.0)
+
+-- | A draft good enough to stop searching: at least a 1.3× detour, and
+-- | greedy goes wrong on it.
+isKeeperMaze :: Int -> Int -> Boolean
+isKeeperMaze opt greedy = toNumber opt / toNumber manhattanStartGoal >= 1.3 && greedy > opt
 
 -- | Draft up to 80 mazes and keep the best-scoring solvable one —
 -- | favoring long detours and mazes where greedy finds a longer path.
@@ -269,45 +338,155 @@ buildMaze wallsRef optimalRef rng = go 0 Nothing Nothing
         else do
           let
             greedy = greedyLen draft
-            detour = toNumber opt / toNumber manhattanStartGoal
-            score = detour + (if greedy > opt then 2.0 else 0.0)
+            score = draftScore opt greedy
             best' =
               if score > maybe (-1.0) _.score best then Just { walls: draft, score, opt }
               else best
-          if detour >= 1.3 && greedy > opt then finishWith best' (Just draft)
+          if isKeeperMaze opt greedy then finishWith best' (Just draft)
           else go (attempt + 1) best' (Just draft)
 
-  -- The no-winner fallback mirrors the SFC, where the shared walls array
-  -- keeps the last draft when every attempt was unsolvable.
   finishWith best lastDraft = case best of
     Just b -> do
       Ref.write b.walls wallsRef
       Ref.write b.opt optimalRef
     Nothing -> for_ lastDraft \draft -> Ref.write draft wallsRef
 
-hOf :: String -> Int -> Number
-hOf mode i =
+-- | The heuristic toward the goal: straight-line distance for "euclid",
+-- | Manhattan distance for anything else.
+mazeHeuristic :: String -> Int -> Number
+mazeHeuristic mode i =
   let
-    dx = abs (i `mod` gridW - goalCell `mod` gridW)
-    dy = abs (i `div` gridW - goalCell `div` gridW)
+    dx = abs (i `mod` gridW - mazeGoal `mod` gridW)
+    dy = abs (i `div` gridW - mazeGoal `div` gridW)
   in
     if mode == "euclid" then hypot (toNumber dx) (toNumber dy)
     else toNumber (dx + dy)
 
-modeLabel :: String -> String
-modeLabel mode =
+-- | The mode's name as the score note spells it.
+searchModeLabel :: String -> String
+searchModeLabel mode =
   if mode == "greedy" then "greedy"
   else if mode == "euclid" then "A* euclidean"
   else "A* manhattan"
 
-openOrder :: OpenNode -> OpenNode -> Ordering
-openOrder a b = compare a.f b.f <> compare a.g b.g
+-- | Frontier order: lowest priority first, ties to the cheaper path.
+frontierOrder :: OpenNode -> OpenNode -> Ordering
+frontierOrder a b = compare a.f b.f <> compare a.g b.g
+
+-- | A fresh search from the start cell under the given mode.
+startSearch :: String -> Search
+startSearch mode =
+  { open: [ { i: mazeStart, g: 0, f: mazeHeuristic mode mazeStart } ]
+  , gScore: setAt mazeStart 0.0 (Array.replicate total infinity)
+  , cameFrom: Array.replicate total (-1)
+  , closed: Array.replicate total false
+  , expanded: 0
+  }
+
+-- | One search step: pop the best frontier entry; unless it was already
+-- | expanded, close it, count it, and — short of the goal — push every
+-- | neighbor it reaches more cheaply (greedy orders by the heuristic
+-- | alone, A* by cost plus heuristic). Nothing once the frontier is
+-- | exhausted; `reached` when the popped entry was the goal.
+searchStep :: String -> Array Boolean -> Search -> Maybe { search :: Search, reached :: Boolean }
+searchStep mode walls s = case Array.uncons (Array.sortBy frontierOrder s.open) of
+  Nothing -> Nothing
+  Just { head: cur, tail: rest } ->
+    if fromMaybe false (Array.index s.closed cur.i) then
+      Just { search: s { open = rest }, reached: false }
+    else
+      let
+        closedNow =
+          s { open = rest, closed = setAt cur.i true s.closed, expanded = s.expanded + 1 }
+      in
+        if cur.i == mazeGoal then Just { search: closedNow, reached: true }
+        else
+          Just
+            { search: foldl (relaxNeighbor cur) closedNow (neighborsOf walls cur.i)
+            , reached: false
+            }
+  where
+  relaxNeighbor cur acc n =
+    let
+      g = cur.g + 1
+    in
+      if toNumber g < fromMaybe infinity (Array.index acc.gScore n) then
+        acc
+          { gScore = setAt n (toNumber g) acc.gScore
+          , cameFrom = setAt n cur.i acc.cameFrom
+          , open = Array.snoc acc.open
+              { i: n
+              , g
+              , f:
+                  if mode == "greedy" then mazeHeuristic mode n
+                  else toNumber g + mazeHeuristic mode n
+              }
+          }
+      else acc
+
+-- | Paint class per cell: walls, then expanded cells as visited, then
+-- | frontier entries not yet expanded, the rest free.
+mazeCellClasses :: Array Boolean -> Array Boolean -> Array OpenNode -> Array String
+mazeCellClasses walls closed open = foldl
+  ( \acc o ->
+      if fromMaybe false (Array.index closed o.i) then acc else setAt o.i "frontier" acc
+  )
+  base
+  open
+  where
+  classOf i =
+    if fromMaybe false (Array.index walls i) then "wall"
+    else if fromMaybe false (Array.index closed i) then "visited"
+    else "free"
+  base = map classOf (Array.range 0 (total - 1))
+
+-- | The route into `at`, start first, following predecessors back until
+-- | a cell has none.
+mazeRoute :: Array Int -> Int -> Array Int
+mazeRoute cameFrom at = walkBack at []
+  where
+  walkBack c acc =
+    if c == -1 then acc
+    else walkBack (fromMaybe (-1) (Array.index cameFrom c)) (Array.cons c acc)
+
+-- | A route as polyline `points` through the cell centers.
+mazeRoutePoints :: Array Int -> String
+mazeRoutePoints path = joinWith " " (map (\i -> toString (sx i) <> "," <> toString (sy i)) path)
+
+-- | The status line while searching.
+searchingNote :: Int -> String
+searchingNote optimal = "searching — shortest possible is " <> show optimal <> " steps"
+
+-- | The score line once the goal is reached: the mode, cells expanded,
+-- | the path length, and how it compares with the true shortest path.
+searchScoreNote :: String -> Int -> Int -> Int -> String
+searchScoreNote mode expanded len optimal =
+  searchModeLabel mode <> " · expanded " <> show expanded <> " cells · path " <> show len
+    <> " steps — "
+    <> verdict
+  where
+  verdict =
+    if len == optimal then "a shortest path"
+    else show (len - optimal) <> " longer than optimal"
+
+-- | The speed button's text.
+searchSpeedLabel :: Boolean -> String
+searchSpeedLabel isSlow = if isSlow then "speed: slow" else "speed: fast"
+
+-- | A seeded rng over the LCG state in `state`: steps it and yields the
+-- | new state scaled by 1 / 0x7fffffff, into [0, 1].
+seededRng :: Ref.Ref Number -> Effect Number
+seededRng state = do
+  current <- Ref.read state
+  let next = lcgNextImpl current
+  Ref.write next state
+  pure (next / toNumber 0x7fffffff)
 
 -- | Wires the seeded maze build, the stepping A*/greedy search, and the
 -- | frame loop, starting after first paint and stopping on unmount.
 -- | Binds the mode and speed controls, the painted cell classes, the
--- | found route, the score note, and the grid geometry the SVG template
--- | draws with.
+-- | found route, the score note, the speed label, and the grid geometry
+-- | the SVG template draws with.
 useAStarViz :: Effect AStarBindings
 useAStarViz = do
   mode <- ref "manhattan"
@@ -317,111 +496,65 @@ useAStarViz = do
   pathPoints <- ref (null :: Nullable String)
   wallsRef <- Ref.new (Array.replicate total false)
   optimalRef <- Ref.new 0
-  openRef <- Ref.new ([] :: Array OpenNode)
-  gScoreRef <- Ref.new (Array.replicate total infinity)
-  cameFromRef <- Ref.new (Array.replicate total (-1))
-  closedRef <- Ref.new (Array.replicate total false)
-  expandedRef <- Ref.new 0
+  searchRef <- Ref.new
+    { open: []
+    , gScore: Array.replicate total infinity
+    , cameFrom: Array.replicate total (-1)
+    , closed: Array.replicate total false
+    , expanded: 0
+    }
   doneRef <- Ref.new false
   restLeftRef <- Ref.new 0
-  lcgRef <- Ref.new (toNumber 0x2545f49)
+  lcgRef <- Ref.new mazeSeed
   frameRef <- Ref.new 0
   stopLoop <- Ref.new (pure unit :: Effect Unit)
 
   let
-    seeded = do
-      current <- Ref.read lcgRef
-      let next = lcgNextImpl current
-      Ref.write next lcgRef
-      pure (next / toNumber 0x7fffffff)
+    seeded = seededRng lcgRef
 
     paint = do
       walls <- Ref.read wallsRef
-      closed <- Ref.read closedRef
-      open <- Ref.read openRef
-      let
-        classOf i =
-          if fromMaybe false (Array.index walls i) then "wall"
-          else if fromMaybe false (Array.index closed i) then "visited"
-          else "free"
-        base = map classOf (Array.range 0 (total - 1))
-        withFrontier = foldl
-          ( \acc o ->
-              if fromMaybe false (Array.index closed o.i) then acc else setAt o.i "frontier" acc
-          )
-          base
-          open
-      write cells withFrontier
+      search <- Ref.read searchRef
+      write cells (mazeCellClasses walls search.closed search.open)
 
     restart = do
       m <- read mode
-      Ref.write [ { i: startCell, g: 0, f: hOf m startCell } ] openRef
-      Ref.write (setAt startCell 0.0 (Array.replicate total infinity)) gScoreRef
-      Ref.write (Array.replicate total (-1)) cameFromRef
-      Ref.write (Array.replicate total false) closedRef
-      Ref.write 0 expandedRef
+      Ref.write (startSearch m) searchRef
       Ref.write false doneRef
       Ref.write 0 restLeftRef
       write pathPoints null
       paint
       optimal <- Ref.read optimalRef
-      write note ("searching — shortest possible is " <> show optimal <> " steps")
+      write note (searchingNote optimal)
 
     newMaze = do
       buildMaze wallsRef optimalRef random
       restart
 
     finish at = do
-      cameFrom <- Ref.read cameFromRef
+      search <- Ref.read searchRef
       let
-        walkBack c acc =
-          if c == -1 then acc
-          else walkBack (fromMaybe (-1) (Array.index cameFrom c)) (Array.cons c acc)
-        path = walkBack at []
-        points = joinWith " "
-          (map (\i -> toString (sx i) <> "," <> toString (sy i)) path)
+        path = mazeRoute search.cameFrom at
         len = Array.length path - 1
-      write pathPoints (notNull points)
+      write pathPoints (notNull (mazeRoutePoints path))
       optimal <- Ref.read optimalRef
-      expanded <- Ref.read expandedRef
       m <- read mode
-      let
-        verdict =
-          if len == optimal then "a shortest path"
-          else show (len - optimal) <> " longer than optimal"
-      write note
-        ( modeLabel m <> " · expanded " <> show expanded <> " cells · path " <> show len
-            <> " steps — "
-            <> verdict
-        )
+      write note (searchScoreNote m search.expanded len optimal)
       Ref.write true doneRef
       Ref.write restFrames restLeftRef
 
     stepSearch = do
-      open <- Ref.read openRef
-      case Array.uncons (Array.sortBy openOrder open) of
+      search <- Ref.read searchRef
+      walls <- Ref.read wallsRef
+      m <- read mode
+      case searchStep m walls search of
         Nothing -> do
           write note "frontier exhausted — new maze"
           Ref.write true doneRef
           Ref.write 90 restLeftRef
-        Just { head: cur, tail: rest } -> do
-          Ref.write rest openRef
-          closed <- Ref.read closedRef
-          unless (fromMaybe false (Array.index closed cur.i)) do
-            Ref.write (setAt cur.i true closed) closedRef
-            Ref.modify_ (_ + 1) expandedRef
-            if cur.i == goalCell then finish cur.i
-            else do
-              walls <- Ref.read wallsRef
-              m <- read mode
-              for_ (neighborsOf walls cur.i) \n -> do
-                let g = cur.g + 1
-                gScore <- Ref.read gScoreRef
-                when (toNumber g < fromMaybe infinity (Array.index gScore n)) do
-                  Ref.write (setAt n (toNumber g) gScore) gScoreRef
-                  Ref.modify_ (setAt n cur.i) cameFromRef
-                  let f = if m == "greedy" then hOf m n else toNumber g + hOf m n
-                  Ref.modify_ (flip Array.snoc { i: n, g, f }) openRef
+        Just stepped -> do
+          Ref.write stepped.search searchRef
+          when stepped.reached (finish mazeGoal)
 
     tick = do
       Ref.modify_ (_ + 1) frameRef
@@ -446,6 +579,10 @@ useAStarViz = do
           burst 0
           paint
 
+  speedLabel <- computed do
+    isSlow <- read slow
+    pure (searchSpeedLabel isSlow)
+
   _ <- watchRef mode \_ -> restart
 
   useAfterPaint do
@@ -459,18 +596,22 @@ useAStarViz = do
   pure
     { mode
     , slow
+    , speedLabel
     , note
     , cells
     , pathPoints
     , newMaze
     , sx
     , sy
+    , cellX
+    , cellY
+    , startMark: { x: sx mazeStart - 4.0, y: sy mazeStart - 4.0 }
     , w: canvasW
     , h: canvasH
     , gw: gridW
     , cs: cellSize
     , ox: originX
     , oy: originY
-    , start: startCell
-    , goal: goalCell
+    , start: mazeStart
+    , goal: mazeGoal
     }
