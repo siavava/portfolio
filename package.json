@@ -4,15 +4,18 @@
   "packageManager": "bun@1.2.22",
   "type": "module",
   "imports": {
-    "#purs/*": "./.purs/output/*/index.js"
+    "#purs/*": {
+      "types": "./app/types/purs/*.d.ts",
+      "default": "./.purs/output/*/index.js"
+    }
   },
   "scripts": {
-    "notes-meta": "bun scripts/build-notes-meta.ts",
+    "notes-meta": "bun run purs:build && bun scripts/build-notes-meta.ts",
     "purs:build": "bun scripts/purs-ffi-stubs.ts && bun run --cwd packages/vue-bridge build && bun scripts/spago-build.ts && bun scripts/purs-dts.ts",
     "purs:check": "bun run purs:build && bun scripts/purs-test.ts",
-    "build": "bun run purs:build && bun run notes-meta && nuxi build",
+    "build": "bun run purs:build && bun scripts/build-notes-meta.ts && nuxi build",
     "dev": "bun run purs:build && nuxi dev",
-    "generate": "bun run purs:build && bun run notes-meta && nuxi generate",
+    "generate": "bun run purs:build && bun scripts/build-notes-meta.ts && nuxi generate",
     "preview": "nuxi preview",
     "lint": "eslint . --fix",
     "lint:md": "markdownlint-cli2 \"content/**/*.md\" \"*.md\"",
