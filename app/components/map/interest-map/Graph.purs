@@ -1,13 +1,18 @@
 -- | ## Graph
 -- |
 -- | Pure traversal helpers for the interest map's link graph: an
--- | insertion-ordered adjacency list, reachability over it, and tree-parent
--- | lookup. FFI-free and generic in the link type, so the logic is pure and
--- | testable in isolation. Only PureScript consumes it. @ts-internal
+-- | insertion-ordered adjacency list, reachability and lineage over it,
+-- | tree-parent lookup, the endpoint test that gates a link on its nodes,
+-- | and the entry stagger's reveal order. FFI-free and generic in the link
+-- | type, so the logic is pure and testable in isolation. Only PureScript
+-- | consumes it. @ts-internal
 module App.Components.InterestMap.Graph
   ( AdjEntry
+  , appearanceOrderBy
   , buildAdj
+  , endpointsWithin
   , insertAdj
+  , lineage
   , lookupAdj
   , parentOf
   , reachable
@@ -15,7 +20,7 @@ module App.Components.InterestMap.Graph
 
 import Prelude
 
-import Data.Array (elem, find, findIndex, modifyAt, snoc, uncons) as Array
+import Data.Array (elem, find, findIndex, modifyAt, snoc, sortBy, uncons) as Array
 import Data.Foldable (foldl)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Nullable (Nullable, toMaybe)
@@ -72,3 +77,26 @@ parentOf
 parentOf targetOf prereqOf sourceOf links nodeId =
   Array.find (\link -> targetOf link == nodeId && not (prereqOf link)) links
     >>= \link -> toMaybe (sourceOf link)
+
+-- | A node's whole lineage: everything reachable from it down the
+-- | `children` adjacency, then everything reachable up the `parents` one
+-- | — the node itself heading both halves.
+lineage :: Array AdjEntry -> Array AdjEntry -> String -> Array String
+lineage children parents nodeId = reachable children nodeId <> reachable parents nodeId
+
+-- | Whether a link's endpoints all pass `has`: the target, and the source
+-- | when the link has one (a center spoke has none).
+endpointsWithin :: (String -> Boolean) -> String -> Nullable String -> Boolean
+endpointsWithin has target source =
+  has target
+    && case toMaybe source of
+      Nothing -> true
+      Just from -> has from
+
+-- | The entry stagger's reveal order: shallower levels first, and within
+-- | a level by ascending shuffle key (ties keep their input order).
+appearanceOrderBy :: forall node. (node -> Int) -> (node -> Number) -> Array node -> Array node
+appearanceOrderBy levelOf keyOf nodes =
+  map _.node $ Array.sortBy
+    (\a b -> compare (levelOf a.node) (levelOf b.node) <> compare a.key b.key)
+    (nodes <#> \node -> { node, key: keyOf node })

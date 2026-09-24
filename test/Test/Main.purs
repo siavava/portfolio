@@ -18,6 +18,7 @@ import Test.Components.FigmaSelect as FigmaSelect
 import Test.Components.FigureSpotlight as FigureSpotlightComponent
 import Test.Components.GraphTraversalViz as GraphTraversalViz
 import Test.Components.IndexPage as IndexPage
+import Test.Components.InterestMapGraph as InterestMapGraph
 import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.MassSpringViz as MassSpringViz
 import Test.Components.MulticopterViz as MulticopterViz
@@ -94,6 +95,7 @@ main = do
   ParticleHashViz.suite tally
   Links.suite tally
   InterestLayout.suite tally
+  InterestMapGraph.suite tally
   Sitemap.suite tally
   Tikz.suite tally
   TransformersFences.suite tally
