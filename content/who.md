@@ -9,7 +9,7 @@ building observability where it matters,
 and supporting user adoption.
 ::
 
-I'm a :figma-select[product engineer]{note="role"}, :timeline-target[most recently]{year="2024"} at
+I'm a :figma-select[product engineer]{note="role"}, :timeline-target[most recently]{year="2024" period="Aug"} at
 :chip{label="Meta" icon="simple-icons:meta" href="https://about.meta.com"},
 building :cue-root[messaging experiences]{to="apis,realtime,agents,scale,observability,adoption" note="meta-work"} for
 :chip{label="Instagram" icon="simple-icons:instagram" href="https://www.meta.com/instagram/"},
@@ -45,12 +45,12 @@ assignments, and holding office hours:
 - [Artificial Intelligence][cosc-76]
 ::
 
-:timeline-target[Previously]{year="2020"}, I studied :bio-target[math]{node="Mathematics"},
+:timeline-target[Previously]{year="2020" period="Sep"}, I studied :bio-target[math]{node="Mathematics"},
 :bio-target[computer science]{node="Systems,Intelligence,Discrete Structures"}, and
 :bio-target[philosophy]{node="Philosophy"} at
 :chip{label="Dartmouth" icon="lucide:tree-pine" href="https://home.dartmouth.edu"},
 where :cue-root[I helped teach five courses]{to="course-notes,essays" note="teaching"} and
-:timeline-target[did research]{year="2023"} in :bio-target[applying reinforcement learning and computer vision methods in robotics]{node="Marine Robotics,Computer Vision,Reinforcement Learning"} at
+:timeline-target[did research]{year="2023" period="May"} in :bio-target[applying reinforcement learning and computer vision methods in robotics]{node="Marine Robotics,Computer Vision,Reinforcement Learning"} at
 the [Dartmouth Reality & Robotics Lab][home].
 I was also the AI lead at the Dartmouth Robotics Club.
 
