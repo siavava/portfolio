@@ -11,6 +11,7 @@ import Test.Components.CodePage as CodePage
 import Test.Components.CueThreads as CueThreads
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
+import Test.Components.NowItem as NowItem
 import Test.Components.ProseA as ProseA
 import Test.Components.ShelfSatori as ShelfSatori
 import Test.Components.TikzDiagram as TikzDiagram
@@ -91,6 +92,7 @@ main = do
   MapReveal.suite tally
   SideNotes.suite tally
   IndexPage.suite tally
+  NowItem.suite tally
   BioTarget.suite tally
   ProseA.suite tally
   TikzDiagram.suite tally

@@ -18,8 +18,9 @@ const { item } = defineProps<{
   item: NowCollectionItem
 }>()
 
-const external = computed(() =>
-  ["http", "//", "mailto:"].some(prefix => item.url.startsWith(prefix)))
+const { external } = useNowItem({
+  url: () => item.url,
+})
 </script>
 
 <style lang="sass" scoped>
