@@ -19,6 +19,7 @@ import Test.Components.FigureSpotlight as FigureSpotlightComponent
 import Test.Components.GraphTraversalViz as GraphTraversalViz
 import Test.Components.IndexPage as IndexPage
 import Test.Components.LayoutChrome as LayoutChrome
+import Test.Components.MulticopterViz as MulticopterViz
 import Test.Components.NowItem as NowItem
 import Test.Components.OrbitViz as OrbitViz
 import Test.Components.ProjectShelf as ProjectShelf
@@ -29,6 +30,7 @@ import Test.Components.ShelfSatori as ShelfSatori
 import Test.Components.SideNote as SideNote
 import Test.Components.TikzDiagram as TikzDiagram
 import Test.Components.TooltipShell as TooltipShell
+import Test.Components.Visualizers as Visualizers
 import Test.Composables.CaptionTypewriter as CaptionTypewriter
 import Test.Composables.DraggableBubble as DraggableBubble
 import Test.Composables.FigureSpotlight as FigureSpotlight
@@ -72,12 +74,14 @@ main = do
   MarkdownMath.suite tally
   CueThreads.suite tally
   AStar.suite tally
+  Visualizers.suite tally
   AlgorithmBlock.suite tally
   LayoutChrome.suite tally
   CodePage.suite tally
   ShelfSatori.suite tally
   OrbitViz.suite tally
   GraphTraversalViz.suite tally
+  MulticopterViz.suite tally
   Links.suite tally
   InterestLayout.suite tally
   Sitemap.suite tally

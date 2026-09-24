@@ -22,18 +22,22 @@ VizFrame(variant="multicopter-viz", title="Multicopter (side view)", :note="note
       line(x1="0", y1="4", x2="0", y2="9")
     g(:transform="craftTransform")
       line.arm(:x1="-armPx", :y1="0", :x2="armPx", :y2="0")
-      rect.rotor(:x="-armPx - 8", :y="-4.5", width="16", height="9")
-      rect.rotor(:x="armPx - 8", :y="-4.5", width="16", height="9")
-      line.thrust(:x1="-armPx", :y1="-5", :x2="-armPx", :y2="-5 - leftLen + HEAD")
-      polygon.thrust-head(:points="head(-armPx, -5 - leftLen)")
-      line.thrust(:x1="armPx", :y1="-5", :x2="armPx", :y2="-5 - rightLen + HEAD")
-      polygon.thrust-head(:points="head(armPx, -5 - rightLen)")
-      text.svg-label.thrust-label(:x="-armPx - 6", :y="-12 - leftLen") f1
-      text.svg-label.thrust-label(:x="armPx + 6", :y="-12 - rightLen", text-anchor="start") f2
+      rect.rotor(:x="rotorLeftX", :y="-4.5", width="16", height="9")
+      rect.rotor(:x="rotorRightX", :y="-4.5", width="16", height="9")
+      line.thrust(:x1="leftArrow.x", :y1="-5", :x2="leftArrow.x", :y2="leftArrow.y2")
+      polygon.thrust-head(:points="leftArrow.headPoints")
+      line.thrust(:x1="rightArrow.x", :y1="-5", :x2="rightArrow.x", :y2="rightArrow.y2")
+      polygon.thrust-head(:points="rightArrow.headPoints")
+      text.svg-label.thrust-label(:x="leftArrow.labelX", :y="leftArrow.labelY") f1
+      text.svg-label.thrust-label(
+        :x="rightArrow.labelX", :y="rightArrow.labelY", text-anchor="start",
+      ) f2
       circle.com(:cx="0", :cy="0", r="2.4")
-    line.gravity(:x1="comX", :y1="comY + 8", :x2="comX", :y2="comY + 34 - HEAD")
+    line.gravity(:x1="comX", :y1="gravityArrow.y1", :x2="comX", :y2="gravityArrow.y2")
     polygon.gravity-head(:points="gHead")
-    text.svg-label.gravity-label(:x="comX + 6", :y="comY + 32", text-anchor="start") mg
+    text.svg-label.gravity-label(
+      :x="gravityArrow.labelX", :y="gravityArrow.labelY", text-anchor="start",
+    ) mg
   template(#legend)
     .viz-legend
       span
@@ -52,9 +56,9 @@ VizFrame(variant="multicopter-viz", title="Multicopter (side view)", :note="note
 
 <script lang="ts" setup>
 const {
-  W, H, HEAD, groundPx, armPx,
-  targetPx, comX, comY, craftTransform,
-  leftLen, rightLen, trailPoints, gHead, head,
+  W, H, groundPx, armPx, rotorLeftX, rotorRightX,
+  targetPx, comX, craftTransform,
+  leftArrow, rightArrow, gravityArrow, trailPoints, gHead,
   note, flyTo, nudge, reset,
 } = useMulticopterViz()
 </script>
