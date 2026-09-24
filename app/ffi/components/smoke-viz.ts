@@ -6,7 +6,8 @@
  * semi-Lagrangian advection, Gauss-Seidel projection, and vorticity sweeps
  * must run at frame rate over every cell of the 72-by-36 grid. PureScript
  * (`SmokeViz.purs`) owns orchestration: the confine toggle, note text,
- * frame loop, and lifecycle. Ported verbatim from the reference SFC.
+ * frame loop, lifecycle, and the once-per-mount theme color parsing
+ * (`smokeColor`). Ported verbatim from the reference SFC.
  */
 import { useRafFn } from "@vueuse/core"
 
@@ -62,21 +63,25 @@ export const newSmokeSimImpl = (): SmokeSim => ({
   hot: [120, 160, 220],
 })
 
-function parseColor(s: string, fallback: Rgb): Rgb {
-  const m = s.match(/(\d+(?:\.\d+)?)/g)
-  if (s.startsWith("#")) {
-    const h = s.slice(1)
-    const n = h.length === 3 ? h.split("").map(c => c + c).join("") : h
-    return [parseInt(n.slice(0, 2), 16), parseInt(n.slice(2, 4), 16), parseInt(n.slice(4, 6), 16)]
-  }
-  if (m && m.length >= 3) return [Number(m[0]), Number(m[1]), Number(m[2])]
-  return fallback
-}
+/** JS `parseInt(s, 16)` — NaN on a non-hex prefix, as `smokeColor` expects. */
+export const parseHexImpl = (s: string): number => parseInt(s, 16)
 
-export const initCanvasImpl = (sim: SmokeSim, el: HTMLCanvasElement): void => {
+/** JS `Number(s)` over a regex-matched decimal. */
+export const jsNumberImpl = (s: string): number => Number(s)
+
+/**
+ * Binds the sim to the mounted canvas. `parse` is `smokeColor` from the
+ * PureScript side (an uncurried `Fn2`), applied to each theme property
+ * before the canvas is sized.
+ */
+export const initCanvasImpl = (
+  sim: SmokeSim,
+  el: HTMLCanvasElement,
+  parse: (s: string, fallback: number[]) => number[],
+): void => {
   const style = getComputedStyle(el)
-  sim.bg = parseColor(style.getPropertyValue("--study-surface-sunken").trim(), sim.bg)
-  sim.hot = parseColor(style.getPropertyValue("--blue-underline").trim(), sim.hot)
+  sim.bg = parse(style.getPropertyValue("--study-surface-sunken").trim(), sim.bg) as Rgb
+  sim.hot = parse(style.getPropertyValue("--blue-underline").trim(), sim.hot) as Rgb
   const w = el.clientWidth || 640
   el.width = w
   el.height = 320

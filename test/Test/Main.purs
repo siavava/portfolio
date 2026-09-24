@@ -32,6 +32,7 @@ import Test.Components.ReviewBubble as ReviewBubble
 import Test.Components.ScrollFades as ScrollFades
 import Test.Components.ShelfSatori as ShelfSatori
 import Test.Components.SideNote as SideNote
+import Test.Components.SmokeViz as SmokeViz
 import Test.Components.TikzDiagram as TikzDiagram
 import Test.Components.TooltipShell as TooltipShell
 import Test.Components.Visualizers as Visualizers
@@ -83,6 +84,7 @@ main = do
   LayoutChrome.suite tally
   CodePage.suite tally
   ShelfSatori.suite tally
+  SmokeViz.suite tally
   OrbitViz.suite tally
   GraphTraversalViz.suite tally
   MulticopterViz.suite tally
