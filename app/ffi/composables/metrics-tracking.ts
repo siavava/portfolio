@@ -13,8 +13,11 @@ export const useMetricsImpl = (): MetricsStore => useMetrics()
 
 export const currentPathImpl = (router: Router): string => router.currentRoute.value.path
 
+/** A cancelled or aborted navigation leaves the viewer where they were, so it is never watched. */
 export const afterEachImpl = (router: Router, handler: (toPath: string, fromPath: string) => void): void => {
-  router.afterEach((to, from) => handler(to.path, from.path))
+  router.afterEach((to, from, failure) => {
+    if (!failure) handler(to.path, from.path)
+  })
 }
 
 export const storeWatchPathImpl = (store: MetricsStore, path: string): void => {
