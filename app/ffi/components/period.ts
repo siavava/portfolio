@@ -65,7 +65,11 @@ export const unfoldImpl = (body: HTMLElement, reduced: boolean, show: () => void
     body.style.height = ""
     const to = body.offsetHeight
     if (to <= from) settle(body)
-    else ease(body, from, to, () => settle(body))
+    else {
+      // Pinned before the first frame, or the detail paints at full height once and shifts what is below.
+      body.style.height = `${from}px`
+      ease(body, from, to, () => settle(body))
+    }
   })
 }
 
