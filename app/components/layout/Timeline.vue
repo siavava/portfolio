@@ -26,7 +26,7 @@ main.timeline(ref="root-el", tabindex="-1", aria-label="Timeline")
                 p.timeline__caption years
             .timeline__markers
               .timeline__rule(aria-hidden="true")
-                .timeline__rule-line(data-timeline-rail)
+                .timeline__rule-line(data-timeline-rail, data-timeline-progress)
               .timeline__row
                 .timeline__marker(
                   v-for="row in rows",
@@ -40,7 +40,7 @@ main.timeline(ref="root-el", tabindex="-1", aria-label="Timeline")
                     .timeline__body(@mouseleave="leave")
                       YearSpans(:year="row.year", hoverable, pickable, folding)
                         ContentRenderer(v-if="row.doc", :value="row.doc")
-              .timeline__spans(aria-hidden="true")
+              .timeline__spans(aria-hidden="true", data-timeline-progress)
                 span.timeline__span(
                   v-for="run in spans",
                   :key="run.key",
@@ -55,8 +55,8 @@ main.timeline(ref="root-el", tabindex="-1", aria-label="Timeline")
           p.timeline__caption years
         .timeline__column-body
           .timeline__rule-v(aria-hidden="true")
-            .timeline__rule-line-v(data-timeline-rail)
-          .timeline__marks(aria-hidden="true")
+            .timeline__rule-line-v(data-timeline-rail, data-timeline-progress)
+          .timeline__marks(aria-hidden="true", data-timeline-progress)
             span.timeline__mark(
               v-for="run in runs",
               :key="run.key",

@@ -115,11 +115,19 @@ const readInset = (section: HTMLElement, fallback: number): number => {
 
 const KEY_STEPS: Record<string, number> = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }
 
-const settleClasses = (entering: Element[], drawn: Element, host: HTMLElement, smooth: boolean) => {
+// Invisible, but still counted by paint timing, which skips anything at opacity 0.
+const UNSEEN = 0.01
+
+// Written only on the elements that read it: on the host, ~500 descendants restyle each frame.
+const setProgress = (drawing: HTMLElement[], value: string) => {
+  for (const element of drawing) element.style.setProperty("--timeline-progress", value)
+}
+
+const settleClasses = (entering: Element[], drawn: Element, drawing: HTMLElement[], smooth: boolean) => {
   const settling = smooth ? [...entering, drawn] : []
   for (const element of settling) element.classList.add("is-settling")
   drawn.classList.remove("is-drawing")
-  host.style.removeProperty("--timeline-progress")
+  for (const element of drawing) element.style.removeProperty("--timeline-progress")
   for (const element of entering) element.classList.remove("is-entering")
   if (settling.length > 0) {
     window.setTimeout(() => {
@@ -159,6 +167,11 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): Running
   const sizes = markers.map(marker => marker.offsetWidth)
   const inners = markers.map(marker => marker.firstElementChild).filter(inner => inner instanceof HTMLElement)
   const entering = () => [labels.firstElementChild, ...inners].filter(element => element !== null)
+  const drawing = [...section.querySelectorAll<HTMLElement>("[data-timeline-progress]")]
+  const shown = markers.map(() => Number.NaN)
+  let lefts = markers.map(marker => leftWithin(marker, track))
+  let labelsWidth = labels.offsetWidth
+  let viewportWidth = section.clientWidth
 
   let lead = readInset(section, 24)
   let floor = 0
@@ -186,12 +199,15 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): Running
   let wheelTakenAt = 0
   let railTakenAt = Number.NEGATIVE_INFINITY
 
-  const gutter = () => lead + labels.offsetWidth
-  const viewport = () => section.clientWidth
+  const gutter = () => lead + labelsWidth
+  const viewport = () => viewportWidth
   const range = () => limit - floor
   const landingOf = (index: number) => kernel.landing(sizes, gutter(), viewport(), 0.5, index)
 
   const measure = () => {
+    lefts = markers.map(marker => leftWithin(marker, track))
+    labelsWidth = labels.offsetWidth
+    viewportWidth = section.clientWidth
     lead = readInset(section, 24)
     floor = kernel.scrollFloor(gutter(), viewport())
     limit = kernel.scrollLimit(sizes, gutter(), viewport())
@@ -208,18 +224,22 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): Running
     }
   }
 
+  // From measured offsets rather than rects: no forced layout per frame, and no skew
+  // from the panel's entrance scale.
   const fadeColumns = () => {
-    const box = section.getBoundingClientRect()
-    for (const marker of markers) {
-      const rect = marker.getBoundingClientRect()
-      marker.style.opacity = String(kernel.opacity({
-        left: rect.left - box.left,
-        width: rect.width,
-        viewport: box.width,
+    const origin = snap(lead - at)
+    markers.forEach((marker, index) => {
+      const value = Math.max(UNSEEN, kernel.opacity({
+        left: origin + (lefts[index] ?? 0),
+        width: sizes[index] ?? 0,
+        viewport: viewportWidth,
         translate: at,
         coarse,
       }))
-    }
+      if (Math.abs(value - (shown[index] ?? Number.NaN)) < 0.001) return
+      shown[index] = value
+      marker.style.opacity = String(value)
+    })
   }
 
   const paint = (next: number) => {
@@ -311,8 +331,9 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): Running
   const settle = (smooth: boolean) => {
     window.clearTimeout(settleTimer)
     unsettled = false
-    settleClasses(entering(), rail, section, smooth)
+    settleClasses(entering(), rail, drawing, smooth)
     for (const marker of markers) marker.style.opacity = ""
+    shown.fill(Number.NaN)
     fadeColumns()
   }
 
@@ -336,7 +357,7 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): Running
     applyDelays()
     sweeping = true
     unsettled = true
-    section.style.setProperty("--timeline-progress", "0")
+    setProgress(drawing, "0")
     rail.classList.add("is-drawing")
     for (const element of entering()) element.classList.add("is-entering")
 
@@ -346,7 +367,7 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): Running
     const step = (now: number) => {
       if (sweepStart === 0) sweepStart = now
       const progress = kernel.progress(sizes, plan.duration, now - sweepStart)
-      section.style.setProperty("--timeline-progress", String(progress))
+      setProgress(drawing, String(progress))
       paint(progress * end)
       if (progress < 1) {
         sweepFrame = requestAnimationFrame(step)
@@ -522,7 +543,14 @@ export const startRailImpl = (section: HTMLElement, kernel: RailKernel): Running
     })
   }
 
-  const observer = new ResizeObserver(onResize)
+  // A period easing open changes the track's height, never its width.
+  let trackWidth = Number.NaN
+  const observer = new ResizeObserver((entries) => {
+    const width = entries.at(-1)?.contentRect.width ?? Number.NaN
+    if (width === trackWidth) return
+    trackWidth = width
+    onResize()
+  })
   observer.observe(track)
   window.addEventListener("resize", onResize)
   section.addEventListener("wheel", onWheel, { passive: false })
@@ -569,6 +597,16 @@ const topWithin = (element: HTMLElement, ancestor: HTMLElement): number => {
   return top
 }
 
+const leftWithin = (element: HTMLElement, ancestor: HTMLElement): number => {
+  let left = 0
+  let node: Element | null = element
+  while (node instanceof HTMLElement && node !== ancestor) {
+    left += node.offsetLeft
+    node = node.offsetParent
+  }
+  return left
+}
+
 const placeMarks = (scroller: HTMLElement): void => {
   const body = scroller.querySelector<HTMLElement>(".timeline__column-body")
   if (!body) return
@@ -611,6 +649,7 @@ export const startColumnImpl = (scroller: HTMLElement, kernel: RailKernel): Runn
   const sizes = entries.map(entry => entry.offsetHeight)
   const inners = entries.map(entry => entry.firstElementChild).filter(inner => inner instanceof HTMLElement)
   const entering = () => [labels, ...inners].filter(element => element !== null)
+  const drawing = [...scroller.querySelectorAll<HTMLElement>("[data-timeline-progress]")]
   const extent = () => Math.max(0, scroller.scrollHeight - scroller.clientHeight)
   const gutter = first.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop
   const landingOf = (index: number) =>
@@ -627,7 +666,7 @@ export const startColumnImpl = (scroller: HTMLElement, kernel: RailKernel): Runn
   const settle = (smooth: boolean) => {
     window.clearTimeout(settleTimer)
     unsettled = false
-    settleClasses(entering(), rail, scroller, smooth)
+    settleClasses(entering(), rail, drawing, smooth)
     window.setTimeout(() => placeMarks(scroller), smooth ? SETTLE_MS : 0)
   }
 
@@ -687,7 +726,7 @@ export const startColumnImpl = (scroller: HTMLElement, kernel: RailKernel): Runn
   applyDelays()
   sweeping = true
   unsettled = true
-  scroller.style.setProperty("--timeline-progress", "0")
+  setProgress(drawing, "0")
   rail.classList.add("is-drawing")
   for (const element of entering()) element.classList.add("is-entering")
 
@@ -698,7 +737,7 @@ export const startColumnImpl = (scroller: HTMLElement, kernel: RailKernel): Runn
   const step = (now: number) => {
     if (start === 0) start = now
     const progress = kernel.progress(sizes, plan.duration, now - start)
-    scroller.style.setProperty("--timeline-progress", String(progress))
+    setProgress(drawing, String(progress))
     scroller.scrollTop = progress * end
     if (progress < 1) {
       frame = requestAnimationFrame(step)
