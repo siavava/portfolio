@@ -3,6 +3,7 @@ module Test.Main (main) where
 import Prelude
 
 import Effect (Effect)
+import Test.Build.NotesMeta as NotesMeta
 import Test.Components.AStar as AStar
 import Test.Components.CueThreads as CueThreads
 import Test.Composables.DraggableBubble as DraggableBubble
@@ -41,6 +42,7 @@ main = do
   Sitemap.suite tally
   Tikz.suite tally
   Metrics.suite tally
+  NotesMeta.suite tally
   SideNoteLayout.suite tally
   FigureSpotlight.suite tally
   ReaderPeeks.suite tally
