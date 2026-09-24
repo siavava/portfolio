@@ -54,6 +54,7 @@ import Test.Composables.Metrics.ViewerGeo as ViewerGeo
 import Test.Composables.ProjectReferences as ProjectReferences
 import Test.Composables.ReaderPeeks as ReaderPeeks
 import Test.Composables.SideNoteLayout as SideNoteLayout
+import Test.Composables.TimelineTransition as TimelineTransition
 import Test.Harness (newTally, report)
 import Test.Map.InterestLayout as InterestLayout
 import Test.Middleware.Wipe as Wipe
@@ -63,6 +64,7 @@ import Test.Stores.Connections as Connections
 import Test.Stores.Cues as Cues
 import Test.Stores.MapReveal as MapReveal
 import Test.Stores.SideNotes as SideNotes
+import Test.Stores.Timeline as TimelineStore
 import Test.Transformers.Fences as TransformersFences
 import Test.Transformers.TikzCaption as TikzCaption
 import Test.Transformers.TikzFigAudit as TikzFigAudit
@@ -122,6 +124,7 @@ main = do
   NotesMeta.suite tally
   CaptionTypewriter.suite tally
   SideNoteLayout.suite tally
+  TimelineTransition.suite tally
   FigureSpotlight.suite tally
   ReaderPeeks.suite tally
   ProjectReferences.suite tally
@@ -137,6 +140,7 @@ main = do
   Cues.suite tally
   MapReveal.suite tally
   SideNotes.suite tally
+  TimelineStore.suite tally
   BookshelfPanel.suite tally
   ContactPanel.suite tally
   DreamItem.suite tally

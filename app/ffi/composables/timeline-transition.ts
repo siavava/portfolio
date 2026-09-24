@@ -1,8 +1,9 @@
 /**
  * Typed FFI implementations for `App.Composables.TimelineTransition` — the
  * router hook and the four `<Transition>` specs. The dock spec carries the
- * close-out choreography: the content lets go first, then the slab settles
- * back into the name bar's rect and reports the landing.
+ * close-out choreography: the content lets go first, the page underneath is
+ * put back at the scroll the bar was clicked at, then the slab settles back
+ * into the name bar's rect and reports the landing.
  *
  * The leave hooks animate with the Web Animations API rather than motion:
  * Vue has already unmounted the leaving page's component (only its DOM is
@@ -27,8 +28,6 @@ export const onNavigateImpl = (report: (from: string, to: string, initial: boole
   })
 }
 
-const panelInset = (): number => window.matchMedia("(max-width: 900px)").matches ? 0 : 12
-
 const reducedMotion = (): boolean => window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
 const settle = (animation: Animation, then: () => void): void => {
@@ -49,8 +48,6 @@ export const idleSpecImpl: TransitionProps = {
   onLeave: (_, done) => done(),
 }
 
-// The leaving page's dim and blur are CSS on its root (`timeline-open-leave-*`
-// in default.sass); the panel morphs itself on mount.
 export const openSpecImpl: TransitionProps = {
   name: "timeline-open",
 }
@@ -63,7 +60,19 @@ export const fadeSpecImpl = (clearOrigin: () => void): TransitionProps => ({
   },
 })
 
-export const dockSpecImpl = (origin: () => Rect | null, land: () => void): TransitionProps => ({
+const restoreScroll = (top: number, then: () => void, frames = 6): void => {
+  requestAnimationFrame(() => {
+    const room = document.documentElement.scrollHeight - window.innerHeight
+    if (room < top && frames > 0) {
+      restoreScroll(top, then, frames - 1)
+      return
+    }
+    window.scrollTo({ top, behavior: "instant" })
+    then()
+  })
+}
+
+export const dockSpecImpl = (origin: () => Rect | null, scroll: () => number, land: () => void): TransitionProps => ({
   name: "timeline-dock",
   onLeave(el, done) {
     const panel = el.querySelector<HTMLElement>(".timeline__panel")
@@ -76,25 +85,21 @@ export const dockSpecImpl = (origin: () => Rect | null, land: () => void): Trans
       })
       return
     }
-    const inset = panelInset()
-    const x = from.left - inset
-    const y = from.top - inset
-    const sx = from.width / (window.innerWidth - inset * 2)
-    const sy = from.height / (window.innerHeight - inset * 2)
+    const sx = from.width / window.innerWidth
+    const sy = from.height / window.innerHeight
     content?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 70, easing: "ease-out", fill: "forwards" })
-    // The slab docks clean — any overshoot at the slot clips into the page
-    // text; the bounce is the bar absorbing the landing. The delay holds the
-    // slab until the content has let go.
-    const dock = panel.animate(
-      [
-        { transform: "translate(0px, 0px) scale(1, 1)" },
-        { transform: `translate(${x}px, ${y}px) scale(${sx}, ${sy})` },
-      ],
-      { delay: 90, duration: 340, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" },
-    )
-    settle(dock, () => {
-      land()
-      done()
+    restoreScroll(scroll(), () => {
+      const dock = panel.animate(
+        [
+          { transform: "translate(0px, 0px) scale(1, 1)" },
+          { transform: `translate(${from.left}px, ${from.top}px) scale(${sx}, ${sy})` },
+        ],
+        { delay: 60, duration: 340, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" },
+      )
+      settle(dock, () => {
+        land()
+        done()
+      })
     })
   },
 })

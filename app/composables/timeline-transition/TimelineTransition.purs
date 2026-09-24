@@ -23,28 +23,21 @@ import App.Stores.Timeline (Rect)
 import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, mkEffectFn3, runEffectFn1, runEffectFn2)
+import Effect.Uncurried (EffectFn1, EffectFn3, mkEffectFn3, runEffectFn1, runEffectFn3)
 import Vue (Computed, computed, onUnmounted, read, shallowRef, write)
 
 -- | A Vue `<Transition>` props object. @ts import("vue").TransitionProps
 foreign import data TransitionSpec :: Type
 
--- | Reports every navigation before it resolves — from path, to path, and
--- | whether it is the initial load; returns the remove thunk.
 foreign import onNavigateImpl :: EffectFn1 (EffectFn3 String String Boolean Unit) (Effect Unit)
 
--- | No choreography: both pages swap at once.
 foreign import idleSpecImpl :: TransitionSpec
 
--- | The timeline entering: the page it grew from dims behind it.
 foreign import openSpecImpl :: TransitionSpec
 
--- | The timeline leaving for its origin: the panel docks into the name bar
--- | (read from the origin thunk), then reports the landing.
-foreign import dockSpecImpl :: EffectFn2 (Effect (Nullable Rect)) (Effect Unit) TransitionSpec
+foreign import dockSpecImpl
+  :: EffectFn3 (Effect (Nullable Rect)) (Effect Number) (Effect Unit) TransitionSpec
 
--- | The timeline leaving for anywhere else: it fades, and the origin is
--- | dropped since there is no bar to land in.
 foreign import fadeSpecImpl :: EffectFn1 (Effect Unit) TransitionSpec
 
 -- | What one navigation does with the timeline.
@@ -59,7 +52,6 @@ derive instance Eq Phase
 timelinePath :: String
 timelinePath = "/timeline"
 
--- | Pages that carry a name bar for the panel to grow from and dock into.
 hasBar :: String -> Boolean
 hasBar path = path == "/" || path == "/code"
 
@@ -77,6 +69,8 @@ type TransitionArgs =
     origin :: Effect (Nullable Rect)
   -- | Reads the route that bar is on.
   , originPath :: Effect (Nullable String)
+  -- | Reads how far that page was scrolled when the bar was clicked.
+  , originScroll :: Effect Number
   -- | The panel docked: count the landing and release the origin.
   , land :: Effect Unit
   -- | The panel left without docking: release the origin.
@@ -95,7 +89,7 @@ type TransitionBindings =
 setup :: TransitionArgs -> Effect TransitionBindings
 setup args = do
   phase <- shallowRef Idle
-  dock <- runEffectFn2 dockSpecImpl args.origin args.land
+  dock <- runEffectFn3 dockSpecImpl args.origin args.originScroll args.land
   fade <- runEffectFn1 fadeSpecImpl args.clearOrigin
 
   unbind <- runEffectFn1 onNavigateImpl $ mkEffectFn3 \from to initial ->
