@@ -6,6 +6,7 @@ import Effect (Effect)
 import Test.Components.AStar as AStar
 import Test.Components.CueThreads as CueThreads
 import Test.Composables.DraggableBubble as DraggableBubble
+import Test.Composables.FigureSpotlight as FigureSpotlight
 import Test.Harness (newTally, report)
 import Test.Map.InterestLayout as InterestLayout
 import Test.Server.Sitemap as Sitemap
@@ -31,6 +32,7 @@ main = do
   InterestLayout.suite tally
   Sitemap.suite tally
   Tikz.suite tally
+  FigureSpotlight.suite tally
   DraggableBubble.suite tally
   JsMath.suite tally
   Scroll.suite tally
