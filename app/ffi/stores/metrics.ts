@@ -6,6 +6,15 @@
  */
 import { uxSessionId } from "@/utils/ux-session"
 
+let watchedSid: string | null = null
+
+/**
+ * The UX session id the latest watch carried. The server accepts tracker
+ * frames only under the id its connection last watched with, so the ux
+ * bridge re-watches when the id has rolled over since.
+ */
+export const watchedSessionId = (): string | null => watchedSid
+
 /**
  * Key order (`scope`, `path`, geo, then `sid`) keeps the wire JSON
  * stable. Every watch — first, re-watch on reconnect, geo re-watch —
@@ -14,6 +23,7 @@ import { uxSessionId } from "@/utils/ux-session"
  */
 export const watchPayloadImpl = (scope: string, path: string, geo: ViewerGeo | null): WsData => {
   const sid = uxSessionId()
+  watchedSid = sid
   return {
     scope,
     path,

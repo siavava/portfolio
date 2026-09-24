@@ -1,4 +1,5 @@
 import { sendIfOpen } from "~/ffi/composables/metrics/socket"
+import { watchedSessionId } from "~/ffi/stores/metrics"
 
 /** `route.path` without its trailing slash; `/` stays `/`. */
 const normalizePath = (path: string): string => path.replace(/\/+$/, "") || "/"
@@ -18,12 +19,20 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (uxSessionId() === null) return
 
   const router = useRouter()
+  const metrics = useMetrics()
   const api = useApiRoute()
   const push = (command: UxCommand) => window.__ux?.q.push(command)
 
   window.__ux = {
     ns: "<p>",
-    sid: () => uxSessionId(),
+    // An id that rolled over under an open page (the first flush after 30
+    // idle minutes) is re-watched first: the server drops tracker frames
+    // under any id but the one its connection last watched with.
+    sid: () => {
+      const sid = uxSessionId()
+      if (sid !== null && sid !== watchedSessionId()) metrics.watchPath(router.currentRoute.value.path)
+      return sid
+    },
     send: sendIfOpen,
     depth: "",
     nodepth: ["/timeline"],
