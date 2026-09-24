@@ -19,6 +19,7 @@ import Test.Components.LayoutChrome as LayoutChrome
 import Test.Components.NowItem as NowItem
 import Test.Components.ProjectShelf as ProjectShelf
 import Test.Components.ProseA as ProseA
+import Test.Components.ReviewBubble as ReviewBubble
 import Test.Components.ScrollFades as ScrollFades
 import Test.Components.ShelfSatori as ShelfSatori
 import Test.Components.SideNote as SideNote
@@ -104,6 +105,7 @@ main = do
   DreamItem.suite tally
   IndexPage.suite tally
   NowItem.suite tally
+  ReviewBubble.suite tally
   ScrollFades.suite tally
   TooltipShell.suite tally
   BioTarget.suite tally

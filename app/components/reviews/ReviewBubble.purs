@@ -7,8 +7,11 @@
 module App.Components.ReviewBubble
   ( BubbleArgs
   , BubbleBindings
+  , BubbleStyle
   , StyleMap
+  , bubbleStyleFor
   , setup
+  , tiltFor
   ) where
 
 import Prelude
@@ -23,8 +26,6 @@ import Vue (Computed, Ref, computed, read)
 -- | An assembled `:style` object. @ts Record<string, string | number | undefined>
 foreign import data StyleMap :: Type
 
--- | Assembles the bubble style: `--tilt` and `--delay` variables, the
--- | drag transform, and an optional z-index (null omits it).
 foreign import mkBubbleStyleImpl :: Fn4 String String String (Nullable Int) StyleMap
 
 type BubbleArgs =
@@ -47,14 +48,42 @@ type BubbleBindings =
     style :: Computed StyleMap
   }
 
+-- | A bubble's resting tilt in whole degrees, from its position in the
+-- | grid: `index * 137 % 7 - 3`, so neighbours lean differently and every
+-- | bubble stays within the ±3° band.
+tiltFor :: Int -> Int
+tiltFor index = rem (index * 137) 7 - 3
+
+-- | The pieces of a bubble's `:style`, before they are assembled.
+type BubbleStyle =
+  { -- | `--tilt`: the resting tilt, 1.5° steeper while dragged.
+    tilt :: String
+  -- | `--delay`: the reveal, staggered 90 ms per bubble.
+  , delay :: String
+  -- | The drag offset, with the tilt applied after it.
+  , transform :: String
+  -- | The stacking order; null leaves it unset.
+  , zIndex :: Nullable Int
+  }
+
+-- | The style pieces for a bubble at rest tilt `baseTilt` and grid
+-- | position `index`, dragged or not, offset by `x`/`y` px and stacked at
+-- | `z` — where 0, the unset order, leaves z-index off as `|| undefined`
+-- | did.
+bubbleStyleFor :: Int -> Boolean -> Int -> Number -> Number -> Int -> BubbleStyle
+bubbleStyleFor baseTilt dragging index x y z =
+  { tilt: toString (toNumber baseTilt + (if dragging then 1.5 else 0.0)) <> "deg"
+  , delay: show (index * 90) <> "ms"
+  , transform: "translate(" <> toString x <> "px, " <> toString y <> "px) rotate(var(--tilt))"
+  , zIndex: if z == 0 then null else notNull z
+  }
+
 -- | Derives the bubble's style map: a deterministic per-index tilt in
 -- | the ±3° band (steeper while dragging), the staggered reveal delay,
 -- | and the drag-following transform.
 setup :: BubbleArgs -> Effect BubbleBindings
 setup args = do
-  tilt <- computed do
-    index <- args.index
-    pure (rem (index * 137) 7 - 3)
+  tilt <- computed (tiltFor <$> args.index)
 
   style <- computed do
     baseTilt <- read tilt
@@ -63,11 +92,7 @@ setup args = do
     x <- args.offsetX
     y <- args.offsetY
     z <- read args.zIndex
-    let
-      tiltVar = toString (toNumber baseTilt + (if dragging then 1.5 else 0.0)) <> "deg"
-      delayVar = show (index * 90) <> "ms"
-      transform = "translate(" <> toString x <> "px, " <> toString y <>
-        "px) rotate(var(--tilt))"
-    pure (runFn4 mkBubbleStyleImpl tiltVar delayVar transform (if z == 0 then null else notNull z))
+    let pieces = bubbleStyleFor baseTilt dragging index x y z
+    pure (runFn4 mkBubbleStyleImpl pieces.tilt pieces.delay pieces.transform pieces.zIndex)
 
   pure { style }
