@@ -11,7 +11,7 @@
       "~~/*": ["./*"],
       "~/*": ["./app/*"],
       "@/*": ["./app/*"],
-      "#purs/*": ["./output/*/index.js"]
+      "#purs/*": ["./.purs/output/*/index.js"]
     }
   },
   "files": [],
