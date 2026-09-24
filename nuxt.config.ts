@@ -96,7 +96,6 @@ export default defineNuxtConfig({
   },
 
   css: [
-    "katex/dist/katex.min.css",
     "@/styles/colors.scss",
     "@/styles/default.sass",
     "@/styles/typography.scss",

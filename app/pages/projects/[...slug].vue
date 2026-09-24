@@ -45,6 +45,8 @@ main.projects-screen
 </template>
 
 <script lang="ts" setup>
+import "katex/dist/katex.min.css"
+
 definePageMeta({ path: "/projects/:slug(.*)*", key: "projects", scrollToTop: false, layout: false })
 
 const { data } = await useAsyncData("projects-all", () =>

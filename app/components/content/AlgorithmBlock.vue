@@ -33,6 +33,8 @@ figure.algorithm(:style="{ '--algo-digits': maxDigits }")
  * `meta` (`caption="…" number=N`) overrides the
  * in-body directives.
  */
+import "katex/dist/katex.min.css"
+
 const { code = "", meta = "" } = defineProps<{ code?: string, meta?: string }>()
 
 const { lines, heading, captionHtml, maxDigits, footDepthStyle, isFoot } = useAlgorithmBlock({
