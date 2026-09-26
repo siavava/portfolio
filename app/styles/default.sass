@@ -6,10 +6,20 @@
     --#{$name}: #{$value}
   --wipe-tint: rgba(0, 0, 0, 0.3)
 
+// On wide-gamut displays the red goes past what sRGB can show; sRGB screens
+// keep the hex, since clipping a P3 colour would pull it off its hue.
+@media (color-gamut: p3)
+  :root
+    --accent: color(display-p3 0.948 0.239 0.062)
+
 .dark-mode
   @each $name, $value in colors.$dark-palette
     --#{$name}: #{$value}
   --wipe-tint: rgba(255, 255, 255, 0.24)
+
+@media (color-gamut: p3)
+  .dark-mode
+    --accent: color(display-p3 0.948 0.239 0.062)
 
 *, *::before, *::after
   box-sizing: border-box

@@ -134,8 +134,9 @@ type SatoriBindings =
   , footerLink :: StyleMap
   }
 
-orange :: String
-orange = "#ff4800"
+-- | The site's accent red, as sRGB: the card renderer has no wide-gamut colour.
+accent :: String
+accent = "#ff3600"
 
 ink :: String
 ink = "#1a1a17"
@@ -422,5 +423,5 @@ setup args = do
         , fontSize: "21px"
         }
     , footerMuted: styleMapImpl { color: monoMuted }
-    , footerLink: styleMapImpl { color: orange }
+    , footerLink: styleMapImpl { color: accent }
     }

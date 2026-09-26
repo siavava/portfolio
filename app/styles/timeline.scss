@@ -1,17 +1,21 @@
 @mixin slab {
-  --tl-accent: #ffcb00;
+  --tl-accent: #ff3600;
 
-  @supports (color: color(display-p3 1 1 1)) {
-    --tl-accent: color(display-p3 0.98 0.8 0.14);
+  // Only where the display can show it: sRGB screens clip a P3 colour, which pulls this red off its hue.
+  @media (color-gamut: p3) {
+    --tl-accent: color(display-p3 0.948 0.239 0.062);
   }
 
   --tl-highlight: var(--tl-accent);
 }
 
 @mixin slab-light {
-  --tl-highlight: #876500;
+  // Dark enough to read as text on the light slab: 4.5:1 on #f4f4f2.
+  --tl-highlight: #d62c01;
 
-  @supports (color: oklch(from red calc(l - 0.1) c h)) {
-    --tl-highlight: oklch(from var(--tl-accent) min(l, 0.53) c h);
+  @media (color-gamut: p3) {
+    @supports (color: oklch(from red calc(l - 0.1) c h)) {
+      --tl-highlight: oklch(from var(--tl-accent) min(l, 0.54) c h);
+    }
   }
 }
