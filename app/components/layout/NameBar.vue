@@ -15,15 +15,15 @@ Motion.name-bar.no-select(
 )
   span.name-bar__door(aria-hidden="true")
     | timeline
-    PointerArrow.name-bar__arrow
+    Icon.name-bar__expand(name="ph:arrows-out-simple")
   span.name-bar__name {{ profile.name }}
   span.name-bar__location
     Transition(name="name-bar-swap", mode="out-in")
       span.name-bar__location-text(:key="answer ?? 'place'") {{ answer ?? profile.location }}
-    PointerArrow.name-bar__location-arrow(aria-hidden="true")
+    Icon.name-bar__location-expand(name="ph:arrows-out-simple", aria-hidden="true")
     span.name-bar__cue(aria-hidden="true")
       | open timeline
-      PointerArrow.name-bar__arrow
+      Icon.name-bar__expand(name="ph:arrows-out-simple")
 </template>
 
 <script lang="ts" setup>
@@ -175,16 +175,19 @@ const { pressed, spring, barPose, showing, quiet, answer, onDrift, onDriftEnd, o
     .dark-mode &
       color: rgba(0, 0, 0, 0.55)
 
-.name-bar__arrow
-  --pointer-gap: 1px
-  font-size: 1.25em
+.name-bar__expand
+  flex-shrink: 0
+  margin-left: 5px
+  font-size: 1.15em
+  transition: transform 0.2s cubic-bezier(0.9, 0, 0.2, 0)
 
   @media (min-width: 901px) and (hover: hover)
     .name-bar:is(:hover, :focus-visible:not(.is-quiet)) &
-      transform: translate(2.5px, -2.5px)
+      transform: scale(1.15)
 
-.name-bar__location-arrow
+.name-bar__location-expand
   display: none
+  margin-left: 6px
 
   @media (min-width: 901px) and (hover: none)
     display: inline-block

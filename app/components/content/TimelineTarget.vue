@@ -32,7 +32,7 @@ Teleport(to="body")
         p.timeline-peek__empty(v-else) nothing written for this year yet
       a.timeline-peek__open(:href="href", tabindex="-1", @click="follow")
         | open timeline
-        PointerArrow.timeline-peek__arrow
+        Icon.timeline-peek__expand(name="ph:arrows-out-simple", aria-hidden="true")
 </template>
 
 <script lang="ts" setup>
@@ -195,12 +195,14 @@ const {
     &:hover
       color: var(--tl-highlight)
 
-.timeline-peek__arrow
-  --pointer-gap: 1px
-  font-size: 1.25em
+.timeline-peek__expand
+  flex-shrink: 0
+  margin-left: 5px
+  font-size: 1.15em
+  transition: transform 0.2s cubic-bezier(0.9, 0, 0.2, 0)
 
-.timeline-peek__open:hover .timeline-peek__arrow
-  transform: translate(2.5px, -2.5px)
+.timeline-peek__open:hover .timeline-peek__expand
+  transform: scale(1.15)
 
 .timeline-peek-leave-active
   transition: opacity 0.14s ease
