@@ -7,9 +7,9 @@ import { join } from "node:path"
 // Content-addressed cache for rendered figures. Each `$$…tikzpicture…$$` block
 // is keyed by a hash of its source (+ caption + a pipeline version), so an
 // unchanged figure is read from disk instead of re-rendered through
-// node-tikzjax (~0.6s each). The dir is gitignored but PERSISTED across CI
-// builds (see netlify.toml), which is what keeps production builds from
-// re-rendering all ~400 figures from scratch every time. Bump
+// node-tikzjax (~0.6s each). The dir is gitignored; production builds restore
+// it from Vercel Blob and save it back (scripts/tikz-cache.ts), which keeps
+// them from re-rendering every figure from scratch each time. Bump
 // TIKZ_CACHE_VERSION to invalidate every entry after a change to the
 // rendering pipeline (theming, text-outlining, fonts, tikz libraries, …).
 export const TIKZ_CACHE_DIR = join(process.cwd(), ".cache", "tikz")
