@@ -34,6 +34,7 @@ module App.Components.TimelineTarget
 import Prelude
 
 import App.Components.Timeline (Node, monthLabel, onlyPeriod, periodPoint)
+import App.Stores.Timeline (Rect)
 import Data.Array (find)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Maybe (Maybe(..))
@@ -112,6 +113,8 @@ foreign import anchorRectImpl
   :: EffectFn1 DomElement { left :: Number, top :: Number, bottom :: Number }
 
 foreign import viewportImpl :: Effect { width :: Number, height :: Number }
+
+foreign import cardRectImpl :: EffectFn1 DomElement Rect
 
 foreign import observeHeightImpl
   :: EffectFn2 DomElement (EffectFn2 Number Boolean Unit) (Effect Unit)
@@ -228,6 +231,8 @@ type TargetArgs =
   , peek :: Ref (Nullable DomElement)
   -- | The router the preview's link and the phrase's press go through.
   , router :: Router
+  -- | The timeline store's `launch`: the panel grows out of the preview.
+  , launch :: EffectFn1 Rect Unit
   -- | The timeline store's `focus`: a preview of this year is up.
   , focusYear :: EffectFn1 Int Unit
   -- | The timeline store's `blur`: the preview of this year closed.
@@ -412,6 +417,8 @@ setup args = do
 
     -- The bar lets go of the year before the route changes under it.
     open = do
+      card <- toMaybe <$> read args.peek
+      traverse_ (runEffectFn1 args.launch <=< runEffectFn1 cardRectImpl) card
       dismiss
       read year >>= runEffectFn1 args.blurYear
       read landing >>= runEffectFn2 pushImpl args.router

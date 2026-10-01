@@ -51,6 +51,12 @@ export const anchorRectImpl = (anchor: HTMLElement): { left: number, top: number
   return { left: r.left, top: r.top, bottom: r.bottom }
 }
 
+/** The preview's viewport rect, for the timeline panel to grow out of. */
+export const cardRectImpl = (card: HTMLElement): { left: number, top: number, width: number, height: number } => {
+  const { left, top, width, height } = card.getBoundingClientRect()
+  return { left, top, width, height }
+}
+
 /**
  * Reports the element's height, and whether its body has rendered, now and
  * after every size change. The body's components load on first use, so the

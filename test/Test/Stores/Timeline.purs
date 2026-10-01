@@ -1,7 +1,8 @@
 -- | Checks for the timeline store core, run against Vue's real
 -- | reactivity: clicking the bar records the rect the panel grows from,
 -- | the scroll it was clicked at and the route it sits on; clearing the
--- | origin makes the next open or close fade; each dock counts a landing
+-- | origin makes the next open or close fade; a preview card's launch
+-- | records its rect with no route, so the close fades; each dock counts a landing
 -- | and releases the origin; and a bio target's previewed year shows until
 -- | that same year's preview closes, surviving the close of an older one.
 module Test.Stores.Timeline (suite) where
@@ -18,6 +19,9 @@ import Vue (read)
 
 bar :: Rect
 bar = { left: 24.0, top: 16.0, width: 320.0, height: 40.0 }
+
+card :: Rect
+card = { left: 120.0, top: 300.0, width: 280.0, height: 180.0 }
 
 suite :: Tally -> Effect Unit
 suite t = do
@@ -44,6 +48,11 @@ suite t = do
   store.clearOrigin
   origin >>= expect t "clearing drops the rect" Nothing
   originPath >>= expect t "clearing drops the route" Nothing
+
+  begin bar 0.0 "/"
+  runEffectFn1 store.launch card
+  origin >>= expect t "a launch records the card's rect" (Just card)
+  originPath >>= expect t "a launch leaves no route to dock into" Nothing
 
   begin bar 0.0 "/projects"
   store.land

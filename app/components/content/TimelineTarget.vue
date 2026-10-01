@@ -78,6 +78,7 @@ const {
   el,
   peek,
   router,
+  launch: store.launch,
   focusYear: store.focus,
   blurYear: store.blur,
 })
@@ -144,7 +145,6 @@ const {
   p + ul
     margin-top: 4px
 
-  // A preview gives a period's headline and first paragraph; the timeline has the rest.
   .period__body > :nth-child(n + 3)
     display: none
 

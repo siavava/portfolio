@@ -46,6 +46,10 @@ type TimelineStoreBindings =
     focusYear :: Ref (Nullable Int)
   , -- | The bar was clicked: remember where, at what scroll, on which route.
     begin :: EffectFn3 Rect Number String Unit
+  , -- | A preview card opened the timeline: grow the panel out of its rect.
+    -- | The card is gone by the time the panel closes, so there is no route
+    -- | to dock back into and the close fades.
+    launch :: EffectFn1 Rect Unit
   , -- | Drop the origin so the next open or close fades.
     clearOrigin :: Effect Unit
   , -- | The panel has docked: count the landing and release the origin.
@@ -78,6 +82,9 @@ useTimelineStoreCore = do
         write origin (notNull rect)
         write originScroll scroll
         write originPath (notNull path)
+    , launch: mkEffectFn1 \rect -> do
+        write origin (notNull rect)
+        write originPath null
     , clearOrigin
     , land: do
         count <- read landings
