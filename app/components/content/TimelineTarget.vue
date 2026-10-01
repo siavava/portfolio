@@ -89,7 +89,6 @@ const {
 
 .timeline-target
   border-bottom: 1px dashed var(--divider)
-  border-radius: 2px
   cursor: pointer
   transition: color 0.2s ease, border-color 0.2s ease
 
