@@ -15,6 +15,15 @@ preview:
 start:
 	@bun run start
 
+lint:
+	@bun run lint
+
+lint-md:
+	@bun run lint:md
+
+typecheck:
+	@bun run typecheck
+
 # Remove everything generated: PureScript build output, generated shims,
 # declarations, FFI companion stubs, and Nuxt/content artifacts. All of it
 # is rebuilt by `bun run purs:build` / `bun run dev`.
@@ -28,4 +37,4 @@ clean:
 distclean: clean
 	@rm -rf .spago node_modules
 
-.PHONY: all build dev generate preview start clean distclean
+.PHONY: all build dev generate preview start lint lint-md typecheck clean distclean
