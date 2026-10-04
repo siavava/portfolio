@@ -300,5 +300,3 @@ The conclusions are the experiments' own. No single method explains the
 pipeline; the methods that read most clearly to a person are not the ones that
 scale; and an attribution is only as durable as the feature it rests on, which
 a change of domain may simply delete.
-
-[perception]: https://notes.amittai.studio/deep-learning
