@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "(ci)"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "(deps)"
+    cooldown:
+      default-days: 3
+    # first matching group wins, so the toolchain stays ahead of the catch-all
+    groups:
+      purescript:
+        patterns: ["purescript", "spago", "purs-tidy"]
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
