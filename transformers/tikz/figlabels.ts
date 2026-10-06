@@ -25,7 +25,7 @@ async function check(file: string) {
   const blocks = [...src.matchAll(BLOCK_RE)]
   for (const blk of blocks) {
     const line = src.slice(0, blk.index).split("\n").length
-    let svg = ""
+    let svg: string
     try {
       svg = await renderTikzBlock(blk[1]!)
     } catch { continue }

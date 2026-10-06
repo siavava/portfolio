@@ -18,7 +18,7 @@ const isBlack = (c?: string): boolean =>
 const fontCache = new Map<string, opentype.Font | null>()
 export function loadFont(family: string): opentype.Font | null {
   if (fontCache.has(family)) return fontCache.get(family)!
-  let font: opentype.Font | null = null
+  let font: opentype.Font | null
   try {
     const ttfDir = "node_modules/node-tikzjax/css/bakoma/ttf"
     const p = join(process.cwd(), ttfDir, `${family}.ttf`)
