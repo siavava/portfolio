@@ -11,7 +11,7 @@ export const mediaBoxImpl = (
   if (!fig || typeof window === "undefined") return null
   const media = fig.querySelector<SVGSVGElement | HTMLImageElement>("svg, img")
   if (!media) return null
-  let aspect = 0
+  let aspect: number
   if (media instanceof SVGSVGElement) {
     const vb = media.viewBox.baseVal
     aspect = vb && vb.height ? vb.width / vb.height : 0

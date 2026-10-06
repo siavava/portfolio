@@ -32,7 +32,7 @@ let n = 0
 for (let bi = 0; bi < blocks.length; bi++) {
   const raw = blocks[bi]![1]!
   const line = src.slice(0, blocks[bi]!.index).split("\n").length
-  let svg = ""
+  let svg: string
   try {
     svg = await renderTikzBlock(raw)
   } catch (e) {
