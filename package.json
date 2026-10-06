@@ -69,7 +69,7 @@
     "@vercel/blob": "^2.8.0",
     "@vue/language-plugin-pug": "3.3.1",
     "eslint-plugin-vue": "10.8.0",
-    "eslint-plugin-vue-pug": "1.0.0-alpha.5",
+    "eslint-plugin-vue-pug": "1.0.0-alpha.6",
     "markdownlint-cli2": "^0.18.0",
     "pug": "^3.0.3",
     "purescript": "^0.15.16",
