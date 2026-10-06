@@ -50,7 +50,7 @@
     "nuxt": "^4.3.1",
     "nuxt-og-image": "^6.7.2",
     "opentype.js": "^2.0.0",
-    "pinia": "^3.0.0",
+    "pinia": "^4.0.3",
     "playwright-core": "^1.61.1",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
