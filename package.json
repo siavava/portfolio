@@ -40,7 +40,7 @@
     "@takumi-rs/core": "^2.14.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "@vueuse/core": "^14.2.1",
+    "@vueuse/core": "^15.0.0",
     "better-sqlite3": "^12.6.2",
     "d3-force": "^3.0.0",
     "katex": "^0.19.0",
