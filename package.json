@@ -36,7 +36,7 @@
     "@nuxt/image": "^2.1.0",
     "@nuxtjs/color-mode": "^4.0.0",
     "@nuxtjs/robots": "^6.2.4",
-    "@pinia/nuxt": "^0.11.3",
+    "@pinia/nuxt": "^1.0.3",
     "@takumi-rs/core": "^2.14.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
