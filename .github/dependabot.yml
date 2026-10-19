@@ -19,6 +19,11 @@ updates:
       prefix: "(deps)"
     cooldown:
       default-days: 3
+    # typescript 7 dropped the JS compiler API that vue-tsc and
+    # typescript-eslint load; lift this once both run on it
+    ignore:
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
     # first matching group wins, so the toolchain stays ahead of the catch-all
     groups:
       purescript:
