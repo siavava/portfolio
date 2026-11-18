@@ -26,8 +26,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   window.__ux = {
     ns: "<p>",
     // An id that rolled over under an open page (the first flush after 30
-    // idle minutes) is re-watched first: the server drops tracker frames
-    // under any id but the one its connection last watched with.
+    // idle minutes) is re-watched first, and so is any id after a
+    // reconnect: the server drops tracker frames under any id but the one
+    // its connection last watched with.
     sid: () => {
       const sid = uxSessionId()
       if (sid !== null && sid !== watchedSessionId()) metrics.watchPath(router.currentRoute.value.path)

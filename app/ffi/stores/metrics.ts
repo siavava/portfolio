@@ -16,8 +16,17 @@ let watchedSid: string | null = null
 export const watchedSessionId = (): string | null => watchedSid
 
 /**
+ * A reconnect leaves the new connection without a watch, so no session
+ * id counts as watched: the ux bridge's next `sid()` re-watches, which
+ * is when a tab that came back is counted again.
+ */
+export const forgetWatchImpl = (): void => {
+  watchedSid = null
+}
+
+/**
  * Key order (`scope`, `path`, geo, then `sid`) keeps the wire JSON
- * stable. Every watch — first, re-watch on reconnect, geo re-watch —
+ * stable. Every watch — first, geo re-watch, the ux bridge's re-watch —
  * carries the UX session id, read (and kept fresh) as it is built;
  * the key is left out when the viewer opted out.
  */

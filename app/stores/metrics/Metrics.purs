@@ -8,6 +8,12 @@
 -- | lives in the standalone status app. The pinia shell is
 -- | `defineStore("metrics", useMetricsCore)`.
 -- |
+-- | A page is watched once per load. The server counts a view for the
+-- | first watch of every connection, so a reconnect that re-watched its
+-- | page would count the same open tab again each time its socket
+-- | dropped. A reconnect therefore sends nothing; the next navigation,
+-- | or the UX tracker's next flush, watches on the new connection.
+-- |
 -- | The socket, geo, and location composables are called directly — the
 -- | FFI only builds the watch payload, reads the client flag, and
 -- | subscribes to the geo promise.
@@ -26,12 +32,15 @@ import Data.Function.Uncurried (Fn3, runFn3)
 import Data.Maybe (Maybe(..))
 import Data.Nullable (Nullable, notNull, null, toMaybe)
 import Effect (Effect)
+import Effect.Ref as Ref
 import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
 import Vue (Computed, read, ref, write)
 
 foreign import watchPayloadImpl :: Fn3 String String (Nullable GeoData) WsData
 
 foreign import isClientImpl :: Effect Boolean
+
+foreign import forgetWatchImpl :: Effect Unit
 
 foreign import awaitGeoImpl :: EffectFn2 GeoPromise (EffectFn1 (Nullable GeoData) Unit) Unit
 
@@ -45,8 +54,8 @@ type MetricsBindings =
     recordVisit :: Effect Unit
   }
 
--- | Assembles the metrics store: connects the shared socket, re-watches
--- | the active path on every (re)connect, and attributes views to the
+-- | Assembles the metrics store: connects the shared socket, watches the
+-- | active path on the first connect only, and attributes views to the
 -- | viewer's resolved location.
 useMetricsCore :: Effect MetricsBindings
 useMetricsCore = do
@@ -78,7 +87,16 @@ useMetricsCore = do
         locationApi <- useViewerLocation
         void locationApi.getLocation
 
-  runEffectFn1 socket.onConnect (read currentPath >>= watchPath)
+  connectedBefore <- Ref.new false
+
+  let
+    onConnect = do
+      reconnect <- Ref.read connectedBefore
+      Ref.write true connectedBefore
+      if reconnect then forgetWatchImpl
+      else read currentPath >>= watchPath
+
+  runEffectFn1 socket.onConnect onConnect
 
   pure
     { connected: socket.isConnected
