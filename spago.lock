@@ -22,64 +22,11 @@
             "st",
             "strings",
             "vue-bridge"
-          ],
-          "build_plan": [
-            "arrays",
-            "bifunctors",
-            "console",
-            "const",
-            "contravariant",
-            "control",
-            "distributive",
-            "effect",
-            "either",
-            "enums",
-            "exists",
-            "foldable-traversable",
-            "functions",
-            "functors",
-            "gen",
-            "identity",
-            "integers",
-            "invariant",
-            "js-timers",
-            "maybe",
-            "newtype",
-            "nonempty",
-            "nullable",
-            "numbers",
-            "orders",
-            "partial",
-            "prelude",
-            "profunctor",
-            "random",
-            "refs",
-            "safe-coerce",
-            "st",
-            "strings",
-            "tailrec",
-            "tuples",
-            "type-equality",
-            "unfoldable",
-            "unsafe-coerce",
-            "vue-bridge"
           ]
         },
         "test": {
           "dependencies": [
             "exceptions"
-          ],
-          "build_plan": [
-            "control",
-            "effect",
-            "either",
-            "exceptions",
-            "invariant",
-            "maybe",
-            "newtype",
-            "prelude",
-            "safe-coerce",
-            "unsafe-coerce"
           ]
         }
       },
@@ -89,15 +36,10 @@
           "dependencies": [
             "effect",
             "prelude"
-          ],
-          "build_plan": [
-            "effect",
-            "prelude"
           ]
         },
         "test": {
-          "dependencies": [],
-          "build_plan": []
+          "dependencies": []
         }
       }
     },
